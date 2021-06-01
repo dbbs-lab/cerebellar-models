@@ -39,10 +39,7 @@
       "z_index": 3
     },
     "io_layer": {
-      "volume_scale": 0.0147,
       "thickness": 15.0,
-      "scale_from_layers": ["granular_layer", "purkinje_layer", "molecular_layer"],
-      "volume_dimension_ratio": [0.5, 1.0, 0.2],
       "region": "inferior_olive",
       "z_index": 0
     }
@@ -128,8 +125,7 @@
       "placement": {
         "cls": "bsb.placement.ParticlePlacement",
         "partitions": ["molecular_layer"],
-        "density": 0.5e-4,
-        "y_restriction": [0.33, 1.00]
+        "density": 0.5e-4
       },
       "spatial": {
         "radius": 4.0
@@ -143,8 +139,7 @@
       "placement": {
         "cls": "bsb.placement.ParticlePlacement",
         "partitions": ["molecular_layer"],
-        "density": 0.5e-4,
-        "y_restriction": [0.00, 0.33]
+        "density": 0.5e-4
       },
       "spatial": {
         "radius": 6.0
