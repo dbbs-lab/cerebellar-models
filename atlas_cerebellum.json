@@ -1,0 +1,26 @@
+{
+    "storage": {
+      "engine": "hdf5",
+      "root": "atlas_cerebellum.hdf5"
+    },
+    "network": {
+      "x": 50,
+      "z": 50,
+      "y": 0
+    },
+    "regions": {
+  
+    },
+    "partitions": {
+  
+    },
+    "cell_types": {
+  
+    },
+    "connection_types": {
+  
+    },
+    "simulations": {
+  
+    }
+  }

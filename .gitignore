@@ -3,3 +3,5 @@ __pycache__
 *.lck
 *.hdf5
 .python-version
+Flocculus3.0_Lingula/
+venv/
