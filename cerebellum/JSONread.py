@@ -1,7 +1,7 @@
 import numpy as np
 import json
 
-DATA_PATH = "../Flocculus3.0_Lingula/"
+DATA_PATH = "../../Flocculus3.0_Lingula/"
 region_name = "Flocculus"
 
 

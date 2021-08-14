@@ -5,3 +5,4 @@ __pycache__
 .python-version
 Flocculus3.0_Lingula/
 venv/
+.history/
