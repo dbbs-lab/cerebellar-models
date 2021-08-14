@@ -1,3 +1,4 @@
+# flake8: noqa
 import numpy as np
 import json
 
@@ -44,9 +45,7 @@ def hex_to_rgb(value):
     return tuple(int(value[i : i + lv // 3], 16) for i in range(0, lv, lv // 3))
 
 
-def search_children(
-    object_, numiter, lastname_ALL="", lastname="", pos0=0.5, sc=1.0, darken=True
-):
+def search_children(object_, numiter, lastname_ALL="", lastname="", pos0=0.5, sc=1.0, darken=True):
     global iterTMP, region_keys
     # ~ print " "*numiter, object_["name"], ":", object_["id"]
     # ~ id_to_region_dictionary[ object_["id"] ] = lastname+"/"+object_["name"]
@@ -57,16 +56,10 @@ def search_children(
     name2allname[object_["name"]] = lastname_ALL + "|" + object_["name"]
     allname2name[lastname_ALL + "|" + object_["name"]] = object_["name"]
     id_to_region_dictionary[object_["id"]] = object_["name"]
-    id_to_region_dictionary_ALLNAME[object_["id"]] = (
-        lastname_ALL + "|" + object_["name"]
-    )
+    id_to_region_dictionary_ALLNAME[object_["id"]] = lastname_ALL + "|" + object_["name"]
     region_dictionary_to_id[object_["name"]] = object_["id"]
-    region_dictionary_to_id_ALLNAME[lastname_ALL + "|" + object_["name"]] = object_[
-        "id"
-    ]
-    region_dictionary_to_id_ALLNAME_parent[
-        lastname_ALL + "|" + object_["name"]
-    ] = lastname_ALL
+    region_dictionary_to_id_ALLNAME[lastname_ALL + "|" + object_["name"]] = object_["id"]
+    region_dictionary_to_id_ALLNAME_parent[lastname_ALL + "|" + object_["name"]] = lastname_ALL
     region_dictionary_to_id_parent[object_["name"]] = lastname
     clrTMP = np.float32(np.array(list(hex_to_rgb(object_["color_hex_triplet"]))))
     if np.sum(clrTMP) > 255.0 * 3.0 * 0.75 and darken:
@@ -163,7 +156,6 @@ inv_corrections = {}
 for k, v in dict_corrections.items():
     for conv in v:
         inv_corrections[conv] = k
-
 
 
 jsontextfile = open(DATA_PATH + "data/brain_regions.json", "r")

@@ -1,5 +1,12 @@
-from JSONread import * 
+from JSONread import (
+    DATA_PATH,
+    region_name,
+    id_to_region_dictionary,
+    id_current_region,
+    id_region,
+)
 import nrrd
+
 
 def get_mask_purkinje():
     ann, h = nrrd.read(DATA_PATH + "data/annotations.nrrd")
