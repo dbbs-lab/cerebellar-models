@@ -1,3 +1,5 @@
-numpy 
+numpy
 pynrrd
 pandas
+pytest
+anytree

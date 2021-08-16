@@ -1,28 +1,7 @@
 # flake8: noqa
 import numpy as np
 import json
-
-DATA_PATH = "../../Flocculus3.0_Lingula/"
-region_name = "Flocculus"
-
-
-id_to_region_dictionary = {}
-id_to_region_dictionary_ALLNAME = {}  # id to complete name
-region_dictionary_to_id = {}  # name to id
-region_dictionary_to_id_ALLNAME = {}  # complete name to id
-
-region_dictionary_to_id_ALLNAME_parent = {}  # complete name to complete name parent
-region_dictionary_to_id_parent = {}  # name to complete name parent
-allname2name = {}  # complete name to name
-name2allname = {}  # name to complete name
-allnameOrder = {}
-iterTMP = 0
-region_keys = []  # list of regions names
-regions_ALLNAME_list = []  # list of complete regions names
-is_leaf = {}  # full name to int (! if is leaf, else 0)
-regions_pos = {}  # name to position in ordered array (according to depth in tree)
-id_to_color = {}  # region id to color in RGB
-region_to_color = {}  # complete name to color in RGB
+from anytree import Node, RenderTree
 
 
 def return_ids_containing_str_list(str_list):
@@ -94,55 +73,30 @@ def search_children(object_, numiter, lastname_ALL="", lastname="", pos0=0.5, sc
         print("No children of object")
 
 
+DATA_PATH = "../../Flocculus3.0_Lingula/"
+region_name = "Flocculus"
+
+
+id_to_region_dictionary = {}
+id_to_region_dictionary_ALLNAME = {}  # id to complete name
+region_dictionary_to_id = {}  # name to id
+region_dictionary_to_id_ALLNAME = {}  # complete name to id
+region_dictionary_to_id_ALLNAME_parent = {}  # complete name to complete name parent
+region_dictionary_to_id_parent = {}  # name to complete name parent
+allname2name = {}  # complete name to name
+name2allname = {}  # name to complete name
+allnameOrder = {}
+iterTMP = 0
+region_keys = []  # list of regions names
+regions_ALLNAME_list = []  # list of complete regions names
+is_leaf = {}  # full name to int (! if is leaf, else 0)
+regions_pos = {}  # name to position in ordered array (according to depth in tree)
+id_to_color = {}  # region id to color in RGB
+region_to_color = {}  # complete name to color in RGB
+
 dict_corrections = {}
-old_regions_layer23 = [
-    41,
-    113,
-    163,
-    180,
-    201,
-    211,
-    219,
-    241,
-    251,
-    269,
-    288,
-    296,
-    304,
-    328,
-    346,
-    412,
-    427,
-    430,
-    434,
-    492,
-    556,
-    561,
-    582,
-    600,
-    643,
-    657,
-    667,
-    670,
-    694,
-    755,
-    806,
-    821,
-    838,
-    854,
-    888,
-    905,
-    943,
-    962,
-    965,
-    973,
-    1053,
-    1066,
-    1106,
-    1127,
-    12994,
-    182305697,
-]
+with open("config_data/old_regions.json") as f:
+    old_regions_layer23 = json.load(f)["old_regions"]
 for reg in old_regions_layer23:
     dict_corrections[reg] = [reg + 20000, reg + 30000]
 
@@ -160,7 +114,13 @@ for k, v in dict_corrections.items():
 
 jsontextfile = open(DATA_PATH + "data/brain_regions.json", "r")
 jsoncontent = json.loads(jsontextfile.read())
+
+for each in jsoncontent["msg"][0]:
+    print(each[""])
+
+
 search_children(jsoncontent["msg"][0], 0)
+
 
 id_region = []
 id_mol = -1
