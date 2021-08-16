@@ -14,8 +14,6 @@ from cerebellum.brain_regions_tree import BrainRegionsTree
 PLOTTING = True
 fac_Lugaro = 15.0
 data_path = "../Flocculus3.0_Lingula/"
-
-
 reference_UBC_density = {
     "Lingula (I)": 6000,
     "Uvula": 25600,
@@ -39,7 +37,7 @@ print(orientations[0].shape)
 
 # starting to create
 brain_regions_tree = BrainRegionsTree()
-id_to_region_dictionary = brain_regions_tree.id_to_region_dictionary_ALLNAME()
+id_to_region_dictionary = brain_regions_tree.id_to_region_dictionary()
 id_region = brain_regions_tree.id_region
 id_gr, id_pc, id_mol = brain_regions_tree.get_id_gr_pc_mol()
 id_current_region = brain_regions_tree.region_of_interest.id
@@ -63,7 +61,7 @@ for id_ in id_region:
     region_names.append(id_to_region_dictionary[id_])
     region, layer = id_to_region_dictionary[id_].split(", ")
     print(layer)
-    mask[layer] = ann == id_
+    mask[layer] = ann == int(id_)
     vox_in_layer[layer] = len(np.where(mask[layer])[0])
     number_cells.append(np.round(np.sum(dens_cell[mask[layer]])))
     number_neurons.append(np.round(np.sum(dens_neuron[mask[layer]])))
@@ -72,7 +70,8 @@ for id_ in id_region:
     cell_densities.append(number_cells[-1] / volumes[-1])
     neuron_densities.append(number_neurons[-1] / volumes[-1])
 
-
+print(number_neurons)
+print(number_cells)
 mask[region_name] = ann == id_current_region
 
 region_names.append(region_name)
@@ -95,7 +94,6 @@ layers_per_cell = {
 i_granular = -1
 i_molecular = -1
 i_purkinje = -1
-print(region_names)
 for i in range(len(region_names)):
     if "granular layer" in region_names[i]:
         i_granular = i

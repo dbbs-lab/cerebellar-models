@@ -1,18 +1,13 @@
 # flake8: noqa
 # Importing scaffold
-from scaffold.particles import (
-    Particle,
-    ParticleSystem,
-    plot_particle_system,
-    plot_detailed_system,
-)
-from scaffold.placement import ParallelArrayPlacement
-from scaffold.config import JSONConfig
-from scaffold.core import Scaffold, from_hdf5
-from scaffold.plotting import *
-from scaffold.models import MorphologySet, PlacementSet
-from scaffold.output import MorphologyRepository, MorphologyCache
-from scaffold.reporting import set_verbosity
+from bsb.particles import Particle, ParticleSystem, plot_particle_system, plot_detailed_system
+from bsb.placement import ParallelArrayPlacement
+from bsb.config import JSONConfig
+from bsb.core import Scaffold, from_hdf5
+from bsb.plotting import *
+from bsb.models import MorphologySet, PlacementSet
+from bsb.output import MorphologyRepository, MorphologyCache
+from bsb.reporting import set_verbosity
 
 # Importing compute results
 from compute_results import (
@@ -28,22 +23,6 @@ from compute_results import (
     reference_UBC_density,
 )
 
-docs = """
-# Per Silvia
-import pickle
-
-# obj0, obj1, obj2 are created here...
-
-# Saving the objects:
-with open('data_mapping.pkl', 'wb') as f:  # Python 3: open(..., 'wb')
-    pickle.dump([region_name, VOXEL_SIZE, mask, dens_neuron, dens_inh, layers_per_cell, mask_of_stellate, orientations, fac_Lugaro, reference_UBC_density], f)
-
-# Getting back the objects:
-# with open('data_mapping.pkl') as f:  # Python 3: open(..., 'rb')
-#     region_name, VOXEL_SIZE, mask, dens_neuron, dens_inh, layers_per_cell, mask_of_stellate, orientations, fac_Lugaro, reference_UBC_density = pickle.load(f)
-"""
-# Importing other packages
-# Extract PC layer voxels - indexes
 import numpy as np
 import os, sys
 
@@ -55,9 +34,10 @@ import h5py
 import math
 import matplotlib.pyplot as plt
 from mpl_toolkits.mplot3d import Axes3D
-import asearch
 import scipy
 import cProfile
+
+import cerebellum.asearch as asearch
 
 
 PLOTTING_FOR_CHECK = False
@@ -76,7 +56,6 @@ cell_per_layer = {
     "Basket layer": ["basket_cell"],
     "granular layer": ["granule_cell", "golgi_cell", "glomerulus"],
 }
-
 # cell_per_layer = {'Stellate layer': ['stellate_cell']}
 # cell_per_layer = {'Stellate layer': ['stellate'],'Basket layer': ['basket']}
 # cell_per_layer = {'granular layer': ['granule_cell']}
@@ -144,11 +123,7 @@ vox_dist_z = math.ceil(dist_z / VOXEL_SIZE)
 index_pc_voxels = np.nonzero(mask["Purkinje layer"])
 # print(index_pc_voxels)
 pc_matrix = np.zeros(
-    (
-        max(index_pc_voxels[0]) + 1,
-        max(index_pc_voxels[1]) + 1,
-        max(index_pc_voxels[2]) + 1,
-    )
+    (max(index_pc_voxels[0]) + 1, max(index_pc_voxels[1]) + 1, max(index_pc_voxels[2]) + 1)
 )
 pc_matrix[index_pc_voxels] = 1
 # print(pc_matrix)
@@ -410,7 +385,7 @@ for sd in range(dim[cut_dir]):  # FOR EACH SLICE
                     current_node_y = next_current_node_y
                     # print (" ***voxel più vicino: ", current_node_x, current_node_y, "          dist=", current_min_dist )
 
-                (path, path_length, count_over_dist_two, pc_voxels_in_slice_mod,) = asearch.astar(
+                path, path_length, count_over_dist_two, pc_voxels_in_slice_mod = asearch.astar(
                     pc_slice,
                     (start_x_current_slice, start_y_current_slice),
                     (current_node_x, current_node_y),
@@ -512,12 +487,7 @@ for layer in cell_per_layer.keys():
     number_inh_tot = np.round(np.sum(number_inh))
     number_exc_tot = np.round(np.sum(number_exc))
     print(
-        "number neu_tot = ",
-        number_neu_tot,
-        "// inh= ",
-        number_inh_tot,
-        " //exc = ",
-        number_exc_tot,
+        "number neu_tot = ", number_neu_tot, "// inh= ", number_inh_tot, " //exc = ", number_exc_tot
     )
 
     # For each cell type in the layer, extract voxels belonging to that layer and cell counts for that cell type.
@@ -542,11 +512,7 @@ for layer in cell_per_layer.keys():
             fig = plt.figure()
             ax = Axes3D(fig)
             for vox in range(len(voxels_cell)):
-                ax.scatter(
-                    voxels_cell[vox][0][0],
-                    voxels_cell[vox][0][1],
-                    voxels_cell[vox][0][2],
-                )
+                ax.scatter(voxels_cell[vox][0][0], voxels_cell[vox][0][1], voxels_cell[vox][0][2])
             plt.show()
 
     voxel_num = 50
@@ -696,10 +662,7 @@ for layer in cell_per_layer.keys():
             print("pos shape ", positions_granule.shape)
             print("rot shape ", rotations_granule.shape)
             scaffold.place_cells(
-                cell_type,
-                cell_type.placement.layer_instance,
-                positions_granule,
-                rotations_granule,
+                cell_type, cell_type.placement.layer_instance, positions_granule, rotations_granule
             )
         elif cell == "golgi_cell":
             index_golgi = np.where(positions_all[layer][:, 0] == cell_properties[cell]["radius"])
@@ -708,10 +671,7 @@ for layer in cell_per_layer.keys():
             rotations_golgi = rotations_all[layer][index_golgi, :]
             rotations_golgi = np.squeeze(rotations_golgi)
             scaffold.place_cells(
-                cell_type,
-                cell_type.placement.layer_instance,
-                positions_golgi,
-                rotations_golgi,
+                cell_type, cell_type.placement.layer_instance, positions_golgi, rotations_golgi
             )
         elif cell == "glomerulus":
             index_glom = np.where(positions_all[layer][:, 0] == cell_properties[cell]["radius"])
@@ -720,10 +680,7 @@ for layer in cell_per_layer.keys():
             rotations_glom = rotations_all[layer][index_glom, :]
             rotations_glom = np.squeeze(rotations_glom)
             scaffold.place_cells(
-                cell_type,
-                cell_type.placement.layer_instance,
-                positions_glom,
-                rotations_glom,
+                cell_type, cell_type.placement.layer_instance, positions_glom, rotations_glom
             )
         else:
             scaffold.place_cells(

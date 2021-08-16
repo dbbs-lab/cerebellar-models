@@ -6,3 +6,7 @@ chart_studio
 pandas
 pytest
 anytree
+mpi4py
+scipy
+cProfile
+mpl_toolkits

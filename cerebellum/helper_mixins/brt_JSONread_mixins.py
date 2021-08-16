@@ -18,6 +18,12 @@ class JSONreadMixin(object):
 
         return {str(node.id): node.get_path_str() for node in PreOrderIter(self.tree)}
 
+    def id_to_region_dictionary(self):
+        """Get path for each of the nodes ivolved.
+        id_to_dictionary"""
+
+        return {str(node.id): node.name for node in PreOrderIter(self.tree)}
+
     def get_id_gr_pc_mol(self):
         id_mol, id_pc, id_gr = -1, -1, -1
         for region_node in self.involved_regions:

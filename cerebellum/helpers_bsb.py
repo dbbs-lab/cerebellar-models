@@ -1,5 +1,5 @@
 # flake8: noqa
-from compute_results import get_mask_purkinje
+import bsb.options
 from bsb.config import from_json
 from bsb.core import Scaffold, from_hdf5
 from helpers import relative_folder, extract_voxels, cell_properties, cell_per_layer
@@ -8,8 +8,9 @@ import math
 import scipy
 import random
 import asearch
-import bsb.options
 import numpy as np
+
+from cerebellum.compute_results import get_mask_purkinje
 
 # display
 bsb.options.verbosity = 3
@@ -22,7 +23,7 @@ dist_x = 130.0
 dist_z = 3.5
 radius_pc = 7.5
 
-config = from_json("../atlas_cerebellum.json")
+config = from_json("config/atlas_cerebellum.json")
 scaffold = Scaffold(config)
 
 num_to_place = {}
