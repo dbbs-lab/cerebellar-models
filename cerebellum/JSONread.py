@@ -1,7 +1,6 @@
 # flake8: noqa
 import numpy as np
 import json
-from anytree import Node, RenderTree
 
 
 def return_ids_containing_str_list(str_list):
@@ -31,6 +30,7 @@ def search_children(object_, numiter, lastname_ALL="", lastname="", pos0=0.5, sc
     # ~ id_to_region_dictionary_ALLNAME[ object_["id"] ] = object_["name"]
     # ~ region_dictionary_to_id[ object_["name"] ] = object_["id"]
     # ~ region_dictionary_to_id_ALLNAME[ lastname+"/"+object_["name"] ] = object_["id"]
+
     regions_ALLNAME_list.append(lastname_ALL + "|" + object_["name"])
     name2allname[object_["name"]] = lastname_ALL + "|" + object_["name"]
     allname2name[lastname_ALL + "|" + object_["name"]] = object_["name"]
@@ -40,11 +40,14 @@ def search_children(object_, numiter, lastname_ALL="", lastname="", pos0=0.5, sc
     region_dictionary_to_id_ALLNAME[lastname_ALL + "|" + object_["name"]] = object_["id"]
     region_dictionary_to_id_ALLNAME_parent[lastname_ALL + "|" + object_["name"]] = lastname_ALL
     region_dictionary_to_id_parent[object_["name"]] = lastname
+
+    # coloring process
     clrTMP = np.float32(np.array(list(hex_to_rgb(object_["color_hex_triplet"]))))
     if np.sum(clrTMP) > 255.0 * 3.0 * 0.75 and darken:
         clrTMP *= 255.0 * 3.0 * 0.75 / np.sum(clrTMP)
     region_to_color[lastname_ALL + "|" + object_["name"]] = list(clrTMP)
     id_to_color[object_["id"]] = list(clrTMP)
+
     regions_pos[object_["name"]] = pos0
     allnameOrder[lastname_ALL + "|" + object_["name"]] = iterTMP
     iterTMP += 1
@@ -73,7 +76,7 @@ def search_children(object_, numiter, lastname_ALL="", lastname="", pos0=0.5, sc
         print("No children of object")
 
 
-DATA_PATH = "../../Flocculus3.0_Lingula/"
+DATA_PATH = "../Flocculus3.0_Lingula/"
 region_name = "Flocculus"
 
 
@@ -94,30 +97,9 @@ regions_pos = {}  # name to position in ordered array (according to depth in tre
 id_to_color = {}  # region id to color in RGB
 region_to_color = {}  # complete name to color in RGB
 
-dict_corrections = {}
-with open("config_data/old_regions.json") as f:
-    old_regions_layer23 = json.load(f)["old_regions"]
-for reg in old_regions_layer23:
-    dict_corrections[reg] = [reg + 20000, reg + 30000]
-
-# Change of id when L2 and L2/3 existed
-dict_corrections[195] = [20304]
-dict_corrections[747] = [20556]
-dict_corrections[524] = [20582]
-dict_corrections[606] = [20430]
-
-inv_corrections = {}
-for k, v in dict_corrections.items():
-    for conv in v:
-        inv_corrections[conv] = k
-
 
 jsontextfile = open(DATA_PATH + "data/brain_regions.json", "r")
 jsoncontent = json.loads(jsontextfile.read())
-
-for each in jsoncontent["msg"][0]:
-    print(each[""])
-
 
 search_children(jsoncontent["msg"][0], 0)
 
@@ -139,3 +121,15 @@ for id_reg, name in id_to_region_dictionary_ALLNAME.items():
                 id_pc = id_reg
         else:
             id_current_region = id_reg
+
+
+with open("tests/fixtures/id_to_region_dictionary_ALLNAME.json", "w+") as f:
+    json.dump(id_to_region_dictionary_ALLNAME, f)
+
+
+with open("tests/fixtures/id_region.json", "w+") as f:
+    json.dump(id_region, f)
+
+
+with open("tests/fixtures/id_current_region.json", "w+") as f:
+    json.dump(id_current_region, f)
