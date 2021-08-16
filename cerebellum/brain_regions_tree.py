@@ -1,16 +1,12 @@
-from anytree import RenderTree, AnyNode, Node
+from anytree import RenderTree, AnyNode
 from anytree.importer import DictImporter
 from anytree.exporter import DictExporter
 import json
 
-from cerebellum.helper_mixins.brt_JSONread_mixins import JSONreadMixin
-
-
-class BrainNode(Node):
-    separator = "|"
-
-    def get_path_str(self):
-        return "|" + "|".join([i.name for i in list(self.path)])
+from cerebellum.helper_mixins.brt_JSONread_mixins import (
+    JSONreadMixin,
+    BrainNode,
+)
 
 
 class BrainRegionsTree(JSONreadMixin):

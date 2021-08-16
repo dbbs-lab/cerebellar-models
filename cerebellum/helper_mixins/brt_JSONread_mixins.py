@@ -1,5 +1,12 @@
 from anytree.search import find, findall
-from anytree import PreOrderIter
+from anytree import PreOrderIter, Node
+
+
+class BrainNode(Node):
+    separator = "|"
+
+    def get_path_str(self):
+        return "|" + "|".join([i.name for i in list(self.path)])
 
 
 class JSONreadMixin(object):
