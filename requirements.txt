@@ -1,5 +1,8 @@
 numpy
 pynrrd
+plotly
+matplotlib
+chart_studio
 pandas
 pytest
 anytree

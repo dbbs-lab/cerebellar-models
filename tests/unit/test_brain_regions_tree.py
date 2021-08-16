@@ -1,8 +1,6 @@
 import unittest
 import json
 
-# import pytest
-
 from anytree.search import findall
 from cerebellum.brain_regions_tree import BrainRegionsTree
 
@@ -33,5 +31,9 @@ class TestRegionConfig(unittest.TestCase):
 
     def test_id_to_region_dictionary_ALLNAME(self):
         self.assertEqual(
-            self.brain_regions_tree.all_nodes_dict(), self.id_to_region_dictionary_ALLNAME
+            self.brain_regions_tree.id_to_region_dictionary_ALLNAME(),
+            self.id_to_region_dictionary_ALLNAME,
         )
+
+    def test_get_involved_regions_id(self):
+        self.assertEqual(self.brain_regions_tree.get_id_gr_pc_mol(), (10690, 10691, 10692))
