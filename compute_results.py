@@ -1,19 +1,20 @@
 # flake8: noqa
-from plotly.subplots import make_subplots
+
 import plotly.graph_objects as go
-import chart_studio.plotly as py
 import matplotlib.pyplot as plt
-import plotly.express as px
 import numpy as np
 import statistics
 import random
 import nrrd
 
+from plotly.subplots import make_subplots
 from cerebellum.brain_regions_tree import BrainRegionsTree
 
 PLOTTING = True
-fac_Lugaro = 15.0
-data_path = "../Flocculus3.0_Lingula/"
+VOXEL_SIZE = 25.0  # um
+FAC_LUGARO = 15.0  # Lugaro Cell fraction/purkinje cells
+
+
 reference_UBC_density = {
     "Lingula (I)": 6000,
     "Uvula": 25600,
@@ -22,21 +23,11 @@ reference_UBC_density = {
     "Paraflocculus": 18272.36,
 }
 
-ann, h = nrrd.read(data_path + "data/annotations.nrrd")
-print(h)
-print(ann.shape)
-print(ann[0, 0, 0])
-print(ann[395, 191, 121])
-dens_cell, h = nrrd.read(data_path + "data/cell_density.nrrd")
-print("dens cell ", dens_cell.shape)
-dens_neuron, h = nrrd.read(data_path + "data/neu_density.nrrd")
-dens_inh, h = nrrd.read(data_path + "data/inh_density.nrrd")
-orientations, h = nrrd.read(data_path + "data/orientations_cereb.nrrd")
-print("orientation: ", orientations.shape)
-print(orientations[0].shape)
 
-# starting to create
-brain_regions_tree = BrainRegionsTree()
+# know with which part of the brain you are dealing with
+# following from the Brain Regions Tree
+# (follows logic of previously JSONread file)
+brain_regions_tree = BrainRegionsTree(file="config/brain_regions.json", region_name="Flocculus")
 id_to_region_dictionary = brain_regions_tree.id_to_region_dictionary()
 id_region = brain_regions_tree.id_region
 id_gr, id_pc, id_mol = brain_regions_tree.get_id_gr_pc_mol()
@@ -44,8 +35,16 @@ id_current_region = brain_regions_tree.region_of_interest.id
 region_name = brain_regions_tree.region_of_interest.name
 
 
+# get the 3-dimensional data of cell distributions of the brain
+data_path = "../Flocculus3.0_Lingula/"
+ann, h = nrrd.read(data_path + "data/annotations.nrrd")  # voxel - region annotation
+dens_cell, h = nrrd.read(data_path + "data/cell_density.nrrd")
+dens_neuron, h = nrrd.read(data_path + "data/neu_density.nrrd")
+dens_inh, h = nrrd.read(data_path + "data/inh_density.nrrd")
+orientations, h = nrrd.read(data_path + "data/orientations_cereb.nrrd")  # orientation voxel
+
+
 # mask_current_region = annis in id_region
-VOXEL_SIZE = 25.0  # um
 region_names = []
 number_cells = []
 number_neurons = []
@@ -53,31 +52,42 @@ number_inhibitory = []
 volumes = []
 cell_densities = []
 neuron_densities = []
-
 mask = {}
 vox_in_layer = {}
+
+# number_cells = reg_1 + reg_2 + reg_3 + ... + unknown_1
+
 for id_ in id_region:
-    id_ = str(id_)
-    region_names.append(id_to_region_dictionary[id_])
-    region, layer = id_to_region_dictionary[id_].split(", ")
-    print(layer)
-    mask[layer] = ann == int(id_)
+    # filter the necessary regions
+    region_names.append(id_to_region_dictionary[str(id_)])
+    region, layer = id_to_region_dictionary[str(id_)].split(", ")
+    mask[layer] = ann == id_
     vox_in_layer[layer] = len(np.where(mask[layer])[0])
+
+    # necessary to decide the total - known
     number_cells.append(np.round(np.sum(dens_cell[mask[layer]])))
     number_neurons.append(np.round(np.sum(dens_neuron[mask[layer]])))
     number_inhibitory.append(np.round(np.sum(dens_inh[mask[layer]])))
+
+    # voxels: 25um2 length, volumn of the voxels
     volumes.append(len(np.where(mask[layer])[0]) / (4.0 ** 3) / 1000.0)  # in mm3
+    # volumes.append(sum(mask[layer]) / (4.0 ** 3) / 1000.0)  # in mm3
+
     cell_densities.append(number_cells[-1] / volumes[-1])
     neuron_densities.append(number_neurons[-1] / volumes[-1])
 
-print(number_neurons)
-print(number_cells)
 mask[region_name] = ann == id_current_region
 
+print(mask)
+
+
 region_names.append(region_name)
+
+# cumulative values in the end of the list
 number_cells.append(np.sum(number_cells))
 number_neurons.append(np.sum(number_neurons))
 number_inhibitory.append(np.sum(number_inhibitory))
+
 volumes.append(np.sum(volumes))
 cell_densities.append(number_cells[-1] / volumes[-1])
 neuron_densities.append(number_neurons[-1] / volumes[-1])
@@ -89,7 +99,6 @@ layers_per_cell = {
     "stellate": "Stellate layer",
     "basket": "Basket layer",
 }
-
 
 i_granular = -1
 i_molecular = -1
@@ -103,12 +112,13 @@ for i in range(len(region_names)):
         i_purkinje = i
 
 
-print("i_molecular: ", i_molecular)
 # Volumes print
+print("i_molecular: ", i_molecular)
 print("Volume molecular layer: " + str(volumes[i_molecular]))
 print("Volume purkinje layer: " + str(volumes[i_purkinje]))
 print("Volume granular layer: " + str(volumes[i_granular]))
 
+### MASKING
 
 # Number of basket and stellate cells according to relative layer distance
 bounds, h = nrrd.read(data_path + "data/boundaries_mo.nrrd")
@@ -129,433 +139,435 @@ print("Mean up layer: ", statistics.mean(up_layer_distance))
 relative_layer_distance[mask_mol] = up_layer_distance / (up_layer_distance + down_layer_distance)
 
 
-mask_of_stellate = relative_layer_distance * mask_mol
-mask_of_stellate = (mask_of_stellate > 0) * (mask_of_stellate < thickness_ratio)
-mask["Stellate layer"] = mask_of_stellate
-mask_of_basket = ~mask_of_stellate * mask_mol
-mask["Basket layer"] = mask_of_basket
-vox_in_layer["Stellate layer"] = len(np.where(mask["Stellate layer"])[0])
-vox_in_layer["Basket layer"] = len(np.where(mask["Basket layer"])[0])
+def skip():
+    mask_of_stellate = relative_layer_distance * mask_mol
+    mask_of_stellate = (mask_of_stellate > 0) * (mask_of_stellate < thickness_ratio)
+    mask["Stellate layer"] = mask_of_stellate
+    mask_of_basket = ~mask_of_stellate * mask_mol
+    mask["Basket layer"] = mask_of_basket
+    vox_in_layer["Stellate layer"] = len(np.where(mask["Stellate layer"])[0])
+    vox_in_layer["Basket layer"] = len(np.where(mask["Basket layer"])[0])
 
+    volumes.append(len(np.where(mask["Stellate layer"])[0]) / (4.0 ** 3) / 1000.0)  # in mm3
+    volumes.append(len(np.where(mask["Basket layer"])[0]) / (4.0 ** 3) / 1000.0)  # in mm3
+    print("Volume Stellate layer: " + str(volumes[4]))
+    print("Volume Basket layer: " + str(volumes[5]))
+    print("Total volume: " + str(volumes[3]))
 
-volumes.append(len(np.where(mask["Stellate layer"])[0]) / (4.0 ** 3) / 1000.0)  # in mm3
-volumes.append(len(np.where(mask["Basket layer"])[0]) / (4.0 ** 3) / 1000.0)  # in mm3
-print("Volume Stellate layer: " + str(volumes[4]))
-print("Volume Basket layer: " + str(volumes[5]))
-print("Total volume: " + str(volumes[3]))
+    print("Voxels Granular layer: " + str(vox_in_layer["granular layer"]))
+    print("Voxels Purkinje layer: " + str(vox_in_layer["Purkinje layer"]))
+    print("Voxels Stellate layer: " + str(vox_in_layer["Stellate layer"]))
+    print("Voxels Basket layer: " + str(vox_in_layer["Basket layer"]))
 
-print("Voxels Granular layer: " + str(vox_in_layer["granular layer"]))
-print("Voxels Purkinje layer: " + str(vox_in_layer["Purkinje layer"]))
-print("Voxels Stellate layer: " + str(vox_in_layer["Stellate layer"]))
-print("Voxels Basket layer: " + str(vox_in_layer["Basket layer"]))
-
-
-if __name__ == "__main__":
-    num_stellate = np.round(np.sum(dens_neuron[mask_of_stellate]))
-    density_stellate_all = (np.round(dens_neuron[mask_of_stellate]) / (VOXEL_SIZE ** 3)) * (10 ** 9)
-    plt.hist(density_stellate_all, bins=50)
-    plt.show()
-    print(
-        "Density stellate cells - max: ",
-        np.amax(density_stellate_all),
-        ", min: ",
-        np.amin(density_stellate_all),
-    )
-    num_basket = np.round(np.sum(dens_neuron[mask_of_basket]))
-    density_basket_all = (np.round(dens_neuron[mask_of_basket]) / (VOXEL_SIZE ** 3)) * (10 ** 9)
-    plt.hist(density_basket_all, bins=50)
-    plt.show()
-    print(
-        "Density basket cells - max: ",
-        np.amax(density_basket_all),
-        ", min: ",
-        np.amin(density_basket_all),
-    )
-    num_mol = np.round(np.sum(dens_neuron[mask_mol]))
-    vol_stellate = len(np.where(mask_of_stellate)[0]) / 4.0 ** 3 / 1000.0
-    vol_basket = len(np.where(mask_of_basket)[0]) / 4.0 ** 3 / 1000.0
-    density_stellate = num_stellate / vol_stellate
-    density_basket = num_basket / vol_basket
-
-    # Number of purkinje cells as the boundary between granular and molecular layers. Already computed
-    num_purkinje = number_neurons[i_purkinje]
-    print("Number of purkinje cells: " + str(num_purkinje))
-
-    print("Estimate number of cells for " + region_name)
-    print("Number of basket cells: " + str(num_basket))
-    print("Number of stellate cells: " + str(num_stellate))
-    print("Number of MLI: " + str(num_mol))
-    print("Volume of voxels with basket cells: " + str(vol_basket))
-    print("Volume of voxels with stellate cells: " + str(vol_stellate))
-    print("Density of basket cells: " + str(density_basket))
-    print("Density of stellate cells: " + str(density_stellate))
-
-    # UBC
-    num_UBC = np.round(reference_UBC_density[region_name] * volumes[i_granular])
-    print("Number of UBC: " + str(num_UBC))
-    density_UBC = (
-        num_UBC / volumes[i_granular]
-    )  # The first element in volumes is the Granule layer volume
-    print("Density of UBC cells: " + str(density_UBC))
-
-    # Lugaro cells
-    num_Lugaro = np.round(num_purkinje / fac_Lugaro)
-    print("Number of Lugaro cells: " + str(num_Lugaro))
-    density_Lugaro = num_Lugaro / volumes[i_purkinje]
-    print("Density of Lugaro cells: " + str(density_Lugaro))
-
-    # Rest of inhibitory neurons in Granular layer are Golgi cells
-    num_Golgi = np.round(number_inhibitory[i_granular] - num_Lugaro)
-    print("Number of Golgi cells: " + str(num_Golgi))
-    density_Golgi = (
-        num_Golgi / volumes[i_granular]
-    )  # The first element in volumes is the Granule layer volume
-    print("Density of Golgi cells: " + str(density_Golgi))
-
-    # Excitatory cells in Granular layer are Granule cells
-    num_Granule = number_neurons[i_granular] - number_inhibitory[i_granular]
-    print("Number of Granule cells: " + str(num_Granule))
-    density_Granule = num_Granule / volumes[i_granular]
-    print("Density of Granule cells: " + str(density_Granule))
-
-    # For each cell type, saving total number and density in a single variable
-    num_flocculus = {}
-    num_flocculus["granule"] = num_Granule
-    num_flocculus["golgi"] = num_Golgi
-    num_flocculus["purkinje"] = num_purkinje
-    num_flocculus["stellate"] = num_stellate
-    num_flocculus["basket"] = num_basket
-
-    density_flocculus = {}
-    density_flocculus["granule"] = density_Granule
-    density_flocculus["golgi"] = density_Golgi
-    density_flocculus["purkinje"] = num_purkinje / volumes[i_purkinje]
-    density_flocculus["stellate"] = density_stellate
-    density_flocculus["basket"] = density_basket
-
-    ######################################### PLOTS ###############################################
-    if PLOTTING:
-        sliding_dir = 1
-
-        # PC layer
-        maskPC = ann == id_pc
-        maskPC = maskPC * 1
-        print(maskPC.shape)
-        PCsurface = np.where(maskPC)
-        # print(PCsurface[0])
-        print(id_pc)
-
-        # ML
-        maskMLI = ann == id_mol
-        maskMLI = maskMLI * 1
-        MLIsurface = np.where(maskMLI)
-        SCsurface = np.where(mask_of_stellate)
-        BCsurface = np.where(mask_of_basket)
-
-        # GL
-        maskGL = ann == id_gr
-        maskGL = maskGL * 1
-        GLsurface = np.where(maskGL)
-
-        ############################ Scatter plot 3D #######################
-        fig_scatter = go.Figure(
-            data=[go.Scatter3d(x=PCsurface[0], y=PCsurface[1], z=PCsurface[2], mode="markers")]
+    if __name__ == "__main__":
+        num_stellate = np.round(np.sum(dens_neuron[mask_of_stellate]))
+        density_stellate_all = (np.round(dens_neuron[mask_of_stellate]) / (VOXEL_SIZE ** 3)) * (
+            10 ** 9
         )
-
-        fig_scatter["data"][0]["marker"]["symbol"] = "square"
-
-        fig_scatter.add_trace(
-            go.Scatter3d(x=MLIsurface[0], y=MLIsurface[1], z=MLIsurface[2], mode="markers")
+        plt.hist(density_stellate_all, bins=50)
+        plt.show()
+        print(
+            "Density stellate cells - max: ",
+            np.amax(density_stellate_all),
+            ", min: ",
+            np.amin(density_stellate_all),
         )
-
-        fig_scatter["data"][1]["marker"]["symbol"] = "square"
-
-        fig_scatter.add_trace(
-            go.Scatter3d(x=GLsurface[0], y=GLsurface[1], z=GLsurface[2], mode="markers")
+        num_basket = np.round(np.sum(dens_neuron[mask_of_basket]))
+        density_basket_all = (np.round(dens_neuron[mask_of_basket]) / (VOXEL_SIZE ** 3)) * (10 ** 9)
+        plt.hist(density_basket_all, bins=50)
+        plt.show()
+        print(
+            "Density basket cells - max: ",
+            np.amax(density_basket_all),
+            ", min: ",
+            np.amin(density_basket_all),
         )
+        num_mol = np.round(np.sum(dens_neuron[mask_mol]))
+        vol_stellate = len(np.where(mask_of_stellate)[0]) / 4.0 ** 3 / 1000.0
+        vol_basket = len(np.where(mask_of_basket)[0]) / 4.0 ** 3 / 1000.0
+        density_stellate = num_stellate / vol_stellate
+        density_basket = num_basket / vol_basket
 
-        fig_scatter["data"][2]["marker"]["symbol"] = "square"
+        # Number of purkinje cells as the boundary between granular and molecular layers. Already computed
+        num_purkinje = number_neurons[i_purkinje]
+        print("Number of purkinje cells: " + str(num_purkinje))
 
-        fig_scatter.show()
+        print("Estimate number of cells for " + region_name)
+        print("Number of basket cells: " + str(num_basket))
+        print("Number of stellate cells: " + str(num_stellate))
+        print("Number of MLI: " + str(num_mol))
+        print("Volume of voxels with basket cells: " + str(vol_basket))
+        print("Volume of voxels with stellate cells: " + str(vol_stellate))
+        print("Density of basket cells: " + str(density_basket))
+        print("Density of stellate cells: " + str(density_stellate))
 
-        ########################## Sliding sections 3D #################
-        # Extract all region
-        mask_all = np.isin(ann, id_region)
-        print(mask_all.shape)
-        region = (
-            ann - id_region[2] + 1
-        )  # Scale to have granular layer = 1, PC layer = 2, molecular layer = 3
-        region[~mask_all] = 0  # Outside of the region = 0
-        region[mask_of_stellate] = 4  # To differentiate SC and BC in the ML
+        # UBC
+        num_UBC = np.round(reference_UBC_density[region_name] * volumes[i_granular])
+        print("Number of UBC: " + str(num_UBC))
+        density_UBC = (
+            num_UBC / volumes[i_granular]
+        )  # The first element in volumes is the Granule layer volume
+        print("Density of UBC cells: " + str(density_UBC))
 
-        # Cut around the region
-        region_index = np.nonzero(region)
-        print(len(region_index[0]))
-        print(len(region_index[1]))
-        region = region[
-            np.amin(region_index[0]) - 10 : np.amax(region_index[0]) + 10,
-            np.amin(region_index[1]) - 10 : np.amax(region_index[1]) + 10,
-            np.amin(region_index[2]) - 10 : np.amax(region_index[2]) + 10,
-        ]
-        dim = region.shape
-        print("dim cut: ", dim)
-        example_slice = np.take(region, 0, axis=sliding_dir)
-        r, c = example_slice.shape
+        # Lugaro cells
+        num_Lugaro = np.round(num_purkinje / FAC_LUGARO)
+        print("Number of Lugaro cells: " + str(num_Lugaro))
+        density_Lugaro = num_Lugaro / volumes[i_purkinje]
+        print("Density of Lugaro cells: " + str(density_Lugaro))
 
-        # Define frames
-        sample_factor = (
-            1  # How much we subsample the selected dimension (sliding_dir) to plot slices
-        )
-        nb_frames = int(dim[sliding_dir] / sample_factor)
-        print("frames ", nb_frames)
-        frames = np.linspace(0, dim[sliding_dir], nb_frames, dtype=int)
+        # Rest of inhibitory neurons in Granular layer are Golgi cells
+        num_Golgi = np.round(number_inhibitory[i_granular] - num_Lugaro)
+        print("Number of Golgi cells: " + str(num_Golgi))
+        density_Golgi = (
+            num_Golgi / volumes[i_granular]
+        )  # The first element in volumes is the Granule layer volume
+        print("Density of Golgi cells: " + str(density_Golgi))
 
-        # Define colorscale
-        color_region = [
-            # External to region: gray
-            [0, "rgb(220, 220, 220)"],
-            [0.2, "rgb(220, 220, 220)"],
-            # Granular layer: red
-            [0.2, "rgb(256, 0, 0)"],
-            [0.4, "rgb(256, 0, 0)"],
-            # PC layer: green
-            [0.4, "rgb(58, 146, 94)"],
-            [0.6, "rgb(58, 146, 94)"],
-            # Molecular layer - BC: arancione
-            [0.6, "rgb(249, 90, 8)"],
-            [0.8, "rgb(249, 90, 8)"],
-            # Molecular layer - SC: giallo
-            [0.8, "rgb(245, 177, 0)"],
-            [1.0, "rgb(245, 177, 0)"],
-        ]
+        # Excitatory cells in Granular layer are Granule cells
+        num_Granule = number_neurons[i_granular] - number_inhibitory[i_granular]
+        print("Number of Granule cells: " + str(num_Granule))
+        density_Granule = num_Granule / volumes[i_granular]
+        print("Density of Granule cells: " + str(density_Granule))
 
-        # Plot Flocculus sections
-        fig_section3 = go.Figure(
-            frames=[
-                go.Frame(
-                    data=go.Surface(
-                        z=((k) * 0.1) * np.ones((r, c)),
-                        surfacecolor=(np.take(region, k - 1, axis=sliding_dir)),
-                        colorscale=color_region,
-                        cmin=0,
-                        cmax=3,
-                    ),
-                    name=str(k),  # you need to name the frame for the animation to behave properly
-                )
-                for k in frames
-            ]
-        )
+        # For each cell type, saving total number and density in a single variable
+        num_flocculus = {}
+        num_flocculus["granule"] = num_Granule
+        num_flocculus["golgi"] = num_Golgi
+        num_flocculus["purkinje"] = num_purkinje
+        num_flocculus["stellate"] = num_stellate
+        num_flocculus["basket"] = num_basket
 
-        print(int(frames[nb_frames - 1]))
+        density_flocculus = {}
+        density_flocculus["granule"] = density_Granule
+        density_flocculus["golgi"] = density_Golgi
+        density_flocculus["purkinje"] = num_purkinje / volumes[i_purkinje]
+        density_flocculus["stellate"] = density_stellate
+        density_flocculus["basket"] = density_basket
 
-        # Add data to be displayed before animation starts
-        fig_section3.add_trace(
-            go.Surface(
-                z=((frames[nb_frames - 1]) * 0.1) * np.ones((r, c)),
-                surfacecolor=np.take(region, int(frames[nb_frames - 1] - 1), axis=sliding_dir),
-                colorscale=color_region,
-                cmin=0,
-                cmax=200,
-                colorbar=dict(thickness=20, ticklen=4),
+        ######################################### PLOTS ###############################################
+        if PLOTTING:
+            sliding_dir = 1
+
+            # PC layer
+            maskPC = ann == id_pc
+            maskPC = maskPC * 1
+            print(maskPC.shape)
+            PCsurface = np.where(maskPC)
+            # print(PCsurface[0])
+            print(id_pc)
+
+            # ML
+            maskMLI = ann == id_mol
+            maskMLI = maskMLI * 1
+            MLIsurface = np.where(maskMLI)
+            SCsurface = np.where(mask_of_stellate)
+            BCsurface = np.where(mask_of_basket)
+
+            # GL
+            maskGL = ann == id_gr
+            maskGL = maskGL * 1
+            GLsurface = np.where(maskGL)
+
+            ############################ Scatter plot 3D #######################
+            fig_scatter = go.Figure(
+                data=[go.Scatter3d(x=PCsurface[0], y=PCsurface[1], z=PCsurface[2], mode="markers")]
             )
-        )
-        z = ((frames[nb_frames - 1]) * 0.1) * np.ones((r, c))
-        print(z.shape)
-        selected = np.take(region, int(frames[nb_frames - 1] - 1), axis=sliding_dir)
 
-        print(selected.shape)
+            fig_scatter["data"][0]["marker"]["symbol"] = "square"
 
-        def frame_args(duration):
-            return {
-                "frame": {"duration": duration},
-                "mode": "immediate",
-                "fromcurrent": True,
-                "transition": {"duration": duration, "easing": "linear"},
-            }
+            fig_scatter.add_trace(
+                go.Scatter3d(x=MLIsurface[0], y=MLIsurface[1], z=MLIsurface[2], mode="markers")
+            )
 
-        sliders = [
-            {
-                "pad": {"b": 10, "t": 60},
-                "len": 0.9,
-                "x": 0.1,
-                "y": 0,
-                "steps": [
-                    {
-                        "args": [[f.name], frame_args(0)],
-                        # "label": str(k),
-                        "method": "animate",
-                    }
-                    for k, f in enumerate(fig_section3.frames)
-                ],
-            }
-        ]
+            fig_scatter["data"][1]["marker"]["symbol"] = "square"
 
-        # Axes
-        plane = [r, c]
-        if abs(r - c) > 2 * (min(plane)):
-            ax = [None] * len(plane)
-            ax[plane.index(max(plane))] = [-1, max(plane) + 1]
-            ax[plane.index(min(plane))] = [-max(plane) / 2, max(plane) / 2]
-        else:
-            ax = [None] * len(plane)
-            ax[plane.index(max(plane))] = [-1, max(plane) + 1]
-            ax[plane.index(min(plane))] = [-1, max(plane) + 1]
+            fig_scatter.add_trace(
+                go.Scatter3d(x=GLsurface[0], y=GLsurface[1], z=GLsurface[2], mode="markers")
+            )
 
-        # Layout
-        fig_section3.update_layout(
-            title="Flocculus voxelization",
-            width=1000,
-            height=1000,
-            scene=dict(
-                zaxis=dict(range=[-0.1, frames[nb_frames - 1] * 0.1], autorange=False),
-                yaxis=dict(range=ax[0], autorange=False),
-                xaxis=dict(range=ax[1], autorange=False),
-                aspectratio=dict(x=1, y=1, z=1),
-            ),
-            updatemenus=[
+            fig_scatter["data"][2]["marker"]["symbol"] = "square"
+
+            fig_scatter.show()
+
+            ########################## Sliding sections 3D #################
+            # Extract all region
+            mask_all = np.isin(ann, id_region)
+            print(mask_all.shape)
+            region = (
+                ann - id_region[2] + 1
+            )  # Scale to have granular layer = 1, PC layer = 2, molecular layer = 3
+            region[~mask_all] = 0  # Outside of the region = 0
+            region[mask_of_stellate] = 4  # To differentiate SC and BC in the ML
+
+            # Cut around the region
+            region_index = np.nonzero(region)
+            print(len(region_index[0]))
+            print(len(region_index[1]))
+            region = region[
+                np.amin(region_index[0]) - 10 : np.amax(region_index[0]) + 10,
+                np.amin(region_index[1]) - 10 : np.amax(region_index[1]) + 10,
+                np.amin(region_index[2]) - 10 : np.amax(region_index[2]) + 10,
+            ]
+            dim = region.shape
+            print("dim cut: ", dim)
+            example_slice = np.take(region, 0, axis=sliding_dir)
+            r, c = example_slice.shape
+
+            # Define frames
+            sample_factor = (
+                1  # How much we subsample the selected dimension (sliding_dir) to plot slices
+            )
+            nb_frames = int(dim[sliding_dir] / sample_factor)
+            print("frames ", nb_frames)
+            frames = np.linspace(0, dim[sliding_dir], nb_frames, dtype=int)
+
+            # Define colorscale
+            color_region = [
+                # External to region: gray
+                [0, "rgb(220, 220, 220)"],
+                [0.2, "rgb(220, 220, 220)"],
+                # Granular layer: red
+                [0.2, "rgb(256, 0, 0)"],
+                [0.4, "rgb(256, 0, 0)"],
+                # PC layer: green
+                [0.4, "rgb(58, 146, 94)"],
+                [0.6, "rgb(58, 146, 94)"],
+                # Molecular layer - BC: arancione
+                [0.6, "rgb(249, 90, 8)"],
+                [0.8, "rgb(249, 90, 8)"],
+                # Molecular layer - SC: giallo
+                [0.8, "rgb(245, 177, 0)"],
+                [1.0, "rgb(245, 177, 0)"],
+            ]
+
+            # Plot Flocculus sections
+            fig_section3 = go.Figure(
+                frames=[
+                    go.Frame(
+                        data=go.Surface(
+                            z=((k) * 0.1) * np.ones((r, c)),
+                            surfacecolor=(np.take(region, k - 1, axis=sliding_dir)),
+                            colorscale=color_region,
+                            cmin=0,
+                            cmax=3,
+                        ),
+                        name=str(
+                            k
+                        ),  # you need to name the frame for the animation to behave properly
+                    )
+                    for k in frames
+                ]
+            )
+
+            print(int(frames[nb_frames - 1]))
+
+            # Add data to be displayed before animation starts
+            fig_section3.add_trace(
+                go.Surface(
+                    z=((frames[nb_frames - 1]) * 0.1) * np.ones((r, c)),
+                    surfacecolor=np.take(region, int(frames[nb_frames - 1] - 1), axis=sliding_dir),
+                    colorscale=color_region,
+                    cmin=0,
+                    cmax=200,
+                    colorbar=dict(thickness=20, ticklen=4),
+                )
+            )
+            z = ((frames[nb_frames - 1]) * 0.1) * np.ones((r, c))
+            print(z.shape)
+            selected = np.take(region, int(frames[nb_frames - 1] - 1), axis=sliding_dir)
+
+            print(selected.shape)
+
+            def frame_args(duration):
+                return {
+                    "frame": {"duration": duration},
+                    "mode": "immediate",
+                    "fromcurrent": True,
+                    "transition": {"duration": duration, "easing": "linear"},
+                }
+
+            sliders = [
                 {
-                    "buttons": [
-                        {
-                            "args": [None, frame_args(50)],
-                            "label": "&#9654;",  # play symbol
-                            "method": "animate",
-                        },
-                        {
-                            "args": [[None], frame_args(0)],
-                            "label": "&#9724;",  # pause symbol
-                            "method": "animate",
-                        },
-                    ],
-                    "direction": "left",
-                    "pad": {"r": 10, "t": 70},
-                    "type": "buttons",
+                    "pad": {"b": 10, "t": 60},
+                    "len": 0.9,
                     "x": 0.1,
                     "y": 0,
+                    "steps": [
+                        {
+                            "args": [[f.name], frame_args(0)],
+                            # "label": str(k),
+                            "method": "animate",
+                        }
+                        for k, f in enumerate(fig_section3.frames)
+                    ],
                 }
-            ],
-            sliders=sliders,
+            ]
+
+            # Axes
+            plane = [r, c]
+            if abs(r - c) > 2 * (min(plane)):
+                ax = [None] * len(plane)
+                ax[plane.index(max(plane))] = [-1, max(plane) + 1]
+                ax[plane.index(min(plane))] = [-max(plane) / 2, max(plane) / 2]
+            else:
+                ax = [None] * len(plane)
+                ax[plane.index(max(plane))] = [-1, max(plane) + 1]
+                ax[plane.index(min(plane))] = [-1, max(plane) + 1]
+
+            # Layout
+            fig_section3.update_layout(
+                title="Flocculus voxelization",
+                width=1000,
+                height=1000,
+                scene=dict(
+                    zaxis=dict(range=[-0.1, frames[nb_frames - 1] * 0.1], autorange=False),
+                    yaxis=dict(range=ax[0], autorange=False),
+                    xaxis=dict(range=ax[1], autorange=False),
+                    aspectratio=dict(x=1, y=1, z=1),
+                ),
+                updatemenus=[
+                    {
+                        "buttons": [
+                            {
+                                "args": [None, frame_args(50)],
+                                "label": "&#9654;",  # play symbol
+                                "method": "animate",
+                            },
+                            {
+                                "args": [[None], frame_args(0)],
+                                "label": "&#9724;",  # pause symbol
+                                "method": "animate",
+                            },
+                        ],
+                        "direction": "left",
+                        "pad": {"r": 10, "t": 70},
+                        "type": "buttons",
+                        "x": 0.1,
+                        "y": 0,
+                    }
+                ],
+                sliders=sliders,
+            )
+
+            fig_section3.show()
+
+            ######################### Sections 2D as heatmaps ############################
+            # Plot Region sections as heatmaps
+            dim_names = ["x", "y", "z"]
+            nb_sections = 10
+            sections = []
+            for sd in range(dim[sliding_dir]):
+                if np.any(np.take(region, sd - 1, axis=sliding_dir)):
+                    sections.append(sd)
+            for k in range(nb_sections):
+                sections_sel = random.sample(sections, nb_sections)
+
+            sections_sel.sort()
+            sections_sel[0] = 50
+
+            titles = [dim_names[sliding_dir] + " = " + str(k) for k in sections_sel]
+            fig_section2 = make_subplots(
+                rows=2,
+                cols=5,
+                subplot_titles=(
+                    titles[0],
+                    titles[1],
+                    titles[2],
+                    titles[3],
+                    titles[4],
+                    titles[5],
+                    titles[6],
+                    titles[7],
+                    titles[8],
+                    titles[9],
+                ),
+            )
+            ind = 0
+            for k in sections_sel:
+                data = go.Heatmap(
+                    z=np.take(region, k - 1, axis=sliding_dir), colorscale=color_region
+                )
+                fig_section2.append_trace(data, int(ind / 5) + 1, ind % 5 + 1)
+                ind = ind + 1
+
+            fig_section2.show()
+
+            fig_section2.update_layout(height=600, width=800, title_text="Subplots")
+            fig_section2.show()
+
+    ##############################################################################
+
+    sliding_dir = 2
+
+    # PC layer
+    maskPC = ann == id_pc
+    maskPC = maskPC * 1
+    PCsurface = np.where(maskPC)
+
+    # ML
+    maskMLI = ann == id_mol
+    maskMLI = maskMLI * 1
+    MLIsurface = np.where(maskMLI)
+    SCsurface = np.where(mask_of_stellate)
+    BCsurface = np.where(mask_of_basket)
+
+    # GL
+    maskGL = ann == id_gr
+    maskGL = maskGL * 1
+    GLsurface = np.where(maskGL)
+
+    # Extract all region
+    mask_all = np.isin(ann, id_region)
+    region = (
+        ann - id_region[2] + 1
+    )  # Scale to have granular layer = 1, PC layer = 2, molecular layer = 3
+    region[~mask_all] = 0  # Outside of the region = 0
+    region[mask_of_stellate] = 4  # To differentiate SC and BC in the ML
+
+    # Cut around the region
+    region_index = np.nonzero(region)
+    region = region[
+        np.amin(region_index[0]) - 10 : np.amax(region_index[0]) + 10,
+        np.amin(region_index[1]) - 10 : np.amax(region_index[1]) + 10,
+        np.amin(region_index[2]) - 10 : np.amax(region_index[2]) + 10,
+    ]
+    dim = region.shape
+    example_slice = np.take(region, 0, axis=sliding_dir)
+    r, c = example_slice.shape
+
+    # Define colorscale
+    color_region = [
+        # External to region: gray
+        [0, "rgb(220, 220, 220)"],
+        [0.2, "rgb(220, 220, 220)"],
+        # Granular layer: red
+        [0.2, "rgb(256, 0, 0)"],
+        [0.4, "rgb(256, 0, 0)"],
+        # PC layer: green
+        [0.4, "rgb(58, 146, 94)"],
+        [0.6, "rgb(58, 146, 94)"],
+        # Molecular layer - BC: arancione
+        [0.6, "rgb(249, 90, 8)"],
+        [0.8, "rgb(249, 90, 8)"],
+        # Molecular layer - SC: giallo
+        [0.8, "rgb(245, 177, 0)"],
+        [1.0, "rgb(245, 177, 0)"],
+    ]
+
+    # for sl in range(10, 20):    #ciclo for da 10 a 19
+    #    print(sl)
+
+    # 69 – 386 ( range 317 )
+    low = np.amin(region_index[2]) - 10  # 69
+    high = np.amax(region_index[2]) + 10  # 387
+    rang = high - low  # 317
+
+    fig_scatter6 = go.Figure(
+        data=go.Heatmap(
+            z=np.take(region, 39, axis=sliding_dir),
+            colorscale=color_region
+            # cmin=0, cmax=200,
+            # colorbar=dict(thickness=20, ticklen=4)
         )
-
-        fig_section3.show()
-
-        ######################### Sections 2D as heatmaps ############################
-        # Plot Region sections as heatmaps
-        dim_names = ["x", "y", "z"]
-        nb_sections = 10
-        sections = []
-        for sd in range(dim[sliding_dir]):
-            if np.any(np.take(region, sd - 1, axis=sliding_dir)):
-                sections.append(sd)
-        for k in range(nb_sections):
-            sections_sel = random.sample(sections, nb_sections)
-
-        sections_sel.sort()
-        sections_sel[0] = 50
-
-        titles = [dim_names[sliding_dir] + " = " + str(k) for k in sections_sel]
-        fig_section2 = make_subplots(
-            rows=2,
-            cols=5,
-            subplot_titles=(
-                titles[0],
-                titles[1],
-                titles[2],
-                titles[3],
-                titles[4],
-                titles[5],
-                titles[6],
-                titles[7],
-                titles[8],
-                titles[9],
-            ),
-        )
-        ind = 0
-        for k in sections_sel:
-            data = go.Heatmap(z=np.take(region, k - 1, axis=sliding_dir), colorscale=color_region)
-            fig_section2.append_trace(data, int(ind / 5) + 1, ind % 5 + 1)
-            ind = ind + 1
-
-        fig_section2.show()
-
-        # fig_section2.update_layout(height=600, width=800, title_text="Subplots")
-        # fig_section2.show()
-
-
-##############################################################################
-
-sliding_dir = 2
-
-# PC layer
-maskPC = ann == id_pc
-maskPC = maskPC * 1
-PCsurface = np.where(maskPC)
-
-# ML
-maskMLI = ann == id_mol
-maskMLI = maskMLI * 1
-MLIsurface = np.where(maskMLI)
-SCsurface = np.where(mask_of_stellate)
-BCsurface = np.where(mask_of_basket)
-
-# GL
-maskGL = ann == id_gr
-maskGL = maskGL * 1
-GLsurface = np.where(maskGL)
-
-# Extract all region
-mask_all = np.isin(ann, id_region)
-region = (
-    ann - id_region[2] + 1
-)  # Scale to have granular layer = 1, PC layer = 2, molecular layer = 3
-region[~mask_all] = 0  # Outside of the region = 0
-region[mask_of_stellate] = 4  # To differentiate SC and BC in the ML
-
-# Cut around the region
-region_index = np.nonzero(region)
-region = region[
-    np.amin(region_index[0]) - 10 : np.amax(region_index[0]) + 10,
-    np.amin(region_index[1]) - 10 : np.amax(region_index[1]) + 10,
-    np.amin(region_index[2]) - 10 : np.amax(region_index[2]) + 10,
-]
-dim = region.shape
-example_slice = np.take(region, 0, axis=sliding_dir)
-r, c = example_slice.shape
-
-# Define colorscale
-color_region = [
-    # External to region: gray
-    [0, "rgb(220, 220, 220)"],
-    [0.2, "rgb(220, 220, 220)"],
-    # Granular layer: red
-    [0.2, "rgb(256, 0, 0)"],
-    [0.4, "rgb(256, 0, 0)"],
-    # PC layer: green
-    [0.4, "rgb(58, 146, 94)"],
-    [0.6, "rgb(58, 146, 94)"],
-    # Molecular layer - BC: arancione
-    [0.6, "rgb(249, 90, 8)"],
-    [0.8, "rgb(249, 90, 8)"],
-    # Molecular layer - SC: giallo
-    [0.8, "rgb(245, 177, 0)"],
-    [1.0, "rgb(245, 177, 0)"],
-]
-
-
-# for sl in range(10, 20):    #ciclo for da 10 a 19
-#    print(sl)
-
-
-# 69 – 386 ( range 317 )
-low = np.amin(region_index[2]) - 10  # 69
-high = np.amax(region_index[2]) + 10  # 387
-rang = high - low  # 317
-
-fig_scatter6 = go.Figure(
-    data=go.Heatmap(
-        z=np.take(region, 39, axis=sliding_dir),
-        colorscale=color_region
-        # cmin=0, cmax=200,
-        # colorbar=dict(thickness=20, ticklen=4)
     )
-)
-fig_scatter6.show()
+    fig_scatter6.show()

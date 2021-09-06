@@ -12,11 +12,14 @@ from cerebellum.helper_mixins.brt_JSONread_mixins import (
 class BrainRegionsTree(JSONreadMixin):
     def __init__(
         self,
-        file="config/brain_regions.json",
-        region_name="Flocculus",
+        region_name,
+        brt_file="config/brain_regions.json",
     ):
-        self.tree = self._create_tree(file, nodecls=BrainNode)
+        self.tree = self._create_tree(brt_file, nodecls=BrainNode)
         self.region_name = region_name
+        self.region_of_interest = None
+        self.involved_regions = []
+        self.id_region = []
         self._region_of_interest_updates()
 
     @staticmethod
@@ -34,5 +37,8 @@ class BrainRegionsTree(JSONreadMixin):
         exporter = DictExporter()
         return exporter.export(self.tree)
 
-    def render(self):
+    def render_all(self):
         return RenderTree(self.tree)
+
+    def render_roi(self):
+        return RenderTree(self.region_of_interest)

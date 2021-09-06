@@ -1,0 +1,2 @@
+class MissingNRRDFileException(Exception):
+    pass
