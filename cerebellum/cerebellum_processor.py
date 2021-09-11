@@ -1,8 +1,55 @@
+import nrrd
 import numpy as np
 import plotly.graph_objects as go
+from cerebellum.helper_mixins.bap_abstract import BrainAtlasProcessor
 
 
-class BAPCerebellum(object):
+class CerebellumProcessor(BrainAtlasProcessor):
+    def __init__(self, brt, nrrd_path):
+        self.nrrd_path = nrrd_path
+        self.brt = brt
+        self.mask = {}
+        self.vox_in_layer = {}
+        self.stats = {}
+        self.__nrrd_read()
+
+    def __nrrd_read(self):
+        # get the 3-dimensional data of cell distributions of the brain
+        data_path = self.nrrd_path
+        # voxel - region annotation
+        self.ann, h = nrrd.read(data_path + "annotations.nrrd")
+        self.dens_cell, h = nrrd.read(data_path + "cell_density.nrrd")
+        self.dens_neuron, h = nrrd.read(data_path + "neu_density.nrrd")
+        self.dens_inh, h = nrrd.read(data_path + "inh_density.nrrd")
+        # orientation voxel
+        self.orientations, h = nrrd.read(data_path + "orientations_cereb.nrrd")
+        self.bounds, h = nrrd.read(data_path + "boundaries_mo.nrrd")
+
+    def screenshot_region(self, id_):
+        """During masking of region, keeping track of stats.
+        TODO: does not deal with parent cumulative values
+        skipped for now, non-essential (not used in placement)"""
+
+        stats = {}
+        number_cells = np.round(np.sum(self.dens_cell[self.mask[id_]]))
+        number_neurons = np.round(np.sum(self.dens_neuron[self.mask[id_]]))
+        inhibitory_count = self.dens_inh[self.mask[id_]]
+        volumes = sum(self.mask[id_]) / (4.0 ** 3) / 1000.0
+        stats[id_]["number_cells"] = number_cells
+        stats[id_]["number_neurons"] = number_neurons
+        stats[id_]["volumes"] = volumes
+        stats[id_]["cell_densities"] = number_cells / volumes
+        stats[id_]["neuron_densities"] = number_neurons / volumes
+        stats[id_]["number_inhibitory"] = np.round(np.sum(inhibitory_count))
+        return stats
+
+    def mask_regions(self):
+        """Store information per region"""
+        for id_ in self.brt.involved_regions:
+            self.mask[id_] = self.ann == id_
+            self.vox_in_layer[id_] = sum(self.mask[id_])
+        self.mask_basket_stellate()
+
     def mask_basket_stellate(self, thickness_ratio=2.0 / 3.0):
         # ratio of molecular layer space for stellate cells
         up_layer_distance = np.abs(self.bounds[0])
@@ -27,10 +74,6 @@ class BAPCerebellum(object):
         self.vox_in_layer["Basket layer"] = sum(self.mask["Basket layer"])
 
     def fill_regions(self):
-        # TODO find a better way to automatically
-        # mask the layers not in proper definition
-        self.mask_basket_stellate()
-
         id_region = self.brt.id_region
         # Extract all region
         mask_all = np.isin(self.ann, id_region)
@@ -77,3 +120,6 @@ class BAPCerebellum(object):
             )
         )
         fig_scatter.show()
+
+    def render_regions(self):
+        return self.brt.render_roi()

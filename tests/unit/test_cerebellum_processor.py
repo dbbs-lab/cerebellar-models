@@ -1,18 +1,20 @@
 import unittest
 import numpy as np
 from anytree import findall, find
-
+from cerebellum.cerebellum_processor import CerebellumProcessor
 from cerebellum.brain_regions_tree import BrainRegionsTree
-from cerebellum.brain_atlas_processor import BrainAtlasProcessor
 
 
-class TestAtlasInput(unittest.TestCase):
+class TestBrainAtlasProcessor(unittest.TestCase):
     @classmethod
     def setUpClass(cls):
-        cls.brt = BrainRegionsTree(
-            region_name="Flocculus",
-        )
-        cls.bap = BrainAtlasProcessor(cls.brt)
+        cls.brt = BrainRegionsTree(region_name="Flocculus")
+        cls.bap = CerebellumProcessor(brt=cls.brt, nrrd_path="../Flocculus3.0_Lingula/data/")
+
+    def test_pipeline(self):
+        self.bap.mask_regions()
+        self.bap.fill_regions()
+        self.bap.show_regions()
 
     def test_init(self):
         # print("Annotations shape: " + str(self.bap.ann.shape))
