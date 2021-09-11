@@ -56,10 +56,9 @@ class JSONreadMixin(object):
             self.region_of_interest, filter_=lambda node: self.region_of_interest in node.path
         )
         # issue #2
-        # involved_regions = [
-        #    i
-        #    for i in involved_regions
-        #    if i.id is not self.region_of_interest.id
-        # ]  # remove Flocculus itself
+        # issue #3: Adding Flocculus in the end
+        involved_regions = [
+            i for i in involved_regions if i.id is not self.region_of_interest.id
+        ] + [self.region_of_interest]
         self.involved_regions = involved_regions
         self.id_region = [i.id for i in involved_regions]

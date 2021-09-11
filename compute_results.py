@@ -128,8 +128,9 @@ for i in range(len(region_names)):
     if "Purkinje layer" in region_names[i]:
         i_purkinje = i
 
-
+print("i_granular: ", i_granular)
 print("i_molecular: ", i_molecular)
+print("Purkinje layer: ", i_purkinje)
 # Volumes print
 print("Volume molecular layer: " + str(volumes[i_molecular]))
 print("Volume purkinje layer: " + str(volumes[i_purkinje]))

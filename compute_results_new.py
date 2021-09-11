@@ -105,7 +105,7 @@ for i in range(len(region_names)):
     if "Purkinje layer" in region_names[i]:
         i_purkinje = i
 
-
+print("i_granular: ", i_granular)
 print("i_molecular: ", i_molecular)
 # Volumes print
 print("Volume molecular layer: " + str(volumes[i_molecular]))
@@ -196,11 +196,11 @@ color_region = [
     [0, "rgb(220, 220, 220)"],
     [0.2, "rgb(220, 220, 220)"],
     # Granular layer: red
-    [0.2, "rgb(58, 146, 94)"],
-    [0.4, "rgb(58, 146, 94)"],
-    # PC layer: green
+    [0.2, "rgb(256, 0, 0)"],
     [0.4, "rgb(256, 0, 0)"],
-    [0.6, "rgb(256, 0, 0)"],
+    # PC layer: green
+    [0.4, "rgb(58, 146, 94)"],
+    [0.6, "rgb(58, 146, 94)"],
     # Molecular layer - BC: arancione
     [0.6, "rgb(249, 90, 8)"],
     [0.8, "rgb(249, 90, 8)"],
