@@ -8,7 +8,7 @@ from cerebellum.brain_regions_tree import BrainRegionsTree
 class TestRegionConfig(unittest.TestCase):
     @classmethod
     def setUpClass(cls):
-        cls.brt = BrainRegionsTree()
+        cls.brt = BrainRegionsTree(region_name="Flocculus")
         cls.roi = cls.brt.region_of_interest
         with open("tests/fixtures/id_current_region.json") as f:
             cls.current_region = json.load(f)
@@ -25,7 +25,8 @@ class TestRegionConfig(unittest.TestCase):
         # get nodes that are related to Flocculus
         id_region_nodes = findall(self.roi, filter_=lambda node: self.roi in node.path)
         id_region = [i.id for i in id_region_nodes]
-        id_region.remove(self.roi.id)  # remove Flocculus itself
+        # #2 Issue
+        # id_region.remove(self.roi.id)  # remove Flocculus
         self.assertEqual(id_region, self.id_region)
         self.assertEqual(self.brt.id_region, self.id_region)
 
@@ -39,4 +40,4 @@ class TestRegionConfig(unittest.TestCase):
         self.assertEqual(self.brt.get_id_gr_pc_mol(), (10690, 10691, 10692))
 
     def test_basic_properties(self):
-        self.assertEqual(self.brt.region_of_interest in self.brt.involved_regions, False)
+        self.assertEqual(self.brt.region_of_interest in self.brt.involved_regions, True)

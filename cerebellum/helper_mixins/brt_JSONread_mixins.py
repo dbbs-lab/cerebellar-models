@@ -37,6 +37,12 @@ class JSONreadMixin(object):
                     id_pc = region_node.id
         return id_gr, id_pc, id_mol
 
+    def get_id_region(self, region_string):
+        for region_node in self.involved_regions:
+            full_name = region_node.get_path_str()
+            if region_string in full_name:
+                return region_node.id
+
     def _region_of_interest_updates(self):
         if not self.region_name:
             raise ("Region name not set.")
@@ -46,11 +52,14 @@ class JSONreadMixin(object):
         )
 
         # previously called id_region
-        id_region_nodes = findall(
+        involved_regions = findall(
             self.region_of_interest, filter_=lambda node: self.region_of_interest in node.path
         )
-        involved_regions = [
-            i for i in id_region_nodes if i.id is not self.region_of_interest.id
-        ]  # remove Flocculus itself
+        # issue #2
+        # involved_regions = [
+        #    i
+        #    for i in involved_regions
+        #    if i.id is not self.region_of_interest.id
+        # ]  # remove Flocculus itself
         self.involved_regions = involved_regions
         self.id_region = [i.id for i in involved_regions]
