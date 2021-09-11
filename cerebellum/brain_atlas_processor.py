@@ -31,7 +31,7 @@ class BrainAtlasProcessor(BAPCerebellum):
         self.mask = {}
         self.vox_in_layer = {}
         self.stats = {}
-        self.__brain_regions_init(self)
+        # self.__brain_regions_init(self)
         self.__nrrd_read()
 
         self.fill_basket_stellate()
