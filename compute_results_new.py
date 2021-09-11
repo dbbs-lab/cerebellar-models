@@ -64,7 +64,7 @@ for id_ in id_region:
         continue
     region, layer = id_to_region_dictionary[id_].split(", ")
     print(layer)
-    mask[layer] = ann == int(id_)
+    mask[layer] = ann == id_regiont(id_)
     vox_in_layer[layer] = len(np.where(mask[layer])[0])
     number_cells.append(np.round(np.sum(dens_cell[mask[layer]])))
     number_neurons.append(np.round(np.sum(dens_neuron[mask[layer]])))
@@ -153,23 +153,6 @@ print("Voxels Stellate layer: " + str(vox_in_layer["Stellate layer"]))
 print("Voxels Basket layer: " + str(vox_in_layer["Basket layer"]))
 
 sliding_dir = 2
-
-# PC layer
-maskPC = ann == id_pc
-maskPC = maskPC * 1
-PCsurface = np.where(maskPC)
-
-# ML
-maskMLI = ann == id_mol
-maskMLI = maskMLI * 1
-MLIsurface = np.where(maskMLI)
-SCsurface = np.where(mask_of_stellate)
-BCsurface = np.where(mask_of_basket)
-
-# GL
-maskGL = ann == id_gr
-maskGL = maskGL * 1
-GLsurface = np.where(maskGL)
 
 # Extract all region
 mask_all = np.isin(ann, id_region)

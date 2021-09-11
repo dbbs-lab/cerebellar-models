@@ -24,7 +24,7 @@ class TestRegionConfig(unittest.TestCase):
     def test_id_region(self):
         # get nodes that are related to Flocculus
         id_region_nodes = findall(self.roi, filter_=lambda node: self.roi in node.path)
-        id_region = [i.id for i in id_region_nodes]
+        id_region = [i.id for i in id_region_nodes if i != self.roi] + [self.roi.id]
         # #2 Issue
         # id_region.remove(self.roi.id)  # remove Flocculus
         self.assertEqual(id_region, self.id_region)

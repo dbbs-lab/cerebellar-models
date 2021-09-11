@@ -1,14 +1,14 @@
 import numpy as np
+import plotly.graph_objects as go
 
 
 class BAPCerebellum(object):
-    def fill_basket_stellate(self):
+    def mask_basket_stellate(self, thickness_ratio=2.0 / 3.0):
         # ratio of molecular layer space for stellate cells
-        thickness_ratio = 2.0 / 3.0
         up_layer_distance = np.abs(self.bounds[0])
         down_layer_distance = np.abs(self.bounds[1])
-
         relative_layer_distance = np.zeros(up_layer_distance.shape)
+
         id_mol = self.brt.get_id_region("molecular layer")
         mask_mol = self.ann == id_mol
 
@@ -25,3 +25,55 @@ class BAPCerebellum(object):
         self.mask["Basket layer"] = mask_of_basket
         self.vox_in_layer["Stellate layer"] = sum(self.mask["Stellate layer"])
         self.vox_in_layer["Basket layer"] = sum(self.mask["Basket layer"])
+
+    def fill_regions(self):
+        # TODO find a better way to automatically
+        # mask the layers not in proper definition
+        self.mask_basket_stellate()
+
+        id_region = self.brt.id_region
+        # Extract all region
+        mask_all = np.isin(self.ann, id_region)
+        # Scale to have granular layer = 1, PC layer = 2, molecular layer = 3
+        region = self.ann - id_region[2] + 1
+        # Outside of the region = 0
+        region[~mask_all] = 0
+        # To differentiate SC and BC in the ML
+        region[self.mask["Stellate layer"]] = 4
+        # Cut around the region
+        self.region_index = np.nonzero(region)
+        self.region = region[
+            np.amin(self.region_index[0]) - 10 : np.amax(self.region_index[0]) + 10,  # noqa
+            np.amin(self.region_index[1]) - 10 : np.amax(self.region_index[1]) + 10,  # noqa
+            np.amin(self.region_index[2]) - 10 : np.amax(self.region_index[2]) + 10,  # noqa
+        ]
+
+    def show_regions(self, sliding_dir=2):
+        # Define colorscale
+        color_region = [
+            # External to region: gray
+            [0, "rgb(220, 220, 220)"],
+            [0.2, "rgb(220, 220, 220)"],
+            # Granular layer: red
+            [0.2, "rgb(256, 0, 0)"],
+            [0.4, "rgb(256, 0, 0)"],
+            # PC layer: green
+            [0.4, "rgb(58, 146, 94)"],
+            [0.6, "rgb(58, 146, 94)"],
+            # Molecular layer - BC: arancione
+            [0.6, "rgb(249, 90, 8)"],
+            [0.8, "rgb(249, 90, 8)"],
+            # Molecular layer - SC: giallo
+            [0.8, "rgb(245, 177, 0)"],
+            [1.0, "rgb(245, 177, 0)"],
+        ]
+
+        fig_scatter = go.Figure(
+            data=go.Heatmap(
+                z=np.take(self.region, 39, axis=sliding_dir),
+                colorscale=color_region
+                # cmin=0, cmax=200,
+                # colorbar=dict(thickness=20, ticklen=4)
+            )
+        )
+        fig_scatter.show()
