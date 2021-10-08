@@ -7,14 +7,17 @@ class BrainAtlasProcessor(ABC):
         """Initializes region of interest, subregions, and nrrd data"""
         pass
 
+    @abstractmethod
     def mask_regions(self):
         """Create a mask for each of the involved regions."""
         pass
 
+    @abstractmethod
     def fill_regions(self):
         """Create a single 3D array containing all the masks."""
         pass
 
+    @abstractmethod
     def show_regions(self):
         """Show a slice of the regions involved."""
         pass

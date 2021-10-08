@@ -8,6 +8,9 @@ class BrainNode(Node):
     def get_path_str(self):
         return "|" + "|".join([i.name for i in list(self.path)])
 
+    def get_name(self):
+        return [i.name for i in list(self.path)][-1]
+
 
 class JSONreadMixin(object):
     """Making possible previous functionalities"""
@@ -50,6 +53,8 @@ class JSONreadMixin(object):
         self.region_of_interest = find(
             self.tree, filter_=lambda node: node.name in (self.region_name)
         )
+        if self.region_of_interest is None:
+            raise Exception("Region not found.")
 
         # previously called id_region
         involved_regions = findall(

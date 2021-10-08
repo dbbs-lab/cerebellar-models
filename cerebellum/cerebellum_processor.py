@@ -1,4 +1,5 @@
 import nrrd
+import pickle
 import numpy as np
 import plotly.graph_objects as go
 from cerebellum.helper_mixins.bap_abstract import BrainAtlasProcessor
@@ -11,9 +12,9 @@ class CerebellumProcessor(BrainAtlasProcessor):
         self.mask = {}
         self.vox_in_layer = {}
         self.stats = {}
-        self.__nrrd_read()
+        self._nrrd_read()
 
-    def __nrrd_read(self):
+    def _nrrd_read(self):
         # get the 3-dimensional data of cell distributions of the brain
         data_path = self.nrrd_path
         # voxel - region annotation
@@ -44,10 +45,13 @@ class CerebellumProcessor(BrainAtlasProcessor):
         return stats
 
     def mask_regions(self):
-        """Store information per region"""
-        for id_ in self.brt.involved_regions:
-            self.mask[id_] = self.ann == id_
-            self.vox_in_layer[id_] = sum(self.mask[id_])
+        """Store information per region node in the mask for filtering."""
+
+        for region_node in self.brt.involved_regions:
+            name_region = region_node.get_name()
+            id_ = region_node.id
+            self.mask[name_region] = self.ann == id_
+            self.vox_in_layer[name_region] = sum(self.mask[name_region])
         self.mask_basket_stellate()
 
     def mask_basket_stellate(self, thickness_ratio=2.0 / 3.0):
@@ -74,6 +78,8 @@ class CerebellumProcessor(BrainAtlasProcessor):
         self.vox_in_layer["Basket layer"] = sum(self.mask["Basket layer"])
 
     def fill_regions(self):
+        """Cutting around the region of interest."""
+
         id_region = self.brt.id_region
         # Extract all region
         mask_all = np.isin(self.ann, id_region)
@@ -123,3 +129,24 @@ class CerebellumProcessor(BrainAtlasProcessor):
 
     def render_regions(self):
         return self.brt.render_roi()
+
+    def save_processor(self, keep_arrays=True):
+        """"""
+
+        filename = "config/big_data/" + self.brt.region_name + ".pkl"
+        with open(filename, "wb") as outp:
+            pickle.dump(self, outp, pickle.HIGHEST_PROTOCOL)
+
+    @classmethod
+    def read_processor(self, region_name="Lingula (I)"):
+        filename = "config/big_data/" + region_name + ".pkl"
+        with open(filename, "rb") as inp:
+            return pickle.load(inp)
+
+    def run_pipeline(self, show_regions=False, save_processor=False):
+        self.mask_regions()
+        self.fill_regions()
+        if show_regions:
+            self.show_regions()
+        if save_processor:
+            self.save_processor()

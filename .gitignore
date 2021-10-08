@@ -8,7 +8,7 @@ venv/
 .history/
 .vscode/
 .pytest_cache/
-
+config/big_data/
 
 # Byte-compiled / optimized / DLL files
 __pycache__/

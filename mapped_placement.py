@@ -1,48 +1,49 @@
 # flake8: noqa
 # Importing scaffold
-from bsb.particles import Particle, ParticleSystem, plot_particle_system, plot_detailed_system
-from bsb.placement import ParallelArrayPlacement
-from bsb.config import JSONConfig
 from bsb.core import Scaffold, from_hdf5
-from bsb.plotting import *
 from bsb.models import MorphologySet, PlacementSet
 from bsb.output import MorphologyRepository, MorphologyCache
+from bsb.config import JSONConfig
+from bsb.plotting import *
+from bsb.particles import Particle, ParticleSystem, plot_particle_system, plot_detailed_system
+from bsb.placement import ParallelArrayPlacement
 from bsb.reporting import set_verbosity
 
 # Importing compute results
 from compute_results import (
-    region_name,
     VOXEL_SIZE,
     mask,
     dens_neuron,
     dens_inh,
-    layers_per_cell,
-    mask_of_stellate,
     orientations,
     fac_Lugaro,
-    reference_UBC_density,
 )
 
-import numpy as np
-import os, sys
 
-sys.path.insert(0, os.path.join(os.path.dirname("__file__"), ".."))
-from time import time
-import plotly.graph_objects as go
-import random
-import h5py
+import os
+import sys
 import math
-import matplotlib.pyplot as plt
-from mpl_toolkits.mplot3d import Axes3D
 import scipy
-import cProfile
-
+import random
+import numpy as np
+import matplotlib.pyplot as plt
 import cerebellum.asearch as asearch
 
+from time import time
+from mpl_toolkits.mplot3d import Axes3D
+
+sys.path.insert(0, os.path.join(os.path.dirname("__file__"), ".."))
 
 PLOTTING_FOR_CHECK = False
 PC_SHUFFLED = False
 
+layers_per_cell = {
+    "granule": "granular layer",
+    "golgi": "granular layer",
+    "purkinje": "Purkinje layer",
+    "stellate": "Stellate layer",
+    "basket": "Basket layer",
+}
 cell_properties = {
     "stellate_cell": {"radius": 4.0, "id": 5, "type": "inh"},
     "basket_cell": {"radius": 6.0, "id": 6, "type": "inh"},
@@ -121,12 +122,10 @@ vox_dist_x = math.floor(dist_x / VOXEL_SIZE)  # To be sure of not having overlap
 vox_dist_z = math.ceil(dist_z / VOXEL_SIZE)
 
 index_pc_voxels = np.nonzero(mask["Purkinje layer"])
-# print(index_pc_voxels)
 pc_matrix = np.zeros(
     (max(index_pc_voxels[0]) + 1, max(index_pc_voxels[1]) + 1, max(index_pc_voxels[2]) + 1)
 )
 pc_matrix[index_pc_voxels] = 1
-# print(pc_matrix)
 
 # PC sections are obtained cutting along the z axis
 dim = pc_matrix.shape  # 448 x 232 x 372
@@ -136,7 +135,6 @@ sections = []
 started_placing = False
 slice_placing_num = 0
 for sd in range(dim[cut_dir]):  # FOR EACH SLICE
-
     # Matrix cutted in the parasagittal direction
     pc_slice = np.take(pc_matrix, sd - 1, axis=cut_dir)
     # Tuple of arrays with indices of PC voxels/pixels in the current slice, ordered
@@ -606,7 +604,7 @@ print("Total positioning time: ", tot_time)
 
 cell_per_layer["Purkinje layer"] = ["purkinje_cell"]
 
-discretized_phi, discretized_theta = morphology_cache._discretize_orientations([30, 30])
+discretized_phi, discretized_theta = morphology_cache._discretize_orientations(30, 30)
 discretized_orientations = np.array(
     [np.cos(discretized_phi), np.sin(discretized_phi), np.sin(discretized_theta)]
 )
@@ -693,7 +691,6 @@ for layer in cell_per_layer.keys():
 # Place entities
 mossy_fibers_type = scaffold.get_cell_type("mossy_fibers")
 scaffold.place_cell_type(mossy_fibers_type)
-
 
 scaffold.compile_output()
 print("Connecting neurons...")
