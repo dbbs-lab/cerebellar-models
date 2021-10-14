@@ -1,6 +1,5 @@
 # flake8: noqa
 from cerebellum.helpers import cell_properties
-from compute_results import get_mask_purkinje
 from bsb.config import from_json
 from bsb.core import Scaffold
 

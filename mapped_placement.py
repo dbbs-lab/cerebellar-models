@@ -1,25 +1,17 @@
 # flake8: noqa
 # Importing scaffold
-from bsb.core import Scaffold, from_hdf5
-from bsb.models import MorphologySet, PlacementSet
+from bsb.core import Scaffold
 from bsb.output import MorphologyRepository, MorphologyCache
 from bsb.config import JSONConfig
 from bsb.plotting import *
-from bsb.particles import Particle, ParticleSystem, plot_particle_system, plot_detailed_system
-from bsb.placement import ParallelArrayPlacement
+from bsb.particles import ParticleSystem
 from bsb.reporting import set_verbosity
 
-# Importing compute results
-from compute_results import (
-    VOXEL_SIZE,
-    mask,
-    dens_neuron,
-    dens_inh,
-    orientations,
-    fac_Lugaro,
-)
+# import cerebellum stuff
+from cerebellum.cerebellum_processor import CerebellumProcessor as CP
+from cerebellum.brain_regions_tree import BrainRegionsTree
 
-
+# import additional libraries
 import os
 import sys
 import math
@@ -28,7 +20,6 @@ import random
 import numpy as np
 import matplotlib.pyplot as plt
 import cerebellum.asearch as asearch
-
 from time import time
 from mpl_toolkits.mplot3d import Axes3D
 
@@ -36,30 +27,13 @@ sys.path.insert(0, os.path.join(os.path.dirname("__file__"), ".."))
 
 PLOTTING_FOR_CHECK = False
 PC_SHUFFLED = False
+VOXEL_SIZE = 25.0  # um
+NRRD_PATH = "../Flocculus3.0_Lingula/data/"
+fac_Lugaro = 15.0
 
-layers_per_cell = {
-    "granule": "granular layer",
-    "golgi": "granular layer",
-    "purkinje": "Purkinje layer",
-    "stellate": "Stellate layer",
-    "basket": "Basket layer",
-}
-cell_properties = {
-    "stellate_cell": {"radius": 4.0, "id": 5, "type": "inh"},
-    "basket_cell": {"radius": 6.0, "id": 6, "type": "inh"},
-    "granule_cell": {"radius": 2.5, "id": 2, "type": "exc"},
-    "golgi_cell": {"radius": 8.0, "id": 1, "type": "inh"},
-    "glomerulus": {"radius": 1.5, "density": 3e-4},
-    "purkinje_cell": {"radius": 7.5},
-}
-cell_per_layer = {
-    "Stellate layer": ["stellate_cell"],
-    "Basket layer": ["basket_cell"],
-    "granular layer": ["granule_cell", "golgi_cell", "glomerulus"],
-}
-# cell_per_layer = {'Stellate layer': ['stellate_cell']}
-# cell_per_layer = {'Stellate layer': ['stellate'],'Basket layer': ['basket']}
-# cell_per_layer = {'granular layer': ['granule_cell']}
+
+def relative_folder(path):
+    return os.path.join(os.path.dirname("__file__"), path)
 
 
 def extract_voxels(indexes, number, dim, threshold):
@@ -89,10 +63,39 @@ def extract_voxels(indexes, number, dim, threshold):
     return voxels, neu_in_voxels
 
 
-# Initialize Scaffold
-def relative_folder(path):
-    return os.path.join(os.path.dirname("__file__"), path)
+layers_per_cell = {
+    "granule": "Lingula (I), granular layer",
+    "golgi": "Lingula (I), granular layer",
+    "purkinje": "Lingula (I), Purkinje layer",
+    "stellate": "Stellate layer",
+    "basket": "Basket layer",
+}
+cell_properties = {
+    "stellate_cell": {"radius": 4.0, "id": 5, "type": "inh"},
+    "basket_cell": {"radius": 6.0, "id": 6, "type": "inh"},
+    "granule_cell": {"radius": 2.5, "id": 2, "type": "exc"},
+    "golgi_cell": {"radius": 8.0, "id": 1, "type": "inh"},
+    "glomerulus": {"radius": 1.5, "density": 3e-4},
+    "purkinje_cell": {"radius": 7.5},
+}
+cell_per_layer = {
+    "Stellate layer": ["stellate_cell"],
+    "Basket layer": ["basket_cell"],
+    "Lingula (I), granular layer": ["granule_cell", "golgi_cell", "glomerulus"],
+}
 
+# generate mask
+brt = BrainRegionsTree(region_name="Lingula (I)")
+bap = CP(brt=brt, nrrd_path=NRRD_PATH)
+bap.create_mask()
+bap.apply_mask()
+
+print(bap.mask.keys())
+
+# keep others
+orientations = CP.read_nrrd("orientations_cereb.nrrd", nrrd_path=NRRD_PATH)
+dens_neuron = CP.read_nrrd("neu_density.nrrd", nrrd_path=NRRD_PATH)
+dens_inh = CP.read_nrrd("inh_density.nrrd", nrrd_path=NRRD_PATH)
 
 morpho_file = relative_folder("morphologies.hdf5")
 
@@ -101,7 +104,9 @@ config.connection_types["parallel_fiber_to_golgi"].transformation.quivers = orie
 config.connection_types["parallel_fiber_to_purkinje"].transformation.quivers = orientations
 config.connection_types["parallel_fiber_to_basket"].transformation.quivers = orientations
 config.connection_types["parallel_fiber_to_stellate"].transformation.quivers = orientations
+
 set_verbosity(3)
+
 scaffold = Scaffold(config)
 scaffold.morphology_repository = MorphologyRepository(morpho_file)
 morphology_cache = MorphologyCache(scaffold.morphology_repository)
@@ -121,9 +126,13 @@ radius_pc = 7.5
 vox_dist_x = math.floor(dist_x / VOXEL_SIZE)  # To be sure of not having overlapping
 vox_dist_z = math.ceil(dist_z / VOXEL_SIZE)
 
-index_pc_voxels = np.nonzero(mask["Purkinje layer"])
+index_pc_voxels = np.nonzero(bap.mask["Lingula (I), Purkinje layer"])
 pc_matrix = np.zeros(
-    (max(index_pc_voxels[0]) + 1, max(index_pc_voxels[1]) + 1, max(index_pc_voxels[2]) + 1)
+    (
+        max(index_pc_voxels[0]) + 1,
+        max(index_pc_voxels[1]) + 1,
+        max(index_pc_voxels[2]) + 1,
+    )
 )
 pc_matrix[index_pc_voxels] = 1
 
@@ -383,7 +392,7 @@ for sd in range(dim[cut_dir]):  # FOR EACH SLICE
                     current_node_y = next_current_node_y
                     # print (" ***voxel più vicino: ", current_node_x, current_node_y, "          dist=", current_min_dist )
 
-                path, path_length, count_over_dist_two, pc_voxels_in_slice_mod = asearch.astar(
+                (path, path_length, count_over_dist_two, pc_voxels_in_slice_mod,) = asearch.astar(
                     pc_slice,
                     (start_x_current_slice, start_y_current_slice),
                     (current_node_x, current_node_y),
@@ -438,15 +447,17 @@ print("Placed ", len(PC_placed), " Purkinje cells")
 
 
 # Position PC at center of voxel with variability within VOXEL
-positions_all["Purkinje layer"] = (
+positions_all["Lingula (I), Purkinje layer"] = (
     PC_placed * VOXEL_SIZE
     + VOXEL_SIZE / 2
     + scipy.stats.truncnorm.rvs(-VOXEL_SIZE / 2, VOXEL_SIZE / 2)
 )
 radii_pc = np.ones([len(PC_placed), 1]) * cell_properties["purkinje_cell"]["radius"]
-print(radii_pc.shape, " ", positions_all["Purkinje layer"].shape)
-positions_all["Purkinje layer"] = np.hstack((radii_pc, positions_all["Purkinje layer"]))
-print(len(positions_all["Purkinje layer"]))
+print(radii_pc.shape, " ", positions_all["Lingula (I), Purkinje layer"].shape)
+positions_all["Lingula (I), Purkinje layer"] = np.hstack(
+    (radii_pc, positions_all["Lingula (I), Purkinje layer"])
+)
+print(len(positions_all["Lingula (I), Purkinje layer"]))
 
 num_Lugaro = np.round(len(PC_placed) / fac_Lugaro)
 
@@ -461,7 +472,7 @@ for layer in cell_per_layer.keys():
     neu_in_voxels = {}
 
     # Indexes of voxels belonging to layer (3-D tuple of arrays, each one for each of the 3 dimensions)
-    index_cell = np.nonzero(mask[layer])
+    index_cell = np.nonzero(bap.mask[layer])
 
     if PLOTTING_FOR_CHECK:
         fig = plt.figure()
@@ -470,8 +481,8 @@ for layer in cell_per_layer.keys():
         plt.show()
 
     # Extracting map of neuron count in the current layer
-    number_neu = dens_neuron[mask[layer]]
-    number_inh = dens_inh[mask[layer]]
+    number_neu = dens_neuron[bap.mask[layer]]
+    number_inh = dens_inh[bap.mask[layer]]
     number_exc = number_neu - number_inh
     # print(" number_neu.shape =", number_neu.shape )
     # print(" number_inh.shape =", number_inh.shape )
@@ -485,7 +496,12 @@ for layer in cell_per_layer.keys():
     number_inh_tot = np.round(np.sum(number_inh))
     number_exc_tot = np.round(np.sum(number_exc))
     print(
-        "number neu_tot = ", number_neu_tot, "// inh= ", number_inh_tot, " //exc = ", number_exc_tot
+        "number neu_tot = ",
+        number_neu_tot,
+        "// inh= ",
+        number_inh_tot,
+        " //exc = ",
+        number_exc_tot,
     )
 
     # For each cell type in the layer, extract voxels belonging to that layer and cell counts for that cell type.
@@ -510,7 +526,11 @@ for layer in cell_per_layer.keys():
             fig = plt.figure()
             ax = Axes3D(fig)
             for vox in range(len(voxels_cell)):
-                ax.scatter(voxels_cell[vox][0][0], voxels_cell[vox][0][1], voxels_cell[vox][0][2])
+                ax.scatter(
+                    voxels_cell[vox][0][0],
+                    voxels_cell[vox][0][1],
+                    voxels_cell[vox][0][2],
+                )
             plt.show()
 
     voxel_num = 50
@@ -602,7 +622,7 @@ print("Pruned cells: ", pruned_per_type_in_layer)
 print("Total positioning time: ", tot_time)
 
 
-cell_per_layer["Purkinje layer"] = ["purkinje_cell"]
+cell_per_layer["Lingula (I), Purkinje layer"] = ["purkinje_cell"]
 
 discretized_phi, discretized_theta = morphology_cache._discretize_orientations(30, 30)
 discretized_orientations = np.array(
@@ -660,7 +680,10 @@ for layer in cell_per_layer.keys():
             print("pos shape ", positions_granule.shape)
             print("rot shape ", rotations_granule.shape)
             scaffold.place_cells(
-                cell_type, cell_type.placement.layer_instance, positions_granule, rotations_granule
+                cell_type,
+                cell_type.placement.layer_instance,
+                positions_granule,
+                rotations_granule,
             )
         elif cell == "golgi_cell":
             index_golgi = np.where(positions_all[layer][:, 0] == cell_properties[cell]["radius"])
@@ -669,7 +692,10 @@ for layer in cell_per_layer.keys():
             rotations_golgi = rotations_all[layer][index_golgi, :]
             rotations_golgi = np.squeeze(rotations_golgi)
             scaffold.place_cells(
-                cell_type, cell_type.placement.layer_instance, positions_golgi, rotations_golgi
+                cell_type,
+                cell_type.placement.layer_instance,
+                positions_golgi,
+                rotations_golgi,
             )
         elif cell == "glomerulus":
             index_glom = np.where(positions_all[layer][:, 0] == cell_properties[cell]["radius"])
@@ -678,7 +704,10 @@ for layer in cell_per_layer.keys():
             rotations_glom = rotations_all[layer][index_glom, :]
             rotations_glom = np.squeeze(rotations_glom)
             scaffold.place_cells(
-                cell_type, cell_type.placement.layer_instance, positions_glom, rotations_glom
+                cell_type,
+                cell_type.placement.layer_instance,
+                positions_glom,
+                rotations_glom,
             )
         else:
             scaffold.place_cells(

@@ -8,12 +8,12 @@ class BrainAtlasProcessor(ABC):
         pass
 
     @abstractmethod
-    def mask_regions(self):
+    def create_mask(self):
         """Create a mask for each of the involved regions."""
         pass
 
     @abstractmethod
-    def fill_regions(self):
+    def apply_mask(self):
         """Create a single 3D array containing all the masks."""
         pass
 

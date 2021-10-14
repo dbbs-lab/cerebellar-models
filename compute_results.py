@@ -12,7 +12,7 @@ import nrrd
 from cerebellum.brain_regions_tree import BrainRegionsTree
 
 PLOTTING = True
-fac_Lugaro = 15.0
+
 data_path = "../Flocculus3.0_Lingula/"
 reference_UBC_density = {
     "Lingula (I)": 6000,

@@ -1,50 +1,39 @@
 import nrrd
-import pickle
+import sparse
 import numpy as np
 import plotly.graph_objects as go
 from cerebellum.helper_mixins.bap_abstract import BrainAtlasProcessor
 
 
-class CerebellumProcessor(BrainAtlasProcessor):
+class Selector(BrainAtlasProcessor):
     def __init__(self, brt, nrrd_path):
         self.nrrd_path = nrrd_path
         self.brt = brt
         self.mask = {}
         self.vox_in_layer = {}
         self.stats = {}
-        self._nrrd_read()
 
-    def _nrrd_read(self):
-        # get the 3-dimensional data of cell distributions of the brain
-        data_path = self.nrrd_path
-        # voxel - region annotation
-        self.ann, h = nrrd.read(data_path + "annotations.nrrd")
-        self.dens_cell, h = nrrd.read(data_path + "cell_density.nrrd")
-        self.dens_neuron, h = nrrd.read(data_path + "neu_density.nrrd")
-        self.dens_inh, h = nrrd.read(data_path + "inh_density.nrrd")
-        # orientation voxel
-        self.orientations, h = nrrd.read(data_path + "orientations_cereb.nrrd")
-        self.bounds, h = nrrd.read(data_path + "boundaries_mo.nrrd")
+    @staticmethod
+    def read_nrrd(filename, nrrd_path, sparce_matrix=False):
+        print(filename)
+        if sparce_matrix:
+            return sparse.COO.from_numpy(nrrd.read(nrrd_path + filename)[0])
+        else:
+            return nrrd.read(nrrd_path + filename)[0]
 
-    def screenshot_region(self, id_):
-        """During masking of region, keeping track of stats.
-        TODO: does not deal with parent cumulative values
-        skipped for now, non-essential (not used in placement)"""
+    @property
+    def ann(self):
+        if not hasattr(self, "_ann"):
+            self._ann = self.read_nrrd("annotations.nrrd", self.nrrd_path, True)
+        return self._ann.todense()
 
-        stats = {}
-        number_cells = np.round(np.sum(self.dens_cell[self.mask[id_]]))
-        number_neurons = np.round(np.sum(self.dens_neuron[self.mask[id_]]))
-        inhibitory_count = self.dens_inh[self.mask[id_]]
-        volumes = sum(self.mask[id_]) / (4.0 ** 3) / 1000.0
-        stats[id_]["number_cells"] = number_cells
-        stats[id_]["number_neurons"] = number_neurons
-        stats[id_]["volumes"] = volumes
-        stats[id_]["cell_densities"] = number_cells / volumes
-        stats[id_]["neuron_densities"] = number_neurons / volumes
-        stats[id_]["number_inhibitory"] = np.round(np.sum(inhibitory_count))
-        return stats
+    @property
+    def bounds(self):
+        if not hasattr(self, "_bounds"):
+            self._bounds = self.read_nrrd("boundaries_mo.nrrd", self.nrrd_path, True)
+        return self._bounds.todense()
 
-    def mask_regions(self):
+    def create_mask(self, brt=None):
         """Store information per region node in the mask for filtering."""
 
         for region_node in self.brt.involved_regions:
@@ -52,9 +41,9 @@ class CerebellumProcessor(BrainAtlasProcessor):
             id_ = region_node.id
             self.mask[name_region] = self.ann == id_
             self.vox_in_layer[name_region] = sum(self.mask[name_region])
-        self.mask_basket_stellate()
+        self.create_mask_basket_stellate()
 
-    def mask_basket_stellate(self, thickness_ratio=2.0 / 3.0):
+    def create_mask_basket_stellate(self, thickness_ratio=2.0 / 3.0):
         # ratio of molecular layer space for stellate cells
         up_layer_distance = np.abs(self.bounds[0])
         down_layer_distance = np.abs(self.bounds[1])
@@ -77,7 +66,7 @@ class CerebellumProcessor(BrainAtlasProcessor):
         self.vox_in_layer["Stellate layer"] = sum(self.mask["Stellate layer"])
         self.vox_in_layer["Basket layer"] = sum(self.mask["Basket layer"])
 
-    def fill_regions(self):
+    def apply_mask(self):
         """Cutting around the region of interest."""
 
         id_region = self.brt.id_region
@@ -126,27 +115,3 @@ class CerebellumProcessor(BrainAtlasProcessor):
             )
         )
         fig_scatter.show()
-
-    def render_regions(self):
-        return self.brt.render_roi()
-
-    def save_processor(self, keep_arrays=True):
-        """"""
-
-        filename = "config/big_data/" + self.brt.region_name + ".pkl"
-        with open(filename, "wb") as outp:
-            pickle.dump(self, outp, pickle.HIGHEST_PROTOCOL)
-
-    @classmethod
-    def read_processor(self, region_name="Lingula (I)"):
-        filename = "config/big_data/" + region_name + ".pkl"
-        with open(filename, "rb") as inp:
-            return pickle.load(inp)
-
-    def run_pipeline(self, show_regions=False, save_processor=False):
-        self.mask_regions()
-        self.fill_regions()
-        if show_regions:
-            self.show_regions()
-        if save_processor:
-            self.save_processor()
