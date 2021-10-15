@@ -1,8 +1,27 @@
-from anytree import RenderTree
 from anytree.importer import DictImporter
 from anytree.exporter import DictExporter
 from anytree.search import find, findall
-from anytree import Node
+from anytree import RenderTree, Node
+from abc import ABC, abstractmethod
+
+
+class OntologyTreeAbstract(ABC):
+    """A clean wrapper to the ontology-based region mapping of the brain."""
+
+    @abstractmethod
+    def __init__(self, tree_dict):
+        """Creates"""
+        pass
+
+    @abstractmethod
+    def subtree(self, region_name):
+        """Returns a subregion with similar properties of the base class."""
+        pass
+
+    @abstractmethod
+    def get_ids(self, region_name):
+        """Returns the ids related to the region name."""
+        pass
 
 
 class RegionNode(Node):
@@ -15,7 +34,7 @@ class RegionNode(Node):
         return [i.name for i in list(self.path)][-1]
 
 
-class OntologyTree:
+class OntologyTree(OntologyTreeAbstract):
     """Takes a dict of regions based on TODO: find reference
     and provides the ids of the involved regions, and allows subtree.
     """
@@ -47,7 +66,5 @@ class OntologyTree:
 
     def get_ids(self, region_name):
         roi = self._get_roi(region_name)
-
-        # get all its children
         involved_regions = findall(roi, filter_=lambda node: roi in node.path)
         return [i.id for i in involved_regions]

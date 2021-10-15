@@ -8,8 +8,8 @@ from bsb.particles import ParticleSystem
 from bsb.reporting import set_verbosity
 
 # import cerebellum stuff
-from cerebellum.cerebellum_processor import CerebellumProcessor as CP
-from cerebellum.brain_regions_tree import BrainRegionsTree
+from cerebellum.ontology_tree import OntologyTree as OT
+from cerebellum.selector import RegionSelector
 
 # import additional libraries
 import os
