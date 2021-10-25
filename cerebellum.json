@@ -57,7 +57,12 @@
         "geometrical": {
           "pf_height": 126,
           "pf_height_sd": 15
-        }
+        },
+        "morphological": [
+          {
+            "names": ["GranuleCell"]
+          }
+        ]
       },
       "plotting": {
         "display_name": "Granule cell",
