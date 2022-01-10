@@ -93,6 +93,11 @@
         "radius": 7.5,
         "planar_density": 0.0017
       },
+      "morphological": [
+        {
+          "names": ["PurkinjeCell"]
+        }
+      ],
       "plotting": {
         "display_name": "Purkinje cell",
         "color": "#068f0d"
@@ -103,6 +108,11 @@
         "radius": 8.0,
         "density": 9e-6
       },
+      "morphological": [
+        {
+          "names": ["GolgiCell"]
+        }
+      ],
       "plotting": {
         "display_name": "Golgi cell",
         "color": "#1009e3"
@@ -113,6 +123,11 @@
         "radius": 4.0,
         "density": 0.5e-4
       },
+      "morphological": [
+        {
+          "names": ["StellateCell"]
+        }
+      ],
       "plotting": {
         "display_name": "Stellate cell",
         "color": "#f5bb1d"
@@ -123,6 +138,11 @@
         "radius": 6.0,
         "density": 0.5e-4
       },
+      "morphological": [
+        {
+          "names": ["BasketCell"]
+        }
+      ],
       "plotting": {
         "display_name": "Basket cell",
         "color": "#f5830a"
