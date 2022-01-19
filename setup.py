@@ -13,14 +13,6 @@ requires = [
     "bsb[NEURON,MPI]>=4.0.0"
 ]
 
-if not os.getenv("READTHEDOCS", False):
-    # Add all packages with binary dependencies that cannot be installed on RTD here.
-    requires.extend(
-        [
-            "rtree-linux>=0.9.4",
-        ]
-    )
-
 setuptools.setup(
     name="cerebellum",
     version=__version__,
