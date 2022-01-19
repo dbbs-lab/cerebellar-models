@@ -23,7 +23,7 @@ class ConnectomeGolgiGranule(ConnectionStrategy):
                     + " (Requires the selection of morphologies to be moved from the connection module to the placement module)"
                 )
             mr = self.scaffold.morphology_repository
-            morphology = mr.get_morphology(morphologies[0])
+            morphology = mr.load(morphologies[0])
             axonic_compartments = morphology.get_compartments(["axon"])
             self.axon = np.array([c.id for c in axonic_compartments])
             self.morphology = morphology

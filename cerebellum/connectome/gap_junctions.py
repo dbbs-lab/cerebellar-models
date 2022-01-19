@@ -1,5 +1,5 @@
 import numpy as np
-from ..strategy import ConnectionStrategy
+from bsb.connectivity.strategy import ConnectionStrategy
 
 
 class ConnectomeGapJunctions(ConnectionStrategy):
@@ -13,6 +13,9 @@ class ConnectomeGapJunctions(ConnectionStrategy):
 
     def validate(self):
         pass
+
+    def get_region_of_interest(self, chunk, chunk_size):
+        return [chunk]
 
     def connect(self):
         # Gather information for the legacy code block below.
