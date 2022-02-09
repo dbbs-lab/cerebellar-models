@@ -1,4 +1,10 @@
 
+:class:`TouchingConvergenceDivergence <.connectivity.TouchingConvergenceDivergence>`
+====================================================================================
+
+* ``divergence``: Preferred amount of connections starting from 1 from_cell
+* ``convergence``: Preferred amount of connections ending on 1 to_cell
+
 :class:`ConnectomeGlomerulusGranule <.connectivity.ConnectomeGlomerulusGranule>`
 ================================================================================
 
