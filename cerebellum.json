@@ -864,14 +864,7 @@
             "cell_types": ["io_cell"]
           },
           "parameters": {
-            "spike_times": {
-              "statement": "list(np.round(np.linspace(start, start+duration, num_spikes)))",
-              "variables": {
-                "start": 750,
-                "duration": 10,
-                "num_spikes": 5
-              }
-            }
+            "spike_times": [10, 20, 30]
           },
           "connection": {
             "rule": "one_to_one",
