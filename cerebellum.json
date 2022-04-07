@@ -10,19 +10,6 @@
     "z": 400.0,
     "chunk_size": [50, 50, 50]
   },
-  "regions": {
-    "cc_io": {
-      "type": "stack",
-      "children": ["cerebellar_cortex", "inferior_olive"]
-    },
-    "cerebellar_cortex": {
-      "type": "stack",
-      "children": ["dcn_layer", "granular_layer", "purkinje_layer", "b_molecular_layer", "t_molecular_layer"]
-    },
-    "inferior_olive": {
-      "children": ["io_layer"]
-    }
-  },
   "partitions": {
     "dcn_layer": {
       "thickness": 600.0,
@@ -48,6 +35,18 @@
       "thickness": 15.0
     }
   },
+  "regions": {
+    "cerebellar_cortex": {
+      "type": "stack",
+      "offset": [0.0, 0.0, 0.0],
+      "children": ["dcn_layer", "granular_layer", "purkinje_layer", "b_molecular_layer", "t_molecular_layer"]
+    },
+    "inferior_olive": {
+      "type": "stack",
+      "offset": [260.0, -400.0, 0.0],
+      "children": ["io_layer"]
+    }
+  },
   "cell_types": {
     "granule_cell": {
       "spatial": {
@@ -57,7 +56,7 @@
           "pf_height": 126,
           "pf_height_sd": 15
         },
-        "morphological": [
+        "morphologies": [
           {
             "names": ["GranuleCell"]
           }
@@ -91,7 +90,7 @@
       "spatial": {
         "radius": 7.5,
         "planar_density": 0.0017,
-        "morphological": [
+        "morphologies": [
           {
             "names": ["PurkinjeCell"]
           }
@@ -106,7 +105,7 @@
       "spatial": {
         "radius": 8.0,
         "density": 9e-6,
-        "morphological": [
+        "morphologies": [
           {
             "names": ["GolgiCell"]
           }
@@ -121,7 +120,7 @@
       "spatial": {
         "radius": 4.0,
         "density": 0.5e-4,
-        "morphological": [
+        "morphologies": [
           {
             "names": ["StellateCell"]
           }
@@ -136,7 +135,7 @@
       "spatial": {
         "radius": 6.0,
         "density": 0.5e-4,
-        "morphological": [
+        "morphologies": [
           {
             "names": ["BasketCell"]
           }
