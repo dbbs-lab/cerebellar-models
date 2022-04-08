@@ -10,7 +10,7 @@ with open("README.md", "r") as fh:
     long_description = fh.read()
 
 requires = [
-    "bsb[NEURON,MPI]>=4.0.0"
+    "bsb[NEURON,MPI]>=4.0.0a1"
 ]
 
 setuptools.setup(
