@@ -58,15 +58,19 @@
         "radius": 2.4,
         "density": 2.5e-3
       },
-      "morphology": {
+      "geometry": {
         "class": "bsb.morphologies.NoGeometry",
         "pf_height": 0,
         "pf_height_sd": 0,
         "pf_length": 0,
         "pf_radius": 0,
         "dendrite_length": 40,
-        "detailed_morphologies":["GranuleCell"]
       },
+      "morphologies": [
+        {
+          "names":["GranuleCell"]
+        }
+      ],
       "plotting": {
         "display_name": "granule cell",
         "color": "#E62214",
