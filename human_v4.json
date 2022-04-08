@@ -64,11 +64,11 @@
         "pf_height_sd": 0,
         "pf_length": 0,
         "pf_radius": 0,
-        "dendrite_length": 40,
+        "dendrite_length": 40
       },
       "morphologies": [
         {
-          "names":["GranuleCell"]
+          "names": ["GranuleCell"]
         }
       ],
       "plotting": {
@@ -186,7 +186,9 @@
     "purkinje_placement": {
       "cls": "bsb.placement.ParallelArrayPlacement",
       "cell_types": ["purkinje_cell"],
-      "partitions": ["purkinje_layer"]
+      "partitions": ["purkinje_layer"],
+      "spacing_x": 150,
+      "angle": 70
     },
     "golgi_cell_placement": {
       "cls": "bsb.placement.ParticlePlacement",
