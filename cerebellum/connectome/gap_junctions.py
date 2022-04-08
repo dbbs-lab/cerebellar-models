@@ -14,7 +14,7 @@ class ConnectomeGapJunctions(ConnectionStrategy):
     def validate(self):
         pass
 
-    def get_region_of_interest(self, chunk, chunk_size):
+    def get_region_of_interest(self, chunk):
         return [chunk]
 
     def connect(self):
