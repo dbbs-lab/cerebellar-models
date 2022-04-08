@@ -1,5 +1,5 @@
 import numpy as np
-from ..strategy import ConnectionStrategy
+from bsb.connectivity.strategy import ConnectionStrategy
 
 
 class ConnectomeGolgiGlomerulus(ConnectionStrategy):
@@ -10,10 +10,15 @@ class ConnectomeGolgiGlomerulus(ConnectionStrategy):
     casts = {"divergence": int}
     required = ["divergence"]
 
+
+    def get_region_of_interest(self, chunk):
+        return [chunk]
+
+
     def validate(self):
         pass
 
-    def connect(self):
+    def connect(self, pre, post):
         # Gather information for the legacy code block below.
         golgi_cell_type = self.from_cell_types[0]
         glomerulus_cell_type = self.to_cell_types[0]

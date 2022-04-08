@@ -7,3 +7,5 @@ from .glomerulus_granule import ConnectomeGlomerulusGranule as GlomerulusGranule
 from .golgi_glomerulus import ConnectomeGolgiGlomerulus as GolgiGlomerulus
 from .glomerulus_golgi import ConnectomeGlomerulusGolgi as GlomerulusGolgi
 from .golgi_granule import ConnectomeGolgiGranule as GolgiGranule
+from .pf_purkinje import ConnectomePFPurkinje as PFPurkinje
+from .bcsc_purkinje import ConnectomeBCSCPurkinje as BCSCPurkinje

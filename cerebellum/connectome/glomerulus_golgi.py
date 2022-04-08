@@ -1,7 +1,5 @@
 import numpy as np
-from ..strategy import ConnectionStrategy
-from ...helpers import DistributionConfiguration
-from ...functions import get_distances
+from bsb.connectivity.strategy import ConnectionStrategy
 from scipy.stats.distributions import truncexpon
 
 
@@ -10,8 +8,8 @@ class ConnectomeGlomerulusGolgi(ConnectionStrategy):
     Legacy implementation for the connections between Golgi cells and glomeruli.
     """
 
-    defaults = {"detailed": False, "contacts": DistributionConfiguration.cast(1)}
-    casts = {"detailed": bool, "contacts": DistributionConfiguration.cast}
+    def get_region_of_interest(self, chunk):
+        return [chunk]
 
     def validate(self):
         if self.detailed:
@@ -30,7 +28,7 @@ class ConnectomeGlomerulusGolgi(ConnectionStrategy):
             self.dendritic_compartments = morphology.get_compartments(["dendrites"])
             self.morphology = morphology
 
-    def connect(self):
+    def connect(self, pre, post):
         # Gather information for the legacy code block below.
         glomerulus_cell_type = self.from_cell_types[0]
         golgi_cell_type = self.to_cell_types[0]

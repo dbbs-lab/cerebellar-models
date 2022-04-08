@@ -1,6 +1,6 @@
 import numpy as np
-from ..strategy import ConnectionStrategy
-from ...exceptions import *
+from bsb.connectivity.strategy import ConnectionStrategy
+from bsb.exceptions import *
 from ...reporting import warn
 
 

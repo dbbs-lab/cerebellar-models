@@ -1,5 +1,5 @@
 import numpy as np
-from ..strategy import ConnectionStrategy
+from bsb.connectivity.strategy import ConnectionStrategy
 
 
 class ConnectomePFInterneuron(ConnectionStrategy):

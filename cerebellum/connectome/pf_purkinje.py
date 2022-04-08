@@ -1,5 +1,5 @@
 import numpy as np
-from ..strategy import ConnectionStrategy
+from bsb.connectivity.strategy import ConnectionStrategy
 
 
 class ConnectomePFPurkinje(ConnectionStrategy):
@@ -7,10 +7,13 @@ class ConnectomePFPurkinje(ConnectionStrategy):
     Legacy implementation for the connections between parallel fibers and purkinje cells.
     """
 
+    def get_region_of_interest(self, chunk):
+        return [chunk]
+
     def validate(self):
         pass
 
-    def connect(self):
+    def connect(self,pre,post):
         # Gather information for the legacy code block below.
         granule_cell_type = self.from_cell_types[0]
         purkinje_cell_type = self.to_cell_types[0]

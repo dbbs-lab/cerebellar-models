@@ -1,5 +1,5 @@
 import numpy as np
-from ..strategy import ConnectionStrategy
+from bsb.connectivity.strategy import ConnectionStrategy
 
 
 class ConnectomeGolgiGranule(ConnectionStrategy):
@@ -9,6 +9,11 @@ class ConnectomeGolgiGranule(ConnectionStrategy):
 
     casts = {"detailed": bool}
     defaults = {"detailed": False}
+
+
+    def get_region_of_interest(self, chunk):
+        return [chunk]
+
 
     def validate(self):
         if self.detailed:
@@ -28,7 +33,7 @@ class ConnectomeGolgiGranule(ConnectionStrategy):
             self.axon = np.array([c.id for c in axonic_compartments])
             self.morphology = morphology
 
-    def connect(self):
+    def connect(self, pre, post):
         # Gather information for the legacy code block below.
         glom_grc = self.scaffold.cell_connections_by_tag["glomerulus_to_granule"]
         glom_ids = self.scaffold.get_placement_set("glomerulus").identifiers

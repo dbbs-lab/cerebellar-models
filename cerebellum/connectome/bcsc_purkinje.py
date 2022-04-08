@@ -1,5 +1,5 @@
 import numpy as np
-from ..strategy import ConnectionStrategy
+from bsb.connectivity.strategy import ConnectionStrategy
 
 
 class ConnectomeBCSCPurkinje(ConnectionStrategy):
@@ -13,10 +13,13 @@ class ConnectomeBCSCPurkinje(ConnectionStrategy):
 
     defaults = {"tag_bc": "basket_to_purkinje", "tag_sc": "stellate_to_purkinje"}
 
+    def get_region_of_interest(self, chunk):
+        return [chunk]
+
     def validate(self):
         pass
 
-    def connect(self):
+    def connect(self,pre,post):
         # Gather information for the legacy code block below.
         basket_cell_type = self.from_cell_types[0]
         stellate_cell_type = self.from_cell_types[1]

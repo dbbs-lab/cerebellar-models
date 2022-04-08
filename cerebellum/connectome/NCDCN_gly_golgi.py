@@ -1,6 +1,6 @@
 import numpy as np
 import csv
-from ..strategy import ConnectionStrategy
+from bsb.connectivity.strategy import ConnectionStrategy
 from ...reporting import report, warn
 
 

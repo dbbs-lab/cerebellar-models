@@ -1,7 +1,7 @@
 import numpy as np
-from ..strategy import ConnectionStrategy
+from bsb.connectivity.strategy import ConnectionStrategy
 from ...reporting import report, warn
-from ...exceptions import *
+from bsb.exceptions import *
 
 
 class ConnectomeMossyDCN(ConnectionStrategy):

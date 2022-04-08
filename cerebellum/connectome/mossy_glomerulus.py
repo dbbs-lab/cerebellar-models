@@ -12,10 +12,14 @@ class ConnectomeMossyGlomerulus(ConnectionStrategy):
     The connectivity is somatotopic and
     """
 
+    def get_region_of_interest(self, chunk):
+        return [chunk]
+
+
     def validate(self):
         pass
 
-    def connect(self):
+    def connect(self, pre, post):
         def probability_mapping(input, center, std):
             # input: input array that has to be transformed
             # center: center of the sigmoid
