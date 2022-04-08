@@ -10,29 +10,10 @@
     "z": 400.0
   },
   "regions": {
-    "granular_layer": {
+    "cerebellar_cortex": {
+      "type": "stack",
       "origin":[0.0, 0.0, 0.0],
-      "partitions":["granular_layer"],
-      "stack": {
-        "stack_id": 0,
-        "position_in_stack": 0
-      }
-    },
-    "purkinje_layer": {
-      "origin":[0.0,260.0,0.0],
-      "partitions":["purkinje_layer"],
-      "stack": {
-        "stack_id": 0,
-        "position_in_stack": 1
-      }
-    },
-    "molecular_layer": {
-      "origin":[0.0,290.0,0.0],
-      "partitions":["molecular_layer"],
-      "stack": {
-        "stack_id": 0,
-        "position_in_stack": 2
-      }
+      "partitions":["granular_layer", "purkinje_layer", "molecular_layer"]
     }
   },
   "partitions": {
@@ -46,11 +27,16 @@
       "type":"layer",
       "thickness": 30.0
     },
-    "molecular_layer": {
+    "upper_molecular_layer": {
       "region":"molecular_layer",
       "type":"layer",
-      "thickness": 300.0
-    }
+      "thickness": 200.0
+    },
+    "lower_molecular_layer":{
+      "region":"molecular_layer",
+      "type":"layer",
+      "thickness": 100.0
+    }      
   },
   "cell_types": {
     "granule_cell": {
@@ -186,9 +172,10 @@
     "purkinje_placement": {
       "cls": "bsb.placement.ParallelArrayPlacement",
       "cell_types": ["purkinje_cell"],
-      "partitions": ["purkinje_layer"],
-      "spacing_x": 150,
-      "angle": 70
+      "spacing_x": 350.0,
+      "spacing_z": 3.5,
+      "angle" : 70,
+      "partitions": ["purkinje_layer"]
     },
     "golgi_cell_placement": {
       "cls": "bsb.placement.ParticlePlacement",
@@ -209,6 +196,7 @@
       "cls": "bsb.placement.Entities",
       "cell_types":["mossy_fibers"],
       "layer": "granular_layer",
+      "partitions": ["granular_layer"],
       "placement_relative_to": "glomerulus",
       "placement_count_ratio": 0.05
     }
@@ -221,7 +209,7 @@
   },
   "connectivity": {
     "mossy_to_glomerulus": {
-      "cls": "bsb.connectivity.ConnectomeMossyGlomerulus",
+      "cls": "cerebellum.connectome.MossyGlomerulus",
       "presynaptic": {
         "cell_types": ["cell_type_A"],
         "compartments":["soma"]
@@ -232,7 +220,7 @@
       }
     },
     "glomerulus_to_granule": {
-      "cls": "bsb.connectivity.ConnectomeGlomerulusGranule",
+      "cls": "cerebellum.connectome.GlomerulusGranule",
       "after": ["mossy_to_glomerulus"],
       "presynaptic": {
         "cell_types": ["glomerulus"],
@@ -246,7 +234,7 @@
       "detailed": true
     },
     "golgi_to_glomerulus": {
-      "cls": "bsb.connectivity.ConnectomeGolgiGlomerulus",
+      "cls": "cerebellum.connectome.GolgiGlomerulus",
       "presynaptic": {
         "cell_types": ["golgi_cell"],
         "compartments":["soma"]
@@ -260,7 +248,7 @@
 
     },
     "glomerulus_to_golgi": {
-      "cls": "bsb.connectivity.ConnectomeGlomerulusGolgi",
+      "cls": "cerebellum.connectome.GlomerulusGolgi",
       "presynaptic": {
         "cell_types": ["glomerulus"],
         "compartments":["soma"]
@@ -272,7 +260,7 @@
       "detailed": true
     },
     "golgi_to_granule": {
-      "cls": "bsb.connectivity.ConnectomeGolgiGranule",
+      "cls": "cerebellum.connectome.GolgiGranule",
       "after": ["golgi_to_glomerulus", "glomerulus_to_granule"],
       "presynaptic": {
         "cell_types": ["golgi_cell"],

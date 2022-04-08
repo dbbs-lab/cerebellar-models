@@ -2,3 +2,8 @@ from bsb.connectivity import ConnectionStrategy
 import importlib
 import os
 from .gap_junctions import ConnectomeGapJunctions
+from .mossy_glomerulus import ConnectomeMossyGlomerulus as MossyGlomerulus
+from .glomerulus_granule import ConnectomeGlomerulusGranule as GlomerulusGranule
+from .golgi_glomerulus import ConnectomeGolgiGlomerulus as GolgiGlomerulus
+from .glomerulus_golgi import ConnectomeGlomerulusGolgi as GlomerulusGolgi
+from .golgi_granule import ConnectomeGolgiGranule as GolgiGranule
