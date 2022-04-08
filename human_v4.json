@@ -5,11 +5,9 @@
     "root": "HumanMorphologies.hdf5"
   },
   "network": {
-    "x": 600.0,
-    "z": 400.0,
-    "store_kd_trees": true,
-    "store_compound_kd_tree": true,
-    "store_pf_kd_trees": true
+    "x": 400.0,
+    "y": 600.0,
+    "z": 400.0
   },
   "regions": {
     "granular_layer": {
@@ -17,7 +15,7 @@
       "partitions":["granular_layer"],
       "stack": {
         "stack_id": 0,
-        "position_in_stack": 0         
+        "position_in_stack": 0
       }
     },
     "purkinje_layer": {
@@ -52,7 +50,7 @@
       "region":"molecular_layer",
       "type":"layer",
       "thickness": 300.0
-    }      
+    }
   },
   "cell_types": {
     "granule_cell": {
@@ -239,7 +237,7 @@
         "compartments":["dendrites"]
       },
       "convergence": 4,
-      "detailed": true  
+      "detailed": true
     },
     "golgi_to_glomerulus": {
       "cls": "bsb.connectivity.ConnectomeGolgiGlomerulus",
@@ -253,7 +251,7 @@
       },
       "divergence": 40,
       "detailed": true
-      
+
     },
     "glomerulus_to_golgi": {
       "cls": "bsb.connectivity.ConnectomeGlomerulusGolgi",
