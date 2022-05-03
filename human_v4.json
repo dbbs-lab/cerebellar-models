@@ -13,27 +13,27 @@
     "cerebellar_cortex": {
       "type": "stack",
       "origin":[0.0, 0.0, 0.0],
-      "partitions":["granular_layer", "purkinje_layer", "molecular_layer"]
+      "partitions":["granular_layer", "purkinje_layer", "upper_molecular_layer","lower_molecular_layer"]
     }
   },
   "partitions": {
     "granular_layer": {
-      "region":"granular_layer",
+      "region":"cerebellar_cortex",
       "type":"layer",
       "thickness": 260.0
     },
     "purkinje_layer": {
-      "region":"purkinje_layer",
+      "region":"cerebellar_cortex",
       "type":"layer",
       "thickness": 30.0
     },
     "upper_molecular_layer": {
-      "region":"molecular_layer",
+      "region":"cerebellar_cortex",
       "type":"layer",
       "thickness": 200.0
     },
     "lower_molecular_layer":{
-      "region":"molecular_layer",
+      "region":"cerebellar_cortex",
       "type":"layer",
       "thickness": 100.0
     }      
@@ -134,7 +134,7 @@
     },
     "basket_cell": {
       "spatial": {
-        "soma_radius": 6.0,
+        "radius": 6.0,
         "density": 0.2e-4,
         "y_restriction": [0.00, 0.33]
       },
@@ -151,6 +151,7 @@
       "entity": true,
       "relay": true,
       "spatial": {
+        "density":3e-4
       },
       "plotting": {
         "display_name": "mossy_fibers",
@@ -185,12 +186,12 @@
     "stellate_cell_placement": {
       "cls": "bsb.placement.ParticlePlacement",
       "cell_types": ["stellate_cell"],
-      "partitions": ["molecular_layer"]
+      "partitions": ["upper_molecular_layer","lower_molecular_layer"]
     },
     "basket_cell_placement": {
       "cls": "bsb.placement.ParticlePlacement",
       "cell_types": ["basket_cell"],
-      "partitions": ["molecular_layer"]
+      "partitions": ["upper_molecular_layer","lower_molecular_layer"]
     },
     "mossy_fibers_placement": {
       "cls": "bsb.placement.Entities",
@@ -211,8 +212,7 @@
   "mossy_to_glomerulus":{
     "cls": "cerebellum.connectome.MossyGlomerulus",
     "presynaptic": {
-      "cell_types": ["cell_type_A"],
-      "compartments":["soma"]
+      "cell_types": ["mossy_fibers"]
     },
     "postsynaptic": {
       "cell_types": ["glomerulus"],
@@ -363,7 +363,7 @@
   },
   "parallel_fiber_to_basket": {
     "cls": "bsb.connectivity.FiberIntersection",
-    "after": ["granule_to_golgi"],
+    "after": ["golgi_to_granule"],
     "presynaptic": {
       "cell_types": ["granule_cell"],
       "compartments":["parallel_fiber"]
@@ -377,7 +377,7 @@
   },
   "parallel_fiber_to_stellate": {
     "cls": "bsb.connectivity.FiberIntersection",
-    "after": ["granule_to_golgi"],
+    "after": ["golgi_to_granule"],
     "presynaptic": {
       "cell_types": ["granule_cell"],
       "compartments":["parallel_fiber"]
