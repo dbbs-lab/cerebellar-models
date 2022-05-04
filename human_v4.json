@@ -151,7 +151,7 @@
       "entity": true,
       "relay": true,
       "spatial": {
-        "density":3e-4
+        "density":1.5e-5
       },
       "plotting": {
         "display_name": "mossy_fibers",
