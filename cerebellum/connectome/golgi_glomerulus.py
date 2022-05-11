@@ -1,14 +1,17 @@
 import numpy as np
 from bsb.connectivity.strategy import ConnectionStrategy
+from bsb.reporting import warn
+from bsb import config
 
 
+@config.node
 class ConnectomeGolgiGlomerulus(ConnectionStrategy):
     """
     Legacy implementation for the connections between glomeruli and Golgi cells.
     """
 
-    casts = {"divergence": int}
-    required = ["divergence"]
+    divergence = config.attr(type=int, required=True)
+    detailed = config.attr(type=bool, default=False)
 
 
     def get_region_of_interest(self, chunk):
@@ -20,12 +23,27 @@ class ConnectomeGolgiGlomerulus(ConnectionStrategy):
 
     def connect(self, pre, post):
         # Gather information for the legacy code block below.
-        golgi_cell_type = self.from_cell_types[0]
-        glomerulus_cell_type = self.to_cell_types[0]
-        glomeruli = self.scaffold.cells_by_type[glomerulus_cell_type.name]
-        golgis = self.scaffold.cells_by_type[golgi_cell_type.name]
+        golgi_cell_type = pre.cell_types[0].get_placement_set()
+        glomerulus_cell_type = post.cell_types[0].get_placement_set()
+        golgi_pos = golgi_cell_type.load_positions()
+        glom_pos = glomerulus_cell_type.load_positions()
+        glomeruli = np.column_stack(
+            (
+                np.arange(0, len(glom_pos)),
+                np.zeros(len(glom_pos)),
+                glom_pos
+            )
+        )
+        golgis = np.column_stack(
+            (
+                np.arange(0, len(golgi_pos)),
+                np.zeros(len(golgi_pos)),
+                golgi_pos
+            )
+        )
+        
         first_glomerulus = int(glomeruli[0, 0])
-        GoCaxon_x = golgi_cell_type.morphology.axon_x
+        GoCaxon_x = golgi_cell_type.spatial.geometrical.axon_x
         GoCaxon_y = golgi_cell_type.morphology.axon_y
         GoCaxon_z = golgi_cell_type.morphology.axon_z
         r_glom = glomerulus_cell_type.placement.radius

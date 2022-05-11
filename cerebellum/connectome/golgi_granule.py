@@ -1,15 +1,13 @@
 import numpy as np
 from bsb.connectivity.strategy import ConnectionStrategy
+from bsb import config
 
-
+@config.node
 class ConnectomeGolgiGranule(ConnectionStrategy):
     """
     Legacy implementation for the connections between Golgi cells and granule cells.
     """
-
-    casts = {"detailed": bool}
-    defaults = {"detailed": False}
-
+    detailed = config.attr(type=bool, default=False)
 
     def get_region_of_interest(self, chunk):
         return [chunk]

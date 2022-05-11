@@ -1,12 +1,16 @@
 import numpy as np
 from bsb.connectivity.strategy import ConnectionStrategy
 from scipy.stats.distributions import truncexpon
+from bsb import config
 
 
+@config.node
 class ConnectomeGlomerulusGolgi(ConnectionStrategy):
     """
     Legacy implementation for the connections between Golgi cells and glomeruli.
     """
+
+    detailed = config.attr(type=bool, default=False)
 
     def get_region_of_interest(self, chunk):
         return [chunk]

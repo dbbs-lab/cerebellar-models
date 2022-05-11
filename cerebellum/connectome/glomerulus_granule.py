@@ -1,17 +1,18 @@
 import numpy as np, random
 from bsb.connectivity.strategy import ConnectionStrategy
 from bsb.exceptions import ConfigurationError, ConnectivityError
+from bsb.reporting import warn
+from bsb import config
 
 
+@config.node
 class ConnectomeGlomerulusGranule(ConnectionStrategy):
     """
     Legacy implementation for the connections between glomeruli and granule cells.
     """
 
-    casts = {"detailed": bool, "convergence": int}
-    defaults = {"detailed": False}
-    required = ["convergence"]
-
+    convergence = config.attr(type=int, required=True)
+    detailed = config.attr(type=bool, default=False)
 
     def get_region_of_interest(self, chunk):
         return [chunk]
@@ -41,10 +42,25 @@ class ConnectomeGlomerulusGranule(ConnectionStrategy):
 
     def connect(self, pre, post):
         # Gather information for the legacy code block below.
-        from_cell_type = self.from_cell_types[0]
-        to_cell_type = self.to_cell_types[0]
-        glomeruli = self.scaffold.cells_by_type[from_cell_type.name]
-        granules = self.scaffold.cells_by_type[to_cell_type.name]
+        from_cell_type = pre.cell_types[0].get_placement_set()
+        to_cell_type = post.cell_types[0].get_placement_set()
+        glom_pos = from_cell_type.load_positions() 
+        gran_pos = to_cell_type.load_positions()
+        glomeruli = np.column_stack(
+            (
+                np.arange(0, len(glom_pos)),
+                np.zeros(len(glom_pos)),
+                glom_pos
+            )
+        )
+        granules = np.column_stack(
+            (
+                np.arange(0, len(gran_pos)),
+                np.zeros(len(gran_pos)),
+                gran_pos
+            )
+        )
+        return warn("Morphology specific connectivity glomerulus to granule disabled")
         dend_len = to_cell_type.morphology.dendrite_length
         n_conn_glom = self.convergence
         first_glomerulus = int(glomeruli[0, 0])

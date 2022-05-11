@@ -2,10 +2,12 @@ import numpy as np
 from bsb.connectivity import ConnectionStrategy
 from bsb.reporting import report, warn
 from time import time  # usalo per time sttart stop
+from bsb import config
 
 # import time    #usalo per il time.sleep
 
 
+@config.node
 class ConnectomeMossyGlomerulus(ConnectionStrategy):
     """
     Implementation for the connections between mossy fibers and glomeruli.
@@ -63,12 +65,25 @@ class ConnectomeMossyGlomerulus(ConnectionStrategy):
 
         t_start = time()
 
+        if len(pre.cell_types) != 1 or len(post.cell_types) != 1:
+            raise NotImplementedError("Legacy cerebellum connectome definitions must be from 1 and to 1 cell type")
+
         # Source and target neurons are extracted
-        mossy_cell_type = self.from_cell_types[0]
-        glomerulus_cell_type = self.to_cell_types[0]
+        mossy_ps = pre.cell_types[0].get_placement_set()
+        glom_ps = post.cell_types[0].get_placement_set()
+        glom_pos = glom_ps.load_positions()
+        mossy_cell_type = mossy_ps.cell_type
+        glomerulus_cell_type = glom_ps.cell_type
 
         # glomeruli contiene per ogni glom, l'id del glo, l'id del cell type, le coordinate x y z
-        glomeruli = self.scaffold.cells_by_type[glomerulus_cell_type.name]
+        glomeruli = np.column_stack(
+            (
+                np.arange(0, len(glom_pos)),
+                np.zeros(len(glom_pos)),
+                glom_pos
+            )
+        )
+        return warn("Mossy to glomerulus disabled")
 
         # I'm shamelessly aiming for the path of least resistance here and will
         # produce a most horrible workaround to quickly converge on the code:
@@ -79,8 +94,8 @@ class ConnectomeMossyGlomerulus(ConnectionStrategy):
         # they can be plugged into the `mossy` variable and the rest of the code
         # will run as before.
 
-        _mossy_ids = mossy_cell_type.get_placement_set().identifiers
-        _layer = mossy_cell_type.placement.layer_instance
+        _mossy_ids = np.arange(0, len(mossy_ps))
+        _layer = self.layer_instance
         _og, _dims = _layer.origin, _layer.dimensions
         _rng = np.random.default_rng()
         _uni_pos = []

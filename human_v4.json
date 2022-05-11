@@ -11,8 +11,8 @@
   },
   "regions": {
     "cerebellar_cortex": {
-      "type": "stack",
-      "origin":[0.0, 0.0, 0.0],
+      "cls": "stack",
+      "offset":[0.0, 0.0, 0.0],
       "partitions":["granular_layer", "purkinje_layer", "upper_molecular_layer","lower_molecular_layer"]
     }
   },
@@ -42,21 +42,21 @@
     "granule_cell": {
       "spatial": {
         "radius": 2.4,
-        "density": 2.5e-3
+        "density": 2.5e-3,
+        "geometry": {
+          "class": "bsb.morphologies.NoGeometry",
+          "pf_height": 0,
+          "pf_height_sd": 0,
+          "pf_length": 0,
+          "pf_radius": 0,
+          "dendrite_length": 40
+        },
+        "morphologies": [
+          {
+            "names": ["GranuleCell"]
+          }
+        ]
       },
-      "geometry": {
-        "class": "bsb.morphologies.NoGeometry",
-        "pf_height": 0,
-        "pf_height_sd": 0,
-        "pf_length": 0,
-        "pf_radius": 0,
-        "dendrite_length": 40
-      },
-      "morphologies": [
-        {
-          "names": ["GranuleCell"]
-        }
-      ],
       "plotting": {
         "display_name": "granule cell",
         "color": "#E62214",
@@ -68,9 +68,6 @@
         "radius": 1.5,
         "density": 3e-4
       },
-      "morphology": {
-        "class": "bsb.morphologies.NoGeometry"
-      },
       "plotting": {
         "display_name": "glomerulus",
         "color": "#0E1030",
@@ -80,16 +77,15 @@
     "golgi_cell": {
       "spatial": {
         "radius": 8.0,
-        "density": 2.2e-6
-      },
-      "morphology": {
-        "class": "bsb.morphologies.GolgiCellGeometry",
-        "dendrite_radius": 120.0,
-        "axon_x": 400.0,
-        "axon_y": 400.0,
-        "axon_z": 30.0,
-        "detailed_morphologies": {
-          "names": ["GolgiCell"]
+        "density": 2.2e-6,
+        "geometry":{
+          "dendrite_radius": 120.0,
+          "axon_x": 400.0,
+          "axon_y": 400.0,
+          "axon_z": 30.0
+        },
+        "morphologies": {
+          "names": ["GolgiCell"]        
         }
       },
       "plotting": {
@@ -102,13 +98,15 @@
       "spatial": {
         "radius": 15.0,
         "planar_density": 0.000180,
-        "extension_x": 350.0,
-        "extension_z": 3.5,
-        "angle": 70
-      },
-      "morphology": {
-        "class": "bsb.morphologies.NoGeometry",
-        "detailed_morphologies": ["PurkinjeCell"]
+        "geometry":{
+          "extension_x": 350.0,
+          "extension_z": 3.5
+        },
+        "morphologies": [
+          {
+            "names":["PurkinjeCell"]
+          }
+        ]
       },
       "plotting": {
         "display_name": "Purkinje cell",
@@ -120,11 +118,11 @@
       "spatial": {
         "radius": 5.0,
         "density": 0.2e-4,
-        "y_restriction": [0.33, 1.00]
-      },
-      "morphology": {
-        "class": "bsb.morphologies.NoGeometry",
-        "detailed_morphologies": ["StellateCell"]
+        "morphologies":[
+          {
+            "names":["StellateCell"]
+          }
+        ]
       },
       "plotting": {
         "display_name": "Stellate cell",
@@ -136,11 +134,11 @@
       "spatial": {
         "radius": 6.0,
         "density": 0.2e-4,
-        "y_restriction": [0.00, 0.33]
-      },
-      "morphology": {
-        "class": "bsb.morphologies.NoGeometry",
-        "detailed_morphologies": ["BasketCell"]
+        "morphologies":[
+          {
+            "names":["BasketCell"]
+          }
+        ]
       },
       "plotting": {
         "display_name": "Basket cell",
@@ -151,7 +149,8 @@
       "entity": true,
       "relay": true,
       "spatial": {
-        "density":1.5e-5
+        "relative_to": "glomerulus",
+        "count_ratio": 0.05
       },
       "plotting": {
         "display_name": "mossy_fibers",
@@ -174,7 +173,6 @@
       "cls": "bsb.placement.ParallelArrayPlacement",
       "cell_types": ["purkinje_cell"],
       "spacing_x": 350.0,
-      "spacing_z": 3.5,
       "angle" : 70,
       "partitions": ["purkinje_layer"]
     },
@@ -196,10 +194,7 @@
     "mossy_fibers_placement": {
       "cls": "bsb.placement.Entities",
       "cell_types":["mossy_fibers"],
-      "layer": "granular_layer",
-      "partitions": ["granular_layer"],
-      "placement_relative_to": "glomerulus",
-      "placement_count_ratio": 0.05
+      "partitions": ["granular_layer"]
     }
   },
   "after_placement": {
@@ -342,8 +337,8 @@
       "compartments": ["aa_targets"]
     },
     "compartment_intersection_radius": 3.0,
-    "synapses": {
-      "type": "norm",
+    "contacts": {
+      "distribution": "norm",
       "loc": 4,
       "scale": 0.4
     }
