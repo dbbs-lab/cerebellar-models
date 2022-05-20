@@ -2,6 +2,7 @@ import numpy as np
 from bsb.connectivity.strategy import ConnectionStrategy
 from scipy.stats.distributions import truncexpon
 from bsb import config
+from bsb.reporting import warn
 
 
 @config.node
@@ -34,10 +35,25 @@ class ConnectomeGlomerulusGolgi(ConnectionStrategy):
 
     def connect(self, pre, post):
         # Gather information for the legacy code block below.
-        glomerulus_cell_type = self.from_cell_types[0]
-        golgi_cell_type = self.to_cell_types[0]
-        glomeruli = self.scaffold.cells_by_type[glomerulus_cell_type.name]
-        golgis = self.scaffold.cells_by_type[golgi_cell_type.name]
+        glomerulus_cell_type = pre.cell_types[0].get_placement_set()
+        golgi_cell_type = post.cell_types[0].get_placement_set()
+        golgi_pos = golgi_cell_type.load_positions()
+        glom_pos = glomerulus_cell_type.load_positions()
+        glomeruli = np.column_stack(
+            (
+                np.arange(0, len(glom_pos)),
+                np.zeros(len(glom_pos)),
+                glom_pos
+            )
+        )
+        golgis = np.column_stack(
+            (
+                np.arange(0, len(golgi_pos)),
+                np.zeros(len(golgi_pos)),
+                golgi_pos
+            )
+        )
+        return warn("Glomerulus_golgi morphological connectivity disabled")
         first_glomerulus = int(glomeruli[0, 0])
         r_goc_vol = golgi_cell_type.morphology.dendrite_radius
         if self.detailed:
