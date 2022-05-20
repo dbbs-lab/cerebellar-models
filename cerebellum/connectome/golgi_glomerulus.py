@@ -41,6 +41,7 @@ class ConnectomeGolgiGlomerulus(ConnectionStrategy):
                 golgi_pos
             )
         )
+        return warn("Golgi axon to Glomerulus morphological connectivity disabled")
         
         first_glomerulus = int(glomeruli[0, 0])
         GoCaxon_x = golgi_cell_type.spatial.geometrical.axon_x

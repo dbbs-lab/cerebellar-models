@@ -1,6 +1,7 @@
 import numpy as np
 from bsb.connectivity.strategy import ConnectionStrategy
 from bsb import config
+from bsb.reporting import warn
 
 @config.node
 class ConnectomeGolgiGranule(ConnectionStrategy):
