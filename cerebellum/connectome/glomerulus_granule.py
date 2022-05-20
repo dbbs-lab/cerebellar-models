@@ -60,7 +60,7 @@ class ConnectomeGlomerulusGranule(ConnectionStrategy):
                 gran_pos
             )
         )
-        return warn("Morphology specific connectivity glomerulus to granule disabled")
+        return warn("Glomerulus to granule morphological connectivity disabled")
         dend_len = to_cell_type.morphology.dendrite_length
         n_conn_glom = self.convergence
         first_glomerulus = int(glomeruli[0, 0])
