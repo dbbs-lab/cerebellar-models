@@ -36,8 +36,8 @@ class ConnectomeGlomerulusGolgi(ConnectionStrategy):
     def connect(self, pre, post):
         # Gather information for the legacy code block below.
         glomerulus_cell_type = pre.cell_types[0].get_placement_set()
-        golgi_cell_type = post.cell_types[0].get_placement_set()
-        golgi_pos = golgi_cell_type.load_positions()
+        golgi_ps = post.cell_types[0].get_placement_set()
+        golgi_pos = golgi_ps.load_positions()
         glom_pos = glomerulus_cell_type.load_positions()
         glomeruli = np.column_stack(
             (
@@ -53,13 +53,16 @@ class ConnectomeGlomerulusGolgi(ConnectionStrategy):
                 golgi_pos
             )
         )
-        return warn("Glomerulus_golgi morphological connectivity disabled")
         first_glomerulus = int(glomeruli[0, 0])
-        r_goc_vol = golgi_cell_type.morphology.dendrite_radius
+        r_goc_vol = golgi_ps.cell_type.spatial.geometry.dendrite_radius
         if self.detailed:
             compartments = np.zeros((0, 2))
+            return warn("ConnectomeGlomerulusGolgi disabled: requires new `detailed` adaptation.")
             comps = self.dendritic_compartments
             total_compartments = len(comps)
+        else:
+            return warn("ConnectomeGlomerulusGolgi disabled: requires new `connect_cells` adaptation.")
+
 
         def connectome_glom_goc(first_glomerulus, glomeruli, golgicells, r_goc_vol):
             nonlocal compartments
@@ -145,7 +148,7 @@ class ConnectomeGlomerulusGolgi(ConnectionStrategy):
         if self.detailed:
             morphologies = np.zeros(connectome.shape)
             morphology_map = [self.morphology.morphology_name]
-            self.scaffold.connect_cells(
+            self.connect_cells(
                 self,
                 connectome,
                 compartments=compartments,
@@ -153,4 +156,4 @@ class ConnectomeGlomerulusGolgi(ConnectionStrategy):
                 morpho_map=morphology_map,
             )
         else:
-            self.scaffold.connect_cells(self, connectome)
+            self.connect_cells(self, connectome)
