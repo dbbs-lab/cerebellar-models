@@ -15,12 +15,27 @@ class ConnectomePFPurkinje(ConnectionStrategy):
 
     def connect(self,pre,post):
         # Gather information for the legacy code block below.
-        granule_cell_type = self.from_cell_types[0]
-        purkinje_cell_type = self.to_cell_types[0]
-        granules = self.scaffold.cells_by_type[granule_cell_type.name]
-        purkinjes = self.scaffold.cells_by_type[purkinje_cell_type.name]
+        granule_cell_type = pre.cell_types[0].get_placement_set()
+        purkinje_cell_type = post.cell_types[0].get_placement_set()
+        purk_pos = purkinje_cell_type.load_positions()
+        gran_pos = granule_cell_type.load_positions()
+        purkinjes = np.column_stack(
+            (
+                np.arange(0, len(purk_pos)),
+                np.zeros(len(purk_pos)),
+                purk_pos
+            )
+        )
+        granules = np.column_stack(
+            (
+                np.arange(0, len(gran_pos)),
+                np.zeros(len(gran_pos)),
+                gran_pos
+            )
+        )
         first_granule = int(granules[0, 0])
-        purkinje_extension_x = purkinje_cell_type.placement.extension_x
+        purkinje_extension_x = purkinje_cell_type.cell_type.spatial.geometry.extension_x
+
 
         def connectome_pf_pc(first_granule, granules, purkinjes, x_pc):
             pf_pc = np.zeros((0, 2))
