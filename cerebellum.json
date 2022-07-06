@@ -38,12 +38,10 @@
   "regions": {
     "cerebellar_cortex": {
       "type": "stack",
-      "offset": [0.0, 0.0, 0.0],
       "children": ["dcn_layer", "granular_layer", "purkinje_layer", "b_molecular_layer", "t_molecular_layer"]
     },
     "inferior_olive": {
       "type": "stack",
-      "offset": [260.0, -400.0, 0.0],
       "children": ["io_layer"]
     }
   },
@@ -52,7 +50,7 @@
       "spatial": {
         "radius": 2.5,
         "density": 3.9e-3,
-        "geometrical": {
+        "geometry": {
           "pf_height": 126,
           "pf_height_sd": 15
         },
@@ -105,6 +103,9 @@
       "spatial": {
         "radius": 8.0,
         "density": 9e-6,
+        "geometry": {
+          "axon_radius": 160
+        },
         "morphologies": [
           {
             "names": ["GolgiCell"]
@@ -179,24 +180,24 @@
   },
   "placement": {
     "granular_layer_innervation": {
-      "cls": "bsb.placement.Entities",
+      "strategy": "bsb.placement.Entities",
       "partitions": ["granular_layer"],
       "cell_types": ["mossy_fibers"]
     },
     "granular_layer_placement": {
-      "cls": "bsb.placement.ParticlePlacement",
+      "strategy": "bsb.placement.ParticlePlacement",
       "partitions": ["granular_layer"],
       "cell_types": ["granule_cell", "golgi_cell", "glomerulus"]
     },
     "purkinje_layer_placement": {
-      "cls": "bsb.placement.ParallelArrayPlacement",
+      "strategy": "bsb.placement.ParallelArrayPlacement",
       "partitions": ["purkinje_layer"],
       "cell_types": ["purkinje_cell"],
       "spacing_x": 130.0,
       "angle": 70.0
     },
     "molecular_layer_placement": {
-      "cls": "bsb.placement.ParticlePlacement",
+      "strategy": "bsb.placement.ParticlePlacement",
       "partitions": ["b_molecular_layer", "t_molecular_layer"],
       "cell_types": ["stellate_cell", "basket_cell"],
       "restrict": {
@@ -205,26 +206,26 @@
       }
     },
     "dcn_placement": {
-      "cls": "bsb.placement.ParticlePlacement",
+      "strategy": "bsb.placement.ParticlePlacement",
       "partitions": ["dcn_layer"],
       "cell_types": ["dcn_cell"]
     },
     "dcn_satellite_placement": {
-      "cls": "bsb.placement.Satellite",
+      "strategy": "bsb.placement.Satellite",
       "partitions": ["dcn_layer"],
       "cell_types": ["dcn_interneuron"],
       "planet_types": ["dcn_cell"],
       "per_planet": 1.0
     },
     "io_layer_placement": {
-      "cls": "bsb.placement.ParticlePlacement",
+      "strategy": "bsb.placement.ParticlePlacement",
       "partitions": ["io_layer"],
       "cell_types": ["io_cell"]
     }
   },
   "connectivity": {
     "ascending_axon_to_purkinje": {
-      "cls": "bsb.connectivity.VoxelIntersection",
+      "strategy": "bsb.connectivity.VoxelIntersection",
       "presynaptic": {
         "cell_types": ["granule_cell"],
         "compartments": ["ascending_axon"]

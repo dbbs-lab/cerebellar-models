@@ -2,5 +2,5 @@
 config = "cerebellum.json"
 
 [tools.bsb.links]
-config = [ "sys", "cerebellum.json", "always",]
+config = "auto"
 morpho = [ "sys", "morphologies.hdf5", "newer",]
