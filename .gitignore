@@ -3,3 +3,4 @@ __pycache__
 *.lck
 *.hdf5
 .python-version
+build
