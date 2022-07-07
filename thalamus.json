@@ -10,30 +10,28 @@
     "z": 11400.0
   },
   "regions": {
-    "Thalamus": {}
+    "Thalamus": {
+      "children": ["VAL", "RT"]
+    }
   },
   "partitions": {
     "VAL": {
       "type": "voxels",
-      "voxel_dim": [25.0, 25.0, 25.0],
+      "region": "Thalamus",
       "voxels": {
-        "type": "nrrd",
-        "source": "src/data/annotation_25.nrrd",
-        "mask_value": 629,
-        "voxel_size": 25
-      },
-      "region": "Thalamus"
+        "type": "allen",
+        "voxel_size": [25.0, 25.0, 25.0],
+        "struct_name": "VAL"
+      }
     },
     "RT": {
       "type": "voxels",
-      "voxel_dim": [25.0, 25.0, 25.0],
+      "region": "Thalamus",
       "voxels": {
-        "type": "nrrd",
-        "source": "src/data/annotation_25.nrrd",
-        "mask_value": 262,
-        "voxel_size": 25
-      },
-      "region": "Thalamus"
+        "type": "allen",
+        "voxel_size": [25.0, 25.0, 25.0],
+        "struct_name": "RT"
+      }
     }
   },
   "cell_types": {
@@ -79,12 +77,12 @@
   },
   "placement": {
     "thalamic_placement": {
-      "cls": "bsb.placement.ParticlePlacement",
+      "strategy": "bsb.placement.ParticlePlacement",
       "cell_types": ["interneurons", "thalamocortical-cells", "reticular-cells"],
       "partitions": ["VAL", "RT"],
       "distribute": {
          "morphologies": {
-           "cls": "bsb.placement.strategy.RandomMorphologies"
+           "strategy": "bsb.placement.strategy.RandomMorphologies"
          }
       }
     }
