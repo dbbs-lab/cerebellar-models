@@ -1,6 +1,9 @@
 Golgi, glomerulus \& granule cell axis
 ======================================
 
+Point neuron specs
+~~~~~~~~~~~~~~~~~~
+
 Glomerulus
 ----------
 
@@ -29,3 +32,9 @@ Granule cell
 
 * The granule cell must be connected to glomeruli that originate from different mossy
   fibers. :sup:`[ref?]`
+
+Detailed specs
+~~~~~~~~~~~~~~
+
+The Golgi cell must contact the granule cell on the compartment right above where the MF
+contacts it.
