@@ -6,9 +6,6 @@ from bsb import config
 
 
 class ConnectomeGolgiGlomerulus(ConnectionStrategy):
-    """
-    Legacy implementation for the connections between glomeruli and Golgi cells.
-    """
 
     divergence = config.attr(type=int, required=True)
 
@@ -50,7 +47,12 @@ class ConnectomeGolgiGlomerulus(ConnectionStrategy):
         avail = np.ones((n_conn_goc), dtype=bool)
         ptr = 0
         for i, gpos in enumerate(golgi_pos):
-            cand = np.linalg.norm(gpos - glom_pos) < 160
+            dist = np.sqrt(
+                np.power(gpos[0] - glom_pos[:, 0], 2)
+                + np.power(gpos[1] - glom_pos[:, 1], 2)
+                + np.power(gpos[2] - glom_pos[:, 2], 2)
+            )
+            cand = dist < 160
             cand = cand & avail
             avail = avail & ~cand
             pre_locs[i, 0] = i

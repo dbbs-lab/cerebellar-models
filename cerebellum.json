@@ -237,12 +237,21 @@
     },
     "golgi_to_glomerulus": {
       "strategy": "cerebellum.connectome.golgi_glomerulus.ConnectomeGolgiGlomerulus",
-      "divergence": 4,
+      "divergence": 40,
       "presynaptic": {
         "cell_types": ["golgi_cell"]
       },
       "postsynaptic": {
         "cell_types": ["glomerulus"]
+      }
+    },
+    "glomerulus_to_granule_cells": {
+      "strategy": "cerebellum.connectome.glomerulus_granule.ConnectomeGlomerulusGranule",
+      "presynaptic": {
+        "cell_types": ["glomerulus"]
+      },
+      "postsynaptic": {
+        "cell_types": ["granule_cell"]
       }
     }
   },
