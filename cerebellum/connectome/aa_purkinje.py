@@ -1,65 +1,43 @@
 import numpy as np
-from ..strategy import ConnectionStrategy
+from bsb.connectivity.strategy import ConnectionStrategy
+from bsb.storage import Chunk
+from bsb import config
 
 
+@config.node
 class ConnectomeAscAxonPurkinje(ConnectionStrategy):
     """
     Legacy implementation for the connections between ascending axons and purkinje cells.
     """
 
-    def validate(self):
-        pass
+    divergence = config.attr(type=int, required=True)
 
-    def connect(self):
-        # Gather information for the legacy code block below.
-        granule_cell_type = self.from_cell_types[0]
-        purkinje_cell_type = self.to_cell_types[0]
-        granules = self.scaffold.cells_by_type[granule_cell_type.name]
-        purkinjes = self.scaffold.cells_by_type[purkinje_cell_type.name]
-        first_granule = int(granules[0, 0])
-        OoB_value = (
-            self.scaffold.configuration.X * 1000.0
-        )  # Any arbitrarily large value outside of simulation volume
-        purkinje_extension_x = purkinje_cell_type.placement.extension_x
-        purkinje_extension_z = purkinje_cell_type.placement.extension_z
+    def get_region_of_interest(self, chunk):
+        roi_xs = np.arange(chunk[0] - 1, chunk[0] + 1, 1)
+        roi_ys = np.arange(chunk[1] - 1, chunk[1] + 1, 1)
+        roi_zs = np.arange(chunk[2] - 1, chunk[2] + 1, 1)
+        print("Chunk type?", type(roi_zs))
+        my_roi = np.meshgrid(roi_xs, roi_ys, roi_zs)
+        print("And after meshgrid?", type(my_roi))
+        return my_roi
 
-        def connectome_aa_pc(first_granule, granules, purkinjes, x_pc, z_pc, OoB_value):
-            aa_pc = np.zeros((0, 2))
-            new_granules = np.copy(granules)
+    def connect(self, pre, post):
+        pre_type = pre.cell_types[0]
+        post_type = post.cell_types[0]
+        for pre_ct, pre_ps in pre.placement.items():
+            for post_ct, post_ps in post.placement.items():
+                self._connect_type(pre_ct, pre_ps, post_ct, post_ps)
 
-            # for all Purkinje cells: calculate and choose which granules fall into the area of PC dendritic tree, then delete them from successive computations, since 1 ascending axon is connected to only 1 PC
-            for i in purkinjes:
-                # ascending axon falls into the z range of values?
-                bool_vector = (new_granules[:, 4]).__ge__(i[4] - z_pc / 2.0) & (
-                    new_granules[:, 4]
-                ).__le__(i[4] + z_pc / 2.0)
-                # ascending axon falls into the x range of values?
-                bool_vector = bool_vector & (
-                    (new_granules[:, 2]).__ge__(i[2] - x_pc / 2.0)
-                    & (new_granules[:, 2]).__le__(i[2] + x_pc / 2.0)
-                )
-                good_aa = np.where(bool_vector)[
-                    0
-                ]  # finds indexes of ascending axons that, on the selected axis, have the correct sum value
+    def _connect_type(self, pre_ct, pre_ps, post_ct, post_ps):
+        # N x 3 (xyz)
+        pre_pos = pre_ps.load_positions()
+        post_pos = post_ps.load_positions()
 
-                # construction of the output matrix: the first column has the GrC id, while the second column has the PC id
-                matrix = np.zeros((len(good_aa), 2))
-                matrix[:, 1] = i[0]
-                matrix[:, 0] = good_aa + first_granule
-                aa_pc = np.vstack((aa_pc, matrix))
+        # numpy magic
 
-                new_granules[
-                    good_aa, :
-                ] = OoB_value  # update the granules matrix used for computation by deleting the coordinates of connected ones
+        # cell id, branch id, point id
+        # cell id, -1, -1
+        pre_locs = np.zeros((N, 3))
+        post_locs = np.zeros((N, 3))
 
-            return aa_pc
-
-        result = connectome_aa_pc(
-            first_granule,
-            granules,
-            purkinjes,
-            purkinje_extension_x,
-            purkinje_extension_z,
-            OoB_value,
-        )
-        self.scaffold.connect_cells(self, result)
+        self.connect_cells(pre_ps, post_ps, pre_locs, post_locs)

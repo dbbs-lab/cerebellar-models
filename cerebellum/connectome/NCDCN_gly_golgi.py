@@ -133,10 +133,14 @@ class ConnectomeDcnGlyGolgi(ConnectionStrategy):
             n_dcn = len(dcn_selected[:, 0])
             dcn_per_Area = n_dcn / YZ_Area
             dcn_per_Y = int(
-                np.ceil((BoundsY_cluster[1] - BoundsY_cluster[0]) * np.sqrt(dcn_per_Area))
+                np.ceil(
+                    (BoundsY_cluster[1] - BoundsY_cluster[0]) * np.sqrt(dcn_per_Area)
+                )
             )
             dcn_per_Z = int(
-                np.ceil((BoundsZ_cluster[1] - BoundsZ_cluster[0]) * np.sqrt(dcn_per_Area))
+                np.ceil(
+                    (BoundsZ_cluster[1] - BoundsZ_cluster[0]) * np.sqrt(dcn_per_Area)
+                )
             )
             dcn_Y = np.linspace(BoundsY_cluster[0], BoundsY_cluster[1], num=dcn_per_Y)
             dcn_Z = np.linspace(BoundsZ_cluster[0], BoundsZ_cluster[1], num=dcn_per_Z)

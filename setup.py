@@ -1,6 +1,8 @@
 import setuptools, sys, os
 
-with open(os.path.join(os.path.dirname(__file__), "cerebellum", "__init__.py"), "r") as f:
+with open(
+    os.path.join(os.path.dirname(__file__), "cerebellum", "__init__.py"), "r"
+) as f:
     for line in f:
         if "__version__ = " in line:
             exec(line.strip())
@@ -9,9 +11,7 @@ with open(os.path.join(os.path.dirname(__file__), "cerebellum", "__init__.py"), 
 with open("README.md", "r") as fh:
     long_description = fh.read()
 
-requires = [
-    "bsb[NEURON,MPI]>=4.0.0a1"
-]
+requires = ["bsb[NEURON,MPI]>=4.0.0a1"]
 
 setuptools.setup(
     name="cerebellum",

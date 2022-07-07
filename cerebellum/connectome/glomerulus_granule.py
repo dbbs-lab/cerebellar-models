@@ -64,7 +64,7 @@ class ConnectomeGlomerulusGranule(ConnectionStrategy):
                     ((glom_x - gran_x) ** 2)
                     + ((glom_y - gran_y) ** 2)
                     + ((glom_z - gran_z) ** 2)
-                    - (dend_len ** 2)
+                    - (dend_len**2)
                 )
                 # Indices of glomeruli that can potentially be connected
                 good_gloms = np.where((distance_vector < 0.0) == True)[0]

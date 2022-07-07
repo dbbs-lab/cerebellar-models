@@ -13,7 +13,10 @@ class ConnectomeGranuleGolgi(ConnectionStrategy):
 
     required = ["aa_convergence", "pf_convergence", "tag_aa", "tag_pf"]
 
-    defaults = {"tag_aa": "ascending_axon_to_golgi", "tag_pf": "parallel_fiber_to_golgi"}
+    defaults = {
+        "tag_aa": "ascending_axon_to_golgi",
+        "tag_pf": "parallel_fiber_to_golgi",
+    }
 
     def validate(self):
         pass
@@ -60,7 +63,7 @@ class ConnectomeGranuleGolgi(ConnectionStrategy):
                 distance_vector = ((granules_x - golgi_x) ** 2) + (
                     (granules_z - golgi_z) ** 2
                 )
-                AA_candidates = np.where((distance_vector).__le__(r_goc_vol ** 2))[
+                AA_candidates = np.where((distance_vector).__le__(r_goc_vol**2))[
                     0
                 ]  # finds indexes of ascending axons that can potentially be connected
                 chosen_rand = np.random.permutation(AA_candidates)

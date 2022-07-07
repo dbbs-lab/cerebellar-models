@@ -28,7 +28,7 @@ class ConnectomePFInterneuron(ConnectionStrategy):
 
                 # find all cells that satisfy the condition
                 interneuron_matrix = (
-                    ((granules[:, 2] - i[2]) ** 2) + ((h_pf - i[3]) ** 2) - (r_sb ** 2)
+                    ((granules[:, 2] - i[2]) ** 2) + ((h_pf - i[3]) ** 2) - (r_sb**2)
                 ).__le__(0)
                 # indexes of interneurons that can potentially be connected
                 good_pf = np.where(interneuron_matrix)[0]
