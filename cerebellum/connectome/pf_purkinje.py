@@ -1,47 +1,47 @@
 import numpy as np
-from ..strategy import ConnectionStrategy
+from bsb.connectivity.strategy import ConnectionStrategy
+from bsb.storage import Chunk
+from bsb import config
 
 
+@config.node
 class ConnectomePFPurkinje(ConnectionStrategy):
-    """
-    Legacy implementation for the connections between parallel fibers and purkinje cells.
-    """
+    def get_region_of_interest(self, chunk):
+        ct = self.postsynaptic.cell_types[0]
+        chunks = ct.get_placement_set().get_all_chunks()
+        # print("CT", ct.name, "N", len(ct.get_placement_set()), "Placed in", len(ct.get_placement_set().get_all_chunks()), "chunks")
+        selected_chunks = []
+        purkinje_x_max = 130 / 2
+        for c in chunks:
+            x_pos = np.abs(chunk[0] - c[0]) * chunk.dimensions[0]
+            if x_pos < purkinje_x_max:
+                selected_chunks.append(Chunk([c[0], c[1], c[2]], chunk.dimensions))
+        return selected_chunks
 
-    def validate(self):
-        pass
+    def connect(self, pre, post):
+        pre_type = pre.cell_types[0]
+        post_type = post.cell_types[0]
+        for pre_ct, pre_ps in pre.placement.items():
+            for post_ct, post_ps in post.placement.items():
+                self._connect_type(pre_ct, pre_ps, post_ct, post_ps)
 
-    def connect(self):
-        # Gather information for the legacy code block below.
-        granule_cell_type = self.from_cell_types[0]
-        purkinje_cell_type = self.to_cell_types[0]
-        granules = self.scaffold.cells_by_type[granule_cell_type.name]
-        purkinjes = self.scaffold.cells_by_type[purkinje_cell_type.name]
-        first_granule = int(granules[0, 0])
-        purkinje_extension_x = purkinje_cell_type.placement.extension_x
-
-        def connectome_pf_pc(first_granule, granules, purkinjes, x_pc):
-            pf_pc = np.zeros((0, 2))
-            # for all Purkinje cells: calculate and choose which parallel fibers fall into the area of PC dendritic tree (then delete them from successive computations, since 1 parallel fiber is connected to a maximum of PCs)
-            for i in purkinjes:
-                # which parallel fibers fall into the x range of values?
-                bool_matrix = (granules[:, 2]).__ge__(i[2] - x_pc / 2.0) & (
-                    granules[:, 2]
-                ).__le__(
-                    i[2] + x_pc / 2.0
-                )  # CAMBIARE IN new_granules SE VINCOLO SU 30 pfs
-                good_pf = np.where(bool_matrix)[
-                    0
-                ]  # finds indexes of parallel fibers that, on the selected axis, satisfy the condition
-
-                # construction of the output matrix: the first column has the GrC id, while the second column has the PC id
-                matrix = np.zeros((len(good_pf), 2))
-                matrix[:, 1] = i[0]
-                matrix[:, 0] = good_pf + first_granule
-                pf_pc = np.vstack((pf_pc, matrix))
-
-            return pf_pc
-
-        result = connectome_pf_pc(
-            first_granule, granules, purkinjes, purkinje_extension_x
-        )
-        self.scaffold.connect_cells(self, result)
+    def _connect_type(self, pre_ct, pre_ps, post_ct, post_ps):
+        granule_pos = pre_ps.load_positions()
+        purkinje_pos = post_ps.load_positions()
+        n_golgi = len(granule_pos)
+        n_purkinje = len(purkinje_pos)
+        n_conn = n_golgi * n_purkinje
+        pre_locs = np.full((n_conn, 3), -1, dtype=int)
+        post_locs = np.full((n_conn, 3), -1, dtype=int)
+        max_dist = 130 / 2
+        ptr = 0
+        for i, purkinje in enumerate(purkinje_pos):
+            # Compute the distance on the x-axis between the somata of purkinje and granule cells
+            x_dist = np.abs(purkinje[0] - granule_pos[0])
+            # Find the granule cells whose x-distance from the current purkinje cell
+            pre_gr = x_dist < max_dist
+            pre_idx = np.nonzero(pre_gr)[0]
+            post_locs[ptr : (ptr + len(pre_locs)), 0] = i
+            pre_locs[ptr : (ptr + len(pre_locs)), 0] = pre_idx
+            ptr += len(pre_idx)
+        self.connect_cells(pre_ps, post_ps, pre_locs[:ptr], post_locs[:ptr])
