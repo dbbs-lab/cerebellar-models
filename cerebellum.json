@@ -237,6 +237,19 @@
         "compartments": ["aa_targets"]
       }
     },
+    "parallel_fibers_to_purkinje": {
+      "strategy": "bsb.connectivity.VoxelIntersection",
+      "x_estension": 130,
+      "z_extension": 130,
+      "presynaptic": {
+        "cell_types": ["granule_cell"],
+        "compartments": ["parallel_fiber"]
+      },
+      "postsynaptic": {
+        "cell_types": ["purkinje_cell"],
+        "compartments": ["pf_targets"]
+      }
+    },
     "golgi_to_glomerulus": {
       "strategy": "cerebellum.connectome.golgi_glomerulus.ConnectomeGolgiGlomerulus",
       "divergence": 40,

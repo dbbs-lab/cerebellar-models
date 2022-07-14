@@ -1,9 +1,9 @@
 import numpy as np
-from ..strategy import ConnectionStrategy
-from ...exceptions import *
-from ...reporting import warn
+from bsb.connectivity.strategy import ConnectionStrategy
+from bsb.storage import Chunk
+from bsb import config
 
-
+@config.node
 class ConnectomeGranuleGolgi(ConnectionStrategy):
     """
     Legacy implementation for the connections between Golgi cells and glomeruli.
