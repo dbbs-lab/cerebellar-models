@@ -1,147 +1,69 @@
+from typing_extensions import Required
 import numpy as np
 from bsb.connectivity.strategy import ConnectionStrategy
 from bsb.storage import Chunk
 from bsb import config
 
+
 @config.node
 class ConnectomeGranuleGolgi(ConnectionStrategy):
-    """
-    Legacy implementation for the connections between Golgi cells and glomeruli.
-    """
 
-    casts = {"aa_convergence": int, "pf_convergence": int}
+    radius = config.attr(type=int, required=True)
+    convergence = config.attr(type=int, required=True)
 
-    required = ["aa_convergence", "pf_convergence", "tag_aa", "tag_pf"]
+    def get_region_of_interest(self, chunk):
+        ct = self.postsynaptic.cell_types[0]
+        chunks = ct.get_placement_set().get_all_chunks()
+        selected_chunks = []
+        for c in chunks:
+            dist = np.sqrt(
+                np.power(chunk[0] - c[0], 2)
+                + np.power(chunk[1] - c[1], 2)
+                + np.power(chunk[2] - c[2], 2)
+            )
+            if dist < self.radius and c[1] < chunk[1]:
+                selected_chunks.append(Chunk([c[0], c[1], c[2]], chunk.dimensions))
+        return selected_chunks
 
-    defaults = {
-        "tag_aa": "ascending_axon_to_golgi",
-        "tag_pf": "parallel_fiber_to_golgi",
-    }
+    def connect(self, pre, post):
+        pre_type = pre.cell_types[0]
+        post_type = post.cell_types[0]
+        for pre_ct, pre_ps in pre.placement.items():
+            for post_ct, post_ps in post.placement.items():
+                self._connect_type(pre_ct, pre_ps, post_ct, post_ps)
 
-    def validate(self):
-        pass
-
-    def connect(self):
-        # Gather information for the legacy code block below.
-        granule_cell_type = self.from_cell_types[0]
-        golgi_cell_type = self.to_cell_types[0]
-        granules = self.scaffold.cells_by_type[granule_cell_type.name]
-        golgis = self.scaffold.cells_by_type[golgi_cell_type.name]
-        first_granule = int(granules[0, 0])
-        r_goc_vol = golgi_cell_type.morphology.dendrite_radius
-        oob = (
-            self.scaffold.configuration.X * 1000.0
-        )  # Any arbitrarily large value outside of simulation volume
-        n_connAA = self.aa_convergence
-        n_conn_pf = self.pf_convergence
-        tot_conn = n_connAA + n_conn_pf
-
-        def connectome_grc_goc(
-            first_granule,
-            granules,
-            golgicells,
-            r_goc_vol,
-            OoB_value,
-            n_connAA,
-            n_conn_pf,
-            tot_conn,
-            scaffold,
-        ):
-            aa_goc = np.empty((0, 2))
-            pf_goc = np.empty((0, 2))
-            densityWarningSent = False
-            new_granules = np.copy(granules)
-            granules_x = new_granules[:, 2]
-            granules_z = new_granules[:, 4]
-            new_golgicells = np.random.permutation(golgicells)
-            if new_granules.shape[0] <= new_golgicells.shape[0]:
-                raise ConnectivityError(
-                    "The number of granule cells was less than the number of golgi cells. Simulation cannot continue."
-                )
-            for golgi_id, _, golgi_x, golgi_y, golgi_z in new_golgicells:
-                # Distance of this golgi cell to all ascending axons
-                distance_vector = ((granules_x - golgi_x) ** 2) + (
-                    (granules_z - golgi_z) ** 2
-                )
-                AA_candidates = np.where((distance_vector).__le__(r_goc_vol**2))[
-                    0
-                ]  # finds indexes of ascending axons that can potentially be connected
-                chosen_rand = np.random.permutation(AA_candidates)
-                selected_granules = new_granules[chosen_rand]
-                selected_distances = np.sqrt(distance_vector[chosen_rand])
-                prob = selected_distances / r_goc_vol
-                distance_sort = prob.argsort()
-                selected_granules = selected_granules[distance_sort]
-                prob = prob[distance_sort]
-                rolls = np.random.uniform(size=len(selected_granules))
-                connectedAA = np.empty(n_connAA)
-                idx = 0
-                for ind, j in enumerate(selected_granules):
-                    if idx < n_connAA:
-                        if rolls[ind] > prob[ind]:
-                            connectedAA[idx] = j[0]
-                            idx += 1
-                connectedAA = connectedAA[0:idx]
-                good_grc = np.delete(
-                    granules, np.array(connectedAA - first_granule, dtype=int), 0
-                )
-                intersections = (good_grc[:, 2]).__ge__(golgi_x - r_goc_vol) & (
-                    good_grc[:, 2]
-                ).__le__(golgi_x + r_goc_vol)
-                good_pf = np.where(intersections == True)[
-                    0
-                ]  # finds indexes of granules that can potentially be connected
-                # The remaining amount of parallel fibres to connect after subtracting the amount of already connected ascending axons.
-                AA_connected_count = len(connectedAA)
-                parallelFibersToConnect = tot_conn - AA_connected_count
-                # Randomly select parallel fibers to be connected with a GoC, to a maximum of tot_conn connections
-                if good_pf.shape[0] < parallelFibersToConnect:
-                    connected_pf = np.random.choice(
-                        good_pf,
-                        min(tot_conn - AA_connected_count, good_pf.shape[0]),
-                        replace=False,
-                    )
-                    totalConnectionsMade = connected_pf.shape[0] + AA_connected_count
-                    # Warn the user once if not enough granule cells are present to connect to the Golgi cell.
-                    if not densityWarningSent:
-                        densityWarningSent = True
-                        warn(
-                            "The granule cell density is too low compared to the Golgi cell density to make physiological connections!",
-                            ConnectivityWarning,
-                        )
-                else:
-                    connected_pf = np.random.choice(
-                        good_pf, tot_conn - len(connectedAA), replace=False
-                    )
-                    totalConnectionsMade = tot_conn
-                PF_connected_count = connected_pf.shape[0]
-                pf_idx = good_grc[connected_pf, :]
-                matrix_aa = np.zeros((AA_connected_count, 2))
-                matrix_pf = np.zeros((PF_connected_count, 2))
-                matrix_pf[0:PF_connected_count, 0] = pf_idx[:, 0]
-                matrix_aa[0:AA_connected_count, 0] = connectedAA
-                matrix_pf[:, 1] = golgi_id
-                matrix_aa[:, 1] = golgi_id
-                pf_goc = np.vstack((pf_goc, matrix_pf))
-                aa_goc = np.vstack((aa_goc, matrix_aa))
-                new_granules[((connectedAA.astype(int)) - first_granule), :] = OoB_value
-                # End of Golgi cell loop
-            aa_goc = aa_goc[aa_goc[:, 1].argsort()]
-            pf_goc = pf_goc[
-                pf_goc[:, 1].argsort()
-            ]  # sorting of the resulting vector on the post-synaptic neurons
-            return aa_goc, pf_goc
-
-        result_aa, result_pf = connectome_grc_goc(
-            first_granule,
-            granules,
-            golgis,
-            r_goc_vol,
-            oob,
-            n_connAA,
-            n_conn_pf,
-            tot_conn,
-            self.scaffold,
-        )
-        self.scaffold.connect_cells(self, result_aa, self.tag_aa)
-        self.scaffold.connect_cells(self, result_pf, self.tag_pf)
+    def _connect_type(self, pre_ct, pre_ps, post_ct, post_ps):
+        granule_pos = pre_ps.load_positions()
+        golgi_pos = post_ps.load_positions()
+        n_golgi = len(golgi_pos)
+        n_granule = len(granule_pos)
+        n_conn = n_golgi * n_granule
+        pre_locs = np.full((n_conn, 3), -1, dtype=int)
+        post_locs = np.full((n_conn, 3), -1, dtype=int)
+        ptr = 0
+        for i, golgi in enumerate(golgi_pos):
+            # Compute the distance between the somata of the current golgi cell and granule cells
+            dist = np.sqrt(
+                np.pow(golgi[0] - granule_pos[0], 2)
+                + np.pow(golgi[1] - granule_pos[1], 2)
+                + np.pow(golgi[2] - granule_pos[2], 2)
+            )
+            # Find the granule cells whose distence from the soma of the golgi cell is less than the radius of the dendridic tree and such that they are under the golgi cell
+            radius_condition = dist < self.radius
+            y_condition = granule_pos[:, 1] < golgi[1]
+            final_condition = np.logical_and(radius_condition, y_condition)
+            # If less than 400 granule cells can be connected, take them all
+            if np.count_nonzero(final_condition) < self.convergence:
+                pre_idx = np.nonzero(final_condition)[0]
+                post_locs[ptr : (ptr + len(pre_locs)), 0] = i
+                pre_locs[ptr : (ptr + len(pre_locs)), 0] = pre_idx
+                ptr += len(pre_idx)
+            # Otherwise, take the first 400 occourrence setting the subsequent ones to False
+            else:
+                true_indices = np.argwhere(final_condition == True)
+                final_condition[true_indices[len(true_indices) - 1] :] = False
+                pre_idx = np.nonzero(final_condition)[0]
+                post_locs[ptr : (ptr + len(pre_locs)), 0] = i
+                pre_locs[ptr : (ptr + len(pre_locs)), 0] = pre_idx
+                ptr += len(pre_idx)
+        self.connect_cells(pre_ps, post_ps, pre_locs[:ptr], post_locs[:ptr])

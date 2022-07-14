@@ -3,6 +3,7 @@ from bsb.connectivity.strategy import ConnectionStrategy
 from bsb.storage import Chunk
 from bsb import config
 
+
 @config.node
 class ConnectomeGlomerulusGranule(ConnectionStrategy):
     radius = config.attr(type=int, required=True)

@@ -225,7 +225,7 @@
   },
   "connectivity": {
     "ascending_axon_to_purkinje": {
-      "strategy": "bsb.connectivity.VoxelIntersection",
+      "strategy": "cerebellum.connectome.aa_purkinje.ConnectomeAscAxonPurkinje",
       "x_estension": 130,
       "z_extension": 130,
       "presynaptic": {
@@ -238,7 +238,7 @@
       }
     },
     "parallel_fibers_to_purkinje": {
-      "strategy": "bsb.connectivity.VoxelIntersection",
+      "strategy": "cerebellum.connectome.pf_purkinje.ConnectomePFPurkinje",
       "x_estension": 130,
       "z_extension": 130,
       "presynaptic": {
@@ -270,6 +270,17 @@
       },
       "postsynaptic": {
         "cell_types": ["granule_cell"]
+      }
+    },
+    "glomerulus_to_golgi": {
+      "strategy": "cerebellum.connectome.granule_golgi.ConnectomeGranuleGolgi",
+      "convergence": 400,
+      "radius": 50,
+      "presynaptic": {
+        "cell_types": ["granule_cell"]
+      },
+      "postsynaptic": {
+        "cell_types": ["golgi_cell"]
       }
     }
   },

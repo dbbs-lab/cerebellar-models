@@ -10,7 +10,7 @@ class ConnectomeAscAxonPurkinje(ConnectionStrategy):
     z_extension = config.attr(type=int, required=True)
 
     def get_region_of_interest(self, chunk):
-        #Find the first neighborhoods of the chunk
+        # Find the first neighborhoods of the chunk
         roi_xs = np.arange(chunk[0] - 1, chunk[0] + 1, 1)
         roi_ys = np.arange(chunk[1] - 1, chunk[1] + 1, 1)
         roi_zs = np.arange(chunk[2] - 1, chunk[2] + 1, 1)
