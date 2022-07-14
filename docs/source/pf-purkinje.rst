@@ -9,7 +9,7 @@ Purkinje cells
 
 * Purkinje cells dendridic trees lie on parasagittal planes (for us the sagittal plane is the xy plane).
   
-  * Since their parallel fibers length is of about 2mm :ref:`[Huang et al., 2006]<pf-purkinje-biblio>`, in :ref:`[Casali et al., 2019]<pf-purkinje-biblio>` they are assumed to extend for the entire simulation volume. Therefore it is sufficient to check whether their x coordinate falls into the dendritic tree.
+  * Since their parallel fibers length is of about 2 mm :ref:`[Huang et al., 2006]<pf-purkinje-biblio>`, in :ref:`[Casali et al., 2019]<pf-purkinje-biblio>` they are assumed to extend for the entire simulation volume. Therefore it is sufficient to check whether their x coordinate falls into the dendritic tree.
 
 .. image:: imgs/pf_purkinje.png
   :width: 400
@@ -17,6 +17,7 @@ Purkinje cells
 
 * Only parallel fibers originated from positioned Granule cells are considered.
 
+* The connection forms an excitatory synapse.
 
 .. _pf-purkinje-biblio:
 

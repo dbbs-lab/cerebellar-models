@@ -16,11 +16,11 @@ Golgi cell
 
   The Golgi to glomerulus connection is an intermediate for the Golgi to granule. These connections needn't actually be stored.
 
-* Target a number of glomeruli according to their divergence of 40 :ref:`[Solinas et al., 2010]<golgi-glom-grc-biblio>`.
+* Target a number of glomeruli according to their divergence of 40 micrometers :ref:`[Solinas et al., 2010]<golgi-glom-grc-biblio>`.
 
   * A possible improvement is to make the divergence a distribution :ref:`[Casali et al., 2019]<golgi-glom-grc-biblio>`. 
 
-* Targets must be located within a y-axis aligned cylinder of radius 150 around the Golgi cell, and beneath its soma :ref:`[Casali et al., 2019]<golgi-glom-grc-biblio>`. 
+* Targets must be located within a y-axis aligned cylinder of radius 150 micrometers around the Golgi cell, and beneath its soma :ref:`[Casali et al., 2019]<golgi-glom-grc-biblio>`. 
 
 Granule cell
 ------------
@@ -33,6 +33,8 @@ Granule cell
 
 .. image:: imgs/go_gl_gr.png
   :width: 400
+
+* The connection forms an inhibitory synapse.
 
 Detailed specs
 ~~~~~~~~~~~~~~
