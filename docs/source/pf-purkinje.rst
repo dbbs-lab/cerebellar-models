@@ -1,4 +1,4 @@
-Parallel fibers & Purkinje cells
+Parallel fibers \& Purkinje cells
 ======================================
 
 Point neuron specs
@@ -7,7 +7,7 @@ Point neuron specs
 Purkinje cells
 ----------
 
-* Purkinje cells dendridic trees lie on parasaggital planes (for us the saggital plane is the xy plane).
+* Purkinje cells dendridic trees lie on parasagittal planes (for us the sagittal plane is the xy plane).
   
   * Since their parallel fibers length is of about 2mm :ref:`[Huang et al., 2006]<pf-purkinje-biblio>`, in :ref:`[Casali et al., 2019]<pf-purkinje-biblio>` they are assumed to extend for the entire simulation volume. Therefore it is sufficient to check whether their x coordinate falls into the dendritic tree.
 

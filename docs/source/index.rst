@@ -11,6 +11,8 @@ Welcome to Cerebellum's documentation!
    :caption: Connectome:
 
    golgi-glom-grc
+   pf-purkinje
+   aa-purkinje
 
 Indices and tables
 ==================
