@@ -226,6 +226,8 @@
   "connectivity": {
     "ascending_axon_to_purkinje": {
       "strategy": "bsb.connectivity.VoxelIntersection",
+      "x_estension": 130,
+      "z_extension": 130,
       "presynaptic": {
         "cell_types": ["granule_cell"],
         "compartments": ["ascending_axon"]
@@ -238,6 +240,7 @@
     "golgi_to_glomerulus": {
       "strategy": "cerebellum.connectome.golgi_glomerulus.ConnectomeGolgiGlomerulus",
       "divergence": 40,
+      "radius": 150
       "presynaptic": {
         "cell_types": ["golgi_cell"]
       },
@@ -247,6 +250,8 @@
     },
     "glomerulus_to_granule_cells": {
       "strategy": "cerebellum.connectome.glomerulus_granule.ConnectomeGlomerulusGranule",
+      "divergence": 4,
+      "radius": 40,
       "presynaptic": {
         "cell_types": ["glomerulus"]
       },

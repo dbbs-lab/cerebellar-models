@@ -4,20 +4,20 @@ from bsb.connectivity.strategy import ConnectionStrategy
 from bsb.storage import Chunk
 from bsb import config
 
-
+@config.node
 class ConnectomeGolgiGlomerulus(ConnectionStrategy):
 
     divergence = config.attr(type=int, required=True)
+    radius = config.attr(type=int, required=True)
 
     def get_region_of_interest(self, chunk):
         ct = self.postsynaptic.cell_types[0]
         chunks = ct.get_placement_set().get_all_chunks()
         # print("CT", ct.name, "N", len(ct.get_placement_set()), "Placed in", len(ct.get_placement_set().get_all_chunks()), "chunks")
-        max_radius = 160
         selected_chunks = []
         for c in chunks:
             dist = np.sqrt(np.power(chunk[0] - c[0], 2) + np.power(chunk[2] - c[2], 2))
-            if dist < max_radius and chunk[1] > c[1]:
+            if dist < self.radius and chunk[1] > c[1]:
                 selected_chunks.append(Chunk([c[0], c[1], c[2]], chunk.dimensions))
         return selected_chunks
 
@@ -52,7 +52,7 @@ class ConnectomeGolgiGlomerulus(ConnectionStrategy):
                 + np.power(gpos[1] - glom_pos[:, 1], 2)
                 + np.power(gpos[2] - glom_pos[:, 2], 2)
             )
-            cand = dist < 160
+            cand = dist < self.radius
             cand = cand & avail
             avail = avail & ~cand
             pre_locs[i, 0] = i

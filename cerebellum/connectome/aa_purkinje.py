@@ -6,9 +6,11 @@ from bsb import config
 
 @config.node
 class ConnectomeAscAxonPurkinje(ConnectionStrategy):
-    divergence = config.attr(type=int, required=True)
+    x_extension = config.attr(type=int, required=True)
+    z_extension = config.attr(type=int, required=True)
 
     def get_region_of_interest(self, chunk):
+        #Find the first neighborhoods of the chunk
         roi_xs = np.arange(chunk[0] - 1, chunk[0] + 1, 1)
         roi_ys = np.arange(chunk[1] - 1, chunk[1] + 1, 1)
         roi_zs = np.arange(chunk[2] - 1, chunk[2] + 1, 1)
@@ -46,8 +48,8 @@ class ConnectomeAscAxonPurkinje(ConnectionStrategy):
             x_dist = np.abs(purkinje[0] - aa_pos[0])
             z_dist = np.abs(purkinje[2] - aa_pos[2])
             # Check if the conditions on x and z are satisfied, then compute the logical product elementwise
-            x_condition = x_dist < 130 / 2
-            z_condition = z_dist < 130 / 2
+            x_condition = x_dist < self.x_extension / 2
+            z_condition = z_dist < self.z_extension / 2
             final_cond = np.logical_and(x_condition, z_condition)
             # Find the indices of the aa to connect
             pre_idx = np.nonzero(final_cond)[0]

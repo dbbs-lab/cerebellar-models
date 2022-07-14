@@ -3,8 +3,11 @@ from bsb.connectivity.strategy import ConnectionStrategy
 from bsb.storage import Chunk
 from bsb import config
 
-
+@config.node
 class ConnectomeGlomerulusGranule(ConnectionStrategy):
+    radius = config.attr(type=int, required=True)
+    divergence = config.attr(type=int, required=True)
+
     def get_region_of_interest(self, chunk):
         ct = self.postsynaptic.cell_types[0]
         chunks = ct.get_placement_set().get_all_chunks()
@@ -17,7 +20,6 @@ class ConnectomeGlomerulusGranule(ConnectionStrategy):
             len(ct.get_placement_set().get_all_chunks()),
             "chunks",
         )
-        radius = 40
         selected_chunks = []
         for c in chunks:
             dist = np.sqrt(
@@ -25,7 +27,7 @@ class ConnectomeGlomerulusGranule(ConnectionStrategy):
                 + np.power(chunk[1] - c[1], 2)
                 + np.power(chunk[2] - c[2], 2)
             )
-            if dist < radius:
+            if dist < self.radius:
                 selected_chunks.append(Chunk([c[0], c[1], c[2]], chunk.dimensions))
         return selected_chunks
 
@@ -41,7 +43,7 @@ class ConnectomeGlomerulusGranule(ConnectionStrategy):
         gran_pos = post_ps.load_positions()
         n_glom = len(glom_pos)
         n_gran = len(gran_pos)
-        max_connections = 4
+        max_connections = self.divergence
         n_conn = n_glom * max_connections
         pre_locs = np.full((n_conn, 3), -1, dtype=int)
         post_locs = np.full((n_conn, 3), -1, dtype=int)
@@ -60,8 +62,8 @@ class ConnectomeGlomerulusGranule(ConnectionStrategy):
             # cand = sorted_dist < 40
             # Sort the distances array
             for j, gdist in enumerate(sorted_dist):
-                if gr_connection < 4:
-                    if gdist < 40:
+                if gr_connection < self.divergence:
+                    if gdist < self.radius:
                         post_locs[ptr + j, 0] = i
                         pre_locs[ptr + j, 0] = sorted_indices[j]
                         gr_connection += 1
