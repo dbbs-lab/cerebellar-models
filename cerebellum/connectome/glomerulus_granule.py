@@ -7,7 +7,9 @@ from bsb import config
 @config.node
 class ConnectomeGlomerulusGranule(ConnectionStrategy):
     radius = config.attr(type=int, required=True)
-    divergence = config.attr(type=int, required=True)
+    convergence = config.attr(type=bool, required=True)
+    # Is it the correct type?
+    compartments = config.attr(type=list, required=True)
 
     def get_region_of_interest(self, chunk):
         ct = self.postsynaptic.cell_types[0]
@@ -24,9 +26,9 @@ class ConnectomeGlomerulusGranule(ConnectionStrategy):
         selected_chunks = []
         for c in chunks:
             dist = np.sqrt(
-                np.power(chunk[0] - c[0], 2)
-                + np.power(chunk[1] - c[1], 2)
-                + np.power(chunk[2] - c[2], 2)
+                np.power(chunk[0] * chunk.dimensions[0] - c[0] * c.dimensions[0], 2)
+                + np.power(chunk[1] * chunk.dimensions[1] - c[1] * c.dimensions[0], 2)
+                + np.power(chunk[2] * chunk.dimensions[2] - c[2] * c.dimensions[0], 2)
             )
             if dist < self.radius:
                 selected_chunks.append(Chunk([c[0], c[1], c[2]], chunk.dimensions))
@@ -44,7 +46,7 @@ class ConnectomeGlomerulusGranule(ConnectionStrategy):
         gran_pos = post_ps.load_positions()
         n_glom = len(glom_pos)
         n_gran = len(gran_pos)
-        max_connections = self.divergence
+        max_connections = self.convergence
         n_conn = n_glom * max_connections
         pre_locs = np.full((n_conn, 3), -1, dtype=int)
         post_locs = np.full((n_conn, 3), -1, dtype=int)
@@ -62,6 +64,7 @@ class ConnectomeGlomerulusGranule(ConnectionStrategy):
             sorted_dist = np.sort(dist)
             # cand = sorted_dist < 40
             # Sort the distances array
+
             for j, gdist in enumerate(sorted_dist):
                 if gr_connection < self.divergence:
                     if gdist < self.radius:
@@ -71,4 +74,32 @@ class ConnectomeGlomerulusGranule(ConnectionStrategy):
                 else:
                     break
             ptr += gr_connection
-        self.connect_cells(pre_ps, post_ps, pre_locs[:ptr], post_locs[:ptr])
+
+        if self.detailed:
+            # Store a map between the granule cell ids and the available dendridic compartments ids
+            granule_dendrite_occupation = {
+                g[0]: self.compartments.copy() for g in gran_pos
+            }
+            # Shuffle the order in which the dendrites will be selected by glomeruli
+            for l in granule_dendrite_occupation.values():
+                np.random.shuffle(l)
+            compartments = []
+
+            for i in range(len(pre_locs)):
+                granule_id = pre_locs[i]
+                try:
+                    unoccupied = granule_dendrite_occupation[granule_id].pop()
+                except IndexError:
+                    print(
+                        "Attempt to connect a glomerulus to a fully saturated granule cell."
+                    )
+                compartments.append([0, unoccupied])
+            self.connect_cells(
+                pre_ps,
+                post_ps,
+                pre_locs[:ptr],
+                post_locs[:ptr],
+                compartments=np.array(compartments),
+            )
+        else:
+            self.connect_cells(pre_ps, post_ps, pre_locs[:ptr], post_locs[:ptr])
