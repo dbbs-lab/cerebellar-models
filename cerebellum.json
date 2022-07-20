@@ -294,7 +294,7 @@
       "postsynaptic": {
         "cell_types": ["golgi_cell"],
         "compartments": ["basal_dendrites"]
-      },
+      }
     },
     "parallel_fiber_to_golgi": {
       "strategy": "bsb.connectivity.VoxelIntersection",
@@ -318,7 +318,7 @@
         "cell_types": ["purkinje_cell"],
         "compartments": ["aa_targets"]
       },
-      "affinity": 0.1	
+      "affinity": 0.1
     },
 
     "parallel_fiber_to_purkinje": {
@@ -345,7 +345,7 @@
       },
       "affinity": 0.1
     },
-    
+
     "parallel_fiber_to_stellate": {
       "strategy": "bsb.connectivity.VoxelIntersection",
       "presynaptic": {
@@ -379,7 +379,7 @@
       "postsynaptic": {
         "cell_types": ["purkinje_cell"],
         "compartments": ["soma"]
-      },
+      }
     },
     "stellate_to_stellate": {
       "strategy": "bsb.connectivity.VoxelIntersection",
@@ -773,7 +773,7 @@
           "synapse": {
             "static_synapse": {}
           }
-          
+
         },
         "glomerulus_to_golgi": {
           "connection": {
