@@ -263,7 +263,7 @@
       },
       "affinity": 0.5,
       "contacts": {
-        "type": "norm",
+        "distribution": "norm",
         "loc": 160,
         "scale": 5
       }
@@ -280,7 +280,7 @@
       },
       "affinity": 0.2,
       "contacts": {
-        "type": "norm",
+        "distribution": "norm",
         "loc": 3,
         "scale": 1
       }
@@ -393,7 +393,7 @@
       },
       "affinity": 0.5,
       "contacts": {
-        "type": "norm",
+        "distribution": "norm",
         "loc": 100,
         "scale":4
       }
@@ -410,7 +410,7 @@
       },
       "affinity": 0.5,
       "contacts": {
-        "type": "norm",
+        "distribution": "norm",
         "loc": 100,
         "scale":4
       }
