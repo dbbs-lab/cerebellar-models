@@ -3,14 +3,12 @@ from bsb.connectivity.strategy import ConnectionStrategy
 from bsb.storage import Chunk
 from bsb import config
 from scipy.stats.distributions import truncexpon
+from bsb.morphologies import Morphology
 
 
 @config.node
 class ConnectomeGlomerulusGolgi(ConnectionStrategy):
     radius = config.attr(type=int, required=True)
-    detailed = config.attr(type=bool, required=True)
-    # Is it the correct type?
-    compartments = config.attr(type=list, required=True)
 
     def get_region_of_interest(self, chunk):
         ct = self.postsynaptic.cell_types[0]
@@ -48,62 +46,51 @@ class ConnectomeGlomerulusGolgi(ConnectionStrategy):
         # If synaptic contacts need to be made we use this exponential distribution
         # to pick the closer by compartments.
         exp_dist = truncexpon(b=5, scale=0.03)
-
-        glom_pos = pre_ps.load_positions()
+        glomeruli_pos = pre_ps.load_positions()
         golgi_pos = post_ps.load_positions()
-        n_glom = len(glom_pos)
+        n_glom = len(glomeruli_pos)
         n_golgi = len(golgi_pos)
         n_conn = n_glom * n_golgi
         pre_locs = np.full((n_conn, 3), -1, dtype=int)
         post_locs = np.full((n_conn, 3), -1, dtype=int)
-        compartments = np.zeros((0, 1))
-
+        # Find Golgi cells to connect
         ptr = 0
         for i, golgi in enumerate(golgi_pos):
             dist = np.sqrt(
-                np.power(golgi[0] - glom_pos[:, 0], 2)
-                + np.power(golgi[1] - glom_pos[:, 1], 2)
-                + np.power(golgi[2] - glom_pos[:, 2], 2)
+                np.power(golgi[0] - glomeruli_pos[:, 0], 2)
+                + np.power(golgi[1] - glomeruli_pos[:, 1], 2)
+                + np.power(golgi[2] - glomeruli_pos[:, 2], 2)
             )
             to_connect_bool = dist < self.radius
             to_connect_idx = np.nonzero(to_connect_bool)[0]
             connected_gloms = len(to_connect_idx)
-            pre_locs[ptr : (prt + connected_gloms), 0] = to_connect_idx
-            post_locs[ptr : (prt + connected_gloms), 0] = i
-
-            # If GOC is detailed, find the closest compartments
-            if self.detailed:
-                rolls = exp_dist.rvs(size=connected_gloms)
-                gg_comps = np.zeros((connected_gloms, 1))
-                comps = selfs.compartments
-                total_compartments = len(comps)
-
-                # Does c.start[0] give the x position relative to the Golgi soma position?
-                for c in comps:
-                    c_dist = np.sqrt(
-                        np.power(c.start[0] + golgi[0] - glom_pos[:, 0], 2)
-                        + np.power(c.start[1] + golgi[1] - glom_pos[:, 1], 2)
-                        + np.power(c.start[2] + golgi[2] - glom_pos[:, 2], 2)
+            pre_locs[ptr : (ptr + connected_gloms), 0] = to_connect_idx
+            post_locs[ptr : (ptr + connected_gloms), 0] = i
+            '''
+            # Find which dendrite to connect
+            basal_dendrides = post_ct.morphology.get_branches(["basal_dendrites"])
+            basal_points = []
+            for basal_branch in basal_dendrides:
+                if basal_branch.is_terminal:
+                    basal_points.append(
+                        basal_branch.get_points_labelled("basal_dendrites")
                     )
-                    d_comps = np.argsort(c_dist)
-
-                    # Pick compartments according to a exponential distribution mapped
-                    # through the distance indices: high chance to pick closeby comps.
-                    gg_comps = [
-                        comps[d_comps[int(k * total_compartments)]].id for k in rolls
-                    ]
-                    compartments = np.vstack((compartments, gg_comps))
-
-            prt += connected_gloms
-
-        if self.detailed:
-            self.scaffold.connect_cells(
-                self,
-                pre_ps,
-                post_ps,
-                pre_locs[:ptr],
-                post_locs[:ptr],
-                compartments=compartments,
-            )
-        else:
-            self.connect_cells(pre_ps, post_ps, pre_locs[:ptr], post_locs[:ptr])
+            num_basal_points = len(basal_points)
+            rolls = exp_dist.rvs(size=connected_gloms)
+            # Compute the distance between terminal points of basal dendrites 
+            # and the soma of the avaiable glomeruli
+            for b_point in basal_points:
+                bp_dist = np.sqrt(
+                    np.power(b_point[0] + golgi[0] - glomeruli_pos[:, 0], 2)
+                    + np.power(b_point[1] + golgi[1] - glomeruli_pos[:, 1], 2)
+                    + np.power(b_point[2] + golgi[2] - glomeruli_pos[:, 2], 2)
+                )
+            # To employ vectorized/parallelized operations in numpy, we select which dendride connects
+            # with each one of the glomeruli in post, then we take only the connections satisfying
+            # the geometric constraints using an elementwise multiplication and taking only
+            # the non-zero elements
+            synapse_points = [basal_points[int(k * num_basal_points)].id for k in rolls]
+            synapse_points = int(to_connect_bool)*synapse_points
+            post_locs[ptr + connected_gloms), 1] = index
+            '''
+        self.connect_cells(pre_ps, post_ps, pre_locs[:ptr], post_locs[:ptr])

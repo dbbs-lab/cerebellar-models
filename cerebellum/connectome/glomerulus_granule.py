@@ -9,7 +9,7 @@ class ConnectomeGlomerulusGranule(ConnectionStrategy):
     radius = config.attr(type=int, required=True)
     convergence = config.attr(type=bool, required=True)
     # Is it the correct type?
-    compartments = config.attr(type=list, required=True)
+    # compartments = config.attr(type=list, required=True)
 
     def get_region_of_interest(self, chunk):
         ct = self.postsynaptic.cell_types[0]
