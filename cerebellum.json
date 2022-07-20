@@ -418,14 +418,14 @@
   },
   "after_placement": {
     "microzones": {
-      "cls": "bsb.postprocessing.LabelMicrozones",
+      "strategy": "bsb.postprocessing.LabelMicrozones",
       "targets": ["purkinje_cell", "dcn_cell", "io_cell"]
     },
     "aa_lengths": {
-      "cls": "bsb.postprocessing.AscendingAxonLengths"
+      "strategy": "bsb.postprocessing.AscendingAxonLengths"
     },
     "dcn_rotations": {
-      "cls": "bsb.postprocessing.DCNRotations"
+      "strategy": "bsb.postprocessing.DCNRotations"
     }
   },
   "simulations": {
