@@ -42,12 +42,11 @@ class ConnectomeGlomerulusGolgi(ConnectionStrategy):
                 self._connect_type(pre_ct, pre_ps, post_ct, post_ps)
 
     def _connect_type(self, pre_ct, pre_ps, post_ct, post_ps):
-        """
+        
         # If synaptic contacts need to be made we use this exponential distribution
         # to pick the closer by compartments.
         exp_dist = truncexpon(b=5, scale=0.03)
-        """
-
+        
         glomeruli_pos = pre_ps.load_positions()
         golgi_pos = post_ps.load_positions()
         n_glom = len(glomeruli_pos)
@@ -55,7 +54,7 @@ class ConnectomeGlomerulusGolgi(ConnectionStrategy):
         n_conn = n_glom * n_golgi
         pre_locs = np.full((n_conn, 3), -1, dtype=int)
         post_locs = np.full((n_conn, 3), -1, dtype=int)
-        # Find Golgi cells to connect
+        # Find cells to connect
         ptr = 0
         for i, golgi in enumerate(golgi_pos):
             dist = np.sqrt(
@@ -68,31 +67,37 @@ class ConnectomeGlomerulusGolgi(ConnectionStrategy):
             connected_gloms = len(to_connect_idx)
             pre_locs[ptr : (ptr + connected_gloms), 0] = to_connect_idx
             post_locs[ptr : (ptr + connected_gloms), 0] = i
-            """
+
             # Find which dendrite to connect
-            basal_dendrides = post_ct.morphology.get_branches(["basal_dendrites"])
-            basal_points = []
-            for basal_branch in basal_dendrides:
-                if basal_branch.is_terminal:
-                    basal_points.append(
-                        basal_branch.get_points_labelled("basal_dendrites")
-                    )
-            num_basal_points = len(basal_points)
-            rolls = exp_dist.rvs(size=connected_gloms)
+            basal_dendrides_branches = post_ct.morphology.get_branches(["basal_dendrites"])
+            # We keep track of the index of a branch and of the index of a point on a branch
+            id_pairs = np.full((len(post_ct.morphology.points), 2), -1, dtype=int)
+            basal_points_coord = np.full((len(post_ct.morphology.points), 3), -1, dtype=float)
+            ptr_idx = 0
+            for idx_b,branch in enumerate(post_ct.morphology.get_branches(basal_dendrides_branches)):
+                for idx_p,coordinates in enumerate(branch.points):
+                    id_pairs[ptr_idx] = [idx_b,idx_p]
+                    basal_points_coord[ptr_idx] = coordinates
+                    ptr_idx += 1
+            # Draw rolls from the exponential distribution equal to the total amount
+            # of synaptic contacts to be made between this Golgi cell and all its
+            # glomeruli.
+            num_basal_points = len(basal_points_coord)
+            rolls = exp_dist.rvs(size=num_basal_points)
             # Compute the distance between terminal points of basal dendrites 
             # and the soma of the avaiable glomeruli
-            for b_point in basal_points:
-                bp_dist = np.sqrt(
-                    np.power(b_point[0] + golgi[0] - glomeruli_pos[:, 0], 2)
-                    + np.power(b_point[1] + golgi[1] - glomeruli_pos[:, 1], 2)
-                    + np.power(b_point[2] + golgi[2] - glomeruli_pos[:, 2], 2)
-                )
-            # To employ vectorized/parallelized operations in numpy, we select which dendride connects
-            # with each one of the glomeruli in post, then we take only the connections satisfying
-            # the geometric constraints using an elementwise multiplication and taking only
-            # the non-zero elements
-            synapse_points = [basal_points[int(k * num_basal_points)].id for k in rolls]
-            synapse_points = int(to_connect_bool)*synapse_points
-            post_locs[ptr + connected_gloms), 1] = index
-            """
+            for id_g,glom_p in enumerate(glomeruli_pos):
+                for pt_coord in basal_points_coord:
+                    pts_dist = np.sqrt(
+                        np.power(basal_points_coord[:,0] + golgi[0] - glom_p[0], 2)
+                        + np.power(basal_points_coord[:,1] + golgi[1] - glom_p[1], 2)
+                        + np.power(basal_points_coord[:,2] + golgi[2] - glom_p[2], 2)
+                    )
+                sorted_pts_ids = np.argsort(pts_dist)
+                # Pick the point in which we form a synapse according to a exponential distribution mapped
+                # through the distance indices: high chance to pick closeby points.
+                pt_idx = [max(int(k * num_basal_points)) for k in rolls]
+                post_locs[ptr+i,1] = id_pairs[pt_idx,0]
+                post_locs[ptr+i,2] = id_pairs[pt_idx,1]
+                
         self.connect_cells(pre_ps, post_ps, pre_locs[:ptr], post_locs[:ptr])
