@@ -2,7 +2,7 @@ import numpy as np
 from bsb.connectivity.strategy import ConnectionStrategy
 from bsb.storage import Chunk
 from bsb import config
-
+from bsb.morphologies import Morphology
 
 @config.node
 class ConnectomeGlomerulusGranule(ConnectionStrategy):
@@ -58,8 +58,21 @@ class ConnectomeGlomerulusGranule(ConnectionStrategy):
                     if gdist < self.radius:
                         post_locs[ptr + j, 0] = i
                         pre_locs[ptr + j, 0] = sorted_indices[j]
+                        dendrites_branches = post_ct.morphology.get_branches(["basal_dendrites"])
+                        rand = np.random.randint(low=0,high=4)
+                        #Select one of the 4 dendrites
+                        dendrite = dendrites_branches[rand]
+                        #Select the terminal point of the branch
+                        syn_point = dendrites_branches[rand].points[len(dendrite)-1]
+                        post_locs[ptr + j, 1] = post_ct.morphology.branches.index(dendrite)
+                        post_locs[ptr + j, 2] = rand
                         gr_connection += 1
                 else:
                     break
             ptr += gr_connection
+
+            
+
+
+
         self.connect_cells(pre_ps, post_ps, pre_locs[:ptr], post_locs[:ptr])
