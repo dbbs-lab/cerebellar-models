@@ -96,7 +96,7 @@ class ConnectomeGlomerulusGolgi(ConnectionStrategy):
                 sorted_pts_ids = np.argsort(pts_dist)
                 # Pick the point in which we form a synapse according to a exponential distribution mapped
                 # through the distance indices: high chance to pick closeby points.
-                pt_idx = [max(int(k * num_basal_points)) for k in rolls]
+                pt_idx = sorted_pts_ids[min(int(k * num_basal_points) for k in rolls)]
                 post_locs[ptr+i,1] = id_pairs[pt_idx,0]
                 post_locs[ptr+i,2] = id_pairs[pt_idx,1]
                 
