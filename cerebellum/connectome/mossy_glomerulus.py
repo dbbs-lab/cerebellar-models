@@ -1,293 +1,110 @@
 import numpy as np
-from bsb.connectivity import ConnectionStrategy
-from bsb.reporting import report, warn
-from time import time  # usalo per time sttart stop
+from bsb.connectivity.strategy import ConnectionStrategy
+from bsb.storage import Chunk
+from bsb import config
 
-# import time    #usalo per il time.sleep
-
-
+@config.node
 class ConnectomeMossyGlomerulus(ConnectionStrategy):
-    """
-    Implementation for the connections between mossy fibers and glomeruli.
-    The connectivity is somatotopic and
-    """
+    x_length = config.attr(type=int, required=True)
+    z_length = config.attr(type=int, required=True)
+    x_sigma = config.attr(type=int, required=True)
+    z_sigma = config.attr(type=int, required=True)
+    mean = config.attr(type=int, required=True)
+    sigma = config.attr(type=int, required=True)
 
-    def validate(self):
-        pass
+    def get_region_of_interest(self, chunk):
+        ct = self.presynaptic.cell_types[0]
+        chunks = ct.get_placement_set().get_all_chunks()
+        selected_chunks = []
+        # Look for chunks which are less than radius away
+        for c in chunks:
+            x_dist = np.fabs(chunk[0] - c[0])
+            z_dist = np.fabs(chunk[2]- c[2])
 
-    def connect(self):
-        def probability_mapping(input, center, std):
-            # input: input array that has to be transformed
-            # center: center of the sigmoid
-            # std: value at which the sigmoid reaches the 54% of its value
-            output = np.empty(input.size, dtype=float)
-            # print(' dist_x shape', input.shape)
-            input_rect = np.fabs(input - center)
-            output[np.where(input <= center)] = (
-                0.5 + 0.5 * (input[np.where(input <= center)]) / center
-            )
-            output[np.where(input > center)] = 2.0 * (
-                1.0
-                - 1.0
-                / (1.0 + np.exp(-input_rect[np.where(input > center)] * (1.0 / std)))
-            )  # sigmoide rovesciata
-            return output
+        x_dist = x_dist * chunk.dimensions[0]
+        z_dist = z_dist * chunk.dimensions[3]
 
-        def compute_likelihood(x, z, gloms):
-            # Based on the distance between the x and z position of each
-            # MF and the x z positions of the glomeruli
-            # the likelihood of a glomerulus to belong to the MF
-            # is computed
-            dist_x = np.fabs(
-                gloms[:, 0] - x
-            )  # np.fabs returns the absolute value di (coordinata x del glom - valore x)
-            dist_z = np.fabs(gloms[:, 1] - z)
+        #TODO vectorize this part, removing the loop
+        for c in chunks:
+            if x_dist < self.x_length/2 and  z_dist < self.z_length/2:
+                selected_chunks.append(Chunk([c[0], c[1], c[2]], chunk.dimensions))
+        return selected_chunks
 
-            # Glomeruli receiving signals from the same mf were
-            # grouped together in anisotropic clusters that extended 60 µm along the parasagittal direction (x-axis)
-            # and 20 µm along the transverse direction (z-axis)
+    def connect(self, pre, post):
+        pre_type = pre.cell_types[0]
+        post_type = post.cell_types[0]
+        for pre_ct, pre_ps in pre.placement.items():
+            for post_ct, post_ps in post.placement.items():
+                self._connect_type(pre_ct, pre_ps, post_ct, post_ps)
 
-            prob_x = probability_mapping(
-                dist_x, center=30.0, std=3.0
-            )  # As in Sultan, 2001 for the parasagittal axis
-            prob_z = probability_mapping(
-                dist_z, center=10.0, std=1.0
-            )  # As in Sultan, 2001 for the mediolateral axis
+    def _connect_type(self, pre_ct, pre_ps, post_ct, post_ps):
+     
+        mossy_pos = pre_ps.load_positions()
+        glomeruli_pos = post_ps.load_positions()
+        n_mossy = len(mossy_pos)
+        n_glom = len(glomeruli_pos)
+        n_conn = n_glom * n_mossy
+        pre_locs = np.full((n_conn, 3), -1, dtype=int)
+        post_locs = np.full((n_conn, 3), -1, dtype=int)
+        # Since a glomerulus can be connected only to one mossy fiber, we
+        # need to keep track of the connected glomeruli
+        free_glomeruli = np.full(n_glom, True)
 
-            probabilities = prob_x * prob_z
-            return probabilities
+        # Find glomeruli to connect            
+        ptr = 0
+        for i, mossy in enumerate(mossy_pos):
+            x_dist = np.fabs(mossy[0] - glomeruli_pos[:,0])
+            z_dist = np.fabs(mossy[2]- glomeruli_pos[:,2])
 
-        t_start = time()
+            #Select the candidates glomeruli using a distance-based probability rule
+            roll_x = np.random.normal(self.x_length/2, self.x_sigma, n_glom)
+            roll_z = np.random.normal(self.z_length/2, self.z_sigma, n_glom)
+            candidates_x =  x_dist < roll_x
+            candidates_x = np.nonzero(candidates_x)
+            candidates_z =  z_dist < roll_z
+            candidates_z = np.nonzero(candidates_z)
+            final_candidates = (candidates_x & candidates_z) & free_glomeruli
+            final_candidates = np.nonzero(final_candidates, dtype = int)
+            
+            #Draw the number of glomeruli to connect to the current mossy fiber
+            # following a Gaussian distribution
+            glomeruli_to_connect = np.random.normal(self.mean, self.sigma)
 
-        # Source and target neurons are extracted
-        mossy_cell_type = self.from_cell_types[0]
-        glomerulus_cell_type = self.to_cell_types[0]
-
-        # glomeruli contiene per ogni glom, l'id del glo, l'id del cell type, le coordinate x y z
-        glomeruli = self.scaffold.cells_by_type[glomerulus_cell_type.name]
-
-        # I'm shamelessly aiming for the path of least resistance here and will
-        # produce a most horrible workaround to quickly converge on the code:
-        #
-        # mossy fiber positions will be sampled from a uniform distribution,
-        # and merged with the mossy fiber (entity) IDs. These will be padded
-        # together in the awful 5-column old-style placement matrices so that
-        # they can be plugged into the `mossy` variable and the rest of the code
-        # will run as before.
-
-        _mossy_ids = mossy_cell_type.get_placement_set().identifiers
-        _layer = mossy_cell_type.placement.layer_instance
-        _og, _dims = _layer.origin, _layer.dimensions
-        _rng = np.random.default_rng()
-        _uni_pos = []
-
-        mossy = np.column_stack(
-            (
-                _mossy_ids,
-                np.broadcast_to(0, (len(_mossy_ids),)),
-                *(_rng.random(len(_mossy_ids)) * d + o for o, d in zip(_og, _dims)),
-            )
-        )
-
-        first_MF = int(mossy[0, 0])
-        report("id first mf:", first_MF, level=3)
-        num_mf = len(mossy[:, 0])
-        report("num mf  :", num_mf, level=3)
-
-        # Glom x, y and ID
-        Glom_xzID = glomeruli[:, [2, 4, 0]]
-        Mf_xzID = mossy[:, [2, 4, 0]]
-        mossy_id = (np.array(mossy[:, 0])).tolist()
-        glom_id = (np.array(glomeruli[:, 0])).tolist()
-        # time.sleep(4)
-        total_glom = np.shape(Glom_xzID)[0]
-        report("num glom", total_glom, level=3)
-        first_glom = int(glomeruli[0, 0])
-        ind_associated_glom = []
-        deleted_gloms = []
-        index = 0
-        num_glom = 0
-        connections = []
-        mo = []
-        gl = []
-
-        n = 50  # prendo in modo casuale i 'num_glom' glomeruli tra i primi 100 a prob maggiore
-        fine = 0
-        w = 0
-        ind_non_associated_glom = []
-        non_associated_mf = []
-        for i in np.random.permutation(range(num_mf)):
-            mf_id = i + first_MF
-            w = w + 1
-            report(
-                "--> connecting mf num : ", w, "/", num_mf, "-id mf=", mf_id, i, level=3
-            )
-            # time.sleep(1)
-            mf_x = mossy[i, 2]
-            mf_z = mossy[i, 4]
-            probabilities = compute_likelihood(mf_x, mf_z, Glom_xzID)
-            # print('prob prima', len(probabilities), probabilities )   #probabilità per ogni glomerulo, lunghezza: 20085
-
-            (ind_prob,) = np.where(
-                probabilities > 0.0001
-            )  # indici con prob > 0.001, da 0 a 20084
-            # print('numero indici a prob > 0.001 : ', len(ind_prob))
-            # print('indici non ordinati:', ind_prob)
-
-            ind_prob_ord_dec = (ind_prob[np.argsort(probabilities[ind_prob])])[
-                ::-1
-            ]  # ordino in ordine decrescente: il primo indice corrisponde al glom con probabilità maggiore
-            # da questa lista devo prendere gli indici dei gloms dopo i primi n
-            # print('numero indici a prob> 0.001', len(ind_prob_ord_dec))
-            # print('indici ordinati per probabilità decrescente: ', ind_prob_ord_dec)
-
-            ind_prob_ord_dec_n = ind_prob_ord_dec[:n]
-            # print('primi n glomeruli (', len(ind_prob_ord_dec_n), ') :', ind_prob_ord_dec_n)
-            ind_prob_ord_dec_n_random = np.random.permutation(ind_prob_ord_dec_n)
-            # print('primi n glomeruli mescolati (', len(ind_prob_ord_dec_n_random), ') :', ind_prob_ord_dec_n_random)
-
-            num_glom = min(
-                int(20 + 3 * np.random.randn()), len(ind_prob_ord_dec)
-            )  # distribuzione standard con media 0 e varianza 1
-            # print('num glomeruli da associare: ', num_glom)
-            ind_associated_glom = ind_prob_ord_dec_n_random[:num_glom]
-            ind = 1
-            fine_sub_for_current_mf = 0
-            ind_associated_glom_def = []
-            for k in range(num_glom):  # per il num di glom da associare
-                glom_associati = k
-                # print('k=',k,'- analizzo il glomerulo numero ', ind_associated_glom[k], '(' , ind_associated_glom[k]+first_glom, ')' )
-                if (
-                    ind_associated_glom[k] not in deleted_gloms
-                ):  # se il glom non è gia associato
-                    # print('il glomerulo va bene ')
-                    ind_associated_glom_def.append(ind_associated_glom[k])
-                    glom_id.remove(glomeruli[ind_associated_glom[k]][0])
-                else:  # il glomerulo è già associato
-                    # print('glomerulo gia associato, devo sostituirlo')
-                    if fine_sub_for_current_mf == 1:
-                        # print('non posso sostituire il glom con niente, quindi lo elimino')
-                        continue  # salta le conse scritte sotto e va alla prossima iterazione del for
-                    else:  # trovo un sostituto per il glomerulo
-                        substitute_glom = True
-                        while substitute_glom:
-                            # print(' - indice ', ind+num_glom, 'len probabilities', len(probabilities))
-                            # print('indice numero sostituzioni,', ind)
-                            if (
-                                k + index
-                            ) == total_glom:  # ho finito i glomeruli a disposizione
-                                # print('non ho più glomeruli a disposizione')
-                                fine = 1
-                                substitute_glom = False
-                                break  # esce dal while
-                            elif (ind + num_glom - 1) == len(ind_prob_ord_dec):
-                                # print (' finiti i gloms a prob > 0.001')
-                                fine_sub_for_current_mf = 1
-                                substitute_glom = False
-                            else:
-                                if (ind + num_glom) <= n:  # arrivo fino a n = 50
-                                    # print('cerco nei gloms tra i primi 50 a prob maggiore ')
-                                    # print('ind + num glo =', ind+num_glom, 'lunghezza associated glom random = ', len(associated_glom_random))
-                                    # new_glom = associated_glom_random[num_glom+ind-1]   #nuova prova
-                                    ind_new_glom = ind_prob_ord_dec_n_random[
-                                        num_glom + ind - 1
-                                    ]
-                                else:  # entro per n>50
-                                    # print('cerco nei glom dopo i primi 50')
-                                    # new_glom = associated_glom_all[num_glom+ind-1]
-                                    ind_new_glom = ind_prob_ord_dec[num_glom + ind - 1]
-
-                                # print('analizzo', ind_new_glom, '(', ind_new_glom+first_glom, ')' )
-                                if ind_new_glom not in deleted_gloms:
-                                    # print('sostituisco' , ind_associated_glom[k], 'con il nuovo glom  ', ind_new_glom, '(' , ind_new_glom+first_glom, ')')
-                                    substitute_glom = False
-                                    ind_associated_glom_def.append(ind_new_glom)
-                                    glom_id.remove(glomeruli[ind_new_glom][0])
-                                ind = (
-                                    ind + 1
-                                )  # indice per prendere nuovi glomeruli, nel caso di selezione glom già usati.
-
-                    if fine == 1:
-                        # print('condizione fine')
-                        break  # esco dal ciclo for
-
-            deleted_gloms.extend(
-                list(ind_associated_glom_def)
-            )  # se esco prima dal for, devo agiungere solo i gloms
-            # print('num glomeruli associati: ', len(deleted_gloms))
-
-            # print('associo', len(ind_associated_glom_def), 'nuovi glomeruli')
-
-            if len(ind_associated_glom_def) == 0:
-                non_associated_mf.append(mf_id)
-            for j in range(len(ind_associated_glom_def)):
-                mo.append(mf_id)
-                gl.append(glomeruli[ind_associated_glom_def[j]][0])
-                # print(' - connection ' , len(mo), '/',total_glom,'-associate mf ', mf_id, 'to glom', glomeruli[ind_associated_glom_def[j]][0] )
-                # print (' len mo e gl' , len(mo), len(gl))
-                if (len(mo)) == total_glom:
-                    # print ('non associo indice ', index+j, '(' , j+index+1, '==', total_glom, ')' )
-                    break
-            # index = index + j + 1
-
-            if fine == 1:
-                # print('esco dal secondo for')
-                break  # esco dal ciclo for
-        # print (' index = ', index)
-        # print (' len mo e gl' , len(mo), len(gl))
-        # print (' num non associated mf ', len(non_associated_mf))
-        # print('id mf non associate: ', non_associated_mf)
-        report(first_MF, level=3)
-        ind_non_associated_mf = []
-        for i in range(len(non_associated_mf)):
-            ind_non_associated_mf.append(non_associated_mf[i] - first_MF)
-        # print('indici mf non associate', ind_non_associated_mf)
-        report("connetto i glomeruli non associati", level=3)
-        num_non_ass_glom = len(glom_id)
-        report("num glomeruli non associati", len(glom_id), level=3)
-        ind_non_associated_glom = []
-        # glom_x = []
-        # glom_y =[]
-        # glom_z = []
-        for i in range(len(glom_id)):
-            ind_non_associated_glom.append(glom_id[i] - first_glom)
-
-        # print(' index non associated gloms', ind_non_associated_glom )
-        c = 0
-
-        # for i in np.random.permutation(range(len(ind_non_associated_glom))):
-        for i in range(len(ind_non_associated_glom)):
-            # print('incice', i )
-            # print (ind_non_associated_glom[i])
-            gl_id = ind_non_associated_glom[i] + first_glom
-            c = c + 1
-            report(
-                "--> connecting glom num : ",
-                c,
-                "/",
-                num_non_ass_glom,
-                "-id glom=",
-                gl_id,
-                ind_non_associated_glom[i],
-                level=3,
-            )
-            # time.sleep(1)
-            glom_x = glomeruli[int(ind_non_associated_glom[i])][2]
-            glom_z = glomeruli[int(ind_non_associated_glom[i])][4]
-            # print ( ' glomeruli x e z ', glom_x, glom_z)
-            probabilities = compute_likelihood(glom_x, glom_z, Mf_xzID)
-            # print( 'len probabilities', len(probabilities))  #lunhezza par al numero di mf
-            ind_max_prob = int(np.argmax(probabilities))
-            # print('probabilities', probabilities)
-            # print('indice massima probabilità', ind_max_prob, probabilities[ind_max_prob], 'corrisponde alla mf', mossy_id[ind_max_prob] )
-            mo.append(mossy_id[ind_max_prob])
-            gl.append(gl_id)
-            # print(' - connection ' , index+i, '/',total_glom,'-associate mf ',  mossy_id[ind_max_prob], 'to glom', gl_id )
-
-        connections = np.column_stack((mo, gl))
-        report("tot connessioni", len(connections), level=3)
-        t_end = time()
-        tot_time = t_end - t_start
-        report("Total  time: ", tot_time, level=3)
-        report("random 50, probabilità = 0.0001", level=3)
-        self.scaffold.connect_cells(self, connections)
+            #If the good glomeruli are less than glomeruli_to_connect, connect them all;
+            # Otherwise, select the first good glomeruli_to_connect glomeruli
+            num_candidates = len(final_candidates)
+            if (num_candidates < glomeruli_to_connect):
+                pre_locs[ptr:ptr+num_candidates] = i
+                post_locs[ptr:ptr+num_candidates] = final_candidates
+                free_glomeruli[final_candidates] = False
+                ptr += num_candidates
+            else:
+                pre_locs[ptr:ptr+glomeruli_to_connect] = i
+                post_locs[ptr:ptr+glomeruli_to_connect] = final_candidates[:glomeruli_to_connect]
+                free_glomeruli[final_candidates[:glomeruli_to_connect]] = False
+                ptr += glomeruli_to_connect
+        
+        #If there are some glomeruli which are not connected, connect them to a random near mossy fiber
+        id_non_connected = np.nonzero(~free_glomeruli)
+        #Draw some random numbers to be used as the indices of mossy fibers to connect to
+        # each non connected glomerulus.
+        random_ids = np.random.randint(0, len(id_non_connected), len(id_non_connected), dtype=int)
+        if (len(id_non_connected)>0):
+            for id_glom in id_non_connected:
+                x_dist = np.fabs(mossy[id_glom][0] - mossy_pos[:,0])
+                z_dist = np.fabs(mossy[id_glom][2]- mossy_pos[:,2])
+                #Select the candidates mossy fibers
+                roll_x = np.random.normal(self.x_length/2, self.x_sigma, n_glom)
+                roll_z = np.random.normal(self.z_length/2, self.z_sigma, n_glom)
+                candidates_x =  x_dist < roll_x
+                candidates_x = np.nonzero(candidates_x)
+                candidates_z =  z_dist < roll_z
+                candidates_z = np.nonzero(candidates_z)
+                final_candidates = (candidates_x & candidates_z)
+                final_candidates = np.nonzero(final_candidates, dtype = int)
+                pre_locs[ptr:ptr+1] = final_candidates[random_ids[id_glom]]
+                post_locs[ptr:ptr+1] = id_glom
+                free_glomeruli[id_glom] = False
+                ptr += 1
+                
+        self.connect_cells(pre_ps, post_ps, pre_locs[:ptr], post_locs[:ptr])
