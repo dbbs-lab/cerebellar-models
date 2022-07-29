@@ -1,10 +1,11 @@
-
+import importlib
+import unittest
 
 _nest_available = importlib.util.find_spec("nest") is not None
 _using_morphologies = True
 
 
-@unittest.skip("Re-enabling tests gradually while advancing v4.0 rework")
+@unittest.skip("Needs to be updated to v4")
 class TestConnectivity(unittest.TestCase):
     @classmethod
     def setUpClass(self):
