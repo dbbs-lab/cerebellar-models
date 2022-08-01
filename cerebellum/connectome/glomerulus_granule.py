@@ -1,6 +1,6 @@
 import numpy as np, random
-from ..strategy import ConnectionStrategy
-from ...exceptions import ConfigurationError, ConnectivityError
+from bsb.connectivity import ConnectionStrategy
+from bsb.exceptions import ConfigurationError, ConnectivityError
 
 
 class ConnectomeGlomerulusGranule(ConnectionStrategy):
@@ -11,6 +11,9 @@ class ConnectomeGlomerulusGranule(ConnectionStrategy):
     casts = {"detailed": bool, "convergence": int}
     defaults = {"detailed": False}
     required = ["convergence"]
+
+    def get_region_of_interest(self, chunk):
+        return [chunk]
 
     def validate(self):
         if self.detailed:

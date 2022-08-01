@@ -1,5 +1,5 @@
 import numpy as np
-from ..strategy import ConnectionStrategy
+from bsb.strategy import ConnectionStrategy
 
 
 class ConnectomeGolgiGlomerulus(ConnectionStrategy):
@@ -9,6 +9,9 @@ class ConnectomeGolgiGlomerulus(ConnectionStrategy):
 
     casts = {"divergence": int}
     required = ["divergence"]
+
+    def get_region_of_interest(self, chunk):
+        return [chunk]
 
     def validate(self):
         pass
