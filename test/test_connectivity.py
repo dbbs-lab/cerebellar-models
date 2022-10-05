@@ -1,112 +1,202 @@
-import importlib
+from imp import get_tag
 import unittest
+from bsb.unittest import NumpyTestCase
+from bsb.config import from_json
+from bsb.core import Scaffold
+from bsb.storage import Storage
+import numpy as np
 
-_nest_available = importlib.util.find_spec("nest") is not None
-_using_morphologies = True
+# RandomStorageFixture, NumpyTestCase,
+class TestGlomerulusGolgi(unittest.TestCase, NumpyTestCase):
+    def setUp(self):
+        self.storage = Storage(engine="hdf5", root="test")
+        # self.storage = self.random_storage(engine="hdf5")
+        self.cfg = from_json("cerebellum.json")
+        self.cfg.network.x = 100
+        self.cfg.network.y = 100
+        self.cfg.network.z = 100
+        self.network = Scaffold(self.cfg, self.storage)
+        # self.network.compile(only=["granular_layer_placement", "granular_layer_innervation","purkinje_layer_placement","molecular_layer_placement","mossy_fibers_to_glomerulus","glomerulus_to_golgi","glomerulus_to_granule","golgi_to_glomerulus","golgi_to_golgi","parallel_fiber_to_purkinje"])
+        # self.network.compile(only=["granular_layer_placement", "granular_layer_innervation","mossy_fibers_to_glomerulus","glomerulus_to_granule"])
 
+    def test_convergence(self):
+        cs = self.network.get_connectivity_set(tag="glomerulus_to_golgi_granule")
+        # cs = self.network.get_connectivity_set(tag="golgi_cell_to_golgi_cell")
 
-@unittest.skip("Needs to be updated to v4")
-class TestConnectivity(unittest.TestCase):
-    @classmethod
-    def setUpClass(self):
-        super(TestConnectivity, self).setUpClass()
-        self.scaffold = get_test_network(200, 200)
-        if _nest_available:
-            self.nest_adapter = self.scaffold.get_simulation("FCN_2019")
-            self.scaffold.run_simulation("FCN_2019")
+        # MOSSY-GLOMS
 
-    @unittest.skipIf(not _nest_available, "NEST is not importable.")
-    def test_MF_Glom(self):
-        mossy = self.nest_adapter.entities["mossy_fibers"].nest_identifiers
-        glom = self.nest_adapter.cell_models["glomerulus"].nest_identifiers
-        mf_glom = np.array(self.nest_adapter.nest.GetConnections(mossy, glom))
-        hist_mf = np.histogram(mf_glom[:, 0], bins=np.append(mossy, np.max(mossy) + 1))[0]
-        hist_glom = np.histogram(mf_glom[:, 1], bins=np.append(glom, np.max(glom) + 1))[0]
-        self.assertEqual(np.mean(hist_glom), 1.0)
-        self.assertTrue(19 <= np.mean(hist_mf) <= 21)
-
-    @unittest.skipIf(not _nest_available, "NEST is not importable.")
-    def test_MF_DCN(self):
-        mossy = self.nest_adapter.entities["mossy_fibers"].nest_identifiers
-        dcn = self.nest_adapter.cell_models["dcn_cell"].nest_identifiers
-        mf_dcn = np.array(self.nest_adapter.nest.GetConnections(mossy, dcn))
-        hist_mf = np.histogram(mf_dcn[:, 0], bins=np.append(mossy, np.max(mossy) + 1))[0]
-        hist_dcn = np.histogram(mf_dcn[:, 1], bins=np.append(dcn, np.max(dcn) + 1))[0]
-        self.assertEqual(np.mean(hist_dcn), 50)
-        self.assertTrue(1 <= np.mean(hist_mf) <= 4)
-
-    @unittest.skipIf(not _nest_available, "NEST is not importable.")
-    def test_Glom_GoC(self):
-        glom = self.nest_adapter.cell_models["glomerulus"].nest_identifiers
-        goc = self.nest_adapter.cell_models["golgi_cell"].nest_identifiers
-        glom_goc = self.nest_adapter.nest.GetConnections(glom, goc)
-        self.assertTrue(glom_goc)
-
-    @unittest.skipIf(not _nest_available, "NEST is not importable.")
-    def test_GoC_GoC(self):
-        goc = self.nest_adapter.cell_models["golgi_cell"].nest_identifiers
-        goc_goc = self.nest_adapter.nest.GetConnections(goc, goc)
-        self.assertTrue(goc_goc)
-
-    # Test goc_glom connectivity in the scaffold creation (not used in NEST)
-    def test_GoC_Glom(self):
-        first_goc_id = np.int(min(self.scaffold.get_cells_by_type("golgi_cell")[:, 0]))
-        last_goc_id = np.int(max(self.scaffold.get_cells_by_type("golgi_cell")[:, 0]))
-        first_glom_id = np.int(min(self.scaffold.get_cells_by_type("glomerulus")[:, 0]))
-        last_glom_id = np.int(max(self.scaffold.get_cells_by_type("glomerulus")[:, 0]))
-        goc_glom = self.scaffold.get_connections_by_cell_type(
-            presynaptic="golgi_cell", postsynaptic="glomerulus"
-        )
-        self.assertTrue(
-            first_goc_id <= min(goc_glom[0][1].from_identifiers) <= last_goc_id
-        )
-        self.assertTrue(
-            first_glom_id <= min(goc_glom[0][1].to_identifiers) <= last_glom_id
+        convergence_list = []
+        for lchunk, itr in cs.nested_iter_connections("inc"):
+            # print(lchunk)
+            for gchunk, (golgi_locs, glomerulus_locs) in itr:
+                unique_golgi = np.unique(golgi_locs, axis=0)
+                # print(unique_golgi)
+                first_global = True
+                n_gloms = 0
+                n_golgi = 0
+                for golgi in unique_golgi:
+                    connected_gloms_ids = np.where(golgi_locs[:, 0] == golgi[0])
+                    # print(connected_gloms_ids)
+                    if first_global == True:
+                        n_golgi += len(unique_golgi)
+                        first_global = False
+                    n_gloms += len(np.unique(connected_gloms_ids))
+                    # print(n_gloms)
+                # print(n_golgi)
+                convergence_list.append(n_gloms / n_golgi)
+                # print(len(locs))
+        # print(convergence_list)
+        variance = np.var(convergence_list)
+        sum = 0
+        for elem in convergence_list:
+            sum += elem
+        print(
+            "Mean:",
+            round(np.mean(convergence_list), 2),
+            " STD:",
+            round(np.sqrt(variance), 1),
         )
 
-        # Tests if labelled cells are connected only with cells with the same label
+    def test_divergence(self):
+        # cs = self.network.get_connectivity_set(tag="glomerulus_to_golgi_cell")
+        cs = self.network.get_connectivity_set(tag="mossy_fibers_to_glomerulus")
 
-    def test_Microzones(self):
+        # MOSSY-GLOMS
 
-        micro_neg = self.scaffold.get_labelled_ids("microzone-negative")
-        micro_pos = self.scaffold.get_labelled_ids("microzone-positive")
-        for pre in ["purkinje_cell", "dcn_cell", "dcn_interneuron", "io_cell"]:
-            for post in ["purkinje_cell", "dcn_cell", "dcn_interneuron", "io_cell"]:
-                pre_post = self.scaffold.get_connections_by_cell_type(
-                    presynaptic=pre, postsynaptic=post
-                )
-                if len(pre_post) > 0:
-                    for conn_type in pre_post[0][1:]:
-                        A_to_B = np.column_stack(
-                            (conn_type.from_identifiers, conn_type.to_identifiers)
-                        )
-                        for connection_i in A_to_B:
-                            self.assertTrue(
-                                (connection_i[0] in micro_neg)
-                                == (connection_i[1] in micro_neg)
-                            )
+        count_connected_glom = 0
+        count_connected_mossy = 0
+        list_glom = []
+        list_mossy = []
+        list_div = []
+        for dir_, itr in cs.nested_iter_connections(direction="out"):
+            first = True
+            local_gloms = 0
+            local_mossy = 0
+            for lchunk, itr in itr:
+                if first == True:
+                    count_connected_mossy += len(np.unique(itr[1], axis=0))
+                    print(count_connected_mossy)
+                    local_mossy += len(np.unique(itr[1], axis=0))
+                    first = False
+                count_connected_glom += len(itr[0])
+                local_gloms += len(itr[0])
+            list_div.append(local_gloms / local_mossy)
 
-    def test_connectivity_matrix(self):
+        var = np.var(list_div)
+        mean = np.mean(list_div)
+        print("\n")
+        print("\n")
+        print("----------------------------------------")
+        print("Connectivity: mossy_fibers_to_glomerulus")
+        print("Divergence mean:", round(mean, 1), "STD:", np.sqrt(var))
 
-        for connections in self.scaffold.configuration.connection_types.values():
-            for connection_tag in connections.tags:
-                cs = self.scaffold.get_connectivity_set(connection_tag)
-                from_cells = cs.from_identifiers
-                to_cells = cs.to_identifiers
-                connections = cs.get_dataset()
-                pre = np.unique(connections[:, 0])
-                post = np.unique(connections[:, 1])
+        print("Connected glomeruli:", count_connected_glom)
+        ps = self.network.get_placement_set("glomerulus")
+        print("Total glomeruli: ", len(ps))
+        ps = self.network.get_placement_set("mossy_fibers")
+        print("Connected mossy:", count_connected_mossy)
+        print("Total mossy: ", len(ps))
+        print("----------------------------------------")
 
-                with self.subTest(name="PRE " + connection_tag):
-                    for conn in range(len(pre)):
-                        self.assertTrue(pre[conn] in from_cells)
 
-                with self.subTest(name="POST " + connection_tag):
-                    for conn in range(len(post)):
-                        self.assertTrue(post[conn] in to_cells)
+class TestMossyGlomerulus(unittest.TestCase, NumpyTestCase):
+    def setUp(self):
+        self.storage = Storage(engine="hdf5", root="test_str")
+        # self.storage = self.random_storage(engine="hdf5")
+        self.cfg = from_json("cerebellum.json")
+        self.cfg.network.x = 100
+        self.cfg.network.y = 100
+        self.cfg.network.z = 100
+        self.network = Scaffold(self.cfg, self.storage)
+        # self.network.compile(only=["granular_layer_placement", "granular_layer_innervation","purkinje_layer_placement","molecular_layer_placement","mossy_fibers_to_glomerulus","glomerulus_to_golgi","glomerulus_to_granule","golgi_to_glomerulus","golgi_to_golgi","parallel_fiber_to_purkinje"])
+        self.network.compile(
+            only=[
+                "granular_layer_placement",
+                "granular_layer_innervation",
+                "mossy_fibers_to_glomerulus",
+                "glomerulus_to_golgi",
+                "glomerulus_to_granule",
+                "golgi_to_glomerulus",
+                "golgi_to_golgi",
+            ]
+        )
+        # self.network.compile(only=["granular_layer_placement", "granular_layer_innervation","mossy_fibers_to_glomerulus"])
 
-                # Call convergence and divergence code.
-                with self.subTest(name="divergence"):
-                    _ = cs.divergence
-                with self.subTest(name="convergence"):
-                    _ = cs.convergence
+    def test_convergence(self):
+        cs = self.network.get_connectivity_set(tag="glomerulus_to_golgi_granule")
+        # cs = self.network.get_connectivity_set(tag="golgi_cell_to_golgi_cell")
+
+        # MOSSY-GLOMS
+
+        convergence_list = []
+        for lchunk, itr in cs.nested_iter_connections("inc"):
+            # print(lchunk)
+            for gchunk, (golgi_locs, glomerulus_locs) in itr:
+                unique_golgi = np.unique(golgi_locs, axis=0)
+                # print(unique_golgi)
+                first_global = True
+                n_gloms = 0
+                n_golgi = 0
+                for golgi in unique_golgi:
+                    connected_gloms_ids = np.where(golgi_locs[:, 0] == golgi[0])
+                    # print(connected_gloms_ids)
+                    if first_global == True:
+                        n_golgi += len(unique_golgi)
+                        first_global = False
+                    n_gloms += len(np.unique(connected_gloms_ids))
+                    # print(n_gloms)
+                # print(n_golgi)
+                convergence_list.append(n_gloms / n_golgi)
+                # print(len(locs))
+        # print(convergence_list)
+        variance = np.var(convergence_list)
+        sum = 0
+        for elem in convergence_list:
+            sum += elem
+        print(
+            "Mean:",
+            round(np.mean(convergence_list), 2),
+            " STD:",
+            round(np.sqrt(variance), 1),
+        )
+
+    def test_divergence(self):
+        # cs = self.network.get_connectivity_set(tag="glomerulus_to_golgi_cell")
+        cs = self.network.get_connectivity_set(tag="mossy_fibers_to_glomerulus")
+
+        # MOSSY-GLOMS
+
+        count_connected_glom = 0
+        count_connected_mossy = 0
+        list_glom = []
+        list_mossy = []
+        list_div = []
+        for dir_, itr in cs.nested_iter_connections(direction="out"):
+            first = True
+            local_gloms = 0
+            local_mossy = 0
+            for lchunk, itr in itr:
+                if first == True:
+                    count_connected_mossy += len(np.unique(itr[0], axis=0))
+                    print(count_connected_mossy)
+                    local_mossy += len(np.unique(itr[0], axis=0))
+                    first = False
+                count_connected_glom += len(itr[1])
+                local_gloms += len(itr[1])
+            list_div.append(local_gloms / local_mossy)
+
+        var = np.var(list_div)
+        mean = np.mean(list_div)
+        print("\n")
+        print("\n")
+        print("----------------------------------------")
+        print("Connectivity: mossy_fibers_to_glomerulus")
+        print("Divergence mean:", round(mean, 1), "STD:", np.sqrt(var))
+
+        print("Connected glomeruli:", count_connected_glom)
+        ps = self.network.get_placement_set("glomerulus")
+        print("Total glomeruli: ", len(ps))
+        ps = self.network.get_placement_set("mossy_fibers")
+        print("Connected mossy:", count_connected_mossy)
+        print("Total mossy: ", len(ps))
+        print("----------------------------------------")

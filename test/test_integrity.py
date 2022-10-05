@@ -8,11 +8,14 @@ import glob
 import os
 
 
-@unittest.skipIf(not os.getenv("CEREB_INTEGRATION_TESTING", False), "Integration testing not enabled")
+@unittest.skipIf(
+    not os.getenv("CEREB_INTEGRATION_TESTING", False), "Integration testing not enabled"
+)
 class TestCerebellumIntegrity(unittest.TestCase):
     """
     Check if the placement of all cell types is correct
     """
+
     @classmethod
     def setUpClass(cls):
         bsb.options.verbosity = 4

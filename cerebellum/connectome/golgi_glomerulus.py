@@ -100,7 +100,9 @@ class ConnectomeGolgiGlomerulus(ConnectionStrategy):
                             glomerulus_id = glomerulus[0]
                             connections[new_connection_index, 0] = golgi_id
                             connections[new_connection_index, 1] = glomerulus_id
-                            new_glomeruli[int(glomerulus_id - first_glomerulus), :] = oob
+                            new_glomeruli[
+                                int(glomerulus_id - first_glomerulus), :
+                            ] = oob
                             new_connection_index += 1
                             idx += 1
             return connections[0:new_connection_index]

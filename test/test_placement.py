@@ -217,7 +217,10 @@ def get_tiny_network():
         scaffold.connect_cells(
             scaffold.configuration.connection_types["golgi_to_golgi"],
             np.array(
-                [*([[goc_ids[0], goc_ids[1]]] * 100), *([[goc_ids[1], goc_ids[0]]] * 100)]
+                [
+                    *([[goc_ids[0], goc_ids[1]]] * 100),
+                    *([[goc_ids[1], goc_ids[0]]] * 100),
+                ]
             ),
             compartments=np.tile(
                 np.column_stack((np.arange(396, 496), np.arange(495, 395, -1))), (2, 1)
@@ -302,7 +305,6 @@ def get_tiny_network():
         scaffold = from_hdf5(scaffold_path)
 
 
-@unittest.skip("Needs to be updated to v4")
 class TestCerebellumPlacement(unittest.TestCase):
     """
     Check if the placement of all cell types is correct
@@ -310,7 +312,7 @@ class TestCerebellumPlacement(unittest.TestCase):
 
     @classmethod
     def setUpClass(self):
-        super().setUpClass()
+        super(TestPlacement, self).setUpClass()
         self.scaffold = get_test_network(200, 200)
 
     def test_bounds(self):

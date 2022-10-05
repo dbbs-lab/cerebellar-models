@@ -1,17 +1,21 @@
-import setuptools, sys, os
+import setuptools
+import os
 
-with open(os.path.join(os.path.dirname(__file__), "cerebellum", "__init__.py"), "r") as f:
+_findver = "__version__ = "
+_rootpath = os.path.join(os.path.dirname(__file__), "bsb_hdf5", "__init__.py")
+with open(_rootpath, "r") as f:
     for line in f:
-        if "__version__ = " in line:
-            exec(line.strip())
+        if _findver in line:
+            f = line.find(_findver)
+            __version__ = eval(line[line.find(_findver) + len(_findver) :])
             break
+    else:
+        raise Exception(f"No `__version__` found in '{_rootpath}'.")
 
 with open("README.md", "r") as fh:
     long_description = fh.read()
 
-requires = [
-    "bsb[NEURON,MPI]>=4.0.0a1"
-]
+requires = ["bsb[NEURON,MPI]>=4.0.0a1"]
 
 setuptools.setup(
     name="cerebellum",
