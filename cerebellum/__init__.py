@@ -2,6 +2,7 @@ import os
 
 __version__ = "0.0.1"
 
+
 class _obj_list(list):
     pass
 
