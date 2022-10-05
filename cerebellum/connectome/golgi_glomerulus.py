@@ -1,5 +1,5 @@
 import numpy as np
-from ..strategy import ConnectionStrategy
+from bsb.strategy import ConnectionStrategy
 
 
 class ConnectomeGolgiGlomerulus(ConnectionStrategy):
@@ -9,6 +9,9 @@ class ConnectomeGolgiGlomerulus(ConnectionStrategy):
 
     casts = {"divergence": int}
     required = ["divergence"]
+
+    def get_region_of_interest(self, chunk):
+        return [chunk]
 
     def validate(self):
         pass
@@ -97,7 +100,9 @@ class ConnectomeGolgiGlomerulus(ConnectionStrategy):
                             glomerulus_id = glomerulus[0]
                             connections[new_connection_index, 0] = golgi_id
                             connections[new_connection_index, 1] = glomerulus_id
-                            new_glomeruli[int(glomerulus_id - first_glomerulus), :] = oob
+                            new_glomeruli[
+                                int(glomerulus_id - first_glomerulus), :
+                            ] = oob
                             new_connection_index += 1
                             idx += 1
             return connections[0:new_connection_index]

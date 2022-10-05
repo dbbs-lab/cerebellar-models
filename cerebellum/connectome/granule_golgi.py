@@ -13,7 +13,10 @@ class ConnectomeGranuleGolgi(ConnectionStrategy):
 
     required = ["aa_convergence", "pf_convergence", "tag_aa", "tag_pf"]
 
-    defaults = {"tag_aa": "ascending_axon_to_golgi", "tag_pf": "parallel_fiber_to_golgi"}
+    defaults = {
+        "tag_aa": "ascending_axon_to_golgi",
+        "tag_pf": "parallel_fiber_to_golgi",
+    }
 
     def validate(self):
         pass

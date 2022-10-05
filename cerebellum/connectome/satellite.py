@@ -59,7 +59,10 @@ class SatelliteCommonPresynaptic(ConnectionStrategy):
             if connection_i[0] in from_cells:
                 target_planet = connection_i[1]
                 target_satellite = satellites[np.where(satellite_map == target_planet)]
-                to_satellite_connections[counter, :] = [connection_i[0], target_satellite]
+                to_satellite_connections[counter, :] = [
+                    connection_i[0],
+                    target_satellite,
+                ]
                 counter += 1
         # Connect "from" cells with satellites
         self.scaffold.connect_cells(self, to_satellite_connections[:counter, :])
