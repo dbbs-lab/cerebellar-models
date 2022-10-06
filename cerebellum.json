@@ -5,9 +5,9 @@
     "root": "cerebellum.hdf5"
   },
   "network": {
-    "x": 400.0,
+    "x": 150.0,
     "y": 400.0,
-    "z": 400.0,
+    "z": 150.0,
     "chunk_size": [50, 50, 50]
   },
   "partitions": {
@@ -67,8 +67,8 @@
       }
     },
     "mossy_fibers": {
-      "entity": true,
       "spatial": {
+        "radius": 1.0,
         "relative_to": "glomerulus",
         "count_ratio": 0.05
       }
@@ -180,12 +180,12 @@
   },
   "placement": {
     "granular_layer_innervation": {
-      "strategy": "bsb.placement.Entities",
+      "strategy": "bsb.placement.RandomPlacement",
       "partitions": ["granular_layer"],
       "cell_types": ["mossy_fibers"]
     },
     "granular_layer_placement": {
-      "strategy": "bsb.placement.ParticlePlacement",
+      "strategy": "bsb.placement.RandomPlacement",
       "partitions": ["granular_layer"],
       "cell_types": ["granule_cell", "golgi_cell", "glomerulus"]
     },
@@ -197,69 +197,85 @@
       "angle": 70.0
     },
     "molecular_layer_placement": {
-      "strategy": "bsb.placement.ParticlePlacement",
+      "strategy": "bsb.placement.RandomPlacement",
       "partitions": ["b_molecular_layer", "t_molecular_layer"],
       "cell_types": ["stellate_cell", "basket_cell"],
       "restrict": {
         "basket_cell": ["b_molecular_layer"],
         "stellate_cell": ["t_molecular_layer"]
       }
-    },
-    "dcn_placement": {
-      "strategy": "bsb.placement.ParticlePlacement",
-      "partitions": ["dcn_layer"],
-      "cell_types": ["dcn_cell"]
-    },
-    "dcn_satellite_placement": {
-      "strategy": "bsb.placement.Satellite",
-      "partitions": ["dcn_layer"],
-      "cell_types": ["dcn_interneuron"],
-      "planet_types": ["dcn_cell"],
-      "per_planet": 1.0
-    },
-    "io_layer_placement": {
-      "strategy": "bsb.placement.ParticlePlacement",
-      "partitions": ["io_layer"],
-      "cell_types": ["io_cell"]
     }
   },
   "connectivity": {
+    "mossy_fibers_to_glomerulus": {
+      "strategy": "cerebellum.connectome.mossy_glomerulus.ConnectomeMossyGlomerulus",
+      "presynaptic": {
+        "cell_types": ["mossy_fibers"]
+      },
+      "postsynaptic": {
+        "cell_types": ["glomerulus"]
+      },
+      "x_length" : 60,
+      "z_length" : 20  
+    },
     "glomerulus_to_granule": {
       "strategy": "cerebellum.connectome.glomerulus_granule.ConnectomeGlomerulusGranule",
-      "radius": 40,
-      "convergence": 4,
       "presynaptic": {
-        "cell_types": ["glomerulus"],
-        "compartments": ["soma"]
+      
+        "cell_types": ["glomerulus"]
       },
       "postsynaptic": {
         "cell_types": ["granule_cell"],
-        "compartments": ["dendrites"]
-      }
+        "morphology_labels" : ["dendrites"]
+      },
+      "prepresynaptic" : {
+        "cell_types" : ["mossy_fibers"]
+      },
+      "x_length" : 100,
+      "z_length" : 100,
+      "max_radius" : 40,
+      "convergence" : 4
+  
     },
     "glomerulus_to_golgi": {
       "strategy": "cerebellum.connectome.glomerulus_golgi.ConnectomeGlomerulusGolgi",
-      "convergence": 400,
-      "radius": 50,
       "presynaptic": {
-        "cell_types": ["glomerulus"],
-        "compartments": ["soma"]
+      
+        "cell_types": ["glomerulus"]
       },
       "postsynaptic": {
         "cell_types": ["golgi_cell"],
-        "compartments": ["basal_dendrites"]
-      }
+        "morphology_labels" : ["basal dendrites"]
+      },
+      "radius" : 50
+  
     },
-
+    "golgi_to_glomerulus": {
+      "strategy": "cerebellum.connectome.golgi_glomerulus_granule.ConnectomeGolgiGlomerulusGranule",
+      "presynaptic": {
+      
+        "cell_types": ["golgi_cell"],
+        "morphology_labels" : ["axon"]
+      },
+      "postsynaptic": {
+        "cell_types": ["granule_cell"]
+      },
+      "intermediate": {
+        "cell_types": ["glomerulus"]
+      },
+      "radius" : 50,
+      "convergence" : 40
+  
+    },
     "golgi_to_golgi": {
       "strategy": "bsb.connectivity.VoxelIntersection",
       "presynaptic": {
         "cell_types": ["golgi_cell"],
-        "compartments": ["axon"]
+        "morphology_labels": ["axon"]
       },
       "postsynaptic": {
         "cell_types": ["golgi_cell"],
-        "compartments": ["basal_dendrites"]
+        "morphology_labels": ["basal dendrites"]
       },
       "affinity": 0.5,
       "contacts": {
@@ -272,11 +288,11 @@
       "strategy": "bsb.connectivity.VoxelIntersection",
       "presynaptic": {
         "cell_types": ["golgi_cell"],
-        "compartments": ["basal_dendrites"]
+        "morphology_labels": ["basal dendrites"]
       },
       "postsynaptic": {
         "cell_types": ["golgi_cell"],
-        "compartments": ["basal_dendrites"]
+        "morphology_labels": ["basal dendrites"]
       },
       "affinity": 0.2,
       "contacts": {
@@ -289,22 +305,22 @@
       "strategy": "bsb.connectivity.VoxelIntersection",
       "presynaptic": {
         "cell_types": ["granule_cell"],
-        "compartments": ["basal_ascending_axondendrites"]
+        "morphology_labels": ["basal_ascending_axondendrites"]
       },
       "postsynaptic": {
         "cell_types": ["golgi_cell"],
-        "compartments": ["basal_dendrites"]
+        "morphology_labels": ["basal dendrites"]
       }
     },
     "parallel_fiber_to_golgi": {
       "strategy": "bsb.connectivity.VoxelIntersection",
       "presynaptic": {
         "cell_types": ["granule_cell"],
-        "compartments": ["parallel_fiber"]
+        "morphology_labels": ["parallel_fiber"]
       },
       "postsynaptic": {
         "cell_types": ["golgi_cell"],
-        "compartments": ["apical_dendrites"]
+        "morphology_labels": ["apical_dendrites"]
       },
       "affinity": 0.1
     },
@@ -312,11 +328,11 @@
       "strategy": "bsb.connectivity.VoxelIntersection",
       "presynaptic": {
         "cell_types": ["granule_cell"],
-        "compartments": ["ascending_axon"]
+        "morphology_labels": ["ascending_axon"]
       },
       "postsynaptic": {
         "cell_types": ["purkinje_cell"],
-        "compartments": ["aa_targets"]
+        "morphology_labels": ["aa_targets"]
       },
       "affinity": 0.1
     },
@@ -325,11 +341,11 @@
       "strategy": "bsb.connectivity.VoxelIntersection",
       "presynaptic": {
         "cell_types": ["granule_cell"],
-        "compartments": ["parallel_fiber"]
+        "morphology_labels": ["parallel_fiber"]
       },
       "postsynaptic": {
         "cell_types": ["purkinje_cell"],
-        "compartments": ["pf_targets"]
+        "morphology_labels": ["pf_targets"]
       },
       "affinity": 0.1
     },
@@ -337,11 +353,11 @@
       "strategy": "bsb.connectivity.VoxelIntersection",
       "presynaptic": {
         "cell_types": ["granule_cell"],
-        "compartments": ["parallel_fiber"]
+        "morphology_labels": ["parallel_fiber"]
       },
       "postsynaptic": {
         "cell_types": ["basket_cell"],
-        "compartments": ["dendrites"]
+        "morphology_labels": ["dendrites"]
       },
       "affinity": 0.1
     },
@@ -350,11 +366,11 @@
       "strategy": "bsb.connectivity.VoxelIntersection",
       "presynaptic": {
         "cell_types": ["granule_cell"],
-        "compartments": ["parallel_fiber"]
+        "morphology_labels": ["parallel_fiber"]
       },
       "postsynaptic": {
         "cell_types": ["stellate_cell"],
-        "compartments": ["dendrites"]
+        "morphology_labels": ["dendrites"]
       },
       "affinity": 0.1
     },
@@ -362,11 +378,11 @@
       "strategy": "bsb.connectivity.VoxelIntersection",
       "presynaptic": {
         "cell_types": ["stellate_cell"],
-        "compartments": ["axon"]
+        "morphology_labels": ["axon"]
       },
       "postsynaptic": {
         "cell_types": ["purkinje_cell"],
-        "compartments": ["sc_targets"]
+        "morphology_labels": ["sc_targets"]
       },
       "affinity": 0.1
     },
@@ -374,22 +390,22 @@
       "strategy": "bsb.connectivity.VoxelIntersection",
       "presynaptic": {
         "cell_types": ["basket_cell"],
-        "compartments": ["axon"]
+        "morphology_labels": ["axon"]
       },
       "postsynaptic": {
         "cell_types": ["purkinje_cell"],
-        "compartments": ["soma"]
+        "morphology_labels": ["soma"]
       }
     },
     "stellate_to_stellate": {
       "strategy": "bsb.connectivity.VoxelIntersection",
       "presynaptic": {
         "cell_types": ["stellate_cell"],
-        "compartments": ["axon"]
+        "morphology_labels": ["axon"]
       },
       "postsynaptic": {
         "cell_types": ["stellate_cell"],
-        "compartments": ["dendrites"]
+        "morphology_labels": ["dendrites"]
       },
       "affinity": 0.5,
       "contacts": {
@@ -402,11 +418,11 @@
       "strategy": "bsb.connectivity.VoxelIntersection",
       "presynaptic": {
         "cell_types": ["basket_cell"],
-        "compartments": ["axon"]
+        "morphology_labels": ["axon"]
       },
       "postsynaptic": {
         "cell_types": ["basket_cell"],
-        "compartments": ["dendrites"]
+        "morphology_labels": ["dendrites"]
       },
       "affinity": 0.5,
       "contacts": {
@@ -415,6 +431,7 @@
         "scale":4
       }
     }
+
   },
   "after_placement": {
     "microzones": {
@@ -427,6 +444,7 @@
     "dcn_rotations": {
       "strategy": "bsb.postprocessing.DCNRotations"
     }
+
   },
   "simulations": {
     "FCN_2019": {
@@ -773,7 +791,6 @@
           "synapse": {
             "static_synapse": {}
           }
-
         },
         "glomerulus_to_golgi": {
           "connection": {
@@ -906,9 +923,6 @@
           "connection": {
             "weight":-0.3,
             "delay": 1.0
-          },
-        "contacts": {
-            "distribution": 10
           },
           "synapse": {
             "static_synapse": {}
