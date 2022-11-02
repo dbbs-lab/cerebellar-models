@@ -302,7 +302,7 @@ def get_tiny_network():
         )
         scaffold.compile_output()
     else:
-        scaffold = from_hdf5(scaffold_path)
+        scaffold = from_storage(scaffold_path)
 
 
 class TestCerebellumPlacement(unittest.TestCase):
