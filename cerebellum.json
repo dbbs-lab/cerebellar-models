@@ -5,9 +5,9 @@
     "root": "cerebellum.hdf5"
   },
   "network": {
-    "x": 100.0,
+    "x": 150.0,
     "y": 400.0,
-    "z": 100.0,
+    "z": 150.0,
     "chunk_size": [50, 50, 50]
   },
   "partitions": {
@@ -216,12 +216,11 @@
         "cell_types": ["glomerulus"]
       },
       "x_length" : 60,
-      "z_length" : 20
+      "z_length" : 20  
     },
     "glomerulus_to_granule": {
       "strategy": "cerebellum.connectome.glomerulus_granule.ConnectomeGlomerulusGranule",
       "presynaptic": {
-
         "cell_types": ["glomerulus"]
       },
       "postsynaptic": {
@@ -235,25 +234,21 @@
       "z_length" : 100,
       "max_radius" : 40,
       "convergence" : 4
-
     },
     "glomerulus_to_golgi": {
       "strategy": "cerebellum.connectome.glomerulus_golgi.ConnectomeGlomerulusGolgi",
       "presynaptic": {
-
         "cell_types": ["glomerulus"]
       },
       "postsynaptic": {
         "cell_types": ["golgi_cell"],
-        "morphology_labels" : ["basal dendrites"]
+        "morphology_labels" : ["basal_dendrites"]
       },
       "radius" : 50
-
     },
     "golgi_to_glomerulus": {
       "strategy": "cerebellum.connectome.golgi_glomerulus_granule.ConnectomeGolgiGlomerulusGranule",
       "presynaptic": {
-
         "cell_types": ["golgi_cell"],
         "morphology_labels" : ["axon"]
       },
@@ -263,9 +258,8 @@
       "intermediate": {
         "cell_types": ["glomerulus"]
       },
-      "radius" : 190,
+      "radius" : 50,
       "convergence" : 40
-
     },
     "golgi_to_golgi": {
       "strategy": "bsb.connectivity.VoxelIntersection",
@@ -431,6 +425,7 @@
         "scale":4
       }
     }
+
   },
   "after_placement": {
     "microzones": {
