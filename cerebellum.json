@@ -10,6 +10,16 @@
     "z": 150.0,
     "chunk_size": [50, 50, 50]
   },
+  "morphologies": [
+    "morphologies/GranuleCell.swc",
+    {
+      "name": "GolgiCell",
+      "file": "morphologies/GolgiCell_mouse.swc"
+    },
+    "morphologies/PurkinjeCell.swc",
+    "morphologies/BasketCell.swc",
+    "morphologies/StellateCell.swc"
+  ],
   "partitions": {
     "dcn_layer": {
       "thickness": 600.0,
@@ -54,11 +64,7 @@
           "pf_height": 126,
           "pf_height_sd": 15
         },
-        "morphologies": [
-          {
-            "names": ["GranuleCell"]
-          }
-        ]
+        "morphologies": ["GranuleCell"]
       },
       "plotting": {
         "display_name": "Granule cell",
@@ -88,11 +94,7 @@
       "spatial": {
         "radius": 7.5,
         "planar_density": 0.0017,
-        "morphologies": [
-          {
-            "names": ["PurkinjeCell"]
-          }
-        ]
+        "morphologies": ["PurkinjeCell"]
       },
       "plotting": {
         "display_name": "Purkinje cell",
@@ -216,7 +218,7 @@
         "cell_types": ["glomerulus"]
       },
       "x_length" : 60,
-      "z_length" : 20  
+      "z_length" : 20
     },
     "glomerulus_to_granule": {
       "strategy": "cerebellum.connectome.glomerulus_granule.ConnectomeGlomerulusGranule",
