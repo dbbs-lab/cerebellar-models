@@ -20,7 +20,7 @@ requires = ["bsb[NEURON,MPI]>=4.0.0a48"]
 setuptools.setup(
     name="cerebellum",
     version=__version__,
-    author="Robin De Schepper, Francesco Sheiban, Alice Geminiani, Alberto Antonietti, Stefano Casali, Egidio D'Angelo, Claudia Casellato",
+    author="Robin De Schepper, Alessio Marta, Andrea Di Francescantonio, Egidio D'Angelo, Claudia Casellato",
     author_email="robingilbert.deschepper@unipv.it",
     description="A full scaffold model of the cerebellum, using the BSB.",
     include_package_data=True,
