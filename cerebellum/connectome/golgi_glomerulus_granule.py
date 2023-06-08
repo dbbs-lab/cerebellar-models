@@ -20,12 +20,12 @@ class ConnectomeGolgiGlomerulusGranule(ConnectionStrategy):
     radius = config.attr(type=int, required=True)
     convergence = config.attr(type=int, required=True)
     intermediate = config.attr(type=Hemitype, required=True)
-    
+
     #We override this method because it is easier to connect the Golgi cells
     #in a single post chunks to the granule cells in many pre-chunks
     def _get_connect_args_from_job(self, chunk, roi):
         pre = HemitypeCollection(self.presynaptic, roi)
-        post = HemitypeCollection(self.postsynaptic, [chunk])
+        post = HemitypeCollection(self.postsynaptic, chunk)
         return pre, post
 
     def get_region_of_interest(self, chunk):
@@ -36,7 +36,7 @@ class ConnectomeGolgiGlomerulusGranule(ConnectionStrategy):
         # Look for chunks which are less than radius away from the current one in the xy plane
         # and for neighbouring chunks along z direction.
         # Note: All the chunks have the same dimensions
-        for c in chunks:    
+        for c in chunks:
             dist = np.sqrt(
                 np.power((chunk[0] - c[0]) * chunk.dimensions[0], 2)
                 + np.power((chunk[1]  - c[1]) * chunk.dimensions[1], 2)
@@ -58,7 +58,7 @@ class ConnectomeGolgiGlomerulusGranule(ConnectionStrategy):
         print("Number of granule", len(post_ps))
         print("Number of Golgi", len(pre_ps))
         print("Number of gloms", len(self.intermediate.cell_types[0].get_placement_set(chunks=pre_ps.get_loaded_chunks())))
-        
+
 
         #Look for connected glomeruli
         cs = self.scaffold.get_connectivity_set("glomerulus_to_granule_cell")
@@ -82,7 +82,7 @@ class ConnectomeGolgiGlomerulusGranule(ConnectionStrategy):
         local_chunk_ids, local_locs, global_chunk_ids, global_locs = iter.iterate_all_global_id()
         gid_local = np.column_stack((local_chunk_ids, local_locs))
         gid_global = np.column_stack((global_chunk_ids, global_locs))
-        
+
         unique_gloms, unique_gloms_id = np.unique(local_locs,axis=0,return_index=True)
         unique_gloms_id = local_locs[unique_gloms_id,0]
         granule_connections = []
@@ -98,7 +98,7 @@ class ConnectomeGolgiGlomerulusGranule(ConnectionStrategy):
 
 
         num_gloms = len(granule_connections)
-        
+
         #Consider only the glomeruli which are connected to at least a granule cell in the ROI.
         #Select only the gloms for which a connection is found
         glom_pos = self.intermediate.cell_types[0].get_placement_set(chunks=sorted_chunks).load_positions()[unique_gloms_id]
@@ -107,7 +107,7 @@ class ConnectomeGolgiGlomerulusGranule(ConnectionStrategy):
 
         post_locs = np.full((n_glomeruli*n_golgi*len(post_ps),3),-1,dtype=int)
         pre_locs = np.full((n_glomeruli*n_golgi*len(post_ps),3),-1,dtype=int)
-        
+
         #Consider only the glomeruli which are connected to at least a granule cell in the ROI.
         #Select only the gloms for which a connection is found
 
@@ -115,11 +115,11 @@ class ConnectomeGolgiGlomerulusGranule(ConnectionStrategy):
         morpho_set = post_ps.load_morphologies()
         golgi_morphos = morpho_set.iter_morphologies(cache=True, hard_cache=True)
 
-        #Cache Golgi morphologies 
+        #Cache Golgi morphologies
         morphologies = []
         for morpho in pre_ct.get_morphologies():
             morphologies.append(morpho.load())
-            
+
         #Get the Golgi-morphology correspondence
         morpho_id = pre_ps.load_morphologies().get_indices()
 
@@ -153,7 +153,7 @@ class ConnectomeGolgiGlomerulusGranule(ConnectionStrategy):
                     + np.power(golgi[1] - glom_pos[:, 1], 2)
                     + np.power(golgi[2] - glom_pos[:, 2], 2)
                 )
-            #Select the 40 closer gloms 
+            #Select the 40 closer gloms
             to_connect = np.argsort(dist)
             #print(to_connect)
             num_glom_to_connect = np.min([self.convergence,len(to_connect),len(granule_connections)])
@@ -180,7 +180,7 @@ class ConnectomeGolgiGlomerulusGranule(ConnectionStrategy):
                 pre_locs[ptr:ptr+granule_to_connect,1] = terminal_branches_ids[ids_branches]
                 pre_locs[ptr:ptr+granule_to_connect,2] = tips_coordinates[ids_branches]
                 ptr += granule_to_connect
-        
+
         print("Connected", n_golgi, "Golgi cells to", ptr, "granule cells.")
         print(pre_ps.get_loaded_chunks())
         for chunk in pre_ps.get_loaded_chunks():
