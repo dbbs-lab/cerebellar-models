@@ -21,14 +21,14 @@ class ConnectomeMossyGlomerulus(ConnectionStrategy):
         ct = self.presynaptic.cell_types[0]
         chunks = ct.get_placement_set().get_all_chunks()
         selected_chunks = []
-        
+
         #We look for chunks satisfying the geometrical conditions:
         #a mossy fiber can be connected to a glomuerulus
         #inside a self.x_length x self.z_length rectangle
         #centered in the mossy
         for c in chunks:
             x_dist = np.fabs(chunk[0] -c[0])
-            z_dist = np.fabs(chunk[1]- c[1]) 
+            z_dist = np.fabs(chunk[1]- c[1])
             x_dist = x_dist * chunk.dimensions[0]
             z_dist = z_dist * chunk.dimensions[2]
 
@@ -37,15 +37,15 @@ class ConnectomeMossyGlomerulus(ConnectionStrategy):
         #selected_chunks = [chunk]
         return selected_chunks
 
-    #We need to override the default _get_connect_args_from_job function because 
-    #we make implicit use of 1:20 ratio between mossy fibers and glomeruli 
+    #We need to override the default _get_connect_args_from_job function because
+    #we make implicit use of 1:20 ratio between mossy fibers and glomeruli
     #in the custom connection strategy.
     #We need to get single-post-chunk, multi-pre-chunk ROI instead of the opposite.
     #In this way if for each glomerulus in the ROI we select randomly the mossy fiber
     #to connect, the divergence ratio is automatically around 20.
-    def _get_connect_args_from_job(self, chunk, roi):
-        pre = HemitypeCollection(self.presynaptic, roi)
-        post = HemitypeCollection(self.postsynaptic, [chunk])
+    def _get_connect_args_from_job(self, pre_roi, post_roi):
+        pre = HemitypeCollection(self.presynaptic, post_roi)
+        post = HemitypeCollection(self.postsynaptic, pre_roi)
         return pre, post
 
     def connect(self, pre, post):
@@ -56,7 +56,7 @@ class ConnectomeMossyGlomerulus(ConnectionStrategy):
                 self._connect_type(pre_ct, pre_ps, post_ct, post_ps)
 
     def _connect_type(self, pre_ct, pre_ps, post_ct, post_ps):
-              
+
         mossy_pos = pre_ps.load_positions()
         glomeruli_pos = post_ps.load_positions()
         n_mossy = len(mossy_pos)
@@ -83,11 +83,11 @@ class ConnectomeMossyGlomerulus(ConnectionStrategy):
 
         #We connect each glomerulus to a mossy fiber.
         for j,glomerulus in enumerate(glomeruli_pos):
-            
+
             dist = np.linalg.norm(glomerulus-mossy_pos,axis=1)
             id_sorted_dist = np.argsort(dist)
             #print(id_sorted_dist)
-            #MF closer to the granule have an higher chance to be picked 
+            #MF closer to the granule have an higher chance to be picked
             pre_locs[j,0] = id_sorted_dist[rolls[j]]
             post_locs[j,0] = j
 

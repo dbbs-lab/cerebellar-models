@@ -15,7 +15,7 @@ class ConnectomeGlomerulusGolgi(ConnectionStrategy):
 
     def _get_connect_args_from_job(self, chunk, roi):
         pre = HemitypeCollection(self.presynaptic, roi)
-        post = HemitypeCollection(self.postsynaptic, [chunk])
+        post = HemitypeCollection(self.postsynaptic, chunk)
         return pre, post
 
     def get_region_of_interest(self, chunk):
@@ -41,11 +41,11 @@ class ConnectomeGlomerulusGolgi(ConnectionStrategy):
                 self._connect_type(pre_ct, pre_ps, post_ct, post_ps)
 
     def _connect_type(self, pre_ct, pre_ps, post_ct, post_ps):
-        
+
         # If synaptic contacts need to be made we use this exponential distribution
         # to pick the closer by subcell_labels.
         exp_dist = truncexpon(b=5, scale=0.03)
-        
+
         glomeruli_pos = pre_ps.load_positions()
         golgi_pos = post_ps.load_positions()
         n_glom = len(glomeruli_pos)
@@ -58,33 +58,33 @@ class ConnectomeGlomerulusGolgi(ConnectionStrategy):
         #Cache morphologies and generate the morphologies iterator
         morpho_set = post_ps.load_morphologies()
         golgi_morphos = morpho_set.iter_morphologies(cache=True, hard_cache=True)
-        
+
         #Find cells to connect
         ptr = 0
-        
+
         for i, golgi, morpho in zip(itertools.count(), golgi_pos, golgi_morphos):
             dist = np.sqrt(
                 np.power(golgi[0] - glomeruli_pos[:, 0], 2)
                 + np.power(golgi[1] - glomeruli_pos[:, 1], 2)
                 + np.power(golgi[2] - glomeruli_pos[:, 2], 2)
             )
-            
+
             to_connect_bool = dist < self.radius
             to_connect_idx = np.nonzero(to_connect_bool)[0]
             connected_gloms = len(to_connect_idx)
             pre_locs[ptr : (ptr + connected_gloms), 0] = to_connect_idx
             post_locs[ptr : (ptr + connected_gloms), 0] = i
-           
+
             """# Find which dendrites to connect
             branches_names = []
             for string in self.postsynaptic.subcell_labels:
                 branches_names.append(string)
             basal_dendrides_branches = morpho.get_branches(branches_names)"""
             basal_dendrides_branches = morpho.get_branches()
-            
+
             #Get the starting branch id of the denridic branches
             first_dendride_id = morpho.branches.index(basal_dendrides_branches[0])
-            
+
             #Find terminal points on branches
             terminal_ids = np.full(len(basal_dendrides_branches), 0, dtype=int)
             for i,b in enumerate(basal_dendrides_branches):
@@ -104,8 +104,8 @@ class ConnectomeGlomerulusGolgi(ConnectionStrategy):
             #Choose randomly the branch where the synapse is made
             #favouring the branches closer to the glomerulus.
             rolls = exp_dist.rvs(size=len(basal_dendrides_branches))
-            
-            # Compute the distance between terminal points of basal dendrites 
+
+            # Compute the distance between terminal points of basal dendrites
             # and the soma of the avaiable glomeruli
             for id_g,glom_p in enumerate(glomeruli_pos):
                 pts_dist = np.sqrt(np.power(tips_coordinates[:,0] + golgi[0] - glom_p[0], 2)
