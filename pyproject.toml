@@ -1,6 +1,9 @@
 [tools.bsb]
-config = "cerebellum.json"
+config = "HumanCerebellumReconstruction.json"
 
 [tools.bsb.links]
 config = "auto"
 morpho = [ "sys", "morphologies.hdf5", "newer",]
+
+[tools.bsb.links."HumanCerebellum.hdf5"]
+morpho = [ "sys", "HumanMorphologies.hdf5", "newer",]
