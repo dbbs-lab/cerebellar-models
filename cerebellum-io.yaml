@@ -402,6 +402,42 @@ connectivity:
       distribution: norm
       loc: 100
       scale: 4
+  purkinje_to_dcn:
+    strategy: bsb.connectivity.AllToAll
+    presynaptic: { cell_types: [ purkinje_cell ], morphology_labels: [ axon ] }
+    postsynaptic: { cell_types: [ dcn_cell ] }
+  purkinje_to_dcn_interneuron:
+    strategy: bsb.connectivity.AllToAll
+    presynaptic: { cell_types: [ purkinje_cell ], morphology_labels: [ axon ] }
+    postsynaptic: { cell_types: [ dcn_interneuron ] }
+  mossy_fiber_to_dcn:
+    strategy: bsb.connectivity.AllToAll
+    presynaptic: { cell_types: [ mossy_fibers ] }
+    postsynaptic: { cell_types: [ dcn_cell ] }
+  dcn_interneuron_to_io:
+    strategy: bsb.connectivity.AllToAll
+    presynaptic: { cell_types: [ dcn_interneuron ] }
+    postsynaptic: { cell_types: [ io_cell ], morphology_labels: [ dendrites ] }
+  io_to_dcn_interneuron:
+    strategy: bsb.connectivity.AllToAll
+    presynaptic: { cell_types: [ io_cell ], morphology_labels: [ axon ] }
+    postsynaptic: { cell_types: [ dcn_interneuron ] }
+  io_to_dcn:
+    strategy: bsb.connectivity.AllToAll
+    presynaptic: { cell_types: [ io_cell ], morphology_labels: [ axon ] }
+    postsynaptic: { cell_types: [ dcn_cell ] }
+  io_to_purkinje:
+    strategy: bsb.connectivity.AllToAll
+    presynaptic: { cell_types: [ io_cell ], morphology_labels: [ axon ] }
+    postsynaptic: { cell_types: [ purkinje_cell ], morphology_labels: [ dendrites ] }
+  io_to_stellate:
+    strategy: bsb.connectivity.AllToAll
+    presynaptic: { cell_types: [ io_cell ], morphology_labels: [ axon ] }
+    postsynaptic: { cell_types: [ stellate_cell ], morphology_labels: [ dendrites ] }
+  io_to_basket:
+    strategy: bsb.connectivity.AllToAll
+    presynaptic: { cell_types: [ io_cell ], morphology_labels: [ axon ] }
+    postsynaptic: { cell_types: [ basket_cell ], morphology_labels: [ dendrites ] }
 after_placement:
   microzones:
     strategy: bsb.postprocessing.LabelMicrozones

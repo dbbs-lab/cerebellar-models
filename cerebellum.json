@@ -212,7 +212,6 @@
     "golgi_to_glomerulus": {
       "strategy": "cerebellum.connectome.golgi_glomerulus_granule.ConnectomeGolgiGlomerulusGranule",
       "presynaptic": {
-
         "cell_types": ["golgi_cell"],
         "subcell_labels" : ["axon"]
       },
