@@ -10,7 +10,7 @@ from bsb.connectivity.strategy import HemitypeCollection
 
 
 @config.node
-class ConnectomeGolgiGlomerulusGranule(ConnectionStrategy):
+class ConnectomeGolgiGlomerulusUBC(ConnectionStrategy):
     # Read vars from the configuration file
     # The radius is the maximum length of Golgi axon plus the radius of the granule
     # dendritic tree, needed in get_region_of_interest
@@ -188,7 +188,7 @@ class ConnectomeGolgiGlomerulusGranule(ConnectionStrategy):
                 pre_locs[ptr:ptr+granule_to_connect,0] = id_golgi
                 #Store branch-ids and points-on-branch-ids of the granule cells
                 take_branch_point = granule_connections_branch_point[to_connect[i]]
-                post_locs[ptr:ptr+granule_to_connect,1:] = take_branch_point
+                post_locs[ptr:ptr+granule_to_connect,1:] = -1#take_branch_point
                 #Select Golgi axon branch
                 ids_branches = np.random.randint(low=0,high=len(axon_branches),size=granule_to_connect)
                 pre_locs[ptr:ptr+granule_to_connect,1] = terminal_branches_ids[ids_branches]

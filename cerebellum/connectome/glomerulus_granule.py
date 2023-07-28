@@ -14,10 +14,8 @@ class TooFewGlomeruliClusters(Exception):
 
 @config.node
 class ConnectomeGlomerulusGranule(ConnectionStrategy):
-    x_length = config.attr(type=int, required=True)
-    z_length = config.attr(type=int, required=True)
     max_radius = config.attr(type=int, required=True)
-    convergence = config.attr(type=int, required=True)
+    max_convergence = config.attr(type=int, required=True)
     #We need acces to mossy fibers to know the glomeruli clusters
     prepresynaptic = config.attr(type=Hemitype, required=True)
 
@@ -50,70 +48,71 @@ class ConnectomeGlomerulusGranule(ConnectionStrategy):
         return selected_chunks
 
     def connect(self, pre, post):
-        #pre_type = pre.cell_types[0]
-        #post_type = post.cell_types[0]
-        for pre_ct, pre_ps in pre.placement.items():
-            for post_ct, post_ps in post.placement.items():
-                self._connect_type(pre_ct, pre_ps, post_ct, post_ps)
+        for post_ct, post_ps in post.placement.items():
+            pre_ps_mf = None
+            pre_ps_ubc = None
+            for pre_ct, pre_ps in pre.placement.items():        
+                if (pre_ct.name == "glomerulus"):
+                    pre_ps_mf = pre_ps
+                if (pre_ct.name == "ubc_glomerulus"):
+                    pre_ps_ubc = pre_ps
+            self._connect_type(pre_ps_mf, pre_ps_ubc, post_ps)
 
-    def _connect_type(self, pre_ct, pre_ps, post_ct, post_ps):
+    def _connect_type(self, pre_ps_mf, pre_ps_ubc, post_ps):
         
-        glom_pos = pre_ps.load_positions()
+        glom_mf_pos = pre_ps_mf.load_positions()
+        glom_ubc_pos = pre_ps_ubc.load_positions()
         gran_pos = post_ps.load_positions()
 
-        print("Pre",pre_ps.get_loaded_chunks())
+        print("Pre",pre_ps_mf.get_loaded_chunks())
         print("Post",post_ps.get_loaded_chunks())
         
         print("Connecting", len(gran_pos), "granule cells in chunk: ",post_ps.get_loaded_chunks())
-        print("To", len(glom_pos), "glomeruli in chunk: ",pre_ps.get_loaded_chunks())
-        print("Number of glomeruli in ROI:",len(glom_pos))
+        print("To", len(glom_mf_pos), "glomeruli in chunk: ",pre_ps_mf.get_loaded_chunks())
+        print("Number of glomeruli in ROI:",len(glom_mf_pos))
         print("Number of granule in ROI:",len(gran_pos))
-        n_glom = len(glom_pos)
+        
+        n_glom_mf = len(glom_mf_pos)
+        n_glom_ubc = len(glom_ubc_pos)
         n_gran = len(gran_pos)
-        max_connections = self.convergence
+        max_connections = self.max_convergence
         n_conn = n_gran * max_connections
-        pre_locs = np.full((n_conn, 3), -1, dtype=int)
-        post_locs = np.full((n_conn, 3), -1, dtype=int)
-
+        
+        #For the sake of speed we save the connectivity data separately for glom_mf and glom_ubc
+        
+        pre_locs_mf = np.full((n_conn, 3), -1, dtype=int)
+        post_locs_mf = np.full((n_conn, 3), -1, dtype=int)
+        pre_locs_ubc = np.full((n_conn, 3), -1, dtype=int)
+        post_locs_ubc = np.full((n_conn, 3), -1, dtype=int)
+        
         #Find the glomeruli clusters
         cs = self.scaffold.get_connectivity_set("mossy_fibers_to_glomerulus")
-        #print(dir(cs.load_connections()))
-        iter = cs.load_connections().to(pre_ps.get_loaded_chunks()).as_globals()
-        #print(dir(iter))
+        iter = cs.load_connections().to(pre_ps_mf.get_loaded_chunks()).as_globals()
         clusters = []
         
         gid_global,gid_local = iter.all()
-        
-        #print(a,b)
-
-        #local_chunk_ids, local_locs, global_chunk_ids, global_locs = iter.all()
-        #gid_local = np.column_stack((local_chunk_ids, local_locs))
-        #gid_global = np.column_stack((global_chunk_ids, global_locs))
-
-        #print("--------------------------")
-        #print(gid_global)
-        #print(gid_local)
         unique_mossy = np.unique(gid_global,axis=0)
-        #print("UNIQUE:",unique_mossy)
+
         for current in unique_mossy:
             glom_ids = np.where((gid_global[:,0]==current[0]))
             starting = np.min(gid_local[:,0])
             clusters.append(gid_local[glom_ids[0],0]-starting)
 
-
         num_clusters = len(clusters)
         print("Number of clusters:", num_clusters)
         for i,cl in enumerate(clusters):
             print("Glomeruli in cluster", i, ":", len(cl))
-        """
+        
         if (num_clusters < 4):
             raise TooFewGlomeruliClusters("Less then 4 clusters of glomeruli have been found. Check the densities of mossy fibers and glomeruli in the configuration file.")
-        """
+        
         #Cache morphologies 
         morpho_set = post_ps.load_morphologies()
 
         #We keep track of the entries of pre_locs and post_locs we actually used.
-        ptr = 0 
+        ptr_mf = 0 
+        ptr_ubc = 0
+
         gran_morphos = morpho_set.iter_morphologies(cache=True, hard_cache=True)
         for i, grpos, morpho in zip(itertools.count(), gran_pos, gran_morphos):
             
@@ -136,60 +135,124 @@ class ConnectomeGlomerulusGranule(ConnectionStrategy):
             np.random.shuffle(dendrites_idx)  
 
             #Try to select a cell from 4 clusters satisfying the conditions
+            
+            selected_cluster = []
+            selected_indices = []
+            selected_distances = []
+
             for nc in cluster_idx:
-                dist = np.sqrt(
-                    np.power(grpos[0] - glom_pos[clusters[nc]][:, 0], 2)
-                    + np.power(grpos[1] - glom_pos[clusters[nc]][:, 1], 2)
-                    + np.power(grpos[2] - glom_pos[clusters[nc]][:, 2], 2)
+                dist_mf = np.sqrt(
+                    np.power(grpos[0] - glom_mf_pos[clusters[nc]][:, 0], 2)
+                    + np.power(grpos[1] - glom_mf_pos[clusters[nc]][:, 1], 2)
+                    + np.power(grpos[2] - glom_mf_pos[clusters[nc]][:, 2], 2)
                 )
-                bool_arr = dist < self.max_radius
-                sorted_indices = np.nonzero(bool_arr)[0]
-                if (len(sorted_indices)>0 and gr_connections<4):
-                    rnd = np.random.randint(low=0,high=len(sorted_indices))
-                    #Id of the granule cell
-                    post_locs[ptr + gr_connections, 0] = i
-                    #Id of the glomerulus, randomly selected between the avaiable ones
-                    pre_locs[ptr + gr_connections, 0] = clusters[nc][sorted_indices[rnd]]
+                
+                sorted_by_distance = np.sort(dist_mf)
+                ids_sorted_by_distance = np.argsort(dist_mf)
+                bool_arr_mf = sorted_by_distance < self.max_radius
+                sorted_by_distance = sorted_by_distance[bool_arr_mf]
+                ids_sorted_by_distance = ids_sorted_by_distance[bool_arr_mf]
+                ln = np.count_nonzero(bool_arr_mf)
+                if ln > 0 and ln < 5:
+                    for id in range(0,ln):
+                        selected_indices.append(ids_sorted_by_distance[id])
+                        selected_distances.append(sorted_by_distance[id])
+                        selected_cluster.append(nc)
             
-                    #Select one of the 4 dendrites
-                    dendrite = dendrites[dendrites_idx[gr_connections]]
-                    #Select the terminal point of the branch
-                    tip = len(dendrite)-1
-                    post_locs[ptr + gr_connections, 1] = first_dendride_id+dendrites_idx[gr_connections]
-                    post_locs[ptr + gr_connections, 2] = tip
-                    gr_connections += 1
+            #Select first four gloms (according to distance) in each cluster
+
+            if (len(glom_ubc_pos)) > 0:
+                dist_ubc = np.linalg.norm(grpos-glom_ubc_pos,axis=1)
+                sorted_by_distance = np.sort(dist_ubc)
+                ids_sorted_by_distance = np.argsort(dist_ubc)
+                mask_ubc = sorted_by_distance < self.max_radius
+                sorted_by_distance = sorted_by_distance[mask_ubc]
+                ids_sorted_by_distance = ids_sorted_by_distance[mask_ubc]
+                ln = np.count_nonzero(mask_ubc)
+                if ln > 0:
+                    for idx in range(0,min(4,ln)):
+                        selected_indices.append(ids_sorted_by_distance[idx])
+                        selected_distances.append(sorted_by_distance[idx])
+                        selected_cluster.append(-1)
+
+            selected_indices = np.array(selected_indices)
+            selected_distances = np.array(selected_distances)
+            selected_cluster = np.array(selected_cluster)
+
+            global_sorted_idx = np.argsort(selected_distances)
+            selected_cluster = selected_cluster[global_sorted_idx]
+            selected_indices = selected_indices[global_sorted_idx]
+
+            if len(selected_indices) >= 4:
+                for idx in range(min(4,len(selected_indices))):                  
                     
-                #When 4 connection are formed, exit the loop
-                if (gr_connections >= 4):
-                    break
-            
+                    #If the id of the cluster is -1, we are connecting a ubc_glom
+                    if (selected_cluster[idx] == -1 and gr_connections < 4):
+                    #Select one of the 4 dendrites
+                        dendrite = dendrites[dendrites_idx[gr_connections]]
+                        #Select the terminal point of the branch
+                        tip = len(dendrite)-1
+                        post_locs_ubc[ptr_ubc, 0] = i
+                        post_locs_ubc[ptr_ubc, 1] = first_dendride_id+dendrites_idx[gr_connections]
+                        post_locs_ubc[ptr_ubc, 2] = tip
+                        pre_locs_ubc[ptr_ubc, 0] = selected_indices[idx]
+                        gr_connections += 1
+                        ptr_ubc = ptr_ubc + 1
+
+                    #If the id of the cluster is not -1, we are connecting a mf_glom
+                    if (selected_cluster[idx] != -1 and gr_connections < 4):
+                        
+                        cluster_id = selected_cluster[idx]
+                        #Id of the granule cell
+                        post_locs_mf[ptr_mf, 0] = i
+                        #Id of the glomerulus, randomly selected between the avaiable ones
+                        pre_locs_mf[ptr_mf, 0] = clusters[cluster_id][selected_indices[idx]]
+                        #Select one of the 4 dendrites
+                        dendrite = dendrites[dendrites_idx[gr_connections]]
+                        #Select the terminal point of the branch
+                        tip = len(dendrite)-1
+                        post_locs_mf[ptr_mf, 1] = first_dendride_id+dendrites_idx[gr_connections]
+                        post_locs_mf[ptr_mf, 2] = tip
+                        gr_connections += 1
+                        ptr_mf = ptr_mf + 1 
+                        
             #If there are some free dendrites, connect them to the closest glomeruli,
             #even if they do not satisfy the geometric condtitions.
-            if (gr_connections<self.convergence):
+            if (gr_connections<self.max_convergence):
+                
                 #Connect the clostest glomeruli from four random clusters
                 for nc in cluster_idx:
                     dist = np.sqrt(
-                        np.power(grpos[0] - glom_pos[clusters[nc]][:, 0], 2)
-                        + np.power(grpos[1] - glom_pos[clusters[nc]][:, 1], 2)
-                        + np.power(grpos[2] - glom_pos[clusters[nc]][:, 2], 2)
+                        np.power(grpos[0] - glom_mf_pos[clusters[nc]][:, 0], 2)
+                        + np.power(grpos[1] - glom_mf_pos[clusters[nc]][:, 1], 2)
+                        + np.power(grpos[2] - glom_mf_pos[clusters[nc]][:, 2], 2)
                     )
                     min_dist_idx = np.argmin(dist)
-                    post_locs[ptr + gr_connections, 0] = i
-                    #Id of the glomerulus, randomly selected between the avaiable ones
-                    pre_locs[ptr + gr_connections, 0] = clusters[nc][min_dist_idx]
-                    #Select one of the 4 dendrites
-                    dendrite = dendrites[dendrites_idx[gr_connections]]
-                    #Select the terminal point of the branch
-                    tip = len(dendrite)-1
-                    post_locs[ptr + gr_connections, 1] = first_dendride_id+dendrites_idx[gr_connections]
-                    post_locs[ptr + gr_connections, 2] = tip
-                    gr_connections += 1
-                    #When 4 connection are formed, exit the loop
-                    if (gr_connections >= 4):
-                        break
-            
-            ptr += gr_connections     
+                    #Check if the chosen glom is already connected to the granule
+                    if clusters[nc][min_dist_idx] not in pre_locs_mf[ptr_mf : ptr_mf + gr_connections, 0]:
 
-        print("Connected", n_gran, "granular cells.\n")
+                        post_locs_mf[ptr_mf + gr_connections, 0] = i
+                        #Id of the glomerulus, randomly selected between the avaiable ones
+                        pre_locs_mf[ptr_mf + gr_connections, 0] = clusters[nc][min_dist_idx]
+                        #Select one of the 4 dendrites
+                        dendrite = dendrites[dendrites_idx[gr_connections]]
+                        #Select the terminal point of the branch
+                        tip = len(dendrite)-1
+                        post_locs_mf[ptr_mf + gr_connections, 1] = first_dendride_id+dendrites_idx[gr_connections]
+                        post_locs_mf[ptr_mf + gr_connections, 2] = tip
+                        gr_connections += 1
+                        #When 4 connection are formed, exit the loop
+                        if (gr_connections >= 4):
+                            break
+                
+                ptr_mf += gr_connections 
+
+        #print("Connected", n_gran, "granular cells.\n")
         #print(pre_locs[:ptr], post_locs[:ptr])
-        self.connect_cells(pre_ps, post_ps, pre_locs[:ptr], post_locs[:ptr])
+        
+        if ptr_mf > 0:
+            self.connect_cells(pre_ps_mf, post_ps, pre_locs_mf[:ptr_mf], post_locs_mf[:ptr_mf])
+        if ptr_ubc:
+            self.connect_cells(pre_ps_ubc, post_ps, pre_locs_ubc[:ptr_ubc], post_locs_ubc[:ptr_ubc])
+
+
