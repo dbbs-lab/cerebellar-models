@@ -1,70 +1,38 @@
 from bsb.core import from_storage
 import numpy as np
 
-network = from_storage("MiniHuman.hdf5")
+#Bult the network from file
+network = from_storage("200_200_mouse.hdf5")
 
+#Loop through tge entire connectivity set
 for ps in network.get_connectivity_sets():
-    print("----------------------------")
+    
+    #Print the name of the connectivity strategy
     print(ps.tag)
-    cs= network.get_connectivity_set(ps.tag).load_connections().as_globals()
-    data=cs.all()
-    data_pre = data[0]
-    data_post = data[1]
+    
+    #Get the ConnectivityIterator for the current connectivity strategy
+    cs = network.get_connectivity_set(ps.tag).load_connections().as_globals()
+    
+    #Get the arrays containing the connecivity data
+    data = cs.all()
 
-    pre_locs = data_pre
-    post_locs = data_post
+    #data[0] contains pre data; data[1] post data
+    pre_locs = data[0]
+    post_locs = data[1]
 
-    """pre_cells, pre_counts = np.unique(pre_locs[:, 0], axis=0, return_counts=True)
-    post_cells, post_counts = np.unique(post_locs[:, 0], axis=0, return_counts=True)
-    print("tot synapses:", np.sum(pre_counts))
+    #The total number of synapses is the number of entries in pre_locs or post locs
+    print("Tot synapses:", len(pre_locs))
+    
+    #Find the pairs of pre-post neurons (combos) and count how many synapses there are between each pair (combo_counts)
     combos, combo_counts = np.unique(np.column_stack((pre_locs[:, 0], post_locs[:, 0])), axis=0, return_counts=True)
+    print("Synapses per pair:", np.mean(combo_counts), "pm", np.std(combo_counts))
 
-    uniquePost= np.unique(combos[:,:], axis=1, return_counts=True)
-    uniquePre= np.unique(combos[:,:], axis=0, return_counts=True)
-    print("mean divergence:", len(combos)/len(uniquePre[0]))
-    print("mean std:", np.std(pre_counts))
+    #Find the unique pre neurons and compute how many post are connected to each of them
+    uniquePre, uniquePre_count = np.unique(combos[:,0], axis=0, return_counts=True)
+    print("Divergence:", np.mean(uniquePre_count), "pm", np.std(uniquePre_count))
 
-    print("mean convergence:", len(combos)/len(uniquePost[0]))
-    print("mean std:", np.std(post_counts))
+    #Find the unique post neurons and compute how many pre are connected to each of them
+    niquePost, uniquePost_count = np.unique(combos[:,1], axis=0, return_counts=True)
+    print("mean convergence:", np.mean(uniquePost_count), "pm", np.std(uniquePost_count))
 
-    print("mean synapse/pair:", np.sum(pre_counts)/len(combos))
-    print("------------------------")
-    """
-
-    pre_cells, pre_counts = np.unique(pre_locs[:, 0], axis=0, return_counts=True)
-    post_cells, post_counts = np.unique(post_locs[:, 0], axis=0, return_counts=True)
-    print("tot synapses:", np.sum(pre_counts))
-    combos, combo_counts = np.unique(np.column_stack((pre_locs[:, 0], post_locs[:, 0])), axis=0, return_counts=True)
-    print("Numero di sinapsi:",np.sum(combo_counts))
-
-    list_pre = []
-    for i,c in enumerate(pre_cells):
-        sel = combos[combos[:,0] == c]
-        list_pre.append(len(sel))
-        #print(len(sel))
-
-    #print(max(list_pre))
-    #print(min(list_pre))
-    print("Divergence:", np.sum(list_pre)/len(list_pre)," pm ", np.sqrt((np.max(list_pre)-np.min(list_pre))))
-
-    list_post = []
-    for i,c in enumerate(post_cells):
-        sel = combos[combos[:,1] == c]
-        list_post.append(len(sel))
-
-    #print(max(list_post))
-    #print(min(list_post))
-    #print(list_post)
-    print("Convergence:", np.sum(list_post)/len(list_post)," pm ", np.sqrt((np.max(list_post)-np.min(list_post))))
-
-
-    """uniquePost= np.unique(combos[:,1:], axis=0, return_counts=True)
-    uniquePre= np.unique(combos[:,:1], axis=0, return_counts=True)
-    print("mean divergence:", len(combos)/len(uniquePre[0]))
-    print("mean std:", np.std(pre_counts))
-
-    print("mean convergence:", len(combos)/len(uniquePost[0]))
-    print("mean std:", np.std(post_counts))"""
-
-    print("mean synapse/pair:", np.sum(pre_counts)/len(combos))
-
+    print("-------------------------------------------------------------")
