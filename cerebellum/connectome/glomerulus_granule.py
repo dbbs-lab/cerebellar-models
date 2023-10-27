@@ -48,10 +48,11 @@ class ConnectomeGlomerulusGranule(ConnectionStrategy):
         return selected_chunks
 
     def connect(self, pre, post):
-        for post_ct, post_ps in post.placement.items():
+        for post_ps in post.placement:
             pre_ps_mf = None
             pre_ps_ubc = None
-            for pre_ct, pre_ps in pre.placement.items():        
+            for pre_ps in pre.placement:
+                pre_ct = pre_ps.cell_type        
                 if (pre_ct.name == "glomerulus"):
                     pre_ps_mf = pre_ps
                 if (pre_ct.name == "ubc_glomerulus"):

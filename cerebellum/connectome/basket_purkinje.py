@@ -30,9 +30,9 @@ class ConnectomeBasketPurkinje(ConnectionStrategy):
         return chunks
 
     def connect(self, pre, post):
-        for pre_ct, pre_ps in pre.placement.items():
-            for post_ct, post_ps in post.placement.items():
-                self._connect_type(pre_ct, pre_ps, post_ct, post_ps)
+        for pre_ps in pre.placement:
+            for post_ps in post.placement:
+                self._connect_type(pre_ps.cell_type, pre_ps, post_ps.cell_type, post_ps)
 
     def _connect_type(self, pre_ct, pre_ps, post_ct, post_ps):
               
