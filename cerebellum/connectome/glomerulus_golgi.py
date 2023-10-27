@@ -61,51 +61,53 @@ class ConnectomeGlomerulusGolgi(ConnectionStrategy):
         #Find cells to connect
         ptr = 0
         
-        for i, golgi, morpho in zip(itertools.count(), golgi_pos, golgi_morphos):
+        for id_glom,glom_p in enumerate(glomeruli_pos):
+        
             dist = np.sqrt(
-                np.power(golgi[0] - glomeruli_pos[:, 0], 2)
-                + np.power(golgi[1] - glomeruli_pos[:, 1], 2)
-                + np.power(golgi[2] - glomeruli_pos[:, 2], 2)
+                np.power(glom_p[0] - golgi_pos[:, 0], 2)
+                + np.power(glom_p[1] - golgi_pos[:, 1], 2)
+                + np.power(glom_p[2] - golgi_pos[:, 2], 2)
             )
-            
+                
             to_connect_bool = dist < self.radius
             to_connect_idx = np.nonzero(to_connect_bool)[0]
-            connected_gloms = len(to_connect_idx)
-            pre_locs[ptr : (ptr + connected_gloms), 0] = to_connect_idx
-            post_locs[ptr : (ptr + connected_gloms), 0] = i
-            basal_dendrides_branches = morpho.get_branches()
-            print(morpho)
-                        
-            #Get the starting branch id of the denridic branches
-            first_dendride_id = morpho.branches.index(basal_dendrides_branches[0])
+            connected_golgi = len(to_connect_idx)
+            pre_locs[ptr : (ptr + connected_golgi), 0] = id_glom
+            post_locs[ptr : (ptr + connected_golgi), 0] = to_connect_idx
             
-            #Find terminal points on branches
-            terminal_ids = np.full(len(basal_dendrides_branches), 0, dtype=int)
-            for i,b in enumerate(basal_dendrides_branches):
-                if b.is_terminal:
-                    terminal_ids[i] = 1
-            terminal_branches_ids = np.nonzero(terminal_ids)[0]
+            ptr_golgi = 0
+            for counter, id in enumerate(to_connect_idx):
+                basal_dendrides_branches = golgi_morphos[id].get_branches()
+                            
+                #Get the starting branch id of the dendritic branches
+                first_dendride_id = golgi_morphos[id].branches.index(basal_dendrides_branches[0])
+                
+                #Find terminal points on branches
+                terminal_ids = np.full(len(basal_dendrides_branches), 0, dtype=int)
+                for i,b in enumerate(basal_dendrides_branches):
+                    if b.is_terminal:
+                        terminal_ids[i] = 1
+                terminal_branches_ids = np.nonzero(terminal_ids)[0]
 
-            #Keep only terminal branches
-            basal_dendrides_branches = np.take(basal_dendrides_branches, terminal_branches_ids, axis=0)
-            terminal_branches_ids = terminal_branches_ids + first_dendride_id
+                #Keep only terminal branches
+                basal_dendrides_branches = np.take(basal_dendrides_branches, terminal_branches_ids, axis=0)
+                terminal_branches_ids = terminal_branches_ids + first_dendride_id
 
-            #Find the point-on-branch ids of the tips
-            tips_coordinates = np.full((len(basal_dendrides_branches),3), 0, dtype=float)
-            for i,branch in enumerate(basal_dendrides_branches):
-                tips_coordinates[i] = branch.points[-1]
+                #Find the point-on-branch ids of the tips
+                tips_coordinates = np.full((len(basal_dendrides_branches),3), 0, dtype=float)
+                for i,branch in enumerate(basal_dendrides_branches):
+                    tips_coordinates[i] = branch.points[-1]
 
-            #Choose randomly the branch where the synapse is made
-            #favouring the branches closer to the glomerulus.
-            rolls = exp_dist.rvs(size=len(basal_dendrides_branches))
-            
-            # Compute the distance between terminal points of basal dendrites 
-            # and the soma of the avaiable glomeruli
-            for id_g,glom_p in enumerate(glomeruli_pos):
-                pts_dist = np.sqrt(np.power(tips_coordinates[:,0] + golgi[0] - glom_p[0], 2)
-                        + np.power(tips_coordinates[:,1] + golgi[1] - glom_p[1], 2)
-                        + np.power(tips_coordinates[:,2] + golgi[2] - glom_p[2], 2)
-                    )
+                #Choose randomly the branch where the synapse is made
+                #favouring the branches closer to the glomerulus.
+                rolls = exp_dist.rvs(size=len(basal_dendrides_branches))
+                
+                # Compute the distance between terminal points of basal dendrites 
+                # and the soma of the avaiable glomeruli
+                pts_dist = np.sqrt(np.power(tips_coordinates[:,0] + golgi_pos[id][0] - glom_p[0], 2)
+                            + np.power(tips_coordinates[:,1] + golgi_pos[id][1] - glom_p[1], 2)
+                            + np.power(tips_coordinates[:,2] + golgi_pos[id][2] - glom_p[2], 2)
+                        )
 
                 sorted_pts_ids = np.argsort(pts_dist)
                 # Pick the point in which we form a synapse according to a exponential distribution mapped
@@ -113,10 +115,10 @@ class ConnectomeGlomerulusGolgi(ConnectionStrategy):
                 pt_idx = sorted_pts_ids[int(len(basal_dendrides_branches)*rolls[np.random.randint(0,len(rolls))])]
 
                 #The id of the branch is the id of the terminal_branches plus the id of the first dendritic branch
-                post_locs[ptr+id_g,1] = terminal_branches_ids[pt_idx]
+                post_locs[ptr+counter,1] = terminal_branches_ids[pt_idx]
                 #We connect the tip of the branch
-                post_locs[ptr+id_g,2] = len(basal_dendrides_branches[pt_idx].points)-1
-            ptr += connected_gloms
+                post_locs[ptr+counter,2] = len(basal_dendrides_branches[pt_idx].points)-1
+ 
+            ptr += connected_golgi
 
-        print("Connected", n_glom,"glomeruli to",n_golgi,"Golgi cells.")
         self.connect_cells(pre_ps, post_ps, pre_locs[:ptr], post_locs[:ptr])
