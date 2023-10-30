@@ -39,24 +39,41 @@
       "file": "morphologies/GranuleCell.swc", 
       "tags": 
       {
-        18: ["axon", "ascending_axon"],
-        19: ["axon", "parallel_fiber"]
+        "18": ["axon", "ascending_axon"],
+        "19": ["axon", "parallel_fiber"]
       }
     },
     {
       "file": "morphologies/GolgiCell.swc",
       "tags": 
       {
-        16: ["dendrites", "basal_dendrites"],
-        17: ["dendrites", "apical_dendrites"]
+        "16": ["dendrites", "basal_dendrites"],
+        "17": ["dendrites", "apical_dendrites"],
+        "18": ["axon", "axon_initial_segment"]
       }
     },
     {
       "file": "morphologies/PurkinjeCell.swc",
       "tags":
       {
-        16: ["dendrites", "pf_targets", "sc_targets"],
-        17: ["dendrites", "aa_targets", "sc_targets"]
+        "21": ["dendrites", "pf_targets", "sc_targets"],
+        "22": ["dendrites", "aa_targets", "sc_targets"]
+      } 
+    },
+    {
+      "file": "morphologies/StellateCell.swc",
+      "tags":
+      {
+        "16": ["dendrites", "proximal_dendrites"],
+        "17": ["dendrites", "distal_dendrites"],
+        "18": ["axon", "axon_initial_segment"]
+      } 
+    },
+    {
+      "file": "morphologies/BasketCell.swc",
+      "tags":
+      {
+        "16": ["axon", "axon_initial_segment"]
       } 
     }
     ],
