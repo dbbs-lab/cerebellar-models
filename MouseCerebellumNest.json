@@ -2,7 +2,7 @@
   "name": "DBBS Mouse cerebellum configuration v4.0",
   "storage": {
     "engine": "hdf5",
-    "root": "UbcCerebellum.hdf5"
+    "root": "Cerebellum.hdf5"
   },
   "network": {
     "x": 200.0,
@@ -173,6 +173,23 @@
         "strategy": "bsb.placement.RandomPlacement",
         "partitions": ["granular_layer"],
         "cell_types": ["mossy_fibers","glomerulus","unipolar_brush_cell","ubc_glomerulus","granule_cell","golgi_cell"]
+      },
+      "purkinje_layer_placement": {
+        "strategy": "bsb.placement.ParallelArrayPlacement",
+        "partitions": ["purkinje_layer"],
+        "cell_types": ["purkinje_cell"],
+        "spacing_x": 130.0,
+        "angle": 70.0
+      },
+      "b_molecular_layer_placement": {
+        "strategy": "bsb.placement.RandomPlacement",
+        "partitions": ["b_molecular_layer"],
+        "cell_types": ["basket_cell"]
+      },
+      "t_molecular_layer_placement": {
+        "strategy": "bsb.placement.RandomPlacement",
+        "partitions": ["t_molecular_layer"],
+        "cell_types": ["stellate_cell"]
       }
     },
 
