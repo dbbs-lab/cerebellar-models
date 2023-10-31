@@ -80,8 +80,8 @@
     "cell_types": {
       "granule_cell": {
         "spatial": {
-          "radius": 2.9,
-          "density": 2.5e-3,
+          "radius" : 2.5,
+          "density": 3.9e-3,
           "morphologies": [
             {
               "names": ["GranuleCell"]
@@ -96,16 +96,15 @@
       },
       "mossy_fibers": {
         "spatial": {
-          "radius": 1.0,
-          "relative_to": "glomerulus",
-          "count_ratio": 0.05
+          "radius" : 1.5,
+          "density": 1.5e-5
         }
       },
       "glomerulus": {
         "relay": true,
         "spatial": {
-          "radius": 1.5,
-          "density": 1e-4
+          "radius" : 1.5,
+          "density": 3e-4
         },
         "plotting": {
           "display_name": "Glomerulus",
@@ -115,7 +114,7 @@
       "unipolar_brush_cell": {
         "relay": true,
         "spatial": {
-          "radius": 1.5,
+          "radius" : 1.5,
           "density": 8e-5
         },
         "plotting": {
@@ -136,8 +135,8 @@
       },
       "purkinje_cell": {
         "spatial": {
-          "radius": 15,
-          "planar_density": 0.00017,
+          "radius" : 7.5,
+          "planar_density": 0.45e-3,
           "morphologies": [
             {
               "names": ["PurkinjeCell"]
@@ -167,7 +166,12 @@
       "stellate_cell": {
         "spatial": {
           "radius": 5.0,
-          "density": 0.2e-4
+          "density": 0.5e-4,
+          "morphologies": [
+            {
+              "names": ["StellateCell"]
+            }
+          ]
         },
         "plotting": {
           "display_name": "Stellate cell",
@@ -177,7 +181,12 @@
       "basket_cell": {
         "spatial": {
           "radius": 5.0,
-          "density": 0.2e-4
+          "density": 0.5e-4,
+          "morphologies": [
+            {
+              "names": ["BasketCell"]
+            }
+          ]
         },
         "plotting": {
           "display_name": "Basket cell",
