@@ -1,100 +1,54 @@
 import numpy as np
-from ..strategy import ConnectionStrategy
+from bsb.connectivity.strategy import ConnectionStrategy
+from bsb.connectivity.strategy import HemitypeCollection
+from bsb.storage import Chunk
+from bsb import config
+from bsb.cell_types import CellType
+from itertools import chain
+from bsb.reporting import report
+from scipy.stats.distributions import truncexpon
 
+@config.node
+class ConnectomePC_DCN(ConnectionStrategy):
+    divergence = config.attr(type=int, required=True)
 
-class ConnectomePurkinjeDCN(ConnectionStrategy):
-    """
-    Legacy implementation for the connection between purkinje cells and DCN cells.
-    Also rotates the dendritic trees of the DCN.
-    """
+    #We need to connect a PC to #divergence DCN from the whole region,
+    #so we just return all the chunks
+    def get_region_of_interest(self, chunk):
+        ct = self.presynaptic.cell_types[0]
+        chunks = ct.get_placement_set().get_all_chunks()
+        return chunks
 
-    casts = {"divergence": int}
+    def connect(self, pre, post):
+        for pre_ps in pre.placement:
+            for post_ps in post.placement:
+                self._connect_type(pre_ps.cell_type, pre_ps, post_ps.cell_type, post_ps)
 
-    required = ["divergence"]
+    def _connect_type(self, pre_ct, pre_ps, post_ct, post_ps):
+              
+        pc_pos = pre_ps.load_positions()
+        dcn_pos = post_ps.load_positions()
+        n_pc = len(pc_pos)
+        n_dcn = len(dcn_pos)
 
-    def validate(self):
-        pass
+        print("N pc:", n_pc)
+        print("N dcn:", n_dcn)
 
-    def connect(self):
-        # Gather information for the legacy code block below.
-        from_type = self.from_cell_types[0]
-        to_type = self.to_cell_types[0]
-        purkinjes = self.from_cells[from_type.name]
-        dcn_cells = self.to_cells[to_type.name]
+        max_synapses = n_pc * self.divergence
+        pre_locs = np.full((max_synapses, 3), -1, dtype=int)
+        post_locs = np.full((max_synapses, 3), -1, dtype=int)
 
-        dend_tree_coeff = np.zeros((dcn_cells.shape[0], 4))
-        for i in range(len(dcn_cells)):
-            # Make the planar coefficients a, b and c.
-            dend_tree_coeff[i] = np.random.rand(4) * 2.0 - 1.0
-            # Calculate the last planar coefficient d from ax + by + cz - d = 0
-            # => d = - (ax + by + cz)
-            dend_tree_coeff[i, 3] = -np.sum(dend_tree_coeff[i, 0:2] * dcn_cells[i, 2:4])
+        ptr = 0
 
-        if len(dcn_cells) == 0:
-            return
+        #We connect each PC to #divegence DCN
+        for j,_ in enumerate(pc_pos):
 
-        first_dcn = int(dcn_cells[0, 0])
-        divergence = self.divergence
+            #Select randomly #divegence DCNs from all the DCNs
+            selected_dcn_ids = np.random.choice(n_dcn, self.divergence, replace=False)
+            pre_locs[ptr:ptr+self.divergence,0] = selected_dcn_ids
+            post_locs[ptr:ptr+self.divergence,0] = j
+            ptr = ptr + self.divergence
 
-        def connectome_pc_dcn(first_dcn, purkinjes, dcn_cells, div_pc, dend_tree_coeff):
-            pc_dcn = np.zeros((0, 2))
+        self.connect_cells(pre_ps, post_ps, pre_locs, post_locs)
+        print("Connected", n_pc, "PCs to", n_dcn, "dcns fibers.")
 
-            # For all Purkinje cells: calculate the distance with the area around glutamatergic DCN cells soma, then choose 4-5 of them
-            for i in purkinjes:
-                distance = (
-                    np.absolute(
-                        (dend_tree_coeff[:, 0] * i[2])
-                        + (dend_tree_coeff[:, 1] * i[3])
-                        + (dend_tree_coeff[:, 2] * i[4])
-                        + dend_tree_coeff[:, 3]
-                    )
-                ) / (
-                    np.sqrt(
-                        (dend_tree_coeff[:, 0] ** 2)
-                        + (dend_tree_coeff[:, 1] ** 2)
-                        + (dend_tree_coeff[:, 2] ** 2)
-                    )
-                )
-
-                dist_matrix = np.zeros((dcn_cells.shape[0], 2))
-                dist_matrix[:, 1] = dcn_cells[:, 0]
-                dist_matrix[:, 0] = distance
-                dcn_dist = np.random.permutation(dist_matrix)
-
-                # If the number of DCN cells are less than the divergence value, all neurons are connected to the corresponding PC
-                if dcn_cells.shape[0] < div_pc:
-                    matrix = np.zeros((dcn_cells.shape[0], 2))
-                    matrix[:, 0] = i[0]
-                    matrix[:, 1] = dcn_cells[:, 0]
-                    pc_dcn = np.vstack((pc_dcn, matrix))
-
-                else:
-                    if np.random.rand() > 0.5:
-
-                        connected_f = dcn_dist[0:div_pc, 1]
-                        connected_dist = dcn_dist[0:div_pc, 0]
-                        connected_provv = connected_f.astype(int)
-                        connected_dcn = connected_provv
-
-                        # construction of the output matrix: the first column has the  PC index, while the second column has the connected DCN cell index
-                        matrix = np.zeros((div_pc, 2))
-                        matrix[:, 0] = i[0]
-                        matrix[:, 1] = connected_dcn
-                        pc_dcn = np.vstack((pc_dcn, matrix))
-
-                    else:
-                        connected_f = dcn_dist[0 : (div_pc - 1), 1]
-                        connected_dist = dcn_dist[0 : (div_pc - 1), 0]
-                        connected_provv = connected_f.astype(int)
-                        connected_dcn = connected_provv
-
-                        matrix = np.zeros(((div_pc - 1), 2))
-                        matrix[:, 0] = i[0]
-                        matrix[:, 1] = connected_dcn
-                        pc_dcn = np.vstack((pc_dcn, matrix))
-            return pc_dcn
-
-        results = connectome_pc_dcn(
-            first_dcn, purkinjes, dcn_cells, divergence, dend_tree_coeff
-        )
-        self.scaffold.connect_cells(self, results)
