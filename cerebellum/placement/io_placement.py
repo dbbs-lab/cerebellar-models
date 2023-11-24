@@ -26,9 +26,11 @@ class IOPlacement(NotParallel, PlacementStrategy):
                 width, depth, height = prt.data.mdc - prt.data.ldc
 
 
-                x_barycenter = width[0]/2.
-                y_barycenter = width[1]/2.
+                #Find the coordinates of the midpoints of the volume on the x and y sides
+                x_barycenter = width/2.
+                y_barycenter = depth/2.
 
+                #Find the extrema of the rescaled volume on the xy plane
                 x_min = x_barycenter - self.xy_scale*width
                 y_min = y_barycenter - self.xy_scale*depth
                 x_max = x_barycenter + self.xy_scale*width
@@ -36,9 +38,11 @@ class IOPlacement(NotParallel, PlacementStrategy):
 
                 #Generate an array of 3d positions in [0,1)                             
                 positions = np.random.rand((self.numbers_of_cells,3))
+                
                 #Center at the origin
                 positions = positions - 0.5
-
+                
+                #Shift and rescale the array to fit in the selected volume
                 positions[:,0] = x_barycenter + (x_max-x_min)*positions[:,0]
                 positions[:,1] = y_barycenter + (y_max-y_min)*positions[:,1]
                 positions[:,1] = y_barycenter + (y_max-y_min)*positions[:,1]
