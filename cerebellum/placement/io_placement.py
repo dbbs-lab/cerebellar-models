@@ -1,7 +1,7 @@
-from bsb.strategy import PlacementStrategy
+from bsb.placement.strategy import PlacementStrategy
 import math
 import numpy as np
-from bsb. import config
+from bsb import config
 from bsb.config import types
 from bsb.mixins import NotParallel
 from bsb.storage import Chunk
@@ -37,7 +37,7 @@ class IOPlacement(NotParallel, PlacementStrategy):
                 y_max = y_barycenter + self.xy_scale*depth
 
                 #Generate an array of 3d positions in [0,1)                             
-                positions = np.random.rand((self.numbers_of_cells,3))
+                positions = np.random.rand(self.numbers_of_cells,3)
                 
                 #Center at the origin
                 positions = positions - 0.5

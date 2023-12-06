@@ -1,7 +1,7 @@
-from bsb.strategy import PlacementStrategy
+from bsb.placement.strategy import PlacementStrategy
 import math
 import numpy as np
-from bsb. import config
+from bsb import config
 from bsb.config import types
 from bsb.mixins import NotParallel
 from bsb.storage import Chunk
@@ -28,7 +28,7 @@ class DCNPlacement(NotParallel, PlacementStrategy):
         rotation_vector = np.random.rand(3,)*np.pi/2.
         rotation = R.from_rotvec(rotation_vector)
 
-        dcnp_pos = np.random.rand((self.number_of_dcnp_cells,3))
+        dcnp_pos = np.random.rand(self.number_of_dcnp_cells,3)
 
         for indicator in indicators.values():
             cell_type = indicator.cell_type
@@ -51,7 +51,7 @@ class DCNPlacement(NotParallel, PlacementStrategy):
                 if (cell_type != self.satellite_cell_type):
                     
                     #First we place DCNp cells freely on the xy plane..
-                    positions = np.random.rand((self.number_of_dcnp_cells,3))
+                    positions = np.random.rand(self.number_of_dcnp_cells,3)
                     positions[:,0] = x_barycenter + (x_max-x_min)*positions[:,0]
                     positions[:,1] = y_barycenter + (y_max-y_min)*positions[:,1]
                     positions[:,2] = 0.
@@ -63,7 +63,7 @@ class DCNPlacement(NotParallel, PlacementStrategy):
                     #...and we shift them
                     rescaled_vol_lcd = np.array([x_min,y_min,prt.data.ldc[2]])
                     rotated_rescaled_vol_lcd = rotation.apply(rescaled_vol_lcd)
-                    shift = rotated_rescaled_vol_lcd - rescaled_vol_lcd
+                    shift = rotated_rescaled_vol_lcd - np.array([x_min,y_min,prt.data.ldc[2]])
                     positions = positions + shift
                 
                 else:
@@ -72,11 +72,11 @@ class DCNPlacement(NotParallel, PlacementStrategy):
                     mean_dist = np.mean(dcnp_pos)
                     dmax = mean_dist/4. - (self.dcnp_radius + self.dcngaba_radius)
 
-                    radii = dmin + np.random.rand((self.number_of_dcnp_cells,))*(dmax-dmin)
+                    radii = dmin + np.random.rand(self.number_of_dcnp_cells,)*(dmax-dmin)
 
-                    phi = np.random.rand((self.number_of_dcnp_cells,))*np.pi
-                    theta = np.random.rand((self.number_of_dcnp_cells,))*np.pi*2
-                    angles = np.random.rand((self.number_of_dcnp_cells,))*np.pi*2
+                    phi = np.random.rand(self.number_of_dcnp_cells,)*np.pi
+                    theta = np.random.rand(self.number_of_dcnp_cells,)*np.pi*2
+                    angles = np.random.rand(self.number_of_dcnp_cells,)*np.pi*2
 
                     #Generate random points of the surface of a sphere
                     x = np.outer(np.sin(theta), np.cos(phi))

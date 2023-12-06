@@ -35,24 +35,23 @@ class ConnectomeGlomerulusGranule(ConnectionStrategy):
         ct = self.presynaptic.cell_types[0]
         chunks = ct.get_placement_set().get_all_chunks()
         
-        for c in chunks:
-            dist = np.sqrt(
-                np.power(chunk[0] * chunk.dimensions[0] - c[0] * c.dimensions[0], 2)
-                + np.power(chunk[1] * chunk.dimensions[1] - c[1] * c.dimensions[0], 2)
-                + np.power(chunk[2] * chunk.dimensions[2] - c[2] * c.dimensions[0], 2)
-            )
+        #for c in chunks:
+        #    dist = np.sqrt(
+        #        np.power(chunk[0] * chunk.dimensions[0] - c[0] * c.dimensions[0], 2)
+        #        + np.power(chunk[1] * chunk.dimensions[1] - c[1] * c.dimensions[0], 2)
+        #        + np.power(chunk[2] * chunk.dimensions[2] - c[2] * c.dimensions[0], 2)
+        #    )
             #If c is intersecting the granular layer partition and if it is close enough to chunk, then it is in the ROI
-            if (dist <= self.max_radius) and c[1]*c.dimensions[0] < self.scaffold.partitions.granular_layer.thickness:
-                selected_chunks.append(Chunk([c[0], c[1], c[2]], chunk.dimensions))
+        #    if (dist <= self.max_radius +  2*chunk.dimensions[0]): #and c[1]*c.dimensions[0] < self.scaffold.partitions.granular_layer.thickness:
+        #        selected_chunks.append(Chunk([c[0], c[1], c[2]], chunk.dimensions))
 
-        return selected_chunks
+        return chunks
 
     def connect(self, pre, post):
-        for post_ps in post.placement:
+        for post_ct, post_ps in post.placement.items():
             pre_ps_mf = None
             pre_ps_ubc = None
-            for pre_ps in pre.placement:
-                pre_ct = pre_ps.cell_type        
+            for pre_ct, pre_ps in pre.placement.items():  
                 if (pre_ct.name == "glomerulus"):
                     pre_ps_mf = pre_ps
                 if (pre_ct.name == "ubc_glomerulus"):
@@ -88,16 +87,21 @@ class ConnectomeGlomerulusGranule(ConnectionStrategy):
         
         #Find the glomeruli clusters
         cs = self.scaffold.get_connectivity_set("mossy_fibers_to_glomerulus")
-        iter = cs.load_connections().to(pre_ps_mf.get_loaded_chunks()).as_globals()
+        iter = cs.load_connections().from_(pre_ps_mf.get_loaded_chunks()).as_globals()
         clusters = []
         
         gid_global,gid_local = iter.all()
         unique_mossy = np.unique(gid_global,axis=0)
 
+        starting = np.min(gid_local[:,0])
+
         for current in unique_mossy:
-            glom_ids = np.where((gid_global[:,0]==current[0]))
-            starting = np.min(gid_local[:,0])
-            clusters.append(gid_local[glom_ids[0],0]-starting)
+            glom_ids = np.where((gid_global[:,0]==current[0]))    
+            gids_to_append = gid_local[glom_ids[0],0]-starting
+            mask = gids_to_append < n_glom_mf
+            gids_to_append = gids_to_append[mask]
+            if len(gids_to_append) > 0:
+                clusters.append(gids_to_append)
 
         num_clusters = len(clusters)
         print("Number of clusters:", num_clusters)

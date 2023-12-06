@@ -29,9 +29,9 @@ class ConnectomeMossyDCNP(ConnectionStrategy):
         return pre, post
 
     def connect(self, pre, post):
-        for pre_ps in pre.placement:
-            for post_ps in post.placement:
-                self._connect_type(pre_ps.cell_type, pre_ps, post_ps.cell_type, post_ps)
+        for pre_ct, pre_ps in pre.placement.items():
+            for post_ct, post_ps in post.placement.items():
+                self._connect_type(pre_ct, pre_ps, post_ct, post_ps)
 
     def _connect_type(self, pre_ct, pre_ps, post_ct, post_ps):
               
@@ -53,9 +53,10 @@ class ConnectomeMossyDCNP(ConnectionStrategy):
         for j,_ in enumerate(dcnp_pos):
 
             #Select randomly #convergence MFs from all the MFs
-            selected_mf_ids = np.random.choice(n_mossy, self.convergence, replace=False)
-            pre_locs[ptr:ptr+self.convergence,0] = selected_mf_ids
-            post_locs[ptr:ptr+self.convergence,0] = j
+            mossy_to_connect = min(self.convergence,n_mossy)
+            selected_mf_ids = np.random.choice(n_mossy, mossy_to_connect, replace=False)
+            pre_locs[ptr:ptr+mossy_to_connect,0] = selected_mf_ids
+            post_locs[ptr:ptr+mossy_to_connect,0] = j
             ptr = ptr + self.convergence
 
         self.connect_cells(pre_ps, post_ps, pre_locs, post_locs)

@@ -15,14 +15,22 @@ class ConnectomePC_DCN(ConnectionStrategy):
     #We need to connect a PC to #divergence DCN from the whole region,
     #so we just return all the chunks
     def get_region_of_interest(self, chunk):
-        ct = self.presynaptic.cell_types[0]
+        ct = self.postsynaptic.cell_types[0]
         chunks = ct.get_placement_set().get_all_chunks()
         return chunks
+    
+    #We need to override the default _get_connect_args_from_job function because 
+    #We need to get single-post-chunk, multi-pre-chunk ROI instead of the opposite.
+    def _get_connect_args_from_job(self, chunk, roi):
+        pre = HemitypeCollection(self.presynaptic, chunk)
+        post = HemitypeCollection(self.postsynaptic, roi)
+        return pre, post
 
     def connect(self, pre, post):
-        for pre_ps in pre.placement:
-            for post_ps in post.placement:
-                self._connect_type(pre_ps.cell_type, pre_ps, post_ps.cell_type, post_ps)
+        for pre_ct, pre_ps in pre.placement.items():
+            for post_ct, post_ps in post.placement.items():
+                self._connect_type(pre_ct, pre_ps, post_ct, post_ps)
+    
 
     def _connect_type(self, pre_ct, pre_ps, post_ct, post_ps):
               
