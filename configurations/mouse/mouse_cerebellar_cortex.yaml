@@ -8,7 +8,77 @@ network:
   y: 200
   z: 300
 morphologies:
-  $ref: ./morphologies/morphologies.yaml#/
+  - file: ./morphologies/GranuleCell.swc
+    parser:
+      tags:
+        16:
+          - axon
+          - axon_hillock
+        17:
+          - axon
+          - axon_initial_segment
+        18:
+          - axon
+          - ascending_axon
+        19:
+          - axon
+          - parallel_fiber
+  - file: ./morphologies/GolgiCell.swc
+    parser:
+      tags:
+        16:
+          - dendrites
+          - basal_dendrites
+        17:
+          - dendrites
+          - apical_dendrites
+        18:
+          - axon
+          - axon_initial_segment
+  - file: ./morphologies/PurkinjeCell.swc
+    parser:
+      tags:
+        16:
+          - axon
+          - AIS
+        17:
+          - axon
+          - AIS_K
+        18:
+          - axon
+          - axonmyelin
+        19:
+          - axon
+          - nodes
+        20:
+          - dendrites
+          - basal
+        21:
+          - dendrites
+          - pf_targets
+          - sc_targets
+        22:
+          - dendrites
+          - aa_targets
+          - sc_targets
+  - file: ./morphologies/StellateCell.swc
+    parser:
+      tags:
+        16:
+          - dendrites
+          - proximal_dendrites
+        17:
+          - dendrites
+          - distal_dendrites
+        18:
+          - axon
+          - axon_initial_segment
+  - file: ./morphologies/BasketCell.swc
+    parser:
+      tags:
+        16:
+          - axon
+          - axon_initial_segment
 partitions:
   granular_layer:
     stack_index: 0
@@ -131,7 +201,8 @@ connectivity:
     z_length: 20
   glomerulus_to_granule:
     strategy: cerebellum.connectome.glomerulus_granule.ConnectomeGlomerulusGranule
-    depends_on: mossy_fibers_to_glomerulus
+    depends_on:
+      - mossy_fibers_to_glomerulus
     presynaptic:
       cell_types:
         - glomerulus
@@ -149,7 +220,8 @@ connectivity:
     convergence: 4
   glomerulus_to_golgi:
     strategy: cerebellum.connectome.glomerulus_golgi.ConnectomeGlomerulusGolgi
-    depends_on: mossy_fibers_to_glomerulus
+    depends_on:
+      - mossy_fibers_to_glomerulus
     presynaptic:
       cell_types:
         - glomerulus
@@ -162,7 +234,8 @@ connectivity:
   golgi_to_granule:
     strategy: >-
       cerebellum.connectome.golgi_glomerulus_granule.ConnectomeGolgiGlomerulusGranule
-    depends_on: glomerulus_to_granule
+    depends_on:
+      - glomerulus_to_granule
     presynaptic:
       cell_types:
         - golgi_cell
