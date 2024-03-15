@@ -1,7 +1,7 @@
 import unittest
 import bsb.options
 from bsb.core import Scaffold
-from bsb.config import from_json
+from bsb.config import from_yaml
 from bsb.morphologies import Morphology
 import pathlib
 import glob
@@ -16,7 +16,7 @@ class TestCerebellumIntegrity(unittest.TestCase):
     @classmethod
     def setUpClass(cls):
         bsb.options.verbosity = 4
-        cfg = from_json("cerebellum.json")
+        cfg = from_yaml("./configurations/mouse/mouse_cerebellar_cortex.yaml")
         cfg.network.x = 100
         cfg.network.z = 100
         cls.small = net = Scaffold(cfg)
