@@ -10,7 +10,9 @@ network:
 morphologies:
   - morphologies/GolgiCell.swc
   - morphologies/GranuleCell.swc
-  - morphologies/GolgiCell.asc
+  - file: morphologies/GolgiCell.asc
+    parser:
+      parser: morphio
   - morphologies/BasketCell.swc
   - morphologies/PurkinjeCell.swc
   - morphologies/StellateCell.swc
@@ -378,12 +380,3 @@ connectivity:
     strategy: bsb.connectivity.AllToAll
     presynaptic: { cell_types: [ mossy_fibers ] }
     postsynaptic: { cell_types: [ dcn_cell ] }
-after_placement:
-  microzones:
-    strategy: bsb.postprocessing.LabelMicrozones
-    targets:
-      - purkinje_cell
-  aa_lengths:
-    strategy: bsb.postprocessing.AscendingAxonLengths
-  dcn_rotations:
-    strategy: bsb.postprocessing.DCNRotations
