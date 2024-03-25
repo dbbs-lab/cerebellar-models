@@ -74,9 +74,7 @@ We will describe here the spatial parameters used in `canonical circuit`:
 |                   | Mossy fibers (mf)    | Exc.   | /             | count relative to glom. ratio=0.05  | `Billings et al., 2014`                                                                            |
 |                   | Granule Cell (GrC)   | Exc.   | 2.5           | 0.0039                              | `Korbo et al., 1993`                                                                               |
 |                   | Golgi cells (GoC)    | Inh.   | 4.            | 0.000009                            | `Solinas et al. 2010`                                                                              |
-| ----------------- | -------------------- | ------ | ------------- | ----------------------------------- | -------------------------------------------------------------------------------------------------- |
 | Purkinje layer    | Purkinje cell (PC)   | Inh.   | 7.5           | planar density: 0.0017              | `Lange 1975`                                                                                       |
-| ----------------- | -------------------- | ------ | ------------- | ----------------------------------- | -------------------------------------------------------------------------------------------------- |
 | Molecular layer   | Basket cell (BC)     | Inh.   | 6.            | 0.00005                             | `[CITATION]`                                                                                       |
 |                   | Stellate cell (SC)   | Inh.   | 4.            | 0.00005                             | `[CITATION]`                                                                                       |
 
@@ -87,7 +85,7 @@ The density of GrC have been calculated based on values from `Korbo et al., 1993
 and `Jakab and Hámari, 1988`.
 
 ## Morphologies
-
+[TODO: Create readme in morphologies and link it here.]
 
 ## Placement
 Except for Purkinje cells (PC), every entity is supposed to be uniformly distributed in their own 
@@ -109,7 +107,7 @@ shifted with respect to its predecessor to form a `70` degree angle on the `(xy)
 | mf     | glom   | `ConnectomeMossyGlomerulus`        | `Sultan 2001`               |  
 | glom   | GoC    | `ConnectomeGlomerulusGolgi`        | `Kanichay and Silver, 2008` |
 | glom   | GrC    | `ConnectomeGlomerulusGranule`      | `Houston et al., 2017`      |
-| GoC    | GrC    | `ConnectomeGolgiGlomerulusGranule` | `TBD`                       |
+| GoC    | GrC    | `ConnectomeGolgiGlomerulusGranule` | `[CITATION]`                |
 
 According to literature data (Billings et al., 2014; Ito, 1984; Sultan, 2001), the algorithm 
 organizes glomeruli into anisotropic clusters based on their spatial proximity to each other within 
@@ -118,3 +116,5 @@ glomeruli that are close together have a higher chance of being part of the same
 signals from the same mf. 20 glomeruli are connected to the same mf
 
 ## References
+
+[TODO: Add all citations here]
