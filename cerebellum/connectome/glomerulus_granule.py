@@ -1,189 +1,138 @@
-from asyncio import unix_events
-import chunk
 import itertools
 import numpy as np
-from bsb.connectivity.strategy import ConnectionStrategy
-from bsb.storage import Chunk
-from bsb import config
-from bsb.morphologies import Morphology
-from bsb.connectivity.strategy import Hemitype
-from bsb.connectivity.strategy import HemitypeCollection
+from bsb import config, refs, ConnectivityError, ConfigurationError, ConnectionStrategy
+from cerebellum.connectome.presyn_dist_strat import PresynDistStrat
 
-class TooFewGlomeruliClusters(Exception):
+
+class TooFewGlomeruliClusters(ConnectivityError):
     pass
 
+
 @config.node
-class ConnectomeGlomerulusGranule(ConnectionStrategy):
-    x_length = config.attr(type=int, required=True)
-    z_length = config.attr(type=int, required=True)
-    max_radius = config.attr(type=int, required=True)
-    convergence = config.attr(type=int, required=True)
-    #We need acces to mossy fibers to know the glomeruli clusters
-    prepresynaptic = config.attr(type=Hemitype, required=True)
+class ConnectomeGlomerulusGranule(PresynDistStrat, ConnectionStrategy):
+    convergence = config.attr(type=float, required=True)
+    mf_glom_strat = config.ref(refs.connectivity_ref, required=True)
 
-    #We need to override the default _get_connect_args_from_job function because
-    #we need to get single-post-chunk, multi-pre-chunk ROI instead of the opposite.
-    #In this way, given  if for each glomerulus in the ROI we select randomly the mossy fiber
-    #to connect, the divergence ratio is automatically around 20.
-    def _get_connect_args_from_job(self, chunk, roi):
-        pre = HemitypeCollection(self.presynaptic, roi)
-        post = HemitypeCollection(self.postsynaptic, chunk)
-        return pre, post
+    @config.property
+    def depends_on(self):
+        # Get the possibly missing `_depends_on` list.
+        deps = getattr(self, "_depends_on", None) or []
+        # Strat is required, but depends on a reference that isn't available when the config loads.
+        strat = getattr(self, "mf_glom_strat", None)
+        if strat is None:
+            return deps
+        else:
+            return [*{*deps, strat}]
 
-    def get_region_of_interest(self, chunk):
-        selected_chunks = []
+    @depends_on.setter
+    def depends_on(self, value):
+        self._depends_on = value
 
-        #We look for chunks containing the granule cells to connect
-        ct = self.presynaptic.cell_types[0]
-        chunks = ct.get_placement_set().get_all_chunks()
-
-        for c in chunks:
-            dist = np.sqrt(
-                np.power(chunk[0] * chunk.dimensions[0] - c[0] * c.dimensions[0], 2)
-                + np.power(chunk[1] * chunk.dimensions[1] - c[1] * c.dimensions[0], 2)
-                + np.power(chunk[2] * chunk.dimensions[2] - c[2] * c.dimensions[0], 2)
+    def _assert_dependencies(self):
+        # assert dependency rule corresponds to mossy to glom
+        post_ct = self.mf_glom_strat.postsynaptic.cell_types
+        if len(post_ct) != 1 or post_ct[0] not in self.presynaptic.cell_types:
+            raise ConfigurationError(
+                "Postsynaptic cell of dependency rule does not match this rule's"
+                " presynaptic cell."
             )
-            if dist <= self.max_radius:
-                selected_chunks.append(Chunk([c[0], c[1], c[2]], chunk.dimensions))
 
-        #We look for chunks containing the mossy fibers
-        #ct = self.prepresynaptic.cell_types[0]
-        #chunks = ct.get_placement_set().get_all_chunks()
-        return selected_chunks
+    def boot(self):
+        self._assert_dependencies()
 
     def connect(self, pre, post):
-        #pre_type = pre.cell_types[0]
-        #post_type = post.cell_types[0]
-        for pre_ct, pre_ps in pre.placement.items():
-            for post_ct, post_ps in post.placement.items():
-                self._connect_type(pre_ct, pre_ps, post_ct, post_ps)
+        for pre_ps in pre.placement:
+            for post_ps in post.placement:
+                self._connect_type(pre_ps, post_ps)
 
-    def _connect_type(self, pre_ct, pre_ps, post_ct, post_ps):
+    def _get_mf_clusters(self, pre_ps):
+        # Find the glomeruli clusters
+        cs = self.scaffold.get_connectivity_set(self.mf_glom_strat.name)
+        # find mf-glom connections where the postsyn chunk corresponds to the
+        # glom-grc presyn chunk
+        iter = cs.load_connections().to(pre_ps.get_loaded_chunks())
+        mf_locs, glom_locs = iter.all()
 
+        unique_mossy = np.unique(mf_locs[:, 0])
+        if unique_mossy.size < self.convergence:
+            raise TooFewGlomeruliClusters(
+                "Less than 4 unique mossy fibers have been found. "
+                "Check the densities of mossy fibers and glomeruli in "
+                "the configuration file."
+            )
+
+        clusters = []
+        for current in unique_mossy:
+            glom_idx = np.where(mf_locs[:, 0] == current)[0]
+            clusters.append(glom_locs[glom_idx, 0])
+
+        return unique_mossy, clusters
+
+    def _connect_type(self, pre_ps, post_ps):
         glom_pos = pre_ps.load_positions()
         gran_pos = post_ps.load_positions()
 
-        print("Pre",pre_ps.get_loaded_chunks())
-        print("Post",post_ps.get_loaded_chunks())
+        # Find the glomeruli clusters
+        unique_mossy, clusters = self._get_mf_clusters(pre_ps)
 
-        print("Connecting", len(gran_pos), "granule cells in chunk: ",post_ps.get_loaded_chunks())
-        print("To", len(glom_pos), "glomeruli in chunk: ",pre_ps.get_loaded_chunks())
-        print("Number of glomeruli in ROI:",len(glom_pos))
-        print("Number of granule in ROI:",len(gran_pos))
-        n_glom = len(glom_pos)
-        n_gran = len(gran_pos)
-        max_connections = self.convergence
-        n_conn = n_gran * max_connections
+        gran_morphos = post_ps.load_morphologies().iter_morphologies(
+            cache=True, hard_cache=True
+        )
+
+        n_conn = int(np.round(len(gran_pos) * self.convergence))
         pre_locs = np.full((n_conn, 3), -1, dtype=int)
         post_locs = np.full((n_conn, 3), -1, dtype=int)
-
-        #Find the glomeruli clusters
-        cs = self.scaffold.get_connectivity_set("mossy_fibers_to_glomerulus")
-        conns = cs.load_connections()
-        iter = conns.to(pre_ps.get_loaded_chunks())
-        clusters = []
-
-        local_chunk_ids, local_locs, global_chunk_ids, global_locs = iter.iterate_all_global_id()
-        gid_local = np.column_stack((local_chunk_ids, local_locs))
-        gid_global = np.column_stack((global_chunk_ids, global_locs))
-
-        print(gid_local)
-        unique_mossy = np.unique(gid_local,axis=0)
-        #print("=========================")
-        #print(unique_mossy)
-        for current in unique_mossy:
-            glom_ids = np.where((gid_local[:,0]==current[0]) & (gid_local[:,1]==current[1]))
-            clusters.append(gid_global[glom_ids[0],1])
-
-
-        num_clusters = len(clusters)
-        print("Number of clusters:", num_clusters)
-        for i,cl in enumerate(clusters):
-            print("Glomeruli in cluster", i, ":", len(cl))
-
-        if (num_clusters < 4):
-            raise TooFewGlomeruliClusters("Less then 4 clusters of glomeruli have been found. Check the densities of mossy fibers and glomeruli in the configuration file.")
-
-        #Cache morphologies
-        morpho_set = post_ps.load_morphologies()
-
-        #We keep track of the entries of pre_locs and post_locs we actually used.
         ptr = 0
-        gran_morphos = morpho_set.iter_morphologies(cache=True, hard_cache=True)
-        for i, grpos, morpho in zip(itertools.count(), gran_pos, gran_morphos):
-
+        for i, gr_pos, morpho in zip(itertools.count(), gran_pos, gran_morphos):
+            # morpho should have enough dendrites to match convergence
             dendrites = morpho.get_branches()
+            assert len(dendrites) >= self.convergence
 
-            #Get the starting branch id of the dendritic branches
-            first_dendride_id = morpho.branches.index(dendrites[0])
-
-            gr_connections = 0
-
-            #Select (randomly) the order of the clusters
-            cluster_idx = np.arange(0,num_clusters)
+            # Randomize the order of the clusters and dendrites
+            cluster_idx = np.arange(0, unique_mossy.size)
             np.random.shuffle(cluster_idx)
-
-            #Select (randomly) the order of the dendrites
-            #We generate it now because it is faster than
-            #generating a random id in the cluster loop
-            dendrites_idx = np.arange(0,len(dendrites))
-
+            dendrites_idx = np.arange(0, len(dendrites))
             np.random.shuffle(dendrites_idx)
 
-            #Try to select a cell from 4 clusters satisfying the conditions
-            for nc in cluster_idx:
-                dist = np.sqrt(
-                    np.power(grpos[0] - glom_pos[clusters[nc]][:, 0], 2)
-                    + np.power(grpos[1] - glom_pos[clusters[nc]][:, 1], 2)
-                    + np.power(grpos[2] - glom_pos[clusters[nc]][:, 2], 2)
-                )
-                bool_arr = dist < self.max_radius
-                sorted_indices = np.nonzero(bool_arr)[0]
-                if (len(sorted_indices)>0 and gr_connections<4):
-                    rnd = np.random.randint(low=0,high=len(sorted_indices))
-                    #Id of the granule cell
-                    post_locs[ptr + gr_connections, 0] = i
-                    #Id of the glomerulus, randomly selected between the avaiable ones
-                    pre_locs[ptr + gr_connections, 0] = clusters[nc][sorted_indices[rnd]]
+            # The following loop connects a glomerulus from each cluster to a grc dendrite
+            # until the convergence rule is reached.
+            # First it checks for glomerulus that are close enough,
+            # otherwise, it chooses the closest glomerulus from each remaining cluster.
+            gr_connections = 0
+            current_cluster = 0
+            check_dist = True
+            while gr_connections < self.convergence:
+                if current_cluster >= len(cluster_idx):
+                    current_cluster = 0
+                    check_dist = False
+                nc = cluster_idx[current_cluster]
+                dist = np.linalg.norm(gr_pos - glom_pos[clusters[nc]], axis=1)
+                if check_dist:
+                    # Try to select a cell from 4 clusters satisfying the conditions
+                    close_indices = np.nonzero(dist < self.radius)[0]
+                    if len(close_indices) == 0:
+                        current_cluster += 1
+                        continue
+                    # Id of the glomerulus, randomly selected between the available ones
+                    rnd = np.random.randint(low=0, high=len(close_indices))
+                    id_glom = clusters[nc][close_indices[rnd]]
+                else:
+                    # If there are some free dendrites, connect them to the closest glomeruli,
+                    # even if they do not satisfy the geometric conditions.
+                    # Id of the glomerulus, randomly selected between the available ones
+                    id_glom = clusters[nc][np.argmin(dist)]
+                pre_locs[ptr + gr_connections, 0] = id_glom
+                # Id of the granule cell
+                post_locs[ptr + gr_connections, 0] = i
+                # Select one of the 4 dendrites
+                dendrite = dendrites[dendrites_idx[gr_connections]]
+                post_locs[ptr + gr_connections, 1] = morpho.branches.index(dendrite)
+                # Select the terminal point of the branch
+                post_locs[ptr + gr_connections, 2] = len(dendrite) - 1
 
-                    #Select one of the 4 dendrites
-                    dendrite = dendrites[dendrites_idx[gr_connections]]
-                    #Select the terminal point of the branch
-                    tip = len(dendrite)-1
-                    post_locs[ptr + gr_connections, 1] = first_dendride_id+dendrites_idx[gr_connections]
-                    post_locs[ptr + gr_connections, 2] = tip
-                    gr_connections += 1
-
-                #When 4 connection are formed, exit the loop
-                if (gr_connections >= 4):
-                    break
-
-            #If there are some free dendrites, connect them to the closest glomeruli,
-            #even if they do not satisfy the geometric condtitions.
-            if (gr_connections<self.convergence):
-                #Connect the clostest glomeruli from four random clusters
-                for nc in cluster_idx:
-                    dist = np.sqrt(
-                        np.power(grpos[0] - glom_pos[clusters[nc]][:, 0], 2)
-                        + np.power(grpos[1] - glom_pos[clusters[nc]][:, 1], 2)
-                        + np.power(grpos[2] - glom_pos[clusters[nc]][:, 2], 2)
-                    )
-                    min_dist_idx = np.argmin(dist)
-                    post_locs[ptr + gr_connections, 0] = i
-                    #Id of the glomerulus, randomly selected between the avaiable ones
-                    pre_locs[ptr + gr_connections, 0] = clusters[nc][min_dist_idx]
-                    #Select one of the 4 dendrites
-                    dendrite = dendrites[dendrites_idx[gr_connections]]
-                    #Select the terminal point of the branch
-                    tip = len(dendrite)-1
-                    post_locs[ptr + gr_connections, 1] = first_dendride_id+dendrites_idx[gr_connections]
-                    post_locs[ptr + gr_connections, 2] = tip
-                    gr_connections += 1
-                    #When 4 connection are formed, exit the loop
-                    if (gr_connections >= 4):
-                        break
-
+                gr_connections += 1
+                # remove cluster used already
+                cluster_idx = np.delete(cluster_idx, current_cluster)
             ptr += gr_connections
 
-        print("Connected", n_gran, "granular cells.\n")
-        self.connect_cells(pre_ps, post_ps, pre_locs[:ptr], post_locs[:ptr])
+        self.connect_cells(pre_ps, post_ps, pre_locs, post_locs)
