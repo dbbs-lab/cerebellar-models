@@ -19,9 +19,7 @@ class ConnectomeGlomerulusGolgi(PresynDistStrat, ConnectionStrategy):
         # If synaptic contacts need to be made we use this exponential distribution
         # to pick the closer by subcell_labels.
         exp_dist = truncexpon(b=5, scale=0.03)
-        golgi_morphos = post_ps.load_morphologies().iter_morphologies(
-            cache=True, hard_cache=True
-        )
+        golgi_morphos = post_ps.load_morphologies().iter_morphologies(cache=True, hard_cache=True)
 
         n_conn = len(glomeruli_pos) * len(golgi_pos)
         pre_locs = np.full((n_conn, 3), -1, dtype=int)
@@ -37,17 +35,13 @@ class ConnectomeGlomerulusGolgi(PresynDistStrat, ConnectionStrategy):
 
             # Find terminal points on branches
             basal_dendrides_branches = morpho.get_branches()
-            terminal_branches_ids = np.nonzero(
-                [b.is_terminal for b in basal_dendrides_branches]
-            )[0]
+            terminal_branches_ids = np.nonzero([b.is_terminal for b in basal_dendrides_branches])[0]
             basal_dendrides_branches = np.take(
                 basal_dendrides_branches, terminal_branches_ids, axis=0
             )
 
             # Find the point-on-branch ids of the tips
-            tips_coordinates = np.array(
-                [b.points[-1] for b in basal_dendrides_branches]
-            )
+            tips_coordinates = np.array([b.points[-1] for b in basal_dendrides_branches])
 
             # Connect each close by glom to a tip of the golgi
             for id_g, glom_p in enumerate(to_connect_idx):
@@ -56,13 +50,9 @@ class ConnectomeGlomerulusGolgi(PresynDistStrat, ConnectionStrategy):
                 )
                 # Pick the golgi tip according to an exponential distribution mapped
                 # through the distance to each glom: high chance to pick close by tips.
-                pt_idx = sorted_pts_ids[
-                    tips_coordinates.size * exp_dist.rvs(size=1).astype(int)[0]
-                ]
+                pt_idx = sorted_pts_ids[tips_coordinates.size * exp_dist.rvs(size=1).astype(int)[0]]
 
-                post_locs[ptr + id_g, 1] = morpho.branches.index(
-                    basal_dendrides_branches[pt_idx]
-                )
+                post_locs[ptr + id_g, 1] = morpho.branches.index(basal_dendrides_branches[pt_idx])
                 post_locs[ptr + id_g, 2] = len(basal_dendrides_branches[pt_idx]) - 1
             ptr += connected_gloms
 

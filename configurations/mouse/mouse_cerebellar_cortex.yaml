@@ -210,6 +210,7 @@ connectivity:
       morphology_labels:
         - dendrites
     mf_glom_strat: mossy_fibers_to_glomerulus
+    mf_cell_type: mossy_fibers
     radius: 40
     convergence: 4
   glomerulus_to_golgi:
@@ -234,9 +235,8 @@ connectivity:
     postsynaptic:
       cell_types:
         - granule_cell
-    glom_grc_tag: glomerulus_to_granule
-    depends_on:
-      - glomerulus_to_granule
+    glom_grc_strat: glomerulus_to_granule
+    glom_cell_type: glomerulus
     radius: 150
     convergence: 40
   golgi_to_golgi:

@@ -15,8 +15,7 @@ class ConnectomeMossyGlomerulus(InvertedRoI, ConnectionStrategy):
         # x_length * z_length centered on the postsynaptic chunk containing the glomerulus.
         chunks = set(
             itertools.chain.from_iterable(
-                ct.get_placement_set().get_all_chunks()
-                for ct in self.presynaptic.cell_types
+                ct.get_placement_set().get_all_chunks() for ct in self.presynaptic.cell_types
             )
         )
         selected_chunks = []

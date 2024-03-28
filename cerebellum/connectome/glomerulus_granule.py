@@ -1,6 +1,6 @@
 import itertools
 import numpy as np
-from bsb import config, refs, ConnectivityError, ConfigurationError, ConnectionStrategy
+from bsb import config, refs, ConnectivityError, ConfigurationError, ConnectionStrategy, CellType
 from cerebellum.connectome.presyn_dist_strat import PresynDistStrat
 
 
@@ -11,7 +11,8 @@ class TooFewGlomeruliClusters(ConnectivityError):
 @config.node
 class ConnectomeGlomerulusGranule(PresynDistStrat, ConnectionStrategy):
     convergence = config.attr(type=float, required=True)
-    mf_glom_strat = config.ref(refs.connectivity_ref, required=True)
+    mf_glom_strat: ConnectionStrategy = config.ref(refs.connectivity_ref, required=True)
+    mf_cell_type: CellType = config.ref(refs.cell_type_ref, required=True)
 
     @config.property
     def depends_on(self):
@@ -45,9 +46,15 @@ class ConnectomeGlomerulusGranule(PresynDistStrat, ConnectionStrategy):
             for post_ps in post.placement:
                 self._connect_type(pre_ps, post_ps)
 
-    def _get_mf_clusters(self, pre_ps):
+    def _get_mf_clusters(self, pre_ps, post_ps):
         # Find the glomeruli clusters
-        cs = self.scaffold.get_connectivity_set(self.mf_glom_strat.name)
+
+        cs = self.mf_glom_strat.get_output_names(self.mf_cell_type,
+                                                 pre_ps.cell_type)
+        assert (
+            len(cs) == 1
+        ), f"Only one connection set should be given from {self.mf_glom_strat.name}."
+        cs = self.scaffold.get_connectivity_set(cs[0])
         # find mf-glom connections where the postsyn chunk corresponds to the
         # glom-grc presyn chunk
         iter = cs.load_connections().to(pre_ps.get_loaded_chunks())
@@ -73,11 +80,9 @@ class ConnectomeGlomerulusGranule(PresynDistStrat, ConnectionStrategy):
         gran_pos = post_ps.load_positions()
 
         # Find the glomeruli clusters
-        unique_mossy, clusters = self._get_mf_clusters(pre_ps)
+        unique_mossy, clusters = self._get_mf_clusters(pre_ps, post_ps)
 
-        gran_morphos = post_ps.load_morphologies().iter_morphologies(
-            cache=True, hard_cache=True
-        )
+        gran_morphos = post_ps.load_morphologies().iter_morphologies(cache=True, hard_cache=True)
 
         n_conn = int(np.round(len(gran_pos) * self.convergence))
         pre_locs = np.full((n_conn, 3), -1, dtype=int)
@@ -103,6 +108,8 @@ class ConnectomeGlomerulusGranule(PresynDistStrat, ConnectionStrategy):
             check_dist = True
             while gr_connections < self.convergence:
                 if current_cluster >= len(cluster_idx):
+                    # Not enough glom were found close enough to the GrC.
+                    # Select from the remaining (more distant) gloms.
                     current_cluster = 0
                     check_dist = False
                 nc = cluster_idx[current_cluster]

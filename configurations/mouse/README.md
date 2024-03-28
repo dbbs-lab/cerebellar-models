@@ -68,21 +68,22 @@ terminals. These components are used as building entities to relay stimuli from 
 into the circuit and have therefore no morphology attached.\
 We will describe here the spatial parameters used in `canonical circuit`:
 
-| Layer             | Cell name            | Type   | Radius (um)   | Density (um^{-3})                   | References                                                                                         |
-|-------------------|----------------------|--------|---------------|-------------------------------------|----------------------------------------------------------------------------------------------------|
-| Granular layer    | Glomerulus (glom)    | Exc.   | 1.5           | 0.0003                              | `Solinas et al., 2010`                                                                             |
-|                   | Mossy fibers (mf)    | Exc.   | /             | count relative to glom. ratio=0.05  | `Billings et al., 2014`                                                                            |
-|                   | Granule Cell (GrC)   | Exc.   | 2.5           | 0.0039                              | `Korbo et al., 1993`                                                                               |
-|                   | Golgi cells (GoC)    | Inh.   | 4.            | 0.000009                            | `Solinas et al. 2010`                                                                              |
-| Purkinje layer    | Purkinje cell (PC)   | Inh.   | 7.5           | planar density: 0.0017              | `Lange 1975`                                                                                       |
-| Molecular layer   | Basket cell (BC)     | Inh.   | 6.            | 0.00005                             | `[CITATION]`                                                                                       |
-|                   | Stellate cell (SC)   | Inh.   | 4.            | 0.00005                             | `[CITATION]`                                                                                       |
+| Layer             | Cell name            | Type   | Radius (um)   | Density (um^{-3})                   | References              |
+|-------------------|----------------------|--------|---------------|-------------------------------------|-------------------------|
+| Granular layer    | Glomerulus (glom)    | Exc.   | 1.5           | 0.0003                              | `Solinas et al., 2010`  |
+|                   | Mossy fibers (mf)    | Exc.   | /             | count relative to glom. ratio=0.05  | `Billings et al., 2014` |
+|                   | Granule Cell (GrC)   | Exc.   | 2.5           | 0.0039                              | `[CITATION]`            |
+|                   | Golgi cells (GoC)    | Inh.   | 4.            | 0.000009                            | `[CITATION]`            |
+| Purkinje layer    | Purkinje cell (PC)   | Inh.   | 7.5           | planar density: 0.0017              | `[CITATION]`            |
+| Molecular layer   | Basket cell (BC)     | Inh.   | 6.            | 0.00005                             | `[CITATION]`            |
+|                   | Stellate cell (SC)   | Inh.   | 4.            | 0.00005                             | `[CITATION]`            |
 
 
 Note that every literature data in this table comes from the rat (except for the Purkinje layer 
 planar density).\
-The density of GrC have been calculated based on values from `Korbo et al., 1993` 
-and `Jakab and Hámari, 1988`.
+The density of `glom` have been calculated in `Solinas et al., 2010` based on the glomerulus to 
+granule convergence and divergence ratios (derived from values in `Korbo et al., 1993` and 
+`Jakab and Hámari, 1988`).\
 
 ## Morphologies
 [TODO: Create readme in morphologies and link it here.]
@@ -109,11 +110,32 @@ shifted with respect to its predecessor to form a `70` degree angle on the `(xy)
 | glom   | GrC    | `ConnectomeGlomerulusGranule`      | `Houston et al., 2017`      |
 | GoC    | GrC    | `ConnectomeGolgiGlomerulusGranule` | `[CITATION]`                |
 
-According to literature data (Billings et al., 2014; Ito, 1984; Sultan, 2001), the algorithm 
-organizes glomeruli into anisotropic clusters based on their spatial proximity to each other within 
-the mf arborization. Each cluster extends 60 μm along the x-axis and 20 μm along the z-axis. Hence, 
-glomeruli that are close together have a higher chance of being part of the same cluster and receive
-signals from the same mf. 20 glomeruli are connected to the same mf
+### `ConnectomeMossyGlomerulus` 
+According to literature data (Billings et al., 2014; Ito, 1984; Sultan, 2001), 
+The algorithm selects a mf within the `60` μm along the x-axis and `20` μm along the 
+z-axis box surrounding each glom. This selection is random and performed with a truncated 
+exponential distribution. Since the placement of mf and glom is uniformed within their partition, 
+the convergence and divergence ratios of this connection is guaranteed.
+
+### `ConnectomeGlomerulusGolgi` 
+The algorithm selects all glom within the sphere (radius `50` μm) surrounding each GoC soma. 
+For each unique glom to connect, the tip of a basal dendrite branch from the golgi morphology is 
+selected. This selection is random and performed with a truncated exponential distribution based on 
+the distance between the tip of each branch and the glom to connect.
+
+### `ConnectomeGlomerulusGranule` 
+The algorithm selects `4` unique glom within the sphere (radius `40` μm) surrounding each GrC soma.
+Moreover, each presynaptic glom should belong to a unique mf cluster, i.e. each should be connected 
+through the `ConnectomeMossyGlomerulus` strategy to a different mf. The mf cluster, the presynaptic 
+glom and the postsynaptic GrC dendrite are all randomly chosen. If not enough glomerulus could be 
+found in the `40` μm radius sphere surrounding the GrC soma, the closest glom from the remaining 
+cluster are selected to connect. 
+
+### `ConnectomeGolgiGlomerulusGranule` 
+The algorithm selects the closest glom (maximum `40`) are within the sphere (radius `150` μm) 
+surrounding each GoC soma. For each unique glom selected, the tip of an axon branch from the golgi 
+morphology is randomly selected. All GrC connected to the selected glom through the 
+`ConnectomeGlomerulusGranule` strategy are also connected to the selected presynaptic GoC axon tip.
 
 ## References
 
