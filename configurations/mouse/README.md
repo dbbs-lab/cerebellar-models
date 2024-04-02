@@ -137,6 +137,25 @@ surrounding each GoC soma. For each unique glom selected, the tip of an axon bra
 morphology is randomly selected. All GrC connected to the selected glom through the 
 `ConnectomeGlomerulusGranule` strategy are also connected to the selected presynaptic GoC axon tip.
 
+## Extensions to the canonical model
+The `canonical circuit` serves as a template for cerebellar cortex reconstructions. Extensions 
+located in subfolders, can be combined to the model to include specific details and perform various 
+simulations.
+
+### Simulations
+Each circuit configuration can be reconstructed and simulated with BSB to reproduce different 
+experiments. 
+
+#### NEST
+[TODO]
+
+#### Neuron
+[TODO]
+
+### UBC
+[TODO]
+
+
 ## References
 
 [TODO: Add all citations here]
