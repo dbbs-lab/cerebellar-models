@@ -10,11 +10,12 @@ Welcome to Cerebellum's documentation!
    :maxdepth: 2
    :caption: Connectome:
 
-   golgi-glom-grc
+   source/connection-strategies
 
-Indices and tables
-==================
+.. toctree::
+   :maxdepth: 2
+   :caption: References
 
-* :ref:`genindex`
-* :ref:`modindex`
-* :ref:`search`
+   modules
+   genindex
+   py-modindex

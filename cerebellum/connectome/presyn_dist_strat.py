@@ -1,3 +1,7 @@
+"""
+    Module for the utility class for postsynaptically-sorted ConnectionStrategy
+"""
+
 import itertools
 
 import numpy as np
@@ -5,9 +9,24 @@ from bsb import Chunk, InvertedRoI, config
 
 
 class PresynDistStrat(InvertedRoI):
+    """
+    Mixin class that id used for ConnectionStrategy that deal with the connections for a pre- and
+    post-synaptic pair sorting them by the post-synaptic cell chunk.
+    """
+
     radius = config.attr(type=int, required=True)
 
     def get_region_of_interest(self, chunk):
+        """
+        Finds all the presynaptic chunks that are within a sphere of defined radius, centered on the
+        postsynaptic chunk.
+
+        :param chunk:
+        :type chunk: bsb.Chunk
+        :return: list of presynaptic chunks
+        :rtype: list[bsb.Chunk]
+        """
+
         # Fixme: Distance between chunk is done corner to corner. It might not detect all chunks #34
         chunks = set(
             itertools.chain.from_iterable(

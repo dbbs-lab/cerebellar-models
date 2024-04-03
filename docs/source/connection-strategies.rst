@@ -1,64 +1,38 @@
+##################
+List of strategies
+##################
 
-:class:`TouchingConvergenceDivergence <.connectivity.TouchingConvergenceDivergence>`
-====================================================================================
+:class:`ConnectomeMossyGlomerulus <.connectome.to_glomerulus.ConnectomeMossyGlomerulus>`
+========================================================================================
+According to literature data (Billings et al., 2014; Ito, 1984; Sultan, 2001),
+The algorithm selects a mf within the `60` μm along the x-axis and `20` μm along the
+z-axis box surrounding each glom. This selection is random and performed with a truncated
+exponential distribution. Since the placement of mf and glom is uniformed within their partition,
+the convergence and divergence ratios of this connection is guaranteed.
 
-* ``divergence``: Preferred amount of connections starting from 1 from_cell
-* ``convergence``: Preferred amount of connections ending on 1 to_cell
+:class:`ConnectomeGlomerulusGolgi <.connectome.glomerulus_golgi.ConnectomeGlomerulusGolgi>`
+===========================================================================================
 
-:class:`ConnectomeGlomerulusGranule <.connectivity.ConnectomeGlomerulusGranule>`
-================================================================================
+The algorithm selects all glom within the sphere (radius `50` μm) surrounding each GoC soma.
+For each unique glom to connect, the tip of a basal dendrite branch from the golgi morphology is
+selected. This selection is random and performed with a truncated exponential distribution based on
+the distance between the tip of each branch and the glom to connect.
 
-Inherits from TouchingConvergenceDivergence. No additional configuration.
-Uses the dendrite length configured in the granule cell morphology.
+:class:`ConnectomeGlomerulusGranule <cerebellum.connectome.glomerulus_granule.ConnectomeGlomerulusGranule>`
+===========================================================================================================
 
-:class:`ConnectomeGlomerulusGolgi <.connectivity.ConnectomeGlomerulusGolgi>`
-============================================================================
+The algorithm selects `4` unique glom within the sphere (radius `40` μm) surrounding each GrC soma.
+Moreover, each presynaptic glom should belong to a unique mf cluster, i.e. each should be connected
+through the `ConnectomeMossyGlomerulus` strategy to a different mf. The mf cluster, the presynaptic
+glom and the postsynaptic GrC dendrite are all randomly chosen. If not enough glomerulus could be
+found in the `40` μm radius sphere surrounding the GrC soma, the closest glom from the remaining
+cluster are selected to connect.
 
-Inherits from TouchingConvergenceDivergence. No additional configuration.
-Uses the dendrite radius configured in the Golgi cell morphology.
+:class:`ConnectomeGolgiGlomerulus <cerebellum.connectome.golgi_glomerulus.ConnectomeGolgiGlomerulus>`
+=====================================================================================================
 
-:class:`ConnectomeGolgiGlomerulus <.connectivity.ConnectomeGolgiGlomerulus>`
-============================================================================
+The algorithm selects the closest glom (maximum `40`) are within the sphere (radius `150` μm)
+surrounding each GoC soma. For each unique glom selected, the tip of an axon branch from the golgi
+morphology is randomly selected. All GrC connected to the selected glom through the
+`ConnectomeGolgiGlomerulus` strategy are also connected to the selected presynaptic GoC axon tip.
 
-Inherits from TouchingConvergenceDivergence. No additional configuration.
-Uses the ``axon_x``, ``axon_y``, ``axon_z`` from the Golgi cell morphology
-to intersect a parallelopipid Golgi axonal region with the glomeruli.
-
-:class:`ConnectomeGranuleGolgi <.connectivity.ConnectomeGranuleGolgi>`
-======================================================================
-
-Creates 2 connectivity sets by default *ascending_axon_to_golgi* and
-*parallel_fiber_to_golgi* but these can be overwritten by providing ``tag_aa``
-and/or ``tag_pf`` respectively.
-
-Calculates the distance in the XZ plane between granule cells and Golgi cells and
-uses the Golgi cell morphology's dendrite radius to decide on the intersection.
-
-Also creates an ascending axon height for each granule cell.
-
-* ``aa_convergence``: Preferred amount of ascending axon synapses on 1 Golgi cell.
-* ``pf_convergence``: Preferred amount of parallel fiber synapses on 1 Golgi cell.
-
-:class:`ConnectomeGolgiGranule <.connectivity.ConnectomeGolgiGranule>`
-======================================================================
-
-No configuration, it connects each Golgi to each granule cell that it shares a
-connected glomerules with.
-
-:class:`ConnectomeAscAxonPurkinje <.connectivity.ConnectomeAscAxonPurkinje>`
-============================================================================
-
-Intersects the rectangular extension of the Purkinje dendritic tree with the granule
-cells in the XZ plane, uses the Purkinje cell's placement attributes ``extension_x``
-and ``extension_z``.
-
-* ``extension_x``: Extension of the dendritic tree in the X plane
-* ``extension_z``: Extension of the dendritic tree in the Z plane
-
-:class:`ConnectomePFPurkinje <.connectivity.ConnectomePFPurkinje>`
-==================================================================
-
-No configuration. Uses the Purkinje cell's placement attribute ``extension_x``.
-Intersects Purkinje cell dendritic tree extension along the x axis with the x position
-of the granule cells, as the length of a parallel fiber far exceeds the simulation
-volume.

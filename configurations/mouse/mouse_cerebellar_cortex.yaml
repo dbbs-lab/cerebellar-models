@@ -238,7 +238,7 @@ connectivity:
     glom_post_strat: glomerulus_to_granule
     glom_cell_type: glomerulus
     radius: 150
-    convergence: 40
+    divergence: 40
   golgi_to_golgi:
     strategy: bsb.connectivity.VoxelIntersection
     presynaptic:

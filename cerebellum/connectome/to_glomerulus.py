@@ -1,3 +1,7 @@
+"""
+    Module for the configuration node of every presynaptic cell to Glomerulus ConnectionStrategy
+"""
+
 import itertools
 
 import numpy as np
@@ -7,6 +11,9 @@ from scipy.stats.distributions import truncexpon
 
 @config.node
 class ConnectomeGlomerulus(InvertedRoI, ConnectionStrategy):
+    """
+    BSB Connection strategy to connect a presynaptic cell to Glomeruli.
+    """
 
     def connect(self, pre, post):
         # We use a truncated exponential distribution to favour the presynaptic fibers closer the
@@ -40,8 +47,16 @@ class ConnectomeGlomerulus(InvertedRoI, ConnectionStrategy):
 
 @config.node
 class ConnectomeMossyGlomerulus(ConnectomeGlomerulus):
+    """
+    BSB Connection strategy to connect Mossy fibers to Glomeruli.
+    """
+
     x_length = config.attr(type=float, required=True)
+    """Length of the box along the x axis surrounding the glomerulus cell soma in which the 
+        presynaptic cell can be connected."""
     z_length = config.attr(type=float, required=True)
+    """Length of the box along the z axis surrounding the glomerulus cell soma in which the 
+        presynaptic cell can be connected."""
 
     def get_region_of_interest(self, chunk):
         # Chunk here is a postsynaptic chunk because of InvertedRoI

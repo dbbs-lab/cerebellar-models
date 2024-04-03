@@ -1,3 +1,7 @@
+"""
+    Module for the configuration node of the Glomerulus to Granule ConnectionStrategy
+"""
+
 import itertools
 
 import numpy as np
@@ -14,14 +18,29 @@ from cerebellum.connectome.presyn_dist_strat import PresynDistStrat
 
 
 class TooFewGlomeruliClusters(ConnectivityError):
+    """
+    Error raised when too few glomerulus clusters are available for a postsynaptic cell.
+    """
+
     pass
 
 
 @config.node
 class ConnectomeGlomerulusGranule(PresynDistStrat, ConnectionStrategy):
+    """
+    BSB Connection strategy to connect Glomerulus to Granule cells.
+    With a convergence value set to `n`, this connection guarantees that each Granule cell connects
+    to `n` unique Glomerulus clusters, where each Glomerulus cluster is connected to a different
+    Mossy fiber.
+    """
+
     convergence = config.attr(type=float, required=True)
+    """Convergence value between Glomeruli and Granule cells. 
+        Corresponds to the mean number of Glomeruli that has a single Granule cell as target"""
     mf_glom_strat: ConnectionStrategy = config.ref(refs.connectivity_ref, required=True)
+    """Connection Strategy that links Mossy fibers to Glomeruli."""
     mf_cell_type: CellType = config.ref(refs.cell_type_ref, required=True)
+    """Celltype used for the Mossy fibers."""
 
     @config.property
     def depends_on(self):
@@ -55,7 +74,7 @@ class ConnectomeGlomerulusGranule(PresynDistStrat, ConnectionStrategy):
             for post_ps in post.placement:
                 self._connect_type(pre_ps, post_ps)
 
-    def _get_mf_clusters(self, pre_ps, post_ps):
+    def _get_mf_clusters(self, pre_ps):
         # Find the glomeruli clusters
 
         cs = self.mf_glom_strat.get_output_names(self.mf_cell_type, pre_ps.cell_type)
@@ -88,7 +107,7 @@ class ConnectomeGlomerulusGranule(PresynDistStrat, ConnectionStrategy):
         gran_pos = post_ps.load_positions()
 
         # Find the glomeruli clusters
-        unique_mossy, clusters = self._get_mf_clusters(pre_ps, post_ps)
+        unique_mossy, clusters = self._get_mf_clusters(pre_ps)
 
         gran_morphos = post_ps.load_morphologies().iter_morphologies(cache=True, hard_cache=True)
 

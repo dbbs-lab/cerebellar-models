@@ -1,3 +1,7 @@
+"""
+    Module for the configuration node of the Glomerulus to Golgi ConnectionStrategy
+"""
+
 import itertools
 
 import numpy as np
@@ -9,6 +13,10 @@ from cerebellum.connectome.presyn_dist_strat import PresynDistStrat
 
 @config.node
 class ConnectomeGlomerulusGolgi(PresynDistStrat, ConnectionStrategy):
+    """
+    BSB Connection strategy to connect Glomerulus to Golgi cells.
+    """
+
     def connect(self, pre, post):
         for pre_ps in pre.placement:
             for post_ps in post.placement:

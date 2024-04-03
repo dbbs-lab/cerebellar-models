@@ -1,3 +1,7 @@
+"""
+    Module for the configuration node of the Golgi to Glomerulus ConnectionStrategy
+"""
+
 import itertools
 
 import numpy as np
@@ -6,14 +10,21 @@ from bsb import CellType, Chunk, ConnectionStrategy, config, refs
 
 @config.node
 class ConnectomeGolgiGlomerulus(ConnectionStrategy):
-    # Read vars from the configuration file
-    # The radius is the maximum length of Golgi axon plus the radius of the postsynaptic cell
-    # dendritic tree, needed in get_region_of_interest
-    # to find the chunks containing the candidate cells to connect
-    convergence = config.attr(type=int, required=True)
+    """
+    BSB Connection strategy to connect Golgi cells to postsynaptic cells through Glomeruli.
+    With a divergence value set to `n`, this connection guarantees that each golgi cell
+    connects to all postsynaptic cells that are themselves connected to `n` unique Glomerulus.
+    """
+
+    divergence = config.attr(type=int, required=True)
+    """Divergence value between Granule cells and Glomeruli. 
+        Corresponds to the mean number of Glomeruli targeted to a single Granule cell"""
     radius = config.attr(type=int, required=True)
+    """Radius of the sphere surrounding the Golgi cell soma in which glomeruli can be connected."""
     glom_post_strat: ConnectionStrategy = config.ref(refs.connectivity_ref, required=True)
+    """Connection Strategy that links Glomeruli to the postsynaptic cell."""
     glom_cell_type: CellType = config.ref(refs.cell_type_ref, required=True)
+    """Celltype used for the Glomeruli."""
 
     @config.property
     def depends_on(self):
@@ -47,7 +58,7 @@ class ConnectomeGolgiGlomerulus(ConnectionStrategy):
         assert len(chunk) == 1, "There should be exactly one presynaptic chunk"
         chunk = chunk[0]
 
-        # Distance from glom to golgis
+        # Distance from glom to golgi
         chunks = cs.pre_type.get_placement_set().get_all_chunks()
         # Look for chunks containing glom which are less than radius away from the current one.
         # Fixme: Distance between chunk is done corner to corner. It might not detect all chunks #34
@@ -58,10 +69,10 @@ class ConnectomeGolgiGlomerulus(ConnectionStrategy):
 
         # We need global ids to filter the postsynaptic neuron that match the ones from
         # the dependency
-        iter = cs.load_connections().from_(pre_chunks).as_globals()
-        _, post_locs = iter.all()
-        iter = cs.load_connections().from_(pre_chunks)
-        glom_locs, _ = iter.all()
+        iter_ = cs.load_connections().from_(pre_chunks).as_globals()
+        _, post_locs = iter_.all()
+        iter_ = cs.load_connections().from_(pre_chunks)
+        glom_locs, _ = iter_.all()
         unique_gloms = np.unique(glom_locs[:, 0])
         postsyn_connections = []
         postsyn_connections_branch_point = []
@@ -95,7 +106,7 @@ class ConnectomeGolgiGlomerulus(ConnectionStrategy):
         # Cache morphologies and generate the morphologies iterator
         golgi_morphos = pre_ps.load_morphologies().iter_morphologies(cache=True, hard_cache=True)
 
-        num_glom_to_connect = np.min([self.convergence, len(postsyn_connections)])
+        num_glom_to_connect = np.min([self.divergence, len(postsyn_connections)])
         n_conn = (
             len(golgi_pos)
             * num_glom_to_connect
