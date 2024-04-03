@@ -1,7 +1,7 @@
 import itertools
 
 import numpy as np
-from bsb import InvertedRoI, config, Chunk
+from bsb import Chunk, InvertedRoI, config
 
 
 class PresynDistStrat(InvertedRoI):

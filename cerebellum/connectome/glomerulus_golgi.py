@@ -1,7 +1,9 @@
-import numpy as np
 import itertools
-from bsb import config, ConnectionStrategy
+
+import numpy as np
+from bsb import ConnectionStrategy, config
 from scipy.stats.distributions import truncexpon
+
 from cerebellum.connectome.presyn_dist_strat import PresynDistStrat
 
 

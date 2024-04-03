@@ -1,6 +1,7 @@
 import itertools
+
 import numpy as np
-from bsb import config, refs, ConnectionStrategy, Chunk, CellType
+from bsb import CellType, Chunk, ConnectionStrategy, config, refs
 
 
 @config.node

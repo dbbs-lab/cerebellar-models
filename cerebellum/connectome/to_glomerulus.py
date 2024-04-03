@@ -1,6 +1,7 @@
 import itertools
+
 import numpy as np
-from bsb import config, Chunk, InvertedRoI, ConnectionStrategy
+from bsb import Chunk, ConnectionStrategy, InvertedRoI, config
 from scipy.stats.distributions import truncexpon
 
 
@@ -35,6 +36,7 @@ class ConnectomeGlomerulus(InvertedRoI, ConnectionStrategy):
                     post_locs[j, 0] = j
 
                 self.connect_cells(pre_ps, post_ps, pre_locs, post_locs)
+
 
 @config.node
 class ConnectomeMossyGlomerulus(ConnectomeGlomerulus):

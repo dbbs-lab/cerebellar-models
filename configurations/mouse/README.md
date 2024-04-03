@@ -103,12 +103,12 @@ shifted with respect to its predecessor to form a `70` degree angle on the `(xy)
 
 ## Connectivity
 
-| Source | Target | Strategy                           | References                  |
-|--------|--------|------------------------------------|-----------------------------|
-| mf     | glom   | `ConnectomeMossyGlomerulus`        | `Sultan 2001`               |  
-| glom   | GoC    | `ConnectomeGlomerulusGolgi`        | `Kanichay and Silver, 2008` |
-| glom   | GrC    | `ConnectomeGlomerulusGranule`      | `Houston et al., 2017`      |
-| GoC    | GrC    | `ConnectomeGolgiGlomerulusGranule` | `[CITATION]`                |
+| Source | Target | Strategy                      | References                  |
+|--------|--------|-------------------------------|-----------------------------|
+| mf     | glom   | `ConnectomeMossyGlomerulus`   | `Sultan 2001`               |  
+| glom   | GoC    | `ConnectomeGlomerulusGolgi`   | `Kanichay and Silver, 2008` |
+| glom   | GrC    | `ConnectomeGlomerulusGranule` | `Houston et al., 2017`      |
+| GoC    | GrC    | `ConnectomeGolgiGlomerulus`   | `[CITATION]`                |
 
 ### `ConnectomeMossyGlomerulus` 
 According to literature data (Billings et al., 2014; Ito, 1984; Sultan, 2001), 
@@ -131,11 +131,11 @@ glom and the postsynaptic GrC dendrite are all randomly chosen. If not enough gl
 found in the `40` μm radius sphere surrounding the GrC soma, the closest glom from the remaining 
 cluster are selected to connect. 
 
-### `ConnectomeGolgiGlomerulusGranule` 
+### `ConnectomeGolgiGlomerulus` 
 The algorithm selects the closest glom (maximum `40`) are within the sphere (radius `150` μm) 
 surrounding each GoC soma. For each unique glom selected, the tip of an axon branch from the golgi 
 morphology is randomly selected. All GrC connected to the selected glom through the 
-`ConnectomeGlomerulusGranule` strategy are also connected to the selected presynaptic GoC axon tip.
+`ConnectomeGolgiGlomerulus` strategy are also connected to the selected presynaptic GoC axon tip.
 
 ## Extensions to the canonical model
 The `canonical circuit` serves as a template for cerebellar cortex reconstructions. Extensions 

@@ -1,6 +1,15 @@
 import itertools
+
 import numpy as np
-from bsb import config, refs, ConnectivityError, ConfigurationError, ConnectionStrategy, CellType
+from bsb import (
+    CellType,
+    ConfigurationError,
+    ConnectionStrategy,
+    ConnectivityError,
+    config,
+    refs,
+)
+
 from cerebellum.connectome.presyn_dist_strat import PresynDistStrat
 
 
@@ -49,8 +58,7 @@ class ConnectomeGlomerulusGranule(PresynDistStrat, ConnectionStrategy):
     def _get_mf_clusters(self, pre_ps, post_ps):
         # Find the glomeruli clusters
 
-        cs = self.mf_glom_strat.get_output_names(self.mf_cell_type,
-                                                 pre_ps.cell_type)
+        cs = self.mf_glom_strat.get_output_names(self.mf_cell_type, pre_ps.cell_type)
         assert (
             len(cs) == 1
         ), f"Only one connection set should be given from {self.mf_glom_strat.name}."
