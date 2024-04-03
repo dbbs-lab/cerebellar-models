@@ -1,0 +1,20 @@
+name: Run isort
+on:
+  - push
+
+jobs:
+  isort:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: 3.9
+      - name: Install apt dependencies
+        # Install `libopenmpi` for mpi4py
+        run: |
+          sudo apt update
+          sudo apt install openmpi-bin libopenmpi-dev
+      # Install dependencies for proper 1st/2nd/3rd party import sorting
+      - run: pip install -e .[dev]
+      - uses: isort/isort-action@master
