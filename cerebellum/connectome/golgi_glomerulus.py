@@ -4,14 +4,14 @@ from bsb import config, refs, ConnectionStrategy, Chunk, CellType
 
 
 @config.node
-class ConnectomeGolgiGlomerulusGranule(ConnectionStrategy):
+class ConnectomeGolgiGlomerulus(ConnectionStrategy):
     # Read vars from the configuration file
-    # The radius is the maximum length of Golgi axon plus the radius of the granule
+    # The radius is the maximum length of Golgi axon plus the radius of the postsynaptic cell
     # dendritic tree, needed in get_region_of_interest
     # to find the chunks containing the candidate cells to connect
     convergence = config.attr(type=int, required=True)
     radius = config.attr(type=int, required=True)
-    glom_grc_strat: ConnectionStrategy = config.ref(refs.connectivity_ref, required=True)
+    glom_post_strat: ConnectionStrategy = config.ref(refs.connectivity_ref, required=True)
     glom_cell_type: CellType = config.ref(refs.cell_type_ref, required=True)
 
     @config.property
@@ -19,7 +19,7 @@ class ConnectomeGolgiGlomerulusGranule(ConnectionStrategy):
         # Get the possibly missing `_depends_on` list.
         deps = getattr(self, "_depends_on", None) or []
         # Strat is required, but depends on a reference that isn't available when the config loads.
-        strat = getattr(self, "glom_grc_strat", None)
+        strat = getattr(self, "glom_post_strat", None)
         if strat is None:
             return deps
         else:
@@ -35,11 +35,11 @@ class ConnectomeGolgiGlomerulusGranule(ConnectionStrategy):
                 self._connect_type(pre_ps, post_ps)
 
     def _get_glom_cluster(self, pre_ps, post_ps):
-        # Get the glom_to_granule connections
-        cs = self.glom_grc_strat.get_output_names(self.glom_cell_type, post_ps.cell_type)
+        # Get the glom_to_post connections
+        cs = self.glom_post_strat.get_output_names(self.glom_cell_type, post_ps.cell_type)
         assert (
             len(cs) == 1
-        ), f"Only one connection set should be given from {self.glom_grc_strat.name}."
+        ), f"Only one connection set should be given from {self.glom_post_strat.name}."
         cs = self.scaffold.get_connectivity_set(cs[0])
         # Chunks are sorted pre-synaptically so there should be only one chunk
         chunk = pre_ps.get_loaded_chunks()
@@ -55,49 +55,50 @@ class ConnectomeGolgiGlomerulusGranule(ConnectionStrategy):
             if np.linalg.norm(chunk * chunk.dimensions - c * c.dimensions) <= self.radius:
                 pre_chunks.append(Chunk([c[0], c[1], c[2]], chunk.dimensions))
 
-        # We need global ids to filter grc that match the ones from the dependency
+        # We need global ids to filter the postsynaptic neuron that match the ones from
+        # the dependency
         iter = cs.load_connections().from_(pre_chunks).as_globals()
-        _, grc_locs = iter.all()
+        _, post_locs = iter.all()
         iter = cs.load_connections().from_(pre_chunks)
         glom_locs, _ = iter.all()
         unique_gloms = np.unique(glom_locs[:, 0])
-        granule_connections = []
-        granule_connections_branch_point = []
+        postsyn_connections = []
+        postsyn_connections_branch_point = []
         for u_glom in unique_gloms:
             ids = np.where(glom_locs[:, 0] == u_glom)[0]
-            granule_connections.append(grc_locs[ids, 0])
+            postsyn_connections.append(post_locs[ids, 0])
             post_ps.load_ids()
-            granule_connections_branch_point.append(grc_locs[ids, 1:])
+            postsyn_connections_branch_point.append(post_locs[ids, 1:])
 
         glom_pos = cs.pre_type.get_placement_set(chunks=pre_chunks).load_positions()[unique_gloms]
 
         return (
             unique_gloms,
             glom_pos,
-            granule_connections,
-            granule_connections_branch_point,
+            postsyn_connections,
+            postsyn_connections_branch_point,
         )
 
     def _connect_type(self, pre_ps, post_ps):
 
-        # Consider only the glomeruli which are connected to at least a granule cell in the ROI.
+        # Consider only the gloms which are connected to at least a postsynaptic cell in the RoI.
         # Select only the gloms for which a connection is found
         golgi_pos = pre_ps.load_positions()
         (
             unique_gloms,
             glom_pos,
-            granule_connections,
-            granule_connections_branch_point,
+            postsyn_connections,
+            postsyn_connections_branch_point,
         ) = self._get_glom_cluster(pre_ps, post_ps)
 
         # Cache morphologies and generate the morphologies iterator
         golgi_morphos = pre_ps.load_morphologies().iter_morphologies(cache=True, hard_cache=True)
 
-        num_glom_to_connect = np.min([self.convergence, len(granule_connections)])
+        num_glom_to_connect = np.min([self.convergence, len(postsyn_connections)])
         n_conn = (
             len(golgi_pos)
             * num_glom_to_connect
-            * np.max([len(gr_conn) for gr_conn in granule_connections])
+            * np.max([len(gr_conn) for gr_conn in postsyn_connections])
         )
         pre_locs = np.full((n_conn, 3), -1, dtype=int)
         post_locs = np.full((n_conn, 3), -1, dtype=int)
@@ -118,25 +119,25 @@ class ConnectomeGolgiGlomerulusGranule(ConnectionStrategy):
             to_connect = np.argsort(to_connect)[to_connect < self.radius]
             # Keep the closest glomeruli
             to_connect = to_connect[:num_glom_to_connect]
-            # For each glomerulus, connect the corresponding granule cells directly to the current
+            # For each glomerulus, connect the corresponding postsyn cells directly to the current
             # Golgi
             for j in range(num_glom_to_connect):
-                take_granule = granule_connections[to_connect[j]]
-                granule_to_connect = len(take_granule)
-                # Select granule cells ids
-                post_locs[ptr : ptr + granule_to_connect, 0] = take_granule
-                # Store branch-ids and points-on-branch-ids of the granule cells
-                post_locs[ptr : ptr + granule_to_connect, 1:] = granule_connections_branch_point[
+                take_post = postsyn_connections[to_connect[j]]
+                post_to_connect = len(take_post)
+                # Select postsyn cells ids
+                post_locs[ptr : ptr + post_to_connect, 0] = take_post
+                # Store branch-ids and points-on-branch-ids of the postsyn cells
+                post_locs[ptr : ptr + post_to_connect, 1:] = postsyn_connections_branch_point[
                     to_connect[j]
                 ]
                 # Select Golgi axon branch
-                pre_locs[ptr : ptr + granule_to_connect, 0] = i
+                pre_locs[ptr : ptr + post_to_connect, 0] = i
                 ids_branches = np.random.randint(
-                    low=0, high=len(axon_branches), size=granule_to_connect
+                    low=0, high=len(axon_branches), size=post_to_connect
                 )
-                pre_locs[ptr : ptr + granule_to_connect, 1] = terminal_branches_ids[ids_branches]
-                pre_locs[ptr : ptr + granule_to_connect, 2] = tips_coordinates[ids_branches]
-                ptr += granule_to_connect
+                pre_locs[ptr : ptr + post_to_connect, 1] = terminal_branches_ids[ids_branches]
+                pre_locs[ptr : ptr + post_to_connect, 2] = tips_coordinates[ids_branches]
+                ptr += post_to_connect
 
         # So that the global postsynaptic ids are used
         self.connect_cells(
