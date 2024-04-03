@@ -12,9 +12,7 @@ class TestSingleCellModels(unittest.TestCase):
     @unittest.skip(reason="13Hz instead of 8")
     def test_golgi_autorythm(self):
         # Read the config and build a network with a single Golgi cell
-        config = from_json(
-            pathlib.Path(__file__).parent / "test_nrn_goc_autorythm.json"
-        )
+        config = from_json(pathlib.Path(__file__).parent / "test_nrn_goc_autorythm.json")
         scaffold = Scaffold(config, self.storage)
         scaffold.compile()
         # Run a simulation without any stimulus to the Golgi cell.
@@ -28,17 +26,13 @@ class TestSingleCellModels(unittest.TestCase):
         after_transient = int(200.0 / resolution)
         voltage = avg[after_transient:]
         peaks, _ = find_peaks(voltage, height=0)
-        self.assertAlmostEqual(
-            len(peaks), 8, msg="The expected result is 8 pm 1 Hz", delta=1
-        )
+        self.assertAlmostEqual(len(peaks), 8, msg="The expected result is 8 pm 1 Hz", delta=1)
 
     # fixme
     @unittest.skip(reason="0Hz instead of 40")
     def test_golgi_current_clamp_200_pa(self):
         # Build a network with a single Golgi cell
-        config = from_json(
-            pathlib.Path(__file__).parent / "test_nrn_goc_current_clamp_200_pa.json"
-        )
+        config = from_json(pathlib.Path(__file__).parent / "test_nrn_goc_current_clamp_200_pa.json")
         scaffold = Scaffold(config, self.storage)
         scaffold.compile()
         # Run a simulation stimulating the Golgi cell with a 200 pA current.
@@ -52,16 +46,12 @@ class TestSingleCellModels(unittest.TestCase):
         after_transient = int(200.0 / resolution)
         voltage = avg[after_transient:]
         peaks, _ = find_peaks(voltage, height=0)
-        self.assertAlmostEqual(
-            len(peaks), 40, msg="The expected result is 65 pm 7 Hz", delta=2
-        )
+        self.assertAlmostEqual(len(peaks), 40, msg="The expected result is 65 pm 7 Hz", delta=2)
 
     @unittest.skip(reason="Test too time consuming")
     def test_pc_autorythm(self):
         # Build a network with a single Purkinje cell
-        config = from_json(
-            pathlib.Path(__file__).parent / "test_nrn_pc_autorthythm.json"
-        )
+        config = from_json(pathlib.Path(__file__).parent / "test_nrn_pc_autorthythm.json")
         scaffold = Scaffold(config, self.storage)
         scaffold.compile()
         # todo: find more exact range of frequency

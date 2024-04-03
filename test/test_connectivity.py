@@ -1,3 +1,10 @@
+"""
+Integration testing of the connectivity strategies. Every strategy should have at least 1 test in
+this suite that validates that the connectivity strategy produces biologically correct results.
+
+Each strategy should still also have its own test file for unit testing.
+"""
+
 import importlib
 import unittest
 
@@ -57,12 +64,8 @@ class TestConnectivity(unittest.TestCase):
         goc_glom = self.scaffold.get_connections_by_cell_type(
             presynaptic="golgi_cell", postsynaptic="glomerulus"
         )
-        self.assertTrue(
-            first_goc_id <= min(goc_glom[0][1].from_identifiers) <= last_goc_id
-        )
-        self.assertTrue(
-            first_glom_id <= min(goc_glom[0][1].to_identifiers) <= last_glom_id
-        )
+        self.assertTrue(first_goc_id <= min(goc_glom[0][1].from_identifiers) <= last_goc_id)
+        self.assertTrue(first_glom_id <= min(goc_glom[0][1].to_identifiers) <= last_glom_id)
 
         # Tests if labelled cells are connected only with cells with the same label
 
@@ -82,8 +85,7 @@ class TestConnectivity(unittest.TestCase):
                         )
                         for connection_i in A_to_B:
                             self.assertTrue(
-                                (connection_i[0] in micro_neg)
-                                == (connection_i[1] in micro_neg)
+                                (connection_i[0] in micro_neg) == (connection_i[1] in micro_neg)
                             )
 
     def test_connectivity_matrix(self):
