@@ -1,7 +1,7 @@
-cerebellum
-==========
+Packages
+========
 
 .. toctree::
    :maxdepth: 4
 
-   source/cerebellum
+   cerebellum/cerebellum

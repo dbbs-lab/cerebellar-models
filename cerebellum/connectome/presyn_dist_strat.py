@@ -15,6 +15,7 @@ class PresynDistStrat(InvertedRoI):
     """
 
     radius = config.attr(type=int, required=True)
+    """Radius of the sphere to filter the presynaptic chunks within it."""
 
     def get_region_of_interest(self, chunk):
         """

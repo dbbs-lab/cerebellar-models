@@ -29,7 +29,6 @@ author = "DBBS Lab"
 # ones.
 extensions = [
     "sphinx.ext.autodoc",
-    "sphinx.ext.autosummary",
 ]
 
 autodoc_mock_imports = ["bsb-core"]

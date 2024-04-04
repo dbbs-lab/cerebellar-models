@@ -9,8 +9,6 @@ __version__ = "0.0.1"
 
 def templates():
     """
-    bla
-
     :meta private:
     """
     return [os.path.abspath(os.path.join(os.path.dirname(__file__), ".."))]
