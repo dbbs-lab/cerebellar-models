@@ -31,7 +31,9 @@ extensions = [
     "sphinx.ext.autodoc",
 ]
 
-autodoc_mock_imports = ["bsb-core"]
+autodoc_mock_imports = ["bsb-core"]  # FIXME: Cannot import bsb
+
+nitpick_ignore_regex = [("py:class", r"bsb.*")]  # FIXME: Fail to import bsb refs.
 
 # Add any paths that contain templates here, relative to this directory.
 templates_path = ["_templates"]

@@ -1,4 +1,4 @@
-name: Compile a cerebellum
+name: Build and test cerebellum
 
 on: [push, pull_request]
 
