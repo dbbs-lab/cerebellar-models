@@ -2,14 +2,24 @@
     Module for the configuration node of every presynaptic cell to Glomerulus ConnectionStrategy
 """
 
+import abc
 import itertools
 
 import numpy as np
 from bsb import Chunk, ConnectionStrategy, InvertedRoI, config
-from scipy.stats.distributions import truncexpon
 
 
-@config.node
+def norm_exp_dist(size: int = 1, b: float = 2.0):
+    """
+    Normalized exponential random generator for distance based selection
+
+    :param int size: number of random to sample
+    :param float b: strength of the exponential decay.
+    :return numpy.ndarray: random numbers sampled
+    """
+    return (np.exp(-b * np.random.rand(size)) - np.exp(-b)) / (1 - np.exp(-b))
+
+
 class ConnectomeGlomerulus(InvertedRoI, ConnectionStrategy):
     """
     BSB Connection strategy to connect a presynaptic cell to Glomeruli.
@@ -18,7 +28,6 @@ class ConnectomeGlomerulus(InvertedRoI, ConnectionStrategy):
     def connect(self, pre, post):
         # We use a truncated exponential distribution to favour the presynaptic fibers closer the
         # postsynaptic glomerulus.
-        exp_dist = truncexpon(b=0.99)
         for pre_ps in pre.placement:
             for post_ps in post.placement:
                 presyn_pos = pre_ps.load_positions()
@@ -30,19 +39,29 @@ class ConnectomeGlomerulus(InvertedRoI, ConnectionStrategy):
                 pre_locs = np.full((n_glom, 3), -1, dtype=int)
                 post_locs = np.full((n_glom, 3), -1, dtype=int)
 
-                # Here truncexpon(b=0.99).rvs(size=n) provides n random numbers between [0, 1[ with
-                # more likelihood for the lowest values. These n numbers are converted into ids.
-                rolls = np.floor(len(presyn_pos) * exp_dist.rvs(size=n_glom)).astype(int)
-                # We connect each glomerulus to a mossy fiber.
+                # We connect each glomerulus to a presynaptic cell.
                 for j, glomerulus in enumerate(glomeruli_pos):
-                    dist = np.linalg.norm(glomerulus - presyn_pos, axis=1)
-                    id_sorted_dist = np.argsort(dist)
-                    # Sorting MF ids by distances so low ids are closer to glom.
-                    # MF closer to the granule have a higher chance to be picked
-                    pre_locs[j, 0] = id_sorted_dist[rolls[j]]
+                    pre_ids = self.pre_selection(presyn_pos, glomerulus)
+                    roll = int(np.floor(len(pre_ids) * norm_exp_dist()))
+                    pre_locs[j, 0] = pre_ids[roll]
                     post_locs[j, 0] = j
 
                 self.connect_cells(pre_ps, post_ps, pre_locs, post_locs)
+
+    @abc.abstractmethod
+    def pre_selection(
+        self,
+        presyn_pos,
+        glom_pos,
+    ):
+        """
+        Order presynaptic cell ids based on their respective distance to glomerulus
+
+        :param numpy.ndarray presyn_pos: list of presynaptic cell positions
+        :param numpy.ndarray glom_pos: single glomerulus position
+        :return numpy.ndarray: presynaptic cell ids sorted by distance to glomerulus
+        """
+        pass
 
 
 @config.node
@@ -58,6 +77,16 @@ class ConnectomeMossyGlomerulus(ConnectomeGlomerulus):
     """Length of the box along the z axis surrounding the glomerulus cell soma in which the 
         presynaptic cell can be connected."""
 
+    def pre_selection(
+        self,
+        presyn_pos,
+        glom_pos,
+    ):
+        diff = np.absolute(glom_pos - presyn_pos)
+        ids_to_keep = np.where((diff[:, 0] <= self.x_length) * (diff[:, 2] <= self.z_length))[0]
+        dist = np.linalg.norm(diff[ids_to_keep], axis=1)
+        return ids_to_keep[np.argsort(dist)]
+
     def get_region_of_interest(self, chunk):
         # Chunk here is a postsynaptic chunk because of InvertedRoI
         # We look for chunks containing mossy fibers that are within a rectangle of size
@@ -70,7 +99,7 @@ class ConnectomeMossyGlomerulus(ConnectomeGlomerulus):
         selected_chunks = []
         for c in chunks:
             x_dist = np.fabs(chunk[0] - c[0])
-            z_dist = np.fabs(chunk[1] - c[1])
+            z_dist = np.fabs(chunk[2] - c[2])
             x_dist = x_dist * chunk.dimensions[0]
             z_dist = z_dist * chunk.dimensions[2]
 
