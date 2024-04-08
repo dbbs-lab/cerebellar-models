@@ -145,22 +145,39 @@ class TestGlomerulusGranule(
         )
         self.network.compile(append=True, skip_placement=True)
         cs = self.network.get_connectivity_set("glom_to_gran")
+        mf_locs, glom_locs = (
+            self.network.get_connectivity_set("x_to_glomerulus")
+            .load_connections()
+            .as_globals()
+            .all()
+        )
         cell_positions = self.network.get_placement_set("test_cell").load_positions()
-        self.assertEqual(
+        self.assertClose(
             len(cs),
             len(cell_positions) * self.convergence,
             "As many connection as presyn cell times convergence",
         )
         morpho = self.network.cell_types["test_cell"].morphologies[0].load()
+        pre_mfs = np.full((len(cell_positions), self.convergence), -1)
+        last_mf = np.zeros(len(cell_positions), dtype=int)
         for from_, to_ in cs.load_connections().as_globals():
-            self.assertTrue(
-                np.linalg.norm(cell_positions[from_[0]] - cell_positions[to_[0]]) <= self.radius
-            )
             self.assertTrue(len(morpho.branches) > to_[1])
             branch = morpho.branches[to_[1]]
-            self.assertTrue(len(branch) == to_[2] + 1)
-            self.assertTrue("dendrites" in branch.labelsets[branch.labels[to_[2]]])
-            self.assertAll(from_[1:] == np.array([-1, -1]))
+            self.assertTrue(len(branch) == to_[2] + 1, "Target should be last branch point")
+            self.assertTrue(
+                "dendrites" in branch.labelsets[branch.labels[to_[2]]],
+                "Target branch should be a dendrite",
+            )
+            self.assertAll(
+                from_[1:] == np.array([-1, -1]), "Presyn has no morpho, locs should be -1."
+            )
+            filter_mf = np.where(glom_locs[:, 0] == from_[0])[0]
+            self.assertTrue(len(filter_mf) > 0)
+            self.assertTrue(last_mf[to_[0]] < self.convergence)
+            pre_mfs[to_[0], last_mf[to_[0]]] = mf_locs[filter_mf[0], 0]
+            last_mf[to_[0]] += 1
+        self.assertAll(pre_mfs >= 0)
+        self.assertAll(np.array([np.unique(x).size for x in pre_mfs]) == self.convergence)
 
     def test_extra_depends_on(self):
         self.cfg.connectivity.add(

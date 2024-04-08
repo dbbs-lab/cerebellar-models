@@ -38,6 +38,7 @@ intersphinx_mapping = {
     "python": ("https://docs.python.org/3", None),
     "numpy": ("https://numpy.org/doc/stable/", None),
     "scipy": ("https://scipy.github.io/devdocs/", None),
+    "bsb": ("https://bsb.readthedocs.io/en/latest", None),
 }
 
 nitpick_ignore_regex = [("py:class", r"bsb.*")]  # FIXME: Fail to import bsb refs.

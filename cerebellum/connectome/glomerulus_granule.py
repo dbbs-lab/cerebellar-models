@@ -34,7 +34,7 @@ class ConnectomeGlomerulusGranule(PresynDistStrat, ConnectionStrategy):
     Mossy fiber.
     """
 
-    convergence = config.attr(type=float, required=True)
+    convergence: float = config.attr(type=float, required=True)
     """Convergence value between Glomeruli and Granule cells. 
         Corresponds to the mean number of Glomeruli that has a single Granule cell as target"""
     mf_glom_strat: ConnectionStrategy = config.ref(refs.connectivity_ref, required=True)

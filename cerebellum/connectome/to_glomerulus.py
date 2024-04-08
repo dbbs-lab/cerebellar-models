@@ -15,7 +15,8 @@ def norm_exp_dist(size: int = 1, b: float = 2.0):
 
     :param int size: number of random to sample
     :param float b: strength of the exponential decay.
-    :return numpy.ndarray: random numbers sampled
+    :return: random numbers sampled
+    :rtype: numpy.ndarray
     """
     return (np.exp(-b * np.random.rand(size)) - np.exp(-b)) / (1 - np.exp(-b))
 
@@ -62,7 +63,8 @@ class ConnectomeGlomerulus(InvertedRoI, ConnectionStrategy):
 
         :param numpy.ndarray presyn_pos: list of presynaptic cell positions
         :param numpy.ndarray glom_pos: single glomerulus position
-        :return numpy.ndarray: presynaptic cell ids sorted by distance to glomerulus
+        :return: presynaptic cell ids sorted by distance to glomerulus
+        :rtype: numpy.ndarray
         """
         pass
 
@@ -73,10 +75,10 @@ class ConnectomeMossyGlomerulus(ConnectomeGlomerulus):
     BSB Connection strategy to connect Mossy fibers to Glomeruli.
     """
 
-    x_length = config.attr(type=float, required=True)
+    x_length: float = config.attr(type=float, required=True)
     """Length of the box along the x axis surrounding the glomerulus cell soma in which the 
         presynaptic cell can be connected."""
-    z_length = config.attr(type=float, required=True)
+    z_length: float = config.attr(type=float, required=True)
     """Length of the box along the z axis surrounding the glomerulus cell soma in which the 
         presynaptic cell can be connected."""
 

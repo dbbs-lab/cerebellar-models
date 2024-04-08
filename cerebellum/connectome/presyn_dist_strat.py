@@ -22,10 +22,10 @@ class PresynDistStrat(InvertedRoI):
         Finds all the presynaptic chunks that are within a sphere of defined radius, centered on the
         postsynaptic chunk.
 
-        :param chunk:
-        :type chunk: bsb.Chunk
+        :param chunk: Postsynaptic chunk.
+        :type chunk: bsb.storage._chunks.Chunk
         :return: list of presynaptic chunks
-        :rtype: list[bsb.Chunk]
+        :rtype: list[bsb.storage._chunks.Chunk]
         """
 
         # Fixme: Distance between chunk is done corner to corner. It might not detect all chunks #34

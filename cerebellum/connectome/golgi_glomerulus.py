@@ -16,10 +16,10 @@ class ConnectomeGolgiGlomerulus(ConnectionStrategy):
     connects to all postsynaptic cells that are themselves connected to `n` unique Glomerulus.
     """
 
-    divergence = config.attr(type=int, required=True)
+    divergence: float = config.attr(type=float, required=True)
     """Divergence value between Granule cells and Glomeruli. 
         Corresponds to the mean number of Glomeruli targeted to a single Granule cell"""
-    radius = config.attr(type=int, required=True)
+    radius: float = config.attr(type=float, required=True)
     """Radius of the sphere surrounding the Golgi cell soma in which glomeruli can be connected."""
     glom_post_strat: ConnectionStrategy = config.ref(refs.connectivity_ref, required=True)
     """Connection Strategy that links Glomeruli to the postsynaptic cell."""
