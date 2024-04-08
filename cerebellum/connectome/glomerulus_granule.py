@@ -45,6 +45,7 @@ class ConnectomeGlomerulusGranule(PresynDistStrat, ConnectionStrategy):
     @config.property
     def depends_on(self):
         # Get the possibly missing `_depends_on` list.
+        # Fixme: does not work with str.
         deps = getattr(self, "_depends_on", None) or []
         # Strat is required, but depends on a reference that isn't available when the config loads.
         strat = getattr(self, "mf_glom_strat", None)

@@ -29,9 +29,16 @@ author = "DBBS Lab"
 # ones.
 extensions = [
     "sphinx.ext.autodoc",
+    "sphinx.ext.intersphinx",
 ]
 
 autodoc_mock_imports = ["bsb-core"]  # FIXME: Cannot import bsb
+
+intersphinx_mapping = {
+    "python": ("https://docs.python.org/3", None),
+    "numpy": ("https://numpy.org/doc/stable/", None),
+    "scipy": ("https://scipy.github.io/devdocs/", None),
+}
 
 nitpick_ignore_regex = [("py:class", r"bsb.*")]  # FIXME: Fail to import bsb refs.
 

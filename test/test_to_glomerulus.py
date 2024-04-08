@@ -48,8 +48,8 @@ class TestConnectomeMossyGlomerulus(
         distances = np.full(len(cell_positions), -1.0)
         self.assertEqual(len(cs), len(cell_positions), "As many connection as postsyn cell")
         for from_, to_ in cs.load_connections().as_globals():
-            self.assertClose(from_[1:], cell_targets)
-            self.assertClose(to_[1:], cell_targets)
+            self.assertAll(from_[1:] == cell_targets)
+            self.assertAll(to_[1:] == cell_targets)
             diff = np.absolute(cell_positions[from_[0]] - cell_positions[to_[0]])
             self.assertTrue(diff[0] <= self.x_length)
             self.assertTrue(diff[2] <= self.z_length)
@@ -82,5 +82,12 @@ class TestConnectomeMossyGlomerulus(
                     else:
                         sources[i] = 2
                     break
-        self.assertAll(sources != 2, "pos_2 should be unreachable")
-        self.assertTrue(np.count_nonzero(sources == 0) > np.count_nonzero(sources == 1))
+        self.assertClose(
+            np.unique(sources),
+            np.array([0, 1]),
+            "pos_2 should be unreachable.\npos_1 is less likely but should still happen",
+        )
+        self.assertTrue(
+            np.count_nonzero(sources == 0) > np.count_nonzero(sources == 1),
+            "Close targets should be more likely",
+        )

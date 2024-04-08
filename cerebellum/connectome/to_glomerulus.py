@@ -40,13 +40,16 @@ class ConnectomeGlomerulus(InvertedRoI, ConnectionStrategy):
                 post_locs = np.full((n_glom, 3), -1, dtype=int)
 
                 # We connect each glomerulus to a presynaptic cell.
+                to_keep = 0
                 for j, glomerulus in enumerate(glomeruli_pos):
                     pre_ids = self.pre_selection(presyn_pos, glomerulus)
-                    roll = int(np.floor(len(pre_ids) * norm_exp_dist()))
-                    pre_locs[j, 0] = pre_ids[roll]
-                    post_locs[j, 0] = j
+                    if len(pre_ids) > 0:
+                        roll = int(np.floor(len(pre_ids) * norm_exp_dist()))
+                        pre_locs[to_keep, 0] = pre_ids[roll]
+                        post_locs[to_keep, 0] = j
+                        to_keep += 1
 
-                self.connect_cells(pre_ps, post_ps, pre_locs, post_locs)
+                self.connect_cells(pre_ps, post_ps, pre_locs[:to_keep], post_locs[:to_keep])
 
     @abc.abstractmethod
     def pre_selection(
