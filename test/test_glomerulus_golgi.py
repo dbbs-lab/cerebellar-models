@@ -3,9 +3,9 @@ Unit tests of the `ConnectomeGlomerulusGolgi` strategy
 """
 
 import unittest
+from os.path import abspath, dirname, join
 
 import numpy as np
-import yaml
 from bsb import Configuration, Scaffold, WorkflowError
 from bsb_test import NetworkFixture, NumpyTestCase, RandomStorageFixture
 
@@ -32,7 +32,7 @@ class TestGlomerulusGolgi(
             ),
             morphologies=[
                 dict(
-                    file="../morphologies/GolgiCell.swc",
+                    file=abspath(join(dirname(dirname(__file__)), "morphologies", "GolgiCell.swc")),
                     parser=dict(tags={16: ["dendrites", "basal_dendrites"]}),
                 )
             ],

@@ -1,4 +1,8 @@
+import os
 import unittest
+
+import numpy as np
+from bsb import Scaffold
 
 
 def get_tiny_network():
@@ -286,7 +290,7 @@ def get_tiny_network():
         scaffold = from_hdf5(scaffold_path)
 
 
-@unittest.skip("Needs to be updated to v4")
+@unittest.skip("Needs to be updated to bsb v4.0.1")
 class TestCerebellumPlacement(unittest.TestCase):
     """
     Check if the placement of all cell types is correct

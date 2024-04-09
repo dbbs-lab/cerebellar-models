@@ -3,6 +3,7 @@ Unit tests of the `ConnectomeGlomerulusGranule` strategy
 """
 
 import unittest
+from os.path import abspath, dirname, join
 
 import numpy as np
 from bsb import (
@@ -37,7 +38,13 @@ class TestGlomerulusGranule(
                 y=self.chunk_size[1] * 2,
                 z=self.chunk_size[2] * 2,
             ),
-            morphologies=[dict(file="../morphologies/GranuleCell.swc")],
+            morphologies=[
+                dict(
+                    file=abspath(
+                        join(dirname(dirname(__file__)), "morphologies", "GranuleCell.swc")
+                    )
+                )
+            ],
             cell_types=dict(
                 pre_cell=dict(spatial=dict(radius=2, count=100)),
                 pre_cell2=dict(spatial=dict(radius=2, count=1)),
@@ -74,19 +81,8 @@ class TestGlomerulusGranule(
         self.network.compile(skip_connectivity=True)
 
     def test_error_mf_glom_strat(self):
-        with self.assertRaises(RequirementError):
-            self.cfg.connectivity.add(
-                "glom_to_gran",
-                dict(
-                    strategy="cerebellum.connectome.glomerulus_granule.ConnectomeGlomerulusGranule",
-                    presynaptic=dict(cell_types=["test_cell"]),
-                    postsynaptic=dict(cell_types=["test_cell"]),
-                    radius=self.radius,
-                    convergence=self.convergence,
-                    mf_cell_type="pre_cell",
-                ),
-            )
         with self.assertRaises(ConfigurationError):
+            # Test presyn does not match dependency postsynaptic cell
             self.cfg.connectivity.add(
                 "glom_to_gran",
                 dict(
@@ -100,13 +96,29 @@ class TestGlomerulusGranule(
                 ),
             )
 
+        with self.assertRaises(ConfigurationError):
+            # Test mf_cell_type is a presynaptic cell type of dependency rule
+            self.cfg.connectivity.add(
+                "glom_to_gran2",
+                dict(
+                    strategy="cerebellum.connectome.glomerulus_granule.ConnectomeGlomerulusGranule",
+                    presynaptic=dict(cell_types=["test_cell"]),
+                    postsynaptic=dict(cell_types=["test_cell"], morphology_labels=["dendrites"]),
+                    radius=self.radius,
+                    convergence=self.convergence,
+                    mf_cell_type="pre_cell2",
+                    mf_glom_strat="x_to_glomerulus",
+                ),
+            )
+
         self.cfg.connectivity["x_to_glomerulus"].postsynaptic.cell_types = [
             self.cfg.cell_types["pre_cell"],
             self.cfg.cell_types["pre_cell2"],
         ]
         with self.assertRaises(ConfigurationError):
+            # Test dependency strat should have only one postsynaptic cell
             self.cfg.connectivity.add(
-                "glom_to_gran2",
+                "glom_to_gran3",
                 dict(
                     strategy="cerebellum.connectome.glomerulus_granule.ConnectomeGlomerulusGranule",
                     presynaptic=dict(cell_types=["test_cell"]),
@@ -122,6 +134,7 @@ class TestGlomerulusGranule(
             self.cfg.connectivity["x_to_glomerulus"],
             self.cfg.connectivity["glom_to_gran"],
             self.cfg.connectivity["glom_to_gran2"],
+            self.cfg.connectivity["glom_to_gran3"],
         )
         self.cfg.connectivity.add(
             "x_to_glomerulus2",

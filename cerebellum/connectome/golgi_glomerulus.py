@@ -5,7 +5,7 @@
 import itertools
 
 import numpy as np
-from bsb import CellType, Chunk, ConnectionStrategy, config, refs
+from bsb import CellType, Chunk, ConfigurationError, ConnectionStrategy, config, refs
 
 
 @config.node
@@ -17,8 +17,8 @@ class ConnectomeGolgiGlomerulus(ConnectionStrategy):
     """
 
     divergence: float = config.attr(type=float, required=True)
-    """Divergence value between Granule cells and Glomeruli. 
-        Corresponds to the mean number of Glomeruli targeted to a single Granule cell"""
+    """Divergence value between Golgi cells and Glomeruli. 
+        Corresponds to the mean number of Glomeruli targeted by a single Golgi cell"""
     radius: float = config.attr(type=float, required=True)
     """Radius of the sphere surrounding the Golgi cell soma in which glomeruli can be connected."""
     glom_post_strat: ConnectionStrategy = config.ref(refs.connectivity_ref, required=True)
@@ -45,6 +45,26 @@ class ConnectomeGolgiGlomerulus(ConnectionStrategy):
         for pre_ps in pre.placement:
             for post_ps in post.placement:
                 self._connect_type(pre_ps, post_ps)
+
+    def _assert_dependencies(self):
+        # assert dependency rule corresponds to mossy to glom
+        pre_ct = self.glom_post_strat.presynaptic.cell_types
+        if len(pre_ct) != 1 or pre_ct[0] != self.glom_cell_type:
+            raise ConfigurationError(
+                f"Presynaptic cell of dependency rule should match "
+                f"the provided glom_cell_type: {self.glom_cell_type.name}."
+            )
+
+        post_ct = self.glom_post_strat.postsynaptic.cell_types
+        for ct in self.postsynaptic.cell_types:
+            if ct not in post_ct:
+                raise ConfigurationError(
+                    f"The dependency rule does not connect glomeruli to this connection's "
+                    f"postsynaptic cell: {ct.name}."
+                )
+
+    def boot(self):
+        self._assert_dependencies()
 
     def _get_glom_cluster(self, pre_ps, post_ps):
         # Get the glom_to_post connections

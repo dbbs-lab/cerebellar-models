@@ -66,6 +66,12 @@ class ConnectomeGlomerulusGranule(PresynDistStrat, ConnectionStrategy):
                 "Postsynaptic cell of dependency rule does not match this rule's"
                 " presynaptic cell."
             )
+        pre_ct = self.mf_glom_strat.presynaptic.cell_types
+        if self.mf_cell_type not in pre_ct:
+            raise ConfigurationError(
+                f"Presynaptic cells of dependency rule does not contain provided mossy fiber cell "
+                f"type: {self.mf_cell_type.name}."
+            )
 
     def boot(self):
         self._assert_dependencies()
