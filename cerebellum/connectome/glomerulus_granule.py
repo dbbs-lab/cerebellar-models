@@ -85,8 +85,7 @@ class ConnectomeGlomerulusGranule(PresynDistStrat, ConnectionStrategy):
         cs = self.scaffold.get_connectivity_set(cs[0])
         # find mf-glom connections where the postsyn chunk corresponds to the
         # glom-grc presyn chunk
-        iter = cs.load_connections().to(pre_ps.get_loaded_chunks())
-        mf_locs, glom_locs = iter.all()
+        mf_locs, glom_locs = cs.load_connections().to(pre_ps.get_loaded_chunks()).all()
 
         unique_mossy = np.unique(mf_locs[:, 0])
         if unique_mossy.size < self.convergence:

@@ -29,14 +29,30 @@ class TestGlomerulusGranule(
         super().setUp()
         self.radius = 40
         self.convergence = 4
+        self.chunk_size = np.array([30, 30, 30])
         self.cfg = Configuration.default(
+            network=dict(
+                chunk_size=self.chunk_size,
+                x=self.chunk_size[0] * 2,
+                y=self.chunk_size[1] * 2,
+                z=self.chunk_size[2] * 2,
+            ),
             morphologies=[dict(file="../morphologies/GranuleCell.swc")],
             cell_types=dict(
                 pre_cell=dict(spatial=dict(radius=2, count=100)),
                 pre_cell2=dict(spatial=dict(radius=2, count=1)),
                 test_cell=dict(spatial=dict(radius=2, count=100, morphologies=["GranuleCell"])),
             ),
-            partitions=dict(layer=dict(type="rhomboid", dimensions=[100.0, 100.0, 100.0])),
+            partitions=dict(
+                layer=dict(
+                    type="rhomboid",
+                    dimensions=[
+                        self.chunk_size[0] * 2,
+                        self.chunk_size[1] * 2,
+                        self.chunk_size[2] * 2,
+                    ],
+                )
+            ),
             placement=dict(
                 random_placement=dict(
                     strategy="bsb.placement.RandomPlacement",
@@ -176,6 +192,17 @@ class TestGlomerulusGranule(
             self.assertTrue(last_mf[to_[0]] < self.convergence)
             pre_mfs[to_[0], last_mf[to_[0]]] = mf_locs[filter_mf[0], 0]
             last_mf[to_[0]] += 1
+            self.assertTrue(
+                np.linalg.norm(
+                    (
+                        np.floor(cell_positions[from_[0]] / self.chunk_size)
+                        - np.floor(cell_positions[to_[0]] / self.chunk_size)
+                    )
+                    * self.chunk_size
+                )
+                <= self.radius,
+                "Chunk size distance should be less than radius",
+            )
         self.assertAll(pre_mfs >= 0)
         self.assertAll(np.array([np.unique(x).size for x in pre_mfs]) == self.convergence)
 
