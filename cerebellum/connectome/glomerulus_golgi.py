@@ -5,7 +5,7 @@
 import itertools
 
 import numpy as np
-from bsb import ConnectionStrategy, config
+from bsb import ConnectionStrategy, ConnectivityError, config
 from scipy.stats.distributions import truncexpon
 
 from cerebellum.connectome.presyn_dist_strat import PresynDistStrat
@@ -49,6 +49,11 @@ class ConnectomeGlomerulusGolgi(PresynDistStrat, ConnectionStrategy):
             basal_dendrides_branches = np.take(
                 basal_dendrides_branches, terminal_branches_ids, axis=0
             )
+            if basal_dendrides_branches.size == 0:
+                raise ConnectivityError(
+                    "The golgi morphology provided has no terminal branches.\n"
+                    "Check the morphology_labels."
+                )
 
             # Find the point-on-branch ids of the tips
             tips_coordinates = np.array([b.points[-1] for b in basal_dendrides_branches])
