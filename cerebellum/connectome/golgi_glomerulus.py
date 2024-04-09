@@ -47,7 +47,7 @@ class ConnectomeGolgiGlomerulus(ConnectionStrategy):
                 self._connect_type(pre_ps, post_ps)
 
     def _assert_dependencies(self):
-        # assert dependency rule corresponds to mossy to glom
+        # assert dependency rule corresponds to glom to post
         pre_ct = self.glom_post_strat.presynaptic.cell_types
         if len(pre_ct) != 1 or pre_ct[0] != self.glom_cell_type:
             raise ConfigurationError(
@@ -126,7 +126,8 @@ class ConnectomeGolgiGlomerulus(ConnectionStrategy):
         # Cache morphologies and generate the morphologies iterator
         golgi_morphos = pre_ps.load_morphologies().iter_morphologies(cache=True, hard_cache=True)
 
-        num_glom_to_connect = np.min([self.divergence, len(postsyn_connections)])
+        # TODO: implement random rounding and adapt tests.
+        num_glom_to_connect = np.min([int(self.divergence), len(postsyn_connections)])
         n_conn = (
             len(golgi_pos)
             * num_glom_to_connect

@@ -62,6 +62,7 @@ class TestGlomerulusGolgi(
         self.network.compile(skip_connectivity=True)
 
     def test_error_mf_golgi_strat(self):
+        # Test wrong morphology label
         self.network.connectivity["glom_to_golgi"] = ConnectomeGlomerulusGolgi(
             presynaptic=dict(cell_types=["pre_cell"]),
             postsynaptic=dict(cell_types=["test_cell"], morphology_labels=["wrong_label"]),

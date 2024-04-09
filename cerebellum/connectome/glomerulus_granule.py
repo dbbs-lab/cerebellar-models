@@ -117,6 +117,7 @@ class ConnectomeGlomerulusGranule(PresynDistStrat, ConnectionStrategy):
 
         gran_morphos = post_ps.load_morphologies().iter_morphologies(cache=True, hard_cache=True)
 
+        # TODO: implement random rounding and adapt tests.
         n_conn = int(np.round(len(gran_pos) * self.convergence))
         pre_locs = np.full((n_conn, 3), -1, dtype=int)
         post_locs = np.full((n_conn, 3), -1, dtype=int)

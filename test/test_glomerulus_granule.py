@@ -6,13 +6,7 @@ import unittest
 from os.path import abspath, dirname, join
 
 import numpy as np
-from bsb import (
-    Configuration,
-    ConfigurationError,
-    RequirementError,
-    Scaffold,
-    WorkflowError,
-)
+from bsb import Configuration, ConfigurationError, Scaffold, WorkflowError
 from bsb_test import NetworkFixture, NumpyTestCase, RandomStorageFixture
 
 from cerebellum.connectome.glomerulus_granule import ConnectomeGlomerulusGranule
