@@ -12,6 +12,9 @@ requires-python = ">=3.9"
 dynamic = ["version", "description"]
 dependencies = [
     "bsb-core[parallel]~=4.0",
+    "bsb-hdf5~=4.0",
+    "bsb-yaml~=4.0",
+    "bsb-json~=4.0",
     "bsb-neuron~=4.0",
     "bsb-nest~=4.0"
 ]
@@ -19,6 +22,7 @@ dependencies = [
 [project.optional-dependencies]
 test = [
     "bsb-test~=4.0",
+    "coverage~=7.3",
 ]
 dev = [
     "pre-commit~=3.5",
