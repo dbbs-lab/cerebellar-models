@@ -1,3 +1,6 @@
+[![Code style: black](https://img.shields.io/badge/code%20style-black-000000.svg)](https://github.com/psf/black)
+[![codecov](https://codecov.io/gh/dbbs-lab/cerebellum/branch/master/graph/badge.svg)](https://codecov.io/gh/dbbs-lab/cerebellum)
+
 # Cerebellum: A full scaffold model of the cerebellum, using the BSB.
 This repository provides the code, configuration and morphology data to reconstruct and simulate 
 cerebellar cortex circuits using the [Brain Scaffold Builder](https://github.com/dbbs-lab/bsb) 
