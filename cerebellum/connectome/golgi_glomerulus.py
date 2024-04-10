@@ -131,7 +131,7 @@ class ConnectomeGolgiGlomerulus(ConnectionStrategy):
         n_conn = (
             len(golgi_pos)
             * num_glom_to_connect
-            * np.max([len(gr_conn) for gr_conn in postsyn_connections])
+            * np.max([len(post_conn) for post_conn in postsyn_connections])
         )
         pre_locs = np.full((n_conn, 3), -1, dtype=int)
         post_locs = np.full((n_conn, 3), -1, dtype=int)
@@ -149,19 +149,20 @@ class ConnectomeGolgiGlomerulus(ConnectionStrategy):
 
             # Compute and sort the distances between the golgi soma and the glomeruli
             to_connect = np.linalg.norm(golgi - glom_pos, axis=1)
-            to_connect = np.argsort(to_connect)[to_connect < self.radius]
+            sorting = np.argsort(to_connect)
+            to_connect = sorting[to_connect[sorting] <= self.radius]
             # Keep the closest glomeruli
             to_connect = to_connect[:num_glom_to_connect]
             # For each glomerulus, connect the corresponding postsyn cells directly to the current
             # Golgi
-            for j in range(num_glom_to_connect):
-                take_post = postsyn_connections[to_connect[j]]
+            for j, post_conn in enumerate(to_connect):
+                take_post = postsyn_connections[post_conn]
                 post_to_connect = len(take_post)
                 # Select postsyn cells ids
                 post_locs[ptr : ptr + post_to_connect, 0] = take_post
                 # Store branch-ids and points-on-branch-ids of the postsyn cells
                 post_locs[ptr : ptr + post_to_connect, 1:] = postsyn_connections_branch_point[
-                    to_connect[j]
+                    post_conn
                 ]
                 # Select Golgi axon branch
                 pre_locs[ptr : ptr + post_to_connect, 0] = i
