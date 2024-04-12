@@ -49,7 +49,7 @@ bsb compile configurations/mouse/mouse_cerebellar_cortex.yaml -v4 --clear
 This command will produce a microcircuit of the mouse cerebellar cortex and store it in the
 `cerebellum.hdf5` file. This process might take a while depending on your machine.
 
-# Acknowledgements
+## Acknowledgements
 This research has received funding from the European Union’s Horizon 2020 Framework
 Program for Research and Innovation under the Specific Grant Agreement No. 945539
 (Human Brain Project SGA3) and Specific Grant Agreement No. 785907 (Human Brain

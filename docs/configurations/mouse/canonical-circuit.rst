@@ -12,8 +12,8 @@ papers. The role of this file is to make explicit the origin of each value and s
 from the literature and integrated into these configurations. All the configurations present in
 this folder are based on the ``mouse_cerebellar_cortex.yaml`` file. It corresponds to the
 configuration file written for the reconstruction of the cerebellar circuit presented in the
-``De Schepper et al. 2022`` paper. This circuit configuration will be later referred to as the
-``canonical circuit``.
+De Schepper et al. (2022) [#de_schepper_2022]_ paper. This circuit configuration will be later
+referred to as the ``canonical circuit``.
 
 We will follow the structure of the BSB configuration files to present each of their sections and
 the data they leverage.
@@ -50,14 +50,14 @@ Network dimensions
 ~~~~~~~~~~~~~~~~~~
 
 The ``canonical circuit`` is built in a cubic volume of ``300 * 200 * 295 µm`` in the ``(x,y,z)``
-convention (see ``network``,``regions`` and ``partitions`` in the configuration). The thickness of
+convention (see ``network``, ``regions`` and ``partitions`` in the configuration). The thickness of
 each of its layer has been determined according to literature findings and to match the size and
 shape of the available morphologies:
 
 - The Purkinje layer corresponds to a one cell thick sheet of Purkinje cells. The Purkinje cell soma
   diameters determine therefore the thickness of this layer. According to
-  ``Hendelman & Aggerwal, 1980``, Purkinje cell’s soma diameters have been estimated to less than
-  20µm in mice. We chose here ``15µm``.
+  Hendelman & Aggerwal (1980) [#hendelman_1980]_, Purkinje cell’s soma diameters have been
+  estimated to less than 20µm in mice. We chose here ``15µm``.
 
 - The molecular layer total thickness has been calculated to fit the size of the dendritic
   arborization of the Purkinje cell’s morphology as ``150µm``. The molecular layer is itself divided
@@ -65,10 +65,10 @@ shape of the available morphologies:
   bottom part of the molecular layer (hence the part stacked right on top of the Purkinje layer)
   contains the Basket cells (``b_molecular_layer`` in the configuration); while the top part hold
   the Stellate cells (``s_molecular_layer``). In fact, according to literature data
-  (``J. Kim & Augustine, 2021; Sultan & Bower, 1998``), SCs are more likely located in the outer
-  two-third of the Molecular layer. While this distribution of cells is closer to gradient in real
-  mice, we assumed a clear separation between the populations. The ``basket layer`` is therefore
-  ``50µm`` thick while the ``stellate layer`` is ``100µm`` thick.
+  (J. Kim & Augustine, 2021 [#kim_2021]_; Sultan & Bower, 1998 [#sultan_1998]_), SCs are more likely
+  located in the outer two-third of the Molecular layer. While this distribution of cells is closer
+  to gradient in real mice, we assumed a clear separation between the populations. The
+  ``basket layer`` is therefore ``50µm`` thick while the ``stellate layer`` is ``100µm`` thick.
 
 - The granular layer’s thickness has been similarly fitted to match the size of the Golgi cell basal
   dendritic tree, here ``130µm``. Note that the size of the granule cell ascending axons have been
@@ -86,12 +86,38 @@ the circuit and have therefore no morphology attached.
 
 We will describe here the spatial parameters used in ``canonical circuit``:
 
++-----------------+--------------------+------+-----------------+-------------------------------------+------------------------------------------------+
+| Layer           | Cell name          | Type | Radius (µm)     | Density (:math:`µm^{-3}`)           | References                                     |
++=================+====================+======+=================+=====================================+================================================+
+| Granular layer  | Glomerulus (glom)  | Exc. | 1.5             | 0.0003                              | Solinas et al. (2010) [#solinas_2010]_         |
++                 +--------------------+------+-----------------+-------------------------------------+------------------------------------------------+
+|                 | Mossy fibers (mf)  | Exc. | /               | count relative to glom. ratio=0.05  | Billings et al. (2014) [#billings_2014]_       |
++                 +--------------------+------+-----------------+-------------------------------------+------------------------------------------------+
+|                 | Granule Cell (GrC) | Exc. | 2.5             | 0.0039                              | Casali et al. (2019) [#casali_2019]_           |
++                 +--------------------+------+-----------------+-------------------------------------+------------------------------------------------+
+|                 | Golgi Cell (GoC)   | Inh. | 4.0             | 0.000009                            | Casali et al. (2019) [#casali_2019]_           |
++-----------------+--------------------+------+-----------------+-------------------------------------+------------------------------------------------+
+| Purkinje layer  | Purkinje cell (PC) | Inh. | 7.5             | planar density: 0.0017              | De Schepper et al. (2022) [#de_schepper_2022]_ |
++-----------------+--------------------+------+-----------------+-------------------------------------+------------------------------------------------+
+| Molecular layer | Basket cell (BC)   | Inh. | 6.              | 0.00005                             | Casali et al. (2019) [#casali_2019]_           |
++                 +--------------------+------+-----------------+-------------------------------------+------------------------------------------------+
+|                 | Stellate cell (SC) | Inh. | 4.              | 0.00005                             | Casali et al. (2019) [#casali_2019]_           |
++-----------------+--------------------+------+-----------------+-------------------------------------+------------------------------------------------+
 
-Note that every literature data in this table comes from the rat.
+Note that every literature data in this table comes rat data.
 
-The density of ``glom`` have been calculated in ``Solinas et al., 2010`` based on the glomerulus to
-granule convergence and divergence ratios (derived from values in ``Korbo et al., 1993`` and
-``Jakab and Hámari, 1988``).
+The density of glom have been calculated in Solinas et al. (2010) [#solinas_2010]_ based on the
+glomerulus to granule convergence and divergence ratios (derived from values in Korbo et al., 1993
+[#korbo_1993]_ and Jakab and Hámari, 1988 [#jakab_1988]_).
+
+The densities of GrC, GoC, BC and SC are reported in Table 1 of Casali et al. (2019) [#casali_2019]_.
+The authors cite Korbo et al. (1993) [#korbo_1993]_ for the values in this table, however, no
+equivalent was found in the cited paper. These values might have been optimized to improve
+simulation results.
+
+The planar density of PC reported in De Schepper et al. (2022) [#de_schepper_2022]_ is one order of
+magnitude higher with respect to other literature findings. It has been obtained through geometric
+constrained placement to minimize the overlap of PC arborizations.
 
 .. include:: ../morphologies.rst
 
@@ -117,17 +143,17 @@ the ``(xy)`` plane.
 Connectivity
 ~~~~~~~~~~~~
 
-+--------+----------+---------------------------------+-------------------------------+
-| Source | Target   | Strategy                        | References                    |
-+========+==========+=================================+===============================+
-| mf     | glom     | ``ConnectomeMossyGlomerulus``   | ``Sultan 2001``               |
-+--------+----------+---------------------------------+-------------------------------+
-| glom   | GoC      | ``ConnectomeGlomerulusGolgi``   | ``Kanichay and Silver, 2008`` |
-+--------+----------+---------------------------------+-------------------------------+
-| glom   | GrC      | ``ConnectomeGlomerulusGranule`` | ``Houston et al., 2017``      |
-+--------+----------+---------------------------------+-------------------------------+
-| GoC    | GrC      | ``ConnectomeGolgiGlomerulus``   | ``[CITATION]``                |
-+--------+----------+---------------------------------+-------------------------------+
++--------+----------+---------------------------------+----------------------------------------------+
+| Source | Target   | Strategy                        | References                                   |
++========+==========+=================================+==============================================+
+| mf     | glom     | ``ConnectomeMossyGlomerulus``   | Sultan (2001) [#sultan_2001]_                |
++--------+----------+---------------------------------+----------------------------------------------+
+| glom   | GoC      | ``ConnectomeGlomerulusGolgi``   | Kanichay and Silver (2008) [#kanichay_2008]_ |
++--------+----------+---------------------------------+----------------------------------------------+
+| glom   | GrC      | ``ConnectomeGlomerulusGranule`` | Houston et al. (2017) [#houston_2017]_       |
++--------+----------+---------------------------------+----------------------------------------------+
+| GoC    | GrC      | ``ConnectomeGolgiGlomerulus``   | ``[CITATION]``                               |
++--------+----------+---------------------------------+----------------------------------------------+
 
 .. include:: ../../strategies/connection-strategies.rst
 
@@ -162,7 +188,52 @@ UBC
 References
 ----------
 
-#. De Schepper, R., Geminiani, A., Masoli, S., Rizza, M. F., Antonietti, A., & Casellato, C. (2022). Model simulations unveil the structure-function-dynamics relationship of the cerebellar cortical microcircuit. Communications Biology, 5(1), 1-19. https://doi.org/10.1038/s42003-022-04213-y
+.. [#de_schepper_2022] De Schepper, R., Geminiani, A., Masoli, S., Rizza, M. F., Antonietti, A., &
+   Casellato, C. (2022). Model simulations unveil the structure-function-dynamics relationship of
+   the cerebellar cortical microcircuit. Communications Biology, 5(1), 1-19.
+   https://doi.org/10.1038/s42003-022-04213-y
 
-#. Hendelman, W. J., & Aggerwal, A. S. (1980). The Purkinje neuron: I. A Golgi study of its development in the mouse and in culture. Journal of Comparative Neurology, 193(4), 1063–1079. https://doi.org/10.1002/cne.901930417
+.. [#hendelman_1980] Hendelman, W. J., & Aggerwal, A. S. (1980). The Purkinje neuron: I. A Golgi
+   study of its development in the mouse and in culture. Journal of Comparative Neurology, 193(4),
+   1063–1079. https://doi.org/10.1002/cne.901930417
 
+.. [#kim_2021] Kim, J., & Augustine, G. J. (2021). Molecular Layer Interneurons: Key Elements of
+   Cerebellar Network Computation and Behavior. Neuroscience, 462, 22-35.
+   https://doi.org/10.1016/j.neuroscience.2020.10.008
+
+.. [#sultan_1998] Sultan, F., & Bower, J. M. (1998). Quantitative Golgi study of the rat cerebellar
+   molecular layer interneurons using principal component analysis. Journal of Comparative
+   Neurology, 393(3), 353-373. PMID: 9548555.
+   https://doi.org/10.1002/(SICI)1096-9861(19980413)393:3<353::AID-CNE7>3.0.CO;2-0
+
+.. [#solinas_2010] Solinas, S., Nieus, T., & D‘Angelo, E. (2010). A realistic large-scale model of
+   the cerebellum granular layer predicts circuit spatio-temporal filtering properties. Frontiers in
+   cellular neuroscience, 4, 903.  doi: 10.3389/fncel.2010.00012. PMID: 20508743; PMCID: PMC2876868.
+
+.. [#billings_2014] Billings, G., Piasini, E., Lőrincz, A., Nusser, Z., & Silver, R. A. (2014).
+   Network structure within the cerebellar input layer enables lossless sparse encoding. Neuron,
+   83(4), 960-974. https://doi.org/10.1016/j.neuron.2014.07.020
+
+.. [#casali_2019] Casali, S., Marenzi, E., Medini, C., Casellato, C., & D'Angelo, E. (2019).
+   Reconstruction and simulation of a scaffold model of the cerebellar network. Frontiers in
+   neuroinformatics, 13, 444802.https://doi.org/10.3389/fninf.2019.00037
+
+.. [#korbo_1993] Korbo, L., Andersen, B. B., Ladefoged, O., & Møller, A. (1993). Total numbers of
+   various cell types in rat cerebellar cortex estimated using an unbiased stereological method.
+   Brain research, 609(1-2), 262-268. https://doi.org/10.1016/0006-8993(93)90881-M
+
+.. [#jakab_1988] Jakab, R. L., & Hamori, J. (1988). Quantitative morphology and synaptology of
+   cerebellar glomeruli in the rat. Anatomy and embryology, 179, 81-88.
+   https://doi.org/10.1007/BF00305102
+
+.. [#sultan_2001] Sultan, F. (2001). Distribution of mossy fibre rosettes in the cerebellum of cat
+   and mice: Evidence for a parasagittal organization at the single fibre level. European Journal of
+   Neuroscience, 13(11), 2123-2130. https://doi.org/10.1046/j.0953-816x.2001.01593.x
+
+.. [#kanichay_2008] Kanichay, R. T., & Silver, R. A. (2008). Synaptic and cellular properties of the
+   feedforward inhibitory circuit within the input layer of the cerebellar cortex. Journal of
+   Neuroscience, 28(36), 8955-8967. https://doi.org/10.1523/JNEUROSCI.5469-07.2008
+
+.. [#houston_2017] Houston, C. M., Diamanti, E., Diamantaki, M., Kutsarova, E., Cook, A., Sultan, F.,
+   & Brickley, S. G. (2017). Exploring the significance of morphological diversity for cerebellar
+   granule cell excitability. Scientific Reports, 7(1), 1-16. https://doi.org/10.1038/srep46147
