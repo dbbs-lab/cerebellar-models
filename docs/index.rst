@@ -3,18 +3,39 @@
    You can adapt this file completely to your liking, but it should at least
    contain the root `toctree` directive.
 
-Welcome to Cerebellum's documentation!
-======================================
+Cerebellum
+==========
+
+This repository provides the code, configuration and morphology data to reconstruct and simulate
+cerebellar cortex circuits using the `Brain Scaffold Builder <https://bsb.readthedocs.io/en/latest/>`_
+These models are based on the iterative work of the `Department of Brain and Behavioral
+Sciences <https://dbbs.dip.unipv.it/en>`_ of the university of Pavia.
 
 .. toctree::
    :maxdepth: 2
-   :caption: Connectome:
+   :caption: Getting Started
 
-   source/connection-strategies
+   getting-started/installation
+   getting-started/content
+   getting-started/getting-started
+   getting-started/for-developpers
 
 .. toctree::
    :maxdepth: 2
-   :caption: References
+   :caption: BSB Configurations
+
+   configurations/configurations
+   configurations/morphologies
+
+.. toctree::
+   :maxdepth: 2
+   :caption: Strategies
+
+   strategies/connection-strategies
+
+.. toctree::
+   :maxdepth: 2
+   :caption: Code references
 
    modules
    genindex
