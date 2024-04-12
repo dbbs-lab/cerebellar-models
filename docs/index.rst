@@ -16,6 +16,7 @@ Sciences <https://dbbs.dip.unipv.it/en>`_ of the university of Pavia.
    :caption: Getting Started
 
    getting-started/installation
+   getting-started/biological-context.rst
    getting-started/content
    getting-started/getting-started
    getting-started/for-developpers

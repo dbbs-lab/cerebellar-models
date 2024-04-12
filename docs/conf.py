@@ -54,6 +54,7 @@ exclude_patterns = [
 # This pattern also affects html_static_path and html_extra_path.
 exclude_patterns = []
 
+numfig = True  # allow figure numbering
 
 # -- Options for HTML output -------------------------------------------------
 

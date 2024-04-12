@@ -21,18 +21,16 @@ the data they leverage.
 Circuit configuration
 ---------------------
 
-Biological context
-~~~~~~~~~~~~~~~~~~
+.. include:: ../../getting-started/biological-context.rst
+   :end-before: figure
 
-The cerebellar cortex is a subregion of the cerebellum structured as a folded sheet. This cortical
-sheet is itself decomposed into 2 major layers: the granular layer and the molecular layer,
-separated by a thin sheet of Purkinje cells, representing the Purkinje layer. Each layer contains
-its own cell types composition, placement rules and connectivity strategies.
+.. Do not include the Figure to prevent double referencing
 
-In the ``canonical circuit``, only a portion of the mouse cerebellar cortex is built in a cubic
-volume with fixed layer thicknesses, to simplify the orientation and scaling of neuronal geometrical
-representation (morphologies) but also to limit the number of neurons and therefore the final size
-of the network.
+.. include:: ../../getting-started/biological-context.rst
+   :start-after: end-figure
+   :end-before: end-bio-context
+
+In the mouse ``canonical circuit`` case, the UBC, DCN, IO and related connections are not included.
 
 Coordinate framework
 ~~~~~~~~~~~~~~~~~~~~
@@ -124,15 +122,13 @@ constrained placement to minimize the overlap of PC arborizations.
 Placement
 ~~~~~~~~~
 
-Except for Purkinje cells (PC), every entity is supposed to be uniformly
-distributed in their own layer.The bsb ``RandomPlacement`` strategy is
-chosen here to place them. In short, this strategy chose a random
-position for each entity within their sub-partition. Note that this does
-not take into account any potential overlapping of cells’ soma unlike
-the ``ParticlePlacement``. However, comparative analysis conducted in
-[CITATION] have shown that the latter strategy have a limited impact on
-connectivity and simulation results, while the computational cost of
-checking soma overlapping is not negligible.
+Except for Purkinje cells (PC), every entity is supposed to be uniformly distributed in their own
+layer.The bsb ``RandomPlacement`` strategy is chosen here to place them. In short, this strategy
+chose a random position for each entity within their sub-partition. Note that this does not take
+into account any potential overlapping of cells’ soma unlike the ``ParticlePlacement``.
+However, comparative analysis conducted in ``[CITATION]`` have shown that the latter strategy have a
+limited impact on connectivity and simulation results, while the computational cost of checking soma
+overlapping is not negligible.
 
 PC are placed in arrays, ``130 μm`` apart from each other along the
 para-sagittal plane ``(xz)`` to guarantee that their dendritic
@@ -143,19 +139,17 @@ the ``(xy)`` plane.
 Connectivity
 ~~~~~~~~~~~~
 
-+--------+----------+---------------------------------+----------------------------------------------+
-| Source | Target   | Strategy                        | References                                   |
-+========+==========+=================================+==============================================+
-| mf     | glom     | ``ConnectomeMossyGlomerulus``   | Sultan (2001) [#sultan_2001]_                |
-+--------+----------+---------------------------------+----------------------------------------------+
-| glom   | GoC      | ``ConnectomeGlomerulusGolgi``   | Kanichay and Silver (2008) [#kanichay_2008]_ |
-+--------+----------+---------------------------------+----------------------------------------------+
-| glom   | GrC      | ``ConnectomeGlomerulusGranule`` | Houston et al. (2017) [#houston_2017]_       |
-+--------+----------+---------------------------------+----------------------------------------------+
-| GoC    | GrC      | ``ConnectomeGolgiGlomerulus``   | ``[CITATION]``                               |
-+--------+----------+---------------------------------+----------------------------------------------+
-
-.. include:: ../../strategies/connection-strategies.rst
++--------+----------+-------------------+----------------------------------------------+
+| Source | Target   | Strategy          | References                                   |
++========+==========+===================+==============================================+
+| mf     | glom     | :ref:`mossy_glom` | Sultan (2001) [#sultan_2001]_                |
++--------+----------+-------------------+----------------------------------------------+
+| glom   | GoC      | :ref:`glom_goc`   | Kanichay and Silver (2008) [#kanichay_2008]_ |
++--------+----------+-------------------+----------------------------------------------+
+| glom   | GrC      | :ref:`glom_grc`   | Houston et al. (2017) [#houston_2017]_       |
++--------+----------+-------------------+----------------------------------------------+
+| GoC    | GrC      | :ref:`goc_glom`   | ``[CITATION]``                               |
++--------+----------+-------------------+----------------------------------------------+
 
 Extensions to the canonical model
 ---------------------------------

@@ -10,4 +10,6 @@ The ``cerebellum`` package requires Python 3.9+.
     cd cerebellum
     pip install -e .
 
-You can now head over to the :doc:`Contents section <content>`
+If you want more information on the Biological context, head over to this
+:doc:`section <biological-context>`. Otherwise, you can continue to the
+:doc:`Contents section <content>`.
