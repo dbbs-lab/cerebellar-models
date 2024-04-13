@@ -6,3 +6,4 @@ Mouse
     :caption: Configurations
 
     canonical-circuit
+    extensions

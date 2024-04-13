@@ -148,7 +148,7 @@ For the golgi to granule connectivity, the ``axon`` of the golgi cells are selec
     the intermediate cell. The latter serves only as a reference in the dependent connection
     strategy.
 
-.. _voxel_intersect:
+.. _voxel_int:
 
 :doc:`VoxelIntersection <bsb:bsb/bsb.connectivity.detailed>`
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~

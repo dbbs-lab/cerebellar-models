@@ -18,9 +18,6 @@ referred to as the ``canonical circuit``.
 We will follow the structure of the BSB configuration files to present each of their sections and
 the data they leverage.
 
-Circuit configuration
----------------------
-
 .. include:: ../../getting-started/biological-context.rst
    :end-before: figure
 
@@ -31,6 +28,9 @@ Circuit configuration
    :end-before: end-bio-context
 
 In the mouse ``canonical circuit`` case, the UBC, DCN, IO and related connections are not included.
+
+Circuit configuration
+---------------------
 
 Coordinate framework
 ~~~~~~~~~~~~~~~~~~~~
@@ -139,45 +139,52 @@ the ``(xy)`` plane.
 Connectivity
 ~~~~~~~~~~~~
 
-+--------+----------+-------------------+----------------------------------------------+
-| Source | Target   | Strategy          | References                                   |
-+========+==========+===================+==============================================+
-| mf     | glom     | :ref:`mossy_glom` | Sultan (2001) [#sultan_2001]_                |
-+--------+----------+-------------------+----------------------------------------------+
-| glom   | GoC      | :ref:`glom_goc`   | Kanichay and Silver (2008) [#kanichay_2008]_ |
-+--------+----------+-------------------+----------------------------------------------+
-| glom   | GrC      | :ref:`glom_grc`   | Houston et al. (2017) [#houston_2017]_       |
-+--------+----------+-------------------+----------------------------------------------+
-| GoC    | GrC      | :ref:`goc_glom`   | ``[CITATION]``                               |
-+--------+----------+-------------------+----------------------------------------------+
++-----------------------+-------------------------------+--------------------+-----------------------------------------------+
+| Source                | Target                        | Strategy           | References                                    |
++------+----------------+------+------------------------+--------------------+-----------------------------------------------+
+| Name | Branch         | Name | Branch                 |                    |                                               |
++======+================+======+========================+====================+===============================================+
+| mf   | /              | glom | /                      | :ref:`mossy_glom`  | Sultan (2001) [#sultan_2001]_                 |
++------+----------------+------+------------------------+--------------------+-----------------------------------------------+
+| glom | /              | GoC  | basal dendrites        | :ref:`glom_goc`    | Kanichay and Silver (2008) [#kanichay_2008]_  |
++------+----------------+------+------------------------+--------------------+-----------------------------------------------+
+| glom | /              | GrC  | dendrites              | :ref:`glom_grc`    | Houston et al. (2017) [#houston_2017]_        |
++------+----------------+------+------------------------+--------------------+-----------------------------------------------+
+| GoC  | axon           | GrC  | same as throuh glom    | :ref:`goc_glom`    | Barmack and Yakhnitsa (2008) [#barmack_2008]_ |
++------+----------------+------+------------------------+--------------------+-----------------------------------------------+
+| GoC  | axon           | GoC  | basal dendrites        | :ref:`voxel_int`   | Hull and Regehr (2012) [#hull_2012]_          |
++------+----------------+------+------------------------+--------------------+-----------------------------------------------+
+| GrC  | ascending axon | GoC  | basal dendrites        | :ref:`voxel_int`   | Cesana et al. (2013) [#cesana_2013]_          |
++------+----------------+------+------------------------+--------------------+-----------------------------------------------+
+| GrC  | parallel fiber | GoC  | apical dendrites       | :ref:`voxel_int`   | Kanichay and Silver (2008) [#kanichay_2008]_  |
++------+----------------+------+------------------------+--------------------+-----------------------------------------------+
+| GrC  | ascending axon | PC   | ascending axon targets | :ref:`voxel_int`   | Wang and Huang (2006) [#wang_2006]_           |
++------+----------------+------+------------------------+--------------------+-----------------------------------------------+
+| GrC  | parallel fiber | PC   | parallel fiber targets | :ref:`voxel_int`   | Wang and Huang (2006) [#wang_2006]_           |
++------+----------------+------+------------------------+--------------------+-----------------------------------------------+
+| GrC  | parallel fiber | BC   | dendrites              | :ref:`voxel_int`   | Jörntell et al. (2010) [#jorntell_2010]_      |
++------+----------------+------+------------------------+--------------------+-----------------------------------------------+
+| GrC  | parallel fiber | SC   | dendrites              | :ref:`voxel_int`   | Jörntell et al. (2010) [#jorntell_2010]_      |
++------+----------------+------+------------------------+--------------------+-----------------------------------------------+
+| BC   | axon           | PC   | soma                   | :ref:`voxel_int`   | Jörntell et al. (2010) [#jorntell_2010]_      |
++------+----------------+------+------------------------+--------------------+-----------------------------------------------+
+| SC   | axon           | PC   | stellate cell targets  | :ref:`voxel_int`   | Jörntell et al. (2010) [#jorntell_2010]_      |
++------+----------------+------+------------------------+--------------------+-----------------------------------------------+
+| BC   | axon           | SC   | dendrites              | :ref:`voxel_int`   | Ito (2013) [#ito_2013]_                       |
++------+----------------+------+------------------------+--------------------+-----------------------------------------------+
+| BC   | axon           | BC   | dendrites              | :ref:`voxel_int`   | Ito (2013) [#ito_2013]_                       |
++------+----------------+------+------------------------+--------------------+-----------------------------------------------+
+| SC   | axon           | BC   | dendrites              | :ref:`voxel_int`   | Ito (2013) [#ito_2013]_                       |
++------+----------------+------+------------------------+--------------------+-----------------------------------------------+
+| SC   | axon           | SC   | dendrites              | :ref:`voxel_int`   | Ito (2013) [#ito_2013]_                       |
++------+----------------+------+------------------------+--------------------+-----------------------------------------------+
+
+[TODO] Add description + citation for each params.
 
 Extensions to the canonical model
 ---------------------------------
 
-The ``canonical circuit`` serves as a template for cerebellar cortex
-reconstructions. Extensions located in subfolders, can be combined to
-the model to include specific details and perform various simulations.
-
-Simulations
-~~~~~~~~~~~
-
-Each circuit configuration can be reconstructed and simulated with BSB
-to reproduce different experiments.
-
-NEST
-^^^^
-
-[TODO]
-
-Neuron
-^^^^^^
-
-[TODO]
-
-UBC
-~~~
-
-[TODO]
+See the :doc:`Mouse extensions section <extensions>`.
 
 References
 ----------
@@ -231,3 +238,27 @@ References
 .. [#houston_2017] Houston, C. M., Diamanti, E., Diamantaki, M., Kutsarova, E., Cook, A., Sultan, F.,
    & Brickley, S. G. (2017). Exploring the significance of morphological diversity for cerebellar
    granule cell excitability. Scientific Reports, 7(1), 1-16. https://doi.org/10.1038/srep46147
+
+.. [#barmack_2008] Barmack, N. H., & Yakhnitsa, V. (2008). Functions of interneurons in mouse
+   cerebellum. Journal of Neuroscience, 28(5), 1140-1152.
+   https://doi.org/10.1523/JNEUROSCI.3942-07.2008
+
+.. [#hull_2012] Hull, C., Regehr, W. G. (2012). Identification of an inhibitory circuit that
+   regulates cerebellar Golgi cell activity. Neuron, 73(1), 149-158.
+   https://doi.org/10.1016/j.neuron.2011.10.030
+
+.. [#cesana_2013] Cesana, E., Pietrajtis, K., Bidoret, C., Isope, P., D'Angelo, E., Dieudonné, S.,
+   & Forti, L. (2013). Granule cell ascending axon excitatory synapses onto Golgi cells implement a
+   potent feedback circuit in the cerebellar granular layer. Journal of Neuroscience, 33(30),
+   12430-12446. https://doi.org/10.1523/JNEUROSCI.4897-11.2013
+
+.. [#wang_2006] Wang, L., & Huang, R. H. (2006). Cerebellar granule cell: Ascending axon and
+   parallel fiber. European Journal of Neuroscience, 23(7), 1731-1737.
+   https://doi.org/10.1111/j.1460-9568.2006.04690.x
+
+.. [#jorntell_2010] Jörntell, H., Bengtsson, F., Schonewille, M., & De Zeeuw, C. I. (2010).
+   Cerebellar molecular layer interneurons–computational properties and roles in learning. Trends in
+   neurosciences, 33(11), 524-532.https://doi.org/10.1016/j.tins.2010.08.004
+
+.. [#ito_2013] Ito, M. (2013). Cerebellar Microcircuitry. Reference Module in Biomedical Sciences.
+   https://doi.org/10.1016/B978-0-12-801238-3.04544-X

@@ -279,7 +279,7 @@ connectivity:
       cell_types:
         - granule_cell
       morphology_labels:
-        - basal_ascending_axondendrites
+        - ascending_axon
     postsynaptic:
       cell_types:
         - golgi_cell
