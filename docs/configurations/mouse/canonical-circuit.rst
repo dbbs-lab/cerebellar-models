@@ -10,10 +10,11 @@ cerebellar cortex with BSB v4.
 These reconstructions are based on the iterative work of many researchers distributed in many
 papers. The role of this file is to make explicit the origin of each value and strategy extracted
 from the literature and integrated into these configurations. All the configurations present in
-this folder are based on the ``mouse_cerebellar_cortex.yaml`` file. It corresponds to the
-configuration file written for the reconstruction of the cerebellar circuit presented in the
-De Schepper et al. (2022) [#de_schepper_2022]_ paper. This circuit configuration will be later
-referred to as the ``canonical circuit``.
+this folder are based on the
+`mouse_cerebellar_cortex.yaml <https://github.com/dbbs-lab/cerebellum/blob/master/configurations/mouse/mouse_cerebellar_cortex.yaml>`_
+file. It corresponds to the configuration file written for the reconstruction of the cerebellar
+circuit presented in the De Schepper et al. (2022) [#de_schepper_2022]_ paper. This circuit
+configuration will be later referred to as the ``canonical circuit``.
 
 We will follow the structure of the BSB configuration files to present each of their sections and
 the data they leverage.
@@ -47,10 +48,10 @@ match this convention.
 Network dimensions
 ~~~~~~~~~~~~~~~~~~
 
-The ``canonical circuit`` is built in a cubic volume of ``300 * 200 * 295 µm`` in the ``(x,y,z)``
-convention (see ``network``, ``regions`` and ``partitions`` in the configuration). The thickness of
-each of its layer has been determined according to literature findings and to match the size and
-shape of the available morphologies:
+The ``canonical circuit`` is built in a cubic volume of :math:`300 \times 200 \times 295` µm in the
+``(x,y,z)`` convention (see ``network``, ``regions`` and ``partitions`` in the configuration). The
+thickness of each of its layer has been determined according to literature findings and to match the
+size and shape of the available morphologies:
 
 - The Purkinje layer corresponds to a one cell thick sheet of Purkinje cells. The Purkinje cell soma
   diameters determine therefore the thickness of this layer. According to
@@ -97,7 +98,8 @@ We will describe here the spatial parameters used in ``canonical circuit``:
    Molecular layer;Basket cell (BC);Inh.;6.;0.00005;Casali et al. (2019) [#casali_2019]_
    Molecular layer;Stellate cell (SC);Inh.;4.;0.00005;Casali et al. (2019) [#casali_2019]_
 
-Note that most literature data in this table comes from rat data.
+.. warning::
+   Note that most literature data in this table comes from rat data.
 
 The density of glom have been calculated in Solinas et al. (2010) [#solinas_2010]_ based on the
 glomerulus to granule convergence and divergence ratios (derived from values in Korbo et al., 1993
@@ -157,7 +159,16 @@ Connectivity
    SC ; axon ; BC ; dendrites; :ref:`voxel_int` ; Ito (2013) [#ito_2013]_
    SC ; axon ; SC ; dendrites; :ref:`voxel_int` ; Ito (2013) [#ito_2013]_
 
-[TODO] Add description + citation for each params.
+Parameters explanation:
+^^^^^^^^^^^^^^^^^^^^^^^
+
+Sultan provides ranges of distance between gloms and their respective mf in their paper [#sultan_2001]_:
+:math:`57.6 \pm 60 \times 19.6 \pm 18.8` µm along respectively the x and y axes in our coordinate
+system. In our model, we used the rounded mean values as the maximum distance between mf and their
+gloms.
+
+The maximum spread of a Golgi neuron basal dendrite was extracted from Kanichay and Silver (2008)
+[#kanichay_2008]_
 
 Extensions to the canonical model
 ---------------------------------

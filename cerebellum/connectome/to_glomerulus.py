@@ -45,7 +45,7 @@ class ConnectomeGlomerulus(InvertedRoI, ConnectionStrategy):
                 for j, glomerulus in enumerate(glomeruli_pos):
                     pre_ids = self.pre_selection(presyn_pos, glomerulus)
                     if len(pre_ids) > 0:
-                        roll = int(np.floor(len(pre_ids) * norm_exp_dist()))
+                        roll = int(np.floor(len(pre_ids) * norm_exp_dist()[0]))
                         pre_locs[to_keep, 0] = pre_ids[roll]
                         post_locs[to_keep, 0] = j
                         to_keep += 1
@@ -78,8 +78,8 @@ class ConnectomeMossyGlomerulus(ConnectomeGlomerulus):
     x_length: float = config.attr(type=float, required=True)
     """Length of the box along the x axis surrounding the glomerulus cell soma in which the 
         presynaptic cell can be connected."""
-    z_length: float = config.attr(type=float, required=True)
-    """Length of the box along the z axis surrounding the glomerulus cell soma in which the 
+    y_length: float = config.attr(type=float, required=True)
+    """Length of the box along the y axis surrounding the glomerulus cell soma in which the 
         presynaptic cell can be connected."""
 
     def pre_selection(
@@ -88,14 +88,14 @@ class ConnectomeMossyGlomerulus(ConnectomeGlomerulus):
         glom_pos,
     ):
         diff = np.absolute(glom_pos - presyn_pos)
-        ids_to_keep = np.where((diff[:, 0] <= self.x_length) * (diff[:, 2] <= self.z_length))[0]
+        ids_to_keep = np.where((diff[:, 0] <= self.x_length) * (diff[:, 2] <= self.y_length))[0]
         dist = np.linalg.norm(diff[ids_to_keep], axis=1)
         return ids_to_keep[np.argsort(dist)]
 
     def get_region_of_interest(self, chunk):
         # Chunk here is a postsynaptic chunk because of InvertedRoI
         # We look for chunks containing mossy fibers that are within a rectangle of size
-        # x_length * z_length centered on the postsynaptic chunk containing the glomerulus.
+        # x_length * y_length centered on the postsynaptic chunk containing the glomerulus.
         chunks = set(
             itertools.chain.from_iterable(
                 ct.get_placement_set().get_all_chunks() for ct in self.presynaptic.cell_types
@@ -103,11 +103,9 @@ class ConnectomeMossyGlomerulus(ConnectomeGlomerulus):
         )
         selected_chunks = []
         for c in chunks:
-            x_dist = np.fabs(chunk[0] - c[0])
-            z_dist = np.fabs(chunk[2] - c[2])
-            x_dist = x_dist * chunk.dimensions[0]
-            z_dist = z_dist * chunk.dimensions[2]
+            x_dist = np.fabs(chunk[0] - c[0]) * chunk.dimensions[0]
+            y_dist = np.fabs(chunk[1] - c[1]) * chunk.dimensions[1]
 
-            if (x_dist < self.x_length / 2) and (z_dist < self.z_length / 2):
+            if (x_dist < self.x_length / 2) and (y_dist < self.y_length / 2):
                 selected_chunks.append(Chunk([c[0], c[1], c[2]], chunk.dimensions))
         return selected_chunks

@@ -26,7 +26,7 @@ class TestConnectomeMossyGlomerulus(
     def setUp(self):
         super().setUp()
         self.x_length = 60
-        self.z_length = 20
+        self.y_length = 20
         self.cfg.connectivity.add(
             "x_to_glomerulus",
             dict(
@@ -34,7 +34,7 @@ class TestConnectomeMossyGlomerulus(
                 presynaptic=dict(cell_types=["test_cell"]),
                 postsynaptic=dict(cell_types=["test_cell"]),
                 x_length=self.x_length,
-                z_length=self.z_length,
+                y_length=self.y_length,
             ),
         )
         self.network = Scaffold(self.cfg, self.storage)
@@ -52,7 +52,7 @@ class TestConnectomeMossyGlomerulus(
             self.assertAll(to_[1:] == cell_targets)
             diff = np.absolute(cell_positions[from_[0]] - cell_positions[to_[0]])
             self.assertTrue(diff[0] <= self.x_length)
-            self.assertTrue(diff[2] <= self.z_length)
+            self.assertTrue(diff[2] <= self.y_length)
             distances[to_[0]] = np.linalg.norm(diff)
         self.assertAll(distances >= 0, "Each postsyn cell has a connection")
 

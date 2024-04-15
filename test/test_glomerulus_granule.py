@@ -67,7 +67,7 @@ class TestGlomerulusGranule(
                     presynaptic=dict(cell_types=["pre_cell"]),
                     postsynaptic=dict(cell_types=["test_cell"]),
                     x_length=60,
-                    z_length=20,
+                    y_length=20,
                 ),
             ),
         )
@@ -137,7 +137,7 @@ class TestGlomerulusGranule(
                 presynaptic=dict(cell_types=["pre_cell2"]),
                 postsynaptic=dict(cell_types=["test_cell"]),
                 x_length=60,
-                z_length=20,
+                y_length=20,
             ),
         )
         self.cfg.connectivity.add(

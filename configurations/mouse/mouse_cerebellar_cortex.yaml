@@ -198,7 +198,7 @@ connectivity:
       cell_types:
         - glomerulus
     x_length: 60
-    z_length: 20
+    y_length: 20
   glomerulus_to_granule:
     strategy: cerebellum.connectome.glomerulus_granule.ConnectomeGlomerulusGranule
     presynaptic:

@@ -7,14 +7,14 @@ Connection strategies
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 The algorithm selects one presynaptic cell (usually mossy fiber) within the
-:math:`x\_length * z\_length * y\_size` μm box surrounding each postsynaptic cell
+:math:`x\_length \times z\_length \times y\_size` μm box surrounding each postsynaptic cell
 (usually glomerulus). Here ``y_size`` is the size of the partition where the postsynaptic cell are
 (i.e. no limit). This selection is random and performed with a truncated exponential distribution.
 
 * ``x_length``: Length of the box along the x axis surrounding the postsynaptic cell soma in which
   the presynaptic cell can be connected.
 
-* ``z_length``: Length of the box along the z axis surrounding the postsynaptic cell soma in which
+* ``y_length``: Length of the box along the y axis surrounding the postsynaptic cell soma in which
   the presynaptic cell can be connected.
 
 .. note::
