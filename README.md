@@ -34,9 +34,27 @@ Sub-folders within `configurations` corresponds to different species reconstruct
 have its default configuration to reconstruct the models as well as `extensions` that can be added 
 to override or extend the default one. This includes the different simulation' paradigms.
 
+## Create documentation
+
+You can generate the documentation related to the different circuits and the code using sphinx.
+Assuming you are in the `cerebellum` folder, run the following command in your terminal:
+```bash
+pip install -e .[docs]
+````
+to install the required packages. 
+
+Then, you can build the documentation with the sphinx command: 
+```bash
+cd docs
+sphinx-build -n -b html . _build/html
+```
+This will produce html web pages that can be read with your favorite internet browser at: 
+`docs/_build/html/index.html`
+
 ## Building a circuit
 
-Depending on the circuit you wish to obtain and/or simulate, the process will vary.
+Depending on the circuit you wish to obtain and/or simulate, the process will vary. Check the 
+documentation for more information. 
 
 As an example, we present the process to reconstruct the cerebellar cortex of the rodent brain, 
 based on the reconstruction of [De Schepper et al. 2022](https://doi.org/10.1038/s42003-022-04213-y) 

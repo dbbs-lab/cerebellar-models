@@ -7,11 +7,15 @@ the `DBBS <https://dbbs.dip.unipv.it/en)>`_ laboratory of the university of Pavi
 Introduction to BSB
 ~~~~~~~~~~~~~~~~~~~
 
-BSB consumes a configuration file that describes the process of building a neural circuit
-from scratch. This includes the creation of its different sub-regions, the placement cells of the
-cells that compose it and the connections of these cells to form an network. BSB also propose
-different simulators backends that allow for the simulation of the produced circuits. Hence, the
-configuration file can be extended to include simulation paradigms.
+The :doc:`Brain Scaffold Builder <bsb:index>` (BSB) is a framework that provides tools and pipelines
+to reconstruct and simulate neural networks *in silico*.
+
+BSB consumes a model description or ``configuration`` that describes the process of building a
+neural circuit from scratch. This includes the creation of its different sub-regions, the placement
+of the different cells that compose it and the connections of these cells to form an network. BSB
+implements also simulators backends that allow for the simulation of the produced circuits.
+Hence, the configuration can be extended to include simulation paradigms. Model configurations are
+stored as dictionaries, and usually loaded from ``yaml`` or ``json`` files.
 
 A modular configuration file to reconstruct cerebellar cortex circuit
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~

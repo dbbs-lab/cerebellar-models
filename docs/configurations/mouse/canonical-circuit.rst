@@ -142,9 +142,9 @@ Connectivity
 
    Source Name; Source Branch; Target Name; Target Branch; Strategy; References
    mf ; /; glom ; /; :ref:`mossy_glom`; Sultan (2001) [#sultan_2001]_
-   glom ; /; GoC; basal dendrites; :ref:`glom_goc`; Kanichay and Silver (2008) [#kanichay_2008]_
    glom ; /; GrC; dendrites; :ref:`glom_grc`; Houston et al. (2017) [#houston_2017]_
-   GoC; axon ; GrC; same as throuh glom; :ref:`goc_glom`; Barmack and Yakhnitsa (2008) [#barmack_2008]_
+   glom ; /; GoC; basal dendrites; :ref:`glom_goc`; Kanichay and Silver (2008) [#kanichay_2008]_
+   GoC; axon ; GrC; same as through glom; :ref:`goc_glom`; Barmack and Yakhnitsa (2008) [#barmack_2008]_
    GoC; axon ; GoC; basal dendrites; :ref:`voxel_int` ; Hull and Regehr (2012) [#hull_2012]_
    GrC; ascending axon ; GoC; basal dendrites; :ref:`voxel_int` ; Cesana et al. (2013) [#cesana_2013]_
    GrC; parallel fiber ; GoC; apical dendrites ; :ref:`voxel_int` ; Kanichay and Silver (2008) [#kanichay_2008]_
@@ -162,13 +162,41 @@ Connectivity
 Parameters explanation:
 ^^^^^^^^^^^^^^^^^^^^^^^
 
+We currently have no morphologies for the mf and glom, which makes it impossible to use fiber or
+voxel intersection techniques to implement their related connection rules. We therefore simplified
+the geometry of the neurites involved in these connections.
+
 Sultan provides ranges of distance between gloms and their respective mf in their paper [#sultan_2001]_:
 :math:`57.6 \pm 60 \times 19.6 \pm 18.8` µm along respectively the x and y axes in our coordinate
 system. In our model, we used the rounded mean values as the maximum distance between mf and their
 gloms.
 
-The maximum spread of a Golgi neuron basal dendrite was extracted from Kanichay and Silver (2008)
-[#kanichay_2008]_
+GrC of the adult mouse cerebellar cortex has :math:`3.9 \pm 0.1` dendrites that spreads for ~40μm in
+each direction, as reported in Houston et al. (2017) [#houston_2017]_ (see Figure 2G).
+In our model, we therefore assumed that each GrC in our model has ``4`` dendrites of ``40μm``, to
+match also the number of branches of the respective morphology. These values are used in the glom to
+GrC connectivity rule. The convergence value of this connection pair is set here to the number of
+dendrites.
+
+GoC basolateral arborizations spread across 100μm in P25 rat according to Kanichay and Silver (2008)
+[#kanichay_2008]_. This has been simplified to a sphere of ``50μm`` radius surrounding their soma
+for the GoC to glom connectivity.
+
+Barmack and Yakhnitsa (2008) [#barmack_2008]_ reported that the mean mediolateral extent of the GoC
+axon is :math:`180 \pm 40` μm, and that it spreads along the parasagittal plane. In our connection
+from GoC to GrC (through glom), we used a ``150μm`` sphere surrounding the GoC soma to find
+potential glom targets. The maximum number of glom target (divergence) for each GoC was set to ``40``
+in Solinas et al. (2010) [#solinas_2010]_. However, the rationale behind this particular value is
+unclear but probably to balance the granular layer excitation and inhibition.
+
+For the rest of the connection rules, we leveraged each neuron morphologies to detect appositions of
+their neurites. Fiber intersection methods require a lot of computational power we therefore used
+BSB :ref:`voxel_int` strategy as it simplifies this detection representing morphologies using
+voxels.
+
+The ``affinity`` and ``distributions`` of ``contact`` points parameters of these connections were
+tuned in De Schepper et al. (2022) [#de_schepper_2022]_ to match connectivity divergence and
+convergence values.
 
 Extensions to the canonical model
 ---------------------------------
