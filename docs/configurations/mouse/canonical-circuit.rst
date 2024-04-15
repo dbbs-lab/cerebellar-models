@@ -84,25 +84,20 @@ the circuit and have therefore no morphology attached.
 
 We will describe here the spatial parameters used in ``canonical circuit``:
 
-+-----------------+--------------------+------+-----------------+-------------------------------------+------------------------------------------------+
-| Layer           | Cell name          | Type | Radius (µm)     | Density (:math:`µm^{-3}`)           | References                                     |
-+=================+====================+======+=================+=====================================+================================================+
-| Granular layer  | Glomerulus (glom)  | Exc. | 1.5             | 0.0003                              | Solinas et al. (2010) [#solinas_2010]_         |
-+                 +--------------------+------+-----------------+-------------------------------------+------------------------------------------------+
-|                 | Mossy fibers (mf)  | Exc. | /               | count relative to glom. ratio=0.05  | Billings et al. (2014) [#billings_2014]_       |
-+                 +--------------------+------+-----------------+-------------------------------------+------------------------------------------------+
-|                 | Granule Cell (GrC) | Exc. | 2.5             | 0.0039                              | Casali et al. (2019) [#casali_2019]_           |
-+                 +--------------------+------+-----------------+-------------------------------------+------------------------------------------------+
-|                 | Golgi Cell (GoC)   | Inh. | 4.0             | 0.000009                            | Casali et al. (2019) [#casali_2019]_           |
-+-----------------+--------------------+------+-----------------+-------------------------------------+------------------------------------------------+
-| Purkinje layer  | Purkinje cell (PC) | Inh. | 7.5             | planar density: 0.0017              | De Schepper et al. (2022) [#de_schepper_2022]_ |
-+-----------------+--------------------+------+-----------------+-------------------------------------+------------------------------------------------+
-| Molecular layer | Basket cell (BC)   | Inh. | 6.              | 0.00005                             | Casali et al. (2019) [#casali_2019]_           |
-+                 +--------------------+------+-----------------+-------------------------------------+------------------------------------------------+
-|                 | Stellate cell (SC) | Inh. | 4.              | 0.00005                             | Casali et al. (2019) [#casali_2019]_           |
-+-----------------+--------------------+------+-----------------+-------------------------------------+------------------------------------------------+
+.. csv-table::
+   :header-rows: 1
+   :delim: ;
 
-Note that every literature data in this table comes rat data.
+   Layer;Cell name;Type;Radius (µm);Density (:math:`µm^{-3}`);References
+   Granular layer;Glomerulus (glom);Exc.;1.5;0.0003;Solinas et al. (2010) [#solinas_2010]_
+   Granular layer;Mossy fibers (mf);Exc.;/;count relative to glom. ratio=0.05;Billings et al. (2014) [#billings_2014]_
+   Granular layer;Granule Cell (GrC);Exc.;2.5;0.0039;Casali et al. (2019) [#casali_2019]_
+   Granular layer;Golgi Cell (GoC);Inh.;4.0;0.000009;Casali et al. (2019) [#casali_2019]_
+   Purkinje layer;Purkinje cell (PC);Inh.;7.5;planar density: 0.0017;De Schepper et al. (2022) [#de_schepper_2022]_
+   Molecular layer;Basket cell (BC);Inh.;6.;0.00005;Casali et al. (2019) [#casali_2019]_
+   Molecular layer;Stellate cell (SC);Inh.;4.;0.00005;Casali et al. (2019) [#casali_2019]_
+
+Note that most literature data in this table comes from rat data.
 
 The density of glom have been calculated in Solinas et al. (2010) [#solinas_2010]_ based on the
 glomerulus to granule convergence and divergence ratios (derived from values in Korbo et al., 1993
@@ -139,45 +134,28 @@ the ``(xy)`` plane.
 Connectivity
 ~~~~~~~~~~~~
 
-+-----------------------+-------------------------------+--------------------+-----------------------------------------------+
-| Source                | Target                        | Strategy           | References                                    |
-+------+----------------+------+------------------------+--------------------+-----------------------------------------------+
-| Name | Branch         | Name | Branch                 |                    |                                               |
-+======+================+======+========================+====================+===============================================+
-| mf   | /              | glom | /                      | :ref:`mossy_glom`  | Sultan (2001) [#sultan_2001]_                 |
-+------+----------------+------+------------------------+--------------------+-----------------------------------------------+
-| glom | /              | GoC  | basal dendrites        | :ref:`glom_goc`    | Kanichay and Silver (2008) [#kanichay_2008]_  |
-+------+----------------+------+------------------------+--------------------+-----------------------------------------------+
-| glom | /              | GrC  | dendrites              | :ref:`glom_grc`    | Houston et al. (2017) [#houston_2017]_        |
-+------+----------------+------+------------------------+--------------------+-----------------------------------------------+
-| GoC  | axon           | GrC  | same as throuh glom    | :ref:`goc_glom`    | Barmack and Yakhnitsa (2008) [#barmack_2008]_ |
-+------+----------------+------+------------------------+--------------------+-----------------------------------------------+
-| GoC  | axon           | GoC  | basal dendrites        | :ref:`voxel_int`   | Hull and Regehr (2012) [#hull_2012]_          |
-+------+----------------+------+------------------------+--------------------+-----------------------------------------------+
-| GrC  | ascending axon | GoC  | basal dendrites        | :ref:`voxel_int`   | Cesana et al. (2013) [#cesana_2013]_          |
-+------+----------------+------+------------------------+--------------------+-----------------------------------------------+
-| GrC  | parallel fiber | GoC  | apical dendrites       | :ref:`voxel_int`   | Kanichay and Silver (2008) [#kanichay_2008]_  |
-+------+----------------+------+------------------------+--------------------+-----------------------------------------------+
-| GrC  | ascending axon | PC   | ascending axon targets | :ref:`voxel_int`   | Wang and Huang (2006) [#wang_2006]_           |
-+------+----------------+------+------------------------+--------------------+-----------------------------------------------+
-| GrC  | parallel fiber | PC   | parallel fiber targets | :ref:`voxel_int`   | Wang and Huang (2006) [#wang_2006]_           |
-+------+----------------+------+------------------------+--------------------+-----------------------------------------------+
-| GrC  | parallel fiber | BC   | dendrites              | :ref:`voxel_int`   | Jörntell et al. (2010) [#jorntell_2010]_      |
-+------+----------------+------+------------------------+--------------------+-----------------------------------------------+
-| GrC  | parallel fiber | SC   | dendrites              | :ref:`voxel_int`   | Jörntell et al. (2010) [#jorntell_2010]_      |
-+------+----------------+------+------------------------+--------------------+-----------------------------------------------+
-| BC   | axon           | PC   | soma                   | :ref:`voxel_int`   | Jörntell et al. (2010) [#jorntell_2010]_      |
-+------+----------------+------+------------------------+--------------------+-----------------------------------------------+
-| SC   | axon           | PC   | stellate cell targets  | :ref:`voxel_int`   | Jörntell et al. (2010) [#jorntell_2010]_      |
-+------+----------------+------+------------------------+--------------------+-----------------------------------------------+
-| BC   | axon           | SC   | dendrites              | :ref:`voxel_int`   | Ito (2013) [#ito_2013]_                       |
-+------+----------------+------+------------------------+--------------------+-----------------------------------------------+
-| BC   | axon           | BC   | dendrites              | :ref:`voxel_int`   | Ito (2013) [#ito_2013]_                       |
-+------+----------------+------+------------------------+--------------------+-----------------------------------------------+
-| SC   | axon           | BC   | dendrites              | :ref:`voxel_int`   | Ito (2013) [#ito_2013]_                       |
-+------+----------------+------+------------------------+--------------------+-----------------------------------------------+
-| SC   | axon           | SC   | dendrites              | :ref:`voxel_int`   | Ito (2013) [#ito_2013]_                       |
-+------+----------------+------+------------------------+--------------------+-----------------------------------------------+
+.. csv-table::
+   :header-rows: 1
+   :delim: ;
+
+   Source Name; Source Branch; Target Name; Target Branch; Strategy; References
+   mf ; /; glom ; /; :ref:`mossy_glom`; Sultan (2001) [#sultan_2001]_
+   glom ; /; GoC; basal dendrites; :ref:`glom_goc`; Kanichay and Silver (2008) [#kanichay_2008]_
+   glom ; /; GrC; dendrites; :ref:`glom_grc`; Houston et al. (2017) [#houston_2017]_
+   GoC; axon ; GrC; same as throuh glom; :ref:`goc_glom`; Barmack and Yakhnitsa (2008) [#barmack_2008]_
+   GoC; axon ; GoC; basal dendrites; :ref:`voxel_int` ; Hull and Regehr (2012) [#hull_2012]_
+   GrC; ascending axon ; GoC; basal dendrites; :ref:`voxel_int` ; Cesana et al. (2013) [#cesana_2013]_
+   GrC; parallel fiber ; GoC; apical dendrites ; :ref:`voxel_int` ; Kanichay and Silver (2008) [#kanichay_2008]_
+   GrC; ascending axon ; PC ; ascending axon targets ; :ref:`voxel_int` ; Wang and Huang (2006) [#wang_2006]_
+   GrC; parallel fiber ; PC ; parallel fiber targets ; :ref:`voxel_int` ; Wang and Huang (2006) [#wang_2006]_
+   GrC; parallel fiber ; BC ; dendrites; :ref:`voxel_int` ; Jörntell et al. (2010) [#jorntell_2010]_
+   GrC; parallel fiber ; SC ; dendrites; :ref:`voxel_int` ; Jörntell et al. (2010) [#jorntell_2010]_
+   BC ; axon ; PC ; soma ; :ref:`voxel_int` ; Jörntell et al. (2010) [#jorntell_2010]_
+   SC ; axon ; PC ; stellate cell targets; :ref:`voxel_int` ; Jörntell et al. (2010) [#jorntell_2010]_
+   BC ; axon ; SC ; dendrites; :ref:`voxel_int` ; Ito (2013) [#ito_2013]_
+   BC ; axon ; BC ; dendrites; :ref:`voxel_int` ; Ito (2013) [#ito_2013]_
+   SC ; axon ; BC ; dendrites; :ref:`voxel_int` ; Ito (2013) [#ito_2013]_
+   SC ; axon ; SC ; dendrites; :ref:`voxel_int` ; Ito (2013) [#ito_2013]_
 
 [TODO] Add description + citation for each params.
 
