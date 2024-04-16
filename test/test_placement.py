@@ -1,4 +1,8 @@
+import os
 import unittest
+
+import numpy as np
+from bsb import Scaffold
 
 
 def get_tiny_network():
@@ -15,9 +19,7 @@ def get_tiny_network():
         )
         config.output_formatter.file = scaffold_path
         scaffold = Scaffold(config)
-        mf_ids = scaffold.create_entities(
-            scaffold.configuration.cell_types["mossy_fibers"], 3
-        )
+        mf_ids = scaffold.create_entities(scaffold.configuration.cell_types["mossy_fibers"], 3)
         glom_ids = scaffold.place_cells(
             scaffold.configuration.cell_types["glomerulus"],
             None,
@@ -216,9 +218,7 @@ def get_tiny_network():
         )
         scaffold.connect_cells(
             scaffold.configuration.connection_types["golgi_to_golgi"],
-            np.array(
-                [*([[goc_ids[0], goc_ids[1]]] * 100), *([[goc_ids[1], goc_ids[0]]] * 100)]
-            ),
+            np.array([*([[goc_ids[0], goc_ids[1]]] * 100), *([[goc_ids[1], goc_ids[0]]] * 100)]),
             compartments=np.tile(
                 np.column_stack((np.arange(396, 496), np.arange(495, 395, -1))), (2, 1)
             ),
@@ -226,9 +226,7 @@ def get_tiny_network():
         )
         scaffold.connect_cells(
             scaffold.configuration.connection_types["gap_goc"],
-            np.array(
-                [*([[goc_ids[0], goc_ids[1]]] * 5), *([[goc_ids[1], goc_ids[0]]] * 5)]
-            ),
+            np.array([*([[goc_ids[0], goc_ids[1]]] * 5), *([[goc_ids[1], goc_ids[0]]] * 5)]),
             compartments=np.ones((10, 2)) * 395,
             morphologies=np.tile(["GolgiCell"], (10, 2)),
         )
@@ -241,9 +239,7 @@ def get_tiny_network():
                 )
             ),
             compartments=np.tile([80, 2580], (len(grc_ids) * len(sc_ids), 1)),
-            morphologies=np.tile(
-                ["GranuleCell", "StellateCell"], (len(grc_ids) * len(sc_ids), 1)
-            ),
+            morphologies=np.tile(["GranuleCell", "StellateCell"], (len(grc_ids) * len(sc_ids), 1)),
         )
         scaffold.connect_cells(
             scaffold.configuration.connection_types["parallel_fiber_to_basket"],
@@ -254,9 +250,7 @@ def get_tiny_network():
                 )
             ),
             compartments=np.tile([79, 2740], (len(grc_ids) * len(bc_ids), 1)),
-            morphologies=np.tile(
-                ["GranuleCell", "BasketCell"], (len(grc_ids) * len(bc_ids), 1)
-            ),
+            morphologies=np.tile(["GranuleCell", "BasketCell"], (len(grc_ids) * len(bc_ids), 1)),
         )
         scaffold.connect_cells(
             scaffold.configuration.connection_types["parallel_fiber_to_purkinje"],
@@ -267,9 +261,7 @@ def get_tiny_network():
                 )
             ),
             compartments=np.tile([81, 2371], (len(grc_ids) * len(pc_ids), 1)),
-            morphologies=np.tile(
-                ["GranuleCell", "PurkinjeCell"], (len(grc_ids) * len(pc_ids), 1)
-            ),
+            morphologies=np.tile(["GranuleCell", "PurkinjeCell"], (len(grc_ids) * len(pc_ids), 1)),
         )
         scaffold.connect_cells(
             scaffold.configuration.connection_types["stellate_to_purkinje"],
@@ -280,9 +272,7 @@ def get_tiny_network():
                 )
             ),
             compartments=np.tile([2870, 2875], (len(sc_ids) * len(pc_ids), 1)),
-            morphologies=np.tile(
-                ["StellateCell", "PurkinjeCell"], (len(sc_ids) * len(pc_ids), 1)
-            ),
+            morphologies=np.tile(["StellateCell", "PurkinjeCell"], (len(sc_ids) * len(pc_ids), 1)),
         )
         scaffold.connect_cells(
             scaffold.configuration.connection_types["basket_to_purkinje"],
@@ -293,16 +283,14 @@ def get_tiny_network():
                 )
             ),
             compartments=np.tile([6129, 10], (len(bc_ids) * len(pc_ids), 1)),
-            morphologies=np.tile(
-                ["BasketCell", "PurkinjeCell"], (len(bc_ids) * len(pc_ids), 1)
-            ),
+            morphologies=np.tile(["BasketCell", "PurkinjeCell"], (len(bc_ids) * len(pc_ids), 1)),
         )
         scaffold.compile_output()
     else:
         scaffold = from_hdf5(scaffold_path)
 
 
-@unittest.skip("Needs to be updated to v4")
+@unittest.skip("Needs to be updated to bsb v4.0.1")
 class TestCerebellumPlacement(unittest.TestCase):
     """
     Check if the placement of all cell types is correct
@@ -347,8 +335,7 @@ class TestCerebellumPlacement(unittest.TestCase):
         after = cell_type.placement.after
         planet_cell_types = [self.scaffold.get_cell_type(n) for n in after]
         layers = [
-            planet_cell_type.placement.layer_instance
-            for planet_cell_type in planet_cell_types
+            planet_cell_type.placement.layer_instance for planet_cell_type in planet_cell_types
         ]
         # Get satellite positions
         positions = self.scaffold.get_cells_by_type(cell_type.name)[:, 2:5]
@@ -358,9 +345,7 @@ class TestCerebellumPlacement(unittest.TestCase):
         for layer in layers:
             min = layer.origin
             max = layer.origin + layer.dimensions
-            in_layer_bounds = np.where(
-                np.all((positions > min) & (positions < max), axis=1)
-            )[0]
+            in_layer_bounds = np.where(np.all((positions > min) & (positions < max), axis=1))[0]
             in_bounds.update(in_layer_bounds)
         # Verify all satellite cells belong to at least one planet layer.
         out_of_bounds = len(positions) - len(in_bounds)
@@ -398,6 +383,4 @@ class TestCerebellumPlacement(unittest.TestCase):
 
         # Asserts
         self.assertAlmostEqual(overlapSomata.shape[0], 0, delta=pcCount * 1 / 100)
-        self.assertAlmostEqual(
-            overlapDend_whichPairs.shape[0] / 2, 0, delta=pcCount * 4 / 100
-        )
+        self.assertAlmostEqual(overlapDend_whichPairs.shape[0] / 2, 0, delta=pcCount * 4 / 100)

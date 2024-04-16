@@ -3,12 +3,37 @@ storage:
   engine: hdf5
   root: cerebellum.hdf5
 network:
-  chunk_size: [50, 50, 50]
+  chunk_size: [100, 100, 100]
   x: 300
   y: 200
-  z: 300
+  z: 295
+regions:
+  cerebellar_cortex:
+    type: stack
+    children:
+      - granular_layer
+      - purkinje_layer
+      - b_molecular_layer
+      - t_molecular_layer
+partitions:
+  granular_layer:
+    stack_index: 0
+    thickness: 130
+  purkinje_layer:
+    stack_index: 1
+    thickness: 15
+  b_molecular_layer:
+    stack_index: 2
+    thickness: 50
+  t_molecular_layer:
+    stack_index: 3
+    thickness: 100
 morphologies:
   - file: ./morphologies/GranuleCell.swc
+    pipeline:
+      - func: cerebellum._swap_morphology_axes
+        axis1: 1
+        axis2: 2
     parser:
       tags:
         16:
@@ -24,6 +49,10 @@ morphologies:
           - axon
           - parallel_fiber
   - file: ./morphologies/GolgiCell.swc
+    pipeline:
+      - func: cerebellum._swap_morphology_axes
+        axis1: 1
+        axis2: 2
     parser:
       tags:
         16:
@@ -36,6 +65,10 @@ morphologies:
           - axon
           - axon_initial_segment
   - file: ./morphologies/PurkinjeCell.swc
+    pipeline:
+      - func: cerebellum._swap_morphology_axes
+        axis1: 1
+        axis2: 2
     parser:
       tags:
         16:
@@ -62,6 +95,10 @@ morphologies:
           - aa_targets
           - sc_targets
   - file: ./morphologies/StellateCell.swc
+    pipeline:
+      - func: cerebellum._swap_morphology_axes
+        axis1: 1
+        axis2: 2
     parser:
       tags:
         16:
@@ -74,33 +111,27 @@ morphologies:
           - axon
           - axon_initial_segment
   - file: ./morphologies/BasketCell.swc
+    pipeline:
+      - func: cerebellum._swap_morphology_axes
+        axis1: 1
+        axis2: 2
     parser:
       tags:
         16:
           - axon
           - axon_initial_segment
-partitions:
-  granular_layer:
-    stack_index: 0
-    thickness: 130
-  purkinje_layer:
-    stack_index: 1
-    thickness: 15
-  b_molecular_layer:
-    stack_index: 2
-    thickness: 50
-  t_molecular_layer:
-    stack_index: 3
-    thickness: 100
-regions:
-  cerebellar_cortex:
-    type: stack
-    children:
-      - granular_layer
-      - purkinje_layer
-      - b_molecular_layer
-      - t_molecular_layer
 cell_types:
+  glomerulus:
+    spatial:
+      density: 0.0003
+      radius: 1.5
+    plotting:
+      display_name: Glomerulus
+  mossy_fibers:
+    spatial:
+      count_ratio: 0.05
+      radius: 1
+      relative_to: glomerulus
   granule_cell:
     spatial:
       density: 0.0039
@@ -110,25 +141,6 @@ cell_types:
     plotting:
       display_name: Granule cell
       opacity: 0.3
-  mossy_fibers:
-    spatial:
-      count_ratio: 0.05
-      radius: 1
-      relative_to: glomerulus
-  glomerulus:
-    spatial:
-      density: 0.0003
-      radius: 1.5
-    plotting:
-      display_name: Glomerulus
-  purkinje_cell:
-    spatial:
-      morphologies:
-        - PurkinjeCell
-      planar_density: 0.0017
-      radius: 7.5
-    plotting:
-      display_name: Purkinje cell
   golgi_cell:
     spatial:
       density: 0.000009
@@ -137,14 +149,14 @@ cell_types:
       radius: 8
     plotting:
       display_name: Golgi cell
-  stellate_cell:
+  purkinje_cell:
     spatial:
-      density: 0.00005
       morphologies:
-        - StellateCell
-      radius: 4
+        - PurkinjeCell
+      planar_density: 0.00045
+      radius: 7.5
     plotting:
-      display_name: Stellate cell
+      display_name: Purkinje cell
   basket_cell:
     spatial:
       density: 0.00005
@@ -153,6 +165,14 @@ cell_types:
       radius: 6
     plotting:
       display_name: Basket cell
+  stellate_cell:
+    spatial:
+      density: 0.00005
+      morphologies:
+        - StellateCell
+      radius: 4
+    plotting:
+      display_name: Stellate cell
 placement:
   granular_layer_innervation:
     strategy: bsb.placement.RandomPlacement
@@ -190,7 +210,7 @@ placement:
       - stellate_cell
 connectivity:
   mossy_fibers_to_glomerulus:
-    strategy: cerebellum.connectome.mossy_glomerulus.ConnectomeMossyGlomerulus
+    strategy: cerebellum.connectome.to_glomerulus.ConnectomeMossyGlomerulus
     presynaptic:
       cell_types:
         - mossy_fibers
@@ -198,11 +218,9 @@ connectivity:
       cell_types:
         - glomerulus
     x_length: 60
-    z_length: 20
+    y_length: 20
   glomerulus_to_granule:
     strategy: cerebellum.connectome.glomerulus_granule.ConnectomeGlomerulusGranule
-    depends_on:
-      - mossy_fibers_to_glomerulus
     presynaptic:
       cell_types:
         - glomerulus
@@ -211,17 +229,12 @@ connectivity:
         - granule_cell
       morphology_labels:
         - dendrites
-    prepresynaptic:
-      cell_types:
-        - mossy_fibers
-    x_length: 100
-    z_length: 100
-    max_radius: 40
+    mf_glom_strat: mossy_fibers_to_glomerulus
+    mf_cell_type: mossy_fibers
+    radius: 40
     convergence: 4
   glomerulus_to_golgi:
     strategy: cerebellum.connectome.glomerulus_golgi.ConnectomeGlomerulusGolgi
-    depends_on:
-      - mossy_fibers_to_glomerulus
     presynaptic:
       cell_types:
         - glomerulus
@@ -233,9 +246,7 @@ connectivity:
     radius: 50
   golgi_to_granule:
     strategy: >-
-      cerebellum.connectome.golgi_glomerulus_granule.ConnectomeGolgiGlomerulusGranule
-    depends_on:
-      - glomerulus_to_granule
+      cerebellum.connectome.golgi_glomerulus.ConnectomeGolgiGlomerulus
     presynaptic:
       cell_types:
         - golgi_cell
@@ -244,11 +255,10 @@ connectivity:
     postsynaptic:
       cell_types:
         - granule_cell
-    intermediate:
-      cell_types:
-        - glomerulus
-    radius: 50
-    convergence: 40
+    glom_post_strat: glomerulus_to_granule
+    glom_cell_type: glomerulus
+    radius: 150
+    divergence: 40
   golgi_to_golgi:
     strategy: bsb.connectivity.VoxelIntersection
     presynaptic:
@@ -262,6 +272,8 @@ connectivity:
       morphology_labels:
         - basal_dendrites
     affinity: 0.5
+    voxels_pre: 500
+    voxels_post: 500
     contacts:
       distribution: norm
       loc: 160
@@ -278,7 +290,9 @@ connectivity:
         - golgi_cell
       morphology_labels:
         - basal_dendrites
-    affinity: 0.2
+    affinity: 0.3
+    voxels_pre: 500
+    voxels_post: 500
     contacts:
       distribution: norm
       loc: 3
@@ -289,12 +303,15 @@ connectivity:
       cell_types:
         - granule_cell
       morphology_labels:
-        - basal_ascending_axondendrites
+        - ascending_axon
     postsynaptic:
       cell_types:
         - golgi_cell
       morphology_labels:
         - basal_dendrites
+    affinity: 0.05
+    voxels_pre: 500
+    voxels_post: 500
   parallel_fiber_to_golgi:
     strategy: bsb.connectivity.VoxelIntersection
     presynaptic:
@@ -307,7 +324,9 @@ connectivity:
         - golgi_cell
       morphology_labels:
         - apical_dendrites
-    affinity: 0.1
+    affinity: 0.08
+    voxels_pre: 500
+    voxels_post: 500
   ascending_axon_to_purkinje:
     strategy: bsb.connectivity.VoxelIntersection
     presynaptic:
@@ -320,7 +339,9 @@ connectivity:
         - purkinje_cell
       morphology_labels:
         - aa_targets
-    affinity: 0.1
+    affinity: 0.05
+    voxels_pre: 500
+    voxels_post: 500
   parallel_fiber_to_purkinje:
     strategy: bsb.connectivity.VoxelIntersection
     presynaptic:
@@ -334,6 +355,8 @@ connectivity:
       morphology_labels:
         - pf_targets
     affinity: 0.1
+    voxels_pre: 500
+    voxels_post: 500
   parallel_fiber_to_basket:
     strategy: bsb.connectivity.VoxelIntersection
     presynaptic:
@@ -346,7 +369,9 @@ connectivity:
         - basket_cell
       morphology_labels:
         - dendrites
-    affinity: 0.1
+    affinity: 0.08
+    voxels_pre: 500
+    voxels_post: 500
   parallel_fiber_to_stellate:
     strategy: bsb.connectivity.VoxelIntersection
     presynaptic:
@@ -359,7 +384,9 @@ connectivity:
         - stellate_cell
       morphology_labels:
         - dendrites
-    affinity: 0.1
+    affinity: 0.08
+    voxels_pre: 500
+    voxels_post: 500
   stellate_to_purkinje:
     strategy: bsb.connectivity.VoxelIntersection
     presynaptic:
@@ -373,6 +400,8 @@ connectivity:
       morphology_labels:
         - sc_targets
     affinity: 0.1
+    voxels_pre: 500
+    voxels_post: 500
   basket_to_purkinje:
     strategy: bsb.connectivity.VoxelIntersection
     presynaptic:
@@ -385,6 +414,8 @@ connectivity:
         - purkinje_cell
       morphology_labels:
         - soma
+    voxels_pre: 500
+    voxels_post: 500
   stellate_to_stellate:
     strategy: bsb.connectivity.VoxelIntersection
     presynaptic:
@@ -397,7 +428,9 @@ connectivity:
         - stellate_cell
       morphology_labels:
         - dendrites
-    affinity: 0.5
+    affinity: 0.3
+    voxels_pre: 500
+    voxels_post: 500
     contacts:
       distribution: norm
       loc: 100
@@ -415,6 +448,8 @@ connectivity:
       morphology_labels:
         - dendrites
     affinity: 0.5
+    voxels_pre: 500
+    voxels_post: 500
     contacts:
       distribution: norm
       loc: 100

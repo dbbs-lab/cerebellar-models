@@ -1,11 +1,20 @@
-import importlib
-import unittest
+"""
+Integration testing of the connectivity strategies. Every strategy should have at least 1 test in
+this suite that validates that the connectivity strategy produces biologically correct results.
 
-_nest_available = importlib.util.find_spec("nest") is not None
+Each strategy should still also have its own test file for unit testing.
+"""
+
+import unittest
+from importlib.util import find_spec
+
+import numpy as np
+
+_nest_available = find_spec("nest") is not None
 _using_morphologies = True
 
 
-@unittest.skip("Needs to be updated to v4")
+@unittest.skip("Needs to be updated to bsb v4.0.1")
 class TestConnectivity(unittest.TestCase):
     @classmethod
     def setUpClass(self):
@@ -50,19 +59,15 @@ class TestConnectivity(unittest.TestCase):
 
     # Test goc_glom connectivity in the scaffold creation (not used in NEST)
     def test_GoC_Glom(self):
-        first_goc_id = np.int(min(self.scaffold.get_cells_by_type("golgi_cell")[:, 0]))
-        last_goc_id = np.int(max(self.scaffold.get_cells_by_type("golgi_cell")[:, 0]))
-        first_glom_id = np.int(min(self.scaffold.get_cells_by_type("glomerulus")[:, 0]))
-        last_glom_id = np.int(max(self.scaffold.get_cells_by_type("glomerulus")[:, 0]))
+        first_goc_id = int(min(self.scaffold.get_cells_by_type("golgi_cell")[:, 0]))
+        last_goc_id = int(max(self.scaffold.get_cells_by_type("golgi_cell")[:, 0]))
+        first_glom_id = int(min(self.scaffold.get_cells_by_type("glomerulus")[:, 0]))
+        last_glom_id = int(max(self.scaffold.get_cells_by_type("glomerulus")[:, 0]))
         goc_glom = self.scaffold.get_connections_by_cell_type(
             presynaptic="golgi_cell", postsynaptic="glomerulus"
         )
-        self.assertTrue(
-            first_goc_id <= min(goc_glom[0][1].from_identifiers) <= last_goc_id
-        )
-        self.assertTrue(
-            first_glom_id <= min(goc_glom[0][1].to_identifiers) <= last_glom_id
-        )
+        self.assertTrue(first_goc_id <= min(goc_glom[0][1].from_identifiers) <= last_goc_id)
+        self.assertTrue(first_glom_id <= min(goc_glom[0][1].to_identifiers) <= last_glom_id)
 
         # Tests if labelled cells are connected only with cells with the same label
 
@@ -82,8 +87,7 @@ class TestConnectivity(unittest.TestCase):
                         )
                         for connection_i in A_to_B:
                             self.assertTrue(
-                                (connection_i[0] in micro_neg)
-                                == (connection_i[1] in micro_neg)
+                                (connection_i[0] in micro_neg) == (connection_i[1] in micro_neg)
                             )
 
     def test_connectivity_matrix(self):

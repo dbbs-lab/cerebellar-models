@@ -2,18 +2,18 @@ import pathlib
 import unittest
 
 import numpy as np
-from bsb.config import from_json
-from bsb.core import Scaffold
+from bsb import Scaffold, parse_configuration_file
 from scipy.signal import find_peaks
 
 
+@unittest.skip("Needs to be updated to bsb v4.0")
 class TestSingleCellModels(unittest.TestCase):
     # fixme
     @unittest.skip(reason="13Hz instead of 8")
     def test_golgi_autorythm(self):
         # Read the config and build a network with a single Golgi cell
-        config = from_json(
-            pathlib.Path(__file__).parent / "test_nrn_goc_autorythm.json"
+        config = parse_configuration_file(
+            pathlib.Path(__file__).parent / "test_configs" / "test_nrn_goc_autorythm.json", "json"
         )
         scaffold = Scaffold(config, self.storage)
         scaffold.compile()
@@ -28,16 +28,17 @@ class TestSingleCellModels(unittest.TestCase):
         after_transient = int(200.0 / resolution)
         voltage = avg[after_transient:]
         peaks, _ = find_peaks(voltage, height=0)
-        self.assertAlmostEqual(
-            len(peaks), 8, msg="The expected result is 8 pm 1 Hz", delta=1
-        )
+        self.assertAlmostEqual(len(peaks), 8, msg="The expected result is 8 pm 1 Hz", delta=1)
 
     # fixme
     @unittest.skip(reason="0Hz instead of 40")
     def test_golgi_current_clamp_200_pa(self):
         # Build a network with a single Golgi cell
-        config = from_json(
-            pathlib.Path(__file__).parent / "test_nrn_goc_current_clamp_200_pa.json"
+        config = parse_configuration_file(
+            pathlib.Path(__file__).parent
+            / "test_configs"
+            / "test_nrn_goc_current_clamp_200_pa.json",
+            "json",
         )
         scaffold = Scaffold(config, self.storage)
         scaffold.compile()
@@ -52,15 +53,13 @@ class TestSingleCellModels(unittest.TestCase):
         after_transient = int(200.0 / resolution)
         voltage = avg[after_transient:]
         peaks, _ = find_peaks(voltage, height=0)
-        self.assertAlmostEqual(
-            len(peaks), 40, msg="The expected result is 65 pm 7 Hz", delta=2
-        )
+        self.assertAlmostEqual(len(peaks), 40, msg="The expected result is 65 pm 7 Hz", delta=2)
 
     @unittest.skip(reason="Test too time consuming")
     def test_pc_autorythm(self):
         # Build a network with a single Purkinje cell
-        config = from_json(
-            pathlib.Path(__file__).parent / "test_nrn_pc_autorthythm.json"
+        config = parse_configuration_file(
+            pathlib.Path(__file__).parent / "test_configs" / "test_nrn_pc_autorthythm.json", "json"
         )
         scaffold = Scaffold(config, self.storage)
         scaffold.compile()
@@ -84,7 +83,9 @@ class TestSingleCellModels(unittest.TestCase):
     @unittest.skip(reason="Test too time consuming")
     def test_granule_purkinje(self):
         # Build a network with a single Purkinje cell and ~ 70 GrCs connected to the Purkinje
-        config = from_json(pathlib.Path(__file__).parent / "test_nrn_grc_pc.json")
+        config = parse_configuration_file(
+            pathlib.Path(__file__).parent / "test_configs" / "test_nrn_grc_pc.json", "json"
+        )
         scaffold = Scaffold(config, self.storage)
         scaffold.compile()
         # Stimulate GrCs with a baseline of 20 pA and a 25 pA current starting at 70 ms.

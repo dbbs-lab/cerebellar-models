@@ -1,6 +1,47 @@
-[tools.bsb]
-config = "cerebellum.json"
+[build-system]
+requires = ["flit_core >=3.2,<4"]
+build-backend = "flit_core.buildapi"
 
-[tools.bsb.links]
-config = "auto"
-morpho = [ "sys", "morphologies.hdf5", "newer",]
+[project]
+name = "cerebellum"
+authors = [{ name = "Robin De Schepper", email = "robingilbert.deschepper@unipv.it" }]
+readme = "README.md"
+license = { file = "LICENSE" }
+classifiers = ["License :: OSI Approved :: GNU General Public License v3 or later (GPLv3+)"]
+requires-python = ">=3.9"
+dynamic = ["version", "description"]
+dependencies = [
+    "bsb-core[parallel]~=4.0",
+    "bsb-hdf5~=4.0",
+    "bsb-yaml~=4.0",
+    "bsb-json~=4.0",
+    "bsb-neuron~=4.0",
+    "bsb-nest~=4.0"
+]
+
+[project.optional-dependencies]
+test = [
+    "bsb-test~=4.0",
+    "coverage~=7.3",
+]
+dev = [
+    "pre-commit~=3.5",
+    "black~=24.0",
+    "isort~=5.12",
+]
+docs = [
+    "sphinx~=7.0",
+    "furo~=2023.9",
+]
+
+[project.urls]
+Home = "https://github.com/dbbs-lab/cerebellum"
+"Bug Tracker" = "https://github.com/dbbs-lab/cerebellum/issues/"
+"Source Code" = "https://github.com/dbbs-lab/cerebellum/"
+
+[tool.black]
+line-length = 100
+
+[tool.isort]
+profile = "black"
+known_third_party = ["nest"]

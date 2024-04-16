@@ -1,5 +1,9 @@
 ---
 - file: ./morphologies/GranuleCell.swc
+  pipeline:
+    - func: cerebellum._swap_morphology_axes
+      axis1: 1
+      axis2: 2
   parser:
     tags:
       16:
@@ -15,6 +19,10 @@
         - axon
         - parallel_fiber
 - file: ./morphologies/GolgiCell.swc
+  pipeline:
+    - func: cerebellum._swap_morphology_axes
+      axis1: 1
+      axis2: 2
   parser:
     tags:
       16:
@@ -27,6 +35,10 @@
         - axon
         - axon_initial_segment
 - file: ./morphologies/PurkinjeCell.swc
+  pipeline:
+    - func: cerebellum._swap_morphology_axes
+      axis1: 1
+      axis2: 2
   parser:
     tags:
       16:
@@ -53,6 +65,10 @@
         - aa_targets
         - sc_targets
 - file: ./morphologies/StellateCell.swc
+  pipeline:
+    - func: cerebellum._swap_morphology_axes
+      axis1: 1
+      axis2: 2
   parser:
     tags:
       16:
@@ -65,6 +81,10 @@
         - axon
         - axon_initial_segment
 - file: ./morphologies/BasketCell.swc
+  pipeline:
+    - func: cerebellum._swap_morphology_axes
+      axis1: 1
+      axis2: 2
   parser:
     tags:
       16:
