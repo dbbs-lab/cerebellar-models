@@ -89,9 +89,10 @@ class ConnectomeGolgiGlomerulus(ConnectionStrategy):
 
         # We need global ids to filter the postsynaptic neuron that match the ones from
         # the dependency
-        iter_ = cs.load_connections().from_(pre_chunks).as_globals()
+        conn_ = cs.load_connections().from_(pre_chunks)
+        iter_ = conn_.as_globals()
         _, post_locs = iter_.all()
-        iter_ = cs.load_connections().from_(pre_chunks)
+        iter_ = conn_.as_scoped()
         glom_locs, _ = iter_.all()
         unique_gloms = np.unique(glom_locs[:, 0])
         postsyn_connections = []
@@ -99,13 +100,13 @@ class ConnectomeGolgiGlomerulus(ConnectionStrategy):
         for u_glom in unique_gloms:
             ids = np.where(glom_locs[:, 0] == u_glom)[0]
             postsyn_connections.append(post_locs[ids, 0])
+            # Fixme: not sure about the role of the following line
             post_ps.load_ids()
             postsyn_connections_branch_point.append(post_locs[ids, 1:])
 
         glom_pos = cs.pre_type.get_placement_set(chunks=pre_chunks).load_positions()[unique_gloms]
 
         return (
-            unique_gloms,
             glom_pos,
             postsyn_connections,
             postsyn_connections_branch_point,
@@ -117,7 +118,6 @@ class ConnectomeGolgiGlomerulus(ConnectionStrategy):
         # Select only the gloms for which a connection is found
         golgi_pos = pre_ps.load_positions()
         (
-            unique_gloms,
             glom_pos,
             postsyn_connections,
             postsyn_connections_branch_point,
