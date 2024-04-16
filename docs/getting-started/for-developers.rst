@@ -1,4 +1,4 @@
-For developpers
+For developers
 ---------------
 The ``cerebellum`` package requires Python 3.9+.
 

@@ -1,6 +1,6 @@
 Installation
 ------------
-``cerebellum`` is a package that contains implementation of connectivity or placement rules for
+``cerebellum`` is a package that contains implementation of connectivity and placement rules for
 ``BSB``.
 The ``cerebellum`` package requires Python 3.9+.
 

@@ -79,7 +79,7 @@ Cellular composition
 The cellular composition of the circuit is determined in the ``cell_types`` section of the
 configuration file. Each cell type is linked here to a partition in the circuit, and a morphology is
 assigned. Additionally, we introduce here two components used to innervate the circuit: the mossy
-fibers originating from various other brain regions, and the glomerulus that form at their
+fibers originating from various other brain regions, and the glomeruli that form at their
 terminals. These components are used as building entities to relay stimuli from other regions into
 the circuit and have therefore no morphology attached.
 
@@ -173,7 +173,7 @@ gloms.
 
 GrC of the adult mouse cerebellar cortex has :math:`3.9 \pm 0.1` dendrites that spreads for ~40μm in
 each direction, as reported in Houston et al. (2017) [#houston_2017]_ (see Figure 2G).
-In our model, we therefore assumed that each GrC in our model has ``4`` dendrites of ``40μm``, to
+In our model, we therefore assumed that each GrC has ``4`` dendrites of ``40μm``, to
 match also the number of branches of the respective morphology. These values are used in the glom to
 GrC connectivity rule. The convergence value of this connection pair is set here to the number of
 dendrites.
@@ -190,8 +190,8 @@ in Solinas et al. (2010) [#solinas_2010]_. However, the rationale behind this pa
 unclear but probably to balance the granular layer excitation and inhibition.
 
 For the rest of the connection rules, we leveraged each neuron morphologies to detect appositions of
-their neurites. Fiber intersection methods require a lot of computational power we therefore used
-BSB :ref:`voxel_int` strategy as it simplifies this detection representing morphologies using
+their neurites. Fiber intersection methods require a lot of computational power. For this reason, we used
+BSB :ref:`voxel_int` strategy, as it simplifies this detection representing morphologies using
 voxels.
 
 The ``affinity`` and ``distributions`` of ``contact`` points parameters of these connections were

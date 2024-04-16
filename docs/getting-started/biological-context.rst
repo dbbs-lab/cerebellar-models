@@ -16,12 +16,12 @@ shows the different cell type present in the network and their connections.
 
 .. end-figure
 
-**Abbreviations**: mf (Mossy fibers); glom (Glomerulus); UBC (Unipolar brush cell); GrC
-(Granule cell); GoC (Golgi cell); PC (Purkinje cell); aa (Ascending axon); pf (Parallel fiber);
-BC (Basket cell); SC (Stellate cell); IO (Inferior olive); cf (Climbing fibers);
-DCN (Deep cerebellar nuclei)
+**Abbreviations**: mf (Mossy fibers); glom (Glomeruli); UBC (Unipolar brush cells); GrC
+(Granule cells); GoC (Golgi cells); PC (Purkinje cells); aa (Ascending axons); pf (Parallel fibers);
+BC (Basket cells); SC (Stellate cells); IO (Inferior olive); cf (Climbing fibers);
+DCN (Deep cerebellar nuclei).
 
-For most of the configuration available here, only a portion of the cerebellar cortex is built in a
+For most of the configurations available here, only a portion of the cerebellar cortex is built in a
 cubic volume with fixed layer thicknesses, to simplify the orientation and scaling of neuronal
 geometrical representation (morphologies) but also to limit the number of neurons and therefore
 the final size of the network.

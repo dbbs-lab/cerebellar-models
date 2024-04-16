@@ -2,7 +2,7 @@ Building a first circuit
 ------------------------
 
 In this section, you will learn how to reproduce the different cerebellar cortex circuits built at
-the `DBBS <https://dbbs.dip.unipv.it/en)>`_ laboratory of the university of Pavia,
+the `DBBS <https://dbbs.dip.unipv.it/en)>`_ laboratory of the University of Pavia.
 
 Introduction to BSB
 ~~~~~~~~~~~~~~~~~~~

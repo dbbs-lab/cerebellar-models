@@ -6,35 +6,28 @@ Connection strategies
 :class:`ConnectomeMossyGlomerulus <.connectome.to_glomerulus.ConnectomeMossyGlomerulus>`
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-The algorithm selects one presynaptic cell (usually mossy fiber) within the
-:math:`x\_length \times z\_length \times y\_size` μm box surrounding each postsynaptic cell
-(usually glomerulus). Here ``y_size`` is the size of the partition where the postsynaptic cell are
-(i.e. no limit). This selection is random and performed with a truncated exponential distribution.
+The algorithm selects one mossy fiber within the :math:`x\_length \times y\_length \times z\_size` μm box surrounding
+each glomerulus. Here ``z_size`` is the size of the partition where the glomeruli are (i.e. no limit).
+This selection is random and performed with a truncated exponential distribution.
 
-* ``x_length``: Length of the box along the x axis surrounding the postsynaptic cell soma in which
-  the presynaptic cell can be connected.
+* ``x_length``: Length of the box along the x axis surrounding the glomerulus in which the mossy fiber can be connected.
 
-* ``y_length``: Length of the box along the y axis surrounding the postsynaptic cell soma in which
-  the presynaptic cell can be connected.
+* ``y_length``: Length of the box along the y axis surrounding the glomerulus in which the mossy fiber can be connected.
 
 .. note::
-    Since the placement of mossy fibers and glomerulus is uniformed within their partition,
-    the convergence and divergence ratios corresponds to the density ratios.
+    Since the placement of mossy fibers and glomerulus is uniform within their partition,
+    the convergence and divergence ratios correspond to the density ratios.
 
 .. _glom_goc:
 
 :class:`ConnectomeGlomerulusGolgi <.connectome.glomerulus_golgi.ConnectomeGlomerulusGolgi>`
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-The algorithm selects all presynaptic cells (usually glomeruli) within the sphere surrounding each
-(postsynaptic cell soma (usually golgi). For each unique postsynaptic cell to connect, the tip of a
-branch from the postsynaptic cell morphology is selected. This selection is random and performed
-with a truncated exponential distribution based on the distance between the tip of each branch and
-the glomerulus to connect.
+The algorithm selects all glomeruli within the sphere surrounding each Golgi cell soma. For each unique Golgi cell to
+connect, the tip of one of its ``basal dendrites`` is selected. This selection is random and performed with a truncated
+exponential distribution based on the distance between the tip of each dendrite and the glomerulus to connect.
 
-* ``radius``: Radius of the sphere to filter the presynaptic cells within it.
-
-For the glomerulus to golgi connectivity, the ``basal dendrites`` of the golgi cells are selected.
+* ``radius``: Radius of the sphere to filter the glomeruli within it.
 
 .. code-block:: yaml
 
@@ -51,32 +44,28 @@ For the glomerulus to golgi connectivity, the ``basal dendrites`` of the golgi c
         radius: 50
 
 .. note::
-    As for the glomeruli and golgi cells, the presynaptic cell of this connection is supposed to
-    have no morphology attached while the postsynaptic cell must have one.
+    As for the glomeruli and Golgi cells, the presynaptic cell of this connection is supposed to
+    have no morphology attached, while the postsynaptic cell must have one.
 
 .. _glom_grc:
 
 :class:`ConnectomeGlomerulusGranule <.connectome.glomerulus_granule.ConnectomeGlomerulusGranule>`
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-The algorithm selects ``convergence`` unique presynaptic cells (usually glomeruli) within the sphere
-surrounding each postsynaptic cell soma (usually granule cell). Moreover, each presynaptic cell
-should belong to a unique pre-presynaptic cluster (usually refer to unique mossy fiber cluster).
-In other words, for a postsynaptic cell, each selected presynaptic cell should be connected
-through a dependency strategy (usually :ref:`mossy_glom`) to a different pre-presynaptic cell.
-The pre-presynaptic cluster, the presynaptic cell and the postsynaptic cell branch are all randomly
-chosen. If not enough presynaptic cells could be found in the sphere surrounding the postsynaptic
-cell soma, the closest presynaptic connected to the remaining cluster are selected to connect.
+The algorithm selects n unique glomeruli within the sphere surrounding each granule cell soma, where n is equal to the
+``convergence``. Moreover, for each granule cell, each selected glomerulus should be connected through :ref:`mossy_glom`
+to a different mossy fiber.
+The n unique mossy fibers, their connected glomerulus, and the granule cell ``dendrite`` they will target are all
+randomly chosen. If not enough glomeruli could be found in the sphere surrounding the granule cell soma, the closest
+glomerulus connected to one of the not yet selected mossy fibers is chosen.
 
-* ``radius``: Radius of the sphere to filter the presynaptic cells within it.
+* ``radius``: Radius of the sphere to filter the glomeruli within it.
 
-* ``convergence``: Number of presynaptic cell per postsynaptic cell.
+* ``convergence``: Number of glomeruli per granule cell.
 
-* ``mf_glom_strat``: ConnectionStrategy that links the pre-presynaptic cell to the presynaptic cell.
+* ``mf_glom_strat``: ConnectionStrategy that links the mossy fibers to the glomeruli.
 
-* ``mf_cell_type``: CellType of the pre-presynaptic cell, used as a reference
-
-For the glomerulus to granule connectivity, the ``dendrites`` of the granule cells are selected.
+* ``mf_cell_type``: CellType of the mossy fiber, used as a reference.
 
 .. code-block:: yaml
 
@@ -97,34 +86,30 @@ For the glomerulus to granule connectivity, the ``dendrites`` of the granule cel
 
 .. note::
     As for the glomeruli and granule cells, the presynaptic cell of this connection is supposed to
-    have no morphology attached while the postsynaptic cell must have one.
+    have no morphology attached, while the postsynaptic cell must have one.
 
 .. _goc_glom:
 
 :class:`ConnectomeGolgiGlomerulus <.connectome.golgi_glomerulus.ConnectomeGolgiGlomerulus>`
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-This connection strategy links a presynaptic cell (usually golgi) to all postsynaptic cells
-(usually granule or ubc) connected to an intermediate cell (usually a glomerulus). The connections
-between the intermediate cell and the postsynaptic cell need are defined in a separate connection
-strategy (usually :ref:`glom_grc`).
+This connection strategy links a Golgi cell to all granule cells connected to a glomerulus.
+The connections between the glomerulus and the postsynaptic cells are defined in :ref:`glom_grc` used as a
+``reference strategy``.
 
-The algorithm selects here the closest intermediate cell (maximum ``divergence``) that are within
-a sphere surrounding each presynaptic soma. For each unique intermediate cell selected,
-the tip of a branch from the presynaptic cell is randomly selected. All postsynaptic cells connected
-to the selected intermediate cell through the dependent strategy are also connected to the selected
-presynaptic cell. The target points of the postsynaptic cell (branch point) are copied from the
-dependent strategy.
+The algorithm selects here the closest glomeruli (maximum ``divergence``) that are within
+a sphere surrounding each Golgi cell. For each unique glomerulus selected, the tip of an axon's branch from the Golgi
+cell is randomly selected. All granule cells that are connected to the selected glomerulus with the
+``reference strategy``, are also connected to the selected Golgi cell. The target points of the granule cell (i.e.
+dendrite selected) are copied from the ``reference strategy``.
 
-* ``divergence``: Number of postsynaptic cell per presynaptic cell.
+* ``divergence``: Number of glomeruli per Golgi cell.
 
-* ``radius``: Radius of the sphere to filter the intermediate cells within it.
+* ``radius``: Radius of the sphere to filter the glomeruli within it.
 
-* ``glom_post_strat``: ConnectionStrategy that links the intermediate cell to the postsynaptic cell.
+* ``glom_post_strat``: ConnectionStrategy that links the glomeruli to the granule cells.
 
-* ``glom_cell_type``: CellType of the intermediate cell, used as a reference
-
-For the golgi to granule connectivity, the ``axon`` of the golgi cells are selected.
+* ``glom_cell_type``: CellType of the glomerulus, used as a reference
 
 .. code-block:: yaml
 
@@ -144,9 +129,8 @@ For the golgi to granule connectivity, the ``axon`` of the golgi cells are selec
         divergence: 40
 
 .. note::
-    Note that here the presynaptic cell is directly connected to the postsynaptic cell and not to
-    the intermediate cell. The latter serves only as a reference in the dependent connection
-    strategy.
+    Note that here the golgi cell is directly connected to the granule cell and not to the glomerulus.
+    The latter serves only as a intermediate point to look for in the ``reference strategy``.
 
 .. _voxel_int:
 

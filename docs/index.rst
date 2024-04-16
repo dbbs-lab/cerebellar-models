@@ -7,9 +7,9 @@ Cerebellum
 ==========
 
 This repository provides the code, configuration and morphology data to reconstruct and simulate
-cerebellar cortex circuits using the `Brain Scaffold Builder <https://bsb.readthedocs.io/en/latest/>`_
+cerebellar cortex circuits using the `Brain Scaffold Builder <https://bsb.readthedocs.io/en/latest/>`_.
 These models are based on the iterative work of the `Department of Brain and Behavioral
-Sciences <https://dbbs.dip.unipv.it/en>`_ of the university of Pavia.
+Sciences <https://dbbs.dip.unipv.it/en>`_ of the University of Pavia.
 
 .. toctree::
    :maxdepth: 2
@@ -19,7 +19,7 @@ Sciences <https://dbbs.dip.unipv.it/en>`_ of the university of Pavia.
    getting-started/biological-context.rst
    getting-started/content
    getting-started/getting-started
-   getting-started/for-developpers
+   getting-started/for-developers
 
 .. toctree::
    :maxdepth: 2
