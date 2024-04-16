@@ -94,7 +94,7 @@ We will describe here the spatial parameters used in ``canonical circuit``:
    Granular layer;Mossy fibers (mf);Exc.;/;count relative to glom. ratio=0.05;Billings et al. (2014) [#billings_2014]_
    Granular layer;Granule Cell (GrC);Exc.;2.5;0.0039;Casali et al. (2019) [#casali_2019]_
    Granular layer;Golgi Cell (GoC);Inh.;4.0;0.000009;Casali et al. (2019) [#casali_2019]_
-   Purkinje layer;Purkinje cell (PC);Inh.;7.5;planar density: 0.0017;De Schepper et al. (2022) [#de_schepper_2022]_
+   Purkinje layer;Purkinje cell (PC);Inh.;7.5;planar density: 0.00045;Casali et al. (2019) [#casali_2019]_
    Molecular layer;Basket cell (BC);Inh.;6.;0.00005;Casali et al. (2019) [#casali_2019]_
    Molecular layer;Stellate cell (SC);Inh.;4.;0.00005;Casali et al. (2019) [#casali_2019]_
 
@@ -105,14 +105,11 @@ The density of glom have been calculated in Solinas et al. (2010) [#solinas_2010
 glomerulus to granule convergence and divergence ratios (derived from values in Korbo et al., 1993
 [#korbo_1993]_ and Jakab and Hámari, 1988 [#jakab_1988]_).
 
-The densities of GrC, GoC, BC and SC are reported in Table 1 of Casali et al. (2019) [#casali_2019]_.
+The densities of GrC, GoC, PC, BC and SC are reported in Table 1 of Casali et al. (2019) [#casali_2019]_.
 The authors cite Korbo et al. (1993) [#korbo_1993]_ for the values in this table, however, no
 equivalent was found in the cited paper. These values might have been optimized to improve
-simulation results.
-
-The planar density of PC reported in De Schepper et al. (2022) [#de_schepper_2022]_ is one order of
-magnitude higher with respect to other literature findings. It has been obtained through geometric
-constrained placement to minimize the overlap of PC arborizations.
+simulation results. They could also have been obtained through geometric constrained placement
+to minimize the overlap of somas.
 
 .. include:: ../morphologies.rst
 
@@ -195,8 +192,8 @@ BSB :ref:`voxel_int` strategy, as it simplifies this detection representing morp
 voxels.
 
 The ``affinity`` and ``distributions`` of ``contact`` points parameters of these connections were
-tuned in De Schepper et al. (2022) [#de_schepper_2022]_ to match connectivity divergence and
-convergence values.
+tuned to match connectivity divergence and convergence values from De Schepper et al. (2022)
+[#de_schepper_2022]_.
 
 Extensions to the canonical model
 ---------------------------------

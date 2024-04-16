@@ -153,7 +153,7 @@ cell_types:
     spatial:
       morphologies:
         - PurkinjeCell
-      planar_density: 0.0017
+      planar_density: 0.00045
       radius: 7.5
     plotting:
       display_name: Purkinje cell
@@ -272,6 +272,8 @@ connectivity:
       morphology_labels:
         - basal_dendrites
     affinity: 0.5
+    voxels_pre: 500
+    voxels_post: 500
     contacts:
       distribution: norm
       loc: 160
@@ -288,7 +290,9 @@ connectivity:
         - golgi_cell
       morphology_labels:
         - basal_dendrites
-    affinity: 0.2
+    affinity: 0.3
+    voxels_pre: 500
+    voxels_post: 500
     contacts:
       distribution: norm
       loc: 3
@@ -305,6 +309,9 @@ connectivity:
         - golgi_cell
       morphology_labels:
         - basal_dendrites
+    affinity: 0.05
+    voxels_pre: 500
+    voxels_post: 500
   parallel_fiber_to_golgi:
     strategy: bsb.connectivity.VoxelIntersection
     presynaptic:
@@ -317,7 +324,9 @@ connectivity:
         - golgi_cell
       morphology_labels:
         - apical_dendrites
-    affinity: 0.1
+    affinity: 0.08
+    voxels_pre: 500
+    voxels_post: 500
   ascending_axon_to_purkinje:
     strategy: bsb.connectivity.VoxelIntersection
     presynaptic:
@@ -330,7 +339,9 @@ connectivity:
         - purkinje_cell
       morphology_labels:
         - aa_targets
-    affinity: 0.1
+    affinity: 0.05
+    voxels_pre: 500
+    voxels_post: 500
   parallel_fiber_to_purkinje:
     strategy: bsb.connectivity.VoxelIntersection
     presynaptic:
@@ -344,6 +355,8 @@ connectivity:
       morphology_labels:
         - pf_targets
     affinity: 0.1
+    voxels_pre: 500
+    voxels_post: 500
   parallel_fiber_to_basket:
     strategy: bsb.connectivity.VoxelIntersection
     presynaptic:
@@ -356,7 +369,9 @@ connectivity:
         - basket_cell
       morphology_labels:
         - dendrites
-    affinity: 0.1
+    affinity: 0.08
+    voxels_pre: 500
+    voxels_post: 500
   parallel_fiber_to_stellate:
     strategy: bsb.connectivity.VoxelIntersection
     presynaptic:
@@ -369,7 +384,9 @@ connectivity:
         - stellate_cell
       morphology_labels:
         - dendrites
-    affinity: 0.1
+    affinity: 0.08
+    voxels_pre: 500
+    voxels_post: 500
   stellate_to_purkinje:
     strategy: bsb.connectivity.VoxelIntersection
     presynaptic:
@@ -383,6 +400,8 @@ connectivity:
       morphology_labels:
         - sc_targets
     affinity: 0.1
+    voxels_pre: 500
+    voxels_post: 500
   basket_to_purkinje:
     strategy: bsb.connectivity.VoxelIntersection
     presynaptic:
@@ -395,6 +414,8 @@ connectivity:
         - purkinje_cell
       morphology_labels:
         - soma
+    voxels_pre: 500
+    voxels_post: 500
   stellate_to_stellate:
     strategy: bsb.connectivity.VoxelIntersection
     presynaptic:
@@ -407,7 +428,9 @@ connectivity:
         - stellate_cell
       morphology_labels:
         - dendrites
-    affinity: 0.5
+    affinity: 0.3
+    voxels_pre: 500
+    voxels_post: 500
     contacts:
       distribution: norm
       loc: 100
@@ -425,6 +448,8 @@ connectivity:
       morphology_labels:
         - dendrites
     affinity: 0.5
+    voxels_pre: 500
+    voxels_post: 500
     contacts:
       distribution: norm
       loc: 100

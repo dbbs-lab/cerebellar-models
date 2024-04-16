@@ -32,4 +32,4 @@ in the ``cerebellum`` folder:
 .. code-block:: bash
 
    pip install -e .[tests]
-   pytest test/
+   python -m unittest discover -v -s ./test
