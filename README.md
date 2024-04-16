@@ -11,6 +11,25 @@ Sciences](https://dbbs.dip.unipv.it/en) of the university of Pavia.
 `cerebellum` is a package that contains implementation of connectivity or placement rules for BSB.
 The `cerebellum` package requires Python 3.9+.
 
+### Pre-requirements
+
+BSB parallelizes the network reconstruction using MPI, and translates simulator instructions to 
+the simulator backends with it as well, for effortless parallel simulation. 
+To use MPI from Python the mpi4py package is required, which in turn needs a working MPI 
+implementation installed in your environment.
+
+On your local machine you can install OpenMPI:
+```bash
+sudo apt-get update && sudo apt-get install -y libopenmpi-dev openmpi-bin
+```
+
+Then, depending on the types of simulations, you want to perform you will need to install the 
+simulator(s) of your interest. Please follow the instructions:
+- For the [NEST](https://nest-simulator.readthedocs.io/en/stable/installation/index.html) simulator
+- For the [NEURON](https://nrn.readthedocs.io/en/8.2.4/install/install.html) simulator
+
+### Cerebellum installation
+
 Developers best use pip's *editable* install. This creates a live link between the
 installed package and the local git repository:
 
