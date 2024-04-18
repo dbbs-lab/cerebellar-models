@@ -4,6 +4,7 @@ __pycache__
 *.hdf5
 .python-version
 build
+report
 .idea/
 /docs/_build/
 *.coverage*

@@ -1,0 +1,270 @@
+simulations:
+  basal_activity:
+    simulator: nest
+    resolution: 0.05
+    duration: 1200
+    modules:
+      - cerebmodule
+    default_neuron_model: eglif_cond_alpha_multisyn
+    default_synapse_model: static_synapse
+    cell_models:
+      mossy_fibers:
+        neuron_model: parrot_neuron
+      glomerulus:
+        neuron_model: parrot_neuron
+      granule_cell:
+        neuron_model: eglif_cond_alpha_multisyn
+        constants:
+          t_ref: 1.5
+          V_min: -150
+          C_m: 7
+          V_th: -41
+          V_reset: -70
+          E_L: -62
+          I_e: -0.888
+          Vinit: -62
+          lambda_0: 1
+          tau_V: 0.3
+          tau_m: 24.15
+          kadap: 0.022
+          k1: 0.311
+          k2: 0.041
+          A1: 0.01
+          A2: -0.94
+          tau_syn1: 5.8
+          tau_syn2: 13.61
+          E_rev1: 0
+          E_rev2: -80
+          E_rev3: 0
+      golgi_cell:
+        neuron_model: eglif_cond_alpha_multisyn
+        constants:
+          t_ref: 2
+          C_m: 145
+          V_th: -55
+          V_reset: -75
+          E_L: -62
+          V_min: -150
+          Vinit: -62
+          lambda_0: 1
+          tau_V: 0.4
+          tau_m: 44
+          I_e: 19.214
+          kadap: 0.217
+          k1: 0.031
+          k2: 0.023
+          A1: 259.988
+          A2: 178.01
+          tau_syn1: 0.23
+          tau_syn2: 10
+          tau_syn3: 0.5
+          E_rev1: 0
+          E_rev2: -80
+          E_rev3: 0
+      purkinje_cell:
+        neuron_model: eglif_cond_alpha_multisyn
+        constants:
+          t_ref: 2
+          V_min: -350
+          C_m: 334
+          V_th: -43
+          V_reset: -69
+          E_L: -59
+          Vinit: -59
+          lambda_0: 4
+          tau_V: 3.5
+          tau_m: 47
+          I_e: 742.543
+          kadap: 1.492
+          k1: 0.195
+          k2: 0.041
+          A1: 157.622
+          A2: 172.622
+          tau_syn1: 1.1
+          tau_syn2: 2.8
+          tau_syn3: 0.4
+          E_rev1: 0
+          E_rev2: -80
+          E_rev3: 0
+      basket_cell:
+        neuron_model: eglif_cond_alpha_multisyn
+        constants:
+          t_ref: 1.59
+          C_m: 14.6
+          V_th: -53
+          V_reset: -78
+          E_L: -68
+          Vinit: -68
+          lambda_0: 1.8
+          tau_V: 1.1
+          tau_m: 9.125
+          I_e: 3.711
+          kadap: 2.025
+          k1: 1.887
+          k2: 1.096
+          A1: 5.953
+          A2: 5.863
+          tau_syn1: 0.64
+          tau_syn2: 2
+          tau_syn3: 1.2
+          E_rev1: 0
+          E_rev2: -80
+          E_rev3: 0
+      stellate_cell:
+        neuron_model: eglif_cond_alpha_multisyn
+        constants:
+          t_ref: 1.59
+          C_m: 14.6
+          V_th: -53
+          V_reset: -78
+          E_L: -68
+          Vinit: -68
+          lambda_0: 1.8
+          tau_V: 1.1
+          tau_m: 9.125
+          I_e: 3.711
+          kadap: 2.025
+          k1: 1.887
+          k2: 1.096
+          A1: 5.953
+          A2: 5.863
+          tau_syn1: 0.64
+          tau_syn2: 2
+          tau_syn3: 1.2
+          E_rev1: 0
+          E_rev2: -80
+          E_rev3: 0
+    connection_models:
+      mossy_fibers_to_glomerulus:
+        synapse:
+          weight: 1
+          delay: 1
+      glomerulus_to_granule_cell:
+        synapse:
+          weight: 0.095
+          delay: 1
+          receptor_type: 1
+      glomerulus_to_golgi:
+        synapse:
+          weight: 0.5
+          delay: 4
+          receptor_type: 1
+      golgi_to_granule:
+        synapse:
+          weight: 0.6
+          delay: 2
+          receptor_type: 2
+      golgi_to_golgi:
+        synapse:
+          weight: 0.06
+          delay: 4
+          receptor_type: 2
+      ascending_axon_to_golgi:
+        synapse:
+          weight: 3.04
+          delay: 2
+          receptor_type: 3
+      parallel_fiber_to_golgi:
+        synapse:
+          weight: 0.076
+          delay: 5
+          receptor_type: 3
+      parallel_fiber_to_purkinje:
+        synapse:
+          weight: 0.14
+          delay: 5
+          receptor_type: 1
+      ascending_axon_to_purkinje:
+        synapse:
+          weight: 1.88
+          delay: 2
+          receptor_type: 1
+      parallel_fiber_to_stellate:
+        synapse:
+          weight: 2.21
+          delay: 5
+          receptor_type: 1
+      stellate_to_stellate:
+        synapse:
+          weight: 0.005
+          delay: 1
+          receptor_type: 2
+      stellate_to_purkinje:
+        synapse:
+          weight: 1.64
+          delay: 2
+          receptor_type: 2
+      parallel_fiber_to_basket:
+        synapse:
+          weight: 0.11
+          delay: 5
+          receptor_type: 1
+      basket_to_basket:
+        synapse:
+          weight: 0.006
+          delay: 1
+          receptor_type: 2
+      basket_to_purkinje:
+        synapse:
+          weight: 0.44
+          delay: 4
+          receptor_type: 2
+    devices:
+      background_noise:
+        device: poisson_generator
+        rate: 4
+        targetting:
+          strategy: cell_model
+          cell_models:
+            - mossy_fibers
+        weight: 1
+        delay: 0.1
+      mossy_record:
+        device: spike_recorder
+        delay: 0.1
+        targetting:
+          strategy: cell_model
+          cell_models:
+            - mossy_fibers
+      gloms_record:
+        device: spike_recorder
+        delay: 0.1
+        targetting:
+          strategy: cell_model
+          cell_models:
+            - glomerulus
+      granule_record:
+        device: spike_recorder
+        delay: 0.1
+        targetting:
+          strategy: cell_model
+          cell_models:
+            - granule_cell
+      golgi_record:
+        device: spike_recorder
+        delay: 0.1
+        targetting:
+          strategy: cell_model
+          cell_models:
+            - golgi_cell
+      purkinje_record:
+        device: spike_recorder
+        delay: 0.1
+        targetting:
+          strategy: cell_model
+          cell_models:
+            - purkinje_cell
+      basket_record:
+        device: spike_recorder
+        delay: 0.1
+        targetting:
+          strategy: cell_model
+          cell_models:
+            - basket_cell
+      stellate_record:
+        device: spike_recorder
+        delay: 0.1
+        targetting:
+          strategy: cell_model
+          cell_models:
+            - stellate_cell
