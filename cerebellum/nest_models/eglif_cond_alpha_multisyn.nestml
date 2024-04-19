@@ -1,11 +1,11 @@
 """
-eglif_cond_alpha_mulisyn - Conductance based extended generalized leaky integrate and fire neuron model
-#######################################################################################################
+eglif_cond_alpha_multisyn - Conductance based extended generalized leaky integrate and fire neuron model
+########################################################################################################
 
 Description
 +++++++++++
 
-eglif_cond_alpha_mulisyn is the generalized leaky integrate and fire neuron according to
+eglif_cond_alpha_multisyn is the generalized leaky integrate and fire neuron according to
 Geminiani et al. (2018) [#geminiani_2018]_, with post-synaptic conductances in the form of a
 bi-exponential ("alpha") function.
 
@@ -15,8 +15,8 @@ The membrane potential is given by the following differential equation:
    \begin{cases}
        C_m \dfrac{dV_m}{dt} = -\dfrac{C_m}{\tau_m}(V_m-E_L)
                                 - I_{adap} + I_{dep} + I_e + I_{stim} + I_{syn}\\
-       \dfrac{dI_{adap}}{dt}=k_{adap}(V_m−E_L)−k_2 \cdot I_{adap}\\
-       \dfrac{dI_{dep}}{dt} =−k_1 \cdot I_{dep}\\
+       \dfrac{dI_{adap}}{dt}=k_{adap}(V_m-E_L)-k_2 \cdot I_{adap}\\
+       \dfrac{dI_{dep}}{dt} =-k_1 \cdot I_{dep}\\
    \end{cases}
 
 where the synaptic current :math:`I_{syn}` integrates the input from 4 postsynaptic receptors:
@@ -53,7 +53,7 @@ See also
 
 aeif_cond_alpha, aeif_cond_exp
 """
-neuron eglif_cond_alpha_mulisyn:
+neuron eglif_cond_alpha_multisyn:
     state:
         V_m mV = E_L                        # Membrane potential in mV
         I_dep pA = 0 * pA                   # Depolarizing spike-triggered current
