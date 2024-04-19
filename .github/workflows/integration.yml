@@ -37,6 +37,10 @@ jobs:
         pip install -e .[test]
 
     - name: Run tests & coverage
+      uses: codecov/codecov-action@v4.0.1
       run: |
         coverage run -p -m unittest discover -v -s ./test
-        bash <(curl -s https://codecov.io/bash)
+      with:
+        fail_ci_if_error: true
+        token: ${{ secrets.CODECOV_TOKEN }}
+        slug: dbbs-lab/cerebellum
