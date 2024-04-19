@@ -37,9 +37,11 @@ jobs:
         pip install -e .[test]
 
     - name: Run tests & coverage
-      uses: codecov/codecov-action@v4.0.1
       run: |
         coverage run -p -m unittest discover -v -s ./test
+
+    - name: Send coverage
+      uses: codecov/codecov-action@v4.0.1
       with:
         fail_ci_if_error: true
         token: ${{ secrets.CODECOV_TOKEN }}
