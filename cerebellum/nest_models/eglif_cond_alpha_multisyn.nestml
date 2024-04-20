@@ -55,7 +55,7 @@ aeif_cond_alpha, aeif_cond_exp
 """
 neuron eglif_cond_alpha_multisyn:
     state:
-        V_m mV = E_L                        # Membrane potential in mV
+        V_m mV = Vinit                      # Membrane potential in mV
         I_dep pA = 0 * pA                   # Depolarizing spike-triggered current
         I_adap pA = 0 * pA                  # Adaptation current
         r integer = 0                       # Refractory state
@@ -127,7 +127,7 @@ neuron eglif_cond_alpha_multisyn:
 
         if r == 0:
             inline lambda real = lambda_0 * exp((V_m - V_th) / tau_V)
-            if lambda > 0.0 and random_uniform(0, 1) < - expm1(-lambda * resolution()):
+            if random_uniform(0, 1) < - expm1(-lambda * resolution()):
                 r = RefractoryCounts
                 I_dep = A1
                 I_adap += A2
@@ -135,3 +135,4 @@ neuron eglif_cond_alpha_multisyn:
                 emit_spike()
         else:
             r -= 1
+            V_m = V_reset

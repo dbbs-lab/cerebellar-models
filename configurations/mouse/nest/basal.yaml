@@ -141,37 +141,37 @@ simulations:
       glomerulus_to_granule:
         synapse:
           model: static_synapse
-          weight: 0.095
+          weight: 0.23
           delay: 1
           receptor_type: 1
       glomerulus_to_golgi:
         synapse:
           model: static_synapse
-          weight: 0.5
-          delay: 4
+          weight: 0.24
+          delay: 1
           receptor_type: 1
       golgi_to_granule:
         synapse:
           model: static_synapse
-          weight: 0.6
+          weight: 0.24
           delay: 2
           receptor_type: 2
       golgi_to_golgi:
         synapse:
           model: static_synapse
-          weight: 0.06
+          weight: 0.007
           delay: 4
           receptor_type: 2
       ascending_axon_to_golgi:
         synapse:
           model: static_synapse
-          weight: 3.04
+          weight: 0.82
           delay: 2
           receptor_type: 3
       parallel_fiber_to_golgi:
         synapse:
           model: static_synapse
-          weight: 0.076
+          weight: 0.05
           delay: 5
           receptor_type: 3
       parallel_fiber_to_purkinje:
@@ -183,38 +183,38 @@ simulations:
       ascending_axon_to_purkinje:
         synapse:
           model: static_synapse
-          weight: 1.88
+          weight: 0.41
           delay: 2
           receptor_type: 1
       parallel_fiber_to_stellate:
         synapse:
           model: static_synapse
-          weight: 2.21
+          weight: 0.18
           delay: 5
           receptor_type: 1
       stellate_to_stellate:
         synapse:
           model: static_synapse
           weight: 0.005
-          delay: 1
+          delay: 4
           receptor_type: 2
       stellate_to_purkinje:
         synapse:
           model: static_synapse
           weight: 1.64
-          delay: 2
+          delay: 5
           receptor_type: 2
       parallel_fiber_to_basket:
         synapse:
           model: static_synapse
-          weight: 0.11
+          weight: 0.1
           delay: 5
           receptor_type: 1
       basket_to_basket:
         synapse:
           model: static_synapse
           weight: 0.006
-          delay: 1
+          delay: 4
           receptor_type: 2
       basket_to_purkinje:
         synapse:
