@@ -95,7 +95,7 @@ neuron eglif_cond_alpha_multisyn:
 
         k_1 real = pow(144.0, -1) / ms      # Decay rate
         k_2 real = pow(80.5, -1) / ms       # Adaptation constant
-        k_adap real = -4 * nS / ms          # Adaptation constant
+        k_adap real = 4 * nS / ms           # Adaptation constant
         A1 pA = 100.0 pA                    # Current update constant
         A2 pA = 100.0 pA                    # Current update constant
 
@@ -125,7 +125,10 @@ neuron eglif_cond_alpha_multisyn:
         V_m = max(V_m, V_min)
         integrate_odes()
 
-        if r == 0:
+        if r > 0:
+            r -= 1
+            V_m = V_reset
+        else:
             inline lambda real = lambda_0 * exp((V_m - V_th) / tau_V)
             if random_uniform(0, 1) < - expm1(-lambda * resolution()):
                 r = RefractoryCounts
@@ -133,6 +136,3 @@ neuron eglif_cond_alpha_multisyn:
                 I_adap += A2
                 V_m = V_reset
                 emit_spike()
-        else:
-            r -= 1
-            V_m = V_reset

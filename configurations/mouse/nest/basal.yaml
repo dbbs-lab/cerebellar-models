@@ -21,8 +21,8 @@ simulations:
           E_L: -62
           I_e: -0.888
           Vinit: -62
-          lambda_0: 1
-          tau_V: 0.3
+          lambda_0: 0.001
+          tau_V: 0.5
           tau_m: 24.15
           k_adap: 0.022
           k_1: 0.311
@@ -44,8 +44,8 @@ simulations:
           E_L: -62
           V_min: -150
           Vinit: -62
-          lambda_0: 1
-          tau_V: 0.4
+          lambda_0: 0.001
+          tau_V: 0.5
           tau_m: 44
           I_e: 19.214
           k_adap: 0.217
@@ -69,8 +69,8 @@ simulations:
           V_reset: -69
           E_L: -59
           Vinit: -59
-          lambda_0: 4
-          tau_V: 3.5
+          lambda_0: 0.001
+          tau_V: 0.5
           tau_m: 47
           I_e: 742.543
           k_adap: 1.492
@@ -93,8 +93,8 @@ simulations:
           V_reset: -78
           E_L: -68
           Vinit: -68
-          lambda_0: 1.8
-          tau_V: 1.1
+          lambda_0: 0.001
+          tau_V: 0.5
           tau_m: 9.125
           I_e: 3.711
           k_adap: 2.025
@@ -117,8 +117,8 @@ simulations:
           V_reset: -78
           E_L: -68
           Vinit: -68
-          lambda_0: 1.8
-          tau_V: 1.1
+          lambda_0: 0.001
+          tau_V: 0.5
           tau_m: 9.125
           I_e: 3.711
           k_adap: 2.025
