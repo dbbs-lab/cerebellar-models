@@ -39,4 +39,9 @@ jobs:
     - name: Run tests & coverage
       run: |
         coverage run -p -m unittest discover -v -s ./test
-        bash <(curl -s https://codecov.io/bash)
+
+    - name: Send coverage
+      uses: codecov/codecov-action@v4.0.1
+      with:
+        token: ${{ secrets.CODECOV_TOKEN }}
+        slug: dbbs-lab/cerebellum
