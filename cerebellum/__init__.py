@@ -32,3 +32,13 @@ def _swap_morphology_axes(morphology, axis1: int, axis2: int):
         b.points[:, axis2] = old_column
 
     return morphology
+
+
+classmap = {
+    "bsb.connectivity.strategy.ConnectionStrategy": {
+        "mossy_glom": "cerebellum.connectome.to_glomerulus.ConnectomeMossyGlomerulus",
+        "glom_gran": "cerebellum.connectome.glomerulus_granule.ConnectomeGlomerulusGranule",
+        "golgi_glom": "cerebellum.connectome.golgi_glomerulus.ConnectomeGolgiGlomerulus",
+        "glom_golgi": "cerebellum.connectome.glomerulus_golgi.ConnectomeGlomerulusGolgi",
+    }
+}

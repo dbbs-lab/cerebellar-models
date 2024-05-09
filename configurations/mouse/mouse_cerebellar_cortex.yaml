@@ -1,4 +1,10 @@
 name: DBBS Mouse cerebellum configuration v4.0
+packages:
+  - cerebellum~=0.0.1
+  - bsb-core~=4.0.1
+  - bsb-json~=4.0.0
+  - bsb-yaml~=4.0.0
+  - bsb-hdf5~=4.0.0
 storage:
   engine: hdf5
   root: cerebellum.hdf5
@@ -245,8 +251,7 @@ connectivity:
         - basal_dendrites
     radius: 50
   golgi_to_granule:
-    strategy: >-
-      cerebellum.connectome.golgi_glomerulus.ConnectomeGolgiGlomerulus
+    strategy: cerebellum.connectome.golgi_glomerulus.ConnectomeGolgiGlomerulus
     presynaptic:
       cell_types:
         - golgi_cell

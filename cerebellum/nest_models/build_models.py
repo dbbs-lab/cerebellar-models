@@ -10,7 +10,10 @@ _cache_path = _cereb_dirs.user_cache_dir
 
 
 def _build_nest_models(
-    model_dir=realpath("./"), build_dir=join(_cache_path, "nest_build"), module_name="cerebmodule"
+    model_dir=realpath("./"),
+    build_dir=join(_cache_path, "nest_build"),
+    module_name="cerebmodule",
+    redo=False,
 ):
     """
     Build all the nestml models within the provided model directory and deploy them.
@@ -18,7 +21,19 @@ def _build_nest_models(
     :param str model_dir: Directory containing the nestml files to compile
     :param str build_dir: Directory where the nest models will be compiled
     :param str module_name: Name of the nest module produced as outcome.
+    :param bool redo: Flag to force rebuild the nest models.
     """
+    if not redo:
+        import nest
+
+        try:
+            nest.ResetKernel()
+            nest.Install(module_name)
+            nest.ResetKernel()
+            return
+        except nest.NESTErrors.DynamicModuleManagementError as e:
+            if "loaded already" in str(e):
+                return
     if not (exists(model_dir) and isdir(model_dir)):
         raise OSError("Model directory does not exist: {}".format(model_dir))
     if exists(build_dir) and isdir(build_dir):
@@ -30,5 +45,4 @@ def _build_nest_models(
     )
 
 
-if __name__ == "__main__":
-    _build_nest_models()
+_build_nest_models()

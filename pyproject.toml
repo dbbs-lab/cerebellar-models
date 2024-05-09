@@ -46,3 +46,6 @@ line-length = 100
 [tool.isort]
 profile = "black"
 known_third_party = ["nest"]
+
+[project.entry-points."bsb.components"]
+my_components = "cerebellum:classmap"
