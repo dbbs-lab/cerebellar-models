@@ -43,9 +43,12 @@ In case of spike emission, the spike-triggered adaptation currents :math:`I_{ada
 References
 ++++++++++
 
+.. start-references
+
 .. [#geminiani_2018] Geminiani, A., Casellato, C., Locatelli, F., Prestori, F., Pedrocchi, A.,
    & D'Angelo, E. (2018). Complex dynamics in simplified neuronal models:
    reproducing Golgi cell electroresponsiveness. Frontiers in neuroinformatics, 12, 88.
+   https://doi.org/10.3389/fninf.2018.00088
 
 
 See also
@@ -53,6 +56,7 @@ See also
 
 aeif_cond_alpha, aeif_cond_exp
 """
+
 neuron eglif_cond_alpha_multisyn:
     state:
         V_m mV = Vinit                      # Membrane potential in mV

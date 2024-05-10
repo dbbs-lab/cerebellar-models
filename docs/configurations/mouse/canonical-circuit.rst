@@ -89,7 +89,7 @@ We will describe here the spatial parameters used in ``canonical circuit``:
    :header-rows: 1
    :delim: ;
 
-   Layer;Cell name;Type;Radius (µm);Density (:math:`µm^{-3}`);References
+   Layer;Cell name;Type;Radius (:math:`µm`);Density (:math:`µm^{-3}`);References
    Granular layer;Glomerulus (glom);Exc.;1.5;0.0003;Solinas et al. (2010) [#solinas_2010]_
    Granular layer;Mossy fibers (mf);Exc.;/;count relative to glom. ratio=0.05;Billings et al. (2014) [#billings_2014]_
    Granular layer;Granule Cell (GrC);Exc.;2.5;0.0039;Casali et al. (2019) [#casali_2019]_
