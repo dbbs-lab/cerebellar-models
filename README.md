@@ -86,6 +86,16 @@ bsb compile configurations/mouse/mouse_cerebellar_cortex.yaml -v4 --clear
 This command will produce a microcircuit of the mouse cerebellar cortex and store it in the
 `cerebellum.hdf5` file. This process might take a while depending on your machine.
 
+## Running a simulation
+As for the previous paragraph the following command might vary depending on your reconstruction and 
+simulation. 
+
+Assuming you are in the `cerebellum` folder, and you want to run the simulation `simulation_name`, 
+run the following command in your terminal:
+```bash
+bsb simulate cerebellum.hdf5 simulation_name -v4
+```
+
 ## Acknowledgements
 This research has received funding from the European Union’s Horizon 2020 Framework
 Program for Research and Innovation under the Specific Grant Agreement No. 945539
