@@ -59,7 +59,7 @@ aeif_cond_alpha, aeif_cond_exp
 
 neuron eglif_cond_alpha_multisyn:
     state:
-        V_m mV = Vinit                      # Membrane potential in mV
+        V_m mV = -60.0 mV                   # Membrane potential in mV
         I_dep pA = 0 * pA                   # Depolarizing spike-triggered current
         I_adap pA = 0 * pA                  # Adaptation current
         r integer = 0                       # Refractory state
@@ -79,6 +79,7 @@ neuron eglif_cond_alpha_multisyn:
         recordable inline I_syn pA =  I_syn1 + I_syn2 + I_syn3 + I_syn4
 
         # Update membrane potential, adaptation and spike triggered currents
+        # WARNING: SIGN BELOW IS INCORRECT -> Should be V_m' = - (V_m - E_L) / tau_m + ...
         V_m' = (V_m - E_L) / tau_m + (I_e + I_stim - I_adap + I_dep + I_syn) / C_m
         I_dep' = - I_dep * k_1 / ms
         I_adap' = (V_m - E_L) * (k_adap * nS / ms) - I_adap * (k_2 / ms)
@@ -89,7 +90,6 @@ neuron eglif_cond_alpha_multisyn:
         E_L mV = -70.6 mV                   # Leak reversal Potential (aka resting potential)
         t_ref ms = 0.0 ms                   # Refractory period
         I_e pA = 0 pA                       # Constant endogenous current
-        Vinit mV = -60.0 mV                 # Initial membrane potential value
         V_min mV = -150.0 mV                # Minimal membrane potential value
 
         V_th mV = -50.4 mV                  # Spike Threshold

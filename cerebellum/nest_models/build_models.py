@@ -29,6 +29,7 @@ def _build_nest_models(
         try:
             nest.ResetKernel()
             nest.Install(module_name)
+            # unload the module
             nest.ResetKernel()
             return
         except nest.NESTErrors.DynamicModuleManagementError as e:

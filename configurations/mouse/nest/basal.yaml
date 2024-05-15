@@ -1,5 +1,5 @@
 $import:
-  ref: ./configurations/mouse/mouse_cerebellar_cortex.yaml#/
+  ref: ../mouse_cerebellar_cortex.yaml#/
   values:
     - name
     - packages
@@ -14,7 +14,7 @@ $import:
 packages:
   - bsb-nest~=4.0.0
 components:
-  - cerebellum.nest_models.build_models
+  - cerebellum/nest_models/build_models.py
 simulations:
   basal_activity:
     simulator: nest
