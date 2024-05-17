@@ -5,8 +5,8 @@ Installation
 ^^^^^^^^^^^^
 To reproduce the experiments presented below, you should install the NEST simulator following the
 `installation instructions <https://nest-simulator.readthedocs.io/en/stable/installation/index.html>`_.
-Do not forget to add the `nest_vars.sh` script to your `.bashrc` so that the installation of the
-NEST modules work correctly at the end of the installation.
+Do not forget to add the `nest_vars.sh` script to your `.bashrc` file so that the installation of
+the NEST modules work correctly at the end of the installation.
 
 Nest modules are automatically compiled with BSB as ``components`` and deployed as ``cerebmodule``
 through the provided configurations:
@@ -69,26 +69,39 @@ fibers only transmit spikes coming from other regions of the brain.
     :start-after: """
     :end-before: References
 
+.. warning::
+   The model described here is incorrect with respect to the other LIF based models because of the
+   sign in the membrane potential equations: the leak current should drive the membrane potential
+   towards the resting state and not the opposite.
+
+   Additionally, the model' s proof written in the paper seems to indicate that the model may
+   produce unstable oscillations because of the freedom left to the adaptation parameters.
+
+   We have not being able to reproduce any of the results of the Geminiani et al. (2018 and 2019)
+   [#geminiani_2018]_ [#geminiani_2019]_, so we advise you to be very careful when using it.
+   For instance, the granule cell model described below is spiking without any input after several
+   seconds despite the authors claims.
+
 Neuron parameters
 +++++++++++++++++
 
-The parameters for the eglif models are extracted from Table 2 and Table 3 in Geminiani et al. (2019) [#geminiani_2019]_.
-First, the default LIF parameters are as follows:
+The parameters for the eglif models are extracted from Table 2 and Table 3 in Geminiani et al.
+(2019) [#geminiani_2019]_. First, the default LIF parameters are as follows:
 
-.. csv-table::
+.. csv-table:: LIF neuron parameters
    :header-rows: 1
    :delim: ;
 
-   Cell name;:math:`C_m\ (pF)`;:math:`\tau_m\ (ms)`;:math:`E_L\ (mV)`;:math:`t_{ref}\ (ms)`;:math:`V_{reset}\ (mV)`;:math:`V_{th}\ (mV)`; References
-   Granule Cell; 7 (5.5 :math:`\pm` 0.5); 24.15 (24.15 :math:`\pm` 2); -62 (-62 :math:`\pm` 11); 1.5 (1.5 :math:`\pm` 0.4); -70 (-70); -41 (-41 :math:`\pm` 3);
-   Golgi Cell; 145 (145 :math:`\pm` 73); 44 (44 :math:`\pm` 22); -62 (-62); 2 (2 :math:`\pm` 0.4); -75 (-75); -55 (-55 :math:`\pm` 1);
-   Purkinje Cell; 334 (334 :math:`\pm` 106); 47 (47 :math:`\pm` 32); -59 (-59 :math:`\pm` 6); 0.5 (0.5 :math:`\pm` 0.1); -69 (-69); -43 (-43 :math:`\pm` 2);
-   Basket and Stellate Cells; 14.6 (14.6); 9.125 (9.125); -68 (-68); 1.59 (1.59); -78 (-78); -53 (-53);
+   Cell name;:math:`C_m\ (pF)`;:math:`\tau_m\ (ms)`;:math:`E_L\ (mV)`;:math:`t_{ref}\ (ms)`;:math:`V_{reset}\ (mV)`;:math:`V_{th}\ (mV)`
+   Granule Cell; 7 (5.5 :math:`\pm` 0.5); 24.15 (24.15 :math:`\pm` 2); -62 (-62 :math:`\pm` 11); 1.5 (1.5 :math:`\pm` 0.4); -70 (-70); -41 (-41 :math:`\pm` 3)
+   Golgi Cell; 145 (145 :math:`\pm` 73); 44 (44 :math:`\pm` 22); -62 (-62); 2 (2 :math:`\pm` 0.4); -75 (-75); -55 (-55 :math:`\pm` 1)
+   Purkinje Cell; 334 (334 :math:`\pm` 106); 47 (47 :math:`\pm` 32); -59 (-59 :math:`\pm` 6); 0.5 (0.5 :math:`\pm` 0.1); -69 (-69); -43 (-43 :math:`\pm` 2)
+   Basket and Stellate Cells; 14.6 (14.6); 9.125 (9.125); -68 (-68); 1.59 (1.59); -78 (-78); -53 (-53)
 
 Then, the following parameters are optimized according to the method described in Geminiani et al.
-(2018) [#geminiani_2018]_:
+(2018) [#geminiani_2018]_ :
 
-.. csv-table::
+.. csv-table:: GLIF neuron parameters
    :header-rows: 1
    :delim: ;
 
@@ -98,8 +111,44 @@ Then, the following parameters are optimized according to the method described i
     Purkinje Cell; 1.491; 0.195; 0.041; 157.622; 172.622; 742.534
     Basket and Stellate Cells; 2.025; 1.887; 1.096; 5.953; 5.863; 3.711
 
+The postsynaptic currents are integrated to the soma with alpha exponential functions. Each function
+is defined with a reversal potential parameter :math:`E_{rev}` and a time constant :math:`\tau_{syn}`.
+
+These parameters depend on the connection types. In Nest, they are defined in the neuron equations.
+
+The postsynaptic receptor parameters are listed in Table 2 of Geminiani et al. (2019b)
+[#geminiani_2019b]_ :
+
+.. _table-receptor:
+.. csv-table:: Neuron Postsynaptic receptor parameters
+   :header-rows: 1
+   :delim: ;
+
+   Cell name; Receptor id; :math:`E_{rev,i}\ (mV)`; :math:`\tau_{syn,i}\ (ms)`; Type
+   Granule Cell; 1; 0; 5.8; exc.
+   Granule Cell; 2; -80; 13.6; inh.
+   Golgi Cell; 1; 0; 0.23; exc.
+   Golgi Cell; 2; -80; 10; inh.
+   Golgi Cell; 3; 0; 0.5; exc.
+   Purkinje Cell; 1; 0; 1.1; exc.
+   Purkinje Cell; 2; -80; 2.8; inh.
+   Basket Cell; 1; 0; 0.64; exc.
+   Basket Cell; 2; -80; 2; inh.
+
 It is not clear how the spiking parameters (i.e :math:`\lambda_0` and :math:`\tau_V`) are obtained
-in the paper so the default values are used here.
+in the Geminiani et al. (2018) paper [#geminiani_2019] .
+The values were extracted from a BSB configuration provided by the authors.
+
+.. warning::
+   The :math:`k_2` parameter should be greater than :math:`\dfrac{1}{\tau_m}` to prevent unstable
+   oscillations of the membrane potential but the authors rounded down the values for the Granule
+   cells which resulted in an unstable behavior. In `basal.yaml`, we therefore rounded up this
+   value.
+
+   On a side note, in the optimization section of the Geminiani et al. (2018) paper
+   [#geminiani_2018]_, the authors wrote that the :math:`k_2` parameter should not be optimized but
+   set to :math:`\dfrac{1}{\tau_m}` to have stable oscillations but this is not the case for most of
+   the :math:`k_2` parameters listed in  Geminiani et al. (2019) paper [#geminiani_2019]_ .
 
 Synapse models
 ^^^^^^^^^^^^^^
@@ -119,29 +168,30 @@ Synapse parameters
 ++++++++++++++++++
 
 The synaptic parameters used for the `canonical circuit` corresponds to the one listed in Table B of
-supplementary document 1 in Geminiani et al. (2024) [#geminiani_2024]_. However, it is currently
-unclear how these parameters were optimized, or which features were targeted:
+supplementary document 1 in Geminiani et al. (2024) [#geminiani_2024]_. The receptor id corresponds
+to the postsynaptic receptor used for the connection (see table :ref:`table-receptor`).
+However, it is currently unclear how these parameters were optimized, or which features were targeted:
 
-.. csv-table::
+.. csv-table:: Presynaptic parameters
    :header-rows: 1
    :delim: ;
 
-    Source-Target;:math:`weight \ (nS)`;:math:`delay \ (ms)`
-    Mf-glom;1;1
-    glom-GrC;0.23;1
-    glom-GoC;0.24;1
-    GoC-GrC;-0.24;2
-    GoC-GoC;-0.007;4
-    GrC(aa)-GoC ;0.82;2
-    GrC(aa)-PC;0.88;2
-    GrC(pf)-GoC;0.05;5
-    GrC(pf)-PC;0.14;5
-    GrC(pf)-SC;0.18;5
-    GrC(pf)-BC;0.1;5
-    BC-PC;-0.44;4
-    SC-PC;-1.64;5
-    BC-BC ;-0.006;4
-    SC-SC;-0.005;4
+    Source-Target;:math:`weight \ (nS)`;:math:`delay \ (ms)`; Receptor id
+    Mf-glom;1;1;1
+    glom-GrC;0.23;1;1
+    glom-GoC;0.24;1;1
+    GoC-GrC;-0.24;2;2
+    GoC-GoC;-0.007;4;2
+    GrC(aa)-GoC ;0.82;2;3
+    GrC(aa)-PC;0.88;2;1
+    GrC(pf)-GoC;0.05;5;3
+    GrC(pf)-PC;0.14;5;1
+    GrC(pf)-SC;0.18;5;1
+    GrC(pf)-BC;0.1;5;1
+    BC-PC;-0.44;4;2
+    SC-PC;-1.64;5;2
+    BC-BC ;-0.006;4;2
+    SC-SC;-0.005;4;2
 
 Simulation paradigms
 ^^^^^^^^^^^^^^^^^^^^
@@ -196,17 +246,17 @@ for each neuron population, we define:
 For this simulation, the mean firing rates and mean ISI obtained for each neuron population are as
 follows (expressed in mean :math:`\pm` standard deviation):
 
-.. csv-table::
+.. csv-table:: Canonical circuit under basal paradigm results
    :header-rows: 1
    :delim: ;
 
     Cell name;Mean Firing rate (Hz); Mean ISI (ms)
-    Mossy cell; :math:`3.9 \pm 0.99`; :math:`260 \pm 73`
-    Granule cell; :math:`3.3 \pm 2.4`; :math:`470 \pm 490`
-    Golgi cell;:math:`11 \pm 3.7`; :math:`110 \pm 53`
-    Purkinje cell;:math:`50 \pm 2.6`; :math:`20 \pm 1.0`
-    Basket cell;:math:`25 \pm 9.7`; :math:`46 \pm 17`
-    Stellate cell;:math:`28 \pm 18`; :math:`57 \pm 40`
+    Mossy cell; :math:`3.9 \pm 0.79`; :math:`250 \pm 59`
+    Granule cell; :math:`3.5 \pm 3.3`; :math:`510 \pm 510`
+    Golgi cell;:math:`13 \pm 4.1`; :math:`82 \pm 29`
+    Purkinje cell;:math:`49 \pm 2.9`; :math:`20 \pm 1.2`
+    Basket cell;:math:`32 \pm 13`; :math:`38 \pm 16`
+    Stellate cell;:math:`34 \pm 25`; :math:`66 \pm 73`
 
 References
 ^^^^^^^^^^
@@ -219,6 +269,10 @@ References
    Complex electroresponsive dynamics in olivocerebellar neurons represented with extended-generalized
    leaky integrate and fire models. Frontiers in Computational Neuroscience, 13, 35.
    https://doi.org/10.3389/fncom.2019.00035
+.. [#geminiani_2019b] Geminiani, A., Pedrocchi, A., D’Angelo, E., & Casellato, C. (2019). Response
+   dynamics in an olivocerebellar spiking neural network with non-linear neuron properties.
+   Frontiers in computational neuroscience, 13, 68.
+   https://doi.org/10.3389/fncom.2019.00068
 .. [#geminiani_2024] Geminiani, A., Casellato, C., Boele, H. J., Pedrocchi, A., De Zeeuw, C. I., &
    D’Angelo, E. (2024). Mesoscale simulations predict the role of synergistic cerebellar plasticity
    during classical eyeblink conditioning. PLOS Computational Biology, 20(4), e1011277.
