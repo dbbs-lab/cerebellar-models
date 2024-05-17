@@ -13,7 +13,7 @@ The membrane potential is given by the following differential equation:
 
 .. math::
    \begin{cases}
-       C_m \dfrac{dV_m}{dt} = -\dfrac{C_m}{\tau_m}(V_m-E_L)
+       C_m \dfrac{dV_m}{dt} = \dfrac{C_m}{\tau_m}(V_m-E_L)
                                 - I_{adap} + I_{dep} + I_e + I_{stim} + I_{syn}\\
        \dfrac{dI_{adap}}{dt}=k_{adap}(V_m-E_L)-k_2 \cdot I_{adap}\\
        \dfrac{dI_{dep}}{dt} =-k_1 \cdot I_{dep}\\

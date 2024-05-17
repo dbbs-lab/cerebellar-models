@@ -38,16 +38,13 @@ simulations:
           V_reset: -70
           E_L: -62
           I_e: -0.888
-          Vinit:
-            distribution: normal
-            mean: -62.0
-            std: 20.0
-          lambda_0: 0.001
-          tau_V: 0.5
+          V_m: -62.0
+          lambda_0: 1.0
+          tau_V: 0.3
           tau_m: 24.15
           k_adap: 0.022
           k_1: 0.311
-          k_2: 0.041
+          k_2: 0.041407868
           A1: 0.01
           A2: -0.94
           tau_syn1: 5.8
@@ -63,12 +60,9 @@ simulations:
           V_reset: -75
           E_L: -62
           V_min: -150
-          Vinit:
-            distribution: normal
-            mean: -62.0
-            std: 20.0
-          lambda_0: 0.001
-          tau_V: 0.5
+          V_m: -62.0
+          lambda_0: 1.0
+          tau_V: 0.4
           tau_m: 44
           I_e: 16.214
           k_adap: 0.217
@@ -91,10 +85,7 @@ simulations:
           V_th: -43
           V_reset: -69
           E_L: -59
-          Vinit:
-            distribution: normal
-            mean: -59.0
-            std: 20.0
+          V_m: -59.0
           lambda_0: 0.001
           tau_V: 0.5
           tau_m: 47
@@ -118,12 +109,9 @@ simulations:
           V_th: -53
           V_reset: -78
           E_L: -68
-          Vinit:
-            distribution: normal
-            mean: -68.0
-            std: 20.0
-          lambda_0: 0.001
-          tau_V: 0.5
+          V_m: -68.0
+          lambda_0: 1.8
+          tau_V: 1.1
           tau_m: 9.125
           I_e: 3.711
           k_adap: 2.025
@@ -145,12 +133,9 @@ simulations:
           V_th: -53
           V_reset: -78
           E_L: -68
-          Vinit:
-            distribution: normal
-            mean: -68.0
-            std: 20.0
-          lambda_0: 0.001
-          tau_V: 0.5
+          V_m: -68.0
+          lambda_0: 1.8
+          tau_V: 1.1
           tau_m: 9.125
           I_e: 3.711
           k_adap: 2.025
