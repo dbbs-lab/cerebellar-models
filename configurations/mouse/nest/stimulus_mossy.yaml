@@ -1,0 +1,16 @@
+stimulus:
+  device: poisson_generator
+  rate: 150
+  start : 1200
+  stop : 1250
+  targetting:
+    strategy: sphere
+    radius: 90
+    origin:
+      - 150.0
+      - 65.0
+      - 100.0
+    cell_models:
+      - mossy_fibers
+  "weight" : 1.0
+  "delay" : 0.1

@@ -80,7 +80,7 @@ fibers only transmit spikes coming from other regions of the brain.
    We have not being able to reproduce any of the results of the Geminiani et al. (2018 and 2019)
    [#geminiani_2018]_ [#geminiani_2019]_, so we advise you to be very careful when using it.
    For instance, the granule cell model described below is spiking without any input after several
-   seconds despite the authors claims.
+   seconds.
 
 Neuron parameters
 +++++++++++++++++
@@ -136,7 +136,7 @@ The postsynaptic receptor parameters are listed in Table 2 of Geminiani et al. (
    Basket Cell; 2; -80; 2; inh.
 
 It is not clear how the spiking parameters (i.e :math:`\lambda_0` and :math:`\tau_V`) are obtained
-in the Geminiani et al. (2018) paper [#geminiani_2019] .
+in the Geminiani et al. (2018) paper [#geminiani_2019]_ .
 The values were extracted from a BSB configuration provided by the authors.
 
 .. warning::
@@ -180,18 +180,18 @@ However, it is currently unclear how these parameters were optimized, or which f
     Mf-glom;1;1;1
     glom-GrC;0.23;1;1
     glom-GoC;0.24;1;1
-    GoC-GrC;-0.24;2;2
-    GoC-GoC;-0.007;4;2
+    GoC-GrC;0.24;2;2
+    GoC-GoC;0.007;4;2
     GrC(aa)-GoC ;0.82;2;3
     GrC(aa)-PC;0.88;2;1
     GrC(pf)-GoC;0.05;5;3
     GrC(pf)-PC;0.14;5;1
     GrC(pf)-SC;0.18;5;1
     GrC(pf)-BC;0.1;5;1
-    BC-PC;-0.44;4;2
-    SC-PC;-1.64;5;2
-    BC-BC ;-0.006;4;2
-    SC-SC;-0.005;4;2
+    BC-PC;0.44;4;2
+    SC-PC;1.64;5;2
+    BC-BC ;0.006;4;2
+    SC-SC;0.005;4;2
 
 Simulation paradigms
 ^^^^^^^^^^^^^^^^^^^^

@@ -93,7 +93,7 @@ simulation.
 Assuming you are in the `cerebellum` folder, and you want to run the simulation `simulation_name`, 
 run the following command in your terminal:
 ```bash
-bsb simulate cerebellum.hdf5 simulation_name -v4
+bsb simulate cerebellum.hdf5 simulation_name -o output_file_name -v4
 ```
 
 ## Acknowledgements
