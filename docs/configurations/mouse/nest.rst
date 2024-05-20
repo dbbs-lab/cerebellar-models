@@ -200,12 +200,14 @@ Different configuration files are available to reproduce experiments with the ce
 circuit. As for the circuit reconstructions, the simulations are based on a basic paradigm (see the
 following section) and can be extended with simulation extensions.
 
+.. _basal-activity:
+
 Basal activity
 ##############
 
 The basal activity configuration file
 `basal.yaml <https://github.com/dbbs-lab/cerebellum/blob/master/configurations/mouse/nest/basal.yaml>`_
-corresponds to the default activity of the cerebellar cortex circuit. Neurons are represented as
+implements to the default activity of the cerebellar cortex circuit. Neurons are represented as
 `eglif_cond_alpha_multisyn` and are connected with `static synapses`.
 
 This simulation is set to last ``5000 ms`` (with a ``0.1 ms`` timestep) during which the neurons
@@ -238,15 +240,15 @@ This simulation should demonstrate the activity of the network in a stable state
 this simulation serves as a baseline for the following ones. To analyze these results,
 for each neuron population, we define:
 
-* the mean firing rate as the mean of each of its neuron's total number of
+* the mean firing rate as the mean of each of its (spiking at least once) neurons' total number of
   spikes over the simulation time, expressed in Hz.
-* the mean Inter-Spike intervals (ISI) as the mean of each of its neuron mean duration between each
-  of its pair of consecutive spike, expressed in ms.
+* the mean Inter-Spike intervals (ISI) as the mean of each of its (spiking at least twice) neurons
+  mean duration between each of its pair of consecutive spike, expressed in ms.
 
 For this simulation, the mean firing rates and mean ISI obtained for each neuron population are as
 follows (expressed in mean :math:`\pm` standard deviation):
 
-.. csv-table:: Canonical circuit under basal paradigm results
+.. csv-table:: Results of the canonical circuit in basal activity
    :header-rows: 1
    :delim: ;
 
@@ -257,6 +259,34 @@ follows (expressed in mean :math:`\pm` standard deviation):
     Purkinje cell;:math:`49 \pm 2.9`; :math:`20 \pm 1.2`
     Basket cell;:math:`32 \pm 13`; :math:`38 \pm 16`
     Stellate cell;:math:`34 \pm 25`; :math:`66 \pm 73`
+
+Mossy fiber stimulus
+####################
+
+The mossy fiber stimulus configuration file
+`stimulus_mossy.yaml <https://github.com/dbbs-lab/cerebellum/blob/master/configurations/mouse/nest/stimulus_mossy.yaml>`_
+corresponds to the basal activity configuration file with a stimulus of the mossy fibers
+(see :ref:`basal-activity`).
+
+On top of the basal paradigm, we introduce here a ``stimulus`` represented as a ``150 Hz``
+``Poisson spike generator`` between ``1200`` and ``1250`` ms. This latter targets the
+``mossy_fibers`` that are within a ``sphere`` of radius ``90`` :math:`\mu m` and a center at
+``(150.0, 65.0, 100.0)``. This mimic the integration of an input on the mossy fibers.
+
+For this simulation, **during the stimulus**, the mean firing rates and mean ISI obtained for each
+neuron population are as follows (expressed in mean :math:`\pm` standard deviation):
+
+.. csv-table:: Results of the canonical circuit during stimulus of the mossy
+   :header-rows: 1
+   :delim: ;
+
+    Cell name;Mean Firing rate (Hz); Mean ISI (ms)
+    Mossy cell; :math:`48 \pm 76`; :math:`6.5 \pm 3.6`
+    Granule cell; :math:`28 \pm 57`; :math:`6.5 \pm 4.5`
+    Golgi cell;:math:`56 \pm 36`; :math:`5.6 \pm 2.2`
+    Purkinje cell;:math:`93 \pm 29`; :math:`9.4 \pm 3.0`
+    Basket cell;:math:`150 \pm 88`; :math:`4.4 \pm 1.4`
+    Stellate cell;:math:`190 \pm 98`; :math:`5.1 \pm 3.5`
 
 References
 ^^^^^^^^^^
