@@ -128,7 +128,6 @@ class TestSingleCellModels(
         f_tonic = (1.0 / isis / 0.001) if len(isis) > 0 else 0.0  # in Hz
         return np.mean(f_tonic), np.std(f_tonic)
 
-    @unittest.skip(reason="EGLIF results are not reproducible")
     def test_fi_curves(self):
         protocol = {
             "golgi": {
