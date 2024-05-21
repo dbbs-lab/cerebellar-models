@@ -11,12 +11,12 @@ classifiers = ["License :: OSI Approved :: GNU General Public License v3 or late
 requires-python = ">=3.9"
 dynamic = ["version", "description"]
 dependencies = [
-    "bsb-core[parallel]~=4.0",
+    "bsb-core[parallel]~=4.1",
     "bsb-hdf5~=4.0",
-    "bsb-yaml~=4.0",
-    "bsb-json~=4.0",
+    "bsb-yaml~=4.1",
+    "bsb-json~=4.1",
     "bsb-neuron~=4.0",
-    "bsb-nest~=4.0",
+    "bsb-nest~=4.1",
     "nestml~=7.0"
 ]
 

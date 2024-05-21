@@ -12,7 +12,7 @@ $import:
     - placement
     - connectivity
 packages:
-  - bsb-nest~=4.0.0
+  - bsb-nest~=4.1
 components:
   - cerebellum/nest_models/build_models.py
 simulations:
