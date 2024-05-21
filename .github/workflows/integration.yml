@@ -1,5 +1,8 @@
 name: Build and test cerebellum
 
+env:
+  NEST_VERSION: 3.6
+
 on: [push, pull_request]
 
 jobs:
@@ -21,6 +24,17 @@ jobs:
         sudo apt update
         # Install `libopenmpi` for MPI
         sudo apt install openmpi-bin libopenmpi-dev
+
+    - name: Cache NEST
+      id: cache-nest
+      uses: actions/cache@v4
+      with:
+        path: ${{ github.workspace }}/simulators/nest
+        key: ${{ runner.os }}-${{ matrix.python-version }}-nest
+
+    - name: Install NEST
+      if: steps.cache-nest.outputs.cache-hit != 'true'
+      run: .github/devops/install-nest.sh ${NEST_VERSION} ${{ github.workspace }}/simulators/nest
 
     - name: Cache pip
       uses: actions/cache@v4
