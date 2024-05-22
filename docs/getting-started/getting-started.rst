@@ -23,7 +23,7 @@ A modular configuration file to reconstruct cerebellar cortex circuit
 Configuration files will vary according to the specificities of each model, including the
 specie, the sub-regions of interest, or the subject disease.
 
-To help with the reproducibility of the different results from the DBBS we are here decomposing
+To help with the reproducibility of the different results from the `DBBS` we are here decomposing
 the configuration files used in our models in sub-configurations that can be assembled and/or switch
 on based on the model you wish to reproduce. This means that sub-configurations can be used to
 override parameters (e.g. modifying sub-region size to match disease conditions) or introduce new
@@ -56,3 +56,11 @@ This command will produce a microcircuit of the mouse cerebellar cortex and stor
 ``cerebellum.hdf5`` file. This process might take a while depending on your machine.
 
 Congratulations you have built your first cerebellar cortex model !
+
+Simulation of the reconstructed circuits
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+A list of simulations can be attached to a BSB reconstruction through its configuration file (read
+more :doc:`here <bsb:simulation/simulation>`). These simulations are dependant on the simulator you
+choose and their paradigm. Some examples are provided for each simulator sustained by the
+`cerebellum` package in the :doc:`configurations section <../configurations/configurations>`.

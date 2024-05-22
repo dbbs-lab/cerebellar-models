@@ -3,10 +3,8 @@ NEST
 
 Installation
 ^^^^^^^^^^^^
-To reproduce the experiments presented below, you should install the NEST simulator following the
-`installation instructions <https://nest-simulator.readthedocs.io/en/stable/installation/index.html>`_.
-Do not forget to add the `nest_vars.sh` script to your `.bashrc` file so that the installation of
-the NEST modules work correctly at the end of the installation.
+To reproduce the experiments presented below, you should install the NEST simulator (see
+instructions :doc:`here </getting-started/installation>`).
 
 Nest modules are automatically compiled with BSB as ``components`` and deployed as ``cerebmodule``
 through the provided configurations:
