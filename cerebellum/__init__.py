@@ -4,7 +4,7 @@ Implementation of the BSB framework for cerebellar cortex reconstructions and si
 
 import os
 
-__version__ = "0.0.1"
+__version__ = "0.1.0"
 
 
 def templates():
