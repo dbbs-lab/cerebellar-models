@@ -1,5 +1,5 @@
 [![Code style: black](https://img.shields.io/badge/code%20style-black-000000.svg)](https://github.com/psf/black)
-[![codecov](https://codecov.io/gh/dbbs-lab/cerebellum/branch/master/graph/badge.svg)](https://codecov.io/gh/dbbs-lab/cerebellum)
+[![codecov](https://codecov.io/gh/dbbs-lab/cerebellum/graph/badge.svg?token=KBEE3D83YQ)](https://codecov.io/gh/dbbs-lab/cerebellum)
 
 # Cerebellum: A full scaffold model of the cerebellum, using the BSB.
 This repository provides the code, configuration and morphology data to reconstruct and simulate 
@@ -85,6 +85,16 @@ bsb compile configurations/mouse/mouse_cerebellar_cortex.yaml -v4 --clear
 ```
 This command will produce a microcircuit of the mouse cerebellar cortex and store it in the
 `cerebellum.hdf5` file. This process might take a while depending on your machine.
+
+## Running a simulation
+As for the previous paragraph the following command might vary depending on your reconstruction and 
+simulation. 
+
+Assuming you are in the `cerebellum` folder, and you want to run the simulation `simulation_name`, 
+run the following command in your terminal:
+```bash
+bsb simulate cerebellum.hdf5 simulation_name -o output_file_name -v4
+```
 
 ## Acknowledgements
 This research has received funding from the European Union’s Horizon 2020 Framework
