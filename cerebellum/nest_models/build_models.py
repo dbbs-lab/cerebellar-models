@@ -3,8 +3,8 @@ from os import makedirs
 from os.path import exists, isdir, join, realpath
 
 import appdirs
-from pynestml.frontend.pynestml_frontend import generate_target
 from bsb.services import MPI
+from pynestml.frontend.pynestml_frontend import generate_target
 
 _cereb_dirs = appdirs.AppDirs("cerebellum")
 _cache_path = _cereb_dirs.user_cache_dir
@@ -44,7 +44,10 @@ def _build_nest_models(
         makedirs(build_dir)
 
         generate_target(
-            input_path=model_dir, target_platform="NEST", target_path=build_dir, module_name=module_name
+            input_path=model_dir,
+            target_platform="NEST",
+            target_path=build_dir,
+            module_name=module_name,
         )
 
 
