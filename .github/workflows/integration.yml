@@ -52,6 +52,7 @@ jobs:
 
     - name: Run tests & coverage
       run: |
+        source ${{ github.workspace }}/simulators/nest/bin/nest_vars.sh
         coverage run -p -m unittest discover -v -s ./test
 
     - name: Send coverage
