@@ -4,19 +4,20 @@ build-backend = "flit_core.buildapi"
 
 [project]
 name = "cerebellum"
-authors = [{ name = "Robin De Schepper", email = "robingilbert.deschepper@unipv.it" }]
+authors = [{ name = "Dimitri RODARIE", email = "dimitri.rodarie@cref.it" }]
 readme = "README.md"
 license = { file = "LICENSE" }
 classifiers = ["License :: OSI Approved :: GNU General Public License v3 or later (GPLv3+)"]
 requires-python = ">=3.9"
 dynamic = ["version", "description"]
 dependencies = [
-    "bsb-core[parallel]~=4.0",
+    "bsb-core[parallel]~=4.1",
     "bsb-hdf5~=4.0",
-    "bsb-yaml~=4.0",
-    "bsb-json~=4.0",
+    "bsb-yaml~=4.1",
+    "bsb-json~=4.1",
     "bsb-neuron~=4.0",
-    "bsb-nest~=4.0"
+    "bsb-nest~=4.1",
+    "nestml~=7.0"
 ]
 
 [project.optional-dependencies]
@@ -45,3 +46,30 @@ line-length = 100
 [tool.isort]
 profile = "black"
 known_third_party = ["nest"]
+
+[project.entry-points."bsb.components"]
+my_components = "cerebellum:classmap"
+
+[tool.bumpversion]
+current_version = "0.1.0"
+parse = "(?P<major>\\d+)\\.(?P<minor>\\d+)\\.(?P<patch>\\d+)"
+serialize = ["{major}.{minor}.{patch}"]
+search = "{current_version}"
+replace = "{new_version}"
+regex = false
+ignore_missing_version = false
+tag = true
+sign_tags = false
+tag_name = "v{new_version}"
+tag_message = "Bump version: {current_version} → {new_version}"
+allow_dirty = false
+commit = true
+message = "Bump version: {current_version} → {new_version}"
+commit_args = "--no-verify"
+
+[tool.bumpversion.parts.pre_l]
+values = ["dev", "a", "b", "rc", "final"]
+optional_value = "final"
+
+[[tool.bumpversion.files]]
+filename = "cerebellum/__init__.py"
