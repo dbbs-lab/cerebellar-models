@@ -1,0 +1,62 @@
+simulations:
+  basal_activity:
+    cell_models:
+      unipolar_brush_cell:
+        neuron_model: eglif_cond_alpha_multisyn
+        constants:
+          t_ref: 1.59
+          C_m: 14.6
+          V_th: -53
+          V_reset: -78
+          E_L: -68
+          Vinit: -68
+          lambda_0: 1.8
+          tau_V: 1.1
+          tau_m: 9.125
+          I_e: 3.711
+          kadap: 2.025
+          k1: 1.887
+          k2: 1.096
+          A1: 5.953
+          A2: 5.863
+          tau_syn1: 0.64
+          tau_syn2: 2
+          tau_syn3: 1.2
+          E_rev1: 0
+          E_rev2: -80
+          E_rev3: 0
+      ubc_glomerulus:
+        neuron_model: parrot_neuron
+    connection_models:
+      ubc_to_ubc_glomerulus:
+        synapse:
+          weight: 1
+          delay: 50
+      glomerulus_ubc_to_ubc:
+        synapse:
+          weight: 1
+          delay: 50
+          receptor_type: 1
+      glomerulus_mf_to_ubc:
+        synapse:
+          weight: 1
+          delay: 2
+          receptor_type: 1
+      ubc_glomerulus_to_granule_cell:
+        synapse:
+          weight: 0.048
+          delay: 1
+          receptor_type: 1
+      golgi_to_ubc:
+        synapse:
+          weight: 0.00211
+          delay: 4
+          receptor_type: 2
+    devices:
+      unipolar_record:
+        device: spike_recorder
+        delay: 0.1
+        targetting:
+          strategy: cell_model
+          cell_models:
+            - unipolar_brush_cell

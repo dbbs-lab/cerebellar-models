@@ -126,4 +126,4 @@ class ConnectomeUBCGlomerulus(ConnectomeGlomerulus, PresynDistStrat):
     ):
         dist = np.linalg.norm(presyn_pos - glom_pos, axis=1)
         ids_to_keep = np.where(dist <= self.radius)[0]
-        return ids_to_keep[np.argsort(dist)]
+        return ids_to_keep[np.argsort(dist[ids_to_keep])]
