@@ -1,0 +1,91 @@
+morphologies:
+  - file: ./morphologies/human/GranuleCell_326.swc
+    pipeline:
+    - func: swap_axes
+      axis1: 1
+      axis2: 2
+    parser:
+      tags:
+        '18':
+        - axon
+        - ascending_axon
+        '19':
+        - axon
+        - parallel_fiber
+  - file: ./morphologies/human/GranuleCell_617.swc
+    pipeline:
+    - func: swap_axes
+      axis1: 1
+      axis2: 2
+    parser:
+      tags:
+        '18':
+        - axon
+        - ascending_axon
+        '19':
+        - axon
+        - parallel_fiber
+  - file: ./morphologies/human/GolgiCell.swc
+    pipeline:
+    - func: swap_axes
+      axis1: 1
+      axis2: 2
+    parser:
+      tags:
+        '16':
+        - dendrites
+        - basal_dendrites
+        '17':
+        - dendrites
+        - apical_dendrites
+  - file: ./morphologies/human/PurkinjeCell_1.swc
+    pipeline:
+    - func: swap_axes
+      axis1: 1
+      axis2: 2
+    parser:
+      tags:
+        '16':
+        - dendrites
+        - pf_targets
+        - sc_targets
+        '17':
+        - dendrites
+        - aa_targets
+        - sc_targets
+  - file: ./morphologies/human/PurkinjeCell_2.swc
+    pipeline:
+    - func: swap_axes
+      axis1: 1
+      axis2: 2
+    parser:
+      tags:
+        '16':
+        - dendrites
+        - pf_targets
+        - sc_targets
+        '17':
+        - dendrites
+        - aa_targets
+        - sc_targets
+  - file: ./morphologies/human/BasketCell.swc
+    pipeline:
+    - func: swap_axes
+      axis1: 1
+      axis2: 2
+  - file: ./morphologies/human/StellateCell.swc
+    pipeline:
+      - func: swap_axes
+        axis1: 1
+        axis2: 2
+    parser:
+      tags:
+        16:
+          - dendrites
+          - proximal_dendrites
+        17:
+          - dendrites
+          - distal_dendrites
+        18:
+          - axon
+          - axon_initial_segment

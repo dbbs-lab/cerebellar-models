@@ -33,6 +33,8 @@ In the mouse ``canonical circuit`` case, the UBC, DCN, IO and related connection
 Circuit configuration
 ---------------------
 
+.. begin_coord_framework
+
 Coordinate framework
 ~~~~~~~~~~~~~~~~~~~~
 
@@ -44,6 +46,8 @@ plane corresponds to the para-sagittal sections that are co-planar with the Purk
 and normal to the granule cells parallel fibers. Finally, unit of distance in the configurations are
 expressed in micrometers ``µm``. Note that the morphologies provided are oriented by default to
 match this convention.
+
+.. end_coord_framework
 
 Network dimensions
 ~~~~~~~~~~~~~~~~~~
@@ -76,6 +80,8 @@ size and shape of the available morphologies:
 Cellular composition
 ~~~~~~~~~~~~~~~~~~~~
 
+.. begin_cellular_composition_intro
+
 The cellular composition of the circuit is determined in the ``cell_types`` section of the
 configuration file. Each cell type is linked here to a partition in the circuit, and a morphology is
 assigned. Additionally, we introduce here two components used to innervate the circuit: the mossy
@@ -84,6 +90,8 @@ terminals. These components are used as building entities to relay stimuli from 
 the circuit and have therefore no morphology attached.
 
 We will describe here the spatial parameters used in ``canonical circuit``:
+
+.. end_cellular_composition_intro
 
 .. csv-table::
    :header-rows: 1
@@ -116,6 +124,8 @@ to minimize the overlap of somas.
 Placement
 ~~~~~~~~~
 
+.. begin_pc_placement
+
 Except for Purkinje cells (PC), every entity is supposed to be uniformly distributed in their own
 layer.The bsb ``RandomPlacement`` strategy is chosen here to place them. In short, this strategy
 chose a random position for each entity within their sub-partition. Note that this does not take
@@ -123,6 +133,8 @@ into account any potential overlapping of cells’ soma unlike the ``ParticlePla
 However, comparative analysis conducted in ``[CITATION]`` have shown that the latter strategy have a
 limited impact on connectivity and simulation results, while the computational cost of checking soma
 overlapping is not negligible.
+
+.. end_pc_placement
 
 PC are placed in arrays, ``130 μm`` apart from each other along the
 para-sagittal plane ``(xz)`` to guarantee that their dendritic
@@ -132,6 +144,8 @@ the ``(xy)`` plane.
 
 Connectivity
 ~~~~~~~~~~~~
+
+.. begin_connectivity_common
 
 .. csv-table::
    :header-rows: 1
@@ -174,6 +188,8 @@ In our model, we therefore assumed that each GrC has ``4`` dendrites of ``40μm`
 match also the number of branches of the respective morphology. These values are used in the glom to
 GrC connectivity rule. The convergence value of this connection pair is set here to the number of
 dendrites.
+
+.. end_connectivity_common
 
 GoC basolateral arborizations spread across 100μm in P25 rat according to Kanichay and Silver (2008)
 [#kanichay_2008]_. This has been simplified to a sphere of ``50μm`` radius surrounding their soma

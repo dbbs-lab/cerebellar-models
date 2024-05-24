@@ -1,4 +1,4 @@
-name: DBBS Mouse cerebellum configuration v4.1
+name: DBBS Human cerebellum configuration v4.1
 packages:
   - cerebellum~=0.1.0
   - bsb-core~=4.1
@@ -9,10 +9,10 @@ storage:
   engine: hdf5
   root: cerebellum.hdf5
 network:
-  chunk_size: [100, 100, 100]
-  x: 300
-  y: 200
-  z: 295
+  chunk_size: [200, 200, 200]
+  x: 1000
+  y: 1000
+  z: 900
 regions:
   cerebellar_cortex:
     type: stack
@@ -24,25 +24,25 @@ regions:
 partitions:
   granular_layer:
     stack_index: 0
-    thickness: 130
+    thickness: 610
   purkinje_layer:
     stack_index: 1
-    thickness: 15
+    thickness: 30
   b_molecular_layer:
     stack_index: 2
-    thickness: 50
+    thickness: 110
   t_molecular_layer:
     stack_index: 3
-    thickness: 100
+    thickness: 220
 $import:
-  ref: ../../morphologies/mouse/morphologies.yaml#/
+  ref: ../../morphologies/human/morphologies.yaml#/
   values:
     - morphologies
 cell_types:
   glomerulus:
     spatial:
-      density: 0.0003
-      radius: 1.5
+      density: 1.5e-4
+      radius: 3.0
     plotting:
       display_name: Glomerulus
   mossy_fibers:
@@ -52,16 +52,17 @@ cell_types:
       relative_to: glomerulus
   granule_cell:
     spatial:
-      density: 0.0039
+      density: 1.704e-3
       morphologies:
-        - GranuleCell
-      radius: 2.5
+        - GranuleCell_326
+        - GranuleCell_617
+      radius: 2.9
     plotting:
       display_name: Granule cell
       opacity: 0.3
   golgi_cell:
     spatial:
-      density: 0.000009
+      density: 1.42e-6
       morphologies:
         - GolgiCell
       radius: 8
@@ -70,25 +71,26 @@ cell_types:
   purkinje_cell:
     spatial:
       morphologies:
-        - PurkinjeCell
-      planar_density: 0.00045
-      radius: 7.5
+        - PurkinjeCell_1
+        - PurkinjeCell_2
+      planar_density: 0.000228
+      radius: 15
     plotting:
       display_name: Purkinje cell
   basket_cell:
     spatial:
-      density: 0.00005
+      density: 0.23751e-4
       morphologies:
         - BasketCell
-      radius: 6
+      radius: 12
     plotting:
       display_name: Basket cell
   stellate_cell:
     spatial:
-      density: 0.00005
+      density: 0.14794e-4
       morphologies:
         - StellateCell
-      radius: 4
+      radius: 8
     plotting:
       display_name: Stellate cell
 placement:
@@ -103,16 +105,29 @@ placement:
     partitions:
       - granular_layer
     cell_types:
-      - granule_cell
       - golgi_cell
       - glomerulus
+  granule_cell_placement:
+    strategy: bsb.placement.RandomPlacement
+    distribute:
+      morphologies:
+        strategy: cerebellum.placement.binary_distributor.DepthDistributorBinary
+        separating_h: 300
+        below_morphologies:
+        - GranuleCell_617
+        above_morphologies:
+        - GranuleCell_326
+    partitions:
+    - granular_layer
+    cell_types:
+    - granule_cell
   purkinje_layer_placement:
     strategy: bsb.placement.ParallelArrayPlacement
     partitions:
       - purkinje_layer
     cell_types:
       - purkinje_cell
-    spacing_x: 130
+    spacing_x: 350
     angle: 70
   basket_layer_placement:
     strategy: bsb.placement.RandomPlacement
@@ -161,7 +176,7 @@ connectivity:
         - golgi_cell
       morphology_labels:
         - basal_dendrites
-    radius: 50
+    radius: 100
   golgi_to_granule:
     strategy: cerebellum.connectome.golgi_glomerulus.ConnectomeGolgiGlomerulus
     presynaptic:
@@ -174,7 +189,7 @@ connectivity:
         - granule_cell
     glom_post_strat: glomerulus_to_granule
     glom_cell_type: glomerulus
-    radius: 150
+    radius: 200
     divergence: 40
   golgi_to_golgi:
     strategy: bsb.connectivity.VoxelIntersection
@@ -188,7 +203,7 @@ connectivity:
         - golgi_cell
       morphology_labels:
         - basal_dendrites
-    affinity: 0.5
+    affinity: 0.3
     voxels_pre: 500
     voxels_post: 500
     contacts:
@@ -207,7 +222,7 @@ connectivity:
         - golgi_cell
       morphology_labels:
         - basal_dendrites
-    affinity: 0.3
+    affinity: 0.01
     voxels_pre: 500
     voxels_post: 500
     contacts:
@@ -226,7 +241,7 @@ connectivity:
         - golgi_cell
       morphology_labels:
         - basal_dendrites
-    affinity: 0.05
+    affinity: 0.022
     voxels_pre: 500
     voxels_post: 500
   parallel_fiber_to_golgi:
@@ -241,7 +256,7 @@ connectivity:
         - golgi_cell
       morphology_labels:
         - apical_dendrites
-    affinity: 0.08
+    affinity: 0.0137
     voxels_pre: 500
     voxels_post: 500
   ascending_axon_to_purkinje:
@@ -256,7 +271,7 @@ connectivity:
         - purkinje_cell
       morphology_labels:
         - aa_targets
-    affinity: 0.05
+    affinity: 0.026
     voxels_pre: 500
     voxels_post: 500
   parallel_fiber_to_purkinje:
@@ -271,103 +286,214 @@ connectivity:
         - purkinje_cell
       morphology_labels:
         - pf_targets
-    affinity: 0.1
+    affinity: 0.015
     voxels_pre: 500
     voxels_post: 500
   parallel_fiber_to_basket:
-    strategy: bsb.connectivity.VoxelIntersection
+    strategy: bsb.connectivity.geometric.MorphologyToShapeIntersection
     presynaptic:
       cell_types:
-        - granule_cell
+      - granule_cell
       morphology_labels:
-        - parallel_fiber
+      - parallel_fiber
     postsynaptic:
       cell_types:
-        - basket_cell
-      morphology_labels:
-        - dendrites
-    affinity: 0.08
-    voxels_pre: 500
-    voxels_post: 500
+      - basket_cell
+      shapes_composition:
+        voxel_size: 20
+        shapes:
+        - type: Cylinder
+          origin:
+          - 0
+          - -10
+          - 0
+          top_center:
+          - 0
+          - 10
+          - 0
+          radius: 150
+        labels:
+        - - dendrites
+    affinity: 0.008
   parallel_fiber_to_stellate:
-    strategy: bsb.connectivity.VoxelIntersection
+    strategy: bsb.connectivity.geometric.MorphologyToShapeIntersection
     presynaptic:
       cell_types:
-        - granule_cell
+      - granule_cell
       morphology_labels:
-        - parallel_fiber
+      - parallel_fiber
     postsynaptic:
       cell_types:
-        - stellate_cell
+      - stellate_cell
+      shapes_composition:
+        voxel_size: 40
+        shapes:
+        - type: Cylinder
+          origin:
+          - 0
+          - -10
+          - 0
+          top_center:
+          - 0
+          - 10
+          - 0
+          radius: 150
+        labels:
+        - - dendrites
       morphology_labels:
-        - dendrites
-    affinity: 0.08
-    voxels_pre: 500
-    voxels_post: 500
+      - dendrites
+    affinity: 0.0008
   stellate_to_purkinje:
-    strategy: bsb.connectivity.VoxelIntersection
+    strategy: bsb.connectivity.geometric.ShapeToMorphologyIntersection
     presynaptic:
       cell_types:
-        - stellate_cell
+      - stellate_cell
+      shapes_composition:
+        voxel_size: 20
+        shapes:
+        - type: Ellipsoid
+          origin:
+          - 0
+          - 25
+          - 0
+          lambdas:
+          - 100
+          - 40
+          - 100
+          v0:
+          - 1
+          - 0
+          - 0
+          v1:
+          - 0
+          - 1
+          - 0
+          v2:
+          - 0
+          - 0
+          - 1
+        labels:
+        - - axon
       morphology_labels:
-        - axon
+      - axon
     postsynaptic:
       cell_types:
-        - purkinje_cell
+      - purkinje_cell
       morphology_labels:
-        - sc_targets
-    affinity: 0.1
-    voxels_pre: 500
-    voxels_post: 500
+      - sc_targets
+    affinity: 0.0835
   basket_to_purkinje:
-    strategy: bsb.connectivity.VoxelIntersection
+    strategy: cerebellum.connectome.basket_purkinje.ConnectomeBasketPurkinje
+    axon_length: 1200
+    basket_radius: 30
     presynaptic:
       cell_types:
-        - basket_cell
-      morphology_labels:
-        - axon
+      - basket_cell
     postsynaptic:
       cell_types:
-        - purkinje_cell
+      - purkinje_cell
       morphology_labels:
-        - soma
-    voxels_pre: 500
-    voxels_post: 500
+      - soma
+    affinity: 0.45
   stellate_to_stellate:
-    strategy: bsb.connectivity.VoxelIntersection
+    strategy: bsb.connectivity.geometric.ShapeToShapeIntersection
     presynaptic:
       cell_types:
-        - stellate_cell
+      - stellate_cell
+      shapes_composition:
+        voxel_size: 8
+        shapes:
+        - type: Ellipsoid
+          origin:
+          - 0
+          - 25
+          - 0
+          lambdas:
+          - 100
+          - 40
+          - 100
+          v0:
+          - 1
+          - 0
+          - 0
+          v1:
+          - 0
+          - 1
+          - 0
+          v2:
+          - 0
+          - 0
+          - 1
+        labels:
+        - - axon
       morphology_labels:
-        - axon
+      - axon
     postsynaptic:
       cell_types:
-        - stellate_cell
-      morphology_labels:
-        - dendrites
-    affinity: 0.3
-    voxels_pre: 500
-    voxels_post: 500
-    contacts:
-      distribution: norm
-      loc: 100
-      scale: 4
-  basket_to_basket:
-    strategy: bsb.connectivity.VoxelIntersection
-    presynaptic:
-      cell_types:
-        - basket_cell
-      morphology_labels:
-        - axon
-    postsynaptic:
-      cell_types:
-        - basket_cell
-      morphology_labels:
-        - dendrites
+      - stellate_cell
+      shapes_composition:
+        voxel_size: 8
+        shapes:
+        - type: Cylinder
+          origin:
+          - 0
+          - -10
+          - 0
+          top_center:
+          - 0
+          - 10
+          - 0
+          radius: 150
+        labels:
+        - - dendrites
     affinity: 0.5
-    voxels_pre: 500
-    voxels_post: 500
-    contacts:
-      distribution: norm
-      loc: 100
-      scale: 4
+  basket_to_basket:
+    strategy: bsb.connectivity.geometric.ShapeToShapeIntersection
+    presynaptic:
+      cell_types:
+      - basket_cell
+      shapes_composition:
+        voxel_size: 20
+        shapes:
+        - type: Ellipsoid
+          origin:
+          - 0
+          - 25
+          - 0
+          lambdas:
+          - 100
+          - 1000
+          - 100
+          v0:
+          - 1
+          - 0
+          - 0
+          v1:
+          - 0
+          - 1
+          - 0
+          v2:
+          - 0
+          - 0
+          - 1
+        labels:
+        - - axon
+    postsynaptic:
+      cell_types:
+      - basket_cell
+      shapes_composition:
+        voxel_size: 20
+        shapes:
+        - type: Cylinder
+          origin:
+          - 0
+          - -10
+          - 0
+          top_center:
+          - 0
+          - 10
+          - 0
+          radius: 150
+        labels:
+        - - dendrites
+    affinity: 0.01

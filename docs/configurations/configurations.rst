@@ -20,3 +20,4 @@ The following is the list of the species for which canonical configurations have
     :glob:
 
     mouse/mouse
+    human/human

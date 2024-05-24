@@ -1,5 +1,5 @@
 morphologies:
-  - file: ./morphologies/GranuleCell.swc
+  - file: ./morphologies/mouse/GranuleCell.swc
     pipeline:
       - func: swap_axes
         axis1: 1
@@ -18,7 +18,7 @@ morphologies:
         19:
           - axon
           - parallel_fiber
-  - file: ./morphologies/GolgiCell.swc
+  - file: ./morphologies/mouse/GolgiCell.swc
     pipeline:
       - func: swap_axes
         axis1: 1
@@ -34,7 +34,7 @@ morphologies:
         18:
           - axon
           - axon_initial_segment
-  - file: ./morphologies/PurkinjeCell.swc
+  - file: ./morphologies/mouse/PurkinjeCell.swc
     pipeline:
       - func: swap_axes
         axis1: 1
@@ -64,7 +64,7 @@ morphologies:
           - dendrites
           - aa_targets
           - sc_targets
-  - file: ./morphologies/StellateCell.swc
+  - file: ./morphologies/mouse/StellateCell.swc
     pipeline:
       - func: swap_axes
         axis1: 1
@@ -80,7 +80,7 @@ morphologies:
         18:
           - axon
           - axon_initial_segment
-  - file: ./morphologies/BasketCell.swc
+  - file: ./morphologies/mouse/BasketCell.swc
     pipeline:
       - func: swap_axes
         axis1: 1
