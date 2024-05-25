@@ -3,7 +3,7 @@
 """
 
 import numpy as np
-from bsb import ConnectionStrategy, config, ConfigurationError
+from bsb import ConfigurationError, ConnectionStrategy, config
 
 from cerebellum.connectome.presyn_dist_strat import PresynDistStrat
 
@@ -19,16 +19,15 @@ class ConnectomeGlomerulusUBC(PresynDistStrat, ConnectionStrategy):
     population that connects to it."""
 
     def boot(self):
-        parsed_ratios = {k.name: (0. if k.name not in self.ratios_ubc else self.ratios_ubc[k.name]) for k in self.presynaptic.cell_types}
+        parsed_ratios = {
+            k.name: (0.0 if k.name not in self.ratios_ubc else self.ratios_ubc[k.name])
+            for k in self.presynaptic.cell_types
+        }
         sum_ = np.nansum(list(parsed_ratios.values()))
         if np.any(np.array(list(parsed_ratios.values())) < 0):
-            raise ConfigurationError(
-                "Presynaptic cell type ratios should be greater than 0"
-            )
+            raise ConfigurationError("Presynaptic cell type ratios should be greater than 0")
         if sum_ == 0:
-            raise ConfigurationError(
-                "At least one presynaptic ratio should be greater than 0"
-            )
+            raise ConfigurationError("At least one presynaptic ratio should be greater than 0")
         for k, v in parsed_ratios.items():
             parsed_ratios[k] = v / sum_
         self.ratios_ubc = parsed_ratios.copy()

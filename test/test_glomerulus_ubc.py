@@ -1,16 +1,12 @@
 import unittest
 
 import numpy as np
-from bsb import Configuration, Scaffold, ConfigurationError
-from bsb_test import RandomStorageFixture, NetworkFixture, NumpyTestCase
+from bsb import Configuration, ConfigurationError, Scaffold
+from bsb_test import NetworkFixture, NumpyTestCase, RandomStorageFixture
 
 
 class TestGlomerulus_to_UBC(
-    RandomStorageFixture,
-    NetworkFixture,
-    NumpyTestCase,
-    unittest.TestCase,
-    engine_name="hdf5"
+    RandomStorageFixture, NetworkFixture, NumpyTestCase, unittest.TestCase, engine_name="hdf5"
 ):
     def setUp(self):
         super().setUp()
@@ -60,7 +56,7 @@ class TestGlomerulus_to_UBC(
                     presynaptic=dict(cell_types=["pre_cell", "pre_cell2"]),
                     postsynaptic=dict(cell_types=["test_cell"]),
                     radius=self.radius,
-                    ratios_ubc=dict(pre_cell=0.2, pre_cell2= -0.4),
+                    ratios_ubc=dict(pre_cell=0.2, pre_cell2=-0.4),
                 ),
             )
 
@@ -74,12 +70,16 @@ class TestGlomerulus_to_UBC(
                     presynaptic=dict(cell_types=["pre_cell", "pre_cell2"]),
                     postsynaptic=dict(cell_types=["test_cell"]),
                     radius=self.radius,
-                    ratios_ubc=dict(pre_cell=0., pre_cell2=0., pre_cell3= -0.4,),
+                    ratios_ubc=dict(
+                        pre_cell=0.0,
+                        pre_cell2=0.0,
+                        pre_cell3=-0.4,
+                    ),
                 ),
             )
 
     def test_presyn_ratios(self):
-            # Test all 0 presyn ratios
+        # Test all 0 presyn ratios
         self.cfg.connectivity.add(
             "glom_ubc",
             dict(
@@ -87,10 +87,14 @@ class TestGlomerulus_to_UBC(
                 presynaptic=dict(cell_types=["pre_cell", "pre_cell2"]),
                 postsynaptic=dict(cell_types=["test_cell"]),
                 radius=self.radius,
-                ratios_ubc=dict(pre_cell=0.1, pre_cell2=0.3, pre_cell3= -0.4,),
+                ratios_ubc=dict(
+                    pre_cell=0.1,
+                    pre_cell2=0.3,
+                    pre_cell3=-0.4,
+                ),
             ),
         )
-        predicted = {"pre_cell":0.25, "pre_cell2":0.75}
+        predicted = {"pre_cell": 0.25, "pre_cell2": 0.75}
         self.assertEqual(self.cfg.connectivity["glom_ubc"].ratios_ubc.keys(), predicted.keys())
         for k, v in predicted.items():
             self.assertClose(self.cfg.connectivity["glom_ubc"].ratios_ubc[k], v)

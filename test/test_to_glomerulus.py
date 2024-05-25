@@ -15,7 +15,7 @@ from bsb_test import (
 )
 
 
-def _test_distance_to_glomerulus(self, nb_trials=30):
+def _test_distance_to_glomerulus(self, nb_trials=50):
     # Override positions
     self.chunk_size = 100.0
     pos_1 = np.array([0.5, 0.5, 0.5]) * self.chunk_size
