@@ -1,13 +1,37 @@
 import os
 import pathlib
 import unittest
+from os.path import getmtime, isfile, join
 
+import nest
 import numpy as np
 from bsb import Scaffold, parse_configuration_content, parse_configuration_file
 from bsb.services import MPI
 from bsb_test import NumpyTestCase, RandomStorageFixture
+from pynestml.exceptions.invalid_path_exception import InvalidPathException
 from scipy.optimize import curve_fit
 from scipy.signal import find_peaks
+
+
+class TestNestModuleLoading(unittest.TestCase):
+    def test_build_models(self):
+        from cerebellum.nest_models.build_models import _build_nest_models
+
+        # cerebmodule should have been built
+        cerebmodule_file = join(
+            nest.ll_api.sli_func("statusdict/prefix ::"), "lib/nest/cerebmodule.so"
+        )
+        self.assertTrue(isfile(cerebmodule_file))
+        # Does not raise because module exists
+        _build_nest_models(model_dir="bla")
+        old_mtime = getmtime(cerebmodule_file)
+        _build_nest_models(redo=True)  # Force update
+        self.assertTrue(getmtime(cerebmodule_file) > old_mtime, "module should be updated")
+        os.remove(cerebmodule_file)
+        with self.assertRaises(OSError):
+            _build_nest_models(model_dir="bla")
+        with self.assertRaises(InvalidPathException):
+            _build_nest_models(model_dir="./")
 
 
 @unittest.skipIf(MPI.get_size() > 1, "Skipped during parallel testing.")
