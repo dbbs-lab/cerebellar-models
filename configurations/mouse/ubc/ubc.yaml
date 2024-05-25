@@ -32,4 +32,22 @@ connectivity:
     postsynaptic:
       cell_types:
         - unipolar_brush_cell
+    ratios_ubc:
+      ubc_glomerulus: 1.
+      glomerulus: 2.
     radius: 50
+  glomerulus_to_granule:
+    strategy: cerebellum.connectome.glomerulus_granule.ConnectomeGlomerulusGranule
+    presynaptic:
+      cell_types:
+        - glomerulus
+        - ubc_glomerulus
+    postsynaptic:
+      cell_types:
+        - granule_cell
+      morphology_labels:
+        - dendrites
+    mf_glom_strat: mossy_fibers_to_glomerulus
+    mf_cell_type: mossy_fibers
+    radius: 40
+    convergence: 4

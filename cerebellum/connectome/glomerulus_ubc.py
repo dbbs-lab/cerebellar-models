@@ -3,13 +3,13 @@
 """
 
 import numpy as np
-from bsb import ConnectionStrategy, config
+from bsb import ConnectionStrategy, config, ConfigurationError
 
 from cerebellum.connectome.presyn_dist_strat import PresynDistStrat
 
 
 @config.node
-class ConnectomeGlomerulus_to_UBC(PresynDistStrat, ConnectionStrategy):
+class ConnectomeGlomerulusUBC(PresynDistStrat, ConnectionStrategy):
     """
     BSB Connection strategy to connect any type of Glomerulus to UBC cells.
     """
@@ -19,9 +19,19 @@ class ConnectomeGlomerulus_to_UBC(PresynDistStrat, ConnectionStrategy):
     population that connects to it."""
 
     def boot(self):
-        sum_ = np.nansum(list(self.ratios_ubc.values()))
-        for k, v in self.ratios_ubc.items():
-            self.ratios_ubc[k] = v / sum_
+        parsed_ratios = {k.name: (0. if k.name not in self.ratios_ubc else self.ratios_ubc[k.name]) for k in self.presynaptic.cell_types}
+        sum_ = np.nansum(list(parsed_ratios.values()))
+        if np.any(np.array(list(parsed_ratios.values())) < 0):
+            raise ConfigurationError(
+                "Presynaptic cell type ratios should be greater than 0"
+            )
+        if sum_ == 0:
+            raise ConfigurationError(
+                "At least one presynaptic ratio should be greater than 0"
+            )
+        for k, v in parsed_ratios.items():
+            parsed_ratios[k] = v / sum_
+        self.ratios_ubc = parsed_ratios.copy()
 
     def connect(self, pre, post):
         for post_ps in post.placement:
@@ -30,7 +40,7 @@ class ConnectomeGlomerulus_to_UBC(PresynDistStrat, ConnectionStrategy):
             cum_sum = 0
             for pre_ps in pre.placement:
                 # select the ratio of random ubc ids to connect
-                loc_ratio = self.ratios_ubc[pre_ps.cell_type]
+                loc_ratio = self.ratios_ubc[pre_ps.cell_type.name]
                 ubc_ids = ubc_ids[cum_sum : cum_sum + int(len(ubc_pos) // loc_ratio)]
                 cum_sum = int(len(ubc_pos) // loc_ratio)
 
