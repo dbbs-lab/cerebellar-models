@@ -21,7 +21,7 @@ class TestGlomerulus_to_UBC(
             ),
             cell_types=dict(
                 pre_cell=dict(spatial=dict(radius=2, count=100)),
-                pre_cell2=dict(spatial=dict(radius=2, count=1)),
+                pre_cell2=dict(spatial=dict(radius=2, count=100)),
                 test_cell=dict(spatial=dict(radius=2, count=100)),
             ),
             partitions=dict(
@@ -79,7 +79,6 @@ class TestGlomerulus_to_UBC(
             )
 
     def test_presyn_ratios(self):
-        # Test all 0 presyn ratios
         self.cfg.connectivity.add(
             "glom_ubc",
             dict(
@@ -98,3 +97,8 @@ class TestGlomerulus_to_UBC(
         self.assertEqual(self.cfg.connectivity["glom_ubc"].ratios_ubc.keys(), predicted.keys())
         for k, v in predicted.items():
             self.assertClose(self.cfg.connectivity["glom_ubc"].ratios_ubc[k], v)
+        self.network.configuration = self.cfg
+        self.network.compile(skip_placement=True, append=True)
+        cs1 = self.network.get_connectivity_set("glom_ubc_pre_cell_to_test_cell")
+        cs2 = self.network.get_connectivity_set("glom_ubc_pre_cell2_to_test_cell")
+        # self.assertTrue(abs(len(cs1) - len(cs2) // 3) <= 1)

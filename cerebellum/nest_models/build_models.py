@@ -1,4 +1,5 @@
 import shutil
+from logging import warning
 from os import makedirs
 from os.path import abspath, dirname, exists, isdir, join
 
@@ -34,8 +35,8 @@ def _build_nest_models(
                 # unload the module
                 nest.ResetKernel()
                 return
-            except nest.NESTErrors.DynamicModuleManagementError as _:
-                pass
+            except nest.NESTErrors.DynamicModuleManagementError as e:
+                warning(e)
         if not (exists(model_dir) and isdir(model_dir)):
             raise OSError("Model directory does not exist: {}".format(model_dir))
         if exists(build_dir) and isdir(build_dir):
