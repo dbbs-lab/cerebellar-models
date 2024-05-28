@@ -1,7 +1,7 @@
 import unittest
 
 import numpy as np
-from bsb import Configuration, ConfigurationError, Scaffold
+from bsb import Configuration, ConfigurationError, Scaffold, WorkflowError
 from bsb_test import NetworkFixture, NumpyTestCase, RandomStorageFixture
 
 
@@ -22,6 +22,7 @@ class TestGlomerulus_to_UBC(
             cell_types=dict(
                 pre_cell=dict(spatial=dict(radius=2, count=100)),
                 pre_cell2=dict(spatial=dict(radius=2, count=100)),
+                single_cell=dict(spatial=dict(radius=2, count=10)),
                 test_cell=dict(spatial=dict(radius=2, count=100)),
             ),
             partitions=dict(
@@ -38,7 +39,7 @@ class TestGlomerulus_to_UBC(
                 random_placement=dict(
                     strategy="bsb.placement.RandomPlacement",
                     partitions=["layer"],
-                    cell_types=["pre_cell", "pre_cell2", "test_cell"],
+                    cell_types=["pre_cell", "pre_cell2", "test_cell", "single_cell"],
                 ),
             ),
             connectivity=dict(),
@@ -101,4 +102,5 @@ class TestGlomerulus_to_UBC(
         self.network.compile(skip_placement=True, append=True)
         cs1 = self.network.get_connectivity_set("glom_ubc_pre_cell_to_test_cell")
         cs2 = self.network.get_connectivity_set("glom_ubc_pre_cell2_to_test_cell")
-        # self.assertTrue(abs(len(cs1) - len(cs2) // 3) <= 1)
+        self.assertClose(len(cs2) / len(cs1), 3, atol=3e-1)
+        self.assertClose(len(cs1) + len(cs2), 100, atol=1)
