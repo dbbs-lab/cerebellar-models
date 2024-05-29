@@ -1,7 +1,7 @@
 import unittest
 
 import numpy as np
-from bsb import Configuration, ConfigurationError, Scaffold, WorkflowError
+from bsb import Configuration, ConfigurationError, Scaffold
 from bsb_test import NetworkFixture, NumpyTestCase, RandomStorageFixture
 
 
@@ -20,10 +20,10 @@ class TestGlomerulus_to_UBC(
                 z=self.chunk_size[2] * 2,
             ),
             cell_types=dict(
-                pre_cell=dict(spatial=dict(radius=2, count=100)),
-                pre_cell2=dict(spatial=dict(radius=2, count=100)),
-                single_cell=dict(spatial=dict(radius=2, count=10)),
-                test_cell=dict(spatial=dict(radius=2, count=100)),
+                pre_cell=dict(spatial=dict(radius=2, count=80)),
+                pre_cell2=dict(spatial=dict(radius=2, count=80)),
+                single_cell=dict(spatial=dict(radius=2, count=8)),
+                test_cell=dict(spatial=dict(radius=2, count=64)),
             ),
             partitions=dict(
                 layer=dict(
@@ -102,5 +102,66 @@ class TestGlomerulus_to_UBC(
         self.network.compile(skip_placement=True, append=True)
         cs1 = self.network.get_connectivity_set("glom_ubc_pre_cell_to_test_cell")
         cs2 = self.network.get_connectivity_set("glom_ubc_pre_cell2_to_test_cell")
-        self.assertClose(len(cs2) / len(cs1), 3, atol=3e-1)
-        self.assertClose(len(cs1) + len(cs2), 100, atol=1)
+        cell_positions = self.network.get_placement_set("test_cell").load_positions()
+        cell_targets = np.array([-1, -1])
+        self.assertEqual(len(cs2) / len(cs1), 3)
+        self.assertEqual(len(cs1) + len(cs2), len(cell_positions))
+        for cs in [cs1, cs2]:
+            pre_cell_position = self.network.get_placement_set(cs1.pre_type.name).load_positions()
+            dict_pres = {}
+            for from_, to_ in cs.load_connections().as_globals():
+                self.assertAll(from_[1:] == cell_targets)
+                self.assertAll(to_[1:] == cell_targets)
+                post_chunk = np.floor(cell_positions[to_[0]] / self.chunk_size)
+                self.assertTrue(
+                    np.linalg.norm(
+                        (np.floor(pre_cell_position[from_[0]] / self.chunk_size) - post_chunk)
+                        * self.chunk_size
+                    )
+                    <= self.radius,
+                    "Chunk size distance should be less than radius",
+                )
+                post_chunk = str(post_chunk)
+                if post_chunk not in dict_pres:
+                    dict_pres[post_chunk] = np.zeros(len(pre_cell_position), dtype=int)
+                dict_pres[post_chunk][from_[0]] += 1
+            for post_chunk, v in dict_pres.items():
+                # 64 postsyn cells -> 8 postsyn cell per chunk
+                # 80 presyn cells (for each type) -> 10 presyn cell per chunk
+                # -> 4 chunks close enough -> 40 presyn cell per postsyn chunk
+                # There are more than enough presyn cells so each should be used once per postsyn chunk.
+                self.assertAll(
+                    np.unique(v) == np.array([0, 1]),
+                    f"Each presyn cell of postsyn cells in chunk {post_chunk} should be used at most once",
+                )
+
+    def test_uniqueness(self):
+        self.cfg.connectivity.add(
+            "glom_ubc",
+            dict(
+                strategy="cerebellum.connectome.glomerulus_ubc.ConnectomeGlomerulusUBC",
+                presynaptic=dict(cell_types=["single_cell"]),
+                postsynaptic=dict(cell_types=["test_cell"]),
+                radius=self.radius,
+                ratios_ubc=dict(single_cell=1.0),
+            ),
+        )
+        self.network.configuration = self.cfg
+        self.network.compile(skip_placement=True, append=True)
+        cs = self.network.get_connectivity_set("glom_ubc")
+        cell_positions = self.network.get_placement_set("test_cell").load_positions()
+        dict_pres = {}
+        for from_, to_ in cs.load_connections().as_globals():
+            post_chunk = np.floor(cell_positions[to_[0]] / self.chunk_size)
+            post_chunk = str(post_chunk)
+            if post_chunk not in dict_pres:
+                dict_pres[post_chunk] = np.zeros(8, dtype=int)
+            dict_pres[post_chunk][from_[0]] += 1
+        for post_chunk, v in dict_pres.items():
+            # 64 postsyn cells -> 8 postsyn cell per chunk
+            # 8 presyn cells -> 1 presyn cell per chunk -> 4 chunks close enough -> 4 presyn cell per postsyn chunk
+            # Presyn cells are taken twice each per postsyn chunk
+            self.assertAll(
+                np.unique(v) == np.array([0, 2]),
+                f"Each presyn cell of postsyn cells in chunk {post_chunk} should be used exactly twice",
+            )

@@ -65,12 +65,13 @@ class ConnectomeGlomerulusUBC(PresynDistStrat, ConnectionStrategy):
                         # if no glom is left un-connected
                         # we reset the connected list
                         connected_gloms[pre_ct][:] = False
+                        filter_connected = ~connected_gloms[pre_ct]
                     avaiable_gloms_ids = np.where(filter_connected)[0]
                     distances = np.linalg.norm(ubc - glom_pos[filter_connected], axis=1)
                     # Take closest glom
                     pre_id = avaiable_gloms_ids[np.argsort(distances)[0]]
-                    post_locs[i] = loc_ubc_ids[i]
-                    pre_locs[i] = pre_id
+                    post_locs[i, 0] = loc_ubc_ids[i]
+                    pre_locs[i, 0] = pre_id
                     connected_gloms[pre_ct][pre_id] = True
 
                 self.connect_cells(pre_ps, post_ps, pre_locs, post_locs)

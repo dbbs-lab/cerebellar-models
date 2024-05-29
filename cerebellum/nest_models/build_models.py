@@ -29,14 +29,16 @@ def _build_nest_models(
         if not redo:
             import nest
 
+            nest.ResetKernel()
             try:
-                nest.ResetKernel()
                 nest.Install(module_name)
                 # unload the module
                 nest.ResetKernel()
                 return
             except nest.NESTErrors.DynamicModuleManagementError as e:
                 warning(e)
+                if "loaded already" in e.message:
+                    return
         if not (exists(model_dir) and isdir(model_dir)):
             raise OSError("Model directory does not exist: {}".format(model_dir))
         if exists(build_dir) and isdir(build_dir):
