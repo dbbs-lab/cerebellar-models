@@ -99,7 +99,7 @@ The parameters for the eglif models are extracted from Table 2 and Table 3 in Ge
 Then, the following parameters are optimized according to the method described in Geminiani et al.
 (2018) [#geminiani_2018]_ :
 
-.. csv-table:: GLIF neuron parameters
+.. csv-table:: EGLIF neuron parameters
    :header-rows: 1
    :delim: ;
 

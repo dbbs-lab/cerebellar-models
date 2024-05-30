@@ -138,3 +138,44 @@ dendrite selected) are copied from the ``reference strategy``.
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 See bsb :doc:`documentation <bsb:connectivity/connection-strategies>`.
+
+.. _ubc_glom:
+
+:class:`ConnectomeUBCGlomerulus <.connectome.to_glomerulus.ConnectomeUBCGlomerulus>`
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+The algorithm selects one UBC within the sphere surrounding each UBC glomerulus. This selection is random and performed
+with a truncated exponential distribution.
+
+* ``radius``: Radius of the sphere to filter the UBC within it.
+
+.. _glom_ubc:
+
+:class:`ConnectomeGlomerulusUBC <.connectome.glomerulus_ubc.ConnectomeGlomerulusUBC>`
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+The algorithm connects a population of UBC to a list of glomeruli populations (for instance mf or ubc based glomeruli),
+maintaining their relative indegree ratios.
+Glomeruli are selected within the sphere surrounding each UBC chunk.
+For each UBC, the algorithm selects the closest unconnected glomerulus (if possible) to limit the number of UBCs per
+glomerulus.
+
+* ``radius``: Radius of the sphere to filter the glomeruli within it.
+
+* ``ratios_ubc``: Positive relative ratios of indegree for the different types of glomeruli. The ratios will be
+  normalized so that their sum equals to 1.
+
+.. code-block:: yaml
+
+    glomerulus_ubc_to_ubc:
+        strategy: cerebellum.connectome.glomerulus_ubc.ConnectomeGlomerulus_to_UBC
+        presynaptic:
+          cell_types:
+            - ubc_glomerulus
+            - glomerulus
+        postsynaptic:
+          cell_types:
+            - unipolar_brush_cell
+        ratios_ubc:
+          ubc_glomerulus: 1. # will be interpreted as 1 / (1+2)
+          glomerulus: 2.  # will be interpreted as 2 / (1+2)
+        radius: 50

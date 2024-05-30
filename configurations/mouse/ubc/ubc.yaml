@@ -6,7 +6,6 @@ cell_types:
     plotting:
       display_name: UBC
   ubc_glomerulus:
-    relay: true
     spatial:
       radius: 1.5
       relative_to: unipolar_brush_cell
