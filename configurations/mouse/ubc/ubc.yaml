@@ -22,8 +22,8 @@ connectivity:
       cell_types:
         - ubc_glomerulus
     radius: 500
-  glomerulus_ubc_to_ubc:
-    strategy: cerebellum.connectome.glomerulus_ubc.ConnectomeGlomerulus_to_UBC
+  glomerulus_to_ubc:
+    strategy: cerebellum.connectome.glomerulus_ubc.ConnectomeGlomerulusUBC
     presynaptic:
       cell_types:
         - ubc_glomerulus
@@ -50,3 +50,22 @@ connectivity:
     mf_cell_type: mossy_fibers
     radius: 40
     convergence: 4
+  golgi_to_granule:
+    strategy: cerebellum.connectome.golgi_glomerulus.ConnectomeGolgiGlomerulus
+    presynaptic:
+      cell_types:
+        - golgi_cell
+      morphology_labels:
+        - axon
+    postsynaptic:
+      cell_types:
+        - granule_cell
+        - unipolar_brush_cell
+    glom_post_strats:
+      - glomerulus_to_granule
+      - glomerulus_to_ubc
+    glom_cell_types:
+      - glomerulus
+      - ubc_glomerulus
+    radius: 150
+    divergence: 40

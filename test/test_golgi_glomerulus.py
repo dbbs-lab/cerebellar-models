@@ -91,8 +91,8 @@ class TestGlomerulusGranule(
                     postsynaptic=dict(cell_types=["error_cell"]),
                     radius=self.radius,
                     divergence=self.divergence,
-                    glom_cell_type="glom_cell",
-                    glom_post_strat="glom_to_post",
+                    glom_cell_types=["glom_cell"],
+                    glom_post_strats=["glom_to_post"],
                 ),
             )
         with self.assertRaises(ConfigurationError):
@@ -105,8 +105,8 @@ class TestGlomerulusGranule(
                     postsynaptic=dict(cell_types=["golgi_cell"]),
                     radius=self.radius,
                     divergence=self.divergence,
-                    glom_cell_type="error_cell",
-                    glom_post_strat="glom_to_post",
+                    glom_cell_types=["error_cell"],
+                    glom_post_strats=["glom_to_post"],
                 ),
             )
         # Test wrong morphology label
@@ -118,8 +118,8 @@ class TestGlomerulusGranule(
                 postsynaptic=dict(cell_types=["golgi_cell"]),
                 radius=self.radius,
                 divergence=self.divergence,
-                glom_cell_type="glom_cell",
-                glom_post_strat="glom_to_post",
+                glom_cell_types=["glom_cell"],
+                glom_post_strats=["glom_to_post"],
             ),
         )
         # Fixme: test the sub-error: should be ConnectivityError
@@ -132,8 +132,8 @@ class TestGlomerulusGranule(
             postsynaptic=dict(cell_types=["golgi_cell"]),
             radius=self.radius,
             divergence=self.divergence,
-            glom_cell_type="glom_cell",
-            glom_post_strat="glom_to_post",
+            glom_cell_types=["glom_cell"],
+            glom_post_strats=["glom_to_post"],
         )
         self.network.compile(append=True, skip_placement=True)
 
@@ -188,9 +188,9 @@ class TestGlomerulusGranule(
                 postsynaptic=dict(cell_types=["golgi_cell"]),
                 radius=self.radius,
                 divergence=self.divergence,
-                glom_cell_type="glom_cell",
+                glom_cell_types=["glom_cell"],
                 depends_on=[self.cfg.connectivity["glom_to_post"]],
-                glom_post_strat="glom_to_post",
+                glom_post_strats=["glom_to_post"],
             ),
         )
         self.assertEqual(len(self.cfg.connectivity["golgi_glom"].depends_on), 1)

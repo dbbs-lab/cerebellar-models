@@ -69,7 +69,8 @@ Neuron parameters
 
 The UBC neurons were represented as a EGLIF point neuron models (see :doc:`NEST section <nest>`).
 
-The following LIF parameters for the UBC cells were extracted from Locatelli et al. (2013), Subramaniyam et al. (2014) and Russo et al. (2007):
+The following LIF parameters for the UBC cells were extracted from Locatelli et al. (2013) [#locatelli_2013]_,
+Subramaniyam et al. (2014) [#subramaniyam_2014]_ and Russo et al. (2007):
 
 .. csv-table:: UBC LIF neuron parameters
    :header-rows: 1
@@ -78,7 +79,8 @@ The following LIF parameters for the UBC cells were extracted from Locatelli et 
    :math:`C_m\ (pF)`;:math:`\tau_m\ (ms)`;:math:`E_L\ (mV)`;:math:`t_{ref}\ (ms)`;:math:`V_{reset}\ (mV)`;:math:`V_{th}\ (mV)`
    16.5; 13.2;-66.7;1.67;-76,7;-55.8
 
-EGLIF parameters were optimized to match results of Locatelli et al. (2013) using the Gemini et al. (2018) method:
+EGLIF parameters were optimized to match results of Locatelli et al. (2013) [#locatelli_2013]_ using the
+Geminiani et al. (2018) [#geminiani_2018]_ method:
 
 .. csv-table:: UBC EGLIF neuron parameters
    :header-rows: 1
@@ -87,8 +89,12 @@ EGLIF parameters were optimized to match results of Locatelli et al. (2013) usin
     :math:`k_{adap}\ (nS \cdot ms^{-1})`;:math:`k_1\ (ms^{-1})`;:math:`k_2\ (ms^{-1})`;:math:`A_1\ (pA)`;:math:`A_2\ (pA)`;:math:`I_e\ (pA)`
     2.025; 1.887; 1.096; 5.953; 5.863; 3.711
 
+It is not clear how the spiking parameters (i.e :math:`\lambda_0` and :math:`\tau_V`) are obtained in the Geminiani et
+al. (2018) paper [#geminiani_2018]_. The values were extracted from a BSB configuration provided by the authors.
+
 The postsynaptic receptors are defined according to the following table:
 
+.. _ubc-table-receptor:
 .. csv-table:: UBC Postsynaptic receptor parameters
    :header-rows: 1
    :delim: ;
@@ -101,6 +107,19 @@ The postsynaptic receptors are defined according to the following table:
 Synapse parameters
 ++++++++++++++++++
 
+UBC connections are represented as ``static synapses`` (see :doc:`NEST section <nest>`).
+The receptor id corresponds to the postsynaptic receptor used for the connection (see table :ref:`ubc-table-receptor`).
+However, it is currently unclear how these parameters were optimized, or which features were targeted:
+
+.. csv-table:: Presynaptic parameters
+   :header-rows: 1
+   :delim: ;
+
+    Source-Target;:math:`weight \ (nS)`;:math:`delay \ (ms)`; Receptor id
+    UBC-ubc_glom;1;1;1
+    glom-GrC;0.23;1;1
+    glom-GoC;0.24;1;1
+    GoC-GrC;0.24;2;2
 
 References
 ^^^^^^^^^^
@@ -118,3 +137,12 @@ References
 .. [#kanichay_2008] Kanichay, R. T., & Silver, R. A. (2008). Synaptic and cellular properties of the
    feedforward inhibitory circuit within the input layer of the cerebellar cortex. Journal of
    Neuroscience, 28(36), 8955-8967. https://doi.org/10.1523/JNEUROSCI.5469-07.2008
+.. [#locatelli_2013] Locatelli, F., Bottà, L., Prestori, F., Masetto, S., & D’Angelo, E. (2013). Late-onset bursts
+evoked by mossy fibre bundle stimulation in unipolar brush cells: Evidence for the involvement of H- and
+TRP-currents. The Journal of Physiology, 591(4), 899–918. https://doi.org/10.1113/jphysiol.2012.242180
+.. [#subramaniyam_2014] Subramaniyam, S., Solinas, S., Perin, P., Locatelli, F., Masetto, S., & D’Angelo, E. (2014).
+Computational modeling predicts the ionic mechanism of late-onset responses in unipolar brush cells.
+Frontiers in Cellular Neuroscience, 8. https://doi.org/10.3389/fncel.2014.00237
+.. [#geminiani_2018] Geminiani, A., Casellato, C., Locatelli, F., Prestori, F., Pedrocchi, A., & D'Angelo, E. (2018).
+Complex dynamics in simplified neuronal models: reproducing Golgi cell electroresponsiveness. Frontiers in
+neuroinformatics, 12, 88. https://doi.org/10.3389/fninf.2018.00088

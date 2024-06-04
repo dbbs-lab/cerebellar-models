@@ -172,8 +172,10 @@ connectivity:
     postsynaptic:
       cell_types:
         - granule_cell
-    glom_post_strat: glomerulus_to_granule
-    glom_cell_type: glomerulus
+    glom_post_strats:
+      - glomerulus_to_granule
+    glom_cell_types:
+      - glomerulus
     radius: 150
     divergence: 40
   golgi_to_golgi:

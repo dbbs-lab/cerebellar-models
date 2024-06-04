@@ -11,7 +11,7 @@ _cache_path = _cereb_dirs.user_cache_dir
 
 
 def _build_nest_models(
-    model_dir=dirname(abspath(__file__)),
+    model_dir=dirname(__file__),
     build_dir=join(_cache_path, "nest_build"),
     module_name="cerebmodule",
     redo=False,
@@ -24,6 +24,8 @@ def _build_nest_models(
     :param str module_name: Name of the nest module produced as outcome.
     :param bool redo: Flag to force rebuild the nest models.
     """
+
+    model_dir = abspath(model_dir)
     if MPI.get_size() == 1 or MPI.get_rank() == 0:
         if not redo:
             import nest

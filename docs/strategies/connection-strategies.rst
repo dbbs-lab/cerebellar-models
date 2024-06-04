@@ -166,7 +166,7 @@ glomerulus.
 
 .. code-block:: yaml
 
-    glomerulus_ubc_to_ubc:
+    glomerulus_to_ubc:
         strategy: cerebellum.connectome.glomerulus_ubc.ConnectomeGlomerulus_to_UBC
         presynaptic:
           cell_types:
