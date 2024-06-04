@@ -1,7 +1,7 @@
+name: DBBS Mouse cerebellum NEST basal activity
 $import:
   ref: ../mouse_cerebellar_cortex.yaml#/
   values:
-    - name
     - packages
     - storage
     - network

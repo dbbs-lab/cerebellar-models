@@ -138,11 +138,11 @@ References
    feedforward inhibitory circuit within the input layer of the cerebellar cortex. Journal of
    Neuroscience, 28(36), 8955-8967. https://doi.org/10.1523/JNEUROSCI.5469-07.2008
 .. [#locatelli_2013] Locatelli, F., Bottà, L., Prestori, F., Masetto, S., & D’Angelo, E. (2013). Late-onset bursts
-evoked by mossy fibre bundle stimulation in unipolar brush cells: Evidence for the involvement of H- and
-TRP-currents. The Journal of Physiology, 591(4), 899–918. https://doi.org/10.1113/jphysiol.2012.242180
+   evoked by mossy fibre bundle stimulation in unipolar brush cells: Evidence for the involvement of H- and
+   TRP-currents. The Journal of Physiology, 591(4), 899–918. https://doi.org/10.1113/jphysiol.2012.242180
 .. [#subramaniyam_2014] Subramaniyam, S., Solinas, S., Perin, P., Locatelli, F., Masetto, S., & D’Angelo, E. (2014).
-Computational modeling predicts the ionic mechanism of late-onset responses in unipolar brush cells.
-Frontiers in Cellular Neuroscience, 8. https://doi.org/10.3389/fncel.2014.00237
+   Computational modeling predicts the ionic mechanism of late-onset responses in unipolar brush cells.
+   Frontiers in Cellular Neuroscience, 8. https://doi.org/10.3389/fncel.2014.00237
 .. [#geminiani_2018] Geminiani, A., Casellato, C., Locatelli, F., Prestori, F., Pedrocchi, A., & D'Angelo, E. (2018).
-Complex dynamics in simplified neuronal models: reproducing Golgi cell electroresponsiveness. Frontiers in
-neuroinformatics, 12, 88. https://doi.org/10.3389/fninf.2018.00088
+   Complex dynamics in simplified neuronal models: reproducing Golgi cell electroresponsiveness. Frontiers in
+   neuroinformatics, 12, 88. https://doi.org/10.3389/fninf.2018.00088

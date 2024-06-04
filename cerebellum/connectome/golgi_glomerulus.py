@@ -62,12 +62,16 @@ class ConnectomeGolgiGlomerulus(ConnectionStrategy):
                     )
 
             post_ct = glom_post_strat.postsynaptic.cell_types
+            found = False
             for ct in self.postsynaptic.cell_types:
-                if ct not in post_ct:
-                    raise ConfigurationError(
-                        f"The dependency rule {glom_post_strat.name} does not connect glomeruli to this connection's "
-                        f"postsynaptic cell: {ct.name}."
-                    )
+                if ct in post_ct:
+                    found = True
+                    break
+            if not found:
+                raise ConfigurationError(
+                    f"The dependency rule {glom_post_strat.name} does not connect glomeruli to this connection's "
+                    f"postsynaptic cell: {post_ct.name}."
+                )
 
     def boot(self):
         self._assert_dependencies()

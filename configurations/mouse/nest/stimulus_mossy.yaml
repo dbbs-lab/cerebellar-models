@@ -1,7 +1,7 @@
+name: DBBS Mouse cerebellum NEST basal activity and mf stimulus
 $import:
   ref: ./basal.yaml#/
   values:
-    - name
     - packages
     - components
     - storage
@@ -14,7 +14,19 @@ $import:
     - connectivity
     - simulations
 simulations:
-  basal_activity:
+  mf_stimulus:
+    simulator: nest
+    resolution: 0.1
+    duration: 5000
+    modules:
+      - cerebmodule
+    seed: 1234
+    $import:
+      ref: ./basal.yaml#/simulations/basal_activity
+      values:
+        - cell_models
+        - connection_models
+        - devices
     devices:
       stimulus:
         device: poisson_generator
