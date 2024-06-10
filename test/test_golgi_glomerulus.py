@@ -9,6 +9,7 @@ import numpy as np
 from bsb import Configuration, ConfigurationError, Scaffold, WorkflowError
 from bsb_test import NetworkFixture, NumpyTestCase, RandomStorageFixture
 
+from cerebellum.connectome.glomerulus_golgi import ConnectomeGlomerulusGolgi
 from cerebellum.connectome.golgi_glomerulus import ConnectomeGolgiGlomerulus
 
 
@@ -41,6 +42,7 @@ class TestGlomerulusGranule(
             cell_types=dict(
                 # one glom and golgi per chunk
                 glom_cell=dict(spatial=dict(radius=2, density=1.0 / np.prod(self.chunk_size))),
+                glom_cell2=dict(spatial=dict(radius=2, density=1.0 / np.prod(self.chunk_size))),
                 error_cell=dict(spatial=dict(radius=2, count=1)),
                 golgi_cell=dict(
                     spatial=dict(
@@ -62,7 +64,7 @@ class TestGlomerulusGranule(
                 random_placement=dict(
                     strategy="bsb.placement.RandomPlacement",
                     partitions=["layer"],
-                    cell_types=["glom_cell", "error_cell", "golgi_cell"],
+                    cell_types=["glom_cell", "glom_cell2", "error_cell", "golgi_cell"],
                 ),
             ),
             connectivity=dict(
@@ -146,7 +148,7 @@ class TestGlomerulusGranule(
         # each glom should connect to one postsyn so max nb connection per golgi is divergence
         self.assertTrue(
             len(cs) <= len(cell_positions) * self.divergence,
-            "Maximum nb connection pre golgi cell should be divergence",
+            "Maximum nb connection per golgi cell should be divergence",
         )
         morpho = self.network.cell_types["golgi_cell"].morphologies[0].load()
         post_gloms = np.full((len(cell_positions), self.divergence), -1)
@@ -194,3 +196,29 @@ class TestGlomerulusGranule(
             ),
         )
         self.assertEqual(len(self.cfg.connectivity["golgi_glom"].depends_on), 1)
+
+    def test_golgi_glom_multi_strats(self):
+        self.network.connectivity["glom_to_post2"] = ConnectomeGlomerulusGolgi(
+            presynaptic=dict(cell_types=["glom_cell", "glom_cell2"]),
+            postsynaptic=dict(cell_types=["golgi_cell"], morphology_labels=["basal_dendrites"]),
+            # radius is less than a chunk so that glom connect to only onw golgi
+            radius=np.min(self.chunk_size) - 1.0,
+        )
+        self.network.connectivity["golgi_glom"] = ConnectomeGolgiGlomerulus(
+            presynaptic=dict(cell_types=["golgi_cell"], morphology_labels=["axon"]),
+            postsynaptic=dict(cell_types=["golgi_cell"]),
+            radius=150,  # bigger than circuit length in diagonal
+            divergence=self.divergence,
+            glom_cell_types=["glom_cell", "glom_cell2"],
+            glom_post_strats=["glom_to_post", "glom_to_post2"],
+        )
+        self.network.compile(append=True, skip_placement=True)
+
+        cs = self.network.get_connectivity_set("golgi_glom")
+        cell_positions = self.network.get_placement_set("golgi_cell").load_positions()
+        # each glom should connect to one postsyn for each strat,
+        # so max nb connection per golgi is divergence times nb_strat.
+        self.assertTrue(
+            len(cs) <= len(cell_positions) * self.divergence * 2,
+            "Maximum nb connection per strat per golgi cell should be divergence",
+        )

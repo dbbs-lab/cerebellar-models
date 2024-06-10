@@ -164,7 +164,7 @@ connectivity:
       morphology_labels:
         - basal_dendrites
     radius: 50
-  golgi_to_granule:
+  golgi_to_glomerulus:
     strategy: cerebellum.connectome.golgi_glomerulus.ConnectomeGolgiGlomerulus
     presynaptic:
       cell_types:
