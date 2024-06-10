@@ -147,8 +147,10 @@ connectivity:
         - granule_cell
       morphology_labels:
         - dendrites
-    mf_glom_strat: mossy_fibers_to_glomerulus
-    mf_cell_type: mossy_fibers
+    pre_glom_strats:
+      - mossy_fibers_to_glomerulus
+    pre_cell_types:
+      - mossy_fibers
     radius: 40
     convergence: 4
   glomerulus_to_golgi:

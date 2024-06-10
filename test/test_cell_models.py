@@ -31,7 +31,7 @@ class TestNestModuleLoading(unittest.TestCase):
         with self.assertRaises(OSError):
             _build_nest_models(model_dir="bla")
         with self.assertRaises(InvalidPathException):
-            _build_nest_models(model_dir="./")
+            _build_nest_models(model_dir=dirname(abspath(__file__)))
 
 
 @unittest.skipIf(MPI.get_size() > 1, "Skipped during parallel testing.")

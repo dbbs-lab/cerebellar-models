@@ -41,8 +41,12 @@ connectivity:
         - granule_cell
       morphology_labels:
         - dendrites
-    mf_glom_strat: mossy_fibers_to_glomerulus
-    mf_cell_type: mossy_fibers
+    pre_glom_strats:
+      - mossy_fibers_to_glomerulus
+      - ubc_to_ubc_glomerulus
+    pre_cell_types:
+      - mossy_fibers
+      - unipolar_brush_cell
     radius: 40
     convergence: 4
   glomerulus_to_golgi:
@@ -57,7 +61,7 @@ connectivity:
       morphology_labels:
         - basal_dendrites
     radius: 50
-  golgi_to_granule:
+  golgi_to_glomerulus:
     strategy: cerebellum.connectome.golgi_glomerulus.ConnectomeGolgiGlomerulus
     presynaptic:
       cell_types:

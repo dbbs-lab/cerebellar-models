@@ -85,8 +85,8 @@ class TestGlomerulusGranule(
                     postsynaptic=dict(cell_types=["test_cell"], morphology_labels=["dendrites"]),
                     radius=self.radius,
                     convergence=self.convergence,
-                    mf_cell_type="pre_cell",
-                    mf_glom_strat="x_to_glomerulus",
+                    pre_cell_types=["pre_cell"],
+                    pre_glom_strats=["x_to_glomerulus"],
                 ),
             )
 
@@ -100,8 +100,8 @@ class TestGlomerulusGranule(
                     postsynaptic=dict(cell_types=["test_cell"], morphology_labels=["dendrites"]),
                     radius=self.radius,
                     convergence=self.convergence,
-                    mf_cell_type="pre_cell2",
-                    mf_glom_strat="x_to_glomerulus",
+                    pre_cell_types=["pre_cell2"],
+                    pre_glom_strats=["x_to_glomerulus"],
                 ),
             )
 
@@ -119,8 +119,8 @@ class TestGlomerulusGranule(
                     postsynaptic=dict(cell_types=["test_cell"], morphology_labels=["dendrites"]),
                     radius=self.radius,
                     convergence=self.convergence,
-                    mf_cell_type="pre_cell",
-                    mf_glom_strat="x_to_glomerulus",
+                    pre_cell_types=["pre_cell"],
+                    pre_glom_strats=["x_to_glomerulus"],
                 ),
             )
 
@@ -148,8 +148,8 @@ class TestGlomerulusGranule(
                 postsynaptic=dict(cell_types=["test_cell"], morphology_labels=["dendrites"]),
                 radius=self.radius,
                 convergence=self.convergence,
-                mf_cell_type="pre_cell2",
-                mf_glom_strat="x_to_glomerulus2",
+                pre_cell_types=["pre_cell2"],
+                pre_glom_strats=["x_to_glomerulus2"],
             ),
         )
         network = Scaffold(self.cfg, self.storage)
@@ -163,8 +163,8 @@ class TestGlomerulusGranule(
             postsynaptic=dict(cell_types=["test_cell"], morphology_labels=["dendrites"]),
             radius=self.radius,
             convergence=self.convergence,
-            mf_cell_type="pre_cell",
-            mf_glom_strat="x_to_glomerulus",
+            pre_cell_types=["pre_cell"],
+            pre_glom_strats=["x_to_glomerulus"],
         )
         self.network.compile(append=True, skip_placement=True)
         cs = self.network.get_connectivity_set("glom_to_gran")
@@ -222,9 +222,9 @@ class TestGlomerulusGranule(
                 postsynaptic=dict(cell_types=["test_cell"], morphology_labels=["dendrites"]),
                 radius=self.radius,
                 convergence=self.convergence,
-                mf_cell_type="pre_cell",
+                pre_cell_types=["pre_cell"],
                 depends_on=[self.cfg.connectivity["x_to_glomerulus"]],
-                mf_glom_strat="x_to_glomerulus",
+                pre_glom_strats=["x_to_glomerulus"],
             ),
         )
         self.assertEqual(len(self.cfg.connectivity["glom_to_gran"].depends_on), 1)
