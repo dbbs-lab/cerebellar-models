@@ -1,18 +1,4 @@
 name: DBBS Mouse cerebellum NEST basal activity and mf stimulus
-$import:
-  ref: ./basal.yaml#/
-  values:
-    - packages
-    - components
-    - storage
-    - network
-    - regions
-    - partitions
-    - morphologies
-    - cell_types
-    - placement
-    - connectivity
-    - simulations
 simulations:
   mf_stimulus:
     simulator: nest
@@ -44,3 +30,17 @@ simulations:
             - mossy_fibers
         "weight" : 1.0
         "delay" : 0.1
+$import:
+  ref: ./basal.yaml#/
+  values:
+    - packages
+    - components
+    - storage
+    - network
+    - regions
+    - partitions
+    - morphologies
+    - cell_types
+    - placement
+    - connectivity
+    - simulations

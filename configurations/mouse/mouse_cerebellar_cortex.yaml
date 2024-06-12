@@ -7,7 +7,7 @@ packages:
   - bsb-hdf5~=4.0
 storage:
   engine: hdf5
-  root: cerebellum.hdf5
+  root: mouse_cerebellum.hdf5
 network:
   chunk_size: [100, 100, 100]
   x: 300
@@ -34,10 +34,6 @@ partitions:
   t_molecular_layer:
     stack_index: 3
     thickness: 100
-$import:
-  ref: ../../morphologies/morphologies.yaml#/
-  values:
-    - morphologies
 cell_types:
   glomerulus:
     spatial:
@@ -375,3 +371,7 @@ connectivity:
       distribution: norm
       loc: 100
       scale: 4
+$import:
+  ref: ../../morphologies/morphologies.yaml#/
+  values:
+    - morphologies

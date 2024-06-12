@@ -1,4 +1,12 @@
 name: DBBS Mouse cerebellum w/ UBC NEST basal activity and mf stimulus
+storage:
+  root: mouse_cereb_ubc_nest.hdf5
+cell_types:
+  $import:
+    ref: ./ubc.yaml#/cell_types
+    values:
+      - unipolar_brush_cell
+      - ubc_glomerulus
 placement:
   $import:
     ref: ./ubc.yaml#/placement
@@ -12,27 +20,7 @@ connectivity:
       - glomerulus_to_ubc
       - glomerulus_to_granule
       - glomerulus_to_golgi
-      - golgi_to_granule
-$import:
-  ref: ../nest/stimulus_mossy.yaml#/
-  values:
-    - packages
-    - components
-    - storage
-    - network
-    - regions
-    - partitions
-    - morphologies
-    - cell_types
-    - placement
-    - connectivity
-    - simulations
-cell_types:
-  $import:
-    ref: ./ubc.yaml#/cell_types
-    values:
-      - unipolar_brush_cell
-      - ubc_glomerulus
+      - golgi_to_glomerulus
 simulations:
   basal_activity:
     cell_models:
@@ -44,14 +32,14 @@ simulations:
           V_th: -53
           V_reset: -78
           E_L: -68
-          Vinit: -68
+          V_m: -68
           lambda_0: 1.8
           tau_V: 1.1
           tau_m: 9.125
           I_e: 3.711
-          kadap: 2.025
-          k1: 1.887
-          k2: 1.096
+          k_adap: 2.025
+          k_1: 1.887
+          k_2: 1.096
           A1: 5.953
           A2: 5.863
           tau_syn1: 0.64
@@ -67,17 +55,17 @@ simulations:
         synapse:
           weight: 1
           delay: 50
-      glomerulus_ubc_to_ubc:
+      glomerulus_to_ubc_ubc_glomerulus_to_unipolar_brush_cell:
         synapse:
           weight: 1
           delay: 50
           receptor_type: 1
-      glomerulus_mf_to_ubc:
+      glomerulus_to_ubc_glomerulus_to_unipolar_brush_cell:
         synapse:
           weight: 1
           delay: 2
           receptor_type: 1
-      ubc_glomerulus_to_granule_cell:
+      glomerulus_to_granule_ubc_glomerulus_to_granule_cell:
         synapse:
           weight: 0.048
           delay: 1
@@ -102,3 +90,17 @@ simulations:
         - cell_models
         - connection_models
         - devices
+$import:
+  ref: ../nest/stimulus_mossy.yaml#/
+  values:
+    - packages
+    - components
+    - storage
+    - network
+    - regions
+    - partitions
+    - morphologies
+    - cell_types
+    - placement
+    - connectivity
+    - simulations

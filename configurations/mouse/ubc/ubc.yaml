@@ -1,4 +1,20 @@
 name: DBBS Mouse cerebellum w/ UBC
+storage:
+  root: mouse_cereb_ubc.hdf5
+cell_types:
+  unipolar_brush_cell:
+    spatial:
+      radius: 1.5
+      density: 0.000078
+    plotting:
+      display_name: UBC
+  ubc_glomerulus:
+    spatial:
+      radius: 1.5
+      relative_to: unipolar_brush_cell
+      count_ratio: 4.0
+    plotting:
+      display_name: UBC_gloms
 placement:
   granular_layer_placement:
     cell_types:
@@ -92,17 +108,3 @@ $import:
     - cell_types
     - placement
     - connectivity
-cell_types:
-  unipolar_brush_cell:
-    spatial:
-      radius: 1.5
-      density: 0.000078
-    plotting:
-      display_name: UBC
-  ubc_glomerulus:
-    spatial:
-      radius: 1.5
-      relative_to: unipolar_brush_cell
-      count_ratio: 4.0
-    plotting:
-      display_name: UBC_gloms
