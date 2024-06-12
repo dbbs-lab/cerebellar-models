@@ -89,6 +89,21 @@ class ConnectomeGolgiGlomerulus(ConnectionStrategy):
                 pre_chunks.append(Chunk([c[0], c[1], c[2]], chunk.dimensions))
         return pre_chunks
 
+    def _combine_unique_gloms(self, glom_ids, loc_glom_pos, loc_post_locs):
+        # Extract unique glomerulus groups
+        unique_gloms = np.unique(glom_ids)
+        loc_post_locs = np.asarray(loc_post_locs, dtype=object)
+        post_locs = []
+        glom_pos = np.zeros((len(unique_gloms), 3), dtype=float)
+        for c, u_glom in enumerate(unique_gloms):
+            ids = np.where(glom_ids == u_glom)[0]
+            post_locs.append(
+                [locs for locs in np.asarray(np.concatenate(loc_post_locs[ids]), dtype=int)]
+            )
+            glom_pos[c] = loc_glom_pos[ids[0]]
+
+        return (unique_gloms, glom_pos, post_locs)
+
     def _get_glom_cluster(self, chunk, post_ps, glom_type):
         # Get the glom_to_post connections
         glom_ids = []
@@ -126,27 +141,7 @@ class ConnectomeGolgiGlomerulus(ConnectionStrategy):
                 [cs.pre_type.get_placement_set().load_positions()[loc_glom_locs], loc_glom_pos]
             )
 
-        # Extract unique glomerulus groups
-        unique_gloms = np.unique(glom_ids)
-        post_locs = np.asarray(post_locs, dtype=object)
-        postsyn_connections = []
-        postsyn_connections_branch_point = []
-        glom_pos = np.zeros((len(unique_gloms), 3), dtype=float)
-        for c, u_glom in enumerate(unique_gloms):
-            ids = np.where(glom_ids == u_glom)[0]
-            postsyn_connections.append(
-                [loc_post_locs[0] for loc_post_locs in np.concatenate(post_locs[ids])]
-            )
-            postsyn_connections_branch_point.append(
-                [loc_post_locs[1:] for loc_post_locs in np.concatenate(post_locs[ids])]
-            )
-            glom_pos[c] = loc_glom_pos[ids[0]]
-
-        return (
-            glom_pos,
-            postsyn_connections,
-            postsyn_connections_branch_point,
-        )
+        return self._combine_unique_gloms(glom_ids, loc_glom_pos, post_locs)
 
     def _connect_type(self, pre_ps, post):
         # Chunks are sorted presynaptically so there should be only one chunk
@@ -156,35 +151,43 @@ class ConnectomeGolgiGlomerulus(ConnectionStrategy):
 
         # Extract all unique glomeruli connections from connection strategy dependencies grouped by glomeruli
         glom_pos = np.empty([0, 3])
-        postsyn_connections = []
-        postsyn_connections_branch_point = []
-        post_ps_list = []
+        postsyn_locs = []
         ps_ids = []
-        i = 0
-        for post_ps in post.placement:
-            for glom_cell_type in self.glom_cell_types:
-                (
-                    loc_glom_pos,
-                    loc_postsyn_connections,
-                    loc_postsyn_connections_branch_point,
-                ) = self._get_glom_cluster(chunk, post_ps, glom_cell_type)
-                glom_pos = np.concatenate([loc_glom_pos, glom_pos])
-                postsyn_connections.extend(loc_postsyn_connections)
-                postsyn_connections_branch_point.extend(loc_postsyn_connections_branch_point)
-                ps_ids.extend(np.repeat(i, len(loc_postsyn_connections)))
-                post_ps_list.append(self.scaffold.get_placement_set(post_ps.cell_type))
+        for glom_cell_type in self.glom_cell_types:
+            ct_glom_ids = []
+            ct_glom_pos = np.empty([0, 3])
+            ct_postsyn_locs = []
+            ct_ps_ids = []
+            for i, post_ps in enumerate(post.placement):
+                (loc_glom_ids, loc_glom_pos, loc_post_locs) = self._get_glom_cluster(
+                    chunk, post_ps, glom_cell_type
+                )
+                ct_glom_ids.extend(loc_glom_ids)
+                ct_glom_pos = np.concatenate([loc_glom_pos, ct_glom_pos])
+                ct_postsyn_locs.extend(loc_post_locs)
+                ct_ps_ids.extend([np.repeat(i, len(ids)) for ids in loc_post_locs])
                 i += 1
+            # group gloms from different postsynaptic cell type together (e.g. UBC, GrC)
+            u_glom_ids, ct_glom_pos, ct_postsyn_locs = self._combine_unique_gloms(
+                ct_glom_ids, ct_glom_pos, ct_postsyn_locs
+            )
+            glom_pos = np.concatenate([ct_glom_pos, glom_pos])
+            postsyn_locs.extend(ct_postsyn_locs)
+            ct_ps_ids = np.asarray(ct_ps_ids, dtype=object)
+            for u_glom in u_glom_ids:
+                ids = np.where(ct_glom_ids == u_glom)[0]
+                ps_ids.append(np.concatenate(ct_ps_ids[ids].tolist(), dtype=int))
 
         golgi_pos = pre_ps.load_positions()
         # Cache morphologies and generate the morphologies iterator
         golgi_morphos = pre_ps.load_morphologies().iter_morphologies(cache=True, hard_cache=True)
 
         # TODO: implement random rounding and adapt tests.
-        num_glom_to_connect = np.min([int(self.divergence), len(postsyn_connections)])
+        num_glom_to_connect = np.min([int(self.divergence), len(postsyn_locs)])
         n_conn = (
             len(golgi_pos)
             * num_glom_to_connect
-            * np.max([len(post_conn) for post_conn in postsyn_connections])
+            * np.max([len(post_conn) for post_conn in postsyn_locs])
         )
         pre_locs = np.full((n_conn, 3), -1, dtype=int)
         post_locs = np.full((n_conn, 3), -1, dtype=int)
@@ -207,15 +210,11 @@ class ConnectomeGolgiGlomerulus(ConnectionStrategy):
             # Keep the closest glomeruli
             to_connect = to_connect[:num_glom_to_connect]
             # For each glomerulus, connect the corresponding postsyn cells directly to the current Golgi
-            for j, post_conn in enumerate(to_connect):
-                take_post = postsyn_connections[post_conn]
+            for post_conn in to_connect:
+                take_post = np.array(postsyn_locs[post_conn])
                 post_to_connect = len(take_post)
                 # Select postsyn cells ids
-                post_locs[ptr : ptr + post_to_connect, 0] = take_post
-                # Store branch-ids and points-on-branch-ids of the postsyn cells
-                post_locs[ptr : ptr + post_to_connect, 1:] = postsyn_connections_branch_point[
-                    post_conn
-                ]
+                post_locs[ptr : ptr + post_to_connect] = take_post
                 selected_ps[ptr : ptr + post_to_connect] = ps_ids[post_conn]
                 # Select Golgi axon branch
                 pre_locs[ptr : ptr + post_to_connect, 0] = i
@@ -226,12 +225,12 @@ class ConnectomeGolgiGlomerulus(ConnectionStrategy):
                 pre_locs[ptr : ptr + post_to_connect, 2] = tips_coordinates[ids_branches]
                 ptr += post_to_connect
 
-        # So that the global postsynaptic ids are used
-        for i, ps in enumerate(post_ps_list):
+        for i, ps in enumerate(post.placement):
             selected = selected_ps[:ptr] == i
+            # We use the scaffold placement set for each post cell type so that the global postsynaptic ids are used
             self.connect_cells(
                 pre_ps,
-                ps,
+                self.scaffold.get_placement_set(ps.cell_type),
                 pre_locs[:ptr][selected],
                 post_locs[:ptr][selected],
             )

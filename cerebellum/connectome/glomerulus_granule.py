@@ -95,13 +95,13 @@ class ConnectomeGlomerulusGranule(PresynDistStrat, ConnectionStrategy):
                     len(cs) == 1
                 ), f"Only one connection set should be given from {strat.name} with type {pre_ct.name}."
                 cs = self.scaffold.get_connectivity_set(cs[0])
-                # find mf-glom connections where the postsyn chunk corresponds to the
+                # find pre-glom connections where the postsyn chunk corresponds to the
                 # glom-grc presyn chunk
                 pre_locs, glom_locs = cs.load_connections().to(pre_ps.get_loaded_chunks()).all()
+                ct_uniques = np.unique(pre_locs[:, 0])
+                unique_pres.extend(ct_uniques)
 
-                unique_pres.extend(np.unique(pre_locs[:, 0]))
-
-                for current in unique_pres:
+                for current in ct_uniques:
                     glom_idx = np.where(pre_locs[:, 0] == current)[0]
                     clusters.append(glom_locs[glom_idx, 0])
 

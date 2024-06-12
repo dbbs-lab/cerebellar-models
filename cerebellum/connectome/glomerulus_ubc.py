@@ -33,12 +33,10 @@ class ConnectomeGlomerulusUBC(PresynDistStrat, ConnectionStrategy):
         self.ratios_ubc = parsed_ratios.copy()
 
     def connect(self, pre, post):
-        pre_cts = []
-        connected_gloms = {}
-        for pre_ps in pre.placement:
-            pre_ct = pre_ps.cell_type.name
-            connected_gloms[pre_ct] = np.full(len(pre_ps), False, dtype=bool)
-            pre_cts.append(pre_ct)
+        connected_gloms = {
+            pre_ps.cell_type.name: np.full(len(pre_ps), False, dtype=bool)
+            for pre_ps in pre.placement
+        }
 
         for post_ps in post.placement:
             ubc_pos = post_ps.load_positions()
@@ -46,8 +44,9 @@ class ConnectomeGlomerulusUBC(PresynDistStrat, ConnectionStrategy):
             ubc_pos = ubc_pos[ubc_ids]
             cum_sum = 0
             loc_ratio = 0
-            for pre_ct, pre_ps in zip(pre_cts, pre.placement):
+            for pre_ps in pre.placement:
                 # select the ratio of random ubc ids to connect
+                pre_ct = pre_ps.cell_type.name
                 loc_ratio += self.ratios_ubc[pre_ct]
                 new_ptr = min(len(ubc_ids), int(np.round(len(ubc_pos) * loc_ratio)))
                 loc_ubc_ids = ubc_ids[cum_sum:new_ptr]
