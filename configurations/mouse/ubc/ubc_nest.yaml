@@ -23,6 +23,12 @@ connectivity:
       - golgi_to_glomerulus
 simulations:
   basal_activity:
+    simulator: nest
+    resolution: 0.1
+    duration: 5000
+    modules:
+      - cerebmodule
+    seed: 1234
     cell_models:
       unipolar_brush_cell:
         model: eglif_cond_alpha_multisyn
@@ -70,11 +76,51 @@ simulations:
           weight: 0.048
           delay: 1
           receptor_type: 1
-      golgi_to_ubc:
+      glomerulus_to_granule_glomerulus_to_granule_cell:
         synapse:
+          model: static_synapse
+          weight: 0.23
+          delay: 1
+          receptor_type: 1
+      glomerulus_to_golgi_ubc_glomerulus_to_golgi_cell:
+        synapse:
+          model: static_synapse
+          weight: 0.24
+          delay: 1
+          receptor_type: 1
+      glomerulus_to_golgi_glomerulus_to_golgi_cell:
+        synapse:
+          model: static_synapse
+          weight: 0.24
+          delay: 1
+          receptor_type: 1
+      golgi_to_glomerulus_golgi_cell_to_granule_cell:
+        synapse:
+          model: static_synapse
+          weight: 0.24
+          delay: 2
+          receptor_type: 2
+      golgi_to_glomerulus_golgi_cell_to_unipolar_brush_cell:
+        synapse:
+          model: static_synapse
           weight: 0.00211
           delay: 4
           receptor_type: 2
+      $import:
+        ref: ../nest/stimulus_mossy.yaml#/simulations/basal_activity/connection_models
+        values:
+          - mossy_fibers_to_glomerulus
+          - golgi_to_golgi
+          - ascending_axon_to_golgi
+          - parallel_fiber_to_golgi
+          - parallel_fiber_to_purkinje
+          - ascending_axon_to_purkinje
+          - parallel_fiber_to_stellate
+          - stellate_to_stellate
+          - stellate_to_purkinje
+          - parallel_fiber_to_basket
+          - basket_to_basket
+          - basket_to_purkinje
     devices:
       unipolar_record:
         device: spike_recorder
@@ -83,7 +129,23 @@ simulations:
           strategy: cell_model
           cell_models:
             - unipolar_brush_cell
+    $import:
+      ref: ../nest/stimulus_mossy.yaml#/simulations/basal_activity
+      values:
+        - cell_models
+        - devices
   mf_stimulus:
+    simulator: nest
+    resolution: 0.1
+    duration: 5000
+    modules:
+      - cerebmodule
+    seed: 1234
+    devices:
+      $import:
+        ref: ../nest/stimulus_mossy.yaml#/simulations/mf_stimulus/devices
+        values:
+          - stimulus
     $import:
       ref: "#/simulations/basal_activity"
       values:
@@ -103,4 +165,3 @@ $import:
     - cell_types
     - placement
     - connectivity
-    - simulations
