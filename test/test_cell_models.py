@@ -53,6 +53,7 @@ class TestSingleCellModels(
                 "purkinje_cell": {"spatial": {"radius": 1, "count": 10}},
                 "basket_cell": {"spatial": {"radius": 1, "count": 10}},
                 "stellate_cell": {"spatial": {"radius": 1, "count": 10}},
+                "unipolar_brush_cell": {"spatial": {"radius": 1, "count": 10}},
             },
             "placement": {
                 "placement_A": {
@@ -63,6 +64,7 @@ class TestSingleCellModels(
                         "purkinje_cell",
                         "basket_cell",
                         "stellate_cell",
+                        "unipolar_brush_cell",
                     ],
                     "partitions": ["B"],
                     "positions": [[1, 1, 1]] * 10,
@@ -79,26 +81,28 @@ class TestSingleCellModels(
                     "modules": ["cerebmodule"],
                     "cell_models": {
                         "$import": {
-                            "ref": "../configurations/mouse/nest/basal.yaml#/simulations/basal_activity/cell_models",
+                            "ref": "../configurations/mouse/ubc/ubc_nest.yaml#/simulations/basal_activity/cell_models",
                             "values": [
                                 "granule_cell",
                                 "golgi_cell",
                                 "purkinje_cell",
                                 "basket_cell",
                                 "stellate_cell",
+                                "unipolar_brush_cell",
                             ],
                         },
                     },
                     "connection_models": {},
                     "devices": {
                         "$import": {
-                            "ref": "../configurations/mouse/nest/basal.yaml#/simulations/basal_activity/devices",
+                            "ref": "../configurations/mouse/ubc/ubc_nest.yaml#/simulations/basal_activity/devices",
                             "values": [
                                 "granule_record",
                                 "golgi_record",
                                 "purkinje_record",
                                 "basket_record",
                                 "stellate_record",
+                                "unipolar_brush_record",
                             ],
                         },
                     },
@@ -180,6 +184,11 @@ class TestSingleCellModels(
                 "starts": [10, 12, 14],
                 "stops": [11, 13, 15],
             },
+            "unipolar_brush": {
+                "amplitudes": [12, 24, 36],
+                "starts": [10, 12, 14],
+                "stops": [11, 13, 15],
+            },
         }
         predicted = {
             "golgi": {"autorhythm": 12.8, "slope": 0.2},
@@ -187,6 +196,7 @@ class TestSingleCellModels(
             "purkinje": {"autorhythm": 60.96, "slope": 0.08},
             "basket": {"autorhythm": 9.51, "slope": 2.16},
             "stellate": {"autorhythm": 9.51, "slope": 2.16},
+            "unipolar_brush": {"autorhythm": 10.0, "slope": 2.16},  # no source available
         }
         for cell_type in predicted:
             for i, stim in enumerate(protocol[cell_type]["amplitudes"]):
