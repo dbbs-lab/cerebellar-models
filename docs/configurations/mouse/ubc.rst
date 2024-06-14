@@ -121,6 +121,51 @@ However, it is currently unclear how these parameters were optimized, or which f
     glom-GoC;0.24;1;1
     GoC-GrC;0.24;2;2
 
+Simulation paradigms
+++++++++++++++++++++
+
+The `ubc_nest.yaml <https://github.com/dbbs-lab/cerebellum/blob/master/configurations/mouse/ubc/ubc_nest.yaml>`_ are
+including all the simulation paradigms described in the :doc:`NEST section <nest>`) but include the UBC cells in the
+circuit.
+
+Basal activity
+##############
+
+For this simulation, the mean firing rates and mean ISI obtained for each neuron population are as
+follows (expressed in mean :math:`\pm` standard deviation):
+
+.. csv-table:: Results of the canonical circuit with UBC in basal activity
+   :header-rows: 1
+   :delim: ;
+
+    Cell name;Mean Firing rate (Hz); Mean ISI (ms)
+    Mossy cell; :math:`3.9 \pm 0.82`; :math:`250 \pm 57`
+    Granule cell; :math:`2.8 \pm 2.2`; :math:`500 \pm 510`
+    Unipolar brush cell; :math:`12 \pm 1.2`; :math:`84 \pm 7.8`
+    Golgi cell;:math:`8.7 \pm 5.4`; :math:`200 \pm 230`
+    Purkinje cell;:math:`49 \pm 2.0`; :math:`21 \pm 0.89`
+    Basket cell;:math:`25 \pm 14`; :math:`58 \pm 47`
+    Stellate cell;:math:`32 \pm 21`; :math:`85 \pm 170`
+
+Mossy fiber stimulus
+####################
+
+For this simulation, **during the stimulus**, the mean firing rates and mean ISI obtained for each
+neuron population are as follows (expressed in mean :math:`\pm` standard deviation):
+
+.. csv-table:: Results of the canonical circuit with UBC during stimulus of the mossy
+   :header-rows: 1
+   :delim: ;
+
+    Cell name;Mean Firing rate (Hz); Mean ISI (ms)
+    Mossy cell; :math:`42 \pm 69`; :math:`7.1 \pm 2.8`
+    Granule cell; :math:`13 \pm 33`; :math:`11 \pm 6.2`
+    Unipolar brush cell; :math:`18 \pm 18`; :math:`19 \pm 4.6`
+    Golgi cell;:math:`32 \pm 25`; :math:`24 \pm 8.5`
+    Purkinje cell;:math:`61 \pm 12`; :math:`15 \pm 2.8`
+    Basket cell;:math:`85 \pm 47`; :math:`12 \pm 5.9`
+    Stellate cell;:math:`120 \pm 68`; :math:`9.6 \pm 7.1`
+
 References
 ^^^^^^^^^^
 
