@@ -33,24 +33,23 @@ simulations:
       unipolar_brush_cell:
         model: eglif_cond_alpha_multisyn
         constants:
-          t_ref: 1.59
-          C_m: 14.6
-          V_th: -53
-          V_reset: -78
-          E_L: -68
-          V_m: -68
-          lambda_0: 1.8
-          tau_V: 1.1
-          tau_m: 9.125
-          I_e: 3.711
-          k_adap: 2.025
-          k_1: 1.887
-          k_2: 1.096
-          A1: 5.953
-          A2: 5.863
-          tau_syn1: 0.64
+          t_ref: 1.67
+          C_m: 16.5
+          V_th: -55.8
+          V_reset: -76.7
+          E_L: -66.7
+          V_m: -62.0
+          lambda_0: 1.0
+          tau_V: 0.5
+          tau_m: 13.2
+          I_e: 1.0
+          k_adap: 1.17
+          k_1: 0.14
+          k_2: 0.76
+          A1: 0.0001
+          A2: 0.0001
+          tau_syn1: 0.2
           tau_syn2: 2
-          tau_syn3: 1.2
           E_rev1: 0
           E_rev2: -80
           E_rev3: 0

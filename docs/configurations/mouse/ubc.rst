@@ -87,7 +87,7 @@ Geminiani et al. (2018) [#geminiani_2018]_ method:
    :delim: ;
 
     :math:`k_{adap}\ (nS \cdot ms^{-1})`;:math:`k_1\ (ms^{-1})`;:math:`k_2\ (ms^{-1})`;:math:`A_1\ (pA)`;:math:`A_2\ (pA)`;:math:`I_e\ (pA)`
-    2.025; 1.887; 1.096; 5.953; 5.863; 3.711
+    1.17; 0.14; 0.76; 0.0001; 0.0001; 1.0
 
 It is not clear how the spiking parameters (i.e :math:`\lambda_0` and :math:`\tau_V`) are obtained in the Geminiani et
 al. (2018) paper [#geminiani_2018]_. The values were extracted from a BSB configuration provided by the authors.
@@ -100,7 +100,7 @@ The postsynaptic receptors are defined according to the following table:
    :delim: ;
 
    Receptor id; :math:`E_{rev,i}\ (mV)`; :math:`\tau_{syn,i}\ (ms)`; Type
-   1; 0; 0.64; exc.
+   1; 0; 0.2; exc.
    2; -80; 2.0; inh.
    3; 0; 1.2; exc.
 
@@ -139,13 +139,13 @@ follows (expressed in mean :math:`\pm` standard deviation):
    :delim: ;
 
     Cell name;Mean Firing rate (Hz); Mean ISI (ms)
-    Mossy cell; :math:`3.9 \pm 0.82`; :math:`250 \pm 57`
-    Granule cell; :math:`2.8 \pm 2.2`; :math:`500 \pm 510`
-    Unipolar brush cell; :math:`12 \pm 1.2`; :math:`84 \pm 7.8`
-    Golgi cell;:math:`8.7 \pm 5.4`; :math:`200 \pm 230`
-    Purkinje cell;:math:`49 \pm 2.0`; :math:`21 \pm 0.89`
-    Basket cell;:math:`25 \pm 14`; :math:`58 \pm 47`
-    Stellate cell;:math:`32 \pm 21`; :math:`85 \pm 170`
+    Mossy cell; :math:`4.1 \pm 0.93`; :math:`240 \pm 61`
+    Granule cell; :math:`2.9 \pm 2.1`; :math:`480 \pm 440`
+    Unipolar brush cell; :math:`0.2 \pm 0`; not enough spikes per neuron
+    Golgi cell;:math:`7.4 \pm 4.2`; :math:`220 \pm 270`
+    Purkinje cell;:math:`48 \pm 1.6`; :math:`21 \pm 0.73`
+    Basket cell;:math:`19 \pm 8.4`; :math:`70 \pm 47`
+    Stellate cell;:math:`24 \pm 13`; :math:`80 \pm 130`
 
 Mossy fiber stimulus
 ####################
@@ -158,13 +158,13 @@ neuron population are as follows (expressed in mean :math:`\pm` standard deviati
    :delim: ;
 
     Cell name;Mean Firing rate (Hz); Mean ISI (ms)
-    Mossy cell; :math:`42 \pm 69`; :math:`7.1 \pm 2.8`
-    Granule cell; :math:`13 \pm 33`; :math:`11 \pm 6.2`
-    Unipolar brush cell; :math:`18 \pm 18`; :math:`19 \pm 4.6`
-    Golgi cell;:math:`32 \pm 25`; :math:`24 \pm 8.5`
-    Purkinje cell;:math:`61 \pm 12`; :math:`15 \pm 2.8`
-    Basket cell;:math:`85 \pm 47`; :math:`12 \pm 5.9`
-    Stellate cell;:math:`120 \pm 68`; :math:`9.6 \pm 7.1`
+    Mossy cell; :math:`46 \pm 73`; :math:`6.3 \pm 2.8`
+    Granule cell; :math:`19 \pm 36`; :math:`9.2 \pm 4.8`
+    Unipolar brush cell; :math:`16 \pm 8.1`; not enough spikes per neuron
+    Golgi cell;:math:`32 \pm 16`; :math:`7.2 \pm 3.5`
+    Purkinje cell;:math:`59 \pm 15`; :math:`15 \pm 2.9`
+    Basket cell;:math:`73 \pm 53`; :math:`8.4 \pm 4.1`
+    Stellate cell;:math:`98 \pm 68`; :math:`7.9 \pm 5.3`
 
 References
 ^^^^^^^^^^

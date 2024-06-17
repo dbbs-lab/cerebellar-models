@@ -196,7 +196,7 @@ class TestSingleCellModels(
             "purkinje": {"autorhythm": 60.96, "slope": 0.08},
             "basket": {"autorhythm": 9.51, "slope": 2.16},
             "stellate": {"autorhythm": 9.51, "slope": 2.16},
-            "unipolar_brush": {"autorhythm": 10.0, "slope": 2.16},  # no source available
+            "unipolar_brush": {"autorhythm": 0.0, "slope": 2.35},  # no source available
         }
         for cell_type in predicted:
             for i, stim in enumerate(protocol[cell_type]["amplitudes"]):
