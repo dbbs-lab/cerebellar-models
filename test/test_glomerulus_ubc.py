@@ -107,7 +107,7 @@ class TestGlomerulus_to_UBC(
         self.assertEqual(len(cs2) / len(cs1), 3)
         self.assertEqual(len(cs1) + len(cs2), len(cell_positions))
         for cs in [cs1, cs2]:
-            pre_cell_position = self.network.get_placement_set(cs1.pre_type.name).load_positions()
+            pre_cell_position = self.network.get_placement_set(cs.pre_type.name).load_positions()
             dict_pres = {}
             for from_, to_ in cs.load_connections().as_globals():
                 self.assertAll(from_[1:] == cell_targets)

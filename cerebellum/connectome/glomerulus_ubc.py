@@ -3,7 +3,7 @@
 """
 
 import numpy as np
-from bsb import ConfigurationError, ConnectionStrategy, ConnectivityError, config
+from bsb import ConfigurationError, ConnectionStrategy, config
 
 from cerebellum.connectome.presyn_dist_strat import PresynDistStrat
 
