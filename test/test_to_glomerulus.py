@@ -20,7 +20,7 @@ def _test_distance_to_glomerulus(self, nb_trials=50):
     self.chunk_size = 100.0
     pos_1 = np.array([0.5, 0.5, 0.5]) * self.chunk_size
     pos_2 = np.array([0.9, 0.5, 0.5]) * self.chunk_size  # close enough
-    pos_3 = np.array([0.5, 0.5, 1.0]) * self.chunk_size  # to far away
+    pos_3 = np.array([0.5, 0.5, 1.0]) * self.chunk_size  # too far away
     self.cfg.network.chunk_size = self.chunk_size
     self.cfg.cell_types["test_cell"].spatial.count = 3
     self.cfg.placement.ch4_c25.positions = MPI.bcast(np.vstack((pos_1, pos_2, pos_3)))
@@ -43,7 +43,7 @@ def _test_distance_to_glomerulus(self, nb_trials=50):
     self.assertClose(
         np.unique(sources),
         np.array([0, 1]),
-        "pos_2 should be unreachable.\npos_1 is less likely but should still happen",
+        "pos_3 should be unreachable.\npos_2 is less likely but should still happen",
     )
     self.assertTrue(
         np.count_nonzero(sources == 0) > np.count_nonzero(sources == 1),
