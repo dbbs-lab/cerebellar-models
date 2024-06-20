@@ -6,6 +6,7 @@ import itertools
 
 import numpy as np
 from bsb import CellType, Chunk, ConfigurationError, ConnectionStrategy, config, refs
+from connectome.presyn_dist_strat import get_close_chunks
 
 
 @config.node
@@ -81,11 +82,7 @@ class ConnectomeGolgiGlomerulus(ConnectionStrategy):
         # Distance from glom to golgi
         chunks = cs.pre_type.get_placement_set().get_all_chunks()
         # Look for chunks containing glom which are less than radius away from the current one.
-        # Fixme: Distance between chunk is done corner to corner. It might not detect all chunks #34
-        pre_chunks = []
-        for c in chunks:
-            if np.linalg.norm(chunk * chunk.dimensions - c * c.dimensions) <= self.radius:
-                pre_chunks.append(Chunk([c[0], c[1], c[2]], chunk.dimensions))
+        pre_chunks = get_close_chunks(chunk, chunks, self.radius)
 
         # We need global ids to filter the postsynaptic neuron that match the ones from
         # the dependency
@@ -100,8 +97,6 @@ class ConnectomeGolgiGlomerulus(ConnectionStrategy):
         for u_glom in unique_gloms:
             ids = np.where(glom_locs[:, 0] == u_glom)[0]
             postsyn_connections.append(post_locs[ids, 0])
-            # Fixme: not sure about the role of the following line
-            post_ps.load_ids()
             postsyn_connections_branch_point.append(post_locs[ids, 1:])
 
         glom_pos = cs.pre_type.get_placement_set(chunks=pre_chunks).load_positions()[unique_gloms]
