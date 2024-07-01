@@ -203,32 +203,11 @@ connectivity:
         - golgi_cell
       morphology_labels:
         - basal_dendrites
-    affinity: 0.3
-    voxels_pre: 500
-    voxels_post: 500
+    affinity: 0.1
     contacts:
       distribution: norm
       loc: 160
       scale: 5
-  gap_goc:
-    strategy: bsb.connectivity.VoxelIntersection
-    presynaptic:
-      cell_types:
-        - golgi_cell
-      morphology_labels:
-        - basal_dendrites
-    postsynaptic:
-      cell_types:
-        - golgi_cell
-      morphology_labels:
-        - basal_dendrites
-    affinity: 0.01
-    voxels_pre: 500
-    voxels_post: 500
-    contacts:
-      distribution: norm
-      loc: 3
-      scale: 1
   ascending_axon_to_golgi:
     strategy: bsb.connectivity.VoxelIntersection
     presynaptic:
@@ -241,9 +220,9 @@ connectivity:
         - golgi_cell
       morphology_labels:
         - basal_dendrites
-    affinity: 0.022
     voxels_pre: 500
     voxels_post: 500
+    affinity: 0.011
   parallel_fiber_to_golgi:
     strategy: bsb.connectivity.VoxelIntersection
     presynaptic:
@@ -256,7 +235,7 @@ connectivity:
         - golgi_cell
       morphology_labels:
         - apical_dendrites
-    affinity: 0.0137
+    affinity: 0.0098
     voxels_pre: 500
     voxels_post: 500
   ascending_axon_to_purkinje:
@@ -271,9 +250,9 @@ connectivity:
         - purkinje_cell
       morphology_labels:
         - aa_targets
-    affinity: 0.026
     voxels_pre: 500
     voxels_post: 500
+    affinity: 0.014
   parallel_fiber_to_purkinje:
     strategy: bsb.connectivity.VoxelIntersection
     presynaptic:
@@ -286,9 +265,9 @@ connectivity:
         - purkinje_cell
       morphology_labels:
         - pf_targets
-    affinity: 0.015
     voxels_pre: 500
     voxels_post: 500
+    affinity: 0.0118
   parallel_fiber_to_basket:
     strategy: bsb.connectivity.geometric.MorphologyToShapeIntersection
     presynaptic:
@@ -304,17 +283,18 @@ connectivity:
         shapes:
         - type: Cylinder
           origin:
-          - 0
           - -10
           - 0
-          top_center:
           - 0
+          top_center:
           - 10
+          - 0
           - 0
           radius: 150
         labels:
         - - dendrites
-    affinity: 0.008
+    affinity: 0.01
+    pruning_ratio: 0.1
   parallel_fiber_to_stellate:
     strategy: bsb.connectivity.geometric.MorphologyToShapeIntersection
     presynaptic:
@@ -326,7 +306,7 @@ connectivity:
       cell_types:
       - stellate_cell
       shapes_composition:
-        voxel_size: 40
+        voxel_size: 10
         shapes:
         - type: Cylinder
           origin:
@@ -342,14 +322,15 @@ connectivity:
         - - dendrites
       morphology_labels:
       - dendrites
-    affinity: 0.0008
+    affinity: 0.005
+    pruning_ratio: 0.0075
   stellate_to_purkinje:
     strategy: bsb.connectivity.geometric.ShapeToMorphologyIntersection
     presynaptic:
       cell_types:
       - stellate_cell
       shapes_composition:
-        voxel_size: 20
+        voxel_size: 10
         shapes:
         - type: Ellipsoid
           origin:
@@ -381,7 +362,8 @@ connectivity:
       - purkinje_cell
       morphology_labels:
       - sc_targets
-    affinity: 0.0835
+    affinity: 1.0
+    pruning_ratio: 0.00009
   basket_to_purkinje:
     strategy: cerebellum.connectome.basket_purkinje.ConnectomeBasketPurkinje
     axon_length: 1200
@@ -394,14 +376,65 @@ connectivity:
       - purkinje_cell
       morphology_labels:
       - soma
-    affinity: 0.45
+    affinity: 0.05
+  basket_to_basket:
+    strategy: bsb.connectivity.geometric.ShapeToShapeIntersection
+    presynaptic:
+      cell_types:
+      - basket_cell
+      shapes_composition:
+        voxel_size: 20
+        shapes:
+        - type: Ellipsoid
+          origin:
+          - 0
+          - 25
+          - 0
+          lambdas:
+          - 1000
+          - 100
+          - 100
+          v0:
+          - 1
+          - 0
+          - 0
+          v1:
+          - 0
+          - 1
+          - 0
+          v2:
+          - 0
+          - 0
+          - 1
+        labels:
+        - - axon
+    postsynaptic:
+      cell_types:
+      - basket_cell
+      shapes_composition:
+        voxel_size: 20
+        shapes:
+        - type: Cylinder
+          origin:
+          - -10
+          - 0
+          - 0
+          top_center:
+          - 10
+          - 0
+          - 0
+          radius: 150
+        labels:
+        - - dendrites
+    affinity: 1.0
+    pruning_ratio: 0.00075
   stellate_to_stellate:
     strategy: bsb.connectivity.geometric.ShapeToShapeIntersection
     presynaptic:
       cell_types:
       - stellate_cell
       shapes_composition:
-        voxel_size: 8
+        voxel_size: 10
         shapes:
         - type: Ellipsoid
           origin:
@@ -432,68 +465,19 @@ connectivity:
       cell_types:
       - stellate_cell
       shapes_composition:
-        voxel_size: 8
+        voxel_size: 10
         shapes:
         - type: Cylinder
           origin:
           - 0
-          - -10
+          - -10.0
           - 0
           top_center:
           - 0
-          - 10
+          - 10.0
           - 0
           radius: 150
         labels:
         - - dendrites
-    affinity: 0.5
-  basket_to_basket:
-    strategy: bsb.connectivity.geometric.ShapeToShapeIntersection
-    presynaptic:
-      cell_types:
-      - basket_cell
-      shapes_composition:
-        voxel_size: 20
-        shapes:
-        - type: Ellipsoid
-          origin:
-          - 0
-          - 25
-          - 0
-          lambdas:
-          - 100
-          - 1000
-          - 100
-          v0:
-          - 1
-          - 0
-          - 0
-          v1:
-          - 0
-          - 1
-          - 0
-          v2:
-          - 0
-          - 0
-          - 1
-        labels:
-        - - axon
-    postsynaptic:
-      cell_types:
-      - basket_cell
-      shapes_composition:
-        voxel_size: 20
-        shapes:
-        - type: Cylinder
-          origin:
-          - 0
-          - -10
-          - 0
-          top_center:
-          - 0
-          - 10
-          - 0
-          radius: 150
-        labels:
-        - - dendrites
-    affinity: 0.01
+    affinity: 1.0
+    pruning_ratio: 0.0025

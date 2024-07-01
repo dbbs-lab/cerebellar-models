@@ -1,0 +1,33 @@
+$import:
+  ref: ./basal.yaml#/
+  values:
+    - name
+    - packages
+    - components
+    - storage
+    - network
+    - regions
+    - partitions
+    - morphologies
+    - cell_types
+    - placement
+    - connectivity
+    - simulations
+simulations:
+  basal_activity:
+    devices:
+      stimulus:
+        device: poisson_generator
+        rate: 140.0
+        targetting:
+          strategy: cylinder
+          radius: 150
+          origin:
+          - 500
+          - 500     
+          cell_models:
+          - mossy_fibers
+        weight: 1
+        delay: 0.1
+        start: 1000
+        stop: 1050
