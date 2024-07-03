@@ -1,0 +1,110 @@
+name: DBBS Mouse cerebellum w/ UBC
+storage:
+  root: mouse_cereb_ubc.hdf5
+cell_types:
+  unipolar_brush_cell:
+    spatial:
+      radius: 1.5
+      density: 0.000078
+    plotting:
+      display_name: UBC
+  ubc_glomerulus:
+    spatial:
+      radius: 1.5
+      relative_to: unipolar_brush_cell
+      count_ratio: 4.0
+    plotting:
+      display_name: UBC_gloms
+placement:
+  granular_layer_placement:
+    cell_types:
+      - granule_cell
+      - golgi_cell
+      - glomerulus
+      - unipolar_brush_cell
+      - ubc_glomerulus
+connectivity:
+  ubc_to_ubc_glomerulus:
+    strategy: cerebellum.connectome.to_glomerulus.ConnectomeUBCGlomerulus
+    presynaptic:
+      cell_types:
+        - unipolar_brush_cell
+    postsynaptic:
+      cell_types:
+        - ubc_glomerulus
+    radius: 500
+  glomerulus_to_ubc:
+    strategy: cerebellum.connectome.glomerulus_ubc.ConnectomeGlomerulusUBC
+    presynaptic:
+      cell_types:
+        - ubc_glomerulus
+        - glomerulus
+    postsynaptic:
+      cell_types:
+        - unipolar_brush_cell
+    ratios_ubc:
+      ubc_glomerulus: 1.
+      glomerulus: 2.
+    radius: 50
+  glomerulus_to_granule:
+    strategy: cerebellum.connectome.glomerulus_granule.ConnectomeGlomerulusGranule
+    presynaptic:
+      cell_types:
+        - glomerulus
+        - ubc_glomerulus
+    postsynaptic:
+      cell_types:
+        - granule_cell
+      morphology_labels:
+        - dendrites
+    pre_glom_strats:
+      - mossy_fibers_to_glomerulus
+      - ubc_to_ubc_glomerulus
+    pre_cell_types:
+      - mossy_fibers
+      - unipolar_brush_cell
+    radius: 40
+    convergence: 4
+  glomerulus_to_golgi:
+    strategy: cerebellum.connectome.glomerulus_golgi.ConnectomeGlomerulusGolgi
+    presynaptic:
+      cell_types:
+        - glomerulus
+        - ubc_glomerulus
+    postsynaptic:
+      cell_types:
+        - golgi_cell
+      morphology_labels:
+        - basal_dendrites
+    radius: 50
+  golgi_to_glomerulus:
+    strategy: cerebellum.connectome.golgi_glomerulus.ConnectomeGolgiGlomerulus
+    presynaptic:
+      cell_types:
+        - golgi_cell
+      morphology_labels:
+        - axon
+    postsynaptic:
+      cell_types:
+        - granule_cell
+        - unipolar_brush_cell
+    glom_post_strats:
+      - glomerulus_to_granule
+      - glomerulus_to_ubc
+    glom_cell_types:
+      - glomerulus
+      - ubc_glomerulus
+    radius: 150
+    divergence: 40
+$import:
+  ref: ../mouse_cerebellar_cortex.yaml#/
+  values:
+    - packages
+    - storage
+    - network
+    - regions
+    - partitions
+    - morphologies
+    - cell_types
+    - placement
+    - connectivity
