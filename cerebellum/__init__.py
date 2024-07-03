@@ -20,5 +20,7 @@ classmap = {
         "glom_gran": "cerebellum.connectome.glomerulus_granule.ConnectomeGlomerulusGranule",
         "golgi_glom": "cerebellum.connectome.golgi_glomerulus.ConnectomeGolgiGlomerulus",
         "glom_golgi": "cerebellum.connectome.glomerulus_golgi.ConnectomeGlomerulusGolgi",
+        "ubc_glom": "cerebellum.connectome.to_glomerulus.ConnectomeUBCGlomerulus",
+        "glom_ubc": "cerebellum.connectome.glomerulus_ubc.ConnectomeGlomerulusUBC",
     }
 }
