@@ -28,7 +28,7 @@ LIST_CT_INFO = [
     CellTypeInfo("stellate", [1, 0.84, 0, 1.0], "SC"),
     CellTypeInfo("io", [0.46, 0.376, 0.54, 1.0], "IO"),
     CellTypeInfo("dcn_p", [0.3, 0.3, 0.3, 1.0], "DCN_P"),
-    CellTypeInfo("dcn_gaba", [0.635, 0, 0.145, 1.0]),
+    CellTypeInfo("dcn_i", [0.635, 0, 0.145, 1.0], "DCN_I"),
 ]
 
 

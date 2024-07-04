@@ -103,9 +103,12 @@ class ScaffoldPlot(Plot):
         self.scaffold = scaffold
 
     def set_scaffold(self, scaffold):
-        self.scaffold = scaffold
-        if self.is_plotted:
-            self.clear()
+        is_different = scaffold != self.scaffold
+        if is_different:
+            self.scaffold = scaffold
+            if self.is_plotted:
+                self.clear()
+        return is_different
 
 
 class Legend(Plot):

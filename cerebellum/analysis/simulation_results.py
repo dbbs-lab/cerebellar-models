@@ -3,7 +3,6 @@ from os.path import isfile, join
 from typing import List, Tuple
 
 import numpy as np
-from analysis.structure_analysis import TablePlot
 from bsb import Scaffold
 from matplotlib import gridspec as gs
 from matplotlib import pyplot as plt
@@ -12,6 +11,7 @@ from scipy import signal
 
 from cerebellum.analysis.plots import Legend, Plot, ScaffoldPlot
 from cerebellum.analysis.report import LIST_CT_INFO, CellTypeInfo, Report
+from cerebellum.analysis.structure_analysis import TablePlot
 
 
 class SimulationPlot(ScaffoldPlot):
@@ -22,9 +22,9 @@ class SimulationPlot(ScaffoldPlot):
         simulation_name: str,
         time_from: float,
         time_to: float,
-        all_spikes=None,
-        nb_neurons: List = None,
-        populations: List = None,
+        all_spikes,
+        nb_neurons: List,
+        populations: List,
         **kwargs,
     ):
         self.simulation_name = simulation_name
@@ -362,7 +362,7 @@ class FrequencyPlot(Simulation2Columns):
             ax.set_xlim([0.0, 30])
             ax.set_xlabel("Frequency [Hz]")
             ax.set_ylabel("Power [dB]")
-            # ax.set_title('Frequency spectrum')
+            ax.set_title(f"Frequency spectrum for {ct}")
             ax.ticklabel_format(style="sci", axis="y", scilimits=(0, 0))
 
             ax.axvline(4.0, ls="--", color="black")
@@ -387,8 +387,8 @@ class SimResultsTable(TablePlot, SimulationPlot):
         self.update_values()
 
     def set_scaffold(self, scaffold):
-        super().set_scaffold(scaffold)
-        self.update_values()
+        if super().set_scaffold(scaffold):
+            self.update_values()
 
     def plot(self, **kwargs):
         super().plot()
@@ -396,31 +396,30 @@ class SimResultsTable(TablePlot, SimulationPlot):
 
     def update_values(self):
         super().update_values()
-        if self.all_spikes is not None:
-            num_filter = len(self.nb_neurons)
-            counts = np.zeros(num_filter + 1)
-            counts[1:] = np.cumsum(self.nb_neurons)
-            for i in range(num_filter):
-                spikes = self.all_spikes[:, int(counts[i]) : int(counts[i + 1])]
-                all_fr = np.sum(spikes, axis=0) / ((self.time_to - self.time_from) / 1000.0)
+        num_filter = len(self.nb_neurons)
+        counts = np.zeros(num_filter + 1)
+        counts[1:] = np.cumsum(self.nb_neurons)
+        for i in range(num_filter):
+            spikes = self.all_spikes[:, int(counts[i]) : int(counts[i + 1])]
+            all_fr = np.sum(spikes, axis=0) / ((self.time_to - self.time_from) / 1000.0)
 
-                filter_ = np.where(spikes.T)
-                u, idx = np.unique(filter_[0], return_index=True)
-                times = np.split(filter_[1], idx[1:])
+            filter_ = np.where(spikes.T)
+            u, idx = np.unique(filter_[0], return_index=True)
+            times = np.split(filter_[1], idx[1:])
 
-                isi = []
-                for k in range(len(u)):
-                    isis = np.diff(times[k]) * self.dt
-                    if len(isis) > 0:
-                        isi.append(np.mean(isis))
+            isi = []
+            for k in range(len(u)):
+                isis = np.diff(times[k]) * self.dt
+                if len(isis) > 0:
+                    isi.append(np.mean(isis))
 
-                self.values.append(
-                    [
-                        "{:.2} pm {:.2}".format(np.mean(all_fr), np.std(all_fr)),
-                        "{:.2} pm {:.2}".format(np.mean(isi), np.std(isi)),
-                    ]
-                )
-            self.rows = self.populations
+            self.values.append(
+                [
+                    "{:.2} pm {:.2}".format(np.mean(all_fr), np.std(all_fr)),
+                    "{:.2} pm {:.2}".format(np.mean(isi), np.std(isi)),
+                ]
+            )
+        self.rows = self.populations
 
 
 class BasicSimulationReport(SimulationReport):
@@ -443,6 +442,8 @@ class BasicSimulationReport(SimulationReport):
             simulation_name=self.simulation_name,
             time_from=self.time_from,
             time_to=self.time_to,
+            all_spikes=self.all_spikes,
+            nb_neurons=self.nb_neurons,
             populations=self.populations,
         )
         table = SimResultsTable(
@@ -451,6 +452,9 @@ class BasicSimulationReport(SimulationReport):
             simulation_name=self.simulation_name,
             time_from=self.time_from,
             time_to=self.time_to,
+            all_spikes=self.all_spikes,
+            nb_neurons=self.nb_neurons,
+            populations=self.populations,
         )
         firing_rates = FiringRatesPlot(
             (15, 6),
@@ -458,6 +462,8 @@ class BasicSimulationReport(SimulationReport):
             simulation_name=self.simulation_name,
             time_from=self.time_from,
             time_to=self.time_to,
+            all_spikes=self.all_spikes,
+            nb_neurons=self.nb_neurons,
             populations=self.populations,
         )
         isis = IsisPlot(
@@ -466,6 +472,8 @@ class BasicSimulationReport(SimulationReport):
             simulation_name=self.simulation_name,
             time_from=self.time_from,
             time_to=self.time_to,
+            all_spikes=self.all_spikes,
+            nb_neurons=self.nb_neurons,
             populations=self.populations,
         )
         freq = FrequencyPlot(
@@ -474,6 +482,8 @@ class BasicSimulationReport(SimulationReport):
             simulation_name=self.simulation_name,
             time_from=self.time_from,
             time_to=self.time_to,
+            all_spikes=self.all_spikes,
+            nb_neurons=self.nb_neurons,
             populations=self.populations,
         )
         legend = Legend(

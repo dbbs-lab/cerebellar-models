@@ -58,19 +58,16 @@ class PlacementTable(TablePlot, ScaffoldPlot):
 
     def update_values(self):
         super().update_values()
-        if self.scaffold is not None:
-            for i, ps in enumerate(self.scaffold.get_placement_sets()):
-                ct = ps.cell_type
-                self.rows.append(self.extract_ct_name(ct))
-                counts = ps.load_positions().shape[0]
-                volume = [p.volume() for place in ct.get_placement() for p in place.partitions]
-                self.values.append(
-                    ["{:.2E}".format(counts), "{:.2E}".format(counts / np.sum(volume))]
-                )
+        for i, ps in enumerate(self.scaffold.get_placement_sets()):
+            ct = ps.cell_type
+            self.rows.append(self.extract_ct_name(ct))
+            counts = ps.load_positions().shape[0]
+            volume = [p.volume() for place in ct.get_placement() for p in place.partitions]
+            self.values.append(["{:.2E}".format(counts), "{:.2E}".format(counts / np.sum(volume))])
 
     def set_scaffold(self, scaffold):
-        super().set_scaffold(scaffold)
-        self.update_values()
+        if super().set_scaffold(scaffold):
+            self.update_values()
 
     def plot(self, **kwargs):
         super().plot()
@@ -124,37 +121,32 @@ class ConnectivityTable(TablePlot, ScaffoldPlot):
 
     def update_values(self):
         super().update_values()
-        if self.scaffold is not None:
-            for ps in self.scaffold.get_connectivity_sets():
-                # Get the ConnectivityIterator for the current connectivity strategy
-                cs = self.scaffold.get_connectivity_set(ps.tag).load_connections().as_globals()
-                pre_locs, post_locs = cs.all()
-                # Find the pairs of pre-post neurons (combos)
-                # and count how many synapses there are between each pair (combo_counts)
-                combos, combo_counts = np.unique(
-                    np.column_stack((pre_locs[:, 0], post_locs[:, 0])), axis=0, return_counts=True
-                )
+        for ps in self.scaffold.get_connectivity_sets():
+            # Get the ConnectivityIterator for the current connectivity strategy
+            cs = self.scaffold.get_connectivity_set(ps.tag).load_connections().as_globals()
+            pre_locs, post_locs = cs.all()
+            # Find the pairs of pre-post neurons (combos)
+            # and count how many synapses there are between each pair (combo_counts)
+            combos, combo_counts = np.unique(
+                np.column_stack((pre_locs[:, 0], post_locs[:, 0])), axis=0, return_counts=True
+            )
 
-                # Find the unique post and pre neurons
-                uniquePre, uniquePre_count = np.unique(combos[:, 0], axis=0, return_counts=True)
-                niquePost, uniquePost_count = np.unique(combos[:, 1], axis=0, return_counts=True)
-                self.rows.append(self.extract_strat_name(ps))
-                self.values.append(
-                    [
-                        len(pre_locs),
-                        "{:.2} $\pm$ {:.2}".format(np.mean(combo_counts), np.std(combo_counts)),
-                        "{:.2} $\pm$ {:.2}".format(
-                            np.mean(uniquePost_count), np.std(uniquePost_count)
-                        ),
-                        "{:.2} $\pm$ {:.2}".format(
-                            np.mean(uniquePre_count), np.std(uniquePre_count)
-                        ),
-                    ]
-                )
+            # Find the unique post and pre neurons
+            uniquePre, uniquePre_count = np.unique(combos[:, 0], axis=0, return_counts=True)
+            niquePost, uniquePost_count = np.unique(combos[:, 1], axis=0, return_counts=True)
+            self.rows.append(self.extract_strat_name(ps))
+            self.values.append(
+                [
+                    len(pre_locs),
+                    "{:.2} $\pm$ {:.2}".format(np.mean(combo_counts), np.std(combo_counts)),
+                    "{:.2} $\pm$ {:.2}".format(np.mean(uniquePost_count), np.std(uniquePost_count)),
+                    "{:.2} $\pm$ {:.2}".format(np.mean(uniquePre_count), np.std(uniquePre_count)),
+                ]
+            )
 
     def set_scaffold(self, scaffold):
-        super().set_scaffold(scaffold)
-        self.update_values()
+        if super().set_scaffold(scaffold):
+            self.update_values()
 
     def plot(self, **kwargs):
         super().plot()
@@ -210,22 +202,21 @@ class CellPlacement3D(ScaffoldPlot):
 
     def plot(self, **kwargs):
         ax = self.get_ax()
-        if self.scaffold is not None:
-            for i, ps in enumerate(self.scaffold.get_placement_sets()):
-                ct = ps.cell_type
-                ct_name = ct.name.split("_cell")[0]
-                if not ct.name in self.ignored_ct and ct_name in self.dict_colors:
-                    *color, alpha = self.dict_colors[ct_name]
-                    scale = np.power(ct.spatial.radius, 2)
-                    positions = ps.load_positions()
-                    ax.scatter(
-                        positions[:, 0],
-                        positions[:, 1],
-                        positions[:, 2],
-                        c=np.repeat([color], len(positions), axis=0),
-                        alpha=np.repeat([alpha], len(positions), axis=0),
-                        s=scale,
-                    )
+        for i, ps in enumerate(self.scaffold.get_placement_sets()):
+            ct = ps.cell_type
+            ct_name = ct.name.split("_cell")[0]
+            if not ct.name in self.ignored_ct and ct_name in self.dict_colors:
+                *color, alpha = self.dict_colors[ct_name]
+                scale = np.power(ct.spatial.radius, 2)
+                positions = ps.load_positions()
+                ax.scatter(
+                    positions[:, 0],
+                    positions[:, 1],
+                    positions[:, 2],
+                    c=np.repeat([color], len(positions), axis=0),
+                    alpha=np.repeat([alpha], len(positions), axis=0),
+                    s=scale,
+                )
         ax.set_xlabel("x in $\mu m$")
         ax.set_ylabel("y in $\mu m$")
         ax.set_zlabel("z in $\mu m$")
@@ -241,9 +232,11 @@ class StructureReport(Report):
             3,
             dict_legend=dict(columnspacing=2.0, handletextpad=0.1, fontsize=20, loc="lower center"),
         )
-        density_table = PlacementTable((5, 2.5), scaffold=None, dict_abv=self.abbreviations)
-        connectivity_table = ConnectivityTable((10, 5), scaffold=None, dict_abv=self.abbreviations)
-        plot3d = CellPlacement3D((10, 10), scaffold=None)
+        density_table = PlacementTable((5, 2.5), scaffold=self.network, dict_abv=self.abbreviations)
+        connectivity_table = ConnectivityTable(
+            (10, 5), scaffold=self.network, dict_abv=self.abbreviations
+        )
+        plot3d = CellPlacement3D((10, 10), scaffold=self.network)
         self.add_plot("density_table", density_table)
         self.add_plot("connectivity_table", connectivity_table)
         self.add_plot("placement_3d", plot3d)
