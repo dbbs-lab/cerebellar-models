@@ -21,6 +21,7 @@ class Plot(abc.ABC):
         self.nb_cols = nb_cols
         self.fig_size = fig_size
         self.is_plotted = False
+        self.is_updated = False
         self.figure, self.axes = self.init_plot(**kwargs)
 
         self.dict_colors = dict_colors if dict_colors is not None else {}
@@ -30,7 +31,7 @@ class Plot(abc.ABC):
         return plt.subplots(nrows=self.nb_rows, ncols=self.nb_cols, figsize=self.fig_size, **kwargs)
 
     @classmethod
-    def as_subfig(cls, figure: plt.Figure, axes: plt.Axes, dict_colors=None):
+    def as_subfig(cls, figure: plt.figure, axes: plt.Axes, dict_colors=None):
         result = cls((1, 1), dict_colors=dict_colors)
         plt.close(result.figure)
         result.figure = figure
@@ -70,7 +71,14 @@ class Plot(abc.ABC):
         self.figure.tight_layout(pad=pad)
         self.figure.savefig(output_name, dpi=dpi, facecolor="white", **kwargs)
 
+    def update(self):
+        self.is_updated = True
+
     def plot(self, *args, **kwargs):
+        if not self.is_updated:
+            self.update()
+        if self.is_plotted:
+            self.clear()
         self.is_plotted = True
 
     def show(self):
@@ -106,6 +114,7 @@ class ScaffoldPlot(Plot):
         is_different = scaffold != self.scaffold
         if is_different:
             self.scaffold = scaffold
+            self.is_updated = False
             if self.is_plotted:
                 self.clear()
         return is_different

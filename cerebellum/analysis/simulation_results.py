@@ -27,14 +27,15 @@ class SimulationPlot(ScaffoldPlot):
         populations: List,
         **kwargs,
     ):
+        assert simulation_name in scaffold.simulations
+        super().__init__(fig_size, scaffold, **kwargs)
         self.simulation_name = simulation_name
         self.time_from = time_from or 0
         self.time_to = time_to or self.scaffold.simulations[simulation_name].duration
+        self.dt = self.scaffold.simulations[simulation_name].resolution  # in ms
         self.all_spikes = all_spikes
         self.nb_neurons = nb_neurons
         self.populations = populations
-        super().__init__(fig_size, scaffold, **kwargs)
-        self.dt = self.scaffold.simulations[simulation_name].resolution  # in ms
 
     def set_simulation_params(
         self,
@@ -45,12 +46,26 @@ class SimulationPlot(ScaffoldPlot):
         nb_neurons,
         populations,
     ):
-        self.simulation_name = simulation_name
-        self.time_from = time_from
-        self.time_to = time_to
-        self.all_spikes = all_spikes
-        self.nb_neurons = nb_neurons
-        self.populations = populations
+        is_different = (
+            self.simulation_name != simulation_name
+            or self.time_from != time_from
+            or self.time_to != time_to
+            or np.any(self.all_spikes != all_spikes)
+            or np.any(self.nb_neurons != nb_neurons)
+            or self.populations != populations
+        )
+        if is_different:
+            assert simulation_name in self.scaffold.simulations
+            self.simulation_name = simulation_name
+            self.time_from = time_from
+            self.time_to = time_to
+            self.all_spikes = all_spikes
+            self.nb_neurons = nb_neurons
+            self.populations = populations
+            self.is_updated = False
+            if self.is_plotted:
+                self.clear()
+        return is_different
 
 
 class SimulationReport(Report):
@@ -97,7 +112,7 @@ class SimulationReport(Report):
                             cell_dict[cell_type] = {"id": current_id, "senders": []}
                             current_id += 1
                             spikes_res.append([])
-                        if type(st.annotations["senders"]) == np.int64:  # wtf ?
+                        if isinstance(st.annotations["senders"], np.int64):  # wtf ?
                             st.annotations["senders"] = [st.annotations["senders"]]
                         if len(st.annotations["senders"]) > 0:
                             spikes_res[cell_dict[cell_type]["id"]].append(st)
@@ -141,6 +156,7 @@ class SimulationReport(Report):
         return all_spikes, nb_neurons, list(cell_dict.keys())
 
     def add_plot(self, name: str, plot: Plot):
+        super().add_plot(name, plot)
         if isinstance(plot, SimulationPlot):
             plot.set_simulation_params(
                 self.simulation_name,
@@ -150,7 +166,6 @@ class SimulationReport(Report):
                 self.nb_neurons,
                 self.populations,
             )
-        super().add_plot(name, plot)
 
 
 class RasterPSTHPlot(SimulationPlot):
@@ -161,10 +176,24 @@ class RasterPSTHPlot(SimulationPlot):
         simulation_name: str,
         time_from: float,
         time_to: float,
+        all_spikes,
+        nb_neurons: List,
+        populations: List,
         nb_bins: int = 30,
         **kwargs,
     ):
-        super().__init__(fig_size, scaffold, simulation_name, time_from, time_to, **kwargs)
+        self.populations = populations
+        super().__init__(
+            fig_size,
+            scaffold,
+            simulation_name,
+            time_from,
+            time_to,
+            all_spikes,
+            nb_neurons,
+            populations,
+            **kwargs,
+        )
         self.nb_bins = nb_bins
 
     def init_plot(self, **kwargs):
@@ -187,6 +216,7 @@ class RasterPSTHPlot(SimulationPlot):
         return fig, axes
 
     def plot(self, relative_time=False, **kwargs):
+        super().plot()
         num_filter = len(self.nb_neurons)
         counts = np.zeros(num_filter + 1)
         counts[1:] = np.cumsum(self.nb_neurons)
@@ -202,7 +232,7 @@ class RasterPSTHPlot(SimulationPlot):
                 newIds,
                 marker="o",
                 c=np.repeat([self.dict_colors[ct][:3]], len(times), axis=0),
-                s=0.005 * 10000 / self.nb_neurons[i],
+                s=50.0 / self.nb_neurons[i],
                 alpha=1,
                 rasterized=True,
             )
@@ -229,6 +259,31 @@ class RasterPSTHPlot(SimulationPlot):
 
 
 class Simulation2Columns(SimulationPlot):
+    def __init__(
+        self,
+        fig_size: Tuple[float, float],
+        scaffold: Scaffold,
+        simulation_name: str,
+        time_from: float,
+        time_to: float,
+        all_spikes,
+        nb_neurons: List,
+        populations: List,
+        **kwargs,
+    ):
+        self.populations = populations
+        super().__init__(
+            fig_size,
+            scaffold,
+            simulation_name,
+            time_from,
+            time_to,
+            all_spikes,
+            nb_neurons,
+            populations,
+            **kwargs,
+        )
+
     def init_plot(self, **kwargs):
         self.is_plotted = False
         self.nb_cols = 2
@@ -244,57 +299,91 @@ class Simulation2Columns(SimulationPlot):
 
 
 class FiringRatesPlot(Simulation2Columns):
-    def plot(self, relative_time=False, w_single=1000, max_neuron_sampled=10000, **kwargs):
+    def __init__(
+        self,
+        fig_size: Tuple[float, float],
+        scaffold: Scaffold,
+        simulation_name: str,
+        time_from: float,
+        time_to: float,
+        all_spikes,
+        nb_neurons: List,
+        populations: List,
+        w_single=1000,
+        max_neuron_sampled=10000,
+        **kwargs,
+    ):
+        super().__init__(
+            fig_size,
+            scaffold,
+            simulation_name,
+            time_from,
+            time_to,
+            all_spikes,
+            nb_neurons,
+            populations,
+            **kwargs,
+        )
+        self.w_single = w_single
+        self.max_neuron_sampled = max_neuron_sampled
+
+    def update(self):
+        super().update()
         num_filter = len(self.nb_neurons)
         counts = np.zeros(num_filter + 1)
         counts[1:] = np.cumsum(self.nb_neurons)
 
         kernel_single = (
-            signal.windows.triang(w_single) * 2 / w_single
+            signal.windows.triang(self.w_single) * 2 / self.w_single
         )  # normalized boxcar kernel for single-trial firing rate
 
-        time_interval = np.arange(
-            self.time_from + w_single * self.dt, self.time_to + (-w_single + 1) * self.dt, self.dt
+        self.time_interval = np.arange(
+            self.time_from + self.w_single * self.dt,
+            self.time_to + (-self.w_single + 1) * self.dt,
+            self.dt,
         )
-        firing_rates = np.zeros((self.all_spikes.shape[0] - w_single * 2, num_filter))
-        std_rates = np.zeros((self.all_spikes.shape[0] - w_single * 2, num_filter))
+        self.firing_rates = np.zeros((self.all_spikes.shape[0] - self.w_single * 2, num_filter))
+        self.std_rates = np.zeros((self.all_spikes.shape[0] - self.w_single * 2, num_filter))
         for i in range(num_filter):
             spikes = self.all_spikes[:, int(counts[i]) : int(counts[i + 1])]
-            if self.nb_neurons[i] > max_neuron_sampled:
+            if self.nb_neurons[i] > self.max_neuron_sampled:
                 spikes = spikes[
                     :,
                     np.linspace(
-                        0, self.nb_neurons[i], max_neuron_sampled, endpoint=False, dtype=int
+                        0, self.nb_neurons[i], self.max_neuron_sampled, endpoint=False, dtype=int
                     ),
                 ]
             R = signal.lfilter(kernel_single, 1, spikes, axis=0) / self.dt * 1000.0
-            firing_rates[:, i] = np.mean(R, axis=1)[w_single:-w_single]
-            std_rates[:, i] = np.std(R, axis=1)[w_single:-w_single]
+            self.firing_rates[:, i] = np.mean(R, axis=1)[self.w_single : -self.w_single]
+            self.std_rates[:, i] = np.std(R, axis=1)[self.w_single : -self.w_single]
+
+    def plot(self, relative_time=False, **kwargs):
+        super().plot()
         for i, ct in enumerate(self.populations):
             ax = self.get_ax(i)
             ax.fill_between(
-                time_interval,
-                (np.maximum(0, firing_rates[:, i] - std_rates[:, i])),
-                (firing_rates[:, i] + std_rates[:, i]),
+                self.time_interval,
+                (np.maximum(0, self.firing_rates[:, i] - self.std_rates[:, i])),
+                (self.firing_rates[:, i] + self.std_rates[:, i]),
                 alpha=0.5,
                 color=self.dict_colors[ct][:3],
             )
-            ax.plot(time_interval, firing_rates[:, i], color=self.dict_colors[ct][:3])
+            ax.plot(self.time_interval, self.firing_rates[:, i], color=self.dict_colors[ct][:3])
             ax.set_xlabel("Time in ms")
             ax.set_ylabel("Rate in Hz")
             ax.set_title(
-                f"Mean estimated firing rate for {ct} (kernel width = {w_single * self.dt} ms)"
+                f"Mean estimated firing rate for {ct} (kernel width = {self.w_single * self.dt} ms)"
             )
             ax.set_xlim(
-                [0, time_interval[-1] - time_interval[0]]
+                [0, self.time_interval[-1] - self.time_interval[0]]
                 if relative_time
-                else [time_interval[0], time_interval[-1]]
+                else [self.time_interval[0], self.time_interval[-1]]
             )
             ax.text(
                 0.01,
                 0.95,
                 "FR: {:.2} $\pm$ {:.2}".format(
-                    np.mean(firing_rates[:, i]), np.std(firing_rates[:, i])
+                    np.mean(self.firing_rates[:, i]), np.std(self.firing_rates[:, i])
                 ),
                 ha="left",
                 va="top",
@@ -302,24 +391,29 @@ class FiringRatesPlot(Simulation2Columns):
             )
 
 
+def extract_isis(spikes, dt):
+    filter_ = np.where(spikes.T)
+    u, idx = np.unique(filter_[0], return_index=True)
+    times = np.split(filter_[1], idx[1:])
+
+    isi = []
+    for k in range(len(u)):
+        isis = np.diff(times[k]) * dt
+        if len(isis) > 0:
+            isi.append(np.mean(isis))
+    return isi
+
+
 class IsisPlot(Simulation2Columns):
     def plot(self, *args, **kwargs):
+        super().plot()
         num_filter = len(self.nb_neurons)
         counts = np.zeros(num_filter + 1)
         counts[1:] = np.cumsum(self.nb_neurons)
-        isis_dist = []
-        for i in range(num_filter):
-            spikes = self.all_spikes[:, int(counts[i]) : int(counts[i + 1])]
-            filter_ = np.where(spikes.T)
-            u, idx = np.unique(filter_[0], return_index=True)
-            times = np.split(filter_[1], idx[1:])
-
-            isi = []
-            for k in range(len(u)):
-                isis = np.diff(times[k]) * self.dt
-                if len(isis) > 0:
-                    isi.append(np.mean(isis))
-            isis_dist.append(isi)
+        isis_dist = [
+            extract_isis(self.all_spikes[:, int(counts[i]) : int(counts[i + 1])], self.dt)
+            for i in range(num_filter)
+        ]
         for i, ct in enumerate(self.populations):
             ax2 = self.get_ax(i)
             ax2.hist(isis_dist[i], 50, color=self.dict_colors[ct][:3])
@@ -328,29 +422,10 @@ class IsisPlot(Simulation2Columns):
             ax2.set_title(f"Distribution of {ct} ISIs")
 
 
-class FrequencyPlot(Simulation2Columns):
+class FrequencyPlot(FiringRatesPlot):
     def plot(self, w_single=1000, max_neuron_sampled=10000, *args, **kwargs):
-        num_filter = len(self.nb_neurons)
-        counts = np.zeros(num_filter + 1)
-        counts[1:] = np.cumsum(self.nb_neurons)
-
-        kernel_single = (
-            signal.windows.triang(w_single) * 2 / w_single
-        )  # normalized boxcar kernel for single-trial firing rate
-
-        firing_rates = np.zeros((self.all_spikes.shape[0] - w_single * 2, num_filter))
-        for i in range(num_filter):
-            spikes = self.all_spikes[:, int(counts[i]) : int(counts[i + 1])]
-            if self.nb_neurons[i] > max_neuron_sampled:
-                spikes = spikes[
-                    :,
-                    np.linspace(
-                        0, self.nb_neurons[i], max_neuron_sampled, endpoint=False, dtype=int
-                    ),
-                ]
-            R = signal.lfilter(kernel_single, 1, spikes, axis=0) / self.dt * 1000.0
-            firing_rates[:, i] = np.mean(R, axis=1)[w_single:-w_single]
-        for i, (fr, ct) in enumerate(zip(firing_rates.T, self.populations)):
+        super().plot()
+        for i, (fr, ct) in enumerate(zip(self.firing_rates.T, self.populations)):
             glob_fr = fr[:-1]
             t = np.abs(np.fft.fft(glob_fr))
             x = np.fft.fftfreq(t.shape[0], self.dt / 1000.0)
@@ -378,40 +453,40 @@ class SimResultsTable(TablePlot, SimulationPlot):
         simulation_name: str,
         time_from: float,
         time_to: float,
+        all_spikes,
+        nb_neurons: List,
+        populations: List,
         dict_abv: dict = None,
         **kwargs,
     ):
-        super().__init__(fig_size, scaffold, simulation_name, time_from, time_to, **kwargs)
+        super().__init__(
+            fig_size,
+            scaffold,
+            simulation_name,
+            time_from,
+            time_to,
+            all_spikes,
+            nb_neurons,
+            populations,
+            **kwargs,
+        )
         self.columns = ["Firing rate [Hz]", "Inter Spike Intervals [ms]"]
         self.dict_abv = dict_abv or {ct.name: ct.abbreviation for ct in LIST_CT_INFO}
-        self.update_values()
-
-    def set_scaffold(self, scaffold):
-        if super().set_scaffold(scaffold):
-            self.update_values()
 
     def plot(self, **kwargs):
         super().plot()
         self.plot_table(**kwargs)
 
-    def update_values(self):
-        super().update_values()
+    def update(self):
+        super().update()
+        self.update_values()
         num_filter = len(self.nb_neurons)
         counts = np.zeros(num_filter + 1)
         counts[1:] = np.cumsum(self.nb_neurons)
         for i in range(num_filter):
             spikes = self.all_spikes[:, int(counts[i]) : int(counts[i + 1])]
             all_fr = np.sum(spikes, axis=0) / ((self.time_to - self.time_from) / 1000.0)
-
-            filter_ = np.where(spikes.T)
-            u, idx = np.unique(filter_[0], return_index=True)
-            times = np.split(filter_[1], idx[1:])
-
-            isi = []
-            for k in range(len(u)):
-                isis = np.diff(times[k]) * self.dt
-                if len(isis) > 0:
-                    isi.append(np.mean(isis))
+            isi = extract_isis(spikes, self.dt)
 
             self.values.append(
                 [

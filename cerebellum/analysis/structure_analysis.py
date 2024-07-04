@@ -50,24 +50,20 @@ class PlacementTable(TablePlot, ScaffoldPlot):
         )
         self.columns = ["Cell counts", "Cell densities [$\mu m^{-3}$]"]
         self.dict_abv = dict_abv or {ct.name: ct.abbreviation for ct in LIST_CT_INFO}
-        self.update_values()
 
     def extract_ct_name(self, ct: CellType):
         key = ct.name.split("_cell")[0]
         return self.dict_abv[key] if key in self.dict_abv else ct.name
 
-    def update_values(self):
-        super().update_values()
+    def update(self):
+        super().update()
+        self.update_values()
         for i, ps in enumerate(self.scaffold.get_placement_sets()):
             ct = ps.cell_type
             self.rows.append(self.extract_ct_name(ct))
             counts = ps.load_positions().shape[0]
             volume = [p.volume() for place in ct.get_placement() for p in place.partitions]
             self.values.append(["{:.2E}".format(counts), "{:.2E}".format(counts / np.sum(volume))])
-
-    def set_scaffold(self, scaffold):
-        if super().set_scaffold(scaffold):
-            self.update_values()
 
     def plot(self, **kwargs):
         super().plot()
@@ -119,8 +115,9 @@ class ConnectivityTable(TablePlot, ScaffoldPlot):
             tag.extend(to_convert)
         return " ".join(tag)
 
-    def update_values(self):
-        super().update_values()
+    def update(self):
+        super().update()
+        self.update_values()
         for ps in self.scaffold.get_connectivity_sets():
             # Get the ConnectivityIterator for the current connectivity strategy
             cs = self.scaffold.get_connectivity_set(ps.tag).load_connections().as_globals()
@@ -144,10 +141,6 @@ class ConnectivityTable(TablePlot, ScaffoldPlot):
                 ]
             )
 
-    def set_scaffold(self, scaffold):
-        if super().set_scaffold(scaffold):
-            self.update_values()
-
     def plot(self, **kwargs):
         super().plot()
         self.plot_table(**kwargs)
@@ -167,7 +160,7 @@ class CellPlacement3D(ScaffoldPlot):
 
     def init_plot(self, **kwargs):
         self.is_plotted = False
-        fig = plt.Figure(figsize=self.fig_size, **kwargs)
+        fig = plt.figure(figsize=self.fig_size, **kwargs)
         ax = fig.add_subplot(111, projection="3d")
         return fig, ax
 
@@ -201,6 +194,7 @@ class CellPlacement3D(ScaffoldPlot):
         ax.set_zlim3d([z_middle - plot_radius, z_middle + plot_radius])
 
     def plot(self, **kwargs):
+        super().plot()
         ax = self.get_ax()
         for i, ps in enumerate(self.scaffold.get_placement_sets()):
             ct = ps.cell_type
