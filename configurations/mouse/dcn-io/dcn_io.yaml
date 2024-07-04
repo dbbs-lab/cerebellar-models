@@ -1,6 +1,6 @@
 name: DBBS Mouse cerebellum w/ DCN and IO
 storage:
-  root: mouse_cereb_dcn_io.hdf5
+  root: mouse_cereb_dcn_io_alice.hdf5 # mouse_cereb_dcn_io_casali.hdf5 
 
 network:
   z: 495
@@ -26,13 +26,13 @@ cell_types:
   dcn_p:
     spatial:
       radius: 9.5
-      density: 4.95e-5
+      density: 9.92e-6	# 1.33e-6
     plotting:
       display_name: Deep Cerebellar Nuclei type p
   dcn_i:
     spatial:
       radius:  7.0
-      density: 2.6e-5
+      density: 5.58e-6	# 0.7182e-6
     plotting:
       display_name: Deep Cerebellar Nuclei type i
 
@@ -51,8 +51,8 @@ placement:
       - dcn_i
 connectivity:
   purkinje_to_dcn_p:
-    strategy: cerebellum.connectome.purkinje_dcn.ConnectomePC_DCN
-    divergence: 5
+    strategy: cerebellum.connectome.purkinje_dcn.FixedOutdegree
+    outdegree: 45	# 5
     presynaptic:
       cell_types:
         - purkinje_cell
@@ -63,8 +63,8 @@ connectivity:
         - dcn_p
 
   purkinje_to_dcn_i:
-    strategy: cerebellum.connectome.purkinje_dcn.ConnectomePC_DCN
-    divergence: 5
+    strategy: cerebellum.connectome.purkinje_dcn.FixedOutdegree
+    outdegree: 12	# 5
     presynaptic:
       cell_types:
         - purkinje_cell
@@ -74,8 +74,8 @@ connectivity:
       cell_types:
         - dcn_i
   mossy_fibers_to_dcn_p:
-    strategy: cerebellum.connectome.mossy_dcnp.ConnectomeMossyDCNp
-    convergence: 50
+    strategy: bsb.connectivity.FixedIndegree
+    indegree: 48	# 147 (not possible because in canonical n_mf=117)
     presynaptic:
       cell_types:
         - mossy_fibers
