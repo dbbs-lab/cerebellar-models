@@ -1,13 +1,37 @@
 import os
 import pathlib
 import unittest
+from os.path import abspath, dirname, getmtime, isfile, join
 
+import nest
 import numpy as np
 from bsb import Scaffold, parse_configuration_content, parse_configuration_file
 from bsb.services import MPI
 from bsb_test import NumpyTestCase, RandomStorageFixture
+from pynestml.exceptions.invalid_path_exception import InvalidPathException
 from scipy.optimize import curve_fit
 from scipy.signal import find_peaks
+
+
+class TestNestModuleLoading(unittest.TestCase):
+    def test_build_models(self):
+        from cerebellum.nest_models.build_models import _build_nest_models
+
+        # cerebmodule should have been built
+        cerebmodule_file = join(
+            nest.ll_api.sli_func("statusdict/prefix ::"), "lib/nest/cerebmodule.so"
+        )
+        self.assertTrue(isfile(cerebmodule_file))
+        # Does not raise because module exists
+        _build_nest_models(model_dir="bla")
+        old_mtime = getmtime(cerebmodule_file)
+        _build_nest_models(redo=True)  # Force update
+        self.assertTrue(getmtime(cerebmodule_file) > old_mtime, "module should be updated")
+        os.remove(cerebmodule_file)
+        with self.assertRaises(OSError):
+            _build_nest_models(model_dir="bla")
+        with self.assertRaises(InvalidPathException):
+            _build_nest_models(model_dir=dirname(abspath(__file__)))
 
 
 @unittest.skipIf(MPI.get_size() > 1, "Skipped during parallel testing.")
@@ -29,6 +53,7 @@ class TestSingleCellModels(
                 "purkinje_cell": {"spatial": {"radius": 1, "count": 10}},
                 "basket_cell": {"spatial": {"radius": 1, "count": 10}},
                 "stellate_cell": {"spatial": {"radius": 1, "count": 10}},
+                "unipolar_brush_cell": {"spatial": {"radius": 1, "count": 10}},
             },
             "placement": {
                 "placement_A": {
@@ -39,6 +64,7 @@ class TestSingleCellModels(
                         "purkinje_cell",
                         "basket_cell",
                         "stellate_cell",
+                        "unipolar_brush_cell",
                     ],
                     "partitions": ["B"],
                     "positions": [[1, 1, 1]] * 10,
@@ -55,26 +81,28 @@ class TestSingleCellModels(
                     "modules": ["cerebmodule"],
                     "cell_models": {
                         "$import": {
-                            "ref": "../configurations/mouse/nest/basal.yaml#/simulations/basal_activity/cell_models",
+                            "ref": "../configurations/mouse/ubc/ubc_nest.yaml#/simulations/basal_activity/cell_models",
                             "values": [
                                 "granule_cell",
                                 "golgi_cell",
                                 "purkinje_cell",
                                 "basket_cell",
                                 "stellate_cell",
+                                "unipolar_brush_cell",
                             ],
                         },
                     },
                     "connection_models": {},
                     "devices": {
                         "$import": {
-                            "ref": "../configurations/mouse/nest/basal.yaml#/simulations/basal_activity/devices",
+                            "ref": "../configurations/mouse/ubc/ubc_nest.yaml#/simulations/basal_activity/devices",
                             "values": [
                                 "granule_record",
                                 "golgi_record",
                                 "purkinje_record",
                                 "basket_record",
                                 "stellate_record",
+                                "unipolar_brush_record",
                             ],
                         },
                     },
@@ -156,6 +184,11 @@ class TestSingleCellModels(
                 "starts": [10, 12, 14],
                 "stops": [11, 13, 15],
             },
+            "unipolar_brush": {
+                "amplitudes": [12, 24, 36],
+                "starts": [10, 12, 14],
+                "stops": [11, 13, 15],
+            },
         }
         predicted = {
             "golgi": {"autorhythm": 12.8, "slope": 0.2},
@@ -163,6 +196,7 @@ class TestSingleCellModels(
             "purkinje": {"autorhythm": 60.96, "slope": 0.08},
             "basket": {"autorhythm": 9.51, "slope": 2.16},
             "stellate": {"autorhythm": 9.51, "slope": 2.16},
+            "unipolar_brush": {"autorhythm": 0.0, "slope": 2.35},  # no source available
         }
         for cell_type in predicted:
             for i, stim in enumerate(protocol[cell_type]["amplitudes"]):

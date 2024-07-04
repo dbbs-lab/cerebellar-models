@@ -8,6 +8,8 @@ import itertools
 import numpy as np
 from bsb import Chunk, ConnectionStrategy, InvertedRoI, config
 
+from cerebellum.connectome.presyn_dist_strat import PresynDistStrat
+
 
 def norm_exp_dist(size: int = 1, b: float = 2.0):
     """
@@ -109,3 +111,19 @@ class ConnectomeMossyGlomerulus(ConnectomeGlomerulus):
             if (x_dist < self.x_length / 2) and (y_dist < self.y_length / 2):
                 selected_chunks.append(Chunk([c[0], c[1], c[2]], chunk.dimensions))
         return selected_chunks
+
+
+@config.node
+class ConnectomeUBCGlomerulus(ConnectomeGlomerulus, PresynDistStrat):
+    """
+    BSB Connection strategy to connect UBC to Glomeruli.
+    """
+
+    def pre_selection(
+        self,
+        presyn_pos,
+        glom_pos,
+    ):
+        dist = np.linalg.norm(presyn_pos - glom_pos, axis=1)
+        ids_to_keep = np.where(dist <= self.radius)[0]
+        return ids_to_keep[np.argsort(dist[ids_to_keep])]
