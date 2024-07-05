@@ -1,0 +1,70 @@
+import numpy as np
+from bsb import ConnectionStrategy, config
+from bsb.mixins import NotParallel
+
+
+@config.node
+class ConnectomeIO_MLI(NotParallel, ConnectionStrategy):
+    mli_pc_connectivity = config.attr(type=str, required=True)
+    io_pc_connectivity = config.attr(type=str, required=True)
+
+    def connect(self, pre, post):
+        for pre_ps in pre.placement:
+            for post_ps in post.placement:
+                self._connect_type(pre_ps, post_ps)
+
+    def _connect_type(self, pre_ps, post_ps):
+
+        io_pos = pre_ps.load_positions()
+        mli_pos = post_ps.load_positions()
+        print("Number of io cells", len(io_pos))
+        print("Number of mli cells", len(mli_pos))
+
+        # All the MLIs connected to the same PC must be connected to the IO cell which
+        # is connected to that PC
+
+        # We retrieve the connectivity data for the mli-pc connectivity
+
+        cs = self.scaffold.get_connectivity_set(self.mli_pc_connectivity)
+        iter = cs.load_connections().as_globals()
+        mli_per_pc_list = []
+
+        gid_global, gid_local = iter.all()
+        len_pc = len(self.scaffold.get_placement_set("purkinje_cell"))
+        unique_pc = np.arange(0, len_pc, 1)
+
+        for current in unique_pc:
+            mli_ids = np.where(gid_local[:, 0] == current)[0]
+            mli_per_pc_list.append(gid_global[mli_ids][:, 0])
+
+        # We retrieve the connectivity data for the io-pc connectivity
+
+        cs = self.scaffold.get_connectivity_set(self.io_pc_connectivity)
+        iter = cs.load_connections().as_globals()
+        io_pc_list = []
+
+        gid_global, gid_local = iter.all()
+        # unique_pc = np.unique(gid_local[:,0],axis=0)
+        # print("len = ", np.max(unique_pc))
+
+        for current in unique_pc:
+            io_ids = np.where(gid_local[:, 0] == current)[0]
+            io_pc_list.append(gid_global[io_ids][:, 0])
+
+        n_purkinje = len(io_pc_list)
+        max_connections = len(mli_pos) * n_purkinje
+        if max_connections > 0:
+            pre_locs = np.full((max_connections, 3), -1, dtype=int)
+            post_locs = np.full((max_connections, 3), -1, dtype=int)
+
+            ptr = 0
+
+            for j, id_io in enumerate(io_pc_list):
+                ln = len(mli_per_pc_list[j])
+                pre_locs[ptr : ptr + ln, 0] = id_io
+                post_locs[ptr : ptr + ln, 0] = mli_per_pc_list[j]
+                ptr = ptr + ln
+
+            self.connect_cells(pre_ps, post_ps, pre_locs, post_locs)
+
+            print("Connected", len(io_pos), "io cells to", len(mli_pos), "mlis.")
