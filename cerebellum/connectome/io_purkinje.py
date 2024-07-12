@@ -21,7 +21,7 @@ class ConnectomeIOPurkinje(NotParallel, ConnectionStrategy):
         print("N io cells:", n_io)
         print("N pcs:", n_pc)
 
-        # Each PC is connect to a single IO cell
+        # Each PC is connected to a single IO cell
         pre_locs = np.full((n_pc, 3), -1, dtype=int)
         post_locs = np.full((n_pc, 3), -1, dtype=int)
 
