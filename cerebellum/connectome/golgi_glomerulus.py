@@ -5,7 +5,7 @@
 import itertools
 
 import numpy as np
-from bsb import CellType, Chunk, ConfigurationError, ConnectionStrategy, config, refs
+from bsb import ConfigurationError, ConnectionStrategy, config, refs
 from connectome.presyn_dist_strat import get_close_chunks
 
 
@@ -22,21 +22,21 @@ class ConnectomeGolgiGlomerulus(ConnectionStrategy):
         Corresponds to the mean number of Glomeruli targeted by a single Golgi cell"""
     radius: float = config.attr(type=float, required=True)
     """Radius of the sphere surrounding the Golgi cell soma in which glomeruli can be connected."""
-    glom_post_strat: ConnectionStrategy = config.ref(refs.connectivity_ref, required=True)
-    """Connection Strategy that links Glomeruli to the postsynaptic cell."""
-    glom_cell_type: CellType = config.ref(refs.cell_type_ref, required=True)
-    """Celltype used for the Glomeruli."""
+    glom_post_strats = config.reflist(refs.connectivity_ref, required=True)
+    """Connection Strategies that links Glomeruli to the postsynaptic cells."""
+    glom_cell_types = config.reflist(refs.cell_type_ref, required=True)
+    """Cell types used for the Glomeruli."""
 
     @config.property
     def depends_on(self):
         # Get the possibly missing `_depends_on` list.
         deps = getattr(self, "_depends_on", None) or []
         # Strat is required, but depends on a reference that isn't available when the config loads.
-        strat = getattr(self, "glom_post_strat", None)
+        strat = getattr(self, "glom_post_strats", None)
         if strat is None:
             return deps
         else:
-            return [*{*deps, strat}]
+            return [*{*deps, *strat}]
 
     @depends_on.setter
     def depends_on(self, value):
@@ -44,94 +44,150 @@ class ConnectomeGolgiGlomerulus(ConnectionStrategy):
 
     def connect(self, pre, post):
         for pre_ps in pre.placement:
-            for post_ps in post.placement:
-                self._connect_type(pre_ps, post_ps)
+            self._connect_type(pre_ps, post)
 
     def _assert_dependencies(self):
         # assert dependency rule corresponds to glom to post
-        pre_ct = self.glom_post_strat.presynaptic.cell_types
-        if len(pre_ct) != 1 or pre_ct[0] != self.glom_cell_type:
-            raise ConfigurationError(
-                f"Presynaptic cell of dependency rule should match "
-                f"the provided glom_cell_type: {self.glom_cell_type.name}."
-            )
-
-        post_ct = self.glom_post_strat.postsynaptic.cell_types
-        for ct in self.postsynaptic.cell_types:
-            if ct not in post_ct:
+        for glom_post_strat in self.glom_post_strats:
+            # At least one glomerulus type should match for each strat.
+            found = False
+            for glom_cell_type in self.glom_cell_types:
+                if found:
+                    break
+                for pre_ct in glom_post_strat.presynaptic.cell_types:
+                    if pre_ct == glom_cell_type:
+                        found = True
+                        break
+            if not found:
                 raise ConfigurationError(
-                    f"The dependency rule does not connect glomeruli to this connection's "
-                    f"postsynaptic cell: {ct.name}."
+                    f"Presynaptic cell of dependency rule {glom_post_strat.name} should match "
+                    f"at least one of the provided glom_cell_types: "
+                    f"{[glom_cell_type.name for glom_cell_type in self.glom_cell_types]}."
+                )
+
+            post_ct = glom_post_strat.postsynaptic.cell_types
+            found = False
+            for ct in self.postsynaptic.cell_types:
+                if ct in post_ct:
+                    found = True
+                    break
+            if not found:
+                raise ConfigurationError(
+                    f"The dependency rule {glom_post_strat.name} does not connect glomeruli to this connection's "
+                    f"postsynaptic cell: {post_ct.name}."
                 )
 
     def boot(self):
         self._assert_dependencies()
 
-    def _get_glom_cluster(self, pre_ps, post_ps):
+    def _combine_unique_gloms(self, glom_ids, loc_glom_pos, loc_post_locs):
+        # Extract unique glomerulus groups
+        unique_gloms = np.unique(glom_ids)
+        loc_post_locs = np.asarray(loc_post_locs, dtype=object)
+        post_locs = []
+        glom_pos = np.zeros((len(unique_gloms), 3), dtype=float)
+        for c, u_glom in enumerate(unique_gloms):
+            ids = np.where(glom_ids == u_glom)[0]
+            post_locs.append(
+                [locs for locs in np.asarray(np.concatenate(loc_post_locs[ids]), dtype=int)]
+            )
+            glom_pos[c] = loc_glom_pos[ids[0]]
+
+        return (unique_gloms, glom_pos, post_locs)
+
+    def _get_glom_cluster(self, chunk, post_ps, glom_type):
         # Get the glom_to_post connections
-        cs = self.glom_post_strat.get_output_names(self.glom_cell_type, post_ps.cell_type)
-        assert (
-            len(cs) == 1
-        ), f"Only one connection set should be given from {self.glom_post_strat.name}."
-        cs = self.scaffold.get_connectivity_set(cs[0])
-        # Chunks are sorted pre-synaptically so there should be only one chunk
+        glom_ids = []
+        post_locs = []
+        loc_glom_pos = np.empty((0, 3))
+        for glom_post_strat in self.glom_post_strats:
+            try:
+                # Extract connection sets that link glom_type to the postsynaptic cell type.
+                cs = glom_post_strat.get_output_names(glom_type, post_ps.cell_type)
+            except ValueError:
+                continue
+            assert (
+                len(cs) == 1
+            ), f"Only one connection set should be given from {glom_post_strat.name}."
+            cs = self.scaffold.get_connectivity_set(cs[0])
+
+            # We extract global ids to filter the postsynaptic neuron that match the ones from the dependency
+            chunks = cs.pre_type.get_placement_set().get_all_chunks()
+            # We filter glomeruli in chunks which are less than radius away from the current one.
+            loc_glom_locs, loc_post_locs = (
+                cs.load_connections()
+                .from_(get_close_chunks(chunk, chunks, self.radius))
+                .as_globals()
+                .all()
+            )
+
+            # Filter unique glomeruli connections and grouping postsynaptic targets
+            loc_glom_locs, ids = np.unique(loc_glom_locs[:, 0], return_inverse=True)
+            glom_ids.extend(loc_glom_locs)
+            # Sorting connections by presynaptic glomeruli id
+            sorting = np.argsort(ids)
+            # Returns the index positions of each glomerulus group in the sorted connection array
+            _, ids = np.unique(ids[sorting], return_index=True)
+            # Sorts the postsynaptic info and then splitting it according to the presynaptic ids
+            post_locs.extend(np.split(loc_post_locs[sorting], ids[1:]))
+
+            # Since we use global ids there is no need to filter chunks of the presynaptic cell placement set
+            loc_glom_pos = np.concatenate(
+                [cs.pre_type.get_placement_set().load_positions()[loc_glom_locs], loc_glom_pos]
+            )
+
+        return self._combine_unique_gloms(glom_ids, loc_glom_pos, post_locs)
+
+    def _connect_type(self, pre_ps, post):
+        # Chunks are sorted presynaptically so there should be only one chunk
         chunk = pre_ps.get_loaded_chunks()
         assert len(chunk) == 1, "There should be exactly one presynaptic chunk"
         chunk = chunk[0]
 
-        # Distance from glom to golgi
-        chunks = cs.pre_type.get_placement_set().get_all_chunks()
-        # Look for chunks containing glom which are less than radius away from the current one.
-        pre_chunks = get_close_chunks(chunk, chunks, self.radius)
+        # Extract all unique glomeruli connections from connection strategy dependencies grouped by glomeruli
+        glom_pos = np.empty([0, 3])
+        postsyn_locs = []
+        ps_ids = []
+        for glom_cell_type in self.glom_cell_types:
+            ct_glom_ids = []
+            ct_glom_pos = np.empty([0, 3])
+            ct_postsyn_locs = []
+            ct_ps_ids = []
+            for i, post_ps in enumerate(post.placement):
+                (loc_glom_ids, loc_glom_pos, loc_post_locs) = self._get_glom_cluster(
+                    chunk, post_ps, glom_cell_type
+                )
+                ct_glom_ids.extend(loc_glom_ids)
+                ct_glom_pos = np.concatenate([loc_glom_pos, ct_glom_pos])
+                ct_postsyn_locs.extend(loc_post_locs)
+                ct_ps_ids.extend([np.repeat(i, len(ids)) for ids in loc_post_locs])
+                i += 1
+            # group gloms from different postsynaptic cell type together (e.g. UBC, GrC)
+            u_glom_ids, ct_glom_pos, ct_postsyn_locs = self._combine_unique_gloms(
+                ct_glom_ids, ct_glom_pos, ct_postsyn_locs
+            )
+            glom_pos = np.concatenate([ct_glom_pos, glom_pos])
+            postsyn_locs.extend(ct_postsyn_locs)
+            ct_ps_ids = np.asarray(ct_ps_ids, dtype=object)
+            for u_glom in u_glom_ids:
+                ids = np.where(ct_glom_ids == u_glom)[0]
+                ps_ids.append(np.concatenate(ct_ps_ids[ids].tolist(), dtype=int))
 
-        # We need global ids to filter the postsynaptic neuron that match the ones from
-        # the dependency
-        conn_ = cs.load_connections().from_(pre_chunks)
-        iter_ = conn_.as_globals()
-        _, post_locs = iter_.all()
-        iter_ = conn_.as_scoped()
-        glom_locs, _ = iter_.all()
-        unique_gloms = np.unique(glom_locs[:, 0])
-        postsyn_connections = []
-        postsyn_connections_branch_point = []
-        for u_glom in unique_gloms:
-            ids = np.where(glom_locs[:, 0] == u_glom)[0]
-            postsyn_connections.append(post_locs[ids, 0])
-            postsyn_connections_branch_point.append(post_locs[ids, 1:])
-
-        glom_pos = cs.pre_type.get_placement_set(chunks=pre_chunks).load_positions()[unique_gloms]
-
-        return (
-            glom_pos,
-            postsyn_connections,
-            postsyn_connections_branch_point,
-        )
-
-    def _connect_type(self, pre_ps, post_ps):
-
-        # Consider only the gloms which are connected to at least a postsynaptic cell in the RoI.
-        # Select only the gloms for which a connection is found
         golgi_pos = pre_ps.load_positions()
-        (
-            glom_pos,
-            postsyn_connections,
-            postsyn_connections_branch_point,
-        ) = self._get_glom_cluster(pre_ps, post_ps)
-
         # Cache morphologies and generate the morphologies iterator
         golgi_morphos = pre_ps.load_morphologies().iter_morphologies(cache=True, hard_cache=True)
 
         # TODO: implement random rounding and adapt tests.
-        num_glom_to_connect = np.min([int(self.divergence), len(postsyn_connections)])
+        num_glom_to_connect = np.min([int(self.divergence), len(postsyn_locs)])
         n_conn = (
             len(golgi_pos)
             * num_glom_to_connect
-            * np.max([len(post_conn) for post_conn in postsyn_connections])
+            * np.max([len(post_conn) for post_conn in postsyn_locs])
         )
         pre_locs = np.full((n_conn, 3), -1, dtype=int)
         post_locs = np.full((n_conn, 3), -1, dtype=int)
+        selected_ps = np.full(n_conn, -1, dtype=int)
         ptr = 0
-        # For each Golgi cell...
         for i, golgi, morpho in zip(itertools.count(), golgi_pos, golgi_morphos):
             # Find terminal branches
             axon_branches = morpho.get_branches()
@@ -148,17 +204,13 @@ class ConnectomeGolgiGlomerulus(ConnectionStrategy):
             to_connect = sorting[to_connect[sorting] <= self.radius]
             # Keep the closest glomeruli
             to_connect = to_connect[:num_glom_to_connect]
-            # For each glomerulus, connect the corresponding postsyn cells directly to the current
-            # Golgi
-            for j, post_conn in enumerate(to_connect):
-                take_post = postsyn_connections[post_conn]
+            # For each glomerulus, connect the corresponding postsyn cells directly to the current Golgi
+            for post_conn in to_connect:
+                take_post = np.array(postsyn_locs[post_conn])
                 post_to_connect = len(take_post)
                 # Select postsyn cells ids
-                post_locs[ptr : ptr + post_to_connect, 0] = take_post
-                # Store branch-ids and points-on-branch-ids of the postsyn cells
-                post_locs[ptr : ptr + post_to_connect, 1:] = postsyn_connections_branch_point[
-                    post_conn
-                ]
+                post_locs[ptr : ptr + post_to_connect] = take_post
+                selected_ps[ptr : ptr + post_to_connect] = ps_ids[post_conn]
                 # Select Golgi axon branch
                 pre_locs[ptr : ptr + post_to_connect, 0] = i
                 ids_branches = np.random.randint(
@@ -168,10 +220,12 @@ class ConnectomeGolgiGlomerulus(ConnectionStrategy):
                 pre_locs[ptr : ptr + post_to_connect, 2] = tips_coordinates[ids_branches]
                 ptr += post_to_connect
 
-        # So that the global postsynaptic ids are used
-        self.connect_cells(
-            pre_ps,
-            self.scaffold.get_placement_set(post_ps.cell_type),
-            pre_locs[:ptr],
-            post_locs[:ptr],
-        )
+        for i, ps in enumerate(post.placement):
+            selected = selected_ps[:ptr] == i
+            # We use the scaffold placement set for each post cell type so that the global postsynaptic ids are used
+            self.connect_cells(
+                pre_ps,
+                self.scaffold.get_placement_set(ps.cell_type),
+                pre_locs[:ptr][selected],
+                post_locs[:ptr][selected],
+            )

@@ -99,7 +99,7 @@ The parameters for the eglif models are extracted from Table 2 and Table 3 in Ge
 Then, the following parameters are optimized according to the method described in Geminiani et al.
 (2018) [#geminiani_2018]_ :
 
-.. csv-table:: GLIF neuron parameters
+.. csv-table:: EGLIF neuron parameters
    :header-rows: 1
    :delim: ;
 
@@ -263,8 +263,8 @@ Mossy fiber stimulus
 
 The mossy fiber stimulus configuration file
 `stimulus_mossy.yaml <https://github.com/dbbs-lab/cerebellum/blob/master/configurations/mouse/nest/stimulus_mossy.yaml>`_
-corresponds to the basal activity configuration file with a stimulus of the mossy fibers
-(see :ref:`basal-activity`).
+adds to the basal activity configuration file another simulation configuration ``mf_stimulus``. ``mf_stimulus`` has the
+same parameters as the ``basal_activity`` but with a stimulus of the mossy fibers (see :ref:`basal-activity`).
 
 On top of the basal paradigm, we introduce here a ``stimulus`` represented as a ``150 Hz``
 ``Poisson spike generator`` between ``1200`` and ``1250`` ms. This latter targets the

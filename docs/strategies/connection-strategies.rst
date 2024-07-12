@@ -53,19 +53,19 @@ exponential distribution based on the distance between the tip of each dendrite 
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 The algorithm selects n unique glomeruli within the sphere surrounding each granule cell soma, where n is equal to the
-``convergence``. Moreover, for each granule cell, each selected glomerulus should be connected through :ref:`mossy_glom`
-to a different mossy fiber.
-The n unique mossy fibers, their connected glomerulus, and the granule cell ``dendrite`` they will target are all
-randomly chosen. If not enough glomeruli could be found in the sphere surrounding the granule cell soma, the closest
+``convergence``. Moreover, for each granule cell, each selected glomerulus should be connected to a different
+presynaptic cell: the ``presynaptic sources``.
+The n unique ``presynaptic sources``, their connected glomerulus, and the granule cell ``dendrite`` they will target are
+all randomly chosen. If not enough glomeruli could be found in the sphere surrounding the granule cell soma, the closest
 glomerulus connected to one of the not yet selected mossy fibers is chosen.
 
-* ``radius``: Radius of the sphere to filter the glomeruli within it.
+* ``radius``: Radius of the sphere to filter the ``presynaptic source`` within it.
 
 * ``convergence``: Number of glomeruli per granule cell.
 
-* ``mf_glom_strat``: ConnectionStrategy that links the mossy fibers to the glomeruli.
+* ``pre_glom_strats``: List of ConnectionStrategy that links the ``presynaptic source`` to the glomeruli.
 
-* ``mf_cell_type``: CellType of the mossy fiber, used as a reference.
+* ``pre_cell_types``: List of CellType of the ``presynaptic source``, used as references.
 
 .. code-block:: yaml
 
@@ -79,8 +79,10 @@ glomerulus connected to one of the not yet selected mossy fibers is chosen.
             - granule_cell
           morphology_labels:
             - dendrites
-        mf_glom_strat: mossy_fibers_to_glomerulus
-        mf_cell_type: mossy_fibers
+        pre_glom_strats:
+            - mossy_fibers_to_glomerulus
+        pre_cell_types:
+            - mossy_fibers
         radius: 40
         convergence: 4
 
@@ -93,23 +95,23 @@ glomerulus connected to one of the not yet selected mossy fibers is chosen.
 :class:`ConnectomeGolgiGlomerulus <.connectome.golgi_glomerulus.ConnectomeGolgiGlomerulus>`
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-This connection strategy links a Golgi cell to all granule cells connected to a glomerulus.
-The connections between the glomerulus and the postsynaptic cells are defined in :ref:`glom_grc` used as a
-``reference strategy``.
+This connection strategy links a Golgi cell to all postsynaptic cells connected to a glomerulus: the
+``postsynaptic targets``. The connections between the glomerulus and the ``postsynaptic targets`` are configured using a
+list of ``reference strategies``.
 
 The algorithm selects here the closest glomeruli (maximum ``divergence``) that are within
 a sphere surrounding each Golgi cell. For each unique glomerulus selected, the tip of an axon's branch from the Golgi
-cell is randomly selected. All granule cells that are connected to the selected glomerulus with the
-``reference strategy``, are also connected to the selected Golgi cell. The target points of the granule cell (i.e.
-dendrite selected) are copied from the ``reference strategy``.
+cell is randomly selected. All ``postsynaptic targets`` that are connected to the selected glomerulus with the
+``reference strategies``, are connected to the selected Golgi cell. The target points of the ``postsynaptic targets``
+(i.e. dendrite selected) are copied from the ``reference strategies``.
 
 * ``divergence``: Number of glomeruli per Golgi cell.
 
 * ``radius``: Radius of the sphere to filter the glomeruli within it.
 
-* ``glom_post_strat``: ConnectionStrategy that links the glomeruli to the granule cells.
+* ``glom_post_strats``: List of ConnectionStrategy that links the glomeruli to the postsynaptic targets.
 
-* ``glom_cell_type``: CellType of the glomerulus, used as a reference
+* ``glom_cell_types``: List of CellType of the glomeruli, used as references
 
 .. code-block:: yaml
 
@@ -123,14 +125,19 @@ dendrite selected) are copied from the ``reference strategy``.
         postsynaptic:
           cell_types:
             - granule_cell
-        glom_post_strat: glomerulus_to_granule
-        glom_cell_type: glomerulus
+        glom_post_strats:
+            - glomerulus_to_granule
+        glom_cell_types:
+            - glomerulus
         radius: 150
         divergence: 40
 
 .. note::
-    Note that here the golgi cell is directly connected to the granule cell and not to the glomerulus.
+    Note that here the Golgi cell is directly connected to the ``postsynaptic targets`` and not to the glomerulus.
     The latter serves only as a intermediate point to look for in the ``reference strategy``.
+
+.. note::
+    This ``postsynaptic targets`` are usually granule cells and unipolar brush cells.
 
 .. _voxel_int:
 
@@ -138,3 +145,44 @@ dendrite selected) are copied from the ``reference strategy``.
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 See bsb :doc:`documentation <bsb:connectivity/connection-strategies>`.
+
+.. _ubc_glom:
+
+:class:`ConnectomeUBCGlomerulus <.connectome.to_glomerulus.ConnectomeUBCGlomerulus>`
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+The algorithm selects one UBC within the sphere surrounding each UBC glomerulus. This selection is random and performed
+with a truncated exponential distribution.
+
+* ``radius``: Radius of the sphere to filter the UBC within it.
+
+.. _glom_ubc:
+
+:class:`ConnectomeGlomerulusUBC <.connectome.glomerulus_ubc.ConnectomeGlomerulusUBC>`
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+The algorithm connects a population of UBC to a list of glomeruli populations (for instance mf or ubc based glomeruli),
+maintaining their relative indegree ratios.
+Glomeruli are selected within the sphere surrounding each UBC chunk.
+For each UBC, the algorithm selects the closest unconnected glomerulus (if possible) to limit the number of UBCs per
+glomerulus.
+
+* ``radius``: Radius of the sphere to filter the glomeruli within it.
+
+* ``ratios_ubc``: Positive relative ratios of indegree for the different types of glomeruli. The ratios will be
+  normalized so that their sum equals to 1.
+
+.. code-block:: yaml
+
+    glomerulus_to_ubc:
+        strategy: cerebellum.connectome.glomerulus_ubc.ConnectomeGlomerulus_to_UBC
+        presynaptic:
+          cell_types:
+            - ubc_glomerulus
+            - glomerulus
+        postsynaptic:
+          cell_types:
+            - unipolar_brush_cell
+        ratios_ubc:
+          ubc_glomerulus: 1. # will be interpreted as 1 / (1+2)
+          glomerulus: 2.  # will be interpreted as 2 / (1+2)
+        radius: 50

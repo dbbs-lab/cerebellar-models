@@ -132,29 +132,30 @@ the ``(xy)`` plane.
 
 Connectivity
 ~~~~~~~~~~~~
+The followimg table list all the connections present in the model. The connection id of the first column corresponds to
+the numbers reported in :numref:`fig-network`.
 
-.. csv-table::
+.. _table-connectivity:
+.. csv-table:: Connectivity rules of the cerebellar cortex circuit
    :header-rows: 1
    :delim: ;
 
-   Source Name; Source Branch; Target Name; Target Branch; Strategy; References
-   mf ; /; glom ; /; :ref:`mossy_glom`; Sultan (2001) [#sultan_2001]_
-   glom ; /; GrC; dendrites; :ref:`glom_grc`; Houston et al. (2017) [#houston_2017]_
-   glom ; /; GoC; basal dendrites; :ref:`glom_goc`; Kanichay and Silver (2008) [#kanichay_2008]_
-   GoC; axon ; GrC; same as through glom; :ref:`goc_glom`; Barmack and Yakhnitsa (2008) [#barmack_2008]_
-   GoC; axon ; GoC; basal dendrites; :ref:`voxel_int` ; Hull and Regehr (2012) [#hull_2012]_
-   GrC; ascending axon ; GoC; basal dendrites; :ref:`voxel_int` ; Cesana et al. (2013) [#cesana_2013]_
-   GrC; parallel fiber ; GoC; apical dendrites ; :ref:`voxel_int` ; Kanichay and Silver (2008) [#kanichay_2008]_
-   GrC; ascending axon ; PC ; ascending axon targets ; :ref:`voxel_int` ; Wang and Huang (2006) [#wang_2006]_
-   GrC; parallel fiber ; PC ; parallel fiber targets ; :ref:`voxel_int` ; Wang and Huang (2006) [#wang_2006]_
-   GrC; parallel fiber ; BC ; dendrites; :ref:`voxel_int` ; Jörntell et al. (2010) [#jorntell_2010]_
-   GrC; parallel fiber ; SC ; dendrites; :ref:`voxel_int` ; Jörntell et al. (2010) [#jorntell_2010]_
-   BC ; axon ; PC ; soma ; :ref:`voxel_int` ; Jörntell et al. (2010) [#jorntell_2010]_
-   SC ; axon ; PC ; stellate cell targets; :ref:`voxel_int` ; Jörntell et al. (2010) [#jorntell_2010]_
-   BC ; axon ; SC ; dendrites; :ref:`voxel_int` ; Ito (2013) [#ito_2013]_
-   BC ; axon ; BC ; dendrites; :ref:`voxel_int` ; Ito (2013) [#ito_2013]_
-   SC ; axon ; BC ; dendrites; :ref:`voxel_int` ; Ito (2013) [#ito_2013]_
-   SC ; axon ; SC ; dendrites; :ref:`voxel_int` ; Ito (2013) [#ito_2013]_
+   #; Source Name; Source Branch; Target Name; Target Branch; Strategy; References
+   1; mf ; /; glom ; /; :ref:`mossy_glom`; Sultan (2001) [#sultan_2001]_
+   2; glom ; /; GrC; dendrites; :ref:`glom_grc`; Houston et al. (2017) [#houston_2017]_
+   3; glom ; /; GoC; basal dendrites; :ref:`glom_goc`; Kanichay and Silver (2008) [#kanichay_2008]_
+   4; GoC; axon ; GrC; same as through glom; :ref:`goc_glom`; Barmack and Yakhnitsa (2008) [#barmack_2008]_
+   5; GoC; axon ; GoC; basal dendrites; :ref:`voxel_int` ; Hull and Regehr (2012) [#hull_2012]_
+   6; GrC; ascending axon ; GoC; basal dendrites; :ref:`voxel_int` ; Cesana et al. (2013) [#cesana_2013]_
+   7; GrC; parallel fiber ; GoC; apical dendrites ; :ref:`voxel_int` ; Kanichay and Silver (2008) [#kanichay_2008]_
+   8; GrC; ascending axon ; PC ; ascending axon targets ; :ref:`voxel_int` ; Wang and Huang (2006) [#wang_2006]_
+   9; GrC; parallel fiber ; PC ; parallel fiber targets ; :ref:`voxel_int` ; Wang and Huang (2006) [#wang_2006]_
+   10; GrC; parallel fiber ; BC ; dendrites; :ref:`voxel_int` ; Jörntell et al. (2010) [#jorntell_2010]_
+   11; GrC; parallel fiber ; SC ; dendrites; :ref:`voxel_int` ; Jörntell et al. (2010) [#jorntell_2010]_
+   12; BC ; axon ; PC ; soma ; :ref:`voxel_int` ; Jörntell et al. (2010) [#jorntell_2010]_
+   13; SC ; axon ; PC ; stellate cell targets; :ref:`voxel_int` ; Jörntell et al. (2010) [#jorntell_2010]_
+   14; BC ; axon ; BC ; dendrites; :ref:`voxel_int` ; Ito (2013) [#ito_2013]_
+   15; SC ; axon ; SC ; dendrites; :ref:`voxel_int` ; Ito (2013) [#ito_2013]_
 
 Parameters explanation:
 ^^^^^^^^^^^^^^^^^^^^^^^
