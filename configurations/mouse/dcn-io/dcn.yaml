@@ -1,10 +1,8 @@
-name: DBBS Mouse cerebellum w/ DCN and IO
-#storage:
-#  root: mouse_cereb_dcn_alice.hdf5 # mouse_cereb_dcn_io_casali.hdf5
-
+name: DBBS Mouse cerebellum w/ DCN
+storage:
+  root: mouse_cereb_dcn.hdf5
 network:
   z: 495
-
 regions:
   cerebellar_cortex:
     type: stack

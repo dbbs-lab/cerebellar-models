@@ -1,8 +1,9 @@
 import shutil
 from os import makedirs
 from os.path import exists, isdir, join, realpath
-import nest
+
 import appdirs
+import nest
 from bsb.services import MPI
 from pynestml.frontend.pynestml_frontend import generate_target
 
@@ -27,8 +28,6 @@ def _build_nest_models(
 
     if MPI.get_size() == 1 or MPI.get_rank() == 0:
         if not redo:
-            import nest
-   
             try:
                 nest.ResetKernel()
                 nest.Install(module_name)

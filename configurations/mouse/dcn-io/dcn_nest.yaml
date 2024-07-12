@@ -1,4 +1,6 @@
-name: DBBS Mouse cerebellum w/ DCN and IO NEST simulation
+name: DBBS Mouse cerebellum w/ DCN NEST basal activity and mf stimulus
+storage:
+  root: mouse_cereb_dcn_nest.hdf5
 $import:
   ref: ./dcn.yaml#/
   values:
@@ -61,7 +63,6 @@ simulations:
           tau_syn2: 1.14
           E_rev1: 0
           E_rev2: -80
-
     connection_models:
       mossy_fibers_to_dcn_p:
         synapse:
@@ -81,7 +82,6 @@ simulations:
           weight: 0.12
           delay: 4.
           receptor_type: 2
-
     devices:
       dcn_p_record:
         device: spike_recorder

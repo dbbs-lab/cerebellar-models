@@ -1,47 +1,31 @@
-name: DBBS Mouse cerebellum w/ DCN and IO NEST simulation
-$import:
-  ref: ./dcn_nest.yaml#/
-  values:
-    - name
-    - packages
-    - storage
-    - network
-    - regions
-    - partitions
-    - morphologies
-    - cell_types
-    - placement
-    - connectivity
-packages:
-    - bsb-nest~=4.1
+name: DBBS Mouse cerebellum w/ DCN and IO NEST basal activity and mf stimulus
+storage:
+  root: mouse_cereb_dcn_io_nest.hdf5
 simulations:
   basal_activity:
     cell_models:
       io:
-          model: eglif_cond_alpha_multisyn
-          constants:
-            t_ref: 1
-            C_m: 189
-            V_th: -35
-            V_reset: -45
-            E_L: -45
-            I_e: -18.101
-            V_m: -45
-            lambda_0: 1.2
-            tau_V: 0.8
-            tau_m: 11
-            k_adap: 1.928
-            k_1: 0.191
-            k_2: 0.091
-            A1: 1810.923
-            A2: 1358.197
-            tau_syn1: 1
-            tau_syn2: 60
-            tau_syn3:
-            E_rev1: 0
-            E_rev2: -80
-
-
+        model: eglif_cond_alpha_multisyn
+        constants:
+          t_ref: 1
+          C_m: 189
+          V_th: -35
+          V_reset: -45
+          E_L: -45
+          I_e: -18.101
+          V_m: -45
+          lambda_0: 1.2
+          tau_V: 0.8
+          tau_m: 11
+          k_adap: 1.928
+          k_1: 0.191
+          k_2: 0.091
+          A1: 1810.923
+          A2: 1358.197
+          tau_syn1: 1
+          tau_syn2: 60
+          E_rev1: 0
+          E_rev2: -80
     connection_models:
       io_to_purkinje:
         synapse:
@@ -79,7 +63,6 @@ simulations:
           weight: 3
           delay: 20
           receptor_type: 2
-
     devices:
       io_record:
         device: spike_recorder
@@ -88,4 +71,20 @@ simulations:
           strategy: cell_model
           cell_models:
             - io
-
+  $import:
+    ref: ./dcn_nest.yaml#/simulations/
+    values:
+      - basal_activity
+$import:
+  ref: ./dcn_io.yaml#/
+  values:
+    - name
+    - packages
+    - storage
+    - network
+    - regions
+    - partitions
+    - morphologies
+    - cell_types
+    - placement
+    - connectivity

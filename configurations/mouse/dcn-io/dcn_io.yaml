@@ -1,10 +1,8 @@
 name: DBBS Mouse cerebellum w/ DCN and IO
 storage:
-  root: mouse_cereb_dcn_io_plus.hdf5 # mouse_cereb_dcn_io_casali.hdf5
-
+  root: mouse_cereb_dcn_io.hdf5
 network:
   z: 695
-
 regions:
   cerebellar_cortex:
     type: stack
@@ -38,7 +36,6 @@ cell_types:
       relative_to: purkinje_cell
     plotting:
       display_name: Inferior olive cells
-
 placement:
   io_layer_placement:
     strategy: bsb.placement.RandomPlacement
@@ -47,6 +44,14 @@ placement:
     cell_types:
       - io
 connectivity:
+  io_to_purkinje:
+    strategy: cerebellum.connectome.io_purkinje.ConnectomeIOPurkinje
+    presynaptic:
+      cell_types:
+        - io
+    postsynaptic:
+      cell_types:
+        - purkinje_cell
   io_to_basket:
     strategy: cerebellum.connectome.io_molecular.ConnectomeIO_MLI
     presynaptic:
@@ -57,6 +62,7 @@ connectivity:
         - basket_cell
     mli_pc_connectivity: basket_to_purkinje
     io_pc_connectivity: io_to_purkinje
+    pre_cell_pc: purkinje_cell
   io_to_stellate:
     strategy: cerebellum.connectome.io_molecular.ConnectomeIO_MLI
     presynaptic:
@@ -67,7 +73,7 @@ connectivity:
         - stellate_cell
     mli_pc_connectivity: stellate_to_purkinje
     io_pc_connectivity: io_to_purkinje
-
+    pre_cell_pc: purkinje_cell
   io_to_dcn_p:
     strategy: bsb.connectivity.AllToAll
     presynaptic:
@@ -92,15 +98,6 @@ connectivity:
     postsynaptic:
       cell_types:
         - io
-  io_to_purkinje:
-    strategy: cerebellum.connectome.io_purkinje.ConnectomeIOPurkinje
-    presynaptic:
-      cell_types:
-        - io
-    postsynaptic:
-      cell_types:
-        - purkinje_cell
-
 $import:
   ref: ./dcn.yaml#/
   values:
