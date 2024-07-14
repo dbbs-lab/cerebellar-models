@@ -22,6 +22,9 @@ The ``cerebellum`` package requires Python 3.9+.
     cd cerebellum
     pip install -e .
 
+If you wish to contribute to the cerebellum repository, please also install
+the :doc:`developers' packages <for-developers>`.
+
 NEST simulator
 ~~~~~~~~~~~~~~
 

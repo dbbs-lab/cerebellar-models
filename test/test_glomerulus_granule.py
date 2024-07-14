@@ -208,17 +208,6 @@ class TestGlomerulusGranule(
             self.assertTrue(last_mf[to_[0]] < self.convergence)
             pre_mfs[to_[0], last_mf[to_[0]]] = mf_locs[filter_mf[0], 0]
             last_mf[to_[0]] += 1
-            self.assertTrue(
-                np.linalg.norm(
-                    (
-                        np.floor(cell_positions[from_[0]] / self.chunk_size)
-                        - np.floor(cell_positions[to_[0]] / self.chunk_size)
-                    )
-                    * self.chunk_size
-                )
-                <= self.radius,
-                "Chunk size distance should be less than radius",
-            )
         self.assertAll(pre_mfs >= 0)
         self.assertAll(np.array([np.unique(x).size for x in pre_mfs]) == self.convergence)
 

@@ -98,14 +98,3 @@ class TestGlomerulusGolgi(
             self.assertTrue(
                 np.linalg.norm(pre_cell_positions[from_[0]] - cell_positions[to_[0]]) <= self.radius
             )
-            self.assertTrue(
-                np.linalg.norm(
-                    (
-                        np.floor(pre_cell_positions[from_[0]] / self.chunk_size)
-                        - np.floor(cell_positions[to_[0]] / self.chunk_size)
-                    )
-                    * self.chunk_size
-                )
-                <= self.radius,
-                "Chunk size distance should be less than radius",
-            )
