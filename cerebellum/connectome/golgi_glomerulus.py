@@ -6,7 +6,8 @@ import itertools
 
 import numpy as np
 from bsb import ConfigurationError, ConnectionStrategy, config, refs
-from connectome.presyn_dist_strat import get_close_chunks
+
+from cerebellum.connectome.presyn_dist_strat import get_close_chunks
 
 
 @config.node
