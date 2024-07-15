@@ -22,6 +22,7 @@ class TestGlomerulusGranule(
 
     def setUp(self):
         super().setUp()
+        # radius is greater than 1 chunk dimensions but less than two
         self.radius = 40
         self.convergence = 4
         self.chunk_size = np.array([30, 30, 30])
@@ -208,6 +209,12 @@ class TestGlomerulusGranule(
             self.assertTrue(last_mf[to_[0]] < self.convergence)
             pre_mfs[to_[0], last_mf[to_[0]]] = mf_locs[filter_mf[0], 0]
             last_mf[to_[0]] += 1
+            self.assertAll(
+                np.floor(cell_positions[from_[0]] / self.chunk_size)
+                - np.floor(cell_positions[to_[0]] / self.chunk_size)
+                <= 1.0,
+                "Chunk size distance should be less than radius",
+            )
         self.assertAll(pre_mfs >= 0)
         self.assertAll(np.array([np.unique(x).size for x in pre_mfs]) == self.convergence)
 

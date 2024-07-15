@@ -21,6 +21,7 @@ class TestGlomerulusGolgi(
 ):
     def setUp(self):
         super().setUp()
+        # radius is greater than 1 chunk dimensions but less than two
         self.radius = 40
         self.chunk_size = np.array([30, 30, 30])
         self.cfg = Configuration.default(
@@ -97,4 +98,10 @@ class TestGlomerulusGolgi(
             )
             self.assertTrue(
                 np.linalg.norm(pre_cell_positions[from_[0]] - cell_positions[to_[0]]) <= self.radius
+            )
+            self.assertAll(
+                np.floor(pre_cell_positions[from_[0]] / self.chunk_size)
+                - np.floor(cell_positions[to_[0]] / self.chunk_size)
+                <= 1.0,
+                "Chunk size distance should be less than radius",
             )

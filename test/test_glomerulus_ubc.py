@@ -10,6 +10,7 @@ class TestGlomerulus_to_UBC(
 ):
     def setUp(self):
         super().setUp()
+        # radius is greater than 1 chunk dimensions but less than two
         self.radius = 40
         self.chunk_size = np.array([30, 30, 30])
         self.cfg = Configuration.default(
@@ -113,6 +114,10 @@ class TestGlomerulus_to_UBC(
                 self.assertAll(from_[1:] == cell_targets)
                 self.assertAll(to_[1:] == cell_targets)
                 post_chunk = np.floor(cell_positions[to_[0]] / self.chunk_size)
+                self.assertAll(
+                    np.floor(pre_cell_position[from_[0]] / self.chunk_size) - post_chunk <= 1.0,
+                    "Chunk size distance should be less than radius",
+                )
                 post_chunk = str(post_chunk)
                 if post_chunk not in dict_pres:
                     dict_pres[post_chunk] = np.zeros(len(pre_cell_position), dtype=int)
