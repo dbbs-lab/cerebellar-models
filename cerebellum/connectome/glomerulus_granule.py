@@ -88,7 +88,7 @@ class ConnectomeGlomerulusGranule(InvertedRoI, ConnectionStrategy):
         for post_ps in post.placement:
             self._connect_type(pre, post_ps)
 
-    @functools.cache
+    @functools.cached_property
     def load_connections(self):
         dict_cs = {}
         for pre_ct in self.presynaptic.cell_types:
@@ -122,7 +122,7 @@ class ConnectomeGlomerulusGranule(InvertedRoI, ConnectionStrategy):
                 ), f"Only one connection set should be given from {strat.name} with type {pre_ct.name}."
                 # find pre-glom connections where the postsyn chunk corresponds to the
                 # glom-grc presyn chunk
-                pre_locs, glom_locs = self.load_connections()[cs[0]]
+                pre_locs, glom_locs = self.load_connections[cs[0]]
                 ct_uniques = np.unique(pre_locs[:, 0])
                 unique_pres.extend(ct_uniques)
 
