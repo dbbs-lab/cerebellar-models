@@ -2,6 +2,7 @@
     Module for the configuration node of the Golgi to Glomerulus ConnectionStrategy
 """
 
+import functools
 import itertools
 
 import numpy as np
@@ -81,6 +82,24 @@ class ConnectomeGolgiGlomerulus(ConnectionStrategy):
     def boot(self):
         self._assert_dependencies()
 
+    @functools.cache
+    def load_connections(self):
+        dict_cs = {}
+        for grc_ct in self.postsynaptic.cell_types:
+            for strat in self.glom_post_strats:
+                for inter_ct in self.glom_cell_types:
+                    try:
+                        cs = strat.get_output_names(inter_ct, grc_ct)
+                    except ValueError:
+                        continue
+                    assert (
+                        len(cs) == 1
+                    ), f"Only one connection set should be given from {strat.name} with type {inter_ct.name}."
+                    dict_cs[cs[0]] = list(
+                        self.scaffold.get_connectivity_set(cs[0]).load_connections().all()
+                    )
+        return dict_cs
+
     def _combine_unique_gloms(self, glom_ids, loc_glom_pos, loc_post_locs):
         # Extract unique glomerulus groups
         unique_gloms = np.unique(glom_ids)
@@ -110,17 +129,9 @@ class ConnectomeGolgiGlomerulus(ConnectionStrategy):
             assert (
                 len(cs) == 1
             ), f"Only one connection set should be given from {glom_post_strat.name}."
-            cs = self.scaffold.get_connectivity_set(cs[0])
 
-            # We extract global ids to filter the postsynaptic neuron that match the ones from the dependency
-            chunks = cs.pre_type.get_placement_set().get_all_chunks()
             # We filter glomeruli in chunks which are less than radius away from the current one.
-            loc_glom_locs, loc_post_locs = (
-                cs.load_connections()
-                .from_(get_close_chunks(chunk, chunks, self.radius))
-                .as_globals()
-                .all()
-            )
+            loc_glom_locs, loc_post_locs = self.load_connections()[cs[0]]
 
             # Filter unique glomeruli connections and grouping postsynaptic targets
             loc_glom_locs, ids = np.unique(loc_glom_locs[:, 0], return_inverse=True)
@@ -134,7 +145,12 @@ class ConnectomeGolgiGlomerulus(ConnectionStrategy):
 
             # Since we use global ids there is no need to filter chunks of the presynaptic cell placement set
             loc_glom_pos = np.concatenate(
-                [cs.pre_type.get_placement_set().load_positions()[loc_glom_locs], loc_glom_pos]
+                [
+                    self.scaffold.get_connectivity_set(cs[0])
+                    .pre_type.get_placement_set()
+                    .load_positions()[loc_glom_locs],
+                    loc_glom_pos,
+                ]
             )
 
         return self._combine_unique_gloms(glom_ids, loc_glom_pos, post_locs)
