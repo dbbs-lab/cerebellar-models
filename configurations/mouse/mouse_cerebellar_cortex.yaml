@@ -100,28 +100,28 @@ placement:
       - granular_layer
     cell_types:
       - granule_cell
-      - golgi_cell
+#      - golgi_cell
       - glomerulus
-  purkinje_layer_placement:
-    strategy: bsb.placement.ParallelArrayPlacement
-    partitions:
-      - purkinje_layer
-    cell_types:
-      - purkinje_cell
-    spacing_x: 130
-    angle: 70
-  basket_layer_placement:
-    strategy: bsb.placement.RandomPlacement
-    partitions:
-      - b_molecular_layer
-    cell_types:
-      - basket_cell
-  stellate_layer_placement:
-    strategy: bsb.placement.RandomPlacement
-    partitions:
-      - t_molecular_layer
-    cell_types:
-      - stellate_cell
+#  purkinje_layer_placement:
+#    strategy: bsb.placement.ParallelArrayPlacement
+#    partitions:
+#      - purkinje_layer
+#    cell_types:
+#      - purkinje_cell
+#    spacing_x: 130
+#    angle: 70
+#  basket_layer_placement:
+#    strategy: bsb.placement.RandomPlacement
+#    partitions:
+#      - b_molecular_layer
+#    cell_types:
+#      - basket_cell
+#  stellate_layer_placement:
+#    strategy: bsb.placement.RandomPlacement
+#    partitions:
+#      - t_molecular_layer
+#    cell_types:
+#      - stellate_cell
 connectivity:
   mossy_fibers_to_glomerulus:
     strategy: cerebellum.connectome.to_glomerulus.ConnectomeMossyGlomerulus
@@ -149,228 +149,228 @@ connectivity:
       - mossy_fibers
     radius: 40
     convergence: 4
-  glomerulus_to_golgi:
-    strategy: cerebellum.connectome.glomerulus_golgi.ConnectomeGlomerulusGolgi
-    presynaptic:
-      cell_types:
-        - glomerulus
-    postsynaptic:
-      cell_types:
-        - golgi_cell
-      morphology_labels:
-        - basal_dendrites
-    radius: 50
-  golgi_to_glomerulus:
-    strategy: cerebellum.connectome.golgi_glomerulus.ConnectomeGolgiGlomerulus
-    presynaptic:
-      cell_types:
-        - golgi_cell
-      morphology_labels:
-        - axon
-    postsynaptic:
-      cell_types:
-        - granule_cell
-    glom_post_strats:
-      - glomerulus_to_granule
-    glom_cell_types:
-      - glomerulus
-    radius: 150
-    divergence: 40
-  golgi_to_golgi:
-    strategy: bsb.connectivity.VoxelIntersection
-    presynaptic:
-      cell_types:
-        - golgi_cell
-      morphology_labels:
-        - axon
-    postsynaptic:
-      cell_types:
-        - golgi_cell
-      morphology_labels:
-        - basal_dendrites
-    affinity: 0.5
-    voxels_pre: 500
-    voxels_post: 500
-    contacts:
-      distribution: norm
-      loc: 160
-      scale: 5
-  gap_goc:
-    strategy: bsb.connectivity.VoxelIntersection
-    presynaptic:
-      cell_types:
-        - golgi_cell
-      morphology_labels:
-        - basal_dendrites
-    postsynaptic:
-      cell_types:
-        - golgi_cell
-      morphology_labels:
-        - basal_dendrites
-    affinity: 0.3
-    voxels_pre: 500
-    voxels_post: 500
-    contacts:
-      distribution: norm
-      loc: 3
-      scale: 1
-  ascending_axon_to_golgi:
-    strategy: bsb.connectivity.VoxelIntersection
-    presynaptic:
-      cell_types:
-        - granule_cell
-      morphology_labels:
-        - ascending_axon
-    postsynaptic:
-      cell_types:
-        - golgi_cell
-      morphology_labels:
-        - basal_dendrites
-    affinity: 0.05
-    voxels_pre: 500
-    voxels_post: 500
-  parallel_fiber_to_golgi:
-    strategy: bsb.connectivity.VoxelIntersection
-    presynaptic:
-      cell_types:
-        - granule_cell
-      morphology_labels:
-        - parallel_fiber
-    postsynaptic:
-      cell_types:
-        - golgi_cell
-      morphology_labels:
-        - apical_dendrites
-    affinity: 0.08
-    voxels_pre: 500
-    voxels_post: 500
-  ascending_axon_to_purkinje:
-    strategy: bsb.connectivity.VoxelIntersection
-    presynaptic:
-      cell_types:
-        - granule_cell
-      morphology_labels:
-        - ascending_axon
-    postsynaptic:
-      cell_types:
-        - purkinje_cell
-      morphology_labels:
-        - aa_targets
-    affinity: 0.05
-    voxels_pre: 500
-    voxels_post: 500
-  parallel_fiber_to_purkinje:
-    strategy: bsb.connectivity.VoxelIntersection
-    presynaptic:
-      cell_types:
-        - granule_cell
-      morphology_labels:
-        - parallel_fiber
-    postsynaptic:
-      cell_types:
-        - purkinje_cell
-      morphology_labels:
-        - pf_targets
-    affinity: 0.1
-    voxels_pre: 500
-    voxels_post: 500
-  parallel_fiber_to_basket:
-    strategy: bsb.connectivity.VoxelIntersection
-    presynaptic:
-      cell_types:
-        - granule_cell
-      morphology_labels:
-        - parallel_fiber
-    postsynaptic:
-      cell_types:
-        - basket_cell
-      morphology_labels:
-        - dendrites
-    affinity: 0.08
-    voxels_pre: 500
-    voxels_post: 500
-  parallel_fiber_to_stellate:
-    strategy: bsb.connectivity.VoxelIntersection
-    presynaptic:
-      cell_types:
-        - granule_cell
-      morphology_labels:
-        - parallel_fiber
-    postsynaptic:
-      cell_types:
-        - stellate_cell
-      morphology_labels:
-        - dendrites
-    affinity: 0.08
-    voxels_pre: 500
-    voxels_post: 500
-  stellate_to_purkinje:
-    strategy: bsb.connectivity.VoxelIntersection
-    presynaptic:
-      cell_types:
-        - stellate_cell
-      morphology_labels:
-        - axon
-    postsynaptic:
-      cell_types:
-        - purkinje_cell
-      morphology_labels:
-        - sc_targets
-    affinity: 0.1
-    voxels_pre: 500
-    voxels_post: 500
-  basket_to_purkinje:
-    strategy: bsb.connectivity.VoxelIntersection
-    presynaptic:
-      cell_types:
-        - basket_cell
-      morphology_labels:
-        - axon
-    postsynaptic:
-      cell_types:
-        - purkinje_cell
-      morphology_labels:
-        - soma
-    voxels_pre: 500
-    voxels_post: 500
-  stellate_to_stellate:
-    strategy: bsb.connectivity.VoxelIntersection
-    presynaptic:
-      cell_types:
-        - stellate_cell
-      morphology_labels:
-        - axon
-    postsynaptic:
-      cell_types:
-        - stellate_cell
-      morphology_labels:
-        - dendrites
-    affinity: 0.3
-    voxels_pre: 500
-    voxels_post: 500
-    contacts:
-      distribution: norm
-      loc: 100
-      scale: 4
-  basket_to_basket:
-    strategy: bsb.connectivity.VoxelIntersection
-    presynaptic:
-      cell_types:
-        - basket_cell
-      morphology_labels:
-        - axon
-    postsynaptic:
-      cell_types:
-        - basket_cell
-      morphology_labels:
-        - dendrites
-    affinity: 0.5
-    voxels_pre: 500
-    voxels_post: 500
-    contacts:
-      distribution: norm
-      loc: 100
-      scale: 4
+#  glomerulus_to_golgi:
+#    strategy: cerebellum.connectome.glomerulus_golgi.ConnectomeGlomerulusGolgi
+#    presynaptic:
+#      cell_types:
+#        - glomerulus
+#    postsynaptic:
+#      cell_types:
+#        - golgi_cell
+#      morphology_labels:
+#        - basal_dendrites
+#    radius: 50
+#  golgi_to_glomerulus:
+#    strategy: cerebellum.connectome.golgi_glomerulus.ConnectomeGolgiGlomerulus
+#    presynaptic:
+#      cell_types:
+#        - golgi_cell
+#      morphology_labels:
+#        - axon
+#    postsynaptic:
+#      cell_types:
+#        - granule_cell
+#    glom_post_strats:
+#      - glomerulus_to_granule
+#    glom_cell_types:
+#      - glomerulus
+#    radius: 150
+#    divergence: 40
+#  golgi_to_golgi:
+#    strategy: bsb.connectivity.VoxelIntersection
+#    presynaptic:
+#      cell_types:
+#        - golgi_cell
+#      morphology_labels:
+#        - axon
+#    postsynaptic:
+#      cell_types:
+#        - golgi_cell
+#      morphology_labels:
+#        - basal_dendrites
+#    affinity: 0.5
+#    voxels_pre: 500
+#    voxels_post: 500
+#    contacts:
+#      distribution: norm
+#      loc: 160
+#      scale: 5
+#  gap_goc:
+#    strategy: bsb.connectivity.VoxelIntersection
+#    presynaptic:
+#      cell_types:
+#        - golgi_cell
+#      morphology_labels:
+#        - basal_dendrites
+#    postsynaptic:
+#      cell_types:
+#        - golgi_cell
+#      morphology_labels:
+#        - basal_dendrites
+#    affinity: 0.3
+#    voxels_pre: 500
+#    voxels_post: 500
+#    contacts:
+#      distribution: norm
+#      loc: 3
+#      scale: 1
+#  ascending_axon_to_golgi:
+#    strategy: bsb.connectivity.VoxelIntersection
+#    presynaptic:
+#      cell_types:
+#        - granule_cell
+#      morphology_labels:
+#        - ascending_axon
+#    postsynaptic:
+#      cell_types:
+#        - golgi_cell
+#      morphology_labels:
+#        - basal_dendrites
+#    affinity: 0.05
+#    voxels_pre: 500
+#    voxels_post: 500
+#  parallel_fiber_to_golgi:
+#    strategy: bsb.connectivity.VoxelIntersection
+#    presynaptic:
+#      cell_types:
+#        - granule_cell
+#      morphology_labels:
+#        - parallel_fiber
+#    postsynaptic:
+#      cell_types:
+#        - golgi_cell
+#      morphology_labels:
+#        - apical_dendrites
+#    affinity: 0.08
+#    voxels_pre: 500
+#    voxels_post: 500
+#  ascending_axon_to_purkinje:
+#    strategy: bsb.connectivity.VoxelIntersection
+#    presynaptic:
+#      cell_types:
+#        - granule_cell
+#      morphology_labels:
+#        - ascending_axon
+#    postsynaptic:
+#      cell_types:
+#        - purkinje_cell
+#      morphology_labels:
+#        - aa_targets
+#    affinity: 0.05
+#    voxels_pre: 500
+#    voxels_post: 500
+#  parallel_fiber_to_purkinje:
+#    strategy: bsb.connectivity.VoxelIntersection
+#    presynaptic:
+#      cell_types:
+#        - granule_cell
+#      morphology_labels:
+#        - parallel_fiber
+#    postsynaptic:
+#      cell_types:
+#        - purkinje_cell
+#      morphology_labels:
+#        - pf_targets
+#    affinity: 0.1
+#    voxels_pre: 500
+#    voxels_post: 500
+#  parallel_fiber_to_basket:
+#    strategy: bsb.connectivity.VoxelIntersection
+#    presynaptic:
+#      cell_types:
+#        - granule_cell
+#      morphology_labels:
+#        - parallel_fiber
+#    postsynaptic:
+#      cell_types:
+#        - basket_cell
+#      morphology_labels:
+#        - dendrites
+#    affinity: 0.08
+#    voxels_pre: 500
+#    voxels_post: 500
+#  parallel_fiber_to_stellate:
+#    strategy: bsb.connectivity.VoxelIntersection
+#    presynaptic:
+#      cell_types:
+#        - granule_cell
+#      morphology_labels:
+#        - parallel_fiber
+#    postsynaptic:
+#      cell_types:
+#        - stellate_cell
+#      morphology_labels:
+#        - dendrites
+#    affinity: 0.08
+#    voxels_pre: 500
+#    voxels_post: 500
+#  stellate_to_purkinje:
+#    strategy: bsb.connectivity.VoxelIntersection
+#    presynaptic:
+#      cell_types:
+#        - stellate_cell
+#      morphology_labels:
+#        - axon
+#    postsynaptic:
+#      cell_types:
+#        - purkinje_cell
+#      morphology_labels:
+#        - sc_targets
+#    affinity: 0.1
+#    voxels_pre: 500
+#    voxels_post: 500
+#  basket_to_purkinje:
+#    strategy: bsb.connectivity.VoxelIntersection
+#    presynaptic:
+#      cell_types:
+#        - basket_cell
+#      morphology_labels:
+#        - axon
+#    postsynaptic:
+#      cell_types:
+#        - purkinje_cell
+#      morphology_labels:
+#        - soma
+#    voxels_pre: 500
+#    voxels_post: 500
+#  stellate_to_stellate:
+#    strategy: bsb.connectivity.VoxelIntersection
+#    presynaptic:
+#      cell_types:
+#        - stellate_cell
+#      morphology_labels:
+#        - axon
+#    postsynaptic:
+#      cell_types:
+#        - stellate_cell
+#      morphology_labels:
+#        - dendrites
+#    affinity: 0.3
+#    voxels_pre: 500
+#    voxels_post: 500
+#    contacts:
+#      distribution: norm
+#      loc: 100
+#      scale: 4
+#  basket_to_basket:
+#    strategy: bsb.connectivity.VoxelIntersection
+#    presynaptic:
+#      cell_types:
+#        - basket_cell
+#      morphology_labels:
+#        - axon
+#    postsynaptic:
+#      cell_types:
+#        - basket_cell
+#      morphology_labels:
+#        - dendrites
+#    affinity: 0.5
+#    voxels_pre: 500
+#    voxels_post: 500
+#    contacts:
+#      distribution: norm
+#      loc: 100
+#      scale: 4
 $import:
   ref: ../../morphologies/morphologies.yaml#/
   values:

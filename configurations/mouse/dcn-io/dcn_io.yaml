@@ -45,14 +45,15 @@ placement:
       - io
 connectivity:
   io_to_purkinje:
-    strategy: cerebellum.connectome.io_purkinje.ConnectomeIOPurkinje
+    strategy: bsb.connectivity.FixedIndegree
     presynaptic:
       cell_types:
         - io
     postsynaptic:
       cell_types:
         - purkinje_cell
-  io_to_basket:
+    indegree: 1
+  io_to_mli:
     strategy: cerebellum.connectome.io_molecular.ConnectomeIO_MLI
     presynaptic:
       cell_types:
@@ -60,18 +61,10 @@ connectivity:
     postsynaptic:
       cell_types:
         - basket_cell
-    mli_pc_connectivity: basket_to_purkinje
-    io_pc_connectivity: io_to_purkinje
-    pre_cell_pc: purkinje_cell
-  io_to_stellate:
-    strategy: cerebellum.connectome.io_molecular.ConnectomeIO_MLI
-    presynaptic:
-      cell_types:
-        - io
-    postsynaptic:
-      cell_types:
         - stellate_cell
-    mli_pc_connectivity: stellate_to_purkinje
+    mli_pc_connectivity:
+      - basket_to_purkinje
+      - stellate_to_purkinje
     io_pc_connectivity: io_to_purkinje
     pre_cell_pc: purkinje_cell
   io_to_dcn_p:
