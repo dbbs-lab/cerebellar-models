@@ -17,8 +17,7 @@ dependencies = [
     "bsb-json~=4.1",
     "bsb-neuron~=4.0",
     "bsb-nest~=4.1",
-    "nestml~=7.0",
-    "matplotlib~=3.9"
+    "nestml~=7.0"
 ]
 
 [project.optional-dependencies]
@@ -29,8 +28,7 @@ test = [
 dev = [
     "pre-commit~=3.5",
     "black~=24.0",
-    "isort~=5.12",
-    "bump-my-version~=0.21"
+    "isort~=5.12"
 ]
 docs = [
     "sphinx~=7.0",
