@@ -1,6 +1,6 @@
 import shutil
 from os import makedirs
-from os.path import exists, isdir, join, realpath
+from os.path import abspath, dirname, exists, isdir, join
 
 import appdirs
 import nest
@@ -12,10 +12,10 @@ _cache_path = _cereb_dirs.user_cache_dir
 
 
 def _build_nest_models(
-    model_dir=realpath("./"),
+    model_dir=dirname(__file__),
     build_dir=join(_cache_path, "nest_build"),
     module_name="cerebmodule",
-    redo=True,
+    redo=False,
 ):
     """
     Build all the nestml models within the provided model directory and deploy them.
@@ -26,16 +26,17 @@ def _build_nest_models(
     :param bool redo: Flag to force rebuild the nest models.
     """
 
+    model_dir = abspath(model_dir)
     if MPI.get_size() == 1 or MPI.get_rank() == 0:
         if not redo:
+            nest.ResetKernel()
             try:
-                nest.ResetKernel()
                 nest.Install(module_name)
                 # unload the module
                 nest.ResetKernel()
                 return
             except nest.NESTErrors.DynamicModuleManagementError as e:
-                if "loaded already" in str(e):
+                if "loaded already" in e.message:
                     return
         if not (exists(model_dir) and isdir(model_dir)):
             raise OSError("Model directory does not exist: {}".format(model_dir))
