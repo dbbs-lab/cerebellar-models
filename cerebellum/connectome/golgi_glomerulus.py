@@ -82,7 +82,7 @@ class ConnectomeGolgiGlomerulus(ConnectionStrategy):
     def boot(self):
         self._assert_dependencies()
 
-    @functools.cached_property
+    @functools.cache
     def load_connections(self):
         dict_cs = {}
         for grc_ct in self.postsynaptic.cell_types:
@@ -99,6 +99,13 @@ class ConnectomeGolgiGlomerulus(ConnectionStrategy):
                         self.scaffold.get_connectivity_set(cs[0]).load_connections().all()
                     )
         return dict_cs
+
+    def clean_cache(self, scaffold):
+        self.load_connections.cache_clear()
+
+    def queue(self, pool):
+        super().queue(pool)
+        pool.queue(self.clean_cache, deps=pool.get_submissions_of(self))
 
     def _combine_unique_gloms(self, glom_ids, loc_glom_pos, loc_post_locs):
         # Extract unique glomerulus groups
@@ -131,7 +138,7 @@ class ConnectomeGolgiGlomerulus(ConnectionStrategy):
             ), f"Only one connection set should be given from {glom_post_strat.name}."
 
             # We filter glomeruli in chunks which are less than radius away from the current one.
-            loc_glom_locs, loc_post_locs = self.load_connections[cs[0]]
+            loc_glom_locs, loc_post_locs = self.load_connections()[cs[0]]
 
             # Filter unique glomeruli connections and grouping postsynaptic targets
             loc_glom_locs, ids = np.unique(loc_glom_locs[:, 0], return_inverse=True)
