@@ -5,7 +5,7 @@
 from typing import List, Tuple
 
 import numpy as np
-from bsb import CellType, ConnectivitySet, Scaffold, warn
+from bsb import AfterConnectivityHook, CellType, ConnectivitySet, Scaffold, config, warn
 from matplotlib import pyplot as plt
 
 from cerebellum.analysis.plots import Legend, ScaffoldPlot
@@ -296,3 +296,25 @@ class StructureReport(Report):
         legend.set_axis_off()
         density_table.set_axis_off()
         connectivity_table.set_axis_off()
+
+
+@config.node
+class RunStructureReport(AfterConnectivityHook):
+    """
+    BSB postprocessing node to generate a scaffold structural report after running connectivity.
+    """
+
+    output_filename: str = config.attr(required=True)
+    """Name of the pdf file to save the report."""
+
+    def postprocess(self):
+        class StructReportBSB(StructureReport):
+            # Create a report that builds directly on the scaffold instance.
+            def set_scaffold(cls, pathname):
+                cls.scaffold = pathname
+                for plot in cls.plots.values():
+                    if isinstance(plot, ScaffoldPlot):
+                        plot.set_scaffold(cls.scaffold)
+
+        report = StructReportBSB(self.scaffold, LIST_CT_INFO)
+        report.print_report(self.output_filename)
