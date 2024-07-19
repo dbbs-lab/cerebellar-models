@@ -26,14 +26,15 @@ test = [
     "bsb-test~=4.0",
     "coverage~=7.3",
 ]
-dev = [
-    "pre-commit~=3.5",
-    "black~=24.0",
-    "isort~=5.12",
-]
 docs = [
     "sphinx~=7.0",
-    "furo~=2023.9",
+    "furo~=2023.9"
+]
+dev = [
+    "cerebellum[test,docs]",
+    "pre-commit~=3.5",
+    "black~=24.1",
+    "isort~=5.12",
     "bump-my-version~=0.21"
 ]
 
