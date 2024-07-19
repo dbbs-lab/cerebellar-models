@@ -9,7 +9,7 @@ from bsb import AfterConnectivityHook, CellType, ConnectivitySet, Scaffold, conf
 from matplotlib import pyplot as plt
 
 from cerebellum.analysis.plots import Legend, ScaffoldPlot
-from cerebellum.analysis.report import LIST_CT_INFO, PlotTypeInfo, Report
+from cerebellum.analysis.report import LIST_CT_INFO, BSBReport, PlotTypeInfo
 
 
 class TablePlot:
@@ -264,7 +264,7 @@ class CellPlacement3D(ScaffoldPlot):
         ax.set_title("Placement results", fontsize=40)
 
 
-class StructureReport(Report):
+class StructureReport(BSBReport):
     """
     Report of the scaffold neural network structure containing:
 
@@ -275,8 +275,8 @@ class StructureReport(Report):
     - a legend plot
     """
 
-    def __init__(self, pathname: str, cell_type_info: List[PlotTypeInfo] = None):
-        super().__init__(pathname, cell_type_info)
+    def __init__(self, scaffold: str | Scaffold, cell_type_info: List[PlotTypeInfo] = None):
+        super().__init__(scaffold, cell_type_info)
         legend = Legend(
             (10, 2.5),
             3,
@@ -308,13 +308,5 @@ class RunStructureReport(AfterConnectivityHook):
     """Name of the pdf file to save the report."""
 
     def postprocess(self):
-        class StructReportBSB(StructureReport):
-            # Create a report that builds directly on the scaffold instance.
-            def set_scaffold(cls, pathname):
-                cls.scaffold = pathname
-                for plot in cls.plots.values():
-                    if isinstance(plot, ScaffoldPlot):
-                        plot.set_scaffold(cls.scaffold)
-
-        report = StructReportBSB(self.scaffold, LIST_CT_INFO)
+        report = StructureReport(self.scaffold, LIST_CT_INFO)
         report.print_report(self.output_filename)

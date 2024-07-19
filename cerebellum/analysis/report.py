@@ -3,10 +3,11 @@
 """
 
 from typing import List
+from warnings import warn
 
 import matplotlib.backends.backend_pdf
 import numpy as np
-from bsb import from_storage
+from bsb import Scaffold, from_storage
 
 from cerebellum.analysis.plots import Plot, ScaffoldPlot
 
@@ -49,14 +50,13 @@ class Report:
     Class interfacing a list of matplotlib plots to save in an external file.
     """
 
-    def __init__(self, pathname: str, cell_types_info: List[PlotTypeInfo] = None):
+    def __init__(self, cell_types_info: List[PlotTypeInfo] = None):
         self.reports = []
         """List of sub-reports"""
         self.plots = {}
         """Dictionary mapping the report's plots' name to their instance"""
-        self.cell_types_info = cell_types_info or LIST_CT_INFO
+        self.cell_types_info = cell_types_info or []
         """List of PlotTypeInfo for each element to plot."""
-        self.set_scaffold(pathname)
 
     @property
     def colors(self):
@@ -71,13 +71,6 @@ class Report:
         Dictionary from the name of the elements to plot to its abbreviation.
         """
         return {ct.name: ct.abbreviation for ct in self.cell_types_info}
-
-    @property
-    def cell_names(self):
-        """
-        List of the name of the elements to plot.
-        """
-        return list(self.scaffold.cell_types.keys())
 
     def set_subplot_colors(self, plot: Plot):
         """
@@ -95,23 +88,15 @@ class Report:
         for plot in self.plots.values():
             self.set_subplot_colors(plot)
 
-    def set_scaffold(self, pathname):
-        """
-        Set the scaffold of the report and update each of its subplots
-        """
-        self.scaffold = from_storage(pathname)
-        for plot in self.plots.values():
-            if isinstance(plot, ScaffoldPlot):
-                plot.set_scaffold(self.scaffold)
-
     def add_plot(self, name: str, plot: Plot):
         """
         Add a plot to the list of the report's plots.
         """
+        if name in list(self.plots.keys()):
+            warn("A plot named '{}' already exists in the report. Skipping it".format(name))
+            return
         self.set_subplot_colors(plot)
         self.plots[name] = plot
-        if isinstance(plot, ScaffoldPlot):
-            plot.set_scaffold(self.scaffold)
 
     def print_report(self, output_name: str, dpi: int = 200, pad: int = 0, **kwargs):
         """
@@ -145,3 +130,37 @@ class Report:
         """
         for plot in self.plots.values():
             plot.show()
+
+
+class BSBReport(Report):
+    """
+    Class interfacing a list of matplotlib plots for analysis of BSB reconstructions.
+    """
+
+    def __init__(self, scaffold: str | Scaffold, cell_types_info: List[PlotTypeInfo] = None):
+        super().__init__(cell_types_info or LIST_CT_INFO)
+        if isinstance(scaffold, Scaffold):
+            self.scaffold = scaffold
+        else:
+            self.scaffold = from_storage(scaffold)
+        self.set_plots_scaffold()
+
+    @property
+    def cell_names(self):
+        """
+        List of the name of the elements to plot.
+        """
+        return list(self.scaffold.cell_types.keys())
+
+    def set_plots_scaffold(self):
+        """
+        Set the scaffold of the report and update each of its subplots
+        """
+        for plot in self.plots.values():
+            if isinstance(plot, ScaffoldPlot):
+                plot.set_scaffold(self.scaffold)
+
+    def add_plot(self, name: str, plot: Plot):
+        super().add_plot(name, plot)
+        if isinstance(plot, ScaffoldPlot):
+            plot.set_scaffold(self.scaffold)

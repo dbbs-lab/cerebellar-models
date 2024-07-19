@@ -165,7 +165,7 @@ class ScaffoldPlot(Plot):
         scaffold: Scaffold,
         nb_rows: int = 1,
         nb_cols: int = 1,
-        dict_colors=None,
+        dict_colors: dict = None,
         **kwargs,
     ):
         super().__init__(fig_size, nb_rows, nb_cols, dict_colors, **kwargs)
@@ -189,8 +189,15 @@ class Legend(Plot):
     Patch Legend plot
     """
 
-    def __init__(self, fig_size: Tuple[float, float], nb_cols: int = 1, dict_legend=None, **kwargs):
-        super().__init__(fig_size, 1, 1, **kwargs)
+    def __init__(
+        self,
+        fig_size: Tuple[float, float],
+        nb_cols: int = 1,
+        dict_colors: dict = None,
+        dict_legend=None,
+        **kwargs,
+    ):
+        super().__init__(fig_size, 1, 1, dict_colors, **kwargs)
         self.dict_legend = dict_legend or dict()
         self.cols_legend = nb_cols
 

@@ -16,7 +16,7 @@ from neo import io as nio
 from scipy import signal
 
 from cerebellum.analysis.plots import Legend, Plot, ScaffoldPlot
-from cerebellum.analysis.report import LIST_CT_INFO, PlotTypeInfo, Report
+from cerebellum.analysis.report import LIST_CT_INFO, BSBReport, PlotTypeInfo
 from cerebellum.analysis.structure_analysis import TablePlot
 
 
@@ -88,14 +88,14 @@ class SimulationPlot(ScaffoldPlot):
         return is_different
 
 
-class SimulationReport(Report):
+class SimulationReport(BSBReport):
     """
     Abstract class for reports of simulation results of BSB scaffold.
     """
 
     def __init__(
         self,
-        pathname: str,
+        scaffold: str | Scaffold,
         simulation_name: str,
         folder_nio: str,
         time_from: float = 0,
@@ -103,7 +103,7 @@ class SimulationReport(Report):
         ignored_ct=None,
         cell_type_info: List[PlotTypeInfo] = None,
     ):
-        super().__init__(pathname, cell_type_info)
+        super().__init__(scaffold, cell_type_info)
         self.simulation_name = simulation_name
         """Name of the simulation as defined in the scaffold configuration."""
         self.folder_nio = folder_nio
@@ -661,7 +661,7 @@ class BasicSimulationReport(SimulationReport):
 
     def __init__(
         self,
-        pathname: str,
+        scaffold: str | Scaffold,
         simulation_name: str,
         folder_nio: str,
         time_from: float = 0,
@@ -670,7 +670,7 @@ class BasicSimulationReport(SimulationReport):
         cell_type_info: List[PlotTypeInfo] = None,
     ):
         super().__init__(
-            pathname, simulation_name, folder_nio, time_from, time_to, ignored_ct, cell_type_info
+            scaffold, simulation_name, folder_nio, time_from, time_to, ignored_ct, cell_type_info
         )
         raster = RasterPSTHPlot(
             (15, 10),
