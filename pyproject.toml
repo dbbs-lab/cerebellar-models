@@ -11,7 +11,7 @@ classifiers = ["License :: OSI Approved :: GNU General Public License v3 or late
 requires-python = ">=3.9"
 dynamic = ["version", "description"]
 dependencies = [
-    "bsb-core[parallel]~=4.1.1",
+    "bsb-core[parallel]~=4.2",
     "bsb-hdf5~=4.0",
     "bsb-yaml~=4.1",
     "bsb-json~=4.1",
@@ -53,7 +53,7 @@ known_third_party = ["nest"]
 my_components = "cerebellum:classmap"
 
 [tool.bumpversion]
-current_version = "0.1.0"
+current_version = "0.2.0"
 parse = "(?P<major>\\d+)\\.(?P<minor>\\d+)\\.(?P<patch>\\d+)"
 serialize = ["{major}.{minor}.{patch}"]
 search = "{current_version}"
