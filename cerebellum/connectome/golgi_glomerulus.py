@@ -2,11 +2,10 @@
     Module for the configuration node of the Golgi to Glomerulus ConnectionStrategy
 """
 
-import functools
 import itertools
 
 import numpy as np
-from bsb import ConfigurationError, ConnectionStrategy, config, refs
+from bsb import ConfigurationError, ConnectionStrategy, config, pool_cache, refs
 
 from cerebellum.connectome.presyn_dist_strat import get_close_chunks
 
@@ -82,7 +81,7 @@ class ConnectomeGolgiGlomerulus(ConnectionStrategy):
     def boot(self):
         self._assert_dependencies()
 
-    @functools.cache
+    @pool_cache
     def load_connections(self):
         dict_cs = {}
         for grc_ct in self.postsynaptic.cell_types:
@@ -99,13 +98,6 @@ class ConnectomeGolgiGlomerulus(ConnectionStrategy):
                         self.scaffold.get_connectivity_set(cs[0]).load_connections().all()
                     )
         return dict_cs
-
-    def clean_cache(self, scaffold):
-        self.load_connections.cache_clear()
-
-    def queue(self, pool):
-        super().queue(pool)
-        pool.queue(self.clean_cache, deps=pool.get_submissions_of(self))
 
     def _combine_unique_gloms(self, glom_ids, loc_glom_pos, loc_post_locs):
         # Extract unique glomerulus groups

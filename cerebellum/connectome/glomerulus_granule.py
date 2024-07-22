@@ -2,7 +2,6 @@
     Module for the configuration node of the Glomerulus to Granule ConnectionStrategy
 """
 
-import functools
 import itertools
 
 import numpy as np
@@ -12,6 +11,7 @@ from bsb import (
     ConnectivityError,
     InvertedRoI,
     config,
+    pool_cache,
     refs,
 )
 
@@ -88,7 +88,7 @@ class ConnectomeGlomerulusGranule(InvertedRoI, ConnectionStrategy):
         for post_ps in post.placement:
             self._connect_type(pre, post_ps)
 
-    @functools.cache
+    @pool_cache
     def load_connections(self):
         dict_cs = {}
         for pre_ct in self.presynaptic.cell_types:
@@ -105,13 +105,6 @@ class ConnectomeGlomerulusGranule(InvertedRoI, ConnectionStrategy):
                         self.scaffold.get_connectivity_set(cs[0]).load_connections().all()
                     )
         return dict_cs
-
-    def clean_cache(self, scaffold):
-        self.load_connections.cache_clear()
-
-    def queue(self, pool):
-        super().queue(pool)
-        pool.queue(self.clean_cache, deps=pool.get_submissions_of(self))
 
     def _get_pre_clusters(self, pre_ps):
         # Find the glomeruli clusters
