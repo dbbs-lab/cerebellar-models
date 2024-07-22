@@ -7,12 +7,12 @@ regions:
   cerebellar_cortex:
     type: stack
     children:
+      - io_layer
+      - dcn_layer
       - granular_layer
       - purkinje_layer
       - b_molecular_layer
       - t_molecular_layer
-      - dcn_layer
-      - io_layer
 partitions:
   io_layer:
     stack_index: 0
