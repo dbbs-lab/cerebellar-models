@@ -8,4 +8,4 @@ Analysis and reporting
 
     introduction
     structural
-    simulation
+    spike_analysis

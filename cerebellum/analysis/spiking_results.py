@@ -16,13 +16,13 @@ from neo import io as nio
 from scipy import signal
 
 from cerebellum.analysis.plots import Legend, Plot, ScaffoldPlot
-from cerebellum.analysis.report import LIST_CT_INFO, BSBReport, PlotTypeInfo
+from cerebellum.analysis.report import BSBReport, PlotTypeInfo
 from cerebellum.analysis.structure_analysis import TablePlot
 
 
-class SimulationPlot(ScaffoldPlot):
+class SpikePlot(ScaffoldPlot):
     """
-    Abstract class for plotting the simulation results of a BSB scaffold.
+    Abstract class for plotting the spiking simulation results of a BSB scaffold.
     """
 
     def __init__(
@@ -35,11 +35,12 @@ class SimulationPlot(ScaffoldPlot):
         all_spikes,
         nb_neurons: List,
         populations: List,
+        dict_colors: dict = None,
         **kwargs,
     ):
         assert simulation_name in scaffold.simulations
         assert isinstance(scaffold.simulations[simulation_name], (NestSimulation, NeuronSimulation))
-        super().__init__(fig_size, scaffold, **kwargs)
+        super().__init__(fig_size, scaffold, dict_colors=dict_colors, **kwargs)
         self.simulation_name = simulation_name
         """Name of the simulation as defined in the scaffold configuration."""
         self.time_from = time_from or 0
@@ -88,7 +89,7 @@ class SimulationPlot(ScaffoldPlot):
         return is_different
 
 
-class SimulationReport(BSBReport):
+class SpikeSimulationReport(BSBReport):
     """
     Abstract class for reports of simulation results of BSB scaffold.
     """
@@ -213,7 +214,7 @@ class SimulationReport(BSBReport):
 
     def add_plot(self, name: str, plot: Plot):
         super().add_plot(name, plot)
-        if isinstance(plot, SimulationPlot):
+        if isinstance(plot, SpikePlot):
             plot._set_simulation_params(
                 self.simulation_name,
                 self.time_from,
@@ -224,7 +225,7 @@ class SimulationReport(BSBReport):
             )
 
 
-class RasterPSTHPlot(SimulationPlot):
+class RasterPSTHPlot(SpikePlot):
     """
     Combined raster plot and PSTH plot of the spiking activity results for each neuron type.
     The subplots are split in two columns.
@@ -241,6 +242,7 @@ class RasterPSTHPlot(SimulationPlot):
         nb_neurons: List,
         populations: List,
         nb_bins: int = 30,
+        dict_colors: dict = None,
         **kwargs,
     ):
         # population needs to be set before the super.__init__ because it is used in init_plot
@@ -254,6 +256,7 @@ class RasterPSTHPlot(SimulationPlot):
             all_spikes,
             nb_neurons,
             populations,
+            dict_colors,
             **kwargs,
         )
         self.nb_bins = nb_bins
@@ -276,14 +279,23 @@ class RasterPSTHPlot(SimulationPlot):
             self.figure.add_subplot(ax2)
             self.axes[i // 2].append([ax1, ax2])
 
-    def plot(self, relative_time=False, **kwargs):
+    def plot(self, relative_time=False, params_raster: dict = None, params_psth: dict = None):
         """
         Plot or replot the figure
         Calls the update function if needed.
 
         :param bool relative_time: If True, the x-axis values will be relative to the time interval.
+        :param params_raster: Dictionary of parameters for the raster plot (see matplotlib scatter).
+        :param params_psth: Dictionary of parameters for the PSTH plot (see matplotlib hist).
         """
         super().plot()
+
+        # extract dict params
+        loc_params_raster = {"marker": "o", "alpha": 1, "rasterized": True}
+        if params_raster is not None:
+            loc_params_raster.update(params_raster)
+        params_psth = params_psth if params_psth is not None else {}
+
         num_filter = len(self.nb_neurons)
         counts = np.zeros(num_filter + 1)
         counts[1:] = np.cumsum(self.nb_neurons)
@@ -292,16 +304,15 @@ class RasterPSTHPlot(SimulationPlot):
 
         for i, ct in enumerate(self.populations):
             times, newIds = np.where(self.all_spikes[:, int(counts[i]) : int(counts[i + 1])])
-
+            cell_params = loc_params_raster.copy()
+            if "s" not in cell_params:
+                cell_params["s"] = 50.0 / self.nb_neurons[i]
             ax = self.get_ax(i)[0]
             ax.scatter(
                 times * self.dt,
                 newIds,
-                marker="o",
                 c=np.repeat([self.dict_colors[ct][:3]], len(times), axis=0),
-                s=50.0 / self.nb_neurons[i],
-                alpha=1,
-                rasterized=True,
+                **cell_params,
             )
             ax.invert_yaxis()
             ax.set_xlim(
@@ -314,7 +325,7 @@ class RasterPSTHPlot(SimulationPlot):
             ax.set_title(f"{ct}")
 
             ax = self.get_ax(i)[1]
-            ax.hist(times * self.dt, bin_times, color=self.dict_colors[ct][:3])
+            ax.hist(times * self.dt, bin_times, color=self.dict_colors[ct][:3], **params_psth)
             ax.set_xlabel("Time in ms")
             ax.set_xlim(
                 [0, self.time_to - self.time_from]
@@ -322,10 +333,9 @@ class RasterPSTHPlot(SimulationPlot):
                 else [self.time_from, self.time_to]
             )
             ax.set_ylabel("Spike counts")
-            # ax.set_title(f'Spike PSTH plot for {order_ct[i]}')
 
 
-class Simulation2Columns(SimulationPlot):
+class Spike2Columns(SpikePlot):
     """
     Utility class to plot simulation results for each neuron type in a 2 columns fashion.
     """
@@ -340,6 +350,7 @@ class Simulation2Columns(SimulationPlot):
         all_spikes,
         nb_neurons: List,
         populations: List,
+        dict_colors: dict = None,
         **kwargs,
     ):
         # population needs to be set before the super.__init__ because it is used in init_plot
@@ -353,6 +364,7 @@ class Simulation2Columns(SimulationPlot):
             all_spikes,
             nb_neurons,
             populations,
+            dict_colors,
             **kwargs,
         )
 
@@ -369,7 +381,7 @@ class Simulation2Columns(SimulationPlot):
             )
 
 
-class FiringRatesPlot(Simulation2Columns):
+class FiringRatesPlot(Spike2Columns):
     """
     Instantaneous firing rate plot for each cell type based on a time kernel.
     Each population firing rate signal is plotted surrounding by its standard deviation
@@ -389,6 +401,7 @@ class FiringRatesPlot(Simulation2Columns):
         populations: List,
         w_single=1000,
         max_neuron_sampled=10000,
+        dict_colors: dict = None,
         **kwargs,
     ):
         super().__init__(
@@ -400,10 +413,13 @@ class FiringRatesPlot(Simulation2Columns):
             all_spikes,
             nb_neurons,
             populations,
+            dict_colors,
             **kwargs,
         )
         self.w_single = w_single
+        """Width of the kernel expressed as number of time steps"""
         self.max_neuron_sampled = max_neuron_sampled
+        """Maximum number of neurons used to compute the firing rate signal."""
 
     def update(self):
         super().update()
@@ -411,15 +427,9 @@ class FiringRatesPlot(Simulation2Columns):
         counts = np.zeros(num_filter + 1)
         counts[1:] = np.cumsum(self.nb_neurons)
 
-        kernel_single = (
-            signal.windows.triang(self.w_single) * 2 / self.w_single
-        )  # normalized boxcar kernel for single-trial firing rate
+        # normalized triangle kernel for single-trial firing rate
+        kernel_single = signal.windows.triang(self.w_single) * 2 / self.w_single
 
-        self.time_interval = np.arange(
-            self.time_from + self.w_single * self.dt,
-            self.time_to + (-self.w_single + 1) * self.dt,
-            self.dt,
-        )
         self.firing_rates = np.zeros((self.all_spikes.shape[0] - self.w_single * 2, num_filter))
         self.std_rates = np.zeros((self.all_spikes.shape[0] - self.w_single * 2, num_filter))
         for i in range(num_filter):
@@ -443,25 +453,35 @@ class FiringRatesPlot(Simulation2Columns):
         :param bool relative_time: If True, the x-axis values will be relative to the time interval.
         """
         super().plot()
+        time_interval = np.arange(
+            self.time_from + self.w_single * self.dt,
+            self.time_to + (-self.w_single + 1) * self.dt,
+            self.dt,
+        )
         for i, ct in enumerate(self.populations):
             ax = self.get_ax(i)
             ax.fill_between(
-                self.time_interval,
+                time_interval,
                 (np.maximum(0, self.firing_rates[:, i] - self.std_rates[:, i])),
                 (self.firing_rates[:, i] + self.std_rates[:, i]),
                 alpha=0.5,
                 color=self.dict_colors[ct][:3],
             )
-            ax.plot(self.time_interval, self.firing_rates[:, i], color=self.dict_colors[ct][:3])
+            ax.plot(
+                time_interval,
+                self.firing_rates[:, i],
+                color=self.dict_colors[ct][:3],
+                **kwargs,
+            )
             ax.set_xlabel("Time in ms")
             ax.set_ylabel("Rate in Hz")
             ax.set_title(
                 f"Mean estimated firing rate for {ct} (kernel width = {self.w_single * self.dt} ms)"
             )
             ax.set_xlim(
-                [0, self.time_interval[-1] - self.time_interval[0]]
+                [0, time_interval[-1] - time_interval[0]]
                 if relative_time
-                else [self.time_interval[0], self.time_interval[-1]]
+                else [time_interval[0], time_interval[-1]]
             )
             ax.text(
                 0.01,
@@ -501,7 +521,7 @@ def extract_isis(spikes, dt):
     return isi
 
 
-class IsisPlot(Simulation2Columns):
+class ISIPlot(Spike2Columns):
     """
     Inter-spike interval histogram plot for each cell type.
     For each neuron type, one mean inter-spike interval value is computed for each of its neuron.
@@ -518,6 +538,7 @@ class IsisPlot(Simulation2Columns):
         nb_neurons: List,
         populations: List,
         nb_bins: int = 50,
+        dict_colors: dict = None,
         **kwargs,
     ):
         super().__init__(
@@ -529,6 +550,7 @@ class IsisPlot(Simulation2Columns):
             all_spikes,
             nb_neurons,
             populations,
+            dict_colors,
             **kwargs,
         )
         self.nb_bins = nb_bins
@@ -556,10 +578,22 @@ class IsisPlot(Simulation2Columns):
 
 class FrequencyPlot(FiringRatesPlot):
     """
-    Plot of the frequency spectogram of the firing rate signal.
+    Plot of the frequency distribution analysis of the instantaneous firing rate signal.
     """
 
-    def plot(self, max_freq=30.0, plot_bands=True, *args, **kwargs):
+    def update(self):
+        super().update()
+        self.frequencies = []
+        self.freq_powers = []
+        for i, (fr, ct) in enumerate(zip(self.firing_rates.T, self.populations)):
+            glob_fr = fr[:-1]
+            t = np.abs(np.fft.fft(glob_fr))
+            x = np.fft.fftfreq(t.shape[0], self.dt / 1e3)
+            idx = np.argsort(x)
+            self.frequencies.append(t[idx][t.shape[0] // 2 :] * 2)
+            self.freq_powers.append(x[idx][x.shape[0] // 2 :])
+
+    def plot(self, max_freq=30.0, plot_bands=True, **kwargs):
         """
         Plot or replot the figure
         Calls the update function if needed.
@@ -568,15 +602,11 @@ class FrequencyPlot(FiringRatesPlot):
         :param bool plot_bands: if True, plot the frequency bands.
         """
         super(FiringRatesPlot, self).plot()
-        for i, (fr, ct) in enumerate(zip(self.firing_rates.T, self.populations)):
-            glob_fr = fr[:-1]
-            t = np.abs(np.fft.fft(glob_fr))
-            x = np.fft.fftfreq(t.shape[0], self.dt / 1e3)
-            idx = np.argsort(x)
-            t = t[idx][t.shape[0] // 2 :] * 2
-            x = x[idx][x.shape[0] // 2 :]
+        dict_plot = {"alpha": 0.7}
+        dict_plot.update(kwargs)
+        for i, (fr, pw, ct) in enumerate(zip(self.frequencies, self.freq_powers, self.populations)):
             ax = self.get_ax(i)
-            ax.plot(x[1:], t[1:], color=self.dict_colors[ct], alpha=0.7, label=ct)
+            ax.plot(fr[1:], pw[1:], color=self.dict_colors[ct], label=ct, **dict_plot)
             ax.set_xlim([0.0, max_freq])
             ax.set_xlabel("Frequency [Hz]")
             ax.set_ylabel("Power [dB]")
@@ -588,7 +618,7 @@ class FrequencyPlot(FiringRatesPlot):
                 ax.axvline(12.0, ls="--", color="black")
 
 
-class SimResultsTable(TablePlot, SimulationPlot):
+class SimResultsTable(TablePlot, SpikePlot):
     """
     Table of the firing rates and inter-spike intervals for each cell type.
     The firing rate value of a cell type corresponds to the mean number of spike over the time interval,
@@ -606,7 +636,7 @@ class SimResultsTable(TablePlot, SimulationPlot):
         all_spikes,
         nb_neurons: List,
         populations: List,
-        dict_abv: dict = None,
+        dict_colors: dict = None,
         **kwargs,
     ):
         super().__init__(
@@ -618,10 +648,10 @@ class SimResultsTable(TablePlot, SimulationPlot):
             all_spikes,
             nb_neurons,
             populations,
+            dict_colors,
             **kwargs,
         )
         self.columns = ["Firing rate [Hz]", "Inter Spike Intervals [ms]"]
-        self.dict_abv = dict_abv or {ct.name: ct.abbreviation for ct in LIST_CT_INFO}
 
     def plot(self, **kwargs):
         super().plot()
@@ -647,7 +677,7 @@ class SimResultsTable(TablePlot, SimulationPlot):
         self.rows = self.populations
 
 
-class BasicSimulationReport(SimulationReport):
+class BasicSimulationReport(SpikeSimulationReport):
     """
     Simulation report of the spike activity containing:
 
@@ -702,7 +732,7 @@ class BasicSimulationReport(SimulationReport):
             nb_neurons=self.nb_neurons,
             populations=self.populations,
         )
-        isis = IsisPlot(
+        isis = ISIPlot(
             (15, 6),
             scaffold=self.scaffold,
             simulation_name=self.simulation_name,

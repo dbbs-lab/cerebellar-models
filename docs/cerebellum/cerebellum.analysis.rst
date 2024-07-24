@@ -36,10 +36,10 @@ cerebellum.analysis.structure_analysis module
    :undoc-members:
    :show-inheritance:
 
-cerebellum.analysis.simulation_results module
----------------------------------------------
+cerebellum.analysis.spiking_results module
+------------------------------------------
 
-.. automodule:: cerebellum.analysis.simulation_results
+.. automodule:: cerebellum.analysis.spiking_results
    :members:
    :undoc-members:
    :show-inheritance:

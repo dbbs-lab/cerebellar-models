@@ -301,7 +301,7 @@ class StructureReport(BSBReport):
 @config.node
 class RunStructureReport(AfterConnectivityHook):
     """
-    BSB postprocessing node to generate a scaffold structural report after running connectivity.
+    BSB postprocessing node to generate a scaffold structural report after running the connectivity jobs.
     """
 
     output_filename: str = config.attr(required=True)

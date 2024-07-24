@@ -26,7 +26,6 @@ class PlotTypeInfo:
         """Color of the element."""
 
 
-"""List of element info."""
 LIST_CT_INFO = [
     PlotTypeInfo("mossy", [0.847, 0, 0.451, 1.0], "mf"),
     PlotTypeInfo("glomerulus", [0.847, 0, 0.451, 1.0], "glom"),
@@ -39,10 +38,11 @@ LIST_CT_INFO = [
     PlotTypeInfo("purkinje", [0.275, 0.800, 0.275, 1.0], "PC"),
     PlotTypeInfo("basket", [1, 0.647, 0, 1.0], "BC"),
     PlotTypeInfo("stellate", [1, 0.84, 0, 1.0], "SC"),
-    PlotTypeInfo("io", [0.46, 0.376, 0.54, 1.0], "IO"),
     PlotTypeInfo("dcn_p", [0.3, 0.3, 0.3, 1.0], "DCN_P"),
     PlotTypeInfo("dcn_i", [0.635, 0, 0.145, 1.0], "DCN_I"),
+    PlotTypeInfo("io", [0.46, 0.376, 0.54, 1.0], "IO"),
 ]
+"""Cell and fiber information for plotting cerebellum BSB circuit."""
 
 
 class Report:

@@ -6,7 +6,8 @@ of the BSB reconstructions. The results of these analysis can be plotted with ``
 and exported into files.
 
 The code related to the analysis can be found in the ``cerebellum/analysis`` folder. It revolves
-around the :class:`Plot <.analysis.plots.Plot>` and  classes that provide an interface to both ``matplotlib`` and ``bsb``:
+around the :class:`Plot <.analysis.plots.Plot>` and  classes that provide an interface to both
+``matplotlib`` and ``bsb``:
 
 
 :class:`Plot <.analysis.plots.Plot>`
@@ -21,7 +22,8 @@ This class will create a ``matplotlib`` ``Figure`` and its ``Axes``.
 
 * ``nb_cols``: Number of columns of panels to create within the figure
 
-* ``dict_colors``: A Dictionary linking the name of the elements (e.g.: cells, fibers) to plot to their RGBA color
+* ``dict_colors``: A Dictionary linking the name of the elements (e.g.: cells, fibers) to plot to
+  their RGBA color
 
 Interface
 ~~~~~~~~~
@@ -29,8 +31,8 @@ Interface
 :meth:`~cerebellum.analysis.plots.Plot.get_ax`
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-Through this function, you can access each ax of the figure based on its index if you wish to manually change the plot.
-Indexes goes left to right, then top to bottom.
+Through this function, you can access each ax of the figure based on its index if you wish to
+manually change the plot. Indexes goes left to right, then top to bottom.
 
 :meth:`~cerebellum.analysis.plots.Plot.plot`
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
@@ -42,11 +44,13 @@ If you wish to create your own plots, you would have to implement this function:
         super().plot()
         # Insert your code here.
 
-Note that as long as this function was not run, the axes will not be up-to-date (check the ``is_plotted`` flag)
+Note that as long as this function was not run, the axes will not be up-to-date (check the
+``is_plotted`` flag)
 
 :meth:`~cerebellum.analysis.plots.Plot.update`
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-In case your plot needs to precompute some data before plotting it, this function should be implemented:
+In case your plot needs to precompute some data before plotting it, this function should be
+implemented:
 
 .. code-block:: python
 
@@ -54,17 +58,19 @@ In case your plot needs to precompute some data before plotting it, this functio
         super().update()
         # Insert your code here.
 
-The update function will be called, if need be, before plotting the data (based on the ``is_updated`` flag)
+The update function will be called, if need be, before plotting the data (based on the
+``is_updated`` flag)
 
 :meth:`~cerebellum.analysis.plots.Plot.show`
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-This function allow you to see your plot in a separate window. If you are running your python program in a terminal,
-this window will be interactive and you will be able to display the data, zoom and/or manipulate the plot.
+This function allow you to see your plot in a separate window. If you are running your python
+program in a terminal, this window will be interactive and you will be able to display the data,
+zoom and/or manipulate the plot.
 
 :meth:`~cerebellum.analysis.plots.Plot.save_figure`
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-This function will save the current figure as an image in the provided filename. Use it if you need to save your figures
-separately.
+This function will save the current figure as an image in the provided filename. Use it if you
+need to save your figures separately.
 
 
 :class:`ScaffoldPlot <.analysis.plots.ScaffoldPlot>`
@@ -86,7 +92,8 @@ element in common.
   This gives for each element to plot, its name, abbreviation and color.
 
 Plots will be saved in a dictionary linking their name to the ``Plot`` instance.
-You can use the plot name to ``save`` or ``show`` it through respectively the ``save_plot`` and ``show_plot`` functions.
+You can use the plot name to ``save`` or ``show`` it through respectively the ``save_plot`` and
+``show_plot`` functions.
 
 Interface
 ~~~~~~~~~
@@ -110,11 +117,13 @@ This class extends ``Report`` to provide an additional interface to plot results
 
 * ``scaffold``: Scaffold instance or path to the BSB Scaffold file to load
 
-Classes extending from ``BSBReport`` will also used by default the following colors to plot the
-following cells and fibers:
+Classes extending from ``BSBReport`` will also used by default the
+:data:`LIST_CT_INFO <.analysis.report.LIST_CT_INFO>` for ``cell_types_info``.
+This means the following colors will be used to plot the following cells and fibers:
 
 .. figure:: /images/legend.png
    :align: center
    :alt: Default-Legend-celltypes
 
-   Default color legend used to represent the different cells and fibers of the cerebellum reconstructions.
+   Default color legend used to represent the different cells and fibers of the cerebellum
+   reconstructions.
