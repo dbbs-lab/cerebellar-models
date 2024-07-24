@@ -3,7 +3,7 @@
 """
 
 import abc
-from typing import Tuple
+from typing import List, Tuple
 
 import numpy as np
 from bsb import Scaffold
@@ -209,3 +209,18 @@ class Legend(Plot):
         dict_plot = self.dict_legend.copy()
         dict_plot.update(kwargs)
         self.get_ax().legend(patchs, self.dict_colors.keys(), ncol=self.cols_legend, **dict_plot)
+
+    def remove_ct(self, to_keep: List[str], to_ignore: List[str] = None):
+        """
+        Remove cell types that are not in the list to keep or in the list to ignore
+
+        :params to_keep List[str]: list of cell types to keep
+        :params to_ignore List[str]: list of cell types to remove
+
+        """
+        to_ignore = to_ignore or []
+        self.dict_colors = {
+            ct: color
+            for ct, color in self.dict_colors.items()
+            if ct not in to_ignore and (ct in to_keep or ct + "_cell" in to_keep)
+        }

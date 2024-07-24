@@ -294,6 +294,7 @@ class StructureReport(BSBReport):
         self.add_plot("placement_3d", plot3d)
         self.add_plot("legend", legend)
         legend.set_axis_off()
+        legend.remove_ct(self.cell_names, ["glomerulus", "ubc_glomerulus"])
         density_table.set_axis_off()
         connectivity_table.set_axis_off()
 

@@ -102,9 +102,9 @@ class SpikeSimulationReport(BSBReport):
         time_from: float = 0,
         time_to: float = None,
         ignored_ct=None,
-        cell_type_info: List[PlotTypeInfo] = None,
+        cell_types_info: List[PlotTypeInfo] = None,
     ):
-        super().__init__(scaffold, cell_type_info)
+        super().__init__(scaffold, cell_types_info)
         self.simulation_name = simulation_name
         """Name of the simulation as defined in the scaffold configuration."""
         self.folder_nio = folder_nio
@@ -115,7 +115,7 @@ class SpikeSimulationReport(BSBReport):
         """End time of the analysis. By default, this corresponds to the simulation duration."""
         self.dt = self.scaffold.simulations[simulation_name].resolution
         """Time step of the simulation in ms"""
-        self.ignored_ct = ignored_ct or ["gloms", "ubc_glomerulus"]
+        self.ignored_ct = ignored_ct or ["glomerulus", "ubc_glomerulus"]
         """List of ignored cell type names"""
         self.all_spikes = None
         """Boolean numpy array of shape (N*M) storing spike events for each time step. 
@@ -583,15 +583,15 @@ class FrequencyPlot(FiringRatesPlot):
 
     def update(self):
         super().update()
-        self.frequencies = []
-        self.freq_powers = []
+        self.frequencies = np.zeros((self.firing_rates.shape[1], self.firing_rates.shape[0] // 2))
+        self.freq_powers = np.zeros((self.firing_rates.shape[1], self.firing_rates.shape[0] // 2))
         for i, (fr, ct) in enumerate(zip(self.firing_rates.T, self.populations)):
             glob_fr = fr[:-1]
             t = np.abs(np.fft.fft(glob_fr))
-            x = np.fft.fftfreq(t.shape[0], self.dt / 1e3)
+            x = np.fft.fftfreq(t.shape[0], self.dt / 1e3)  # convert ms to s
             idx = np.argsort(x)
-            self.frequencies.append(t[idx][t.shape[0] // 2 :] * 2)
-            self.freq_powers.append(x[idx][x.shape[0] // 2 :])
+            self.freq_powers[i] = t[idx][t.shape[0] // 2 :] * 2
+            self.frequencies[i] = x[idx][x.shape[0] // 2 :]
 
     def plot(self, max_freq=30.0, plot_bands=True, **kwargs):
         """
@@ -697,11 +697,12 @@ class BasicSimulationReport(SpikeSimulationReport):
         time_from: float = 0,
         time_to: float = None,
         ignored_ct=None,
-        cell_type_info: List[PlotTypeInfo] = None,
+        cell_types_info: List[PlotTypeInfo] = None,
     ):
         super().__init__(
-            scaffold, simulation_name, folder_nio, time_from, time_to, ignored_ct, cell_type_info
+            scaffold, simulation_name, folder_nio, time_from, time_to, ignored_ct, cell_types_info
         )
+
         raster = RasterPSTHPlot(
             (15, 10),
             scaffold=self.scaffold,
@@ -753,7 +754,7 @@ class BasicSimulationReport(SpikeSimulationReport):
             populations=self.populations,
         )
         legend = Legend(
-            (10, 2.5),
+            (10, 2),
             3,
             dict_legend=dict(columnspacing=2.0, handletextpad=0.1, fontsize=20, loc="lower center"),
         )
@@ -765,3 +766,4 @@ class BasicSimulationReport(SpikeSimulationReport):
         self.add_plot("legend", legend)
         table.set_axis_off()
         legend.set_axis_off()
+        legend.remove_ct(self.cell_names, self.ignored_ct)

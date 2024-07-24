@@ -239,14 +239,14 @@ simulations:
             - mossy_fibers
         weight: 1
         delay: 0.1
-      mossy_record:
+      mossy_fibers_record:
         device: spike_recorder
         delay: 0.1
         targetting:
           strategy: cell_model
           cell_models:
             - mossy_fibers
-      gloms_record:
+      glomerulus_record:
         device: spike_recorder
         delay: 0.1
         targetting:

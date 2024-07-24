@@ -27,7 +27,7 @@ class PlotTypeInfo:
 
 
 LIST_CT_INFO = [
-    PlotTypeInfo("mossy", [0.847, 0, 0.451, 1.0], "mf"),
+    PlotTypeInfo("mossy_fibers", [0.847, 0, 0.451, 1.0], "mf"),
     PlotTypeInfo("glomerulus", [0.847, 0, 0.451, 1.0], "glom"),
     PlotTypeInfo("granule", [0.7, 0.15, 0.15, 0.5], "GrC"),
     PlotTypeInfo("ascending_axon", [0.7, 0.15, 0.15, 0.5], "aa"),
