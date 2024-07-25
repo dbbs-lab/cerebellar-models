@@ -60,6 +60,14 @@ cerebellum.connectome.glomerulus_ubc module
    :undoc-members:
    :show-inheritance:
 
+cerebellum.connectome.purkinje_dcn module
+-----------------------------------------
+
+.. automodule:: cerebellum.connectome.purkinje_dcn
+   :members:
+   :undoc-members:
+   :show-inheritance:
+
 cerebellum.connectome.io_molecular module
 -----------------------------------------
 

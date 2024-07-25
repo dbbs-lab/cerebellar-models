@@ -186,3 +186,18 @@ glomerulus.
           ubc_glomerulus: 1. # will be interpreted as 1 / (1+2)
           glomerulus: 2.  # will be interpreted as 2 / (1+2)
         radius: 50
+
+.. _fix_in:
+
+:doc:`FixedIndegree <bsb:bsb/bsb.connectivity>`
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+See bsb :doc:`documentation <bsb:connectivity/connection-strategies>`.
+
+.. _fix_out:
+
+:doc:`FixedOutdegree <bsb:bsb/bsb.connectivity>`
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+See bsb :doc:`documentation <bsb:connectivity/connection-strategies>`.
+
