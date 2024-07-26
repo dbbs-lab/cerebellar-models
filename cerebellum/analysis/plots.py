@@ -38,8 +38,11 @@ class Plot(abc.ABC):
         """Matplotlib Figure of the plot."""
         self.axes = None
         """Matplotlib Axes of the plot"""
-        self.dict_colors = dict_colors if dict_colors is not None else {}
+        self.dict_colors = {}
         """Dictionary of element name to their color"""
+        if dict_colors is not None:
+            for key, value in dict_colors.items():
+                self.set_color(key, value)
         self.init_plot(**kwargs)
 
     def clear(self):
@@ -91,7 +94,7 @@ class Plot(abc.ABC):
         Colors must be an array of type RGB or RGBA.
         """
         assert len(color) == 3 or len(color) == 4
-        self.dict_colors[key] = color
+        self.dict_colors[key] = np.array(color)
         # colors are updated so the figure should be updated too.
         if self.is_plotted:
             self.clear()
@@ -122,7 +125,7 @@ class Plot(abc.ABC):
             self.update()
         self.is_plotted = True
 
-    def show(self):
+    def show(self):  # pragma:nocover
         """
         Show the figure.
         The figure will be plotted if needed.
@@ -142,16 +145,6 @@ class Plot(abc.ABC):
             axes = self.get_axes()
         for ax in axes:
             ax.axis("off")
-
-    def add_legend(self, id_ax: int, elem: dict, **kwargs):
-        """
-        Add a legend to a given axis on a provided element.
-
-        :param int id_ax: axis index
-        :param dict elem: dictionary from element name to its instance in the plot.
-        """
-        ax = self.get_ax(id_ax)
-        ax.legend(elem.values(), elem.keys(), **kwargs)
 
 
 class ScaffoldPlot(Plot):
