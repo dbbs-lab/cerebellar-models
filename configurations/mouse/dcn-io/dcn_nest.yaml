@@ -1,21 +1,41 @@
 name: DBBS Mouse cerebellum w/ DCN NEST basal activity and mf stimulus
 storage:
   root: mouse_cereb_dcn_nest.hdf5
-$import:
-  ref: ./dcn.yaml#/
-  values:
-    - name
-    - packages
-    - storage
-    - network
-    - regions
-    - partitions
-    - morphologies
-    - cell_types
-    - placement
-    - connectivity
-packages:
-    - bsb-nest~=4.1
+network:
+  $import:
+    ref: ./dcn.yaml#/network/
+    values:
+      - z
+regions:
+  $import:
+    ref: ./dcn.yaml#/regions/
+    values:
+      - cerebellar_nuclei
+partitions:
+  $import:
+    ref: ./dcn.yaml#/partitions/
+    values:
+      - granular_layer
+      - dcn_layer
+cell_types:
+  $import:
+    ref: ./dcn.yaml#/cell_types/
+    values:
+      - dcn_p
+      - dcn_i
+placement:
+  $import:
+    ref: ./dcn.yaml#/placement
+    values:
+      - dcn_p_layer_placement
+      - dcn_i_layer_placement
+connectivity:
+  $import:
+    ref: ./dcn.yaml#/connectivity
+    values:
+      - purkinje_to_dcn_p
+      - purkinje_to_dcn_i
+      - mossy_fibers_to_dcn_p
 simulations:
   basal_activity:
     cell_models:
@@ -97,8 +117,31 @@ simulations:
           strategy: cell_model
           cell_models:
             - dcn_i
-  $import:
-    ref: ../nest/stimulus_mossy.yaml#/simulations/
-    values:
-      - basal_activity
-      - mf_stimulus
+  mf_stimulus:
+    devices:
+      stimulus:
+        targetting:
+          origin:
+            - 150.0
+            - 65.0
+            - 300.0
+    $import:
+      ref: "#/simulations/basal_activity"
+      values:
+        - cell_models
+        - connection_models
+        - devices
+$import:
+  ref: ../nest/stimulus_mossy.yaml#/
+  values:
+    - packages
+    - components
+    - storage
+    - network
+    - regions
+    - partitions
+    - morphologies
+    - cell_types
+    - placement
+    - connectivity
+    - simulations
