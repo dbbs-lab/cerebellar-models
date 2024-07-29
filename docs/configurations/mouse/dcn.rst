@@ -142,6 +142,20 @@ Mossy fiber stimulus
 For this simulation paradigm, **during the stimulus**, the mean firing rates and mean ISI obtained for each
 neuron population are as follows (expressed in mean :math:`\pm` standard deviation):
 
+.. csv-table:: Results of the canonical circuit with DCN during stimulus of the mossy
+   :header-rows: 1
+   :delim: ;
+
+    Cell name;Mean Firing rate (Hz); Mean ISI (ms)
+    Mossy cell; :math:`44 \pm 7`; :math:`7.0 \pm 3.7`
+    Granule cell; :math:`24 \pm 48`; :math:`7.9 \pm 5.6`
+    Golgi cell;:math:`48 \pm 38`; :math:`10.0 \pm 7.8`
+    Purkinje cell;:math:`79 \pm 24`; :math:`12.0 \pm 4.4`
+    Basket cell;:math:`110 \pm 83`; :math:`7.7 \pm 5.4`
+    Stellate cell;:math:`150 \pm 100`; :math:`6.0 \pm 5.4`
+    DCNp; :math:`23 \pm 7`; :math:`44.0 \pm 2.5`
+    DCNi; :math:`1.2 \pm 4.8`; not enough spikes per neuron
+
 
 
 References
