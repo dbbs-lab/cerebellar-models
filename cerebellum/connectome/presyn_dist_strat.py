@@ -5,7 +5,27 @@
 import itertools
 
 import numpy as np
-from bsb import Chunk, InvertedRoI, config
+from bsb import BoxTree, Chunk, InvertedRoI, config
+
+
+def get_close_chunks(chunk, target_chunks, radius):
+    """
+    Look for target chunks which are less than radius away from the current one.
+
+    :param chunk: Source chunk.
+    :type chunk: bsb.storage._chunks.Chunk
+    :param target_chunks: Target chunk.
+    :type target_chunks: Set[bsb.storage._chunks.Chunk]
+    :radius: Maximum distance from the source chunk.
+    :return: list of presynaptic chunks
+    :rtype: list[bsb.storage._chunks.Chunk]
+    """
+    postsyn_chunk = [
+        np.concatenate((chunk * chunk.dimensions - radius, (chunk + 1) * chunk.dimensions + radius))
+    ]
+    chunks_mbb = [np.concatenate((c, c + 1) * c.dimensions) for c in target_chunks]
+    selected = np.array([i for i in BoxTree(chunks_mbb).query(postsyn_chunk)])
+    return [c for i, c in enumerate(target_chunks) if i in selected]
 
 
 class PresynDistStrat(InvertedRoI):
@@ -28,15 +48,9 @@ class PresynDistStrat(InvertedRoI):
         :rtype: list[bsb.storage._chunks.Chunk]
         """
 
-        # Fixme: Distance between chunk is done corner to corner. It might not detect all chunks #34
         chunks = set(
             itertools.chain.from_iterable(
                 ct.get_placement_set().get_all_chunks() for ct in self.presynaptic.cell_types
             )
         )
-        # Look for chunks which are less than radius away from the current one.
-        selected_chunks = []
-        for c in chunks:
-            if np.linalg.norm(chunk * chunk.dimensions - c * c.dimensions) <= self.radius:
-                selected_chunks.append(Chunk([c[0], c[1], c[2]], chunk.dimensions))
-        return selected_chunks
+        return get_close_chunks(chunk, chunks, self.radius)

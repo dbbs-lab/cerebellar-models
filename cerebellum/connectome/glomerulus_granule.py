@@ -5,9 +5,16 @@
 import itertools
 
 import numpy as np
-from bsb import ConfigurationError, ConnectionStrategy, ConnectivityError, config, refs
-
-from cerebellum.connectome.presyn_dist_strat import PresynDistStrat
+from bsb import (
+    CfgReferenceError,
+    ConfigurationError,
+    ConnectionStrategy,
+    ConnectivityError,
+    InvertedRoI,
+    config,
+    pool_cache,
+    refs,
+)
 
 
 class TooFewGlomeruliClusters(ConnectivityError):
@@ -19,7 +26,7 @@ class TooFewGlomeruliClusters(ConnectivityError):
 
 
 @config.node
-class ConnectomeGlomerulusGranule(PresynDistStrat, ConnectionStrategy):
+class ConnectomeGlomerulusGranule(InvertedRoI, ConnectionStrategy):
     """
     BSB Connection strategy to connect Glomerulus to Granule cells.
     With a convergence value set to `n`, this connection guarantees that each Granule cell connects
@@ -27,6 +34,8 @@ class ConnectomeGlomerulusGranule(PresynDistStrat, ConnectionStrategy):
     Mossy fiber.
     """
 
+    radius = config.attr(type=int, required=True)
+    """Radius of the sphere to filter the presynaptic chunks within it."""
     convergence: float = config.attr(type=float, required=True)
     """Convergence value between Glomeruli and Granule cells. 
         Corresponds to the mean number of Glomeruli that has a single Granule cell as target"""
@@ -80,6 +89,25 @@ class ConnectomeGlomerulusGranule(PresynDistStrat, ConnectionStrategy):
         for post_ps in post.placement:
             self._connect_type(pre, post_ps)
 
+    @pool_cache
+    def load_connections(self):
+        dict_cs = {}
+        for pre_ct in self.presynaptic.cell_types:
+            for strat in self.pre_glom_strats:
+                for pre_pre_ct in self.pre_cell_types:
+                    try:
+                        cs = strat.get_output_names(pre_pre_ct, pre_ct)
+                    except ValueError:
+                        continue
+                    if len(cs) != 1:
+                        raise CfgReferenceError(
+                            f"Only one connection set should be given from {strat.name} with type {pre_pre_ct.name}."
+                        )
+                    dict_cs[cs[0]] = list(
+                        self.scaffold.get_connectivity_set(cs[0]).load_connections().all()
+                    )
+        return dict_cs
+
     def _get_pre_clusters(self, pre_ps):
         # Find the glomeruli clusters
 
@@ -91,13 +119,13 @@ class ConnectomeGlomerulusGranule(PresynDistStrat, ConnectionStrategy):
                     cs = strat.get_output_names(pre_ct, pre_ps.cell_type)
                 except ValueError:
                     continue
-                assert (
-                    len(cs) == 1
-                ), f"Only one connection set should be given from {strat.name} with type {pre_ct.name}."
-                cs = self.scaffold.get_connectivity_set(cs[0])
+                if len(cs) != 1:
+                    raise CfgReferenceError(
+                        f"Only one connection set should be given from {strat.name} with type {pre_ct.name}."
+                    )
                 # find pre-glom connections where the postsyn chunk corresponds to the
                 # glom-grc presyn chunk
-                pre_locs, glom_locs = cs.load_connections().to(pre_ps.get_loaded_chunks()).all()
+                pre_locs, glom_locs = self.load_connections()[cs[0]]
                 ct_uniques = np.unique(pre_locs[:, 0])
                 unique_pres.extend(ct_uniques)
 
@@ -142,7 +170,10 @@ class ConnectomeGlomerulusGranule(PresynDistStrat, ConnectionStrategy):
         for i, gr_pos, morpho in zip(itertools.count(), gran_pos, gran_morphos):
             # morpho should have enough dendrites to match convergence
             dendrites = morpho.get_branches()
-            assert len(dendrites) >= self.convergence
+            if len(dendrites) < self.convergence:
+                raise ConnectivityError(
+                    f"The postsynaptic morphology should have at least as many dendrites as the convergence value: {self.convergence}"
+                )
 
             # Randomize the order of the clusters and dendrites
             cluster_idx = np.arange(0, len(unique_pre))
