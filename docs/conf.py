@@ -32,7 +32,7 @@ extensions = [
     "sphinx.ext.intersphinx",
 ]
 
-autodoc_mock_imports = ["bsb-core"]  # FIXME: Cannot import bsb
+autodoc_mock_imports = []
 
 intersphinx_mapping = {
     "python": ("https://docs.python.org/3", None),

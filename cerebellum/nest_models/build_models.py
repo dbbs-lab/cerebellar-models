@@ -49,31 +49,6 @@ def _build_nest_models(
             target_platform="NEST",
             target_path=build_dir,
             module_name=module_name,
-            codegen_opts={
-                "neuron_synapse_pairs": [
-                    {
-                        "neuron": "eglif_cond_alpha_multisyn",
-                        "synapse": "stdp_connection_sinexp",
-                        "pre_ports": ["pre_spikes"],
-                        "post_ports": ["post_spikes"],
-                        "vt_ports": ["mod_spikes"],
-                    },
-                    {
-                        "neuron": "eglif_cond_alpha_multisyn",
-                        "synapse": "stdp_connection_cosexp",
-                        "pre_ports": ["pre_spikes"],
-                        "post_ports": ["post_spikes"],
-                        "vt_ports": ["mod_spikes"],
-                    },
-                    {
-                        "neuron": "eglif_cond_alpha_multisyn",
-                        "synapse": "stdp_connection_alpha",
-                        "pre_ports": ["pre_spikes"],
-                        "post_ports": ["post_spikes"],
-                        "vt_ports": ["mod_spikes"],
-                    },
-                ]
-            },
         )
 
 

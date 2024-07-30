@@ -41,7 +41,7 @@ placement:
       - dcn_i
 connectivity:
   purkinje_to_dcn_p:
-    strategy: cerebellum.connectome.purkinje_dcn.FixedOutdegree
+    strategy: bsb.connectivity.FixedOutdegree
     outdegree: 45 # 5
     presynaptic:
       cell_types:
@@ -52,7 +52,7 @@ connectivity:
       cell_types:
         - dcn_p
   purkinje_to_dcn_i:
-    strategy: cerebellum.connectome.purkinje_dcn.FixedOutdegree
+    strategy: bsb.connectivity.FixedOutdegree
     outdegree: 12 # 5
     presynaptic:
       cell_types:
