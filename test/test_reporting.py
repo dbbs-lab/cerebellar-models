@@ -3,8 +3,9 @@ import unittest
 from unittest.mock import patch
 
 import numpy as np
-from analysis.plots import Legend, Plot
 from bsb_test import NumpyTestCase
+
+from cerebellum.analysis.plots import Legend, Plot
 
 
 def mock_update(self):
