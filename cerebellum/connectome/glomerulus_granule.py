@@ -6,6 +6,7 @@ import itertools
 
 import numpy as np
 from bsb import (
+    CfgReferenceError,
     ConfigurationError,
     ConnectionStrategy,
     ConnectivityError,
@@ -98,9 +99,10 @@ class ConnectomeGlomerulusGranule(InvertedRoI, ConnectionStrategy):
                         cs = strat.get_output_names(pre_pre_ct, pre_ct)
                     except ValueError:
                         continue
-                    assert (
-                        len(cs) == 1
-                    ), f"Only one connection set should be given from {strat.name} with type {pre_pre_ct.name}."
+                    if len(cs) != 1:
+                        raise CfgReferenceError(
+                            f"Only one connection set should be given from {strat.name} with type {pre_pre_ct.name}."
+                        )
                     dict_cs[cs[0]] = list(
                         self.scaffold.get_connectivity_set(cs[0]).load_connections().all()
                     )
@@ -117,9 +119,10 @@ class ConnectomeGlomerulusGranule(InvertedRoI, ConnectionStrategy):
                     cs = strat.get_output_names(pre_ct, pre_ps.cell_type)
                 except ValueError:
                     continue
-                assert (
-                    len(cs) == 1
-                ), f"Only one connection set should be given from {strat.name} with type {pre_ct.name}."
+                if len(cs) != 1:
+                    raise CfgReferenceError(
+                        f"Only one connection set should be given from {strat.name} with type {pre_ct.name}."
+                    )
                 # find pre-glom connections where the postsyn chunk corresponds to the
                 # glom-grc presyn chunk
                 pre_locs, glom_locs = self.load_connections()[cs[0]]
@@ -167,7 +170,10 @@ class ConnectomeGlomerulusGranule(InvertedRoI, ConnectionStrategy):
         for i, gr_pos, morpho in zip(itertools.count(), gran_pos, gran_morphos):
             # morpho should have enough dendrites to match convergence
             dendrites = morpho.get_branches()
-            assert len(dendrites) >= self.convergence
+            if len(dendrites) < self.convergence:
+                raise ConnectivityError(
+                    f"The postsynaptic morphology should have at least as many dendrites as the convergence value: {self.convergence}"
+                )
 
             # Randomize the order of the clusters and dendrites
             cluster_idx = np.arange(0, len(unique_pre))
