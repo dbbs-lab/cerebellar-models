@@ -3,7 +3,7 @@
 """
 
 import numpy as np
-from bsb import ConnectionStrategy, config, refs
+from bsb import ConfigurationError, ConnectionStrategy, config, refs
 from bsb.mixins import NotParallel
 
 
@@ -33,6 +33,43 @@ class ConnectomeIO_MLI(NotParallel, ConnectionStrategy):
     @depends_on.setter
     def depends_on(self, value):
         self._depends_on = value
+
+    def _assert_dependencies(self):
+        # assert dependency rule corresponds to expected ones
+        found_post = np.full(len(self.postsynaptic.cell_types), False)
+        for strat in self.mli_pc_connectivity:
+            post_ct = strat.postsynaptic.cell_types
+            if len(post_ct) != 1 or post_ct[0] != self.pre_cell_pc:
+                raise ConfigurationError(
+                    "PC cell type of the MLI to PC dependency rule does not correspond "
+                    "to the provided PC type."
+                )
+            for i, post_ct in enumerate(self.postsynaptic.cell_types):
+                if not found_post[i] and post_ct in strat.presynaptic.cell_types:
+                    found_post[i] = True
+        if not np.all(found_post):
+            not_found = np.array([post_ct.name for post_ct in self.postsynaptic.cell_types])[
+                ~found_post
+            ]
+            raise ConfigurationError(
+                f"Postsynaptic cells: {not_found} "
+                f"is not in any connection set of the MLI to PC dependency rules"
+            )
+        post_ct = self.io_pc_connectivity.postsynaptic.cell_types
+        if len(post_ct) != 1 or post_ct[0] != self.pre_cell_pc:
+            raise ConfigurationError(
+                "PC cell type of the IO to PC dependency rule does not correspond "
+                "to the provided PC type."
+            )
+        for pre_ct in self.presynaptic.cell_types:
+            if pre_ct not in self.io_pc_connectivity.presynaptic.cell_types:
+                raise ConfigurationError(
+                    f"Presynaptic cell: {pre_ct.name} is not in any connection set of "
+                    f"the IO to PC dependency rule"
+                )
+
+    def boot(self):
+        self._assert_dependencies()
 
     def connect(self, pre, post):
         for pre_ps in pre.placement:

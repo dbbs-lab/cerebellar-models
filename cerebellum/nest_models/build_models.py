@@ -3,7 +3,6 @@ from os import makedirs
 from os.path import abspath, dirname, exists, isdir, join
 
 import appdirs
-import nest
 from bsb.services import MPI
 from pynestml.frontend.pynestml_frontend import generate_target
 
@@ -29,6 +28,8 @@ def _build_nest_models(
     model_dir = abspath(model_dir)
     if MPI.get_size() == 1 or MPI.get_rank() == 0:
         if not redo:
+            import nest
+
             nest.ResetKernel()
             try:
                 nest.Install(module_name)
