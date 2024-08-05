@@ -90,7 +90,7 @@ class ConnectomeMossyGlomerulus(ConnectomeGlomerulus):
         glom_pos,
     ):
         diff = np.absolute(glom_pos - presyn_pos)
-        ids_to_keep = np.where((diff[:, 0] <= self.x_length) * (diff[:, 2] <= self.y_length))[0]
+        ids_to_keep = np.where((diff[:, 0] <= self.x_length) * (diff[:, 1] <= self.y_length))[0]
         dist = np.linalg.norm(diff[ids_to_keep], axis=1)
         return ids_to_keep[np.argsort(dist)]
 

@@ -5,7 +5,17 @@
 import itertools
 
 import numpy as np
-from bsb import Chunk, ConfigurationError, ConnectionStrategy, config, refs
+from bsb import (
+    CfgReferenceError,
+    ConfigurationError,
+    ConnectionStrategy,
+    ConnectivityError,
+    config,
+    pool_cache,
+    refs,
+)
+
+from cerebellum.connectome.presyn_dist_strat import get_close_chunks
 
 
 @config.node
@@ -79,15 +89,24 @@ class ConnectomeGolgiGlomerulus(ConnectionStrategy):
     def boot(self):
         self._assert_dependencies()
 
-    def _pre_chunks_filter(self, chunk, cs):
-        # Chunk distance from cs pre_types to provided chunk
-        chunks = cs.pre_type.get_placement_set().get_all_chunks()
-        # Fixme: Distance between chunk is done corner to corner. It might not detect all chunks #34
-        pre_chunks = []
-        for c in chunks:
-            if np.linalg.norm(chunk * chunk.dimensions - c * c.dimensions) <= self.radius:
-                pre_chunks.append(Chunk([c[0], c[1], c[2]], chunk.dimensions))
-        return pre_chunks
+    @pool_cache
+    def load_connections(self):
+        dict_cs = {}
+        for grc_ct in self.postsynaptic.cell_types:
+            for strat in self.glom_post_strats:
+                for inter_ct in self.glom_cell_types:
+                    try:
+                        cs = strat.get_output_names(inter_ct, grc_ct)
+                    except ValueError:
+                        continue
+                    if len(cs) != 1:
+                        raise CfgReferenceError(
+                            f"Only one connection set should be given from {strat.name} with type {inter_ct.name}."
+                        )
+                    dict_cs[cs[0]] = list(
+                        self.scaffold.get_connectivity_set(cs[0]).load_connections().all()
+                    )
+        return dict_cs
 
     def _combine_unique_gloms(self, glom_ids, loc_glom_pos, loc_post_locs):
         # Extract unique glomerulus groups
@@ -115,16 +134,13 @@ class ConnectomeGolgiGlomerulus(ConnectionStrategy):
                 cs = glom_post_strat.get_output_names(glom_type, post_ps.cell_type)
             except ValueError:
                 continue
-            assert (
-                len(cs) == 1
-            ), f"Only one connection set should be given from {glom_post_strat.name}."
-            cs = self.scaffold.get_connectivity_set(cs[0])
+            if len(cs) != 1:
+                raise CfgReferenceError(
+                    f"Only one connection set should be given from {glom_post_strat.name}."
+                )
 
-            # We extract global ids to filter the postsynaptic neuron that match the ones from the dependency
             # We filter glomeruli in chunks which are less than radius away from the current one.
-            loc_glom_locs, loc_post_locs = (
-                cs.load_connections().from_(self._pre_chunks_filter(chunk, cs)).as_globals().all()
-            )
+            loc_glom_locs, loc_post_locs = self.load_connections()[cs[0]]
 
             # Filter unique glomeruli connections and grouping postsynaptic targets
             loc_glom_locs, ids = np.unique(loc_glom_locs[:, 0], return_inverse=True)
@@ -138,7 +154,12 @@ class ConnectomeGolgiGlomerulus(ConnectionStrategy):
 
             # Since we use global ids there is no need to filter chunks of the presynaptic cell placement set
             loc_glom_pos = np.concatenate(
-                [cs.pre_type.get_placement_set().load_positions()[loc_glom_locs], loc_glom_pos]
+                [
+                    self.scaffold.get_connectivity_set(cs[0])
+                    .pre_type.get_placement_set()
+                    .load_positions()[loc_glom_locs],
+                    loc_glom_pos,
+                ]
             )
 
         return self._combine_unique_gloms(glom_ids, loc_glom_pos, post_locs)
@@ -146,7 +167,8 @@ class ConnectomeGolgiGlomerulus(ConnectionStrategy):
     def _connect_type(self, pre_ps, post):
         # Chunks are sorted presynaptically so there should be only one chunk
         chunk = pre_ps.get_loaded_chunks()
-        assert len(chunk) == 1, "There should be exactly one presynaptic chunk"
+        if len(chunk) != 1:
+            ConnectivityError("There should be exactly one presynaptic chunk")
         chunk = chunk[0]
 
         # Extract all unique glomeruli connections from connection strategy dependencies grouped by glomeruli

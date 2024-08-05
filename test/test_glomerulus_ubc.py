@@ -10,6 +10,7 @@ class TestGlomerulus_to_UBC(
 ):
     def setUp(self):
         super().setUp()
+        # radius is greater than 1 chunk dimensions but less than two
         self.radius = 40
         self.chunk_size = np.array([30, 30, 30])
         self.cfg = Configuration.default(
@@ -23,7 +24,7 @@ class TestGlomerulus_to_UBC(
                 pre_cell=dict(spatial=dict(radius=2, count=80)),
                 pre_cell2=dict(spatial=dict(radius=2, count=80)),
                 single_cell=dict(spatial=dict(radius=2, count=8)),
-                test_cell=dict(spatial=dict(radius=2, count=64)),
+                test_cell=dict(spatial=dict(radius=2, count=128)),
             ),
             partitions=dict(
                 layer=dict(
@@ -113,12 +114,8 @@ class TestGlomerulus_to_UBC(
                 self.assertAll(from_[1:] == cell_targets)
                 self.assertAll(to_[1:] == cell_targets)
                 post_chunk = np.floor(cell_positions[to_[0]] / self.chunk_size)
-                self.assertTrue(
-                    np.linalg.norm(
-                        (np.floor(pre_cell_position[from_[0]] / self.chunk_size) - post_chunk)
-                        * self.chunk_size
-                    )
-                    <= self.radius,
+                self.assertAll(
+                    np.floor(pre_cell_position[from_[0]] / self.chunk_size) - post_chunk <= 1.0,
                     "Chunk size distance should be less than radius",
                 )
                 post_chunk = str(post_chunk)
@@ -158,10 +155,10 @@ class TestGlomerulus_to_UBC(
                 dict_pres[post_chunk] = np.zeros(8, dtype=int)
             dict_pres[post_chunk][from_[0]] += 1
         for post_chunk, v in dict_pres.items():
-            # 64 postsyn cells -> 8 postsyn cell per chunk
-            # 8 presyn cells -> 1 presyn cell per chunk -> 4 chunks close enough -> 4 presyn cell per postsyn chunk
+            # 128 postsyn cells -> 16 postsyn cell per chunk
+            # 8 presyn cells -> 1 presyn cell per chunk -> 8 chunks close enough -> 8 presyn cell per postsyn chunk
             # Presyn cells are taken twice each per postsyn chunk
             self.assertAll(
-                np.unique(v) == np.array([0, 2]),
+                np.unique(v) == np.array([2]),
                 f"Each presyn cell of postsyn cells in chunk {post_chunk} should be used exactly twice",
             )
