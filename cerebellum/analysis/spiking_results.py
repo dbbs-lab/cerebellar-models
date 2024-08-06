@@ -4,7 +4,7 @@
 
 from os import listdir
 from os.path import isfile, join
-from typing import List, Tuple
+from typing import List, Tuple, Union
 
 import numpy as np
 from bsb import Scaffold
@@ -96,7 +96,7 @@ class SpikeSimulationReport(BSBReport):
 
     def __init__(
         self,
-        scaffold: str | Scaffold,
+        scaffold: Union[str, Scaffold],
         simulation_name: str,
         folder_nio: str,
         time_from: float = 0,
@@ -659,7 +659,7 @@ class SimResultsTable(TablePlot, SpikePlot):
 
     def update(self):
         super().update()
-        self.update_values()
+        self.reset_table()
         num_filter = len(self.nb_neurons)
         counts = np.zeros(num_filter + 1)
         counts[1:] = np.cumsum(self.nb_neurons)
@@ -691,7 +691,7 @@ class BasicSimulationReport(SpikeSimulationReport):
 
     def __init__(
         self,
-        scaffold: str | Scaffold,
+        scaffold: Union[str, Scaffold],
         simulation_name: str,
         folder_nio: str,
         time_from: float = 0,

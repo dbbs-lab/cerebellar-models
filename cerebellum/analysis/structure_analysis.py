@@ -2,7 +2,7 @@
     Module for the plots and reports related to the structural analysis of BSB scaffold.
 """
 
-from typing import List, Tuple
+from typing import List, Tuple, Union
 
 import numpy as np
 from bsb import AfterConnectivityHook, CellType, ConnectivitySet, Scaffold, config, warn
@@ -24,7 +24,7 @@ class TablePlot:
     columns = []
     """Names of the table's columns"""
 
-    def update_values(self):
+    def reset_table(self):
         """
         Update the values of the table.
         """
@@ -71,19 +71,18 @@ class PlacementTable(TablePlot, ScaffoldPlot):
             **kwargs,
         )
         self.columns = ["Cell counts", "Cell densities [$\mu m^{-3}$]"]
-        self.dict_abv = dict_abv or {ct.name: ct.abbreviation for ct in LIST_CT_INFO}
+        self.dict_abv = dict_abv or {}
         """Dictionary of abbreviations for cell types"""
 
     def extract_ct_name(self, ct: CellType):
         """
         Convert the name of a cell type to its abbreviation.
         """
-        key = ct.name.split("_cell")[0]
-        return self.dict_abv[key] if key in self.dict_abv else ct.name
+        return self.dict_abv[ct.name] if ct.name in self.dict_abv else ct.name
 
     def update(self):
         super().update()
-        self.update_values()
+        self.reset_table()
         for i, ps in enumerate(self.scaffold.get_placement_sets()):
             ct = ps.cell_type
             self.rows.append(self.extract_ct_name(ct))
@@ -124,7 +123,7 @@ class ConnectivityTable(TablePlot, ScaffoldPlot):
             **kwargs,
         )
         self.columns = ["Nb. Synapses", "Synapses per pair", "Convergence", "Divergence"]
-        self.dict_abv = dict_abv or {ct.name: ct.abbreviation for ct in LIST_CT_INFO}
+        self.dict_abv = dict_abv or {}
         """Dictionary of abbreviations for cell types"""
 
     def extract_strat_name(self, ps: ConnectivitySet):
@@ -147,8 +146,6 @@ class ConnectivityTable(TablePlot, ScaffoldPlot):
                 else:
                     tag = [tag[-1], "to"]
             else:
-                if "cell" == text:
-                    continue
                 to_convert.append(text)
                 to_convert = to_convert[-2:]
                 if "_".join(to_convert) in self.dict_abv:
@@ -160,7 +157,7 @@ class ConnectivityTable(TablePlot, ScaffoldPlot):
 
     def update(self):
         super().update()
-        self.update_values()
+        self.reset_table()
         for ps in self.scaffold.get_connectivity_sets():
             # Get the ConnectivityIterator for the current connectivity strategy
             cs = self.scaffold.get_connectivity_set(ps.tag).load_connections().as_globals()
@@ -275,7 +272,7 @@ class StructureReport(BSBReport):
     - a legend plot
     """
 
-    def __init__(self, scaffold: str | Scaffold, cell_type_info: List[PlotTypeInfo] = None):
+    def __init__(self, scaffold: Union[str, Scaffold], cell_type_info: List[PlotTypeInfo] = None):
         super().__init__(scaffold, cell_type_info)
         legend = Legend(
             (10, 2.5),

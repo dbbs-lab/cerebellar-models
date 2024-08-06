@@ -2,7 +2,7 @@
     Module for the Report class.
 """
 
-from typing import List
+from typing import List, Union
 from warnings import warn
 
 import matplotlib.backends.backend_pdf
@@ -29,15 +29,15 @@ class PlotTypeInfo:
 LIST_CT_INFO = [
     PlotTypeInfo("mossy_fibers", [0.847, 0, 0.451, 1.0], "mf"),
     PlotTypeInfo("glomerulus", [0.847, 0, 0.451, 1.0], "glom"),
-    PlotTypeInfo("granule", [0.7, 0.15, 0.15, 0.5], "GrC"),
+    PlotTypeInfo("granule_cell", [0.7, 0.15, 0.15, 0.5], "GrC"),
     PlotTypeInfo("ascending_axon", [0.7, 0.15, 0.15, 0.5], "aa"),
     PlotTypeInfo("parallel_fiber", [0.7, 0.15, 0.15, 0.5], "pf"),
-    PlotTypeInfo("unipolar_brush", [0.196, 0.808, 0.988, 1.0], "UBC"),
+    PlotTypeInfo("unipolar_brush_cell", [0.196, 0.808, 0.988, 1.0], "UBC"),
     PlotTypeInfo("ubc_glomerulus", [0.196, 0.808, 0.988, 1.0], "ubc_glom"),
-    PlotTypeInfo("golgi", [0, 0.45, 0.7, 1.0], "GoC"),
-    PlotTypeInfo("purkinje", [0.275, 0.800, 0.275, 1.0], "PC"),
-    PlotTypeInfo("basket", [1, 0.647, 0, 1.0], "BC"),
-    PlotTypeInfo("stellate", [1, 0.84, 0, 1.0], "SC"),
+    PlotTypeInfo("golgi_cell", [0, 0.45, 0.7, 1.0], "GoC"),
+    PlotTypeInfo("purkinje_cell", [0.275, 0.800, 0.275, 1.0], "PC"),
+    PlotTypeInfo("basket_cell", [1, 0.647, 0, 1.0], "BC"),
+    PlotTypeInfo("stellate_cell", [1, 0.84, 0, 1.0], "SC"),
     PlotTypeInfo("dcn_p", [0.3, 0.3, 0.3, 1.0], "DCN_P"),
     PlotTypeInfo("dcn_i", [0.635, 0, 0.145, 1.0], "DCN_I"),
     PlotTypeInfo("io", [0.46, 0.376, 0.54, 1.0], "IO"),
@@ -142,7 +142,7 @@ class BSBReport(Report):
     Class interfacing a list of matplotlib plots for analysis of BSB reconstructions.
     """
 
-    def __init__(self, scaffold: str | Scaffold, cell_types_info: List[PlotTypeInfo] = None):
+    def __init__(self, scaffold: Union[str, Scaffold], cell_types_info: List[PlotTypeInfo] = None):
         super().__init__(cell_types_info or LIST_CT_INFO)
         if isinstance(scaffold, Scaffold):
             self.scaffold = scaffold

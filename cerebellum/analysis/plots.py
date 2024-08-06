@@ -3,7 +3,7 @@
 """
 
 import abc
-from typing import List, Tuple
+from typing import List, Tuple, Union
 
 import numpy as np
 from bsb import Scaffold
@@ -18,7 +18,7 @@ class Plot(abc.ABC):
 
     def __init__(
         self,
-        fig_size: Tuple[float, float] | np.ndarray,
+        fig_size: Union[Tuple[float, float], np.ndarray],
         nb_rows: int = 1,
         nb_cols: int = 1,
         dict_colors=None,
