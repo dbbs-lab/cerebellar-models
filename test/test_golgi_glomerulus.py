@@ -13,7 +13,7 @@ from cerebellum.connectome.glomerulus_golgi import ConnectomeGlomerulusGolgi
 from cerebellum.connectome.golgi_glomerulus import ConnectomeGolgiGlomerulus
 
 
-class TestGlomerulusGranule(
+class TestGolgiGlomerulus(
     RandomStorageFixture,
     NetworkFixture,
     NumpyTestCase,

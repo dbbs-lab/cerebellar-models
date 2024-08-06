@@ -1,7 +1,7 @@
 name: DBBS Mouse cerebellum configuration v4.2
 packages:
   - cerebellum~=0.2.0
-  - bsb-core~=4.2
+  - bsb-core~=4.3
   - bsb-json~=4.1
   - bsb-yaml~=4.1
   - bsb-hdf5~=4.0

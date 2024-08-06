@@ -20,7 +20,7 @@ def _test_distance_to_glomerulus(self, nb_trials=50):
     self.chunk_size = 100.0
     pos_1 = np.array([0.5, 0.5, 0.5]) * self.chunk_size
     pos_2 = np.array([0.9, 0.5, 0.5]) * self.chunk_size  # close enough
-    pos_3 = np.array([0.5, 0.5, 1.0]) * self.chunk_size  # too far away
+    pos_3 = np.array([0.5, 1.0, 0.5]) * self.chunk_size  # too far away
     self.cfg.network.chunk_size = self.chunk_size
     self.cfg.cell_types["test_cell"].spatial.count = 3
     self.cfg.placement.ch4_c25.positions = MPI.bcast(np.vstack((pos_1, pos_2, pos_3)))
@@ -88,7 +88,7 @@ class TestConnectomeMossyGlomerulus(
             self.assertAll(to_[1:] == cell_targets)
             diff = np.absolute(cell_positions[from_[0]] - cell_positions[to_[0]])
             self.assertTrue(diff[0] <= self.x_length)
-            self.assertTrue(diff[2] <= self.y_length)
+            self.assertTrue(diff[1] <= self.y_length)
             distances[to_[0]] = np.linalg.norm(diff)
         self.assertAll(distances >= 0, "Each postsyn cell has a connection")
 
@@ -106,7 +106,7 @@ class TestConnectomeUBCGlomerulus(
 ):
     def setUp(self):
         super().setUp()
-        self.radius = 60
+        self.radius = 45
         self.cfg.connectivity.add(
             "x_to_glomerulus",
             dict(
