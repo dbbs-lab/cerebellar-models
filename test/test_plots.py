@@ -3,9 +3,10 @@ import unittest
 from unittest.mock import patch
 
 import numpy as np
-from bsb_test import NumpyTestCase
+from bsb import Scaffold, parse_configuration_file
+from bsb_test import NumpyTestCase, RandomStorageFixture
 
-from cerebellum.analysis.plots import Legend, Plot
+from cerebellum.analysis.plots import Legend, Plot, ScaffoldPlot
 
 
 def mock_update(self):
@@ -25,6 +26,8 @@ class TestPlot(unittest.TestCase, NumpyTestCase):
         )
         plot = Plot((2, 2), 1, 6)
         plot2 = Plot((2, 2))
+        with self.assertRaises(ValueError):
+            Plot((2, 2), nb_rows=1, nb_cols=0)
         self.assertEqual(self.plot.axes.shape, (2, 3))
         self.assertEqual(len(plot.axes), 6)
         self.assertAll(np.array(self.plot.figure.axes) == np.array(self.plot.get_axes()))
@@ -32,13 +35,17 @@ class TestPlot(unittest.TestCase, NumpyTestCase):
         self.assertAll(np.array(plot2.get_axes()) == np.array(plot2.figure.axes))
         for i in range(6):
             self.assertEqual(self.plot.get_ax(i), self.plot.figure.axes[i])
-            self.assertEqual(self.plot.get_ax(i), self.plot.figure.axes[i])
+            self.assertEqual(plot.get_ax(i), plot.figure.axes[i])
         self.assertEqual(plot2.get_ax(), plot2.figure.axes[0])
-        with self.assertRaises(AssertionError):
+        with self.assertRaises(IndexError):
+            plot.get_ax(-1)
+        with self.assertRaises(IndexError):
+            plot.get_ax(6)
+        with self.assertRaises(ValueError):
             Plot((1, 1), dict_colors={"black": [0.0, 0.0]})
 
     def test_set_color(self):
-        with self.assertRaises(AssertionError):
+        with self.assertRaises(ValueError):
             self.plot.set_color(
                 "black",
                 [
@@ -120,3 +127,23 @@ class TestLegend(unittest.TestCase, NumpyTestCase):
         self.assertTrue(self.plot.get_ax().legend_ is None)
         self.plot.plot()
         self.assertFalse(self.plot.get_ax().legend_ is None)
+
+
+class TestScaffoldPlot(RandomStorageFixture, unittest.TestCase, NumpyTestCase, engine_name="hdf5"):
+    def setUp(self):
+        super().setUp()
+        self.cfg = parse_configuration_file("configurations/mouse/mouse_cerebellar_cortex.yaml")
+        self.scaffold = Scaffold(self.cfg, self.storage)
+        self.plot = ScaffoldPlot((10, 10), self.scaffold)
+
+    def test_set_scaffold(self):
+        self.assertEqual(self.plot.scaffold, self.scaffold)
+        self.plot.plot()
+        self.assertFalse(self.plot.set_scaffold(self.scaffold))
+        self.assertEqual(self.plot.scaffold, self.scaffold)
+        self.assertTrue(self.plot.is_plotted)
+        self.assertTrue(self.plot.is_updated)
+        scaffold2 = Scaffold(self.cfg, self.storage)
+        self.assertTrue(self.plot.set_scaffold(scaffold2))
+        self.assertFalse(self.plot.is_plotted)
+        self.assertFalse(self.plot.is_updated)

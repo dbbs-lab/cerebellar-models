@@ -7,7 +7,7 @@ import os
 __version__ = "0.2.0"
 
 
-def templates():
+def templates():  # pragma: nocover
     """
     :meta private:
     """

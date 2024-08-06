@@ -51,8 +51,6 @@ class Report:
     """
 
     def __init__(self, cell_types_info: List[PlotTypeInfo] = None):
-        self.reports = []
-        """List of sub-reports"""
         self.plots = {}
         """Dictionary mapping the report's plots' name to their instance"""
         self.cell_types_info = cell_types_info or []
@@ -72,7 +70,7 @@ class Report:
         """
         return {ct.name: ct.abbreviation for ct in self.cell_types_info}
 
-    def set_subplot_colors(self, plot: Plot):
+    def set_plot_colors(self, plot: Plot):
         """
         Set the plot color dictionary according to the report's
         """
@@ -82,11 +80,18 @@ class Report:
     def set_color(self, key: str, color: np.ndarray[float]):
         """
         Set a color for an element to plot.
+        Colors must be an array of type RGB or RGBA.
         """
-        assert len(color) == 3
-        self.colors[key] = color
+        if len(color) != 3 and len(color) != 4:
+            raise ValueError("Color must be an array of size 3 or 4.")
+        info_names = [i.name for i in self.cell_types_info]
+        new_color = np.array(color, dtype=float)
+        if key in info_names:
+            self.cell_types_info[info_names.index(key)].color = new_color
+        else:
+            self.cell_types_info.append(PlotTypeInfo(key, new_color, key))
         for plot in self.plots.values():
-            self.set_subplot_colors(plot)
+            self.set_plot_colors(plot)
 
     def add_plot(self, name: str, plot: Plot):
         """
@@ -95,7 +100,7 @@ class Report:
         if name in list(self.plots.keys()):
             warn("A plot named '{}' already exists in the report. Skipping it".format(name))
             return
-        self.set_subplot_colors(plot)
+        self.set_plot_colors(plot)
         self.plots[name] = plot
 
     def print_report(self, output_name: str, dpi: int = 200, pad: int = 0, **kwargs):
@@ -117,14 +122,14 @@ class Report:
         if plot_name in self.plots:
             self.plots[plot_name].save_figure(output_name, dpi, pad, **kwargs)
 
-    def show_plot(self, plot_name):
+    def show_plot(self, plot_name):  # pragma:nocover
         """
         Show one of the report's plots.
         """
         if plot_name in self.plots:
             self.plots[plot_name].show()
 
-    def show(self):
+    def show(self):  # pragma:nocover
         """
         Show all report's plots one by one.
         """
@@ -143,7 +148,6 @@ class BSBReport(Report):
             self.scaffold = scaffold
         else:
             self.scaffold = from_storage(scaffold)
-        self.set_plots_scaffold()
 
     @property
     def cell_names(self):
@@ -151,14 +155,6 @@ class BSBReport(Report):
         List of the name of the elements to plot.
         """
         return list(self.scaffold.cell_types.keys())
-
-    def set_plots_scaffold(self):
-        """
-        Set the scaffold of the report and update each of its subplots
-        """
-        for plot in self.plots.values():
-            if isinstance(plot, ScaffoldPlot):
-                plot.set_scaffold(self.scaffold)
 
     def add_plot(self, name: str, plot: Plot):
         super().add_plot(name, plot)

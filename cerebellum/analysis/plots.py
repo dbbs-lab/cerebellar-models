@@ -24,6 +24,8 @@ class Plot(abc.ABC):
         dict_colors=None,
         **kwargs,
     ):
+        if nb_rows <= 0 or nb_cols <= 0:
+            raise ValueError("Number of columns and rows must be strictly positive.")
         self.nb_rows = nb_rows
         """Number of sub-panel rows in the plot."""
         self.nb_cols = nb_cols
@@ -79,8 +81,10 @@ class Plot(abc.ABC):
         """
         Return the axis at the given index.
         """
-        if self.axes is None:
-            return None
+        if idx >= self.nb_cols * self.nb_rows or idx < 0:
+            raise IndexError(
+                f"Index of matplotlib ax out of range. Max {self.nb_cols * self.nb_rows}"
+            )
         if self.nb_cols == 1 and self.nb_rows == 1:
             return self.axes
         elif self.nb_cols == 1 or self.nb_rows == 1:
@@ -93,8 +97,9 @@ class Plot(abc.ABC):
         Set the color dictionary for a given key.
         Colors must be an array of type RGB or RGBA.
         """
-        assert len(color) == 3 or len(color) == 4
-        self.dict_colors[key] = np.array(color)
+        if len(color) != 3 and len(color) != 4:
+            raise ValueError("Color must be an array of size 3 or 4.")
+        self.dict_colors[key] = np.array(color, dtype=float)
         # colors are updated so the figure should be updated too.
         if self.is_plotted:
             self.clear()
