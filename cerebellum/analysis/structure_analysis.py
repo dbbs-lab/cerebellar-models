@@ -17,8 +17,10 @@ class TablePlot:
     Mixin for plotting tables with matplotlib
     """
 
-    values = []
-    """List of list of values to put in the table"""
+    _values = []
+    """List of list of values from the table"""
+    table_values = []
+    """List of list of string values to put in the table"""
     rows = []
     """Names of the table's rows"""
     columns = []
@@ -28,14 +30,15 @@ class TablePlot:
         """
         Update the values of the table.
         """
-        self.values = []
+        self._values = []
+        self.table_values = []
         self.rows = []
 
     def plot_table(self, **kwargs):
         """
         Plot the table in the Figure.
         """
-        if len(self.values) == 0:
+        if len(self.table_values) == 0:
             warn("No values to plot")
             return
         dict_plot = dict(
@@ -46,7 +49,7 @@ class TablePlot:
         )
         dict_plot.update(kwargs)
         self.get_ax().table(
-            cellText=self.values, rowLabels=self.rows, colLabels=self.columns, **dict_plot
+            cellText=self.table_values, rowLabels=self.rows, colLabels=self.columns, **dict_plot
         )
 
 
@@ -87,12 +90,41 @@ class PlacementTable(TablePlot, ScaffoldPlot):
             ct = ps.cell_type
             self.rows.append(self.extract_ct_name(ct))
             counts = ps.load_positions().shape[0]
-            volume = [p.volume() for place in ct.get_placement() for p in place.partitions]
-            self.values.append(["{:.2E}".format(counts), "{:.2E}".format(counts / np.sum(volume))])
+            volume = np.sum([p.volume() for place in ct.get_placement() for p in place.partitions])
+            self._values.append([counts, volume])
+            self.table_values.append(
+                [
+                    "{:.2E}".format(counts),
+                    "{:.2E}".format((counts / volume) if volume > 0.0 else 0.0),
+                ]
+            )
 
     def plot(self, **kwargs):
         super().plot()
         self.plot_table(**kwargs)
+
+    def get_volumes(self):
+        """
+        Return a dictionary which gives for each cell type
+        the volume occupied by its cells in the Scaffold.
+        The plot needs to be updated.
+
+        :rtype: Dict[str, int]
+        """
+        return {ct: line[1] for ct, line in zip(self.rows, self._values)}
+
+    def get_counts(self):
+        """
+        Return a dictionary which gives for each cell type
+        the number placed in the Scaffold.
+        The plot needs to be updated.
+
+        :rtype: Dict[str, int]
+        """
+        return {ct: line[0] for ct, line in zip(self.rows, self._values)}
+
+    def get_densities(self):
+        return {ct: line[0] / line[1] for ct, line in zip(self.rows, self._values)}
 
 
 class ConnectivityTable(TablePlot, ScaffoldPlot):
@@ -172,7 +204,8 @@ class ConnectivityTable(TablePlot, ScaffoldPlot):
             _, uniquePre_count = np.unique(combos[:, 0], axis=0, return_counts=True)
             _, uniquePost_count = np.unique(combos[:, 1], axis=0, return_counts=True)
             self.rows.append(self.extract_strat_name(ps))
-            self.values.append(
+            self._values.append([len(pre_locs), combo_counts, uniquePost_count, uniquePre_count])
+            self.table_values.append(
                 [
                     len(pre_locs),
                     "{:.2} $\pm$ {:.2}".format(np.mean(combo_counts), np.std(combo_counts)),
@@ -184,6 +217,46 @@ class ConnectivityTable(TablePlot, ScaffoldPlot):
     def plot(self, **kwargs):
         super().plot()
         self.plot_table(**kwargs)
+
+    def get_synapse_counts(self):
+        """
+        Return a dictionary which gives for each connection name
+        the number of synapses formed.
+        The plot needs to be updated.
+
+        :rtype: Dict[str, int]
+        """
+        return {ct: line[0] for ct, line in zip(self.rows, self._values)}
+
+    def get_nb_synapse_per_pair(self):
+        """
+        Return a dictionary which gives for each connection name
+        the number of synapses per unique pair of cell.
+        The plot needs to be updated.
+
+        :rtype: Dict[str, numpy.ndarray[int]]
+        """
+        return {ct: line[1] for ct, line in zip(self.rows, self._values)}
+
+    def get_convergences(self):
+        """
+        Return a dictionary which gives for each connection name
+        the divergence number of each unique postsynaptic cell.
+        The plot needs to be updated.
+
+        :rtype: Dict[str, numpy.ndarray[int]]
+        """
+        return {ct: line[2] for ct, line in zip(self.rows, self._values)}
+
+    def get_divergences(self):
+        """
+        Return a dictionary which gives for each connection name
+        the divergence number of each unique presynaptic cell.
+        The plot needs to be updated.
+
+        :rtype: Dict[str, numpy.ndarray[int]]
+        """
+        return {ct: line[3] for ct, line in zip(self.rows, self._values)}
 
 
 class CellPlacement3D(ScaffoldPlot):
@@ -241,19 +314,27 @@ class CellPlacement3D(ScaffoldPlot):
         ax = self.get_ax()
         for i, ps in enumerate(self.scaffold.get_placement_sets()):
             ct = ps.cell_type
-            ct_name = ct.name.split("_cell")[0]
-            if not ct.name in self.ignored_ct and ct_name in self.dict_colors:
-                *color, alpha = self.dict_colors[ct_name]
-                scale = np.power(ct.spatial.radius, 2)
+            if not ct.name in self.ignored_ct:
                 positions = ps.load_positions()
-                ax.scatter(
-                    positions[:, 0],
-                    positions[:, 1],
-                    positions[:, 2],
-                    c=np.repeat([color], len(positions), axis=0),
-                    alpha=np.repeat([alpha], len(positions), axis=0),
-                    s=scale,
-                )
+                if len(positions) > 0:
+                    if ct.name not in self.dict_colors:
+                        # default color is grey
+                        color = [0.6, 0.6, 0.6]
+                        alpha = 1.0
+                    elif len(self.dict_colors[ct.name]) == 3:
+                        color = self.dict_colors[ct.name]
+                        alpha = 1.0
+                    else:
+                        *color, alpha = self.dict_colors[ct.name]
+                    scale = np.power(ct.spatial.radius, 2)
+                    ax.scatter(
+                        positions[:, 0],
+                        positions[:, 1],
+                        positions[:, 2],
+                        c=np.repeat([color], len(positions), axis=0),
+                        alpha=np.repeat([alpha], len(positions), axis=0),
+                        s=scale,
+                    )
         ax.set_xlabel("x in $\mu m$")
         ax.set_ylabel("y in $\mu m$")
         ax.set_zlabel("z in $\mu m$")

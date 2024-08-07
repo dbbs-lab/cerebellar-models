@@ -668,13 +668,20 @@ class SimResultsTable(TablePlot, SpikePlot):
             all_fr = np.sum(spikes, axis=0) / ((self.time_to - self.time_from) / 1000.0)
             isi = extract_isis(spikes, self.dt)
 
-            self.values.append(
+            self._values.append(all_fr, isi)
+            self.table_values.append(
                 [
                     "{:.2} pm {:.2}".format(np.mean(all_fr), np.std(all_fr)),
                     "{:.2} pm {:.2}".format(np.mean(isi), np.std(isi)) if len(isi) > 0 else "/",
                 ]
             )
         self.rows = self.populations
+
+    def get_firing_rates(self):
+        return {ct: line[0] for ct, line in zip(self.rows, self._values)}
+
+    def get_isis_values(self):
+        return {ct: line[1] for ct, line in zip(self.rows, self._values)}
 
 
 class BasicSimulationReport(SpikeSimulationReport):
