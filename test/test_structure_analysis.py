@@ -236,6 +236,8 @@ class TestStructureReport(
             "x_length": 60,
             "y_length": 20,
         }
+        self.auto_filename = "test_auto_report.pdf"
+        self.cfg.after_connectivity["print_structure_report"].output_filename = self.auto_filename
         self.scaffold = Scaffold(self.cfg, self.storage)
         self.scaffold.compile(
             only=[
@@ -265,6 +267,5 @@ class TestStructureReport(
         os.remove(filename)
 
         # Test automatic report
-        filename = "bsb_report_structure.pdf"
-        self.assertTrue(filename in os.listdir())
-        os.remove(filename)
+        self.assertTrue(self.auto_filename in os.listdir())
+        os.remove(self.auto_filename)

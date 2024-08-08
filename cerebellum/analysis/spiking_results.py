@@ -8,8 +8,6 @@ from typing import List, Tuple, Union
 
 import numpy as np
 from bsb import Scaffold
-from bsb_nest import NestSimulation
-from bsb_neuron import NeuronSimulation
 from matplotlib import gridspec as gs
 from matplotlib import pyplot as plt
 from neo import io as nio
@@ -18,6 +16,14 @@ from scipy import signal
 from cerebellum.analysis.plots import Legend, Plot, ScaffoldPlot
 from cerebellum.analysis.report import BSBReport, PlotTypeInfo
 from cerebellum.analysis.structure_analysis import TablePlot
+
+
+def _check_simulation(scaffold: Scaffold, simulation_name: str):
+    """
+    Check if a simulation is in a Scaffold and raise an error if not.
+    """
+    if simulation_name not in scaffold.simulations:
+        raise ValueError(f"Simulation name {simulation_name} not in the scaffold simulations")
 
 
 class SpikePlot(ScaffoldPlot):
@@ -38,8 +44,7 @@ class SpikePlot(ScaffoldPlot):
         dict_colors: dict = None,
         **kwargs,
     ):
-        assert simulation_name in scaffold.simulations
-        assert isinstance(scaffold.simulations[simulation_name], (NestSimulation, NeuronSimulation))
+        _check_simulation(scaffold, simulation_name)
         super().__init__(fig_size, scaffold, dict_colors=dict_colors, **kwargs)
         self.simulation_name = simulation_name
         """Name of the simulation as defined in the scaffold configuration."""
@@ -76,7 +81,7 @@ class SpikePlot(ScaffoldPlot):
             or self.populations != populations
         )
         if is_different:
-            assert simulation_name in self.scaffold.simulations
+            _check_simulation(self.scaffold, simulation_name)
             self.simulation_name = simulation_name
             self.time_from = time_from
             self.time_to = time_to
@@ -104,6 +109,7 @@ class SpikeSimulationReport(BSBReport):
         ignored_ct=None,
         cell_types_info: List[PlotTypeInfo] = None,
     ):
+        _check_simulation(scaffold, simulation_name)
         super().__init__(scaffold, cell_types_info)
         self.simulation_name = simulation_name
         """Name of the simulation as defined in the scaffold configuration."""
@@ -146,7 +152,6 @@ class SpikeSimulationReport(BSBReport):
         cell_dict = {}
         current_id = 0
 
-        cell_names = [ct.split("_cell")[0] for ct in self.cell_names]
         for f in listdir(self.folder_nio):
             file_ = join(self.folder_nio, f)
             if isfile(file_) and (".nio" in file_):
@@ -155,12 +160,14 @@ class SpikeSimulationReport(BSBReport):
 
                 for st in spiketrains:
                     cell_type = self.extract_ct_device_name(st.annotations["device"])
-                    if cell_type in cell_names and cell_type not in self.ignored_ct:
+                    if cell_type not in self.cell_names:
+                        cell_type += "_cell"
+                    if cell_type in self.cell_names and cell_type not in self.ignored_ct:
                         if cell_type not in cell_dict:
                             cell_dict[cell_type] = {"id": current_id, "senders": []}
                             current_id += 1
                             spikes_res.append([])
-                        if isinstance(st.annotations["senders"], np.int64):  # wtf ?
+                        if isinstance(st.annotations["senders"], np.int64):  # pragma: nocover
                             st.annotations["senders"] = [st.annotations["senders"]]
                         if len(st.annotations["senders"]) > 0:
                             spikes_res[cell_dict[cell_type]["id"]].append(st)
@@ -186,6 +193,12 @@ class SpikeSimulationReport(BSBReport):
             senders = cell_dict[cell_type]["senders"].tolist()
             u_gids.extend(senders)
             u_cell_types.extend([i] * len(senders))
+        if len(u_gids) == 0:
+            return (
+                np.zeros((int((self.time_to - self.time_from) / self.dt) + 1, 0), dtype=bool),
+                np.array([], dtype=int),
+                [],
+            )
         sorting = np.argsort(u_gids)
         u_gids = np.array(u_gids)[sorting]
         u_cell_types = np.array(u_cell_types)[sorting]
