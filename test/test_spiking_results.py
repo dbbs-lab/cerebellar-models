@@ -6,7 +6,11 @@ from bsb import Scaffold, parse_configuration_file
 from bsb_test import NumpyTestCase, RandomStorageFixture
 
 from cerebellum.analysis.plots import ScaffoldPlot
-from cerebellum.analysis.spiking_results import SpikePlot, SpikeSimulationReport
+from cerebellum.analysis.spiking_results import (
+    RasterPSTHPlot,
+    SpikePlot,
+    SpikeSimulationReport,
+)
 
 
 class MiniCerebCircuitTest(RandomStorageFixture, unittest.TestCase, engine_name="hdf5"):
@@ -32,7 +36,7 @@ class MiniCerebCircuitTest(RandomStorageFixture, unittest.TestCase, engine_name=
         self.scaffold.compile(skip_after_connectivity=True, clear=True)
 
 
-class TestSpikePlotReport(MiniCerebCircuitTest, NumpyTestCase, engine_name="hdf5"):
+class ReportBasalSimCircuitTest(MiniCerebCircuitTest, engine_name="hdf5"):
     def setUp(self):
         super().setUp()
         self.simulation_results = self.scaffold.run_simulation("basal_activity")
@@ -47,6 +51,8 @@ class TestSpikePlotReport(MiniCerebCircuitTest, NumpyTestCase, engine_name="hdf5
         super().tearDown()
         os.remove("test_sim_results.nio")
 
+
+class TestSpikePlotReport(ReportBasalSimCircuitTest, NumpyTestCase, engine_name="hdf5"):
     def test_spike_reports(self):
         self.assertEqual(self.simulationReport.time_to, self.simulation_duration)
         self.assertEqual(self.simulationReport.dt, 0.1)
@@ -95,3 +101,81 @@ class TestSpikePlotReport(MiniCerebCircuitTest, NumpyTestCase, engine_name="hdf5
         self.assertFalse(plot.is_updated)
         self.assertEqual(self.simulationReport.simulation_name, plot.simulation_name)
         self.assertEqual(self.scaffold, plot2.scaffold)
+
+
+class TestRasterPSTHPlot(ReportBasalSimCircuitTest, NumpyTestCase, engine_name="hdf5"):
+    def test_rasterpsth(self):
+        self.plot = RasterPSTHPlot(
+            (15, 10),
+            scaffold=self.scaffold,
+            simulation_name="basal_activity",
+            time_from=None,
+            time_to=None,
+            all_spikes=self.simulationReport.all_spikes,
+            nb_neurons=self.simulationReport.nb_neurons,
+            populations=self.simulationReport.populations,
+            dict_colors=self.simulationReport.colors,
+            nb_bins=31,
+        )
+
+        self.plot.plot()
+        self.assertEqual(np.array(self.plot.axes).size, len(self.simulationReport.populations) * 2)
+        mf_axes = self.plot.get_ax()
+        self.assertEqual(len(mf_axes), 2)
+        xlims = np.array([self.simulationReport.time_from, self.simulationReport.time_to])
+        self.assertAll(np.array(self.plot.get_ax()[0].get_xlim()) == xlims)
+        self.assertAll(np.array(self.plot.get_ax()[1].get_xlim()) == xlims)
+        self.assertEqual(len(self.plot.get_ax()[0].collections), 1)
+        scatter = self.plot.get_ax()[0].collections[0]
+        self.assertEqual(len(self.plot.get_ax()[1].containers), 1)
+        hist = self.plot.get_ax()[1].containers[0]
+        self.assertEqual(scatter.get_sizes()[0], 50 / self.simulationReport.nb_neurons[0])
+        self.assertAll(
+            np.array(scatter.get_facecolor()[0][:3])
+            == self.simulationReport.colors["mossy_fibers"][:3]
+        )
+        self.assertEqual(scatter.get_alpha(), 1)
+        self.assertTrue(scatter.get_rasterized())
+        mf_spike_times = (
+            np.array(
+                np.where(self.simulationReport.all_spikes[:, : self.simulationReport.nb_neurons[0]])
+            )
+            * np.array([[self.simulationReport.dt, 1.0]]).T
+        )
+        self.assertAll(mf_spike_times == np.array(scatter.get_offsets()).T)
+        self.assertEqual(len(hist), 30)
+        self.assertEqual(hist.orientation, "vertical")
+
+        del self.plot.dict_colors["mossy_fibers"]
+        self.plot.plot(
+            relative_time=True,
+            params_raster={"alpha": 0.8, "edgecolors": "black", "s": 5.0},
+            params_psth={"orientation": "horizontal"},
+        )
+        self.assertAll(np.array(self.plot.get_ax()[0].get_xlim()) == xlims - xlims[0])
+        self.assertAll(np.array(self.plot.get_ax()[1].get_xlim()) == xlims - xlims[0])
+        self.assertEqual(len(self.plot.get_ax()[0].collections), 1)
+        scatter = self.plot.get_ax()[0].collections[0]
+        self.assertEqual(len(self.plot.get_ax()[1].containers), 1)
+        hist = self.plot.get_ax()[1].containers[0]
+        self.assertEqual(scatter.get_sizes()[0], 5.0)
+        self.assertAll(np.array(scatter.get_facecolor()[0]) == np.array([0.6, 0.6, 0.6, 0.8]))
+        self.assertEqual(scatter.get_alpha(), 0.8)
+        self.assertTrue(scatter.get_rasterized())
+        self.assertAll(scatter.get_edgecolor()[0] == np.array([0, 0, 0, 0.8]))
+        self.assertAll(mf_spike_times == np.array(scatter.get_offsets()).T)
+        self.assertEqual(len(hist), 30)
+        self.assertEqual(hist.orientation, "horizontal")
+
+        # Test that an empty plot does not throw error.
+        plot = RasterPSTHPlot(
+            (15, 10),
+            scaffold=self.scaffold,
+            simulation_name="basal_activity",
+            time_from=None,
+            time_to=None,
+            all_spikes=np.zeros((10001, 0), dtype=bool),
+            nb_neurons=np.zeros(0, dtype=int),
+            populations=[],
+        )
+        self.assertEqual(len(plot.axes), 0)

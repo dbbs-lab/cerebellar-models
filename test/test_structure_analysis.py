@@ -195,7 +195,7 @@ class TestCellPlacement3D(
         scat_data = plot.get_ax().collections[0]
         self.assertEqual(len(glom_ps), len(scat_data._facecolors))
         self.assertAll(old_color == scat_data._facecolors[0])
-        self.assertEqual(2.25, scat_data._sizes)
+        self.assertEqual(2.25, scat_data.get_sizes()[0])
         self.assertAll(glom_ps.load_positions() == np.array(scat_data._offsets3d).T)
         plot.set_color("glomerulus", new_color[:3])
         plot.plot()

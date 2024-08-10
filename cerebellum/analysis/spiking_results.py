@@ -281,7 +281,8 @@ class RasterPSTHPlot(SpikePlot):
         num_filter = len(self.populations)
         self.nb_rows = int(np.ceil(num_filter / 2.0))  # nb rows
         self.figure = plt.figure(figsize=self.fig_size, **kwargs)
-        global_gsp = gs.GridSpec(self.nb_rows, 2)
+        if self.nb_rows > 0:
+            global_gsp = gs.GridSpec(self.nb_rows, 2)
         self.axes = [[] for _ in range(self.nb_rows)]
         for i in range(num_filter):
             local_gsp = gs.GridSpecFromSubplotSpec(2, 1, subplot_spec=global_gsp[i], hspace=0)
@@ -291,6 +292,12 @@ class RasterPSTHPlot(SpikePlot):
             ax2 = plt.Subplot(self.figure, local_gsp[1])
             self.figure.add_subplot(ax2)
             self.axes[i // 2].append([ax1, ax2])
+
+    def clear(self):
+        for ax in self.get_axes():
+            ax[0].clear()
+            ax[1].clear()
+        self.is_plotted = False
 
     def plot(self, relative_time=False, params_raster: dict = None, params_psth: dict = None):
         """
@@ -320,11 +327,12 @@ class RasterPSTHPlot(SpikePlot):
             cell_params = loc_params_raster.copy()
             if "s" not in cell_params:
                 cell_params["s"] = 50.0 / self.nb_neurons[i]
+            color = self.dict_colors[ct][:3] if ct in self.dict_colors else [0.6, 0.6, 0.6]
             ax = self.get_ax(i)[0]
             ax.scatter(
                 times * self.dt,
                 newIds,
-                c=np.repeat([self.dict_colors[ct][:3]], len(times), axis=0),
+                c=color,
                 **cell_params,
             )
             ax.invert_yaxis()
@@ -338,7 +346,7 @@ class RasterPSTHPlot(SpikePlot):
             ax.set_title(f"{ct}")
 
             ax = self.get_ax(i)[1]
-            ax.hist(times * self.dt, bin_times, color=self.dict_colors[ct][:3], **params_psth)
+            ax.hist(times * self.dt, bin_times, color=color, **params_psth)
             ax.set_xlabel("Time in ms")
             ax.set_xlim(
                 [0, self.time_to - self.time_from]
