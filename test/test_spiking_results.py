@@ -8,9 +8,11 @@ from bsb_test import NumpyTestCase, RandomStorageFixture
 from cerebellum.analysis.plots import ScaffoldPlot
 from cerebellum.analysis.spiking_results import (
     FiringRatesPlot,
+    ISIPlot,
     RasterPSTHPlot,
     SpikePlot,
     SpikeSimulationReport,
+    extract_isis,
 )
 
 
@@ -80,7 +82,17 @@ class TestSpikePlotReport(ReportBasalSimCircuitTest, NumpyTestCase, engine_name=
 
         with self.assertRaises(ValueError):
             SpikePlot((10, 10), self.scaffold, "bla", None, None, None, None, None)
-
+        with self.assertRaises(ValueError):
+            SpikePlot(
+                (10, 10),
+                self.scaffold,
+                "basal_activity",
+                "./",
+                None,
+                None,
+                nb_neurons=[1],
+                populations=[],
+            )
         plot = SpikePlot(
             (10, 10),
             self.scaffold,
@@ -196,7 +208,7 @@ class TestRasterPSTHPlot(ReportBasalSimCircuitTest, NumpyTestCase, engine_name="
 
 
 class TestFiringRatesPlot(ReportBasalSimCircuitTest, NumpyTestCase, engine_name="hdf5"):
-    def test_firingrates(self):
+    def test_firing_rates(self):
         self.plot = FiringRatesPlot(
             (15, 6),
             scaffold=self.scaffold,
@@ -211,6 +223,8 @@ class TestFiringRatesPlot(ReportBasalSimCircuitTest, NumpyTestCase, engine_name=
             max_neuron_sampled=100,
         )
         self.plot.plot()
+        self.assertEqual(self.plot.nb_cols, 2)
+        self.assertEqual(self.plot.nb_rows, 3)
         xlims = np.array(
             [
                 self.simulationReport.time_from + 500 * self.simulationReport.dt,
@@ -270,4 +284,74 @@ class TestFiringRatesPlot(ReportBasalSimCircuitTest, NumpyTestCase, engine_name=
                 nb_neurons=np.zeros(0, dtype=int),
                 populations=[],
                 max_neuron_sampled=0,
+            )
+
+
+class TestExtractISIs(unittest.TestCase):
+    def test_extract_isis(self):
+        spikes = np.random.random((20, 10)) >= 0.85
+        isis = extract_isis(spikes, 0.1)
+        enough_spikes = np.unique(np.where(spikes)[1], return_counts=True)[1] >= 2
+        self.assertEqual(len(isis), np.count_nonzero(enough_spikes))
+        for i in range(np.count_nonzero(enough_spikes)):
+            self.assertTrue(
+                np.absolute(
+                    isis[i] - np.mean(np.diff(np.where(spikes[:, enough_spikes][:, i])[0] * 0.1))
+                )
+                <= 1e-7
+            )
+
+
+class TestISIPlot(ReportBasalSimCircuitTest, unittest.TestCase, engine_name="hdf5"):
+    def test_plot_isis(self):
+        self.plot = ISIPlot(
+            (15, 6),
+            scaffold=self.scaffold,
+            simulation_name="basal_activity",
+            time_from=None,
+            time_to=None,
+            all_spikes=self.simulationReport.all_spikes,
+            nb_neurons=self.simulationReport.nb_neurons,
+            populations=self.simulationReport.populations,
+            dict_colors=self.simulationReport.colors,
+            nb_bins=51,
+        )
+        self.plot.plot()
+        self.assertEqual(len(self.plot.get_ax().containers), 1)
+        hist = self.plot.get_ax().containers[0]
+        self.assertEqual(len(hist), 50)
+        self.assertEqual(hist.orientation, "vertical")
+
+        self.plot.plot(orientation="horizontal")
+        self.assertEqual(len(self.plot.get_ax().containers), 1)
+        hist = self.plot.get_ax().containers[0]
+        self.assertEqual(len(hist), 50)
+        self.assertEqual(hist.orientation, "horizontal")
+
+        # Test that an empty plot does not throw error.
+        plot = ISIPlot(
+            (15, 10),
+            scaffold=self.scaffold,
+            simulation_name="basal_activity",
+            time_from=None,
+            time_to=None,
+            all_spikes=np.zeros((10001, 0), dtype=bool),
+            nb_neurons=np.zeros(0, dtype=int),
+            populations=[],
+            dict_colors=self.simulationReport.colors,
+        )
+        plot.plot()
+        self.assertEqual(len(plot.axes), 0)
+        with self.assertRaises(ValueError):
+            ISIPlot(
+                (15, 10),
+                scaffold=self.scaffold,
+                simulation_name="basal_activity",
+                time_from=None,
+                time_to=None,
+                all_spikes=np.zeros((10001, 0), dtype=bool),
+                nb_neurons=np.zeros(0, dtype=int),
+                populations=[],
+                dict_colors=self.simulationReport.colors,
+                nb_bins=0,
             )

@@ -58,6 +58,8 @@ class SpikePlot(ScaffoldPlot):
         """Boolean numpy array of shape (N*M) storing spike events for each time step. 
            N corresponds to the number of time steps, M to the number of neuron.
            Neurons are sorted by neuron type"""
+        if len(nb_neurons) != len(populations):
+            raise ValueError("populations and nb_neurons must have the same length")
         self.nb_neurons = nb_neurons
         """Number of neuron for each neuron type"""
         self.populations = populations
@@ -578,6 +580,8 @@ class ISIPlot(Spike2Columns):
             dict_colors,
             **kwargs,
         )
+        if nb_bins <= 0:
+            raise ValueError("nb_bins must be greater than 0.")
         self.nb_bins = nb_bins
         """Number of bins of the histogram."""
 
