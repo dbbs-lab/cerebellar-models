@@ -7,6 +7,7 @@ from bsb_test import NumpyTestCase, RandomStorageFixture
 
 from cerebellum.analysis.plots import ScaffoldPlot
 from cerebellum.analysis.spiking_results import (
+    FiringRatesPlot,
     RasterPSTHPlot,
     SpikePlot,
     SpikeSimulationReport,
@@ -178,4 +179,95 @@ class TestRasterPSTHPlot(ReportBasalSimCircuitTest, NumpyTestCase, engine_name="
             nb_neurons=np.zeros(0, dtype=int),
             populations=[],
         )
+        plot.plot()
         self.assertEqual(len(plot.axes), 0)
+        with self.assertRaises(ValueError):
+            RasterPSTHPlot(
+                (15, 10),
+                scaffold=self.scaffold,
+                simulation_name="basal_activity",
+                time_from=None,
+                time_to=None,
+                all_spikes=np.zeros((10001, 0), dtype=bool),
+                nb_neurons=np.zeros(0, dtype=int),
+                populations=[],
+                nb_bins=0,
+            )
+
+
+class TestFiringRatesPlot(ReportBasalSimCircuitTest, NumpyTestCase, engine_name="hdf5"):
+    def test_firingrates(self):
+        self.plot = FiringRatesPlot(
+            (15, 6),
+            scaffold=self.scaffold,
+            simulation_name="basal_activity",
+            time_from=None,
+            time_to=None,
+            all_spikes=self.simulationReport.all_spikes,
+            nb_neurons=self.simulationReport.nb_neurons,
+            populations=self.simulationReport.populations,
+            dict_colors=self.simulationReport.colors,
+            w_single=500,
+            max_neuron_sampled=100,
+        )
+        self.plot.plot()
+        xlims = np.array(
+            [
+                self.simulationReport.time_from + 500 * self.simulationReport.dt,
+                self.simulationReport.time_to - 500 * self.simulationReport.dt,
+            ]
+        )
+        self.assertAll(np.array(self.plot.firing_rates.shape) == np.array([9001, 6]))
+        self.assertAll(np.array(self.plot.std_rates.shape) == np.array([9001, 6]))
+        self.assertAll(np.absolute(np.array(self.plot.get_ax().get_xlim()) - xlims) <= 1e-7)
+        self.assertEqual(len(self.plot.get_ax().collections), 1)
+        self.assertEqual(len(self.plot.get_ax().lines), 1)
+        self.assertAll(
+            self.plot.get_ax().lines[0].get_path().vertices[:, 1] == self.plot.firing_rates[:, 0]
+        )
+        self.assertAll(
+            self.plot.get_ax().collections[0].get_paths()[0].vertices[-9002:-1, 1][::-1]
+            == self.plot.firing_rates[:, 0] + self.plot.std_rates[:, 0]
+        )
+        self.plot.plot(relative_time=True)
+        self.assertAll(
+            np.absolute(np.array(self.plot.get_ax().get_xlim()) - xlims + xlims[0]) <= 1e-7
+        )
+        # Test that an empty plot does not throw error.
+        plot = FiringRatesPlot(
+            (15, 6),
+            scaffold=self.scaffold,
+            simulation_name="basal_activity",
+            time_from=None,
+            time_to=None,
+            all_spikes=np.zeros((10001, 0), dtype=bool),
+            nb_neurons=np.zeros(0, dtype=int),
+            populations=[],
+        )
+        plot.plot()
+        self.assertEqual(len(plot.axes), 0)
+
+        with self.assertRaises(ValueError):
+            FiringRatesPlot(
+                (15, 10),
+                scaffold=self.scaffold,
+                simulation_name="basal_activity",
+                time_from=None,
+                time_to=None,
+                all_spikes=np.zeros((10001, 0), dtype=bool),
+                nb_neurons=np.zeros(0, dtype=int),
+                populations=[],
+                w_single=0,
+            )
+        with self.assertRaises(ValueError):
+            FiringRatesPlot(
+                (15, 10),
+                scaffold=self.scaffold,
+                simulation_name="basal_activity",
+                time_from=None,
+                time_to=None,
+                all_spikes=np.zeros((10001, 0), dtype=bool),
+                nb_neurons=np.zeros(0, dtype=int),
+                populations=[],
+                max_neuron_sampled=0,
+            )

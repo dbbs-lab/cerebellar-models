@@ -272,6 +272,8 @@ class RasterPSTHPlot(SpikePlot):
             dict_colors,
             **kwargs,
         )
+        if nb_bins <= 0:
+            raise ValueError("nb_bins must be greater than 0.")
         self.nb_bins = nb_bins
         """Number of bins for the PSTH subplot."""
 
@@ -437,6 +439,8 @@ class FiringRatesPlot(Spike2Columns):
             dict_colors,
             **kwargs,
         )
+        if w_single <= 0 or max_neuron_sampled <= 0:
+            raise ValueError("w_single and max_neuron_sampled must be greater than 0")
         self.w_single = w_single
         """Width of the kernel expressed as number of time steps"""
         self.max_neuron_sampled = max_neuron_sampled
