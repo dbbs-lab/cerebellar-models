@@ -594,15 +594,16 @@ class ISIPlot(Spike2Columns):
             extract_isis(self.all_spikes[:, int(counts[i]) : int(counts[i + 1])], self.dt)
             for i in range(num_filter)
         ]
+        current_ax = 0
         for i, ct in enumerate(self.populations):
-            ax2 = self.get_ax(i)
             if len(isis_dist[i]) > 0:
+                ax2 = self.get_ax(current_ax)
                 ax2.hist(isis_dist[i], self.nb_bins, color=self.dict_colors[ct][:3], **kwargs)
                 ax2.set_xlabel("ISIs bins in ms")
                 ax2.set_yscale("log")
                 ax2.set_title(f"Distribution of {ct} ISIs")
-            else:
-                self.set_axis_off([ax2])
+                current_ax += 1
+        self.set_axis_off(self.get_axes()[current_ax:])
 
 
 class FrequencyPlot(FiringRatesPlot):

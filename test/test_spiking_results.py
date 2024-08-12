@@ -291,14 +291,14 @@ class TestExtractISIs(unittest.TestCase):
     def test_extract_isis(self):
         spikes = np.random.random((20, 10)) >= 0.85
         isis = extract_isis(spikes, 0.1)
-        enough_spikes = np.unique(np.where(spikes)[1], return_counts=True)[1] >= 2
+        enough_spikes = np.zeros(10, dtype=bool)
+        u, c = np.unique(np.where(spikes)[1], return_counts=True)
+        enough_spikes[u] = c >= 2
         self.assertEqual(len(isis), np.count_nonzero(enough_spikes))
-        for i in range(np.count_nonzero(enough_spikes)):
+        loc_spikes = spikes[:, enough_spikes]
+        for i in range(len(isis)):
             self.assertTrue(
-                np.absolute(
-                    isis[i] - np.mean(np.diff(np.where(spikes[:, enough_spikes][:, i])[0] * 0.1))
-                )
-                <= 1e-7
+                np.absolute(isis[i] - np.mean(np.diff(np.where(loc_spikes[:, i])[0] * 0.1))) <= 1e-7
             )
 
 
@@ -314,7 +314,7 @@ class TestISIPlot(ReportBasalSimCircuitTest, unittest.TestCase, engine_name="hdf
             nb_neurons=self.simulationReport.nb_neurons,
             populations=self.simulationReport.populations,
             dict_colors=self.simulationReport.colors,
-            nb_bins=51,
+            nb_bins=50,
         )
         self.plot.plot()
         self.assertEqual(len(self.plot.get_ax().containers), 1)
