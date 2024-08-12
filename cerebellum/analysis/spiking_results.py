@@ -698,16 +698,23 @@ class SimResultsTable(TablePlot, SpikePlot):
             all_fr = np.sum(spikes, axis=0) / ((self.time_to - self.time_from) / 1000.0)
             isi = extract_isis(spikes, self.dt)
 
-            self._values.append(all_fr, isi)
+            self._values.append([all_fr, isi])
             self.table_values.append(
                 [
                     "{:.2} pm {:.2}".format(np.mean(all_fr), np.std(all_fr)),
                     "{:.2} pm {:.2}".format(np.mean(isi), np.std(isi)) if len(isi) > 0 else "/",
                 ]
             )
-        self.rows = self.populations
+        self.rows = self.populations.copy()
 
     def get_firing_rates(self):
+        """
+        Return a dictionary which gives for each cell type the firing rate
+        of each neuron spiking.
+        The plot needs to be updated.
+
+        :rtype: Dict[str, int]
+        """
         return {ct: line[0] for ct, line in zip(self.rows, self._values)}
 
     def get_isis_values(self):
