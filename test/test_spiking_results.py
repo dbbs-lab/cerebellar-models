@@ -7,6 +7,7 @@ from bsb_test import NumpyTestCase, RandomStorageFixture
 
 from cerebellum.analysis.plots import ScaffoldPlot
 from cerebellum.analysis.spiking_results import (
+    BasicSimulationReport,
     FiringRatesPlot,
     FrequencyPlot,
     ISIPlot,
@@ -428,6 +429,34 @@ class TestSpikePlots(ReportBasalSimCircuitTest, NumpyTestCase, engine_name="hdf5
             dict_colors=self.simulationReport.colors,
         )
         plot.plot()
+
+    def test_basic_simulation_report(self):
+        report = BasicSimulationReport(self.scaffold, "basal_activity", "./")
+        plot_keys = np.array(["raster_psth", "table", "firing_rates", "isis", "freq", "legend"])
+        self.assertAll(np.array(list(report.plots.keys())) == plot_keys)
+        filename = "test_report.pdf"
+        report.print_report(filename, dpi=100)
+        # should be seven cell types
+        self.assertEqual(len(report.plots["table"].table_values), 6)
+        # Raster PSTH plot should have two sub plots for each population
+        self.assertEqual(len(report.plots["raster_psth"].get_ax()[0].collections), 1)
+        self.assertEqual(len(report.plots["raster_psth"].get_ax()[1].containers), 1)
+        # Firing rates plot should store firing_rates and std_rates
+        self.assertAll(
+            np.array(report.plots["firing_rates"].firing_rates.shape) == np.array([8001, 6])
+        )
+        self.assertAll(
+            np.array(report.plots["firing_rates"].std_rates.shape) == np.array([8001, 6])
+        )
+        # ISIs histogram should have 50 bars
+        self.assertEqual(len(report.plots["isis"].get_ax().containers[0]), 50)
+        # Frequency analysis plot should store the frequencies distrib.
+        self.assertAll(np.array(report.plots["freq"].frequencies.shape) == np.array((6, 4000)))
+        self.assertAll(np.array(report.plots["freq"].freq_powers.shape) == np.array((6, 4000)))
+        # only 6 cell types in the legend
+        self.assertEqual(len(report.plots["legend"].get_ax().legend_.legend_handles), 6)
+        self.assertTrue(filename in os.listdir())
+        os.remove(filename)
 
 
 class TestExtractISIs(unittest.TestCase):
