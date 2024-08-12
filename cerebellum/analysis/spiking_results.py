@@ -632,7 +632,7 @@ class FrequencyPlot(FiringRatesPlot):
         :param bool plot_bands: if True, plot the frequency bands.
         """
         super(FiringRatesPlot, self).plot()
-        dict_plot = {"alpha": 0.7}
+        dict_plot = {}
         dict_plot.update(kwargs)
         for i, (fr, pw, ct) in enumerate(zip(self.frequencies, self.freq_powers, self.populations)):
             ax = self.get_ax(i)

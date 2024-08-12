@@ -8,6 +8,7 @@ from bsb_test import NumpyTestCase, RandomStorageFixture
 from cerebellum.analysis.plots import ScaffoldPlot
 from cerebellum.analysis.spiking_results import (
     FiringRatesPlot,
+    FrequencyPlot,
     ISIPlot,
     RasterPSTHPlot,
     SpikePlot,
@@ -55,7 +56,7 @@ class ReportBasalSimCircuitTest(MiniCerebCircuitTest, engine_name="hdf5"):
         os.remove("test_sim_results.nio")
 
 
-class TestSpikePlotReport(ReportBasalSimCircuitTest, NumpyTestCase, engine_name="hdf5"):
+class TestSpikePlots(ReportBasalSimCircuitTest, NumpyTestCase, engine_name="hdf5"):
     def test_spike_reports(self):
         self.assertEqual(self.simulationReport.time_to, self.simulation_duration)
         self.assertEqual(self.simulationReport.dt, 0.1)
@@ -115,9 +116,7 @@ class TestSpikePlotReport(ReportBasalSimCircuitTest, NumpyTestCase, engine_name=
         self.assertEqual(self.simulationReport.simulation_name, plot.simulation_name)
         self.assertEqual(self.scaffold, plot2.scaffold)
 
-
-class TestRasterPSTHPlot(ReportBasalSimCircuitTest, NumpyTestCase, engine_name="hdf5"):
-    def test_rasterpsth(self):
+    def test_raster_psth(self):
         self.plot = RasterPSTHPlot(
             (15, 10),
             scaffold=self.scaffold,
@@ -206,8 +205,6 @@ class TestRasterPSTHPlot(ReportBasalSimCircuitTest, NumpyTestCase, engine_name="
                 nb_bins=0,
             )
 
-
-class TestFiringRatesPlot(ReportBasalSimCircuitTest, NumpyTestCase, engine_name="hdf5"):
     def test_firing_rates(self):
         self.plot = FiringRatesPlot(
             (15, 6),
@@ -286,23 +283,6 @@ class TestFiringRatesPlot(ReportBasalSimCircuitTest, NumpyTestCase, engine_name=
                 max_neuron_sampled=0,
             )
 
-
-class TestExtractISIs(unittest.TestCase):
-    def test_extract_isis(self):
-        spikes = np.random.random((20, 10)) >= 0.85
-        isis = extract_isis(spikes, 0.1)
-        enough_spikes = np.zeros(10, dtype=bool)
-        u, c = np.unique(np.where(spikes)[1], return_counts=True)
-        enough_spikes[u] = c >= 2
-        self.assertEqual(len(isis), np.count_nonzero(enough_spikes))
-        loc_spikes = spikes[:, enough_spikes]
-        for i in range(len(isis)):
-            self.assertTrue(
-                np.absolute(isis[i] - np.mean(np.diff(np.where(loc_spikes[:, i])[0] * 0.1))) <= 1e-7
-            )
-
-
-class TestISIPlot(ReportBasalSimCircuitTest, unittest.TestCase, engine_name="hdf5"):
     def test_plot_isis(self):
         self.plot = ISIPlot(
             (15, 6),
@@ -354,4 +334,55 @@ class TestISIPlot(ReportBasalSimCircuitTest, unittest.TestCase, engine_name="hdf
                 populations=[],
                 dict_colors=self.simulationReport.colors,
                 nb_bins=0,
+            )
+
+    def test_freq_plot(self):
+        self.plot = FrequencyPlot(
+            (15, 6),
+            scaffold=self.scaffold,
+            simulation_name="basal_activity",
+            time_from=None,
+            time_to=None,
+            all_spikes=self.simulationReport.all_spikes,
+            nb_neurons=self.simulationReport.nb_neurons,
+            populations=self.simulationReport.populations,
+            dict_colors=self.simulationReport.colors,
+            w_single=500,
+            max_neuron_sampled=100,
+        )
+        self.plot.plot()
+        self.assertAll(np.array(self.plot.firing_rates.shape) == np.array([9001, 6]))
+        self.assertAll(np.array(self.plot.std_rates.shape) == np.array([9001, 6]))
+        self.assertAll(np.array(self.plot.frequencies.shape) == np.array((6, 4500)))
+        self.assertAll(np.array(self.plot.freq_powers.shape) == np.array((6, 4500)))
+        self.assertEqual(
+            len(self.plot.get_ax().lines),
+            4,
+            "There should be 1 line for the freq + 3 vertical lines for bands",
+        )
+        self.assertEqual(self.plot.get_ax().lines[0].get_alpha(), None)
+        self.assertAll(
+            np.absolute(np.array(self.plot.get_ax().get_xlim()) - np.array([0, 30.0])) <= 1e-7
+        )
+
+        self.plot.plot(max_freq=40.0, plot_bands=False, alpha=0.7)
+        self.assertEqual(len(self.plot.get_ax().lines), 1, "There should be 1 line for the freq")
+        self.assertEqual(self.plot.get_ax().lines[0].get_alpha(), 0.7)
+        self.assertAll(
+            np.absolute(np.array(self.plot.get_ax().get_xlim()) - np.array([0, 40.0])) <= 1e-7
+        )
+
+
+class TestExtractISIs(unittest.TestCase):
+    def test_extract_isis(self):
+        spikes = np.random.random((20, 10)) >= 0.85
+        isis = extract_isis(spikes, 0.1)
+        enough_spikes = np.zeros(10, dtype=bool)
+        u, c = np.unique(np.where(spikes)[1], return_counts=True)
+        enough_spikes[u] = c >= 2
+        self.assertEqual(len(isis), np.count_nonzero(enough_spikes))
+        loc_spikes = spikes[:, enough_spikes]
+        for i in range(len(isis)):
+            self.assertTrue(
+                np.absolute(isis[i] - np.mean(np.diff(np.where(loc_spikes[:, i])[0] * 0.1))) <= 1e-7
             )
