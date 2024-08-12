@@ -92,7 +92,7 @@ class TestConnectivity(unittest.TestCase):
 
     def test_connectivity_matrix(self):
 
-        for connections in self.scaffold.configuration.connection_types.table_values():
+        for connections in self.scaffold.configuration.connection_types.values():
             for connection_tag in connections.tags:
                 cs = self.scaffold.get_connectivity_set(connection_tag)
                 from_cells = cs.from_identifiers
