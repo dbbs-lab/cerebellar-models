@@ -18,6 +18,14 @@ For DCN, two types of neurons are considered [#uusisaari_2008]_ [#geminiani_2019
 * **DCNp**: they are the excitatory neurons projecting outside the cerebellum to various brain regions, including the thalamus, the red nucleus, the vestibular nuclei, and the reticular formation;
 * **DCNi**: they are GABAergic interneurons which send inhibitory feedback to IO.
 
+.. warning::
+   In Geminiani et al (2019) [#geminiani_2019]_, DCN populations are defined in a different way:
+
+   * **DCNnL** for the excitatory population (DCNp)
+   * **DCNp** for the inhibitory one (DCNi)
+
+   Then, starting from Geminiani et al (2019b) [#geminiani_2019b]_ , names for DCN populations were redefined as reported here.
+
 No morphologies are currently available for DCN neurons, so they are represented only by their soma.
 Densities were estimated from `Blue Brain Cell Atlas <https://portal.bluebrain.epfl.ch/resources/models/cell-atlas/>`_ (version 2018 [#ero_2018]_), considering the ratio :math:`\frac{n_{GrC}}{n_{DCN}} = \frac{33 \times 10^6}{230 \times 10^3} ≈ 143` between the total number of granule cells and the total number of neurons in the cerebellar nuclei. From this ratio, considering the total amout of GrC placed in the ``canonical circuit``, it is possible to estimate the number of DCN to be placed. Literature data reported that DCNp are around the 57% of the total number of neurons in the cerebellar nuclei, while DCNi around the 32% [#baumel_2009]_ [#batini_1992]_. Taking into account these percentages and dividing by the volume of the DCN layer (set to :math:`200 \times 200 \times 300` µm), the values reported in the following table were obtained.
 
@@ -52,15 +60,6 @@ NEST simulation
 Neuron parameters
 +++++++++++++++++
 DCN populations were represented as a EGLIF point neuron models (see :doc:`NEST section <nest>`). Parameters sets for both DCNp and DCNi are taken from Geminiani et al (2019) [#geminiani_2019]_.
-
-.. warning::
-   In Geminiani et al (2019) [#geminiani_2019]_, DCN populations are defined in a different way:
-
-   * **DCNnL** for the excitatory population (DCNp)
-   * **DCNp** for the inhibitory one (DCNi)
-
-   Then, starting from Geminiani et al (2019b) [#geminiani_2019b]_ , names for DCN populations were redefined as reported here.
-
 The default LIF parameters are the following:
 
 .. csv-table:: LIF neuron parameters for DCN
