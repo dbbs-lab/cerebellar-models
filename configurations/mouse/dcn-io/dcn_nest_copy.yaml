@@ -16,7 +16,7 @@ simulations:
             V_th: -36
             V_reset: -55
             E_L: -45
-            I_e: 75.385
+            I_e: 5.385
             V_m: -45
             lambda_0: 0.001
             tau_V: 0.5
