@@ -48,9 +48,9 @@ class SpikePlot(ScaffoldPlot):
         super().__init__(fig_size, scaffold, dict_colors=dict_colors, **kwargs)
         self.simulation_name = simulation_name
         """Name of the simulation as defined in the scaffold configuration."""
-        self.time_from = time_from or 0
+        self._time_from = time_from or 0
         """Start time of the analysis"""
-        self.time_to = time_to or self.scaffold.simulations[simulation_name].duration
+        self.time_to = time_to or self.scaffold.simulations[self.simulation_name].duration
         """End time of the analysis. By default, this corresponds to the simulation duration."""
         self.dt = self.scaffold.simulations[simulation_name].resolution
         """Time step of the simulation in ms"""
@@ -64,6 +64,33 @@ class SpikePlot(ScaffoldPlot):
         """Number of neuron for each neuron type"""
         self.populations = populations
         """List of neuron type names"""
+
+    def _check_times(self, start, stop):
+        if stop < 0 or start < 0:
+            raise ValueError("time_from and time_to must be non-negative")
+        max_time = self.scaffold.simulations[self.simulation_name].duration
+        if stop > max_time:
+            raise ValueError("time_to must be less than the simulation's duration")
+        if start > stop:
+            raise ValueError("time_from must be less than time_to")
+
+    @property
+    def time_to(self):
+        return self._time_to
+
+    @time_to.setter
+    def time_to(self, value):
+        self._check_times(self.time_from, value)
+        self._time_to = value
+
+    @property
+    def time_from(self):
+        return self._time_from
+
+    @time_from.setter
+    def time_from(self, value):
+        self._check_times(value, self.time_to)
+        self._time_from = value
 
     def _set_simulation_params(
         self,
@@ -95,6 +122,15 @@ class SpikePlot(ScaffoldPlot):
                 self.clear()
         return is_different
 
+    def get_filt_spikes(self):
+        """
+        Filter the spike events for the time of the analysis.
+
+        :return: Boolean numpy array storing spike events for the analysis time step.
+        :rtype: numpy.ndarray[numpy.ndarray[bool]]
+        """
+        return self.all_spikes[int(self.time_from / self.dt) : int(self.time_to / self.dt)]
+
 
 class SpikeSimulationReport(BSBReport):
     """
@@ -111,13 +147,13 @@ class SpikeSimulationReport(BSBReport):
         ignored_ct=None,
         cell_types_info: List[PlotTypeInfo] = None,
     ):
-        _check_simulation(scaffold, simulation_name)
         super().__init__(scaffold, cell_types_info)
+        _check_simulation(self.scaffold, simulation_name)
         self.simulation_name = simulation_name
         """Name of the simulation as defined in the scaffold configuration."""
         self.folder_nio = folder_nio
         """Folder containing the simulation results stored as nio files."""
-        self.time_from = time_from
+        self._time_from = time_from
         """Start time of the analysis"""
         self.time_to = time_to or self.scaffold.simulations[simulation_name].duration
         """End time of the analysis. By default, this corresponds to the simulation duration."""
@@ -135,6 +171,39 @@ class SpikeSimulationReport(BSBReport):
         """List of neuron type names"""
 
         self.all_spikes, self.nb_neurons, self.populations = self.load_spikes()
+
+    def _check_times(self, start, stop):
+        if stop < 0 or start < 0:
+            raise ValueError("time_from and time_to must be non-negative")
+        max_time = self.scaffold.simulations[self.simulation_name].duration
+        if stop > max_time:
+            raise ValueError("time_to must be less than the simulation's duration")
+        if start > stop:
+            raise ValueError("time_from must be less than time_to")
+
+    @property
+    def time_to(self):
+        return self._time_to
+
+    @time_to.setter
+    def time_to(self, value):
+        self._check_times(self.time_from, value)
+        self._time_to = value
+        for plot in self.plots.values():
+            if isinstance(plot, SpikePlot):
+                plot.time_to = value
+
+    @property
+    def time_from(self):
+        return self._time_from
+
+    @time_from.setter
+    def time_from(self, value):
+        self._check_times(value, self.time_to)
+        self._time_from = value
+        for plot in self.plots.values():
+            if isinstance(plot, SpikePlot):
+                plot.time_from = value
 
     @staticmethod
     def extract_ct_device_name(cell_type: str):
@@ -195,9 +264,10 @@ class SpikeSimulationReport(BSBReport):
             senders = cell_dict[cell_type]["senders"].tolist()
             u_gids.extend(senders)
             u_cell_types.extend([i] * len(senders))
+        time_to = self.scaffold.simulations[self.simulation_name].duration
         if len(u_gids) == 0:
             return (
-                np.zeros((int((self.time_to - self.time_from) / self.dt) + 1, 0), dtype=bool),
+                np.zeros((int(time_to / self.dt), 0), dtype=bool),
                 np.array([], dtype=int),
                 [],
             )
@@ -210,17 +280,12 @@ class SpikeSimulationReport(BSBReport):
             inv_convert[u_gid] = i
 
         tot_num_neuron = len(u_gids)
-        all_spikes = np.zeros(
-            (int((self.time_to - self.time_from) / self.dt) + 1, tot_num_neuron), dtype=bool
-        )
+        all_spikes = np.zeros((int(time_to / self.dt) + 1, tot_num_neuron), dtype=bool)
         for cell_type in cell_dict:
             for st in spikes_res[cell_dict[cell_type]["id"]]:
                 spikes = st.magnitude
-                senders = inv_convert[np.array(st.annotations["senders"])]
-                filter_spikes = (spikes > self.time_from) * (spikes <= self.time_to)
-                spikes = spikes[filter_spikes]
-                spikes = np.asarray(np.floor((spikes - self.time_from) / self.dt), dtype=int)
-                senders = np.array(senders)[filter_spikes]
+                senders = np.array(inv_convert[np.array(st.annotations["senders"])])
+                spikes = np.asarray(np.floor(spikes / self.dt), dtype=int)
                 all_spikes[(spikes, senders)] = True
         nb_neurons = np.zeros(len(cell_dict), dtype=int)
         for i, uf in enumerate(cell_dict.keys()):
@@ -238,6 +303,15 @@ class SpikeSimulationReport(BSBReport):
                 self.nb_neurons,
                 self.populations,
             )
+
+    def get_filt_spikes(self):
+        """
+        Filter the spike events for the time of the analysis.
+
+        :return: Boolean numpy array storing spike events for the analysis time step.
+        :rtype: numpy.ndarray[numpy.ndarray[bool]]
+        """
+        return self.all_spikes[int(self.time_from / self.dt) : int(self.time_to / self.dt)]
 
 
 class RasterPSTHPlot(SpikePlot):
@@ -325,9 +399,9 @@ class RasterPSTHPlot(SpikePlot):
         counts[1:] = np.cumsum(self.nb_neurons)
 
         bin_times = np.linspace(0, self.time_to - self.time_from, self.nb_bins)
-
+        loc_spikes = self.get_filt_spikes()
         for i, ct in enumerate(self.populations):
-            times, newIds = np.where(self.all_spikes[:, int(counts[i]) : int(counts[i + 1])])
+            times, newIds = np.where(loc_spikes[:, int(counts[i]) : int(counts[i + 1])])
             cell_params = loc_params_raster.copy()
             if "s" not in cell_params:
                 cell_params["s"] = 50.0 / self.nb_neurons[i]
@@ -457,10 +531,11 @@ class FiringRatesPlot(Spike2Columns):
         # normalized triangle kernel for single-trial firing rate
         kernel_single = signal.windows.triang(self.w_single) * 2 / self.w_single
 
-        self.firing_rates = np.zeros((self.all_spikes.shape[0] - self.w_single * 2, num_filter))
-        self.std_rates = np.zeros((self.all_spikes.shape[0] - self.w_single * 2, num_filter))
+        loc_spikes = self.get_filt_spikes()
+        self.firing_rates = np.zeros((loc_spikes.shape[0] - self.w_single * 2, num_filter))
+        self.std_rates = np.zeros((loc_spikes.shape[0] - self.w_single * 2, num_filter))
         for i in range(num_filter):
-            spikes = self.all_spikes[:, int(counts[i]) : int(counts[i + 1])]
+            spikes = loc_spikes[:, int(counts[i]) : int(counts[i + 1])]
             if self.nb_neurons[i] > self.max_neuron_sampled:
                 spikes = spikes[
                     :,
@@ -482,7 +557,7 @@ class FiringRatesPlot(Spike2Columns):
         super().plot()
         time_interval = np.arange(
             self.time_from + self.w_single * self.dt,
-            self.time_to + (-self.w_single + 1) * self.dt,
+            self.time_to + (-self.w_single) * self.dt,
             self.dt,
         )
         for i, ct in enumerate(self.populations):
@@ -693,8 +768,9 @@ class SimResultsTable(TablePlot, SpikePlot):
         num_filter = len(self.nb_neurons)
         counts = np.zeros(num_filter + 1)
         counts[1:] = np.cumsum(self.nb_neurons)
+        loc_spikes = self.get_filt_spikes()
         for i in range(num_filter):
-            spikes = self.all_spikes[:, int(counts[i]) : int(counts[i + 1])]
+            spikes = loc_spikes[:, int(counts[i]) : int(counts[i + 1])]
             all_fr = np.sum(spikes, axis=0) / ((self.time_to - self.time_from) / 1000.0)
             isi = extract_isis(spikes, self.dt)
 

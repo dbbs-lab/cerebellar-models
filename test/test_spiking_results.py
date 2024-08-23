@@ -78,7 +78,7 @@ class TestSpikePlots(ReportBasalSimCircuitTest, NumpyTestCase, engine_name="hdf5
             SpikeSimulationReport(self.scaffold, "blabla", "./")
 
         empty_report = SpikeSimulationReport(self.scaffold, "basal_activity", "./cerebellum")
-        self.assertEqual(empty_report.all_spikes.shape[0], int(self.simulation_duration / 0.1) + 1)
+        self.assertEqual(empty_report.all_spikes.shape[0], int(self.simulation_duration / 0.1))
         self.assertEqual(empty_report.all_spikes.shape[1], 0)
         self.assertEqual(empty_report.nb_neurons.size, 0)
         self.assertEqual(empty_report.populations, [])
@@ -90,12 +90,53 @@ class TestSpikePlots(ReportBasalSimCircuitTest, NumpyTestCase, engine_name="hdf5
                 (10, 10),
                 self.scaffold,
                 "basal_activity",
-                "./",
+                None,
                 None,
                 None,
                 nb_neurons=[1],
                 populations=[],
             )
+        with self.assertRaises(ValueError):
+            SpikePlot(
+                (10, 10),
+                self.scaffold,
+                "basal_activity",
+                -1,
+                None,
+                None,
+                nb_neurons=[1],
+                populations=["cell"],
+            )
+        with self.assertRaises(ValueError):
+            SpikePlot(
+                (10, 10),
+                self.scaffold,
+                "basal_activity",
+                10,
+                9,
+                None,
+                nb_neurons=[1],
+                populations=["cell"],
+            )
+        with self.assertRaises(ValueError):
+            SpikePlot(
+                (10, 10),
+                self.scaffold,
+                "basal_activity",
+                10,
+                51000,
+                None,
+                nb_neurons=[1],
+                populations=["cell"],
+            )
+        with self.assertRaises(ValueError):
+            self.simulationReport.time_from = -1
+        with self.assertRaises(ValueError):
+            self.simulationReport.time_from = 100000
+        with self.assertRaises(ValueError):
+            self.simulationReport.time_from = -1
+        with self.assertRaises(ValueError):
+            self.simulationReport.time_to = 100000
         plot = SpikePlot(
             (10, 10),
             self.scaffold,
@@ -117,6 +158,10 @@ class TestSpikePlots(ReportBasalSimCircuitTest, NumpyTestCase, engine_name="hdf5
         self.assertFalse(plot.is_updated)
         self.assertEqual(self.simulationReport.simulation_name, plot.simulation_name)
         self.assertEqual(self.scaffold, plot2.scaffold)
+        self.simulationReport.time_to = 500.0
+        self.simulationReport.time_from = 500.0
+        self.assertEqual(plot.time_to, 500.0)
+        self.assertEqual(plot.time_from, 500.0)
 
     def test_raster_psth(self):
         plot = RasterPSTHPlot(
@@ -227,17 +272,17 @@ class TestSpikePlots(ReportBasalSimCircuitTest, NumpyTestCase, engine_name="hdf5
         xlims = np.array(
             [
                 self.simulationReport.time_from + 500 * self.simulationReport.dt,
-                self.simulationReport.time_to - 500 * self.simulationReport.dt,
+                self.simulationReport.time_to - 501 * self.simulationReport.dt,
             ]
         )
-        self.assertAll(np.array(plot.firing_rates.shape) == np.array([9001, 6]))
-        self.assertAll(np.array(plot.std_rates.shape) == np.array([9001, 6]))
+        self.assertAll(np.array(plot.firing_rates.shape) == np.array([9000, 6]))
+        self.assertAll(np.array(plot.std_rates.shape) == np.array([9000, 6]))
         self.assertAll(np.absolute(np.array(plot.get_ax().get_xlim()) - xlims) <= 1e-7)
         self.assertEqual(len(plot.get_ax().collections), 1)
         self.assertEqual(len(plot.get_ax().lines), 1)
         self.assertAll(plot.get_ax().lines[0].get_path().vertices[:, 1] == plot.firing_rates[:, 0])
         self.assertAll(
-            plot.get_ax().collections[0].get_paths()[0].vertices[-9002:-1, 1][::-1]
+            plot.get_ax().collections[0].get_paths()[0].vertices[-9001:-1, 1][::-1]
             == plot.firing_rates[:, 0] + plot.std_rates[:, 0]
         )
         plot.plot(relative_time=True)
@@ -349,8 +394,8 @@ class TestSpikePlots(ReportBasalSimCircuitTest, NumpyTestCase, engine_name="hdf5
             max_neuron_sampled=100,
         )
         plot.plot()
-        self.assertAll(np.array(plot.firing_rates.shape) == np.array([9001, 6]))
-        self.assertAll(np.array(plot.std_rates.shape) == np.array([9001, 6]))
+        self.assertAll(np.array(plot.firing_rates.shape) == np.array([9000, 6]))
+        self.assertAll(np.array(plot.std_rates.shape) == np.array([9000, 6]))
         self.assertAll(np.array(plot.frequencies.shape) == np.array((6, 4500)))
         self.assertAll(np.array(plot.freq_powers.shape) == np.array((6, 4500)))
         self.assertEqual(
@@ -443,10 +488,10 @@ class TestSpikePlots(ReportBasalSimCircuitTest, NumpyTestCase, engine_name="hdf5
         self.assertEqual(len(report.plots["raster_psth"].get_ax()[1].containers), 1)
         # Firing rates plot should store firing_rates and std_rates
         self.assertAll(
-            np.array(report.plots["firing_rates"].firing_rates.shape) == np.array([8001, 6])
+            np.array(report.plots["firing_rates"].firing_rates.shape) == np.array([8000, 6])
         )
         self.assertAll(
-            np.array(report.plots["firing_rates"].std_rates.shape) == np.array([8001, 6])
+            np.array(report.plots["firing_rates"].std_rates.shape) == np.array([8000, 6])
         )
         # ISIs histogram should have 50 bars
         self.assertEqual(len(report.plots["isis"].get_ax().containers[0]), 50)

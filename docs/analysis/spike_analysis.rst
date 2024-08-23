@@ -30,6 +30,9 @@ Constructor parameters:
 It is advised to obtain the ``all_spikes``, ``nb_neurons``, and ``populations``
 parameters from a ``SimulationReport`` (see :ref:`simulation_report`).
 
+.. note::
+   The ``time_from`` and ``time_to`` values can differ from the simulation start
+   and end time, but they should remain within the simulation time interval.
 
 .. _simulation_report:
 
@@ -64,6 +67,11 @@ and store them in store them in the following attributes:
 
 The latter parameters will be automatically forwarded to the report's ``SpikePlots``
 
+.. note::
+   The ``time_from`` and ``time_to`` values can differ from the simulation start
+   and end time, but they should remain within the simulation time interval.
+   Any modification to the ``time_from`` and ``time_to`` values will be automatically
+   forwarded to the report's ``SpikePlots``
 
 .. _raster_psth:
 
