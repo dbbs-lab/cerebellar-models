@@ -1,0 +1,237 @@
+name: Allen based Declive mouse brain NEST
+storage:
+  root: declive_reconstruction.hdf5
+network:
+  x: 13200  # 528 * 25.
+  y: 8000 # 320 * 25.
+  z: 11400 # 456 * 25.
+  chunk_size: 250
+morphologies:
+  - file: ./morphologies/GranuleCell.swc
+    parser:
+      tags:
+        16:
+          - axon
+          - axon_hillock
+        17:
+          - axon
+          - axon_initial_segment
+        18:
+          - axon
+          - ascending_axon
+        19:
+          - axon
+          - parallel_fiber
+  - file: ./morphologies/GolgiCell.swc
+    parser:
+      tags:
+        16:
+          - dendrites
+          - basal_dendrites
+        17:
+          - dendrites
+          - apical_dendrites
+        18:
+          - axon
+          - axon_initial_segment
+  - file: ./morphologies/PurkinjeCell.swc
+    parser:
+      tags:
+        16:
+          - axon
+          - AIS
+        17:
+          - axon
+          - AIS_K
+        18:
+          - axon
+          - axonmyelin
+        19:
+          - axon
+          - nodes
+        20:
+          - dendrites
+          - basal
+        21:
+          - dendrites
+          - pf_targets
+          - sc_targets
+        22:
+          - dendrites
+          - aa_targets
+          - sc_targets
+  - file: ./morphologies/StellateCell.swc
+    parser:
+      tags:
+        16:
+          - dendrites
+          - proximal_dendrites
+        17:
+          - dendrites
+          - distal_dendrites
+        18:
+          - axon
+          - axon_initial_segment
+  - file: ./morphologies/BasketCell.swc
+    parser:
+      tags:
+        16:
+          - axon
+          - axon_initial_segment
+regions:
+  brain:
+    children:
+      - declive
+partitions:
+  declive:
+    type: allen
+    struct_name: DEC
+    mask_source: data/corrections_cereb/annotations_pu.nrrd
+    keys:
+      - mossy_fiber_density
+      - glomerulus_density
+      - ubc_glomerulus_density
+      - granule_density
+      - golgi_density
+      - unipolar_brush_density
+      - purkinje_density
+      - basket_density
+      - stellate_density
+    sources:
+      - data/corrections_cereb/density_volumes/mossy_fiber_density.nrrd
+      - data/corrections_cereb/density_volumes/glomerulus_density.nrrd
+      - data/corrections_cereb/density_volumes/ubc_glomerulus_density.nrrd
+      - data/corrections_cereb/density_volumes/granule_density.nrrd
+      - data/corrections_cereb/density_volumes/golgi_density.nrrd
+      - data/corrections_cereb/density_volumes/unipolar_brushed_density.nrrd
+      - data/corrections_cereb/density_volumes/purkinje_density.nrrd
+      - data/corrections_cereb/density_volumes/basket_density.nrrd
+      - data/corrections_cereb/density_volumes/stellate_density.nrrd
+    atlas_datasets:
+      orientations: data/corrections_cereb/orientations.nrrd
+      thicknesses: data/corrections_cereb/all_depths.nrrd
+      boundaries: data/corrections_cereb/borders.nrrd
+cell_types:
+  mossy_fibers:
+    spatial:
+      density_key: mossy_fiber_density
+      radius: 1.5
+  glomerulus:
+    spatial:
+      density_key: glomerulus_density
+      radius: 1.5
+  granule_cell:
+    spatial:
+      density_key: granule_density
+      morphologies:
+        - GranuleCell
+      radius: 2.5
+  golgi_cell:
+    spatial:
+      density_key: golgi_density
+      morphologies:
+        - GolgiCell
+      radius: 8.0
+  ubc_glomerulus:
+    spatial:
+      density_key: ubc_glomerulus_density
+      radius: 1.5
+  unipolar_brush_cell:
+    spatial:
+      density_key: unipolar_brush_density
+      radius: 4.1
+  purkinje_cell:
+    spatial:
+      density_key: purkinje_density
+      morphologies:
+        - PurkinjeCell
+      radius: 7.5
+  basket_cell:
+    spatial:
+      density_key: basket_density
+      morphologies:
+        - BasketCell
+      radius: 6.0
+  stellate_cell:
+    spatial:
+      density_key: stellate_density
+      morphologies:
+        - StellateCell
+      radius: 4.0
+placement:
+  general_placement:
+    cell_types:
+    - mossy_fibers
+    - glomerulus
+    - ubc_glomerulus
+    - granule_cell
+    - unipolar_brush_cell
+    partitions:
+    - declive
+    strategy: bsb.placement.RandomPlacement
+  goc_placement:
+    cell_types:
+      - golgi_cell
+    distribute:
+      morphologies:
+        strategy: cerebellum.placement.bender_generator.GolgiGenerator
+    partitions:
+      - declive
+    strategy: bsb.placement.RandomPlacement
+  pc_placement:
+    cell_types:
+      - purkinje_cell
+    distribute:
+      morphologies:
+        deform:
+          - dendrites
+        fixed_dimension: 2
+        rescale:
+          - dendrites
+        strategy: cerebellum.placement.bender_generator.PurkinjeGenerator
+    partitions:
+      - declive
+    strategy: bsb.placement.RandomPlacement
+  sc_placement:
+    cell_types:
+      - stellate_cell
+    distribute:
+      morphologies:
+        fixed_dimension: 2
+        strategy: cerebellum.placement.bender_generator.BenderGenerator
+    partitions:
+      - declive
+    strategy: bsb.placement.RandomPlacement
+  bc_placement:
+    cell_types:
+      - basket_cell
+    distribute:
+      morphologies:
+        fixed_dimension: 2
+        strategy: cerebellum.placement.bender_generator.BasketGenerator
+    partitions:
+      - declive
+    strategy: bsb.placement.RandomPlacement
+
+connectivity:
+  $import:
+    ref: ../ubc/ubc_nest.yaml#/connectivity
+    values:
+      - mossy_fibers_to_glomerulus
+      - glomerulus_to_granule
+      - glomerulus_to_golgi
+      - golgi_to_glomerulus
+      - golgi_to_golgi
+      - basket_to_purkinje
+      - stellate_to_purkinje
+      - basket_to_basket
+      - stellate_to_stellate
+      - ubc_to_ubc_glomerulus
+      - glomerulus_to_ubc
+
+$import:
+  ref: ../ubc/ubc_nest.yaml#/
+  values:
+    - packages
+    - storage
+    - simulations

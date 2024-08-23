@@ -39,6 +39,7 @@ intersphinx_mapping = {
     "numpy": ("https://numpy.org/doc/stable/", None),
     "scipy": ("https://scipy.github.io/devdocs/", None),
     "bsb": ("https://bsb.readthedocs.io/en/latest", None),
+    "voxcell": ("https://voxcell.readthedocs.io/en/stable/", None),
 }
 
 # Add any paths that contain templates here, relative to this directory.
