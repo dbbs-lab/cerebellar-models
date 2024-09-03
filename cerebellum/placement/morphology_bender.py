@@ -6,7 +6,6 @@ from bsb import config
 from bsb.config._attrs import cfgdict
 from matplotlib import pylab as plt
 from scipy.spatial.transform import Rotation
-from sympy.strategies import branch
 
 from cerebellum.placement.utils import (
     boundaries_index_of,
@@ -18,15 +17,22 @@ from cerebellum.placement.utils import (
 class RotationReminder:
     """Utility class to keep information on last applied rotations."""
 
-    rotation_to_correct = np.zeros(3)
-    old_diff_rotation = np.full((3,), 1e-3)
-
-    def __init__(self, last_rotation):
+    def __init__(self, last_rotation, old_diff_rotation, rotation_to_correct=None):
         """
 
         :param last_rotation: Last rotation applied to the morphology's points.
         """
         self.last_rotation = last_rotation
+        if rotation_to_correct is None:
+            self.rotation_to_correct = np.zeros(3)
+        else:
+            self.rotation_to_correct = np.copy(rotation_to_correct)
+        self.old_diff_rotation = np.copy(old_diff_rotation)
+
+    def copy(self):
+        return RotationReminder(
+            self.last_rotation, self.old_diff_rotation, self.rotation_to_correct
+        )
 
 
 class MorphologyBender:
@@ -170,7 +176,7 @@ class MorphologyBender:
         :return: number of points deleted
         :rtype: int
         """
-        delta = np.copy(branch.points[i - 1]) - branch.points[i]
+        delta = (branch.points[i - 1] - branch.points[i]) if i > 0 else np.zeros(3)
         # translate all the points of the branch starting at i
         branch.points[i + 1 :] += delta
         # translate all the children of the branch
@@ -204,7 +210,7 @@ class MorphologyBender:
             scaled_diff_rotation = diff_rotation * inc
             if (np.absolute(scaled_diff_rotation) > np.pi / 2).any():
                 if inc >= 1:
-                    diff_rotation = np.sign(diff_rotation) * 1e-3
+                    diff_rotation -= np.sign(diff_rotation) * 1e-3
                     inc = -1.0
                     continue
                 else:
@@ -215,7 +221,7 @@ class MorphologyBender:
                 branch_labels,
             ):
                 if np.linalg.norm(diff_rotation) == 0:
-                    diff_rotation = old_rots.old_diff_rotation
+                    diff_rotation = np.copy(old_rots.old_diff_rotation)
                 else:
                     inc += inc / 4
 
@@ -235,7 +241,7 @@ class MorphologyBender:
         # Update previous rotations.
         old_rots.last_rotation = new_rotation
         if np.linalg.norm(diff_rotation) > 0:
-            old_rots.old_diff_rotation = diff_rotation
+            old_rots.old_diff_rotation = np.copy(diff_rotation)
         old_rots.rotation_to_correct = signed_modulo(
             old_rots.rotation_to_correct - scaled_diff_rotation + diff_rotation, 2 * np.pi
         )
@@ -314,22 +320,31 @@ class MorphologyBender:
                 )
                 branch.root_rotate(rotation)
                 curr_scaling = self.process_scaling(branch.points[0])
-                stack_data.append((branch, rotation, curr_scaling))
+                axis_max = max(
+                    enumerate(
+                        np.absolute(
+                            self.partition.voxel_data_of(branch.points[0], self.orientation_field)
+                        )
+                    ),
+                    key=lambda x: x[1],
+                )[0]
+                old_diff_rotation = np.zeros(3)
+                old_diff_rotation[axis_max] = 1e-2
+                stack_data.append(
+                    (branch, RotationReminder(rotation, old_diff_rotation), curr_scaling)
+                )
             except ValueError as _:
                 continue
         stack = deque(stack_data)
 
-        branches_done = []
         while True:
             try:
-                branch, rotation, curr_scaling = stack.pop()
+                branch, old_rots, curr_scaling = stack.pop()
             except IndexError:
                 break
             else:
-                branches_done.append(branch)
                 last_point = branch.points[0]
                 last_index = 0
-                old_rots = RotationReminder(rotation)
                 i = 0
                 length = len(branch.points)
                 while i < length:
@@ -345,7 +360,6 @@ class MorphologyBender:
                                 "xyz", self.rotate_point(last_point, branch, i, old_rots)
                             )
                             branch.root_rotate(rotation, downstream_of=last_index)
-                            self.print_morpho(morphology, branches_done, i)
                         except ValueError as _:
                             self.delete_point(branch, i)
                             length -= 1
@@ -360,7 +374,7 @@ class MorphologyBender:
                     if len(branch.children):
                         stack.extend(
                             [
-                                (child, rotation, curr_scaling)
+                                (child, old_rots.copy(), curr_scaling)
                                 for child in branch.children
                                 if self.partition.is_within(
                                     self.partition.voxel_of(child.points[0]), self.annotations
@@ -368,6 +382,7 @@ class MorphologyBender:
                             ]
                         )
         morphology.close_gaps()
+        self.print_morpho(morphology)
         return morphology
 
     def process(self, positions, morphologies):
@@ -416,29 +431,28 @@ class MorphologyBender:
         return deformed_list
 
     @functools.cache
-    def _slice_img(self, deformed_morpho, axis):
+    def _slice_img(self):
         roi = [10725, 10724, 10723]
         colors = [
             [0.15844, 0.73551, 0.92305, 0.5],
             [0.64362, 0.98999, 0.23356, 0.5],
             [0.9836, 0.49291, 0.12849, 0.5],
         ]
-        slice_ = self.partition.voxel_of(deformed_morpho.points[0])[axis]
-        slice_ann = np.take(self.annotations, slice_, axis)
-        if axis == 2:
-            slice_ann = slice_ann.T
-        color_ann = np.ones(slice_ann.shape + (4,))
+        color_ann = np.ones(self.annotations.shape + (4,))
         for reg, color in zip(roi, colors):
-            color_ann[slice_ann == reg] = color
+            color_ann[self.annotations == reg] = color
         return color_ann
 
-    def print_morpho(self, deformed_morpho, branches=None, point_index=-1, axis=2):
-        color_ann = self._slice_img(deformed_morpho, axis)
-
-        plt.close("all")
+    def print_morpho(self, deformed_morpho, branches=None, slice_=None, point_index=-1, axis=2):
+        color_ann = self._slice_img()
+        slice_ = slice_ or self.partition.voxel_of(deformed_morpho.points[0])[axis]
+        slice_ann = np.take(color_ann, slice_, axis)
+        if axis == 2:
+            slice_ann = np.moveaxis(slice_ann, 0, 1)
         fig, ax = plt.subplots(figsize=(10, 10))
-        ax.imshow(color_ann, interpolation="nearest")
-
+        ax.imshow(slice_ann, interpolation="nearest")
+        for line in ax.get_lines():
+            line.remove()
         to_keep = np.delete([0, 1, 2], axis)
         if branches is None:
             branches = deformed_morpho.branches
@@ -468,9 +482,10 @@ class MorphologyBender:
         )
         ax.set_ylim(
             [
-                np.min(deformed_morpho.points[:, to_keep[1]]) / self.partition.voxel_size - 3,
                 np.max(deformed_morpho.points[:, to_keep[1]]) / self.partition.voxel_size + 3,
+                np.min(deformed_morpho.points[:, to_keep[1]]) / self.partition.voxel_size - 3,
             ]
         )
         plt.tight_layout()
         plt.savefig("test.png", dpi=200)
+        plt.close("all")
