@@ -4,7 +4,6 @@ from collections import deque
 import numpy as np
 from bsb import config
 from bsb.config._attrs import cfgdict
-from matplotlib import pylab as plt
 from scipy.spatial.transform import Rotation
 
 from cerebellum.placement.utils import (
@@ -183,7 +182,6 @@ class MorphologyBender:
         for child in branch.children:
             child.translate(delta)
         branch.delete_point(i)
-        return 1
 
     def rotate_point(self, source, branch, i, old_rots):
         """
@@ -282,7 +280,7 @@ class MorphologyBender:
 
         # Update the scaling
         new_scaling = self.process_scaling(branch.points[i])
-        if not np.isnan(new_scaling):
+        if not np.isnan(new_scaling) and not np.isinf(new_scaling):
             scaling = new_scaling
         old_coord = np.copy(branch.points[i])
         new_coord = branch.points[i - 1] + (old_coord - branch.points[i - 1]) * scaling
@@ -346,13 +344,12 @@ class MorphologyBender:
                 last_point = branch.points[0]
                 last_index = 0
                 i = 0
-                length = len(branch.points)
-                while i < length:
+                while i < len(branch.points):
                     branch_labels = list(branch.labelsets[branch.labels[i]])
                     if np.isin(branch_labels, self.rescale).any() and i > 0:
                         rescale, curr_scaling = self.scale_morpho(branch, i, curr_scaling)
                         if rescale:
-                            length -= self.delete_point(branch, i)
+                            self.delete_point(branch, i)
                             continue
                     if np.isin(branch_labels, self.deform).any():
                         try:
@@ -362,7 +359,6 @@ class MorphologyBender:
                             branch.root_rotate(rotation, downstream_of=last_index)
                         except ValueError as _:
                             self.delete_point(branch, i)
-                            length -= 1
                             continue
                     last_point = branch.points[i]
                     last_index = i
@@ -382,7 +378,6 @@ class MorphologyBender:
                             ]
                         )
         morphology.close_gaps()
-        self.print_morpho(morphology)
         return morphology
 
     def process(self, positions, morphologies):
@@ -429,63 +424,3 @@ class MorphologyBender:
             deformed_list[filter_pos] = u_morpho[u_index]
 
         return deformed_list
-
-    @functools.cache
-    def _slice_img(self):
-        roi = [10725, 10724, 10723]
-        colors = [
-            [0.15844, 0.73551, 0.92305, 0.5],
-            [0.64362, 0.98999, 0.23356, 0.5],
-            [0.9836, 0.49291, 0.12849, 0.5],
-        ]
-        color_ann = np.ones(self.annotations.shape + (4,))
-        for reg, color in zip(roi, colors):
-            color_ann[self.annotations == reg] = color
-        return color_ann
-
-    def print_morpho(self, deformed_morpho, branches=None, slice_=None, point_index=-1, axis=2):
-        color_ann = self._slice_img()
-        slice_ = slice_ or self.partition.voxel_of(deformed_morpho.points[0])[axis]
-        slice_ann = np.take(color_ann, slice_, axis)
-        if axis == 2:
-            slice_ann = np.moveaxis(slice_ann, 0, 1)
-        fig, ax = plt.subplots(figsize=(10, 10))
-        ax.imshow(slice_ann, interpolation="nearest")
-        for line in ax.get_lines():
-            line.remove()
-        to_keep = np.delete([0, 1, 2], axis)
-        if branches is None:
-            branches = deformed_morpho.branches
-        for loc_branch in branches:
-            last_point = len(loc_branch.points) - 1
-            if loc_branch == branches[-1] and point_index >= 0:
-                last_point = len(loc_branch.points) - 1
-            x, y = np.take(
-                loc_branch.points[: last_point + 1] / self.partition.voxel_size, to_keep, 1
-            ).T
-            is_axon = np.array(
-                [
-                    np.isin(
-                        list(loc_branch.labelsets[loc_branch.labels[i]]), ["axon", "tag_18"]
-                    ).any()
-                    for i in range(len(loc_branch.points))
-                ]
-            )
-            ax.plot(x[~is_axon], y[~is_axon], c="blue")
-            ax.plot(x[is_axon], y[is_axon], c="red")
-
-        ax.set_xlim(
-            [
-                np.min(deformed_morpho.points[:, to_keep[0]]) / self.partition.voxel_size - 3,
-                np.max(deformed_morpho.points[:, to_keep[0]]) / self.partition.voxel_size + 3,
-            ]
-        )
-        ax.set_ylim(
-            [
-                np.max(deformed_morpho.points[:, to_keep[1]]) / self.partition.voxel_size + 3,
-                np.min(deformed_morpho.points[:, to_keep[1]]) / self.partition.voxel_size - 3,
-            ]
-        )
-        plt.tight_layout()
-        plt.savefig("test.png", dpi=200)
-        plt.close("all")

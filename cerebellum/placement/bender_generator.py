@@ -29,7 +29,7 @@ class GranuleBender(MorphologyBender):
     """Specific bender for granule cell."""
 
     SIZE_ASCENDING_AXON = 140.0  # um
-    NB_ASCENDING_AXON_SEGMENTS = 11
+    NB_ASCENDING_AXON_SEGMENTS = 12  # +1 to include the soma
     nb_section_left = NB_ASCENDING_AXON_SEGMENTS
 
     rescale = False
@@ -47,19 +47,30 @@ class GranuleBender(MorphologyBender):
         else:
             ascending_axon_length = top_dist + (1 - self.ratio_gr) * (distances[0] - top_dist)
 
-        self.scaling = (
+        self.scaling = np.maximum(
             ascending_axon_length
             / self.nb_section_left
             / self.SIZE_ASCENDING_AXON
-            * self.NB_ASCENDING_AXON_SEGMENTS
+            * self.NB_ASCENDING_AXON_SEGMENTS,
+            0.1,
         )
         self.nb_section_left -= 1
         return self.scaling  # ratio according to default axon length
 
     def scale_morpho(self, branch, i, scaling):
+        old_deriv = branch.points[i] - branch.points[i - 1]
         rescale, new_scaling = super().scale_morpho(branch, i, scaling)
-        self.rescale = False
+        self.has_rescale = False
         if not rescale:
+            if self.nb_section_left <= 0 and self.get_lay_abv(branch.points[i]) != "mo":
+                # If the last point does not land on molecular layer, add an ascending axon point.
+                self.nb_section_left = 1
+                branch.introduce_point(i, branch.points[i])
+                branch.points[i + 1] = branch.points[i] + old_deriv
+                # translate all the children of the branch
+                for child in branch.children:
+                    child.translate(old_deriv)
+
             # If the difference of orientation between the current point of the ascending axon
             # according to its first point yields an angle greater than 90 degrees, the ascending
             # axon has crossed a frontier of the region, and its last two points can be removed.
@@ -74,7 +85,7 @@ class GranuleBender(MorphologyBender):
                 > np.pi / 2
             )
             if rescale:
-                self.rescale = True
+                self.has_rescale = True
                 old_coord = np.copy(branch.points[i])
                 branch.points[i] = np.copy(branch.points[i - 2])
                 # translate all the points of the branch starting at i
@@ -87,11 +98,9 @@ class GranuleBender(MorphologyBender):
     def delete_point(self, branch, i):
         # Delete 2 points instead of 1
         branch.delete_point(i - 1)
-        if self.rescale:
+        if self.has_rescale:
             branch.delete_point(i - 1)
-            self.rescale = False
-            return 2
-        return 1
+            self.has_rescale = False
 
     def rotate_point(self, source, branch, i, old_rots):
         rotation = super().rotate_point(source, branch, i, old_rots)
@@ -99,7 +108,7 @@ class GranuleBender(MorphologyBender):
             target = branch.points[i]
             target_ = Rotation.from_euler("xyz", rotation).apply(target - source) + source
             distances = self.partition.voxel_data_of(target_, self.thicknesses)
-            if np.sum(distances[:1]) > 1e-6:
+            if np.sum(distances[:1]) > 1e-6 and np.linalg.norm(source - target) > 1e-3:
                 ratio_mol = distances[0] / (distances[1] + distances[0])
                 if ratio_mol > self.ratio_gr + (1 - self.ratio_gr) / 3:  # go too deep
                     angle = signed_modulo(
@@ -166,7 +175,7 @@ class GolgiGenerator(BenderGenerator, classmap_entry="golgi_bender"):
                         (
                             id_den_mol
                             if (
-                                self.atlas_utils.voxel_data_of(point, self.annotations) != 0
+                                self.partition.voxel_data_of(point, self.annotations) != 0
                                 and "mo" in self.get_lay_abv(point)
                             )
                             else id_den_gr

@@ -22,5 +22,6 @@ classmap = {
         "glom_golgi": "cerebellum.connectome.glomerulus_golgi.ConnectomeGlomerulusGolgi",
         "ubc_glom": "cerebellum.connectome.to_glomerulus.ConnectomeUBCGlomerulus",
         "glom_ubc": "cerebellum.connectome.glomerulus_ubc.ConnectomeGlomerulusUBC",
+        "grc_to": "cerebellum.connectome.granule_voxel_intersect.GranuleToMorphologyIntersection",
     }
 }

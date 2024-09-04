@@ -228,6 +228,108 @@ connectivity:
       - stellate_to_stellate
       - ubc_to_ubc_glomerulus
       - glomerulus_to_ubc
+  ascending_axon_to_purkinje:
+    strategy: cerebellum.connectome.granule_voxel_intersect.GranuleToMorphologyIntersection
+    presynaptic:
+      cell_types:
+        - granule_cell
+      morphology_labels:
+        - ascending_axon
+      morpho_loader: cerebellum.connectome.granule_voxel_intersect.load_deformed_morpho
+    postsynaptic:
+      cell_types:
+        - purkinje_cell
+      morphology_labels:
+        - aa_targets
+    affinity: 0.05
+    favor_cache: post
+    voxels_pre: 500
+    voxels_post: 500
+  ascending_axon_to_golgi:
+    strategy: cerebellum.connectome.granule_voxel_intersect.GranuleToMorphologyIntersection
+    presynaptic:
+      cell_types:
+        - granule_cell
+      morphology_labels:
+        - ascending_axon
+      morpho_loader: cerebellum.connectome.granule_voxel_intersect.load_deformed_morpho
+    postsynaptic:
+      cell_types:
+        - golgi_cell
+      morphology_labels:
+        - basal_dendrites
+    affinity: 0.05
+    favor_cache: post
+    voxels_pre: 500
+    voxels_post: 500
+  parallel_fiber_to_golgi:
+    strategy: cerebellum.connectome.granule_voxel_intersect.GranuleToMorphologyIntersection
+    presynaptic:
+      cell_types:
+        - granule_cell
+      morphology_labels:
+        - parallel_fiber
+      morpho_loader: cerebellum.connectome.granule_voxel_intersect.load_deformed_morpho
+    postsynaptic:
+      cell_types:
+        - golgi_cell
+      morphology_labels:
+        - apical_dendrites
+    affinity: 0.08
+    favor_cache: post
+    voxels_pre: 500
+    voxels_post: 500
+  parallel_fiber_to_purkinje:
+    strategy: cerebellum.connectome.granule_voxel_intersect.GranuleToMorphologyIntersection
+    presynaptic:
+      cell_types:
+        - granule_cell
+      morphology_labels:
+        - parallel_fiber
+      morpho_loader: cerebellum.connectome.granule_voxel_intersect.load_deformed_morpho
+    postsynaptic:
+      cell_types:
+        - purkinje_cell
+      morphology_labels:
+        - pf_targets
+    affinity: 0.1
+    favor_cache: post
+    voxels_pre: 500
+    voxels_post: 500
+  parallel_fiber_to_basket:
+    strategy: cerebellum.connectome.granule_voxel_intersect.GranuleToMorphologyIntersection
+    presynaptic:
+      cell_types:
+        - granule_cell
+      morphology_labels:
+        - parallel_fiber
+      morpho_loader: cerebellum.connectome.granule_voxel_intersect.load_deformed_morpho
+    postsynaptic:
+      cell_types:
+        - basket_cell
+      morphology_labels:
+        - dendrites
+    affinity: 0.08
+    favor_cache: post
+    voxels_pre: 500
+    voxels_post: 500
+  parallel_fiber_to_stellate:
+    strategy: cerebellum.connectome.granule_voxel_intersect.GranuleToMorphologyIntersection
+    presynaptic:
+      cell_types:
+        - granule_cell
+      morphology_labels:
+        - parallel_fiber
+      morpho_loader: cerebellum.connectome.granule_voxel_intersect.load_deformed_morpho
+    postsynaptic:
+      cell_types:
+        - stellate_cell
+      morphology_labels:
+        - dendrites
+    affinity: 0.08
+    favor_cache: post
+    voxels_pre: 500
+    voxels_post: 500
 
 $import:
   ref: ../ubc/ubc_nest.yaml#/
