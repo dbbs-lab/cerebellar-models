@@ -54,6 +54,8 @@ Assuming you are in the ``cerebellum`` folder, run the following command in your
 
 This command will produce a microcircuit of the mouse cerebellar cortex and store it in the
 ``cerebellum.hdf5`` file. This process might take a while depending on your machine.
+This command will also automatically produce a separated pdf report on the structure of the microcircuit
+obtained: `bsb_report_structure.pdf` (see also the :doc:`analysis section <../analysis/structural>`).
 
 Congratulations you have built your first cerebellar cortex model !
 
@@ -64,3 +66,20 @@ A list of simulations can be attached to a BSB reconstruction through its config
 more :doc:`here <bsb:simulation/simulation>`). These simulations are dependant on the simulator you
 choose and their paradigm. Some examples are provided for each simulator sustained by the
 `cerebellum` package in the :doc:`configurations section <../configurations/configurations>`.
+
+After the simulation has completed, `cerebellum` allows you to run a list of predefined analysis on the
+simulation results. For instance, for spiking based simulation, you can run the following python script
+to produce a full pdf report with basic spike analysis of the simulation results (see more in
+:doc:`spike reporting section <../analysis/spike_analysis>`):
+
+.. code-block:: python
+
+    from cerebellum.analysis.spiking_results import BasicSimulationReport
+
+    scaffold_file = "path/to/your_bsb_scaffold.hdf5"
+    simulation_name = "name_of_your_simulation"
+    nio_folder = "path/to/folder_containing_nio_files"
+    output_filename = "path/to/report_file_name.pdf"
+
+    report = BasicSimulationReport(scaffold_file, simulation_name, nio_folder)
+    report.print_report(output_filename)

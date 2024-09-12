@@ -2,6 +2,9 @@
 __pycache__
 *.lck
 *.hdf5
+*.pdf
+*.ipynb
+*.png
 .python-version
 build
 report
