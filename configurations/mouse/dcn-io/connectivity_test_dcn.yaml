@@ -2,7 +2,7 @@ name: DBBS Mouse cerebellum w/ DCN and IO NEST basal activity and mf stimulus
 storage:
   root: mouse_cereb_dcn_io_nest.hdf5
 simulations:
-  basal_activity:
+  mf_stimulus:
     cell_models:
       io:
         model: eglif_cond_alpha_multisyn
@@ -33,13 +33,13 @@ simulations:
           weight: 50
           delay: 4
           receptor_type: 3
-      io_to_mli_io_to_basket_cell:
+      io_to_basket:
         synapse:
           model: static_synapse
           weight: 1
           delay: 4
           receptor_type: 3
-      io_to_mli_io_to_stellate_cell:
+      io_to_stellate:
         synapse:
           model: static_synapse
           weight: 2
@@ -64,6 +64,23 @@ simulations:
           delay: 20
           receptor_type: 2
     devices:
+      io_input:
+        device: poisson_generator
+        rate: 150
+        start : 1200
+        stop : 1250
+        targetting:
+          strategy: sphere
+          radius: 90
+          origin:
+            - 150.0
+            - 65.0
+            - 100.0
+          cell_models:
+            - mossy_fibers
+        "weight" : 1.0
+        "delay" : 0.1
+
       io_record:
         device: spike_recorder
         delay: 0.1
@@ -74,7 +91,6 @@ simulations:
   $import:
     ref: ./dcn_nest.yaml#/simulations/
     values:
-      - basal_activity
       - mf_stimulus
 $import:
   ref: ./dcn_io.yaml#/

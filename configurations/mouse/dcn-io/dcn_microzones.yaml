@@ -1,6 +1,6 @@
 name: DBBS Mouse cerebellum w/ DCN
 storage:
-  root: mouse_cereb_dcn.hdf5
+  root: mouse_cereb_dcn_microzones.hdf5
 network:
   z: 495
 regions:
@@ -40,7 +40,13 @@ placement:
       - dcn_layer
     cell_types:
       - dcn_i
-
+after_placement:
+  microzones:
+    class: bsb.postprocessing.LabelMicrozones
+    targets:
+      - purkinje_cell
+      - dcn_p
+      - dcn_i
 connectivity:
   purkinje_to_dcn_p:
     strategy: cerebellum.connectome.purkinje_dcn.FixedOutdegree
@@ -61,18 +67,26 @@ connectivity:
         - purkinje_cell
       morphology_labels:
         - axon
+      with_label:
+        - microzone-*
     postsynaptic:
       cell_types:
         - dcn_i
+      with_label:
+        - microzone-*
   mossy_fibers_to_dcn_p:
     strategy: bsb.connectivity.FixedIndegree
     indegree: 48 # 147 (not possible because in canonical n_mf=117)
     presynaptic:
       cell_types:
         - mossy_fibers
+      with_label:
+        - microzone-*
     postsynaptic:
       cell_types:
         - dcn_p
+      with_label:
+        - microzone-*
 $import:
   ref: ../mouse_cerebellar_cortex.yaml#/
   values:
