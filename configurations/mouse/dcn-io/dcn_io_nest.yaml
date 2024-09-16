@@ -1,6 +1,8 @@
 name: DBBS Mouse cerebellum w/ DCN and IO NEST basal activity and mf stimulus
 storage:
   root: mouse_cereb_dcn_io_nest.hdf5
+packages:
+  - bsb-nest~=4.1
 simulations:
   basal_activity:
     cell_models:
@@ -71,11 +73,41 @@ simulations:
           strategy: cell_model
           cell_models:
             - io
-  $import:
-    ref: ./dcn_nest.yaml#/simulations/
-    values:
-      - basal_activity
-      - mf_stimulus
+    $import:
+      ref: ./dcn_nest_copy.yaml#/simulations/basal_activity/
+      values:
+        - simulator
+        - resolution
+        - duration
+        - modules
+        - seed
+        - cell_models
+        - connection_models
+        - devices
+  mf_stimulus:
+    devices:
+      stimulus:
+        targetting:
+          origin:
+            - 150.0
+            - 65.0
+            - 300.0
+      $import:
+        ref: ./dcn_nest_copy.yaml#/simulations/mf_stimulus/devices
+        values:
+          - stimulus
+    $import:
+      ref: "#/simulations/basal_activity"
+      values:
+        - simulator
+        - resolution
+        - duration
+        - modules
+        - seed
+        - simulator
+        - cell_models
+        - connection_models
+        - devices
 $import:
   ref: ./dcn_io.yaml#/
   values:
