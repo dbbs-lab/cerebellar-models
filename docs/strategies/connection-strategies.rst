@@ -187,6 +187,43 @@ glomerulus.
           glomerulus: 2.  # will be interpreted as 2 / (1+2)
         radius: 50
 
+
+.. _io_mli:
+
+:class:`ConnectomeIO_MLI<.connectome.io_molecular.ConnectomeIO_MLI>`
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+The algorithm constists in a connection strategy to connect all the IO cells, via PC, to the molecular layer interneurons
+(MLI). Specifically, for each IO cell connected to a PC, the connection between this IO and MLI takes place in the subset
+of MLI connected to the shared PC.
+
+* ``presynaptic``: Define the presynaptic objects to consider. In particular, the specific ``cell_types`` can be given;
+
+* ``postsynaptic``: Define the postsynaptic objects to consider. In particular, the specific ``cell_types`` can be given;
+
+* ``mli_pc_connectivity``: define connectvity to be considered in the MLI subset connected to the PC;
+
+* ``io_pc_connectivity``: define connectvity to be considered in the IO connected to the PC;
+
+* ``pre_cell_pc``: PC population reference.
+
+.. code-block:: yaml
+
+      io_to_mli:
+        strategy: cerebellum.connectome.io_molecular.ConnectomeIO_MLI
+        presynaptic:
+          cell_types:
+            - io
+        postsynaptic:
+          cell_types:
+            - basket_cell
+            - stellate_cell
+        mli_pc_connectivity:
+          - basket_to_purkinje
+          - stellate_to_purkinje
+        io_pc_connectivity: io_to_purkinje
+        pre_cell_pc: purkinje_cell
+
+
 .. _fix_in:
 
 :doc:`FixedIndegree <bsb:bsb/bsb.connectivity>`
@@ -200,4 +237,12 @@ See bsb :doc:`documentation <bsb:connectivity/connection-strategies>`.
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 See bsb :doc:`documentation <bsb:connectivity/connection-strategies>`.
+
+.. _all_to_all:
+
+:doc:`AllToAll <bsb:bsb/bsb.connectivity>`
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+See bsb :doc:`documentation <bsb:connectivity/connection-strategies>`.
+
 

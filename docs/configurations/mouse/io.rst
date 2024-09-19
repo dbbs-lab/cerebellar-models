@@ -19,13 +19,38 @@ of the ``dcn_layer`` was set to ``[0,0,200]`` and the ``origin`` of the ``granul
 
 Cell types
 ++++++++++
-No morphologies are currently available for inferior olivary neurons, so they are represented only by their soma.
+No morphologies are currently available for inferior olivary (IO) neurons, so they are represented only by their soma.
+We considered a single population of IO neurons.
+The number of IO neurons to be placed is estimated based on the ratio between the number of Purkinje cells and
+IO itself, which is reported to be ``5:1`` in Blatt and Eisenman [#blatt_1985]_.
 
+Placement
++++++++++
+IO neurons are assumed to be uniformly distributed in their own layer, hence the bsb ``RandomPlacement`` strategy is
+chosen to place them.
 
+Connectivity
+++++++++++++
 
+.. csv-table::
+   :header-rows: 1
+   :delim: ;
+
+   #; Source Name; Source Branch; Target Name; Target Branch; Strategy; Specifics; References
+   22; IO; /; PC; / ; :ref:`fix_in`;``indegree`` =1; Geminiani et al. (2024) [#geminiani_2024]_
+   23; IO; /; SC; / ; :ref:`io_mli`; / ; Geminiani et al. (2024) [#geminiani_2024]_
+   23; IO; /; BC; / ; :ref:`io_mli`; / ; Geminiani et al. (2024) [#geminiani_2024]_
+   24; IO; / ; DCNp ; / ; :ref:`all_to_all`; / ; Geminiani et al. (2024) [#geminiani_2024]_
+   25; IO; /; DCNi; / ; :ref:`all_to_all`; / ; Geminiani et al. (2024) [#geminiani_2024]_
+   26; DCNi; / ; IO ; / ; :ref:`all_to_all`; / ; Geminiani et al. (2024) [#geminiani_2024]_
+
+NEST simulation
+^^^^^^^^^^^^^^^
 
 
 References
 ^^^^^^^^^^
 
 .. [#de_gruijl_2012] De Gruijl, J. R., Bazzigaluppi, P., de Jeu, M. T., & De Zeeuw, C. I. (2012). Climbing fiber burst size and olivary sub-threshold oscillations in a network setting. PLoS computational biology, 8(12), e1002814.
+.. [#blatt_1985] Blatt, G. J., & Eisenman, L. M. (1985). A qualitative and quantitative light microscopic study of the inferior olivary complex of normal, reeler, and weaver mutant mice. Journal of Comparative Neurology, 232(1), 117-128.
+.. [#geminiani_2024] Geminiani, Alice, et al. "Mesoscale simulations predict the role of synergistic cerebellar plasticity during classical eyeblink conditioning." PLOS Computational Biology 20.4 (2024): e1011277. https://doi.org/10.1371/journal.pcbi.1011277.

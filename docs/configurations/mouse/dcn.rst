@@ -80,7 +80,7 @@ Then, the following parameters are optimized according to the method described i
     DCNp; 0.408; 0.697; 0.047; 13.857; 3.477; 75.385
     DCNi; 0.079; 0.041; 0.044; 176.358; 176.358; 2.384
 
-It is not clear how the spiking parameters (i.e and ) are obtained in the Geminiani et al. (2019) paper [#geminiani_2019]_. The values were extracted from a BSB configuration provided by the authors.
+It is not clear how the spiking parameters are obtained in the Geminiani et al. (2019) paper [#geminiani_2019]_. The values were extracted from a BSB configuration provided by the authors.
 
 The postsynaptic receptors are defined as listed in Table 2 of Geminiani et al. (2019b) [#geminiani_2019b]_:
 

@@ -19,7 +19,7 @@ partitions:
 cell_types:
   io:
     spatial:
-      count_ratio: 0.1428
+      count_ratio: 0.2
       radius: 7.5
       relative_to: purkinje_cell
     plotting:
