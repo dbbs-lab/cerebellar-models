@@ -5,6 +5,7 @@ from test.test_reports import DictTestCase
 import numpy as np
 from bsb import Configuration, Scaffold, parse_configuration_file
 from bsb_test import NumpyTestCase, RandomStorageFixture
+from matplotlib import pyplot as plt
 
 from cerebellum.analysis.report import LIST_CT_INFO
 from cerebellum.analysis.structure_analysis import (
@@ -25,6 +26,9 @@ class TestPlacementTable(
         self.plot = PlacementTable(
             (5, 2.5), scaffold=self.scaffold, dict_abv={"granule_cell": "GrC"}
         )
+
+    def tearDown(self):
+        plt.close("all")
 
     def test_placement_table(self):
         keys = [

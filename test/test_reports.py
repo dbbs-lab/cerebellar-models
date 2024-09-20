@@ -4,6 +4,7 @@ import unittest
 import numpy as np
 from bsb import Configuration, Scaffold, parse_configuration_file
 from bsb_test import NumpyTestCase, RandomStorageFixture
+from matplotlib import pyplot as plt
 
 from cerebellum.analysis.plots import Legend, ScaffoldPlot
 from cerebellum.analysis.report import LIST_CT_INFO, BSBReport, Report
@@ -27,6 +28,9 @@ class DictTestCase:
 
 
 class TestReport(unittest.TestCase, NumpyTestCase, DictTestCase):
+
+    def tearDown(self):
+        plt.close("all")
 
     def test_report(self):
         report = Report()

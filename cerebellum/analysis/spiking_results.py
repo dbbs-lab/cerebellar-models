@@ -410,7 +410,7 @@ class RasterPSTHPlot(SpikePlot):
             ax.scatter(
                 times * self.dt,
                 newIds,
-                c=color,
+                color=color,
                 **cell_params,
             )
             ax.invert_yaxis()
