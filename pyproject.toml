@@ -17,7 +17,8 @@ dependencies = [
     "bsb-json~=4.1",
     "bsb-neuron~=4.0",
     "bsb-nest~=4.1",
-    "nestml~=7.0"
+    "nestml~=7.0",
+    "matplotlib~=3.9"
 ]
 
 [project.optional-dependencies]

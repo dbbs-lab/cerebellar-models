@@ -17,3 +17,4 @@ Subpackages
 
    cerebellum.connectome
    cerebellum.placement
+   cerebellum.analysis

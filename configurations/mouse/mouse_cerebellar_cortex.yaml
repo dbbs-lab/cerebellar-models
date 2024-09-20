@@ -23,16 +23,12 @@ regions:
       - t_molecular_layer
 partitions:
   granular_layer:
-    stack_index: 0
     thickness: 130
   purkinje_layer:
-    stack_index: 1
     thickness: 15
   b_molecular_layer:
-    stack_index: 2
     thickness: 50
   t_molecular_layer:
-    stack_index: 3
     thickness: 100
 cell_types:
   glomerulus:
@@ -371,6 +367,10 @@ connectivity:
       distribution: norm
       loc: 100
       scale: 4
+after_connectivity:
+  print_structure_report:
+    strategy: cerebellum.analysis.structure_analysis.RunStructureReport
+    output_filename: bsb_report_structure.pdf
 $import:
   ref: ../../morphologies/morphologies.yaml#/
   values:
