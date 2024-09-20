@@ -55,7 +55,7 @@ Constructor parameters:
   This gives for each element to plot, its name, abbreviation and color.
 
 This class will load the results from nio files produced by the BSB simulation
-and store them in store them in the following attributes:
+and store them  in the following attributes:
 
 * ``all_spikes``: A Boolean numpy array of shape (N*M) storing spike events for
   each time step. N corresponds to the number of time steps, M to the number of
