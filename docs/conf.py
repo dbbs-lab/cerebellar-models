@@ -33,7 +33,7 @@ extensions = [
     "sphinx.ext.intersphinx",
 ]
 autodoc_type_aliases = {"JobPool": "bsb.services.pool.JobPool"}
-autodoc_mock_imports = []
+autodoc_mock_imports = ["nest"]
 
 intersphinx_mapping = {
     "python": ("https://docs.python.org/3", None),

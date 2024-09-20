@@ -36,6 +36,12 @@ Sciences <https://dbbs.dip.unipv.it/en>`_ of the University of Pavia.
 
 .. toctree::
    :maxdepth: 2
+   :caption: Analysis and Reporting
+
+   analysis/reporting
+
+.. toctree::
+   :maxdepth: 2
    :caption: Code references
 
    modules
