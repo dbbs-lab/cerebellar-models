@@ -16,14 +16,14 @@ dependencies = [
     "bsb-yaml~=4.1",
     "bsb-json~=4.1",
     "bsb-neuron~=4.0",
-    "bsb-nest~=4.1",
+    "bsb-nest~=4.2",
     "nestml~=7.0",
     "matplotlib~=3.9"
 ]
 
 [project.optional-dependencies]
 test = [
-    "bsb-test~=4.0",
+    "bsb-test~=4.2",
     "coverage~=7.3",
 ]
 docs = [
