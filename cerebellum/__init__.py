@@ -4,10 +4,10 @@ Implementation of the BSB framework for cerebellar cortex reconstructions and si
 
 import os
 
-__version__ = "0.2.0"
+__version__ = "0.3.0"
 
 
-def templates():
+def templates():  # pragma: nocover
     """
     :meta private:
     """
@@ -23,5 +23,8 @@ classmap = {
         "ubc_glom": "cerebellum.connectome.to_glomerulus.ConnectomeUBCGlomerulus",
         "glom_ubc": "cerebellum.connectome.glomerulus_ubc.ConnectomeGlomerulusUBC",
         "grc_to": "cerebellum.connectome.granule_voxel_intersect.GranuleToMorphologyIntersection",
-    }
+    },
+    "bsb.postprocessing.AfterConnectivityHook": {
+        "struct_report": "cerebellum.analysis.structure_analysis.RunStructureReport",
+    },
 }
