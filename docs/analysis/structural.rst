@@ -93,7 +93,7 @@ BSB postprocessing node to generate a scaffold :ref:`structure_report` after
 running the connectivity jobs. To automatically produce this during BSB scaffold
 compilation add the following section to your configuration:
 
-.. code-block::yaml
+.. code-block:: yaml
 
     after_connectivity:
         print_structure_report:

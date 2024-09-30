@@ -39,7 +39,7 @@ class TablePlot:
         Plot the table in the Figure.
         """
         if len(self.table_values) == 0:
-            warn("No values to plot")
+            warn("No values to plot", UserWarning)
             return
         dict_plot = dict(
             rowColours=np.full((len(self.rows), 3), [0.8, 0.8, 0.8]),

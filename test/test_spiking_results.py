@@ -4,6 +4,7 @@ import unittest
 import numpy as np
 from bsb import Scaffold, parse_configuration_file
 from bsb_test import NumpyTestCase, RandomStorageFixture
+from matplotlib import pyplot as plt
 
 from cerebellum.analysis.plots import ScaffoldPlot
 from cerebellum.analysis.spiking_results import (
@@ -55,6 +56,7 @@ class ReportBasalSimCircuitTest(MiniCerebCircuitTest, engine_name="hdf5"):
 
     def tearDown(self):
         super().tearDown()
+        plt.close("all")
         os.remove("test_sim_results.nio")
 
 
@@ -473,7 +475,8 @@ class TestSpikePlots(ReportBasalSimCircuitTest, NumpyTestCase, engine_name="hdf5
             populations=[],
             dict_colors=self.simulationReport.colors,
         )
-        plot.plot()
+        with self.assertWarns(UserWarning):
+            plot.plot()
 
     def test_basic_simulation_report(self):
         report = BasicSimulationReport(self.scaffold, "basal_activity", "./")

@@ -16,14 +16,14 @@ dependencies = [
     "bsb-yaml~=4.1",
     "bsb-json~=4.1",
     "bsb-neuron~=4.0",
-    "bsb-nest~=4.1",
+    "bsb-nest~=4.2",
     "nestml~=7.0",
     "matplotlib~=3.9"
 ]
 
 [project.optional-dependencies]
 test = [
-    "bsb-test~=4.0",
+    "bsb-test~=4.2",
     "coverage~=7.3",
 ]
 docs = [
@@ -54,7 +54,7 @@ known_third_party = ["nest"]
 my_components = "cerebellum:classmap"
 
 [tool.bumpversion]
-current_version = "0.2.0"
+current_version = "0.3.0"
 parse = "(?P<major>\\d+)\\.(?P<minor>\\d+)\\.(?P<patch>\\d+)"
 serialize = ["{major}.{minor}.{patch}"]
 search = "{current_version}"

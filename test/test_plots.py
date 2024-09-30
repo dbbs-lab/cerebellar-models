@@ -5,6 +5,7 @@ from unittest.mock import patch
 import numpy as np
 from bsb import Scaffold, parse_configuration_file
 from bsb_test import NumpyTestCase, RandomStorageFixture
+from matplotlib import pyplot as plt
 
 from cerebellum.analysis.plots import Legend, Plot, ScaffoldPlot
 
@@ -19,6 +20,9 @@ class TestPlot(unittest.TestCase, NumpyTestCase):
     def setUp(self):
         self.colors = {"blue": np.array([0, 0, 1]), "red": np.array([1, 0, 0])}
         self.plot = Plot((7.5, 6.8), 2, 3, self.colors)
+
+    def tearDown(self):
+        plt.close("all")
 
     def test_init(self):
         self.assertAll(

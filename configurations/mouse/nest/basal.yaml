@@ -2,7 +2,7 @@ name: DBBS Mouse cerebellum NEST basal activity
 storage:
   root: mouse_cereb_nest.hdf5
 packages:
-  - bsb-nest~=4.1
+  - bsb-nest~=4.2
 components:
   - cerebellum/nest_models/build_models.py
 simulations:
