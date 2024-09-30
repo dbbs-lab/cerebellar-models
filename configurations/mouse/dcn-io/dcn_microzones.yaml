@@ -1,55 +1,238 @@
-name: DBBS Mouse cerebellum w/ DCN
+name: DBBS Mouse cerebellum w/ DCN and IO split in microzones
 storage:
-  root: mouse_cereb_dcn_microzones.hdf5
+  root: mouse_cereb_dcn_io_microzones.hdf5
 network:
-  z: 495
+  z: 695
 regions:
+  cerebellar_cortex:
+    type: group
+    children:
+      - granular_layer
+      - purkinje_layer  # Because of the import, it's Z+
+      - purkinje_layer_minus
+      - b_molecular_layer
+      - t_molecular_layer
   cerebellar_nuclei:
     type: group
     children:
-      - dcn_layer
+      - dcn_layer_plus
+      - dcn_layer_minus
+  io:
+    type: group
+    children:
+      - io_layer_plus
+      - io_layer_minus
 partitions:
+  io_layer_plus:
+    type: rhomboid
+    origin: [ 0, 0, 0 ]
+    dimensions: [ 150, 200, 200 ]
+  io_layer_minus:
+    type: rhomboid
+    origin: [ 150, 0, 0 ]
+    dimensions: [ 150, 200, 200 ]
+  dcn_layer_plus:
+    type: rhomboid
+    origin: [ 0, 0, 200 ]
+    dimensions: [ 150, 200, 200 ]
+  dcn_layer_minus:
+    type: rhomboid
+    origin: [ 150, 0, 200 ]
+    dimensions: [ 150, 200, 200 ]
   granular_layer:
+    type: rhomboid
     origin: [0, 0, 400]
-  dcn_layer:
-    origin: [0, 0, 200]
-    thickness: 200
+    dimensions: [300, 200, 130]
+  purkinje_layer: #Z+
+    type: rhomboid
+    origin: [0, 0, 530]
+    dimensions: [150, 200, 15]
+  purkinje_layer_minus:
+    type: rhomboid
+    origin: [ 150, 0, 530 ]
+    dimensions: [ 150, 200, 15 ]
+  b_molecular_layer:
+    type: rhomboid
+    origin: [ 0, 0, 545 ]
+    dimensions: [ 300, 200, 50 ]
+  t_molecular_layer:
+    type: rhomboid
+    origin: [ 0, 0, 595 ]
+    dimensions: [ 300, 200, 100 ]
 cell_types:
-  dcn_p:
+  purkinje_cell: #Z+
+    spatial:
+      morphologies:
+        - PurkinjeCell
+      planar_density: 0.00045
+      radius: 7.5
+    plotting:
+      display_name: Purkinje cell plus
+  purkinje_cell_minus:
+    spatial:
+      morphologies:
+        - PurkinjeCell
+      planar_density: 0.00045
+      radius: 7.5
+    plotting:
+      display_name: Purkinje cell minus
+  dcn_p_plus:
     spatial:
       radius: 9.5
       density: 9.92e-6 # 1.33e-6
     plotting:
-      display_name: Deep Cerebellar Nuclei type p
-  dcn_i:
+      display_name: Deep Cerebellar Nuclei type p plus
+  dcn_p_minus:
     spatial:
-      radius:  7.0
+      radius: 9.5
+      density: 9.92e-6 # 1.33e-6
+    plotting:
+      display_name: Deep Cerebellar Nuclei type p minus
+  dcn_i_plus:
+    spatial:
+      radius: 7.0
       density: 5.58e-6 # 0.7182e-6
     plotting:
-      display_name: Deep Cerebellar Nuclei type i
+      display_name: Deep Cerebellar Nuclei type i plus
+  dcn_i_minus:
+    spatial:
+      radius: 7.0
+      density: 5.58e-6 # 0.7182e-6
+    plotting:
+      display_name: Deep Cerebellar Nuclei type i minus
+  io_plus:
+    spatial:
+      count_ratio: 0.1428
+      radius: 7.5
+      relative_to: purkinje_cell
+    plotting:
+      display_name: Inferior olive cells plus
+  io_minus:
+    spatial:
+      count_ratio: 0.1428
+      radius: 7.5
+      relative_to: purkinje_cell_minus
+    plotting:
+      display_name: Inferior olive cells minus
 placement:
-  dcn_p_layer_placement:
-    strategy: bsb.placement.RandomPlacement
+  purkinje_layer_placement:  # override existing placement for Z+, need also to create an equivalent for Z-
+    strategy: bsb.placement.ParallelArrayPlacement
     partitions:
-      - dcn_layer
+      - purkinje_layer
     cell_types:
-      - dcn_p
-  dcn_i_layer_placement:
-    strategy: bsb.placement.RandomPlacement
-    partitions:
-      - dcn_layer
-    cell_types:
-      - dcn_i
-after_placement:
-  microzones:
-    class: bsb.postprocessing.LabelMicrozones
-    targets:
       - purkinje_cell
-      - dcn_p
-      - dcn_i
+    spacing_x: 130
+    angle: 70
+  purkinje_layer_placement_minus:
+    strategy: bsb.placement.ParallelArrayPlacement
+    partitions:
+      - purkinje_layer_minus
+    cell_types:
+      - purkinje_cell_minus
+    spacing_x: 130
+    angle: 70
+  dcn_p_layer_placement_plus:
+    strategy: bsb.placement.RandomPlacement
+    partitions:
+      - dcn_layer_plus
+    cell_types:
+      - dcn_p_plus
+  dcn_p_layer_placement_minus:
+    strategy: bsb.placement.RandomPlacement
+    partitions:
+      - dcn_layer_minus
+    cell_types:
+      - dcn_p_minus
+  dcn_i_layer_placement_plus:
+    strategy: bsb.placement.RandomPlacement
+    partitions:
+      - dcn_layer_plus
+    cell_types:
+      - dcn_i_plus
+  dcn_i_layer_placement_minus:
+    strategy: bsb.placement.RandomPlacement
+    partitions:
+      - dcn_layer_minus
+    cell_types:
+      - dcn_i_minus
+  io_layer_placement_plus:
+    strategy: bsb.placement.RandomPlacement
+    partitions:
+      - io_layer_plus
+    cell_types:
+      - io_plus
+  io_layer_placement_minus:
+    strategy: bsb.placement.RandomPlacement
+    partitions:
+      - io_layer_minus
+    cell_types:
+      - io_minus
 connectivity:
-  purkinje_to_dcn_p:
-    strategy: cerebellum.connectome.purkinje_dcn.FixedOutdegree
+  ascending_axon_to_purkinje_minus:
+    strategy: bsb.connectivity.VoxelIntersection
+    presynaptic:
+      cell_types:
+        - granule_cell
+      morphology_labels:
+        - ascending_axon
+    postsynaptic:
+      cell_types:
+        - purkinje_cell_minus
+      morphology_labels:
+        - aa_targets
+    affinity: 0.05
+    voxels_pre: 500
+    voxels_post: 500
+    contacts:
+      distribution: norm
+      loc: 3
+      scale: 1
+  parallel_fiber_to_purkinje_minus:
+    strategy: bsb.connectivity.VoxelIntersection
+    presynaptic:
+      cell_types:
+        - granule_cell
+      morphology_labels:
+        - parallel_fiber
+    postsynaptic:
+      cell_types:
+        - purkinje_cell_minus
+      morphology_labels:
+        - pf_targets
+    affinity: 0.1
+    voxels_pre: 500
+    voxels_post: 500
+  stellate_to_purkinje_minus:
+    strategy: bsb.connectivity.VoxelIntersection
+    presynaptic:
+      cell_types:
+        - stellate_cell
+      morphology_labels:
+        - axon
+    postsynaptic:
+      cell_types:
+        - purkinje_cell_minus
+      morphology_labels:
+        - sc_targets
+    affinity: 0.1
+    voxels_pre: 500
+    voxels_post: 500
+  basket_to_purkinje_minus:
+    strategy: bsb.connectivity.VoxelIntersection
+    presynaptic:
+      cell_types:
+        - basket_cell
+      morphology_labels:
+        - axon
+    postsynaptic:
+      cell_types:
+        - purkinje_cell_minus
+      morphology_labels:
+        - soma
+    voxels_pre: 500
+    voxels_post: 500
+  purkinje_to_dcn_p_plus:
+    strategy: bsb.connectivity.FixedOutdegree
     outdegree: 45 # 5
     presynaptic:
       cell_types:
@@ -58,43 +241,135 @@ connectivity:
         - axon
     postsynaptic:
       cell_types:
-        - dcn_p
-  purkinje_to_dcn_i:
-    strategy: cerebellum.connectome.purkinje_dcn.FixedOutdegree
+        - dcn_p_plus
+  purkinje_to_dcn_p_minus:
+    strategy: bsb.connectivity.FixedOutdegree
+    outdegree: 45 # 5
+    presynaptic:
+      cell_types:
+        - purkinje_cell_minus
+      morphology_labels:
+        - axon
+    postsynaptic:
+      cell_types:
+        - dcn_p_minus
+  purkinje_to_dcn_i_plus:
+    strategy: bsb.connectivity.FixedOutdegree
     outdegree: 12 # 5
     presynaptic:
       cell_types:
         - purkinje_cell
       morphology_labels:
         - axon
-      with_label:
-        - microzone-*
     postsynaptic:
       cell_types:
-        - dcn_i
-      with_label:
-        - microzone-*
-  mossy_fibers_to_dcn_p:
+        - dcn_i_plus
+  purkinje_to_dcn_i_minus:
+    strategy: bsb.connectivity.FixedOutdegree
+    outdegree: 12 # 5
+    presynaptic:
+      cell_types:
+        - purkinje_cell_minus
+      morphology_labels:
+        - axon
+    postsynaptic:
+      cell_types:
+        - dcn_i_minus
+  mossy_fibers_to_dcn_p_plus:
     strategy: bsb.connectivity.FixedIndegree
     indegree: 48 # 147 (not possible because in canonical n_mf=117)
     presynaptic:
       cell_types:
         - mossy_fibers
-      with_label:
-        - microzone-*
     postsynaptic:
       cell_types:
-        - dcn_p
-      with_label:
-        - microzone-*
+        - dcn_p_plus
+  mossy_fibers_to_dcn_p_minus:
+    strategy: bsb.connectivity.FixedIndegree
+    indegree: 48 # 147 (not possible because in canonical n_mf=117)
+    presynaptic:
+      cell_types:
+        - mossy_fibers
+    postsynaptic:
+      cell_types:
+        - dcn_p_minus
+  io_to_purkinje:  #ONLY FOR Z+ MICROZONE!!!
+    strategy: bsb.connectivity.FixedIndegree
+    presynaptic:
+      cell_types:
+        - io_plus
+    postsynaptic:
+      cell_types:
+        - purkinje_cell
+    indegree: 1
+  io_to_mli:  #ONLY FOR Z+ MICROZONE!!!
+    strategy: cerebellum.connectome.io_molecular.ConnectomeIO_MLI
+    presynaptic:
+      cell_types:
+        - io_plus
+    postsynaptic:
+      cell_types:
+        - basket_cell
+        - stellate_cell
+    mli_pc_connectivity:
+      - basket_to_purkinje  #NEED TO CHECK ASAP
+      - stellate_to_purkinje
+    io_pc_connectivity: io_to_purkinje
+    pre_cell_pc: purkinje_cell
+  io_to_dcn_p_plus:
+    strategy: bsb.connectivity.AllToAll
+    presynaptic:
+      cell_types:
+        - io_plus
+    postsynaptic:
+      cell_types:
+        - dcn_p_plus
+  io_to_dcn_p_minus:
+    strategy: bsb.connectivity.AllToAll
+    presynaptic:
+      cell_types:
+        - io_minus
+    postsynaptic:
+      cell_types:
+        - dcn_p_minus
+  io_to_dcn_i_plus:
+    strategy: bsb.connectivity.AllToAll
+    presynaptic:
+      cell_types:
+        - io_plus
+    postsynaptic:
+      cell_types:
+        - dcn_i_plus
+  io_to_dcn_i_minus:
+    strategy: bsb.connectivity.AllToAll
+    presynaptic:
+      cell_types:
+        - io_minus
+    postsynaptic:
+      cell_types:
+        - dcn_i_minus
+  dcn_i_to_io_plus:
+    strategy: bsb.connectivity.AllToAll
+    presynaptic:
+      cell_types:
+        - dcn_i_plus
+    postsynaptic:
+      cell_types:
+        - io_plus
+  dcn_i_to_io_minus:
+    strategy: bsb.connectivity.AllToAll
+    presynaptic:
+      cell_types:
+        - dcn_i_minus
+    postsynaptic:
+      cell_types:
+        - io_minus
 $import:
   ref: ../mouse_cerebellar_cortex.yaml#/
   values:
     - packages
     - storage
     - network
-    - regions
-    - partitions
     - morphologies
     - cell_types
     - placement

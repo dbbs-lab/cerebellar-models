@@ -32,38 +32,38 @@ simulations:
       io_to_purkinje:
         synapse:
           model: static_synapse
-          weight: 50
+          weight: 330 # 50
           delay: 4
           receptor_type: 3
       io_to_mli_io_to_basket_cell:
         synapse:
           model: static_synapse
-          weight: 1
-          delay: 4
+          weight: 2.5
+          delay: 40
           receptor_type: 3
       io_to_mli_io_to_stellate_cell:
         synapse:
           model: static_synapse
-          weight: 2
-          delay: 4
+          weight: 2.5
+          delay: 40
           receptor_type: 3
       io_to_dcn_p:
         synapse:
           model: static_synapse
-          weight: 0.1
+          weight: 0.5 # 2.5
           delay: 4
           receptor_type: 1
       io_to_dcn_i:
         synapse:
           model: static_synapse
-          weight: 0.2
+          weight: 0.5 # 0.1
           delay: 5
           receptor_type: 1
       dcn_i_to_io:
         synapse:
           model: static_synapse
-          weight: 3
-          delay: 20
+          weight: 0.45 # 0.75
+          delay: 25
           receptor_type: 2
     devices:
       io_record:
@@ -74,7 +74,7 @@ simulations:
           cell_models:
             - io
     $import:
-      ref: ./dcn_nest_copy.yaml#/simulations/basal_activity/
+      ref: ./dcn_nest.yaml#/simulations/basal_activity/
       values:
         - simulator
         - resolution
@@ -84,18 +84,32 @@ simulations:
         - cell_models
         - connection_models
         - devices
-  mf_stimulus:
+  mf_cf_stimulus:
     devices:
-      stimulus:
+      mf_stimulus:
+        device: poisson_generator
+        rate: 40
+        start: 1000
+        stop: 1260
         targetting:
-          origin:
-            - 150.0
-            - 65.0
-            - 300.0
-      $import:
-        ref: ./dcn_nest_copy.yaml#/simulations/mf_stimulus/devices
-        values:
-          - stimulus
+          strategy: cell_model
+          cell_models:
+            - mossy_fibers
+        weight: 1
+        delay: 0.1
+      cf_stimulus:
+        device: poisson_generator
+        rate: 500
+        start: 1250
+        stop: 1260
+        targetting:
+          strategy: cell_model
+          cell_models:
+            - io
+        receptor_type: 1
+        weight: 55
+        delay: 0.1
+
     $import:
       ref: "#/simulations/basal_activity"
       values:
@@ -111,7 +125,6 @@ simulations:
 $import:
   ref: ./dcn_io.yaml#/
   values:
-    - name
     - packages
     - storage
     - network

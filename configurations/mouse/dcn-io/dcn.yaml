@@ -10,9 +10,8 @@ regions:
       - dcn_layer
 partitions:
   granular_layer:
-    origin: [0, 0, 400]
-  dcn_layer:
     origin: [0, 0, 200]
+  dcn_layer:
     thickness: 200
 cell_types:
   dcn_p:
@@ -40,10 +39,9 @@ placement:
       - dcn_layer
     cell_types:
       - dcn_i
-
 connectivity:
   purkinje_to_dcn_p:
-    strategy: cerebellum.connectome.purkinje_dcn.FixedOutdegree
+    strategy: bsb.connectivity.FixedOutdegree
     outdegree: 45 # 5
     presynaptic:
       cell_types:
@@ -54,7 +52,7 @@ connectivity:
       cell_types:
         - dcn_p
   purkinje_to_dcn_i:
-    strategy: cerebellum.connectome.purkinje_dcn.FixedOutdegree
+    strategy: bsb.connectivity.FixedOutdegree
     outdegree: 12 # 5
     presynaptic:
       cell_types:

@@ -4,32 +4,22 @@ storage:
 network:
   z: 695
 regions:
-  cerebellar_cortex:
-    type: stack
+  inferior_olivary:
+    type: group
     children:
       - io_layer
-      - dcn_layer
-      - granular_layer
-      - purkinje_layer
-      - b_molecular_layer
-      - t_molecular_layer
 partitions:
+  granular_layer:
+    origin: [0,0,400]
+  dcn_layer:
+    origin: [0,0,200]
+    thickness: 200
   io_layer:
     thickness: 200
-  dcn_layer:
-    thickness: 200
-  granular_layer:
-    thickness: 130
-  purkinje_layer:
-    thickness: 15
-  b_molecular_layer:
-    thickness: 50
-  t_molecular_layer:
-    thickness: 100
 cell_types:
   io:
     spatial:
-      count_ratio: 0.1428
+      count_ratio: 0.2
       radius: 7.5
       relative_to: purkinje_cell
     plotting:

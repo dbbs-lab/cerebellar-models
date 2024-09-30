@@ -9,7 +9,7 @@ simulations:
   basal_activity:
     simulator: nest
     resolution: 0.1
-    duration: 5000
+    duration: 2000
     modules:
       - cerebmodule
     seed: 1234
