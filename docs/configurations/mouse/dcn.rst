@@ -97,7 +97,7 @@ The postsynaptic receptors are defined as listed in Table 2 of Geminiani et al. 
 
 Synapse parameters
 ++++++++++++++++++
-DCN connections are represented as ``static synapses`` (see :doc:`NEST section <nest>`). The receptor ids correspond to the postsynaptic receptors used for the connections (see table :ref:`dcn-table-receptor`).
+DCN connections are represented as ``static synapses`` (see :doc:`NEST section <nest>`). The receptor ids correspond to the postsynaptic receptors used for the connections.
 It is still unclear from the references how these parameters were optimized.
 
 .. csv-table:: Presynaptic parameters for DCN connections

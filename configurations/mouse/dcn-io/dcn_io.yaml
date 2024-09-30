@@ -2,7 +2,7 @@ name: DBBS Mouse cerebellum w/ DCN and IO
 storage:
   root: mouse_cereb_dcn_io.hdf5
 network:
-  z: 695
+  z: 595
 regions:
   inferior_olivary:
     type: group
@@ -10,12 +10,12 @@ regions:
       - io_layer
 partitions:
   granular_layer:
-    origin: [0,0,400]
+    origin: [0,0,300]
   dcn_layer:
-    origin: [0,0,200]
+    origin: [0,0,100]
     thickness: 200
   io_layer:
-    thickness: 200
+    thickness: 100 # 200
 cell_types:
   io:
     spatial:
@@ -23,7 +23,7 @@ cell_types:
       radius: 7.5
       relative_to: purkinje_cell
     plotting:
-      display_name: Inferior olive cells
+      display_name: Inferior olivary cells
 placement:
   io_layer_placement:
     strategy: bsb.placement.RandomPlacement
@@ -91,3 +91,4 @@ $import:
     - cell_types
     - placement
     - connectivity
+  #   - after_connectivity
