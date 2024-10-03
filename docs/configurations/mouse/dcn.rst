@@ -77,8 +77,19 @@ Then, the following parameters are optimized according to the method described i
    :delim: ;
 
     Cell name;:math:`k_{adap}\ (nS \cdot ms^{-1})`;:math:`k_1\ (ms^{-1})`;:math:`k_2\ (ms^{-1})`;:math:`A_1\ (pA)`;:math:`A_2\ (pA)`;:math:`I_e\ (pA)`
-    DCNp; 0.408; 0.697; 0.047; 13.857; 3.477; 75.385
-    DCNi; 0.079; 0.041; 0.044; 176.358; 176.358; 2.384
+    DCNp; 0.408; 0.697; 0.047; 13.857; 3.477; 150
+    DCNi; 0.079; 0.041; 0.044; 176.358; 176.358; 10
+
+.. warning::
+   Compared to Geminiani et al (2019) [#geminiani_2019]_, only the endogenous currents :math:`I_e` of both DCN populations
+   were modified in this updated version. This adjustment was made to replicate the network's functional behavior,
+   which we were unable to achieve using the originally provided parameter sets. Specifically:
+
+   * :math:`I_e` (DCNp): 75.385 → 150 (pA);
+   * :math:`I_e` (DCNi): 2.384 → 10 (pA).
+
+
+
 
 It is not clear how the spiking parameters are obtained in the Geminiani et al. (2019) paper [#geminiani_2019]_. The values were extracted from a BSB configuration provided by the authors.
 
@@ -97,17 +108,27 @@ The postsynaptic receptors are defined as listed in Table 2 of Geminiani et al. 
 
 Synapse parameters
 ++++++++++++++++++
-DCN connections are represented as ``static synapses`` (see :doc:`NEST section <nest>`). The receptor ids correspond to the postsynaptic receptors used for the connections.
-It is still unclear from the references how these parameters were optimized.
+DCN connections are represented as ``static synapses`` (see :doc:`NEST section <nest>`). The receptor ids correspond to
+the postsynaptic receptors used for the connections. It is still unclear from the references how these parameters were
+optimized.
 
 .. csv-table:: Presynaptic parameters for DCN connections
    :header-rows: 1
    :delim: ;
 
     Source-Target;:math:`weight \ (nS)`;:math:`delay \ (ms)`; Receptor id
-    mf-DCNp; 0.05; 4.0; 1
-    PC-DCNp; 0.4; 4.0; 2
-    PC-DCNi; 0.12; 4.0; 2
+    mf-DCNp; 0.25; 4.0; 1
+    PC-DCNp; 3.0; 4.0; 2
+    PC-DCNi; 0.4 ; 4.0; 2
+
+.. warning::
+   The reported values were manually adjusted through trial and error to ensure a reasonable excitation/inhibition ratio
+   in the DCN populations.
+
+   * :math:`weight` (mf-DCNp): 0.05 → 0.25 (nS);
+   * :math:`weight` (PC-DCNp): 0.4 → 3.0 (nS);
+   * :math:`weight` (PC-DCNi): 0.12 → 0.4 (nS);
+
 
 Simulation paradigms
 ++++++++++++++++++++
