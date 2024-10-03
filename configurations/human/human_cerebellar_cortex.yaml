@@ -12,7 +12,7 @@ network:
   chunk_size: [200, 200, 200]
   x: 1000
   y: 1000
-  z: 900
+  z: 970
 regions:
   cerebellar_cortex:
     type: stack
@@ -23,16 +23,12 @@ regions:
       - t_molecular_layer
 partitions:
   granular_layer:
-    # stack_index: 0
     thickness: 610
   purkinje_layer:
-    # stack_index: 1
     thickness: 30
   b_molecular_layer:
-    # stack_index: 2
     thickness: 110
   t_molecular_layer:
-    # stack_index: 3
     thickness: 220
 $import:
   ref: ../../morphologies/human/morphologies.yaml#/
