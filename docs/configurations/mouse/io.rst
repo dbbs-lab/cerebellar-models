@@ -132,6 +132,26 @@ No basal activity changes are observed in the cerebellar network beacause IO pre
 Stimulation protocol
 ####################
 
+To test the functionality of the entire olivocerebellar network, another stimulation protocol was used. It
+simulates the Eyeblink Classical Conditioning, a Pavlovian conditioning consisting in a conditioned stimulus (CS),
+typically a light, paired with an unconditioned stimulus (US), usually an air puff to the eye.
+According to Geminiani et al., 2024 [#geminiani_2024]_, a CS of ``40 Hz``  arrives on ``mossy_fibers`` in the
+interval ``[1000, 1260] ms``, while a US of ``500 Hz`` arrives as a burst on ``io`` in the interval ``[1250, 1260] ms``.
+
+.. csv-table:: Results of the canonical circuit with DCN and IO during stimulus of the mossy and the inferior olive
+   :header-rows: 1
+   :delim: ;
+
+    Cell name;Mean Firing rate (Hz) [CS]; Mean ISI (ms) [CS]; Mean Firing rate (Hz) [CS+US]; Mean ISI (ms) [CS+US]
+    Mossy cell; :math:`44 \pm 27`; :math:`13 \pm 8`; :math:`42 \pm 76`; :math:`2.1 \pm 1.7`;
+    Granule cell; :math:`24 \pm 40`; :math:`12 \pm 8.6`; :math:`30 \pm 57`; :math:`6.2 \pm 1.2`;
+    Golgi cell;:math:`40 \pm 16`; :math:`8.1 \pm 5.8`; :math:`80 \pm 65`; :math:`6.5 \pm 1.2`;
+    Purkinje cell;:math:`66 \pm 19`; :math:`16.0 \pm 4.6`; :math:`130 \pm 80`; :math:`3.2 \pm 1.8`;
+    Basket cell;:math:`130 \pm 62`; :math:`7.7 \pm 4.1`; :math:`100 \pm 110`; :math:`5.1 \pm 1.5`;
+    Stellate cell;:math:`140 \pm 100`; :math:`7.2 \pm 5.7`; :math:`150 \pm 130`; :math:`4.5 \pm 1.4`;
+    DCNp; :math:`32 \pm 15`; :math:`29.0 \pm 7.1`; :math:`40 \pm 49`; not enough spikes per neuron;
+    DCNi; :math:`3.7 \pm 7.8`; not enough spikes per neuron;  :math:`4.6 \pm 21`; not enough spikes per neuron;
+    IO; 0; no spikes; :math:`200 \pm 63`; :math:`2.10 \pm 0.58`;
 
 
 References

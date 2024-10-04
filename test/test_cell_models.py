@@ -40,6 +40,7 @@ class TestSingleCellModels(
 ):
 
     def setUp(self):
+        # TODO: re enable the dcn and io tests
         super().setUp()
         self.configuration_dict = {
             "name": "test",
