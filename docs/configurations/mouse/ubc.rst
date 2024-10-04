@@ -89,8 +89,9 @@ Geminiani et al. (2018) [#geminiani_2018]_ method:
     :math:`k_{adap}\ (nS \cdot ms^{-1})`;:math:`k_1\ (ms^{-1})`;:math:`k_2\ (ms^{-1})`;:math:`A_1\ (pA)`;:math:`A_2\ (pA)`;:math:`I_e\ (pA)`
     1.17; 0.14; 0.76; 0.0001; 0.0001; 1.0
 
-It is not clear how the spiking parameters (i.e :math:`\lambda_0` and :math:`\tau_V`) are obtained in the Geminiani et
-al. (2018) paper [#geminiani_2018]_. The values were extracted from a BSB configuration provided by the authors.
+.. warning::
+   It is not clear how the spiking parameters (i.e :math:`\lambda_0` and :math:`\tau_V`) are obtained in the Geminiani et
+   al. (2018) paper [#geminiani_2018]_. The values were extracted from a BSB configuration provided by the authors.
 
 The postsynaptic receptors are defined according to the following table:
 
@@ -169,25 +170,34 @@ neuron population are as follows (expressed in mean :math:`\pm` standard deviati
 References
 ^^^^^^^^^^
 
-.. [#mugnaini_2011] Mugnaini, E., Sekerková, G., & Martina, M. (2011). The unipolar brush cell: a remarkable neuron finally
-   receiving deserved attention. Brain research reviews, 66(1-2), 220-245.
+.. [#mugnaini_2011] Mugnaini, E., Sekerková, G., & Martina, M. (2011).
+   "The unipolar brush cell: a remarkable neuron finally receiving deserved attention."
+   Brain research reviews, 66(1-2), 220-245.
    https://doi.org/10.1016/j.brainresrev.2010.10.001
-.. [#sekerkova_2014] Sekerková, G., Watanabe, M., Martina, M., & Mugnaini, E. (2014). Differential distribution of
-   phospholipase C beta isoforms and diaglycerol kinase-beta in rodents cerebella corroborates the division of unipolar
-   brush cells into two major subtypes. Brain Structure and Function, 219, 719-749.
+.. [#sekerkova_2014] Sekerková, G., Watanabe, M., Martina, M., & Mugnaini, E. (2014).
+   "Differential distribution of phospholipase C beta isoforms and diaglycerol kinase-beta in rodents cerebella
+   corroborates the division of unipolar brush cells into two major subtypes."
+   Brain Structure and Function, 219, 719-749.
    https://doi.org/10.1007/s00429-013-0531-9
 .. [#houston_2017] Houston, C. M., Diamanti, E., Diamantaki, M., Kutsarova, E., Cook, A., Sultan, F.,
-   & Brickley, S. G. (2017). Exploring the significance of morphological diversity for cerebellar
-   granule cell excitability. Scientific Reports, 7(1), 1-16. https://doi.org/10.1038/srep46147
-.. [#kanichay_2008] Kanichay, R. T., & Silver, R. A. (2008). Synaptic and cellular properties of the
-   feedforward inhibitory circuit within the input layer of the cerebellar cortex. Journal of
-   Neuroscience, 28(36), 8955-8967. https://doi.org/10.1523/JNEUROSCI.5469-07.2008
-.. [#locatelli_2013] Locatelli, F., Bottà, L., Prestori, F., Masetto, S., & D’Angelo, E. (2013). Late-onset bursts
-   evoked by mossy fibre bundle stimulation in unipolar brush cells: Evidence for the involvement of H- and
-   TRP-currents. The Journal of Physiology, 591(4), 899–918. https://doi.org/10.1113/jphysiol.2012.242180
+   & Brickley, S. G. (2017).
+   "Exploring the significance of morphological diversity for cerebellar granule cell excitability."
+   Scientific Reports, 7(1), 1-16.
+   https://doi.org/10.1038/srep46147
+.. [#kanichay_2008] Kanichay, R. T., & Silver, R. A. (2008).
+   "Synaptic and cellular properties of the feedforward inhibitory circuit within the input layer of the cerebellar cortex."
+   Journal of Neuroscience, 28(36), 8955-8967.
+   https://doi.org/10.1523/JNEUROSCI.5469-07.2008
+.. [#locatelli_2013] Locatelli, F., Bottà, L., Prestori, F., Masetto, S., & D’Angelo, E. (2013).
+   "Late-onset bursts evoked by mossy fibre bundle stimulation in unipolar brush cells: Evidence for the involvement
+   of H- and TRP-currents."
+   The Journal of Physiology, 591(4), 899–918.
+   https://doi.org/10.1113/jphysiol.2012.242180
 .. [#subramaniyam_2014] Subramaniyam, S., Solinas, S., Perin, P., Locatelli, F., Masetto, S., & D’Angelo, E. (2014).
-   Computational modeling predicts the ionic mechanism of late-onset responses in unipolar brush cells.
-   Frontiers in Cellular Neuroscience, 8. https://doi.org/10.3389/fncel.2014.00237
+   "Computational modeling predicts the ionic mechanism of late-onset responses in unipolar brush cells."
+   Frontiers in Cellular Neuroscience, 8.
+   https://doi.org/10.3389/fncel.2014.00237
 .. [#geminiani_2018] Geminiani, A., Casellato, C., Locatelli, F., Prestori, F., Pedrocchi, A., & D'Angelo, E. (2018).
-   Complex dynamics in simplified neuronal models: reproducing Golgi cell electroresponsiveness. Frontiers in
-   neuroinformatics, 12, 88. https://doi.org/10.3389/fninf.2018.00088
+   "Complex dynamics in simplified neuronal models: reproducing Golgi cell electroresponsiveness."
+   Frontiers in neuroinformatics, 12, 88.
+   https://doi.org/10.3389/fninf.2018.00088
