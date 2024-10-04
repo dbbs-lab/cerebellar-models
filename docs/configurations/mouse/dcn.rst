@@ -189,7 +189,7 @@ neuron population are as follows (expressed in mean :math:`\pm` standard deviati
     Basket cell;:math:`120 \pm 80`; :math:`7.6 \pm 4.0`
     Stellate cell;:math:`150 \pm 110`; :math:`7.2 \pm 5.6`
     DCNp; :math:`22 \pm 16`; :math:`27.0 \pm 5.3`
-    DCNi; :math:`5.8 \pm 9.1`; not enough spikes per neuron;
+    DCNi; :math:`5.8 \pm 9.1`; not enough spikes per neuron
 
 You will observe that the mf stimulus induces a burst-pause response in PC population and a pause-burst in DCNs.
 
