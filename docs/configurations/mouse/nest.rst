@@ -109,6 +109,11 @@ Then, the following parameters are optimized according to the method described i
     Purkinje Cell; 1.491; 0.195; 0.041; 157.622; 172.622; 742.534
     Basket and Stellate Cells; 2.025; 1.887; 1.096; 5.953; 5.863; 3.711
 
+.. warning::
+   It is not clear how the spiking parameters (i.e :math:`\lambda_0` and :math:`\tau_V`) are obtained
+   in the Geminiani et al. (2018) paper [#geminiani_2019]_ .
+   The values were extracted from a BSB configuration provided by the authors.
+
 The postsynaptic currents are integrated to the soma with alpha exponential functions. Each function
 is defined with a reversal potential parameter :math:`E_{rev}` and a time constant :math:`\tau_{syn}`.
 
@@ -132,10 +137,6 @@ The postsynaptic receptor parameters are listed in Table 2 of Geminiani et al. (
    Purkinje Cell; 2; -80; 2.8; inh.
    Basket Cell; 1; 0; 0.64; exc.
    Basket Cell; 2; -80; 2; inh.
-
-It is not clear how the spiking parameters (i.e :math:`\lambda_0` and :math:`\tau_V`) are obtained
-in the Geminiani et al. (2018) paper [#geminiani_2019]_ .
-The values were extracted from a BSB configuration provided by the authors.
 
 .. warning::
    The :math:`k_2` parameter should be greater than :math:`\dfrac{1}{\tau_m}` to prevent unstable
@@ -168,7 +169,6 @@ Synapse parameters
 The synaptic parameters used for the `canonical circuit` corresponds to the one listed in Table B of
 supplementary document 1 in Geminiani et al. (2024) [#geminiani_2024]_. The receptor id corresponds
 to the postsynaptic receptor used for the connection (see table :ref:`table-receptor`).
-However, it is currently unclear how these parameters were optimized, or which features were targeted:
 
 .. csv-table:: Presynaptic parameters
    :header-rows: 1
@@ -190,6 +190,9 @@ However, it is currently unclear how these parameters were optimized, or which f
     SC-PC;1.64;5;2
     BC-BC ;0.006;4;2
     SC-SC;0.005;4;2
+
+.. warning::
+   It is currently unclear how the synaptic parameters were optimized, or which features were targeted.
 
 Simulation paradigms
 ^^^^^^^^^^^^^^^^^^^^

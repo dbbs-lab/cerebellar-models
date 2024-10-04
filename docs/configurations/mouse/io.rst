@@ -1,33 +1,36 @@
 Inferior olivary
 ~~~~~~~~~~~~~~~~
-The inferior olive is a nucleus in the brainstem with neurons that exhibit continuous sub-threshold activity.
-It provides one of the two main inputs to the cerebellum: the so-called climbing fibers. Activation of these climbing
-fibers is generally thought to be involved in the timing of motor commands and/or motor learning. Climbing fiber
-activation triggers large all-or-none action potentials in cerebellar Purkinje cells, which override any ongoing
-activity and temporarily silence the cells. Empirical evidence indicates that climbing fibers can transmit a short burst
-of spikes following an olivary cell somatic spike, potentially increasing the amount of information transferred to the
-cerebellum with each activation [#de_gruijl_2012]_.
-The default configuration with IO is implemented in `dcn_io.yaml <https://github.com/dbbs-lab/cerebellum/blob/feature/dcn-io/configurations/mouse/dcn-io/dcn_io.yaml>`_.
+The inferior olive (IO) is a nucleus in the brainstem with neurons that exhibit continuous sub-threshold activity.
+It provides one of the two main inputs to the cerebellum: the so-called climbing fibers (cf). Activation of the cf
+is generally thought to be involved in the timing of motor commands and/or motor learning. cf activation triggers
+large all-or-none action potentials in cerebellar Purkinje cells (PC), which override any ongoing activity and
+temporarily silence the cells. Empirical evidence indicates that cf can transmit a short burst of spikes following
+an IO cell somatic spike, potentially increasing the amount of information transferred to the cerebellum with each
+activation [#de_gruijl_2012]_.
+The default configuration with IO is implemented in
+`dcn_io.yaml <https://github.com/dbbs-lab/cerebellum/blob/master/configurations/mouse/dcn-io/dcn_io.yaml>`_.
 
 Configuration
 ^^^^^^^^^^^^^
-In `dcn_io.yaml <https://github.com/dbbs-lab/cerebellum/blob/feature/dcn-io/configurations/mouse/dcn-io/dcn_io.yaml>`_ , a new region called ``inferior_olivary`` was added to the ``canonical circuit + DCN``
-(see `dcn.yaml <https://github.com/dbbs-lab/cerebellum/blob/feature/dcn-io/configurations/mouse/dcn-io/dcn.yaml>`_ for more microcircuital info).
-This region was defined of type ``group`` because in it there is only the ``io layer``. ``io layer`` has a thickness of ``100 µm`` .
-Additionally, in order to ensure that ``inferior_olivary`` are placed under the ``cerebellar_nuclei``, the ``origin``
-of the ``dcn_layer`` was set to ``[0,0,100]`` and the ``origin`` of the ``granular_layer`` was updated to ``[0,0,300]``.
+In `dcn_io.yaml <https://github.com/dbbs-lab/cerebellum/blob/master/configurations/mouse/dcn-io/dcn_io.yaml>`_ ,
+a new region called ``inferior_olivary`` was added to the ``canonical circuit + DCN`` model
+(see `dcn.yaml <https://github.com/dbbs-lab/cerebellum/blob/master/configurations/mouse/dcn-io/dcn.yaml>`_
+and :doc:`DCN section <dcn>` for more microcircuital info).
+This region contains only one ``Layer`` Partition: ``io layer``. ``io layer`` has a thickness of ``100 µm`` .
+Additionally, to ensure that ``inferior_olivary`` are placed under the ``cerebellar_nuclei``, the ``origin``
+of the ``dcn_layer`` was set to ``[0, 0, 100]`` and the ``origin`` of the ``granular_layer`` was updated to ``[0, 0, 300]``.
 
 Cell types
 ++++++++++
-No morphologies are currently available for inferior olivary (IO) neurons, so they are represented only by their soma.
+No morphologies are currently available for IO neurons, so they are modelled as point neurons.
 We considered a single population of IO neurons.
-The number of IO neurons to be placed is estimated based on the ratio between the number of Purkinje cells and
+The number of IO neurons to be placed is estimated based on the ratio between the number of PC and
 IO itself, which is reported to be ``5:1`` in Blatt and Eisenman [#blatt_1985]_.
 
 Placement
 +++++++++
-IO neurons are assumed to be uniformly distributed in their own layer, hence the bsb ``RandomPlacement`` strategy is
-chosen to place them.
+IO neurons are assumed to be uniformly distributed in their own layer, hence the bsb ``RandomPlacement``
+strategy is chosen to place them.
 
 Connectivity
 ++++++++++++
@@ -37,7 +40,7 @@ Connectivity
    :delim: ;
 
    #; Source Name; Source Branch; Target Name; Target Branch; Strategy; Specifics; References
-   22; IO; /; PC; / ; :ref:`fix_in`;``indegree`` =1; Geminiani et al. (2024) [#geminiani_2024]_
+   22; IO; /; PC; / ; :ref:`fix_in`;``indegree`` = 1; Geminiani et al. (2024) [#geminiani_2024]_
    23; IO; /; SC; / ; :ref:`io_mli`; / ; Geminiani et al. (2024) [#geminiani_2024]_
    23; IO; /; BC; / ; :ref:`io_mli`; / ; Geminiani et al. (2024) [#geminiani_2024]_
    24; IO; / ; DCNp ; / ; :ref:`all_to_all`; / ; Geminiani et al. (2024) [#geminiani_2024]_
@@ -49,8 +52,9 @@ NEST simulation
 
 Neuron parameters
 +++++++++++++++++
-IO population was represented as an EGLIF point neuron model (see :doc:`NEST section <nest>`). Parameters sets for IO neurons
-are taken from Geminiani et al (2019) [#geminiani_2019]_. The default LIF parameters are the following:
+IO population was represented as an EGLIF point neuron model (see :doc:`NEST section <nest>`).
+Parameters sets for IO neurons are taken from Geminiani et al (2019) [#geminiani_2019]_.
+The default LIF parameters are reported below:
 
 .. csv-table:: LIF neuron parameters for IO
    :header-rows: 1
@@ -68,7 +72,9 @@ Then, the following parameters are optimized according to the method described i
     Cell name;:math:`k_{adap}\ (nS \cdot ms^{-1})`;:math:`k_1\ (ms^{-1})`;:math:`k_2\ (ms^{-1})`;:math:`A_1\ (pA)`;:math:`A_2\ (pA)`;:math:`I_e\ (pA)`
     IO; 1.928; 0.191; 0.091; 1810.923; 1358.197; -18.101
 
-It is not clear how the spiking parameters are obtained in the Geminiani et al. (2019) paper [#geminiani_2019]_. The values were extracted from a BSB configuration provided by the authors.
+.. warning::
+    It is not clear how the spiking parameters are obtained in the Geminiani et al. (2019) paper [#geminiani_2019]_.
+    The values were extracted from a BSB configuration provided by the authors.
 
 The postsynaptic receptors are defined as listed in Table 2 of Geminiani et al. (2019b) [#geminiani_2019b]_:
 
@@ -131,15 +137,28 @@ Stimulation protocol
 References
 ^^^^^^^^^^
 
-.. [#de_gruijl_2012] De Gruijl, J. R., Bazzigaluppi, P., de Jeu, M. T., & De Zeeuw, C. I. (2012). Climbing fiber burst size and olivary sub-threshold oscillations in a network setting. PLoS computational biology, 8(12), e1002814.
-.. [#blatt_1985] Blatt, G. J., & Eisenman, L. M. (1985). A qualitative and quantitative light microscopic study of the inferior olivary complex of normal, reeler, and weaver mutant mice. Journal of Comparative Neurology, 232(1), 117-128.
-.. [#geminiani_2024] Geminiani, Alice, et al. "Mesoscale simulations predict the role of synergistic cerebellar plasticity during classical eyeblink conditioning." PLOS Computational Biology 20.4 (2024): e1011277. https://doi.org/10.1371/journal.pcbi.1011277.
+.. [#de_gruijl_2012] De Gruijl, J. R., Bazzigaluppi, P., de Jeu, M. T., & De Zeeuw, C. I. (2012).
+   "Climbing fiber burst size and olivary sub-threshold oscillations in a network setting."
+   PLoS computational biology, 8(12), e1002814.
+   https://doi.org/10.1371/journal.pcbi.1002814
+.. [#blatt_1985] Blatt, G. J., & Eisenman, L. M. (1985).
+   "A qualitative and quantitative light microscopic study of the inferior olivary complex of normal, reeler,
+   and weaver mutant mice." Journal of Comparative Neurology, 232(1), 117-128.
+   https://doi.org/10.1002/cne.902320110
+.. [#geminiani_2024] Geminiani, Alice, et al.
+   "Mesoscale simulations predict the role of synergistic cerebellar plasticity during classical eyeblink conditioning."
+   PLOS Computational Biology 20.4 (2024): e1011277.
+   https://doi.org/10.1371/journal.pcbi.1011277.
 .. [#geminiani_2019] Geminiani, A., Casellato, C., D’Angelo, E., & Pedrocchi, A. (2019).
-   Complex electroresponsive dynamics in olivocerebellar neurons represented with extended-generalized
-   leaky integrate and fire models. Frontiers in Computational Neuroscience, 13, 35.
+   "Complex electroresponsive dynamics in olivocerebellar neurons represented with extended-generalized
+   leaky integrate and fire models."
+   Frontiers in Computational Neuroscience, 13, 35.
    https://doi.org/10.3389/fncom.2019.00035
-.. [#geminiani_2019b] Geminiani, A., Pedrocchi, A., D’Angelo, E., & Casellato, C. (2019). Response
-   dynamics in an olivocerebellar spiking neural network with non-linear neuron properties.
+.. [#geminiani_2019b] Geminiani, A., Pedrocchi, A., D’Angelo, E., & Casellato, C. (2019).
+   "Response dynamics in an olivocerebellar spiking neural network with non-linear neuron properties."
    Frontiers in computational neuroscience, 13, 68.
-.. [#lefler_2013] Lefler, Y., Torben-Nielsen, B., & Yarom, Y. (2013). Oscillatory activity, phase differences, and phase resetting in the
-   inferior olivary nucleus. Frontiers in systems neuroscience, 7, 22.
+   https://doi.org/10.3389/fncom.2019.00068
+.. [#lefler_2013] Lefler, Y., Torben-Nielsen, B., & Yarom, Y. (2013).
+   "Oscillatory activity, phase differences, and phase resetting in the inferior olivary nucleus."
+   Frontiers in systems neuroscience, 7, 22.
+   https://doi.org/10.3389/fnsys.2013.00022
