@@ -52,7 +52,7 @@ Neuron parameters
 IO population was represented as an EGLIF point neuron model (see :doc:`NEST section <nest>`). Parameters sets for IO neurons
 are taken from Geminiani et al (2019) [#geminiani_2019]_. The default LIF parameters are the following:
 
- .. csv-table:: LIF neuron parameters for IO
+.. csv-table:: LIF neuron parameters for IO
    :header-rows: 1
    :delim: ;
 
@@ -93,10 +93,22 @@ It is still unclear from the references how these parameters were optimized.
 
     Source-Target;:math:`weight \ (nS)`;:math:`delay \ (ms)`; Receptor id
     IO-PC; 300; 4;3
-    IO-MLI; 2.5; 40 ; 3
-    IO-DCNp; 2.5; 4; 1
-    IO-DCNi; 0.1; 5; 1
-    DCNi-IO; 0.75; 25; 2
+    IO-MLI; 5.0; 40 ; 3
+    IO-DCNp; 0.5; 4; 1
+    IO-DCNi; 0.5; 5; 1
+    DCNi-IO; 0.45; 25; 2
+
+.. warning::
+   The reported values were manually adjusted through trial and error to ensure a reasonable excitation/inhibition ratio
+   on IO target populations.
+
+   * :math:`weight` (IO-MLI): 2.5 → 5.0 (nS);
+   * :math:`weight` (IO-DCNp): 2.5 → 0.5 (nS);
+   * :math:`weight` (IO-DCNi): 0.1 → 0.5 (nS);
+   * :math:`weight` (DCNi-IO): 0.75 → 0.45 (nS);
+
+Inhibition
+##########
 
 Simulation paradigms
 ++++++++++++++++++++

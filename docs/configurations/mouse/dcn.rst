@@ -82,16 +82,13 @@ Then, the following parameters are optimized according to the method described i
 
 .. warning::
    Compared to Geminiani et al (2019) [#geminiani_2019]_, only the endogenous currents :math:`I_e` of both DCN populations
-   were modified in this updated version. This adjustment was made to replicate the network's functional behavior,
+   were modified in this version. This adjustment was made to replicate the network's functional behavior,
    which we were unable to achieve using the originally provided parameter sets. Specifically:
 
    * :math:`I_e` (DCNp): 75.385 → 150 (pA);
    * :math:`I_e` (DCNi): 2.384 → 10 (pA).
 
 
-
-
-It is not clear how the spiking parameters are obtained in the Geminiani et al. (2019) paper [#geminiani_2019]_. The values were extracted from a BSB configuration provided by the authors.
 
 The postsynaptic receptors are defined as listed in Table 2 of Geminiani et al. (2019b) [#geminiani_2019b]_:
 
@@ -147,14 +144,14 @@ follows (expressed in mean :math:`\pm` standard deviation):
    :delim: ;
 
     Cell name;Mean Firing rate (Hz); Mean ISI (ms)
-    Mossy cell; :math:`4.1 \pm 0.93`; :math:`240 \pm 61`
-    Granule cell; :math:`3.7 \pm 3.2`; :math:`430 \pm 410`
-    Golgi cell;:math:`13 \pm 4.8`; :math:`92 \pm 46`
-    Purkinje cell;:math:`49 \pm 3.7`; :math:`21 \pm 1.7`
-    Basket cell;:math:`33 \pm 11`; :math:`34 \pm 13`
-    Stellate cell;:math:`38 \pm 23`; :math:`42 \pm 32`
-    DCNp; :math:`21 \pm 0.9`; :math:`47 \pm 2`
-    DCNi; :math:`4.4 \pm 3.2`; :math:`130 \pm 15`
+    Mossy cell; :math:`4.0 \pm 0.84`; :math:`252 \pm 71`
+    Granule cell; :math:`3.5 \pm 3.2`; :math:`500 \pm 520`
+    Golgi cell;:math:`12 \pm 4.6`; :math:`100 \pm 64`
+    Purkinje cell;:math:`49 \pm 2.9`; :math:`20 \pm 1.2`
+    Basket cell;:math:`30 \pm 15`; :math:`41 \pm 20`
+    Stellate cell;:math:`36 \pm 24`; :math:`64 \pm 100`
+    DCNp; :math:`23 \pm 11`; :math:`55 \pm 74`
+    DCNi; :math:`8.2 \pm 6.2`; :math:`82 \pm 15`
 
 Mossy fiber stimulus
 ####################
@@ -167,16 +164,16 @@ neuron population are as follows (expressed in mean :math:`\pm` standard deviati
    :delim: ;
 
     Cell name;Mean Firing rate (Hz); Mean ISI (ms)
-    Mossy cell; :math:`44 \pm 7`; :math:`7.0 \pm 3.7`
-    Granule cell; :math:`24 \pm 48`; :math:`7.9 \pm 5.6`
-    Golgi cell;:math:`48 \pm 38`; :math:`10.0 \pm 7.8`
-    Purkinje cell;:math:`79 \pm 24`; :math:`12.0 \pm 4.4`
-    Basket cell;:math:`110 \pm 83`; :math:`7.7 \pm 5.4`
-    Stellate cell;:math:`150 \pm 100`; :math:`6.0 \pm 5.4`
-    DCNp; :math:`23 \pm 7`; :math:`44.0 \pm 2.5`
-    DCNi; :math:`1.2 \pm 4.8`; not enough spikes per neuron
+    Mossy cell; :math:`48 \pm 74`; :math:`6.4 \pm 2.1`
+    Granule cell; :math:`22 \pm 48`; :math:`9.9 \pm 7.2`
+    Golgi cell;:math:`53 \pm 38`; :math:`11.0 \pm 4.7`
+    Purkinje cell;:math:`82 \pm 20`; :math:`12.0 \pm 2.9`
+    Basket cell;:math:`120 \pm 80`; :math:`7.6 \pm 4.0`
+    Stellate cell;:math:`150 \pm 110`; :math:`7.2 \pm 5.6`
+    DCNp; :math:`22 \pm 16`; :math:`27.0 \pm 5.3`
+    DCNi; :math:`5.8 \pm 9.1`; not enough spikes per neuron
 
-
+You will observe that the mf stimulus induces a burst-pause response in PC population and a pause-burst in DCNs.
 
 References
 ^^^^^^^^^^
