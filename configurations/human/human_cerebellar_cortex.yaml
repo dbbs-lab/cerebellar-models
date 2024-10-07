@@ -278,14 +278,8 @@ connectivity:
         voxel_size: 20
         shapes:
         - type: Cylinder
-          origin:
-          - -10
-          - 0
-          - 0
-          top_center:
-          - 10
-          - 0
-          - 0
+          origin: [-10, 0, 0]
+          top_center: [10, 0, 0]
           radius: 150
         labels:
         - - dendrites
@@ -305,14 +299,8 @@ connectivity:
         voxel_size: 10
         shapes:
         - type: Cylinder
-          origin:
-          - 0
-          - -10
-          - 0
-          top_center:
-          - 0
-          - 10
-          - 0
+          origin: [0, -10, 0]
+          top_center: [0, 10, 0]
           radius: 150
         labels:
         - - dendrites
@@ -329,26 +317,11 @@ connectivity:
         voxel_size: 10
         shapes:
         - type: Ellipsoid
-          origin:
-          - 0
-          - 25
-          - 0
-          lambdas:
-          - 100
-          - 40
-          - 100
-          v0:
-          - 1
-          - 0
-          - 0
-          v1:
-          - 0
-          - 1
-          - 0
-          v2:
-          - 0
-          - 0
-          - 1
+          origin: [0, 25, 0]
+          lambdas: [100, 40, 100]
+          v0: [1, 0, 0]
+          v1: [0, 1, 0]
+          v2: [0, 0, 1]
         labels:
         - - axon
       morphology_labels:
@@ -382,26 +355,11 @@ connectivity:
         voxel_size: 20
         shapes:
         - type: Ellipsoid
-          origin:
-          - 0
-          - 25
-          - 0
-          lambdas:
-          - 1000
-          - 100
-          - 100
-          v0:
-          - 1
-          - 0
-          - 0
-          v1:
-          - 0
-          - 1
-          - 0
-          v2:
-          - 0
-          - 0
-          - 1
+          origin: [0, 25, 0]
+          lambdas: [1000, 100, 100]
+          v0: [1, 0, 0]
+          v1: [0, 1, 0]
+          v2: [0, 0, 1]
         labels:
         - - axon
     postsynaptic:
@@ -411,14 +369,8 @@ connectivity:
         voxel_size: 20
         shapes:
         - type: Cylinder
-          origin:
-          - -10
-          - 0
-          - 0
-          top_center:
-          - 10
-          - 0
-          - 0
+          origin: [-10, 0, 0]
+          top_center: [10, 0, 0]
           radius: 150
         labels:
         - - dendrites
@@ -433,26 +385,11 @@ connectivity:
         voxel_size: 10
         shapes:
         - type: Ellipsoid
-          origin:
-          - 0
-          - 25
-          - 0
-          lambdas:
-          - 100
-          - 40
-          - 100
-          v0:
-          - 1
-          - 0
-          - 0
-          v1:
-          - 0
-          - 1
-          - 0
-          v2:
-          - 0
-          - 0
-          - 1
+          origin: [0, 25, 0]
+          lambdas: [100, 40, 100]
+          v0: [1, 0, 0]
+          v1: [0, 1, 0]
+          v2: [0, 0, 1]
         labels:
         - - axon
       morphology_labels:
@@ -464,14 +401,8 @@ connectivity:
         voxel_size: 10
         shapes:
         - type: Cylinder
-          origin:
-          - 0
-          - -10.0
-          - 0
-          top_center:
-          - 0
-          - 10.0
-          - 0
+          origin: [0, -10.0, 0]
+          top_center: [0, 10.0, 0]
           radius: 150
         labels:
         - - dendrites
