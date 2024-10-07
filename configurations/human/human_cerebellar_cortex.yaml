@@ -110,13 +110,13 @@ placement:
         strategy: cerebellum.placement.binary_distributor.DepthDistributorBinary
         separating_h: 300
         below_morphologies:
-        - GranuleCell_617
+          - GranuleCell_617
         above_morphologies:
-        - GranuleCell_326
+          - GranuleCell_326
     partitions:
-    - granular_layer
+      - granular_layer
     cell_types:
-    - granule_cell
+      - granule_cell
   purkinje_layer_placement:
     strategy: bsb.placement.ParallelArrayPlacement
     partitions:
@@ -268,21 +268,21 @@ connectivity:
     strategy: bsb.connectivity.geometric.MorphologyToShapeIntersection
     presynaptic:
       cell_types:
-      - granule_cell
+        - granule_cell
       morphology_labels:
-      - parallel_fiber
+        - parallel_fiber
     postsynaptic:
       cell_types:
-      - basket_cell
+        - basket_cell
       shapes_composition:
         voxel_size: 20
         shapes:
-        - type: Cylinder
+          type: Cylinder
           origin: [-10, 0, 0]
           top_center: [10, 0, 0]
           radius: 150
         labels:
-        - - dendrites
+          - dendrites
     affinity: 0.01
     pruning_ratio: 0.1
   parallel_fiber_to_stellate:
@@ -298,7 +298,7 @@ connectivity:
       shapes_composition:
         voxel_size: 10
         shapes:
-        - type: Cylinder
+          type: Cylinder
           origin: [0, -10, 0]
           top_center: [0, 10, 0]
           radius: 150
@@ -312,20 +312,20 @@ connectivity:
     strategy: bsb.connectivity.geometric.ShapeToMorphologyIntersection
     presynaptic:
       cell_types:
-      - stellate_cell
+        - stellate_cell
       shapes_composition:
         voxel_size: 10
         shapes:
-        - type: Ellipsoid
+          type: Ellipsoid
           origin: [0, 25, 0]
           lambdas: [100, 40, 100]
           v0: [1, 0, 0]
           v1: [0, 1, 0]
           v2: [0, 0, 1]
         labels:
-        - - axon
+          - axon
       morphology_labels:
-      - axon
+        - axon
     postsynaptic:
       cell_types:
       - purkinje_cell
@@ -339,18 +339,18 @@ connectivity:
     basket_radius: 30
     presynaptic:
       cell_types:
-      - basket_cell
+        - basket_cell
     postsynaptic:
       cell_types:
-      - purkinje_cell
+        - purkinje_cell
       morphology_labels:
-      - soma
+        - soma
     affinity: 0.05
   basket_to_basket:
     strategy: bsb.connectivity.geometric.ShapeToShapeIntersection
     presynaptic:
       cell_types:
-      - basket_cell
+        - basket_cell
       shapes_composition:
         voxel_size: 20
         shapes:
@@ -361,10 +361,10 @@ connectivity:
           v1: [0, 1, 0]
           v2: [0, 0, 1]
         labels:
-        - - axon
+          - axon
     postsynaptic:
       cell_types:
-      - basket_cell
+        - basket_cell
       shapes_composition:
         voxel_size: 20
         shapes:
@@ -373,38 +373,38 @@ connectivity:
           top_center: [10, 0, 0]
           radius: 150
         labels:
-        - - dendrites
+          - dendrites
     affinity: 1.0
     pruning_ratio: 0.00075
   stellate_to_stellate:
     strategy: bsb.connectivity.geometric.ShapeToShapeIntersection
     presynaptic:
       cell_types:
-      - stellate_cell
+        - stellate_cell
       shapes_composition:
         voxel_size: 10
         shapes:
-        - type: Ellipsoid
+          type: Ellipsoid
           origin: [0, 25, 0]
           lambdas: [100, 40, 100]
           v0: [1, 0, 0]
           v1: [0, 1, 0]
           v2: [0, 0, 1]
         labels:
-        - - axon
+          - axon
       morphology_labels:
-      - axon
+        - axon
     postsynaptic:
       cell_types:
-      - stellate_cell
+        - stellate_cell
       shapes_composition:
         voxel_size: 10
         shapes:
-        - type: Cylinder
+          type: Cylinder
           origin: [0, -10.0, 0]
           top_center: [0, 10.0, 0]
           radius: 150
         labels:
-        - - dendrites
+          - dendrites
     affinity: 1.0
     pruning_ratio: 0.0025
