@@ -277,7 +277,7 @@ connectivity:
       shapes_composition:
         voxel_size: 20
         shapes:
-          type: Cylinder
+        - type: Cylinder
           origin: [-10, 0, 0]
           top_center: [10, 0, 0]
           radius: 150
@@ -298,7 +298,7 @@ connectivity:
       shapes_composition:
         voxel_size: 10
         shapes:
-          type: Cylinder
+        - type: Cylinder
           origin: [0, -10, 0]
           top_center: [0, 10, 0]
           radius: 150
@@ -316,7 +316,7 @@ connectivity:
       shapes_composition:
         voxel_size: 10
         shapes:
-          type: Ellipsoid
+        - type: Ellipsoid
           origin: [0, 25, 0]
           lambdas: [100, 40, 100]
           v0: [1, 0, 0]
@@ -384,7 +384,7 @@ connectivity:
       shapes_composition:
         voxel_size: 10
         shapes:
-          type: Ellipsoid
+        - type: Ellipsoid
           origin: [0, 25, 0]
           lambdas: [100, 40, 100]
           v0: [1, 0, 0]
@@ -400,7 +400,7 @@ connectivity:
       shapes_composition:
         voxel_size: 10
         shapes:
-          type: Cylinder
+        - type: Cylinder
           origin: [0, -10.0, 0]
           top_center: [0, 10.0, 0]
           radius: 150
