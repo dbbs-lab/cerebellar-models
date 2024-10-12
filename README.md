@@ -1,3 +1,4 @@
+[![Build and test cerebellum](https://github.com/dbbs-lab/cerebellum/actions/workflows/integration.yml/badge.svg)](https://github.com/dbbs-lab/cerebellum/actions/workflows/integration.yml)
 [![Code style: black](https://img.shields.io/badge/code%20style-black-000000.svg)](https://github.com/psf/black)
 [![codecov](https://codecov.io/gh/dbbs-lab/cerebellum/graph/badge.svg?token=KBEE3D83YQ)](https://codecov.io/gh/dbbs-lab/cerebellum)
 

@@ -1,7 +1,7 @@
 name: Build and test cerebellum
 
 env:
-  NEST_VERSION: 3.6
+  NEST_VERSION: 3.7
 
 on: [push, pull_request]
 

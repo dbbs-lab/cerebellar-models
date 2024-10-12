@@ -26,7 +26,7 @@ where the synaptic current :math:`I_{syn}` integrates the input from 4 postsynap
 
 Here, the synapse `i` is excitatory or inhibitory depending on the value of :math:`E_{rev,i}`.
 
-Neuron produces spikes STOCHASTICALLY according to a point process with the firing intensity:
+Neuron produces spikes stochastically according to a point process with the firing intensity:
 
 .. math::
   \lambda = \lambda_0 \cdot e^{\dfrac{V_m -V_{th}}{\tau_V}}
@@ -79,7 +79,7 @@ neuron eglif_cond_alpha_multisyn:
         recordable inline I_syn pA =  I_syn1 + I_syn2 + I_syn3 + I_syn4
 
         # Update membrane potential, adaptation and spike triggered currents
-        # WARNING: SIGN BELOW IS INCORRECT -> Should be V_m' = - (V_m - E_L) / tau_m + ...
+        # WARNING: SIGN BELOW IS INCORRECT FOR A LIF MODEL -> Should be V_m' = - (V_m - E_L) / tau_m + ...
         V_m' = (V_m - E_L) / tau_m + (I_e + I_stim - I_adap + I_dep + I_syn) / C_m
         I_dep' = - I_dep * k_1 / ms
         I_adap' = (V_m - E_L) * (k_adap * nS / ms) - I_adap * (k_2 / ms)

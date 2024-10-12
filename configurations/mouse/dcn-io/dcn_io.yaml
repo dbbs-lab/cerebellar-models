@@ -1,0 +1,94 @@
+name: DBBS Mouse cerebellum w/ DCN and IO
+storage:
+  root: mouse_cereb_dcn_io.hdf5
+network:
+  z: 595
+regions:
+  inferior_olivary:
+    type: group
+    children:
+      - io_layer
+partitions:
+  granular_layer:
+    origin: [0,0,300]
+  dcn_layer:
+    origin: [0,0,100]
+    thickness: 200
+  io_layer:
+    thickness: 100 # 200
+cell_types:
+  io:
+    spatial:
+      count_ratio: 0.2
+      radius: 7.5
+      relative_to: purkinje_cell
+    plotting:
+      display_name: Inferior olivary cells
+placement:
+  io_layer_placement:
+    strategy: bsb.placement.RandomPlacement
+    partitions:
+      - io_layer
+    cell_types:
+      - io
+connectivity:
+  io_to_purkinje:
+    strategy: bsb.connectivity.FixedIndegree
+    presynaptic:
+      cell_types:
+        - io
+    postsynaptic:
+      cell_types:
+        - purkinje_cell
+    indegree: 1
+  io_to_mli:
+    strategy: cerebellum.connectome.io_molecular.ConnectomeIO_MLI
+    presynaptic:
+      cell_types:
+        - io
+    postsynaptic:
+      cell_types:
+        - basket_cell
+        - stellate_cell
+    mli_pc_connectivity:
+      - basket_to_purkinje
+      - stellate_to_purkinje
+    io_pc_connectivity: io_to_purkinje
+    pre_cell_pc: purkinje_cell
+  io_to_dcn_p:
+    strategy: bsb.connectivity.AllToAll
+    presynaptic:
+      cell_types:
+        - io
+    postsynaptic:
+      cell_types:
+        - dcn_p
+  io_to_dcn_i:
+    strategy: bsb.connectivity.AllToAll
+    presynaptic:
+      cell_types:
+        - io
+    postsynaptic:
+      cell_types:
+        - dcn_i
+  dcn_i_to_io:
+    strategy: bsb.connectivity.AllToAll
+    presynaptic:
+      cell_types:
+        - dcn_i
+    postsynaptic:
+      cell_types:
+        - io
+$import:
+  ref: ./dcn.yaml#/
+  values:
+    - packages
+    - storage
+    - network
+    - regions
+    - partitions
+    - morphologies
+    - cell_types
+    - placement
+    - connectivity
+  #   - after_connectivity

@@ -1,13 +1,13 @@
-name: DBBS Mouse cerebellum configuration v4.1
+name: DBBS Mouse cerebellum configuration v4.2
 packages:
-  - cerebellum~=0.1.0
-  - bsb-core~=4.1
+  - cerebellum~=0.4.0
+  - bsb-core~=4.5
   - bsb-json~=4.1
   - bsb-yaml~=4.1
   - bsb-hdf5~=4.0
 storage:
   engine: hdf5
-  root: cerebellum.hdf5
+  root: mouse_cerebellum.hdf5
 network:
   chunk_size: [100, 100, 100]
   x: 300
@@ -23,21 +23,13 @@ regions:
       - t_molecular_layer
 partitions:
   granular_layer:
-    stack_index: 0
     thickness: 130
   purkinje_layer:
-    stack_index: 1
     thickness: 15
   b_molecular_layer:
-    stack_index: 2
     thickness: 50
   t_molecular_layer:
-    stack_index: 3
     thickness: 100
-$import:
-  ref: ../../morphologies/mouse/morphologies.yaml#/
-  values:
-    - morphologies
 cell_types:
   glomerulus:
     spatial:
@@ -147,8 +139,10 @@ connectivity:
         - granule_cell
       morphology_labels:
         - dendrites
-    mf_glom_strat: mossy_fibers_to_glomerulus
-    mf_cell_type: mossy_fibers
+    pre_glom_strats:
+      - mossy_fibers_to_glomerulus
+    pre_cell_types:
+      - mossy_fibers
     radius: 40
     convergence: 4
   glomerulus_to_golgi:
@@ -162,7 +156,7 @@ connectivity:
       morphology_labels:
         - basal_dendrites
     radius: 50
-  golgi_to_granule:
+  golgi_to_glomerulus:
     strategy: cerebellum.connectome.golgi_glomerulus.ConnectomeGolgiGlomerulus
     presynaptic:
       cell_types:
@@ -172,8 +166,10 @@ connectivity:
     postsynaptic:
       cell_types:
         - granule_cell
-    glom_post_strat: glomerulus_to_granule
-    glom_cell_type: glomerulus
+    glom_post_strats:
+      - glomerulus_to_granule
+    glom_cell_types:
+      - glomerulus
     radius: 150
     divergence: 40
   golgi_to_golgi:
@@ -371,3 +367,11 @@ connectivity:
       distribution: norm
       loc: 100
       scale: 4
+after_connectivity:
+  print_structure_report:
+    strategy: cerebellum.analysis.structure_analysis.RunStructureReport
+    output_filename: bsb_report_structure.pdf
+$import:
+  ref: ../../morphologies/morphologies.yaml#/
+  values:
+    - morphologies

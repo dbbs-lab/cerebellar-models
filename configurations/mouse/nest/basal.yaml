@@ -1,18 +1,8 @@
-$import:
-  ref: ../mouse_cerebellar_cortex.yaml#/
-  values:
-    - name
-    - packages
-    - storage
-    - network
-    - regions
-    - partitions
-    - morphologies
-    - cell_types
-    - placement
-    - connectivity
+name: DBBS Mouse cerebellum NEST basal activity
+storage:
+  root: mouse_cereb_nest.hdf5
 packages:
-  - bsb-nest~=4.1
+  - bsb-nest~=4.2
 components:
   - cerebellum/nest_models/build_models.py
 simulations:
@@ -167,7 +157,7 @@ simulations:
           weight: 0.24
           delay: 1
           receptor_type: 1
-      golgi_to_granule:
+      golgi_to_glomerulus:
         synapse:
           model: static_synapse
           weight: 0.24
@@ -249,14 +239,14 @@ simulations:
             - mossy_fibers
         weight: 1
         delay: 0.1
-      mossy_record:
+      mossy_fibers_record:
         device: spike_recorder
         delay: 0.1
         targetting:
           strategy: cell_model
           cell_models:
             - mossy_fibers
-      gloms_record:
+      glomerulus_record:
         device: spike_recorder
         delay: 0.1
         targetting:
@@ -298,3 +288,15 @@ simulations:
           strategy: cell_model
           cell_models:
             - stellate_cell
+$import:
+  ref: ../mouse_cerebellar_cortex.yaml#/
+  values:
+    - packages
+    - storage
+    - network
+    - regions
+    - partitions
+    - morphologies
+    - cell_types
+    - placement
+    - connectivity
