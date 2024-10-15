@@ -60,12 +60,12 @@ class PlacementTable(TablePlot, ScaffoldPlot):
     """
 
     def __init__(
-        self,
-        fig_size: Tuple[float, float],
-        scaffold: Scaffold = None,
-        dict_colors=None,
-        dict_abv=None,
-        **kwargs,
+            self,
+            fig_size: Tuple[float, float],
+            scaffold: Scaffold = None,
+            dict_colors=None,
+            dict_abv=None,
+            **kwargs,
     ):
         super().__init__(
             fig_size,
@@ -141,12 +141,12 @@ class ConnectivityTable(TablePlot, ScaffoldPlot):
     """
 
     def __init__(
-        self,
-        fig_size: Tuple[float, float],
-        scaffold: Scaffold = None,
-        dict_colors=None,
-        dict_abv=None,
-        **kwargs,
+            self,
+            fig_size: Tuple[float, float],
+            scaffold: Scaffold = None,
+            dict_colors=None,
+            dict_abv=None,
+            **kwargs,
     ):
         super().__init__(
             fig_size,
@@ -265,21 +265,43 @@ class CellPlacement3D(ScaffoldPlot):
     """
 
     def __init__(
-        self,
-        fig_size: Tuple[float, float],
-        scaffold: Scaffold = None,
-        dict_colors=None,
-        ignored_ct=None,
-        **kwargs,
+            self,
+            fig_size: Tuple[float, float],
+            scaffold: Scaffold = None,
+            dict_colors=None,
+            ignored_ct=None,
+            max_neuron_sampled=10000,
+            z_orders=None,
+            **kwargs,
     ):
         super().__init__(fig_size, scaffold, dict_colors=dict_colors, **kwargs)
+        self.z_orders = (
+            {
+                "mossy_fibers": 2,
+                "glomerulus": 2,
+                "granule_cell": 1,
+                "unipolar_brush_cell": 3,
+                "ubc_glomerulus": 2,
+                "golgi_cell": 0,
+                "purkinje_cell": 3,
+                "basket_cell": 4,
+                "stellate_cell": 4,
+                "dcn_p": 0,
+                "dcn_i": 0,
+                "io": 0,
+            }
+            if z_orders is None
+            else z_orders
+        )
+        """Drawing order index for cells. The higher indices are drawn last (on top)"""
         self.ignored_ct = ignored_ct or ["mossy_fibers", "glomerulus", "ubc_glomerulus"]
+        self.max_neuron_sampled = max_neuron_sampled
         """List of cell type names to ignore in the plot."""
 
     def init_plot(self, **kwargs):
         self.is_plotted = False
         self.figure = plt.figure(figsize=self.fig_size, **kwargs)
-        self.axes = self.figure.add_subplot(111, projection="3d")
+        self.axes = self.figure.add_subplot(111, projection="3d", computed_zorder=False)
 
     @staticmethod
     def set_axes_equal(ax):
@@ -317,6 +339,11 @@ class CellPlacement3D(ScaffoldPlot):
             if not ct.name in self.ignored_ct:
                 positions = ps.load_positions()
                 if len(positions) > 0:
+                    if len(positions) > self.max_neuron_sampled:
+                        ids_to_keep = np.linspace(
+                            0, len(positions), self.max_neuron_sampled, endpoint=False, dtype=int
+                        )
+                        positions = positions[ids_to_keep]
                     if ct.name not in self.dict_colors:
                         # default color is grey
                         color = [0.6, 0.6, 0.6]
@@ -327,14 +354,14 @@ class CellPlacement3D(ScaffoldPlot):
                     else:
                         *color, alpha = self.dict_colors[ct.name]
                     scale = np.power(ct.spatial.radius, 2)
-                    ax.scatter(
-                        positions[:, 0],
-                        positions[:, 1],
-                        positions[:, 2],
+                    dict_params = dict(
                         c=np.repeat([color], len(positions), axis=0),
                         alpha=np.repeat([alpha], len(positions), axis=0),
                         s=scale,
+                        zorder=self.z_orders[ct.name],
                     )
+                    dict_params.update(kwargs)
+                    ax.scatter(positions[:, 0], positions[:, 1], positions[:, 2], **dict_params)
         ax.set_xlabel("x in $\mu m$")
         ax.set_ylabel("y in $\mu m$")
         ax.set_zlabel("z in $\mu m$")
