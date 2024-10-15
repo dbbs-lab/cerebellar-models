@@ -7,7 +7,7 @@ packages:
   - bsb-hdf5~=4.0
 storage:
   engine: hdf5
-  root: cerebellum.hdf5
+  root: human_cereb.hdf5
 network:
   chunk_size: [200, 200, 200]
   x: 1000
@@ -158,8 +158,10 @@ connectivity:
         - granule_cell
       morphology_labels:
         - dendrites
-    mf_glom_strat: mossy_fibers_to_glomerulus
-    mf_cell_type: mossy_fibers
+    pre_glom_strats:
+      - mossy_fibers_to_glomerulus
+    pre_cell_types:
+      - mossy_fibers
     radius: 40
     convergence: 4
   glomerulus_to_golgi:
@@ -183,8 +185,10 @@ connectivity:
     postsynaptic:
       cell_types:
         - granule_cell
-    glom_post_strat: glomerulus_to_granule
-    glom_cell_type: glomerulus
+    glom_post_strats:
+      - glomerulus_to_granule
+    glom_cell_types:
+      - glomerulus
     radius: 200
     divergence: 40
   golgi_to_golgi:

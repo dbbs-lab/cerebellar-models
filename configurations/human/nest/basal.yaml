@@ -14,13 +14,13 @@ $import:
 storage:
   root: cerebellum.hdf5
 packages:
-  - bsb-nest~=4.2
+  - bsb-nest~=4.3
 components:
   - cerebellum/nest_models/build_models.py
 simulations:
   basal_activity:
     simulator: nest
-    duration: 2000
+    duration: 5000
     resolution: 0.1
     modules:
       - cerebmodule

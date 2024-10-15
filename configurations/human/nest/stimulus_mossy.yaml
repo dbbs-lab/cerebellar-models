@@ -1,7 +1,38 @@
+name: DBBS Human cerebellum NEST basal activity and mf stimulus
+simulations:
+  mf_stimulus:
+    simulator: nest
+    resolution: 0.1
+    duration: 5000
+    modules:
+      - cerebmodule
+    seed: 1234
+    $import:
+      ref: ./basal.yaml#/simulations/basal_activity
+      values:
+        - cell_models
+        - connection_models
+        - devices
+    devices:
+      stimulus:
+        device: poisson_generator
+        rate: 150
+        start : 1200
+        stop : 1250
+        targetting:
+          strategy: sphere
+          radius: 90
+          origin:
+            - 150.0
+            - 65.0
+            - 100.0
+          cell_models:
+            - mossy_fibers
+        "weight" : 1.0
+        "delay" : 0.1
 $import:
   ref: ./basal.yaml#/
   values:
-    - name
     - packages
     - components
     - storage
@@ -13,21 +44,3 @@ $import:
     - placement
     - connectivity
     - simulations
-simulations:
-  basal_activity:
-    devices:
-      stimulus:
-        device: poisson_generator
-        rate: 140.0
-        targetting:
-          strategy: cylinder
-          radius: 150
-          origin:
-          - 500
-          - 500     
-          cell_models:
-          - mossy_fibers
-        weight: 1
-        delay: 0.1
-        start: 1000
-        stop: 1050
