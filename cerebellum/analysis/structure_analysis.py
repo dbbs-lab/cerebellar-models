@@ -60,12 +60,12 @@ class PlacementTable(TablePlot, ScaffoldPlot):
     """
 
     def __init__(
-            self,
-            fig_size: Tuple[float, float],
-            scaffold: Scaffold = None,
-            dict_colors=None,
-            dict_abv=None,
-            **kwargs,
+        self,
+        fig_size: Tuple[float, float],
+        scaffold: Scaffold = None,
+        dict_colors=None,
+        dict_abv=None,
+        **kwargs,
     ):
         super().__init__(
             fig_size,
@@ -141,12 +141,12 @@ class ConnectivityTable(TablePlot, ScaffoldPlot):
     """
 
     def __init__(
-            self,
-            fig_size: Tuple[float, float],
-            scaffold: Scaffold = None,
-            dict_colors=None,
-            dict_abv=None,
-            **kwargs,
+        self,
+        fig_size: Tuple[float, float],
+        scaffold: Scaffold = None,
+        dict_colors=None,
+        dict_abv=None,
+        **kwargs,
     ):
         super().__init__(
             fig_size,
@@ -265,14 +265,14 @@ class CellPlacement3D(ScaffoldPlot):
     """
 
     def __init__(
-            self,
-            fig_size: Tuple[float, float],
-            scaffold: Scaffold = None,
-            dict_colors=None,
-            ignored_ct=None,
-            max_neuron_sampled=10000,
-            z_orders=None,
-            **kwargs,
+        self,
+        fig_size: Tuple[float, float],
+        scaffold: Scaffold = None,
+        dict_colors=None,
+        ignored_ct=None,
+        max_neuron_sampled=10000,
+        z_orders=None,
+        **kwargs,
     ):
         super().__init__(fig_size, scaffold, dict_colors=dict_colors, **kwargs)
         self.z_orders = (
