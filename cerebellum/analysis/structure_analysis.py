@@ -361,10 +361,10 @@ class StructureReport(BSBReport):
             dict_legend=dict(columnspacing=2.0, handletextpad=0.1, fontsize=20, loc="lower center"),
         )
         density_table = PlacementTable(
-            (5, 2.5), scaffold=self.scaffold, dict_abv=self.abbreviations
+            (5, 4), scaffold=self.scaffold, dict_abv=self.abbreviations
         )
         connectivity_table = ConnectivityTable(
-            (10, 5), scaffold=self.scaffold, dict_abv=self.abbreviations
+            (10, 10), scaffold=self.scaffold, dict_abv=self.abbreviations
         )
         plot3d = CellPlacement3D((10, 10), scaffold=self.scaffold)
         self.add_plot("density_table", density_table)

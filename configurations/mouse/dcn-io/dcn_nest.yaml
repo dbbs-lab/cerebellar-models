@@ -56,13 +56,13 @@ simulations:
       mossy_fibers_to_dcn_p:
         synapse:
           model: static_synapse
-          weight: 0.45 # 0.05
+          weight: 0.25 # 0.05
           delay: 4.
           receptor_type: 1
       purkinje_to_dcn_p:
         synapse:
           model: static_synapse
-          weight: 2.5 # 0.4
+          weight: 3. # 0.4
           delay: 4.
           receptor_type: 2
       purkinje_to_dcn_i:

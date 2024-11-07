@@ -1,6 +1,6 @@
 name: DBBS Mouse cerebellum w/ DCN and IO NEST basal activity and mf stimulus w/ microzones
 storage:
-  root: mouse_cereb_dcn_io_microzones_nest.hdf5
+  root: mouse_cereb_microzones_nest.hdf5
 packages:
   - bsb-nest~=4.1
 simulations:
@@ -149,7 +149,7 @@ simulations:
           V_th: -35
           V_reset: -45
           E_L: -45
-          I_e: 180.101
+          I_e: 18.101
           V_m: -45
           lambda_0: 1.2
           tau_V: 0.8
@@ -191,25 +191,25 @@ simulations:
       mossy_fibers_to_dcn_p_plus:
         synapse:
           model: static_synapse
-          weight: 0.45 # 0.05
+          weight: 0.25 # 0.05
           delay: 4.
           receptor_type: 1
       mossy_fibers_to_dcn_p_minus:
         synapse:
           model: static_synapse
-          weight: 0.45 # 0.05
+          weight: 0.25 # 0.05
           delay: 4.
           receptor_type: 1
       purkinje_to_dcn_p_plus:
         synapse:
           model: static_synapse
-          weight: 2.5 # 0.4
+          weight: 3. # 0.4
           delay: 4.
           receptor_type: 2
       purkinje_to_dcn_p_minus:
         synapse:
           model: static_synapse
-          weight: 2.5 # 0.4
+          weight: 3. # 0.4
           delay: 4.
           receptor_type: 2
       purkinje_to_dcn_i_plus:
@@ -227,19 +227,37 @@ simulations:
       io_to_purkinje:
         synapse:
           model: static_synapse
-          weight: 330 # 50
+          weight: 300 # 50
+          delay: 4
+          receptor_type: 3
+      io_to_purkinje_minus:
+        synapse:
+          model: static_synapse
+          weight: 300 # 50
           delay: 4
           receptor_type: 3
       io_to_mli_io_plus_to_basket_cell:
         synapse:
           model: static_synapse
-          weight: 2.5
+          weight: 5. # 2.5
           delay: 40
           receptor_type: 3
       io_to_mli_io_plus_to_stellate_cell:
         synapse:
           model: static_synapse
-          weight: 2.5
+          weight: 5. # 2.5
+          delay: 40
+          receptor_type: 3
+      io_to_mli_minus_io_minus_to_basket_cell:
+        synapse:
+          model: static_synapse
+          weight: 5. # 2.5
+          delay: 40
+          receptor_type: 3
+      io_to_mli_minus_io_minus_to_stellate_cell:
+        synapse:
+          model: static_synapse
+          weight: 5. # 2.5
           delay: 40
           receptor_type: 3
       io_to_dcn_p_plus:
@@ -352,15 +370,27 @@ simulations:
             - mossy_fibers
         weight: 1
         delay: 0.1
-      cf_stimulus:
+      cf_stimulus_plus:
         device: poisson_generator
         rate: 500
-        start: 1250
-        stop: 1260
+        start: 1550
+        stop: 1560
         targetting:
           strategy: cell_model
           cell_models:
             - io_plus
+        receptor_type: 1
+        weight: 55
+        delay: 0.1
+      cf_stimulus_minus:
+        device: poisson_generator
+        rate: 500
+        start: 1750
+        stop: 1760
+        targetting:
+          strategy: cell_model
+          cell_models:
+            - io_minus
         receptor_type: 1
         weight: 55
         delay: 0.1
@@ -377,7 +407,7 @@ simulations:
         - connection_models
         - devices
 $import:
-  ref: ./dcn_microzones.yaml#/
+  ref: ./microzones.yaml#/
   values:
     - packages
     - storage

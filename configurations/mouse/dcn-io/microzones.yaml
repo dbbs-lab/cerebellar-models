@@ -1,6 +1,6 @@
 name: DBBS Mouse cerebellum w/ DCN and IO split in microzones
 storage:
-  root: mouse_cereb_dcn_io_microzones.hdf5
+  root: mouse_cereb_microzones.hdf5
 network:
   z: 695
 regions:
@@ -302,6 +302,15 @@ connectivity:
       cell_types:
         - purkinje_cell
     indegree: 1
+  io_to_purkinje_minus: #ONLY FOR Z- MICROZONE!!!
+    strategy: bsb.connectivity.FixedIndegree
+    presynaptic:
+      cell_types:
+        - io_minus
+    postsynaptic:
+      cell_types:
+        - purkinje_cell_minus
+    indegree: 1
   io_to_mli:  #ONLY FOR Z+ MICROZONE!!!
     strategy: cerebellum.connectome.io_molecular.ConnectomeIO_MLI
     presynaptic:
@@ -312,10 +321,24 @@ connectivity:
         - basket_cell
         - stellate_cell
     mli_pc_connectivity:
-      - basket_to_purkinje  #NEED TO CHECK ASAP
+      - basket_to_purkinje
       - stellate_to_purkinje
     io_pc_connectivity: io_to_purkinje
     pre_cell_pc: purkinje_cell
+  io_to_mli_minus: #ONLY FOR Z- MICROZONE!!!
+    strategy: cerebellum.connectome.io_molecular.ConnectomeIO_MLI
+    presynaptic:
+      cell_types:
+        - io_minus
+    postsynaptic:
+      cell_types:
+        - basket_cell
+        - stellate_cell
+    mli_pc_connectivity:
+      - basket_to_purkinje_minus
+      - stellate_to_purkinje_minus
+    io_pc_connectivity: io_to_purkinje_minus
+    pre_cell_pc: purkinje_cell_minus
   io_to_dcn_p_plus:
     strategy: bsb.connectivity.AllToAll
     presynaptic:

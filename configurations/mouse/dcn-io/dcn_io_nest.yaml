@@ -32,19 +32,19 @@ simulations:
       io_to_purkinje:
         synapse:
           model: static_synapse
-          weight: 330 # 50
+          weight: 300 # 50
           delay: 4
           receptor_type: 3
       io_to_mli_io_to_basket_cell:
         synapse:
           model: static_synapse
-          weight: 2.5
+          weight: 5. # 2.5
           delay: 40
           receptor_type: 3
       io_to_mli_io_to_stellate_cell:
         synapse:
           model: static_synapse
-          weight: 2.5
+          weight: 5. # 2.5
           delay: 40
           receptor_type: 3
       io_to_dcn_p:
