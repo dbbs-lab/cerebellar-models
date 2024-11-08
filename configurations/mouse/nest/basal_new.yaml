@@ -151,97 +151,45 @@ simulations:
          weight: 1
          receptor_type: 1
          delay: 1
-        #facilitation:
-        # U: 0.1
-        # u: 0.1
-        # x: 1.0
-        # tau_fac: 1000.0
-        # tau_rec: 100.0
-        # weight: 250.0
-        # receptor_type: 1
-        # delay: 1
-        #weight: 250              
-        #tau_rec: 800  #Time constant for depression, default = 800
-        #tau_fac: 0    #Time constant for facilitation, default = 0
-        #delay: 1
-        #receptor_type: 1
+   
       glomerulus_to_granule:
         synapse:
-         model: tsodyks2_synapse
-        #depression:
-         U: 0.35
-         #u: 0.67
-         x: 1.0
-         tau_rec: 36
-         tau_fac: 58
+         model: static_synapse
          weight: 0.23
-         receptor_type: 1  
          delay: 1
-       #facilitation:
-        #U: 0.1
-        #u: 0.1
-        #x: 1.0
-        #tau_fac: 1000.0
-        #tau_rec: 100.0
-        #weight: 250.0
-        #receptor_type: 1
-        #delay: 1
-          #weight: 250
-          #tau_rec: 800
-          #tau_fac: 0
-          #delay: 1
-          #receptor_type: 1
+         receptor_type: 1      
+        
       glomerulus_to_golgi:
         synapse:
-          model: tsodyks2_synapse
-          #depression:
-          U: 0.4   #probability of release increment 
+         model: tsodyks2_synapse
+         weight: 0.24
+         delay: 1
+         receptor_type: 1
+         
+          #U: 0.4   #probability of release increment 
            #u: 0.67  # Maximum probability of release 
-          x: 1   #current scaling factor of the weight,
-          tau_rec: 35.1 # Time constant for facilitation
-          tau_fac: 54   #Time constant for facilitation
-          weight: 0.24
-          receptor_type: 1 
-          delay: 1
-          #facilitation:
-          # U: 0.1
-          # u: 0.1
-          # x: 1.0
-          # tau_fac: 1000.0
-          # tau_rec: 100.0
-          # weight: 250.0
-          # receptor_type: 1 
-          # delay: 1
-          #weight: 250
-          #tau_rec: 800
-          #tau_fac: 0
+          #x: 1   #current scaling factor of the weight,
+          #tau_rec: 35.1 # Time constant for depression 
+          #tau_fac: 54   #Time constant for facilitation
+          #weight: 0.24
+          #receptor_type: 1 
           #delay: 1
-          #receptor_type: 1
+       
       golgi_to_glomerulus:
         synapse:
-         model: tsodyks2_synapse
-          #depression:
-         U: 0.35
-         u: 0.67
-         x: 1.0
-         tau_rec: 36
-         tau_fac: 58
+         model: static_synapse
          weight: 0.24
          delay: 2
-         #facilitation:
-         #U: 0.1
-         #u: 0.1
+         receptor_type: 2
+          #depression:
+         #U: 0.35
+         #u: 0.67
          #x: 1.0
-         #tau_fac: 1000.0
-         #tau_rec: 100.0
-         #weight: 250.0
-         #receptor_type: 2 
-         #receptor_type: 2
-         #weight: 250
-         #tau_rec: 800
-         #tau_fac: 0
+         #tau_rec: 36
+         #tau_fac: 58
+         #weight: 0.24
          #delay: 2
-         #receptor_type: 2
+      
       golgi_to_golgi:
         synapse:
          model: static_synapse
@@ -251,9 +199,7 @@ simulations:
       ascending_axon_to_golgi:
         synapse:
           model: tsodyks2_synapse
-          #depression:
           U: 0.4
-           #u: 0.67
           x: 1
           tau_rec: 35.1
           tau_fac: 54
@@ -263,45 +209,59 @@ simulations:
         
       parallel_fiber_to_golgi:
         synapse: # have to check synapse
-         model: static_synapse
-         # depression:
-         weight: 0.05
-         delay: 5
+         model: tsodyks2_synapse
+         U: 0.4
+         x: 1
+         tau_rec: 35.1
+         tau_fac: 54
+         weight: 0.8
          receptor_type: 3
+         delay: 2
+              
+         #weight: 0.05
+         #delay: 5
+         #receptor_type: 3
          
       parallel_fiber_to_purkinje:
         synapse:
-         model: static_synapse
-         #depression:
+         model: tsodyks2_synapse
+         U: 0.13
+         #u: 0.67
+         x: 1.0
+         tau_rec: 54
+         tau_fac: 35.1
          weight: 0.14
          delay: 5
          receptor_type: 1
                          
       ascending_axon_to_purkinje:
         synapse:
-         model: static_synapse
-         # depression:
-         #  U: 0.67
-         #  u: 0.67
-         #  x: 1
-         #  tau_rec: 450
-         #  tau_fac: 0
+         model: tsodyks2_synapse
+         U: 0.13
+         #u: 0.67
+         x: 1.0
+         tau_rec: 54
+         tau_fac: 35.1
          weight: 0.14
          delay: 2
          receptor_type: 1
          
       parallel_fiber_to_stellate:
         synapse:
-         model: static_synapse
+         model: tsodyks2_synapse
+         U: 0.15
+         #u: 0.67
+         x: 1.0
+         tau_rec: 35.1
+         tau_fac: 10.8
          weight: 0.18
          delay: 5
          receptor_type: 1
-       
+                     
       stellate_to_stellate:
         synapse:
          model: tsodyks2_synapse
          U: 0.42
-         #u: 0.67
          x: 1
          tau_rec: 38.7
          tau_fac: 4
@@ -312,8 +272,7 @@ simulations:
       stellate_to_purkinje:
         synapse:
          model: tsodyks2_synapse
-         U: 0.67
-         #u: 0.67
+         U: 0.35
          x: 1
          tau_rec: 15
          tau_fac: 4 
@@ -321,13 +280,14 @@ simulations:
          delay: 4
          receptor_type: 2
           
-
       parallel_fiber_to_basket:
         synapse:
-         model: static_synapse
-         U: 0.67
+         model: tsodyks_synapse
+         U: 0.15
          #u: 0.67
          x: 1.0
+         tau_rec: 35.1
+         tau_fac: 10.8
          weight: 0.18
          delay: 5
          receptor_type: 1
