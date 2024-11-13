@@ -40,7 +40,7 @@ simulations:
           tau_syn1: 5.8
           tau_syn2: 13.61
           E_rev1: 0
-          E_rev2: -80
+          E_rev2: -80   
       golgi_cell:
         model: eglif_cond_alpha_multisyn
         constants:
@@ -142,43 +142,44 @@ simulations:
     connection_models:
       mossy_fibers_to_glomerulus:
         synapse:
-         model: tsodyks_synapse
+         model: tsodyks2_synapse
         #depression:
          U: 0.43
          x: 1.0
          tau_rec: 8
          tau_fac: 5
-         weight: 250   #1
+         weight: 1   #1
          receptor_type: 1
          delay: 1
-   
       glomerulus_to_granule:
         synapse:
          model: static_synapse
-         weight: 250 #0.23
+         weight: 0.23 #0.23
          delay: 1
          receptor_type: 1      
-        
       glomerulus_to_golgi:
         synapse:
-         model: tsodyks_synapse
-         weight: 250 #0.24
+         model: static_synapse
+         #U: 0.43
+         #x: 1.0
+         #tau_rec: 35.1
+         #tau_fac: 54
+         weight: 0.24 #0.24
          delay: 1
          receptor_type: 1
          
           #U: 0.4   #probability of release increment 
-           #u: 0.67  # Maximum probability of release 
+          #u: 0.67  # Maximum probability of release 
           #x: 1   #current scaling factor of the weight,
           #tau_rec: 35.1 # Time constant for depression 
           #tau_fac: 54   #Time constant for facilitation
           #weight: 0.24
           #receptor_type: 1 
           #delay: 1
-       
       golgi_to_glomerulus:
         synapse:
          model: static_synapse
-         weight: 250 #0.24
+         weight: 0.24 #0.24
          delay: 2
          receptor_type: 2
           #depression:
@@ -189,54 +190,49 @@ simulations:
          #tau_fac: 58
          #weight: 0.24
          #delay: 2
-      
       golgi_to_golgi:
         synapse:
          model: static_synapse
-         weight: 250 #0.007
+         weight: 0.007 #0.007
          delay: 4
          receptor_type: 2
       ascending_axon_to_golgi:
         synapse:
-          model: tsodyks_synapse
+          model: tsodyks2_synapse
           U: 0.4
           x: 1
           tau_rec: 35.1
           tau_fac: 54
-          weight: 250 #0.8
+          weight: 0.8 #0.8
           receptor_type: 3
           delay: 2
-        
       parallel_fiber_to_golgi:
         synapse: # have to check synapse
-         model: tsodyks_synapse
+         model: tsodyks2_synapse
          U: 0.4
          x: 1
          tau_rec: 35.1
          tau_fac: 54
-         weight: 250 #0.8
+         weight: 0.8 #0.8
          receptor_type: 3
          delay: 2
-              
          #weight: 0.05
          #delay: 5
          #receptor_type: 3
-         
       parallel_fiber_to_purkinje:
         synapse:
-         model: tsodyks_synapse
+         model: tsodyks2_synapse
          U: 0.13
          #u: 0.67
          x: 1.0
          tau_rec: 54
          tau_fac: 35.1
-         weight: 250 #0.14
+         weight: 0.14 #0.14
          delay: 5
          receptor_type: 1
-                         
       ascending_axon_to_purkinje:
         synapse:
-         model: tsodyks_synapse
+         model: tsodyks2_synapse
          U: 0.13
          #u: 0.67
          x: 1.0
@@ -245,10 +241,9 @@ simulations:
          weight: 0.14
          delay: 2
          receptor_type: 1
-         
       parallel_fiber_to_stellate:
         synapse:
-         model: tsodyks_synapse
+         model: tsodyks2_synapse
          U: 0.15
          #u: 0.67
          x: 1.0
@@ -257,53 +252,48 @@ simulations:
          weight: 0.18
          delay: 5
          receptor_type: 1
-                     
       stellate_to_stellate:
         synapse:
-         model: tsodyks_synapse
+         model: tsodyks2_synapse
          U: 0.42
          x: 1
          tau_rec: 38.7
          tau_fac: 4
-         weight: 250 #0.005
+         weight: 0.005 #0.005
          delay: 4
          receptor_type: 2
-                   
       stellate_to_purkinje:
         synapse:
-         model: tsodyks_synapse
+         model: tsodyks2_synapse
          U: 0.35
          x: 1
          tau_rec: 15
          tau_fac: 4 
-         weight: 250 #1.64
+         weight: 1.64 #1.64
          delay: 4
          receptor_type: 2
-          
       parallel_fiber_to_basket:
         synapse:
-         model: tsodyks_synapse
+         model: tsodyks2_synapse
          U: 0.15
          #u: 0.67
          x: 1.0
          tau_rec: 35.1
          tau_fac: 10.8
-         weight: 250 #0.18
+         weight: 0.18 #0.18
          delay: 5
-         receptor_type: 1
-        
+         receptor_type: 1   
       basket_to_basket:
         synapse:
-          model: tsodyks_synapse
+          model: tsodyks2_synapse
           U: 0.42
           # u: 0.67
           x: 1.0
           tau_rec: 38.7
           tau_fac: 4
-          weight: 250 #0.006
+          weight: 0.006 #0.006
           delay: 4
           receptor_type: 2
-     
       basket_to_purkinje:
         synapse:
          model: tsodyks2_synapse
@@ -312,14 +302,14 @@ simulations:
          x: 1
          tau_rec: 15
          tau_fac: 4
-         weight: 250 #0.44
+         weight: 0.44 #0.44
          delay: 4
          receptor_type: 2
          
     devices:
       background_noise:
         device: poisson_generator
-        rate: 4
+        rate: 200
         targetting:
           strategy: cell_model
           cell_models:
