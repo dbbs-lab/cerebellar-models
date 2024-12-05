@@ -94,7 +94,7 @@ We will describe here the spatial parameters used in ``canonical circuit``:
    Granular layer;Mossy fibers (mf);Exc.;/;count relative to glom. ratio=0.05;Billings et al. (2014) [#billings_2014]_
    Granular layer;Granule Cell (GrC);Exc.;2.5;0.0039;Casali et al. (2019) [#casali_2019]_
    Granular layer;Golgi Cell (GoC);Inh.;4.0;0.000009;Casali et al. (2019) [#casali_2019]_
-   Purkinje layer;Purkinje cell (PC);Inh.;7.5;planar density: 0.00045;Casali et al. (2019) [#casali_2019]_
+   Purkinje layer;Purkinje cell (PC);Inh.;7.5;planar density: 0.001166;Keller et al. (2018) [#keller_2018]_
    Molecular layer;Basket cell (BC);Inh.;6.;0.00005;Casali et al. (2019) [#casali_2019]_
    Molecular layer;Stellate cell (SC);Inh.;4.;0.00005;Casali et al. (2019) [#casali_2019]_
 
@@ -105,7 +105,11 @@ The density of glom have been calculated in Solinas et al. (2010) [#solinas_2010
 glomerulus to granule convergence and divergence ratios (derived from values in Korbo et al., 1993
 [#korbo_1993]_ and Jakab and Hámari, 1988 [#jakab_1988]_).
 
-The densities of GrC, GoC, PC, BC and SC are reported in Table 1 of Casali et al. (2019) [#casali_2019]_.
+For PC cells, the planar density is calculated assuming a linear density of 34.15 :math:`PCs/mm`,
+in agreement with Roux et al. [#roux_2019]_, which results in a planar density of 1166 :math:`PCs/mm^{2}`.
+This density is consistent with the data from Keller et al. [#keller_2018]_
+
+The densities of GrC, GoC, BC and SC are reported in Table 1 of Casali et al. (2019) [#casali_2019]_.
 The authors cite Korbo et al. (1993) [#korbo_1993]_ for the values in this table, however, no
 equivalent was found in the cited paper. These values might have been optimized to improve
 simulation results. They could also have been obtained through geometric constrained placement
@@ -124,7 +128,7 @@ However, comparative analysis conducted in ``[CITATION]`` have shown that the la
 limited impact on connectivity and simulation results, while the computational cost of checking soma
 overlapping is not negligible.
 
-PC are placed in arrays, ``130 μm`` apart from each other along the
+PC are placed in arrays, ``30 μm`` apart from each other along the
 para-sagittal plane ``(xz)`` to guarantee that their dendritic
 arborizations do not overlap. Furthermore, each row of PC somas is
 shifted with respect to its predecessor to form a ``70`` degree angle on
@@ -277,3 +281,10 @@ References
 
 .. [#ito_2013] Ito, M. (2013). Cerebellar Microcircuitry. Reference Module in Biomedical Sciences.
    https://doi.org/10.1016/B978-0-12-801238-3.04544-X
+
+.. [#keller_2018] Keller, D. (2018). Cell Densities in the Mouse Brain: A Systematic Review.
+   Frontiers in Neuroanatomy, 12. https://doi.org/10.3389/fnana.2018.00083
+
+.. [#roux_2019] Roux, S. (2019). Regional and sex-dependent alterations in Purkinje cell density
+   in the valproate mouse model of autism. Neuronreport, 30(2), 82-88. https://doi.org/10.1097/wnr.0000000000001164
+
