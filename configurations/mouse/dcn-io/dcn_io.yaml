@@ -91,4 +91,4 @@ $import:
     - cell_types
     - placement
     - connectivity
-  #   - after_connectivity
+    - after_connectivity

@@ -105,8 +105,8 @@ The density of glom have been calculated in Solinas et al. (2010) [#solinas_2010
 glomerulus to granule convergence and divergence ratios (derived from values in Korbo et al., 1993
 [#korbo_1993]_ and Jakab and Hámari, 1988 [#jakab_1988]_).
 
-For PC cells, the planar density is calculated assuming a linear density of 34.15 :math:`PCs/mm`,
-in agreement with Roux et al. [#roux_2019]_, which results in a planar density of 1166 :math:`PCs/mm^{2}`.
+For PC cells, the planar density was calculated to obtain approximately 70 PC in our Purkinje Layer,
+which results in a planar density of 1166 :math:`PCs/mm^{2}`.
 This density is consistent with the data from Keller et al. [#keller_2018]_
 
 The densities of GrC, GoC, BC and SC are reported in Table 1 of Casali et al. (2019) [#casali_2019]_.
@@ -128,7 +128,7 @@ However, comparative analysis conducted in ``[CITATION]`` have shown that the la
 limited impact on connectivity and simulation results, while the computational cost of checking soma
 overlapping is not negligible.
 
-PC are placed in arrays, ``30 μm`` apart from each other along the
+PC are placed in arrays, ``130 μm`` apart from each other along the
 para-sagittal plane ``(xz)`` to guarantee that their dendritic
 arborizations do not overlap. Furthermore, each row of PC somas is
 shifted with respect to its predecessor to form a ``70`` degree angle on
@@ -284,7 +284,4 @@ References
 
 .. [#keller_2018] Keller, D. (2018). Cell Densities in the Mouse Brain: A Systematic Review.
    Frontiers in Neuroanatomy, 12. https://doi.org/10.3389/fnana.2018.00083
-
-.. [#roux_2019] Roux, S. (2019). Regional and sex-dependent alterations in Purkinje cell density
-   in the valproate mouse model of autism. Neuronreport, 30(2), 82-88. https://doi.org/10.1097/wnr.0000000000001164
 
