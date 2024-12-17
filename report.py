@@ -1,5 +1,6 @@
 from bsb import from_storage
 
+from cerebellum.analysis.report import PlotTypeInfo
 from cerebellum.analysis.spiking_results import (
     BasicSimulationReport,
     FiringRatesPlot,
@@ -7,7 +8,6 @@ from cerebellum.analysis.spiking_results import (
     SimResultsTable,
 )
 from cerebellum.analysis.structure_analysis import StructureReport
-from cerebellum.analysis.report import PlotTypeInfo
 
 reco_file = "mouse_cereb_microzones_nest.hdf5"
 nio_folder = "nio_files/micro_stim"
@@ -44,7 +44,9 @@ report_struct = StructureReport(reco_file, cell_type_info=LIST_CT_INFO)
 report_struct.print_report(reco_pdf)
 
 # SIMULATION REPORT
-report_sim_stim = BasicSimulationReport(scaffold,simulation_name='mf_cf_stimulus',folder_nio=nio_folder, cell_types_info=LIST_CT_INFO)
+report_sim_stim = BasicSimulationReport(
+    scaffold, simulation_name="mf_cf_stimulus", folder_nio=nio_folder, cell_types_info=LIST_CT_INFO
+)
 report_sim_stim.print_report(sim_stim_pdf)
 
 # SIMULATION REPORT - mossy fiber stimulus

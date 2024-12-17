@@ -360,9 +360,7 @@ class StructureReport(BSBReport):
             3,
             dict_legend=dict(columnspacing=2.0, handletextpad=0.1, fontsize=20, loc="lower center"),
         )
-        density_table = PlacementTable(
-            (5, 4), scaffold=self.scaffold, dict_abv=self.abbreviations
-        )
+        density_table = PlacementTable((5, 4), scaffold=self.scaffold, dict_abv=self.abbreviations)
         connectivity_table = ConnectivityTable(
             (10, 10), scaffold=self.scaffold, dict_abv=self.abbreviations
         )
