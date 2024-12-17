@@ -4,22 +4,44 @@ Deep Cerebellar Nuclei
 Deep cerebellar nuclei (DCN) are the primary output structures of the cerebellar cortex [#dangelo_2018]_.
 They receive inhibitory input from Purkinje cells and excitatory input from mossy fibers and climbing fibers (from IO).
 DCN are composed by three distinct nuclei: dentate nucleus, fastigial nucleus and interposed nucleus.
-The default configuration with DCN is implemented in `dcn.yaml <https://github.com/dbbs-lab/cerebellum/blob/feature/dcn-io/configurations/mouse/dcn-io/dcn.yaml>`_.
+The default configuration with DCN is implemented in
+`dcn.yaml <https://github.com/dbbs-lab/cerebellum/blob/master/configurations/mouse/dcn-io/dcn.yaml>`_.
 
 
 Configuration
 ^^^^^^^^^^^^^
-In `dcn.yaml <https://github.com/dbbs-lab/cerebellum/blob/feature/dcn-io/configurations/mouse/dcn-io/dcn.yaml>`_ , a new region called ``cerebellar_nuclei`` was added to the ``canonical circuit``. This region was defined of type ``group`` because in it there is only the ``dcn layer``. ``dcn layer`` has a thickness of ``200 µm`` . Additionally, in order to ensure that ``cerebellar_nuclei`` are placed under the ``cerebellar_cortex``, the ``origin`` of the ``granular_layer`` was set to ``[0,0,200]``.
+In `dcn.yaml <https://github.com/dbbs-lab/cerebellum/blob/master/configurations/mouse/dcn-io/dcn.yaml>`_ ,
+a new region called ``cerebellar_nuclei`` was added to the ``canonical circuit``.
+This region contains only one ``Layer`` Partition: ``dcn layer``.
+``dcn layer`` has a thickness of ``200 µm`` . Additionally, to ensure that ``cerebellar_nuclei`` are placed under
+the ``cerebellar_cortex``, the ``origin`` of the ``granular_layer`` was set to ``[0, 0, 200]`` (above DCN).
 
 Cell types
 ++++++++++
-For DCN, two types of neurons are considered [#uusisaari_2008]_ [#geminiani_2019b]_:
+In DCN, two types of neurons are considered [#uusisaari_2008]_ [#geminiani_2019b]_:
 
-* **DCNp**: they are the excitatory neurons projecting outside the cerebellum to various brain regions, including the thalamus, the red nucleus, the vestibular nuclei, and the reticular formation;
+* **DCNp**: they are the excitatory neurons projecting outside the cerebellum to various brain regions,
+  including the thalamus, the red nucleus, the vestibular nuclei, and the reticular formation;
 * **DCNi**: they are GABAergic interneurons which send inhibitory feedback to IO.
 
-No morphologies are currently available for DCN neurons, so they are represented only by their soma.
-Densities were estimated from `Blue Brain Cell Atlas <https://portal.bluebrain.epfl.ch/resources/models/cell-atlas/>`_ (version 2018 [#ero_2018]_), considering the ratio :math:`\frac{n_{GrC}}{n_{DCN}} = \frac{33 \times 10^6}{230 \times 10^3} ≈ 143` between the total number of granule cells and the total number of neurons in the cerebellar nuclei. From this ratio, considering the total amout of GrC placed in the ``canonical circuit``, it is possible to estimate the number of DCN to be placed. Literature data reported that DCNp are around the 57% of the total number of neurons in the cerebellar nuclei, while DCNi around the 32% [#baumel_2009]_ [#batini_1992]_. Taking into account these percentages and dividing by the volume of the DCN layer (set to :math:`200 \times 200 \times 300` µm), the values reported in the following table were obtained.
+.. warning::
+   In Geminiani et al (2019) [#geminiani_2019]_, DCN populations are defined in a different way:
+
+   * **DCNnL** for the excitatory population (DCNp)
+   * **DCNp** for the inhibitory one (DCNi)
+
+   Then, starting from Geminiani et al (2019b) [#geminiani_2019b]_ , names for DCN populations were redefined as reported here.
+
+No morphologies are currently available for DCN neurons, so they are modelled as point neurons.
+Densities were estimated from `Blue Brain Cell Atlas <https://portal.bluebrain.epfl.ch/resources/models/cell-atlas/>`_
+(version 2018 [#ero_2018]_), considering the ratio :math:`\frac{n_{GrC}}{n_{DCN}} = \frac{33 \times 10^6}{230 \times 10^3} ≈ 143`
+between the total number of granule cells and the total number of neurons in the cerebellar nuclei.
+From this ratio, considering the total amount of GrC placed in the ``canonical circuit``, it is possible to estimate the
+number of DCN to be placed.
+Literature data reported that DCNp are around the 57% of the total number of neurons in the cerebellar nuclei,
+while DCNi around the 32% [#baumel_2009]_ [#batini_1992]_. Taking into account these percentages and dividing by the
+volume of the DCN layer (set to :math:`200 \times 200 \times 300` µm), the values reported in the following table
+were obtained.
 
 .. csv-table::
    :header-rows: 1
@@ -31,7 +53,8 @@ Densities were estimated from `Blue Brain Cell Atlas <https://portal.bluebrain.e
 
 Placement
 +++++++++
-DCN are assumed to be uniformly distributed in their own layer, hence the bsb ``RandomPlacement`` strategy is chosen to place them.
+DCN are assumed to be uniformly distributed in their own layer, hence the bsb ``RandomPlacement`` strategy is chosen
+to place them.
 
 Connectivity
 ++++++++++++
@@ -51,17 +74,9 @@ NEST simulation
 
 Neuron parameters
 +++++++++++++++++
-DCN populations were represented as a EGLIF point neuron models (see :doc:`NEST section <nest>`). Parameters sets for both DCNp and DCNi are taken from Geminiani et al (2019) [#geminiani_2019]_.
-
-.. warning::
-   In Geminiani et al (2019) [#geminiani_2019]_, DCN populations are defined in a different way:
-
-   * **DCNnL** for the excitatory population (DCNp)
-   * **DCNp** for the inhibitory one (DCNi)
-
-   Then, starting from Geminiani et al (2019b) [#geminiani_2019b]_ , names for DCN populations were redefined as reported here.
-
-The default LIF parameters are the following:
+DCN populations were represented as a EGLIF point neuron models (see :doc:`NEST section <nest>`).
+Parameters sets for both DCNp and DCNi are taken from Geminiani et al (2019) [#geminiani_2019]_.
+The default LIF parameters are reported below:
 
 .. csv-table:: LIF neuron parameters for DCN
    :header-rows: 1
@@ -78,10 +93,21 @@ Then, the following parameters are optimized according to the method described i
    :delim: ;
 
     Cell name;:math:`k_{adap}\ (nS \cdot ms^{-1})`;:math:`k_1\ (ms^{-1})`;:math:`k_2\ (ms^{-1})`;:math:`A_1\ (pA)`;:math:`A_2\ (pA)`;:math:`I_e\ (pA)`
-    DCNp; 0.408; 0.697; 0.047; 13.857; 3.477; 75.385
-    DCNi; 0.079; 0.041; 0.044; 176.358; 176.358; 2.384
+    DCNp; 0.408; 0.697; 0.047; 13.857; 3.477; 150
+    DCNi; 0.079; 0.041; 0.044; 176.358; 176.358; 10
 
-It is not clear how the spiking parameters (i.e and ) are obtained in the Geminiani et al. (2019) paper [#geminiani_2019]_. The values were extracted from a BSB configuration provided by the authors.
+.. warning::
+   Compared to Geminiani et al (2019) [#geminiani_2019]_, only the endogenous currents :math:`I_e` of both DCN populations
+   were modified in this version. This adjustment was made to replicate the network's functional behavior,
+   which we were unable to achieve using the originally provided parameter sets. Specifically:
+
+   * :math:`I_e` (DCNp): 75.385 → 150 (pA);
+   * :math:`I_e` (DCNi): 2.384 → 10 (pA).
+
+
+.. warning::
+   It is not clear how the spiking parameters are obtained in the Geminiani et al. (2019) paper [#geminiani_2019]_.
+   The values were extracted from a BSB configuration provided by the authors.
 
 The postsynaptic receptors are defined as listed in Table 2 of Geminiani et al. (2019b) [#geminiani_2019b]_:
 
@@ -98,22 +124,31 @@ The postsynaptic receptors are defined as listed in Table 2 of Geminiani et al. 
 
 Synapse parameters
 ++++++++++++++++++
-DCN connections are represented as ``static synapses`` (see :doc:`NEST section <nest>`). The receptor ids correspond to the postsynaptic receptors used for the connections (see table :ref:`dcn-table-receptor`).
-It is still unclear from the references how these parameters were optimized.
+DCN connections are represented as ``static synapses`` (see :doc:`NEST section <nest>`). The receptor ids correspond to
+the postsynaptic receptors used for the connections.
 
 .. csv-table:: Presynaptic parameters for DCN connections
    :header-rows: 1
    :delim: ;
 
     Source-Target;:math:`weight \ (nS)`;:math:`delay \ (ms)`; Receptor id
-    mf-DCNp; 0.05; 4.0; 1
-    PC-DCNp; 0.4; 4.0; 2
-    PC-DCNi; 0.12; 4.0; 2
+    mf-DCNp; 0.25; 4.0; 1
+    PC-DCNp; 3.0; 4.0; 2
+    PC-DCNi; 0.4 ; 4.0; 2
+
+.. warning::
+   The reported values were manually adjusted through trial and error to ensure a reasonable excitation/inhibition ratio
+   in the DCN populations.
+
+   * :math:`weight` (mf-DCNp): 0.05 → 0.25 (nS);
+   * :math:`weight` (PC-DCNp): 0.4 → 3.0 (nS);
+   * :math:`weight` (PC-DCNi): 0.12 → 0.4 (nS);
+
 
 Simulation paradigms
 ++++++++++++++++++++
 
-The `dcn_nest.yaml <https://github.com/dbbs-lab/cerebellum/blob/feature/dcn-io/configurations/mouse/dcn-io/dcn_nest.yaml>`_ are
+The `dcn_nest.yaml <https://github.com/dbbs-lab/cerebellum/blob/master/configurations/mouse/dcn-io/dcn_nest.yaml>`_ are
 including all the simulation paradigms described in the :doc:`NEST section <nest>`) but include the DCN cells in the
 circuit.
 
@@ -127,14 +162,14 @@ follows (expressed in mean :math:`\pm` standard deviation):
    :delim: ;
 
     Cell name;Mean Firing rate (Hz); Mean ISI (ms)
-    Mossy cell; :math:`4.1 \pm 0.93`; :math:`240 \pm 61`
-    Granule cell; :math:`3.7 \pm 3.2`; :math:`430 \pm 410`
-    Golgi cell;:math:`13 \pm 4.8`; :math:`92 \pm 46`
-    Purkinje cell;:math:`49 \pm 3.7`; :math:`21 \pm 1.7`
-    Basket cell;:math:`33 \pm 11`; :math:`34 \pm 13`
-    Stellate cell;:math:`38 \pm 23`; :math:`42 \pm 32`
-    DCNp; :math:`21 \pm 0.9`; :math:`47 \pm 2`
-    DCNi; :math:`4.4 \pm 3.2`; :math:`130 \pm 15`
+    Mossy cell; :math:`4.0 \pm 0.84`; :math:`252 \pm 71`
+    Granule cell; :math:`3.5 \pm 3.2`; :math:`500 \pm 520`
+    Golgi cell;:math:`12 \pm 4.6`; :math:`100 \pm 64`
+    Purkinje cell;:math:`49 \pm 2.9`; :math:`20 \pm 1.2`
+    Basket cell;:math:`30 \pm 15`; :math:`41 \pm 20`
+    Stellate cell;:math:`36 \pm 24`; :math:`64 \pm 100`
+    DCNp; :math:`23 \pm 11`; :math:`55 \pm 74`
+    DCNi; :math:`8.2 \pm 6.2`; :math:`82 \pm 15`
 
 Mossy fiber stimulus
 ####################
@@ -142,21 +177,52 @@ Mossy fiber stimulus
 For this simulation paradigm, **during the stimulus**, the mean firing rates and mean ISI obtained for each
 neuron population are as follows (expressed in mean :math:`\pm` standard deviation):
 
+.. csv-table:: Results of the canonical circuit with DCN during stimulus of the mossy
+   :header-rows: 1
+   :delim: ;
 
+    Cell name;Mean Firing rate (Hz); Mean ISI (ms)
+    Mossy cell; :math:`48 \pm 74`; :math:`6.4 \pm 2.1`
+    Granule cell; :math:`22 \pm 48`; :math:`9.9 \pm 7.2`
+    Golgi cell;:math:`53 \pm 38`; :math:`11.0 \pm 4.7`
+    Purkinje cell;:math:`82 \pm 20`; :math:`12.0 \pm 2.9`
+    Basket cell;:math:`120 \pm 80`; :math:`7.6 \pm 4.0`
+    Stellate cell;:math:`150 \pm 110`; :math:`7.2 \pm 5.6`
+    DCNp; :math:`22 \pm 16`; :math:`27.0 \pm 5.3`
+    DCNi; :math:`5.8 \pm 9.1`; not enough spikes per neuron
+
+You will observe that the mf stimulus induces a burst-pause response in PC population and a pause-burst in DCNs.
 
 References
 ^^^^^^^^^^
 
-.. [#dangelo_2018] D'Angelo, Egidio. "Physiology of the cerebellum." Handbook of clinical neurology 154 (2018): 85-108. https://doi.org/10.1016/B978-0-444-63956-1.00006-0
-.. [#uusisaari_2008] Uusisaari, M., and T. Knöpfel. "GABAergic synaptic communication in the GABAergic and non-GABAergic cells in the deep cerebellar nuclei." Neuroscience 156.3 (2008): 537-549. https://doi.org/10.1016/j.neuroscience.2008.07.060
-.. [#geminiani_2019b] Geminiani, A., Pedrocchi, A., D’Angelo, E., & Casellato, C. (2019). Response
-   dynamics in an olivocerebellar spiking neural network with non-linear neuron properties.
+.. [#dangelo_2018] D'Angelo, Egidio.
+   "Physiology of the cerebellum." Handbook of clinical neurology 154 (2018): 85-108.
+   https://doi.org/10.1016/B978-0-444-63956-1.00006-0
+.. [#uusisaari_2008] Uusisaari, M., and T. Knöpfel.
+   "GABAergic synaptic communication in the GABAergic and non-GABAergic cells in the deep cerebellar nuclei."
+   Neuroscience 156.3 (2008): 537-549.
+   https://doi.org/10.1016/j.neuroscience.2008.07.060
+.. [#geminiani_2019b] Geminiani, A., Pedrocchi, A., D’Angelo, E., & Casellato, C. (2019).
+   "Response dynamics in an olivocerebellar spiking neural network with non-linear neuron properties."
    Frontiers in computational neuroscience, 13, 68.
    https://doi.org/10.3389/fncom.2019.00068
-.. [#baumel_2009] Baumel, Yuval, Gilad A. Jacobson, and Dana Cohen. "Implications of functional anatomy on information processing in the deep cerebellar nuclei." Frontiers in cellular neuroscience 3 (2009): 795. https://doi.org/10.3389/neuro.03.014.2009
-.. [#batini_1992] Batini, Cesira, et al. "Cerebellar nuclei and the nucleocortical projections in the rat: retrograde tracing coupled to GABA and glutamate immunohistochemistry." Journal of Comparative Neurology 315.1 (1992): 74-84.  https://doi.org/10.1002/cne.903150106
-.. [#ero_2018] Erö, Csaba, et al. "A cell atlas for the mouse brain." Frontiers in neuroinformatics 12 (2018): 84. https://doi.org/10.3389/fninf.2018.00084
-.. [#geminiani_2024] Geminiani, Alice, et al. "Mesoscale simulations predict the role of synergistic cerebellar plasticity during classical eyeblink conditioning." PLOS Computational Biology 20.4 (2024): e1011277. https://doi.org/10.1371/journal.pcbi.1011277
+.. [#baumel_2009] Baumel, Yuval, Gilad A. Jacobson, and Dana Cohen.
+   "Implications of functional anatomy on information processing in the deep cerebellar nuclei."
+   Frontiers in cellular neuroscience 3 (2009): 795.
+   https://doi.org/10.3389/neuro.03.014.2009
+.. [#batini_1992] Batini, Cesira, et al.
+   "Cerebellar nuclei and the nucleocortical projections in the rat: retrograde tracing coupled to GABA and
+   glutamate immunohistochemistry."
+   Journal of Comparative Neurology 315.1 (1992): 74-84.
+   https://doi.org/10.1002/cne.903150106
+.. [#ero_2018] Erö, Csaba, et al.
+   "A cell atlas for the mouse brain." Frontiers in neuroinformatics 12 (2018): 84.
+   https://doi.org/10.3389/fninf.2018.00084
+.. [#geminiani_2024] Geminiani, Alice, et al.
+   "Mesoscale simulations predict the role of synergistic cerebellar plasticity during classical eyeblink conditioning."
+   PLOS Computational Biology 20.4 (2024): e1011277.
+   https://doi.org/10.1371/journal.pcbi.1011277
 .. [#geminiani_2019] Geminiani, A., Casellato, C., D’Angelo, E., & Pedrocchi, A. (2019).
    Complex electroresponsive dynamics in olivocerebellar neurons represented with extended-generalized
    leaky integrate and fire models. Frontiers in Computational Neuroscience, 13, 35.
