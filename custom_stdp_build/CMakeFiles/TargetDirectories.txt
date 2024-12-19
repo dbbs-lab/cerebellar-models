@@ -1,0 +1,10 @@
+/home/geenetto/Documenti/workspace/custom_stdp_build/CMakeFiles/dist.dir
+/home/geenetto/Documenti/workspace/custom_stdp_build/CMakeFiles/custom_stdp_module_module.dir
+/home/geenetto/Documenti/workspace/custom_stdp_build/CMakeFiles/package.dir
+/home/geenetto/Documenti/workspace/custom_stdp_build/CMakeFiles/package_source.dir
+/home/geenetto/Documenti/workspace/custom_stdp_build/CMakeFiles/edit_cache.dir
+/home/geenetto/Documenti/workspace/custom_stdp_build/CMakeFiles/rebuild_cache.dir
+/home/geenetto/Documenti/workspace/custom_stdp_build/CMakeFiles/list_install_components.dir
+/home/geenetto/Documenti/workspace/custom_stdp_build/CMakeFiles/install.dir
+/home/geenetto/Documenti/workspace/custom_stdp_build/CMakeFiles/install/local.dir
+/home/geenetto/Documenti/workspace/custom_stdp_build/CMakeFiles/install/strip.dir
