@@ -131,7 +131,7 @@ overlapping is not negligible.
 PC are placed in arrays, ``130 μm`` apart from each other along the
 para-sagittal plane ``(xz)`` to guarantee that their dendritic
 arborizations do not overlap. Furthermore, each row of PC somas is
-shifted with respect to its predecessor to form a ``70`` degree angle on
+shifted with respect to its predecessor to form a ``80`` degree angle on
 the ``(xy)`` plane.
 
 Connectivity

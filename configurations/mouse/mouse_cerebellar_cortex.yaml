@@ -63,7 +63,7 @@ cell_types:
     spatial:
       morphologies:
         - PurkinjeCell
-      planar_density: 0.001120
+      planar_density: 0.001166
       radius: 7.5
     plotting:
       display_name: Purkinje cell
@@ -105,7 +105,7 @@ placement:
     cell_types:
       - purkinje_cell
     spacing_x: 130
-    angle: 70
+    angle: 80
   basket_layer_placement:
     strategy: bsb.placement.RandomPlacement
     partitions:
