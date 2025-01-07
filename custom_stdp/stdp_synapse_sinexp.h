@@ -291,7 +291,7 @@ stdp_synapse_sinexp< targetidentifierT >::send( Event& e, size_t t, const Common
         //std::cout << "sddddddddddddd: " << sd;
         //double sd_minus = simple_post_spikes_[GR-1] - minus_dt;
     //    if (sd < 0 && sd > -200 && post != 0){
-    if (minus_dt <= 0 && minus_dt >= -200){
+    if (offset != 0 && minus_dt <= 0 && minus_dt >= -200){
       LTD += depress_(minus_dt);
     }
     //    }
@@ -307,6 +307,7 @@ stdp_synapse_sinexp< targetidentifierT >::send( Event& e, size_t t, const Common
     {
       weight_ = Wmin_;
     }
+
     //  if (last_post_spike <= -200){
     //    post = 0;
     //  }

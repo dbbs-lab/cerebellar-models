@@ -496,39 +496,29 @@ const double g3__X__rec3__d__tmp_ = V_.__P__g3__X__rec3__d__g3__X__rec3 * S_.ode
 
     S_.tick = get_t();
     S_.cf_buffer = (0.001 * B_.spike_inputs_grid_sum_[CF_SPIKES - MIN_SPIKE_RECEPTOR]);
-    std::cout << "BUFFERINO: " << S_.cf_buffer << std::endl;
-double rec_5 = get_spike_input_received_()[4].get_value(lag);
-//    if (S_.cf_buffer != 0)
-//    {
-//
-//        //std::cout << "t: " << S_.tick << " ms\n";
-//
-//        /**
-//         * generated code for emit_spike() function
-//        **/
-//
-//        set_spiketime(nest::Time::step(origin.get_steps() + lag) , 1);
-//
-////        if (rec_5 =! 0 && lag < 200){
-////            set_spiketime(nest::Time::step(origin.get_steps() + lag), 1);
-////            std::cout << "QUI OFFSET VA A 1: " << rec_5 << std::endl;
-////        }
-//        nest::SpikeEvent se;
-//        //S_.received_offset = 1;
-//        std::cout << "Gr: received offset is = " << S_.received_offset << "\n";
-//        se.set_offset(S_.received_offset);
-//
-//        std::cout << "Gr: Sending spike with offset = " << se.get_offset() << " at spike time = " << nest::Time::step(origin.get_steps() + lag + 1) << "\n";
-//
-//        //std::cout << "Spike time = " << get_spiketime() << "\n";
-//        //nest::kernel().event_delivery_manager.send(*this, se, lag+se.get_offset()/__resolution);
-//        nest::kernel().event_delivery_manager.send(*this, se, lag);
-//
-//    }
-//    else{
-//        set_spiketime(nest::Time::step(origin.get_steps() + lag) , 0);
-//        nest::SpikeEvent se;
-//    }
+double rec_5 = get_spike_input_received_()[1].get_value(lag);
+    if (S_.cf_buffer != 0)
+    {
+
+        //std::cout << "t: " << S_.tick << " ms\n";
+
+        /**
+         * generated code for emit_spike() function
+        **/
+
+        set_spiketime(nest::Time::step(origin.get_steps() + lag), 1);
+        nest::SpikeEvent se;
+        //S_.received_offset = 1;
+        std::cout << "Gr: received offset is = " << S_.received_offset << "\n";
+        se.set_offset(S_.received_offset);
+
+        std::cout << "Gr: Sending spike with offset = " << se.get_offset() << " at spike time = " << nest::Time::step(origin.get_steps() + lag + 1) << "\n";
+
+        //std::cout << "Spike time = " << get_spiketime() << "\n";
+        //nest::kernel().event_delivery_manager.send(*this, se, lag+se.get_offset()/__resolution);
+        nest::kernel().event_delivery_manager.send(*this, se, lag);
+
+    }
     
     if (S_.r == 0)
     {  
@@ -610,17 +600,14 @@ double rec_5 = get_spike_input_received_()[4].get_value(lag);
             /**
              * generated code for emit_spike() function
             **/
-            if(S_.cf_buffer != 0){
-                set_spiketime(nest::Time::step(origin.get_steps() + lag + 1), 1);
-                nest::SpikeEvent se;
-            }
-            else{
-                set_spiketime(nest::Time::step(origin.get_steps() + lag + 1), 0);
-                nest::SpikeEvent se;
-            }
-            std::cout << "BUFFERINO, PT. 2: " << S_.cf_buffer << std::endl;
+            set_spiketime(nest::Time::step(origin.get_steps() + lag + 1));
+//            if (rec_5 =! 0){
+//                set_spiketime(nest::Time::step(origin.get_steps() + lag + 1), 1);
+//                std::cout << "QUI OFFSET VA A 1: " << rec_5 << std::endl;
+//            }
+            nest::SpikeEvent se;
             std::cout << "Gr: emitting simple spike\n";
-//            nest::kernel().event_delivery_manager.send(*this, se, lag);
+            nest::kernel().event_delivery_manager.send(*this, se, lag);
 
 
         }

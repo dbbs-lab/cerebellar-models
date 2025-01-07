@@ -499,38 +499,38 @@ const double g3__X__rec3__d__tmp_ = V_.__P__g3__X__rec3__d__g3__X__rec3 * S_.ode
 
     S_.tick = get_t();
     S_.cf_buffer = (0.001 * B_.spike_inputs_grid_sum_[CF_SPIKES - MIN_SPIKE_RECEPTOR]);
-    std::cout << "BUFFERINO PC: " << S_.cf_buffer << std::endl;
 double rec_1 = get_spike_input_received_()[0].get_value(lag);
 double rec_5 = get_spike_input_received_()[4].get_value(lag);
-//    if (S_.cf_buffer != 0)
-//    {
-//        set_spiketime(nest::Time::step(origin.get_steps() + lag));
-//
-////        if (rec_5 =! 0 && lag < 200){
-////            set_spiketime(nest::Time::step(origin.get_steps() + lag), 1);
-////            std::cout << "QUI OFFSET VA A 1: " << rec_5 << std::endl;
-////        }
-//
-//        S_.complex_flag = 1.0;
-//        std::cout << "t: " << S_.tick << " ms\n";
-//        std::cout << "COMPLEX FLAG HERE = " << S_.complex_flag << std::endl;
-//
-//        /**
-//         * generated code for emit_spike() function
-//        **/
-//
-//        //set_spiketime(nest::Time::step(origin.get_steps() + lag), 0);
-//        nest::SpikeEvent se;
-//        //se.set_offset(P_.offset);
-//
+double weight = get_weight();
+    if (S_.cf_buffer != 0)
+    {
+        set_spiketime(nest::Time::step(origin.get_steps() + lag) , 0);
+
+        if (rec_5 =! 0 && weight != 0) {
+            set_spiketime(nest::Time::step(origin.get_steps() + lag), 1);
+            //std::cout << "QUI OFFSET VA A 1: " << rec_5 << std::endl;
+        }
+
+        S_.complex_flag = 1.0;
+        //std::cout << "t: " << S_.tick << " ms\n";
+        //std::cout << "COMPLEX FLAG HERE = " << S_.complex_flag << std::endl;
+
+        /**
+         * generated code for emit_spike() function
+        **/
+
+        //set_spiketime(nest::Time::step(origin.get_steps() + lag), 0);
+        nest::SpikeEvent se;
+        //se.set_offset(P_.offset);
+
 //        std::cout << "PC: My own offset is " << se.get_offset() << "\n";
 //        std::cout << "Sending spike with offset = " << se.get_offset() << " at spike time = " << nest::Time::step(origin.get_steps() + lag + 1) << "\n";
-//
-//        //std::cout << "Spike time = " << get_spiketime() << "\n";
-//        //nest::kernel().event_delivery_manager.send(*this, se, lag+se.get_offset()/__resolution);
-//        nest::kernel().event_delivery_manager.send(*this, se, lag);
-//
-//    }
+
+        //std::cout << "Spike time = " << get_spiketime() << "\n";
+        //nest::kernel().event_delivery_manager.send(*this, se, lag+se.get_offset()/__resolution);
+        nest::kernel().event_delivery_manager.send(*this, se, lag);
+
+    }
     if (S_.r == 0)
     {  
 
@@ -680,11 +680,11 @@ void eglif_pc_nestml::handle(nest::SpikeEvent &e)
 
   double weight = e.get_weight();
   size_t nestml_buffer_idx = 0;
-  if ( weight >= 0.0 )
+  if ( weight > 0.0 )
   {
     nestml_buffer_idx = std::get<0>(rport_to_nestml_buffer_idx[e.get_rport()]);
   }
-  else
+  else if ( weight < 0.0 )
   {
     nestml_buffer_idx = std::get<1>(rport_to_nestml_buffer_idx[e.get_rport()]);
     if ( nestml_buffer_idx == eglif_pc_nestml::PORT_NOT_AVAILABLE )
@@ -693,12 +693,14 @@ void eglif_pc_nestml::handle(nest::SpikeEvent &e)
     }
     weight = -weight;
   }
-  B_.spike_inputs_[ nestml_buffer_idx - MIN_SPIKE_RECEPTOR ].add_value(
-    e.get_rel_delivery_steps( nest::kernel().simulation_manager.get_slice_origin() ),
-    weight * e.get_multiplicity() );
-  B_.spike_input_received_[ nestml_buffer_idx - MIN_SPIKE_RECEPTOR ].add_value(
-    e.get_rel_delivery_steps( nest::kernel().simulation_manager.get_slice_origin() ),
-    1. );
+  if ( weight != 0.0 ){
+      B_.spike_inputs_[ nestml_buffer_idx - MIN_SPIKE_RECEPTOR ].add_value(
+        e.get_rel_delivery_steps( nest::kernel().simulation_manager.get_slice_origin() ),
+        weight * e.get_multiplicity() );
+      B_.spike_input_received_[ nestml_buffer_idx - MIN_SPIKE_RECEPTOR ].add_value(
+        e.get_rel_delivery_steps( nest::kernel().simulation_manager.get_slice_origin() ),
+        1. );
+  }
 }
 
 void eglif_pc_nestml::handle(nest::CurrentEvent& e)

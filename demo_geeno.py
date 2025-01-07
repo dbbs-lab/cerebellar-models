@@ -13,7 +13,7 @@ def run_simulation():
     nest.Install("custom_stdp_module")
     #nest.Install("cerebmodule")
 
-    params_post = {"t_ref": 0.5,
+    params_pc = {"t_ref": 0.5,
           "Vmin": -350,
           "C_m": 334,
           "V_th": -43,
@@ -36,7 +36,7 @@ def run_simulation():
           "E_rev2": -80,
           "E_rev3": 0}
 
-    params_pre= {"t_ref": 1,
+    params_io= {"t_ref": 1,
           "C_m": 189,
           "V_th": -35,
           "V_reset": -45,
@@ -78,27 +78,27 @@ def run_simulation():
           "E_rev2": -80}
 
 
-    pre = nest.Create("eglif_io_nestml", 1, params = params_pre)
-    post = nest.Create("eglif_pc_nestml", 1, params = params_post)
+    io = nest.Create("eglif_io_nestml", 1, params = params_io)
+    pc = nest.Create("eglif_pc_nestml", 1, params = params_pc)
     gr = nest.Create("eglif_gr_nestml", 1, params=params_gr)
     wr = nest.Create("weight_recorder")
     nest.CopyModel("stdp_synapse_sinexp", "stdp_rec", {"weight_recorder": wr})
-    nest.Connect(pre, post, syn_spec={"synapse_model" : "stdp_synapse_sinexp" , "receptor_type" : 5})
-    nest.Connect(pre, gr, syn_spec={"synapse_model" : "stdp_synapse_sinexp" ,"receptor_type" : 5})
-    nest.Connect(gr, post, syn_spec={"synapse_model": "stdp_rec", "receptor_type" : 1})
+    #nest.Connect(pre, post, syn_spec={"synapse_model" : "stdp_synapse_sinexp" , "receptor_type" : 5})
+    nest.Connect(io, pc, syn_spec={"synapse_model" : "static_synapse" ,"receptor_type" : 5})
+    nest.Connect(gr, pc, syn_spec={"synapse_model": "stdp_rec", "receptor_type" : 1})
     #nest.SetStatus(pre, {"offset": 1})
     #nest.SetStatus(post, {"offset": 1})
 
-    generator = nest.Create("poisson_generator", params = {"rate" : 500, "start" : 100, "stop" : 110})
-    gr_generator = nest.Create("poisson_generator", params={"rate": 500, "start": 100, "stop": 110})
+    io_generator = nest.Create("spike_generator", params = {"spike_times": [10]})
+    gr_generator = nest.Create("spike_generator", params={"spike_times": [10, 100, 200]})
     #gr_2_gen = nest.Create("poisson_generator", params={"rate": 500, "start": 800, "stop": 810})
 
-    sr_pre, sr_post, sr_gr = nest.Create("spike_recorder", 3)
-    nest.Connect(pre, sr_pre)
-    nest.Connect(post, sr_post)
+    sr_io, sr_pc, sr_gr = nest.Create("spike_recorder", 3)
+    nest.Connect(io, sr_io)
+    nest.Connect(pc, sr_pc)
     nest.Connect(gr, sr_gr)
-    nest.Connect(generator, pre, syn_spec={"receptor_type": 5})
-    nest.Connect(gr_generator, gr, syn_spec={"receptor_type": 1})
+    nest.Connect(io_generator, io, syn_spec={"receptor_type" : 1, "weight" : 5})
+    nest.Connect(gr_generator, gr, syn_spec={"receptor_type" : 1,"weight" : 1})
     #nest.Connect(gr_2_gen, gr, syn_spec={"receptor_type": 5})
     #nest.Connect(post, pre, syn_spec={"synapse_model": "stdp_synapse_sinexp", "receptor_type" : 5})
 
@@ -111,20 +111,37 @@ def run_simulation():
     for i in range(1000):
         nest.Simulate(1)
         weights[i] = nest.GetStatus(pf_pc_conns, "weight")
-        if weights[i] > 0.14:
-            print("timestamp complex spike: ", i)
-        if i > 500:
-            print("roba succede: ", weights[i])
-        if weights[i] < 0.14 and weights[i] > 0.12:
-            print("SIUUUUUUUUUUM: ", i)
-            print("PAZZESCOOOOOO: ", weights[i])
+        # if weights[i] > 0.14:
+        #     print("timestamp complex spike: ", i)
+        # if i > 500:
+        #     print("roba succede: ", weights[i])
+        # if weights[i] < 0.14 and weights[i] > 0.12:
+        #     print("SIUUUUUUUUUUM: ", i)
+        #     print("PAZZESCOOOOOO: ", weights[i])
 
 
-    return sr_pre.events["times"], sr_post.events["times"], weights
+    return sr_io.events["times"], sr_gr.events["times"], sr_pc.events["times"], weights
 
 
-pre, post, w = run_simulation()
-print(w)
+io, gr, pc, w = run_simulation()
+print(np.diff(w, 0))
+print("IO SPIKES: ", io)
+print("GR SPIKES: ", gr)
+print("PC SPIKES: ", pc)
+i =  np.zeros((999, 1))
+counter = 0
+for z in range(999):
+    i[z] = counter
+    counter = counter +1
+plt.figure()
+plt.plot(i, np.diff(w, axis =0))
+plt.xlim(0,600)
+plt.show()
+
+plt.figure()
+plt.plot(np.append(i, 1000), w)
+plt.xlim(0,600)
+plt.show()
 # counter = 0
 # for i in range(1000):
 #     if w[i] < 0.14:
