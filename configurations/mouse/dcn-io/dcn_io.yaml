@@ -15,7 +15,7 @@ partitions:
     origin: [0,0,100]
     thickness: 200
   io_layer:
-    thickness: 100 # 200
+    thickness: 100
 cell_types:
   io:
     spatial:
@@ -56,29 +56,32 @@ connectivity:
     io_pc_connectivity: io_to_purkinje
     pre_cell_pc: purkinje_cell
   io_to_dcn_p:
-    strategy: bsb.connectivity.AllToAll
+    strategy: bsb.connectivity.FixedOutdegree
     presynaptic:
       cell_types:
         - io
     postsynaptic:
       cell_types:
         - dcn_p
+    outdegree: 60
   io_to_dcn_i:
-    strategy: bsb.connectivity.AllToAll
+    strategy: bsb.connectivity.FixedOutdegree
     presynaptic:
       cell_types:
         - io
     postsynaptic:
       cell_types:
         - dcn_i
+    outdegree: 33
   dcn_i_to_io:
-    strategy: bsb.connectivity.AllToAll
+    strategy: bsb.connectivity.FixedIndegree
     presynaptic:
       cell_types:
         - dcn_i
     postsynaptic:
       cell_types:
         - io
+    indegree: 33
 $import:
   ref: ./dcn.yaml#/
   values:
