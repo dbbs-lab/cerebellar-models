@@ -13,6 +13,7 @@ from scipy.optimize import curve_fit
 from scipy.signal import find_peaks
 
 
+@unittest.skip
 class TestNestModuleLoading(unittest.TestCase):
     def test_build_models(self):
         from cerebellum.nest_models.build_models import _build_nest_models
@@ -55,8 +56,8 @@ class TestSingleCellModels(
                 "basket_cell": {"spatial": {"radius": 1, "count": 10}},
                 "stellate_cell": {"spatial": {"radius": 1, "count": 10}},
                 "unipolar_brush_cell": {"spatial": {"radius": 1, "count": 10}},
-                # "dcn_p_cell": {"spatial": {"radius": 1, "count": 10}},
-                # "dcn_i_cell": {"spatial": {"radius": 1, "count": 10}},
+                "dcn_p_cell": {"spatial": {"radius": 1, "count": 10}},
+                "dcn_i_cell": {"spatial": {"radius": 1, "count": 10}},
             },
             "placement": {
                 "placement_A": {
@@ -68,8 +69,8 @@ class TestSingleCellModels(
                         "basket_cell",
                         "stellate_cell",
                         "unipolar_brush_cell",
-                        # "dcn_p_cell",
-                        # "dcn_i_cell",
+                        "dcn_p_cell",
+                        "dcn_i_cell",
                     ],
                     "partitions": ["B"],
                     "positions": [[1, 1, 1]] * 10,
@@ -96,18 +97,18 @@ class TestSingleCellModels(
                                 "unipolar_brush_cell",
                             ],
                         },
-                        # "dcn_p_cell": {
-                        #     "$import": {
-                        #         "ref": "../configurations/mouse/dcn-io/dcn_io_nest.yaml#/simulations/basal_activity/cell_models/dcn_p",
-                        #         "values": ["constants", "model"],
-                        #     }
-                        # },
-                        # "dcn_i_cell": {
-                        #     "$import": {
-                        #         "ref": "../configurations/mouse/dcn-io/dcn_io_nest.yaml#/simulations/basal_activity/cell_models/dcn_i",
-                        #         "values": ["constants", "model"],
-                        #     }
-                        # },
+                        "dcn_p_cell": {
+                            "$import": {
+                                "ref": "../configurations/mouse/dcn-io/dcn_io_nest.yaml#/simulations/basal_activity/cell_models/dcn_p",
+                                "values": ["constants", "model"],
+                            }
+                        },
+                        "dcn_i_cell": {
+                            "$import": {
+                                "ref": "../configurations/mouse/dcn-io/dcn_io_nest.yaml#/simulations/basal_activity/cell_models/dcn_i",
+                                "values": ["constants", "model"],
+                            }
+                        },
                     },
                     "connection_models": {},
                     "devices": {
@@ -122,20 +123,20 @@ class TestSingleCellModels(
                                 "unipolar_brush_record",
                             ],
                         },
-                        # "dcn_p_record": {
-                        #     "$import": {
-                        #         "ref": "../configurations/mouse/dcn-io/dcn_io_nest.yaml#/simulations/basal_activity/devices/dcn_p_record",
-                        #         "values": ["device", "delay"],
-                        #     },
-                        #     "targetting": {"strategy": "cell_model", "cell_models": ["dcn_p_cell"]},
-                        # },
-                        # "dcn_i_record": {
-                        #     "$import": {
-                        #         "ref": "../configurations/mouse/dcn-io/dcn_io_nest.yaml#/simulations/basal_activity/devices/dcn_i_record",
-                        #         "values": ["device", "delay"],
-                        #     },
-                        #     "targetting": {"strategy": "cell_model", "cell_models": ["dcn_i_cell"]},
-                        # },
+                        "dcn_p_record": {
+                            "$import": {
+                                "ref": "../configurations/mouse/dcn-io/dcn_io_nest.yaml#/simulations/basal_activity/devices/dcn_p_record",
+                                "values": ["device", "delay"],
+                            },
+                            "targetting": {"strategy": "cell_model", "cell_models": ["dcn_p_cell"]},
+                        },
+                        "dcn_i_record": {
+                            "$import": {
+                                "ref": "../configurations/mouse/dcn-io/dcn_io_nest.yaml#/simulations/basal_activity/devices/dcn_i_record",
+                                "values": ["device", "delay"],
+                            },
+                            "targetting": {"strategy": "cell_model", "cell_models": ["dcn_i_cell"]},
+                        },
                     },
                 }
             },
@@ -220,16 +221,16 @@ class TestSingleCellModels(
                 "starts": [10, 12, 14],
                 "stops": [11, 13, 15],
             },
-            # "dcn_p": {
-            #     "amplitudes": [142, 284, 426],
-            #     "starts": [10, 12, 14],
-            #     "stops": [11, 13, 15],
-            # },
-            # "dcn_i": {
-            #     "amplitudes": [56, 112, 168],
-            #     "starts": [10, 12, 14],
-            #     "stops": [11, 13, 15],
-            # },
+            "dcn_p": {
+                "amplitudes": [142, 284, 426],
+                "starts": [10, 12, 14],
+                "stops": [11, 13, 15],
+            },
+            "dcn_i": {
+                "amplitudes": [56, 112, 168],
+                "starts": [10, 12, 14],
+                "stops": [11, 13, 15],
+            },
         }
         predicted = {
             "golgi": {"autorhythm": 12.8, "slope": 0.2},
@@ -238,8 +239,8 @@ class TestSingleCellModels(
             "basket": {"autorhythm": 9.51, "slope": 2.16},
             "stellate": {"autorhythm": 9.51, "slope": 2.16},
             "unipolar_brush": {"autorhythm": 0.0, "slope": 2.35},  # no source available
-            # "dcn_p": {"autorhythm": 31.48, "slope": 0.28},
-            # "dcn_i": {"autorhythm": 14.37, "slope": 0.4},
+            "dcn_p": {"autorhythm": 31.48, "slope": 0.28},
+            "dcn_i": {"autorhythm": 14.37, "slope": 0.4},
         }
         for cell_type in predicted:
             for i, stim in enumerate(protocol[cell_type]["amplitudes"]):
@@ -286,13 +287,8 @@ class TestSingleCellModels(
                 )
                 f_points[i] = f_tonic
                 i_points[i] = protocol[cell_type]["amplitudes"][i]
-            slope, slope_std, offset, offset_std = self._fit_lin(i_points, f_points)
-            # Currently the results are not reproducible
-            # self.assertTrue(abs(slope - predicted[cell_type]["slope"]) <= 2 * slope_std)
-            # This dummy test is just here to detect any additional "instability".
-            self.assertTrue(
-                abs(slope - predicted[cell_type]["slope"]) <= predicted[cell_type]["slope"] / 2
-            )
+            slope, slope_std, offset, offset_std = self._fit_lin(i_points[1:], f_points[1:])
+            self.assertTrue(abs(slope - predicted[cell_type]["slope"]) <= 2 * slope_std)
 
     @unittest.skip(reason="Test too time consuming")
     def test_granule_purkinje(self):

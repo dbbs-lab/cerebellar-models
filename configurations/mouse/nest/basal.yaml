@@ -50,9 +50,9 @@ simulations:
           V_reset: -75
           E_L: -62
           V_min: -150
-          V_m: -62.0
-          lambda_0: 1.0
-          tau_V: 0.4
+          V_m: -60.0
+          lambda_0: 0.15
+          tau_V: 0.09
           tau_m: 44
           I_e: 16.214
           k_adap: 0.217
