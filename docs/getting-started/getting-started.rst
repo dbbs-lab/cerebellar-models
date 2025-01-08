@@ -63,7 +63,7 @@ Simulation of the reconstructed circuits
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 A list of simulations can be attached to a BSB reconstruction through its configuration file (read
-more :doc:`here <bsb:simulation/simulation>`). These simulations are dependant on the simulator you
+more :doc:`here <bsb:simulation/intro>`). These simulations are dependant on the simulator you
 choose and their paradigm. Some examples are provided for each simulator sustained by the
 `cerebellum` package in the :doc:`configurations section <../configurations/configurations>`.
 
