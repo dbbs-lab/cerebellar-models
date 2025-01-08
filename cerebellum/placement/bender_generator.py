@@ -38,7 +38,7 @@ class GranuleBender(MorphologyBender):
     def process_scaling(self, point):
         # We calculate the scaling ratio so that the tip of the ascending axon's depth ratio within
         # the molecular layer is equal to the depth ratio of the soma within the granular layer.
-        distances = self.partition.voxel_data_of(point, self.thicknesses)
+        distances = self.partition.mask_source.voxel_data_of(point, self.thicknesses)
         top_dist = distances[1]  # dist to gr/mol boundary
         if self.ratio_gr is None:
             self.ratio_gr = top_dist / (top_dist + distances[2])  # ratio depth within gr.
@@ -78,8 +78,8 @@ class GranuleBender(MorphologyBender):
                 np.absolute(
                     get_diff_angle(
                         self.orientation_field,
-                        self.partition.voxel_of(branch.points[i]),
-                        self.partition.voxel_of(branch.points[0]),
+                        self.partition.mask_source.voxel_of(branch.points[i]),
+                        self.partition.mask_source.voxel_of(branch.points[0]),
                     )
                 )
                 > np.pi / 2
@@ -107,7 +107,7 @@ class GranuleBender(MorphologyBender):
         if np.isin(list(branch.labelsets[branch.labels[i]]), ["parallel_fiber"]).any():
             target = branch.points[i]
             target_ = Rotation.from_euler("xyz", rotation).apply(target - source) + source
-            distances = self.partition.voxel_data_of(target_, self.thicknesses)
+            distances = self.partition.mask_source.voxel_data_of(target_, self.thicknesses)
             if np.sum(distances[:1]) > 1e-6 and np.linalg.norm(source - target) > 1e-3:
                 ratio_mol = distances[0] / (distances[1] + distances[0])
                 if ratio_mol > self.ratio_gr + (1 - self.ratio_gr) / 3:  # go too deep
@@ -115,7 +115,7 @@ class GranuleBender(MorphologyBender):
                         np.asarray(
                             Rotation.from_matrix(
                                 rotation_matrix_from_vectors(
-                                    self.partition.voxel_orient(
+                                    self.partition.mask_source.voxel_orient(
                                         self.orientation_field,
                                         target_,
                                     ),
@@ -134,7 +134,7 @@ class GranuleBender(MorphologyBender):
                         )
                         + source
                     )
-                    distances = self.partition.voxel_data_of(next_loc, self.thicknesses)
+                    distances = self.partition.mask_source.voxel_data_of(next_loc, self.thicknesses)
                     if (
                         not self.is_target_wrong(source, next_loc)
                         and distances[0] / (distances[1] + distances[0]) < ratio_mol
@@ -175,7 +175,8 @@ class GolgiGenerator(BenderGenerator, classmap_entry="golgi_bender"):
                         (
                             id_den_mol
                             if (
-                                self.partition.voxel_data_of(point, self.annotations) != 0
+                                self.partition.mask_source.voxel_data_of(point, self.annotations)
+                                != 0
                                 and "mo" in self.get_lay_abv(point)
                             )
                             else id_den_gr
@@ -200,8 +201,8 @@ class BasketGenerator(BenderGenerator, classmap_entry="basket_bender"):
             return "mo" not in current_abv
 
         # axon should get closer to Purkinje layer.
-        current_dist = self.partition.voxel_data_of(new_target, self.thicknesses)
-        old_dist = self.partition.voxel_data_of(source, self.thicknesses)
+        current_dist = self.partition.mask_source.voxel_data_of(new_target, self.thicknesses)
+        old_dist = self.partition.mask_source.voxel_data_of(source, self.thicknesses)
         if "mo" in current_abv:
             return current_dist[1] > 62.5 and old_dist[1] < current_dist[1]
         elif "gr" in current_abv:

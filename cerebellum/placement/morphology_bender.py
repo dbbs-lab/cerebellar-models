@@ -2,7 +2,7 @@ import functools
 from collections import deque
 
 import numpy as np
-from bsb import config
+from bsb import NrrdDependencyNode, config
 from bsb.config._attrs import cfgdict
 from scipy.spatial.transform import Rotation
 
@@ -73,7 +73,7 @@ class MorphologyBender:
 
         :rtype: numpy.ndarray
         """
-        loc_orient = self.partition.datasets["orientations"].raw
+        loc_orient = self.partition.sources["orientations"].raw
         loc_orient /= np.linalg.norm(loc_orient, axis=3)[..., np.newaxis]
         if 0 <= self.fixed_dimension <= 2:
             loc_orient[..., self.fixed_dimension] = 0.0
@@ -87,7 +87,7 @@ class MorphologyBender:
 
         :rtype: numpy.ndarray
         """
-        return self.partition.datasets["thicknesses"].raw * self.partition.voxel_size
+        return self.partition.sources["thicknesses"].raw * self.partition.voxel_size
 
     @functools.cached_property
     def boundaries(self):
@@ -97,7 +97,7 @@ class MorphologyBender:
 
         :rtype: numpy.ndarray
         """
-        return self.partition.datasets["boundaries"].raw.reshape(self.annotations.shape + (3, 3, 3))
+        return self.partition.sources["boundaries"].raw.reshape(self.annotations.shape + (3, 3, 3))
 
     def get_lay_abv(self, point):
         """
@@ -108,7 +108,7 @@ class MorphologyBender:
         :rtype: str
         """
         return self.region_map.get(
-            self.partition.voxel_data_of(point, self.annotations), "acronym"
+            self.partition.mask_source.voxel_data_of(point, self.annotations), "acronym"
         )[-2:]
 
     def _ann_to_abv(self, id_reg):
@@ -162,7 +162,8 @@ class MorphologyBender:
         :rtype: bool
         """
         return self.test_voxels_between(
-            self.partition.voxel_of(source), self.partition.voxel_of(new_target)
+            self.partition.mask_source.voxel_of(source),
+            self.partition.mask_source.voxel_of(new_target),
         )
 
     def delete_point(self, branch, i):
@@ -197,7 +198,7 @@ class MorphologyBender:
         """
         target = branch.points[i]
         to_rotate = True
-        new_rotation = self.partition.voxel_rotation_of(self.orientation_field, source)
+        new_rotation = self.partition.mask_source.voxel_rotation_of(self.orientation_field, source)
         diff_rotation = signed_modulo(
             new_rotation.as_euler("xyz") - old_rots.last_rotation.as_euler("xyz"), 2 * np.pi
         )
@@ -254,11 +255,15 @@ class MorphologyBender:
         :return: scaling factor at the current location
         :rtype: float
         """
-        curr_ann = self.partition.voxel_data_of(point, self.annotations)
+        curr_ann = self.partition.mask_source.voxel_data_of(point, self.annotations)
         thick, lay = self._ann_to_abv(curr_ann)
         if lay is not None:
             return np.maximum(
-                np.sum(self.partition.voxel_data_of(point, self.thicknesses)[thick : thick + 2])
+                np.sum(
+                    self.partition.mask_source.voxel_data_of(point, self.thicknesses)[
+                        thick : thick + 2
+                    ]
+                )
                 / self.default_depth[lay],
                 0.1,
             )
@@ -288,7 +293,8 @@ class MorphologyBender:
             new_coord[self.fixed_dimension] = old_coord[self.fixed_dimension]
         # check that every voxel between the points remain within the region boundary
         rescale = self.test_voxels_between(
-            self.partition.voxel_of(branch.points[i - 1]), self.partition.voxel_of(new_coord)
+            self.partition.mask_source.voxel_of(branch.points[i - 1]),
+            self.partition.mask_source.voxel_of(new_coord),
         )
         # if scaling resulted in an overshoot, set to old point coordinate
         branch.points[i] = np.copy(new_coord) if not rescale else np.copy(branch.points[i - 1])
@@ -321,7 +327,9 @@ class MorphologyBender:
                 axis_max = max(
                     enumerate(
                         np.absolute(
-                            self.partition.voxel_data_of(branch.points[0], self.orientation_field)
+                            self.partition.mask_source.voxel_data_of(
+                                branch.points[0], self.orientation_field
+                            )
                         )
                     ),
                     key=lambda x: x[1],
@@ -372,8 +380,9 @@ class MorphologyBender:
                             [
                                 (child, old_rots.copy(), curr_scaling)
                                 for child in branch.children
-                                if self.partition.is_within(
-                                    self.partition.voxel_of(child.points[0]), self.annotations
+                                if NrrdDependencyNode.is_within(
+                                    self.partition.mask_source.voxel_of(child.points[0]),
+                                    self.annotations,
                                 )
                             ]
                         )
@@ -398,7 +407,7 @@ class MorphologyBender:
         )
         morphology_list = morphologies[morpho_ids]
         deformed_list = np.zeros_like(morphology_list)
-        voxel_pos = self.partition.voxel_of(positions)
+        voxel_pos = self.partition.mask_source.voxel_of(positions)
         uniques, indexes = np.unique(voxel_pos, axis=0, return_inverse=True)
 
         for i, uniq_vox in enumerate(uniques):
@@ -406,7 +415,7 @@ class MorphologyBender:
             u_morpho, u_index = np.unique(morpho_ids[filter_pos], return_inverse=True)
             u_morpho = morphology_list[u_morpho]
             # filter for positions inside the orientation and depth field.
-            if self.partition.is_within(uniq_vox, self.orientation_field):
+            if NrrdDependencyNode.is_within(uniq_vox, self.orientation_field):
                 translation_vec = (
                     uniq_vox + 0.5
                 ) * self.partition.voxel_size + self.partition.space_origin
