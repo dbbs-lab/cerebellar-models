@@ -13,7 +13,6 @@ from scipy.optimize import curve_fit
 from scipy.signal import find_peaks
 
 
-@unittest.skip
 class TestNestModuleLoading(unittest.TestCase):
     def test_build_models(self):
         from cerebellum.nest_models.build_models import _build_nest_models
