@@ -24,7 +24,7 @@ class MiniCerebCircuitTest(RandomStorageFixture, unittest.TestCase, engine_name=
     def setUp(self):
         super().setUp()
         # one third of the canonical circuit
-        self.cfg = parse_configuration_file("configurations/mouse/nest/stimulus_mossy.yaml")
+        self.cfg = parse_configuration_file("configurations/mouse/nest/stimulus_mossy_vitro.yaml")
         self.cfg.network.x = 100
         self.cfg.network.y = 66
         self.cfg.network.z = 100

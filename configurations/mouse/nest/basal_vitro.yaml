@@ -1,8 +1,8 @@
-name: DBBS Mouse cerebellum NEST basal activity
+name: DBBS Mouse cerebellum NEST basal activity in vitro state
 storage:
   root: mouse_cereb_nest.hdf5
 packages:
-  - bsb-nest~=4.2
+  - bsb-nest~=4.3
 components:
   - cerebellum/nest_models/build_models.py
 simulations:
@@ -76,10 +76,10 @@ simulations:
           V_reset: -69
           E_L: -59
           V_m: -59.0
-          lambda_0: 1.75 # 0.001
-          tau_V: 1.62 # 0.5
+          lambda_0: 0.5 # 0.001
+          tau_V: 2. # 0.5
           tau_m: 47
-          I_e: 742.534
+          I_e: 590. # 742
           k_adap: 1.491
           k_1: 0.195
           k_2: 0.041
@@ -184,19 +184,19 @@ simulations:
       parallel_fiber_to_purkinje:
         synapse:
           model: static_synapse
-          weight: 0.14
+          weight: 0.05 # 0.14
           delay: 5
           receptor_type: 1
       ascending_axon_to_purkinje:
         synapse:
           model: static_synapse
-          weight: 0.41
+          weight: 0.2 #0.41
           delay: 2
           receptor_type: 1
       parallel_fiber_to_stellate:
         synapse:
           model: static_synapse
-          weight: 0.18
+          weight: 0.05 #0.18
           delay: 5
           receptor_type: 1
       stellate_to_stellate:
@@ -208,13 +208,13 @@ simulations:
       stellate_to_purkinje:
         synapse:
           model: static_synapse
-          weight: 1.64
+          weight: 1.7
           delay: 5
           receptor_type: 2
       parallel_fiber_to_basket:
         synapse:
           model: static_synapse
-          weight: 0.1
+          weight: 0.04 #0.1
           delay: 5
           receptor_type: 1
       basket_to_basket:
@@ -226,7 +226,7 @@ simulations:
       basket_to_purkinje:
         synapse:
           model: static_synapse
-          weight: 0.44
+          weight: 0.5
           delay: 4
           receptor_type: 2
     devices:

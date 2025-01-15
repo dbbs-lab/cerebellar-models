@@ -1,8 +1,8 @@
-name: DBBS Mouse cerebellum w/ DCN and IO NEST basal activity and mf stimulus
+name: DBBS Mouse cerebellum w/ DCN and IO NEST basal activity and mf & cf stimulus for in vitro state
 storage:
   root: mouse_cereb_dcn_io_nest.hdf5
 packages:
-  - bsb-nest~=4.2
+  - bsb-nest~=4.3
 components:
   - cerebellum/nest_models/build_models.py
 simulations:
@@ -40,13 +40,13 @@ simulations:
       io_to_mli_io_to_basket_cell:
         synapse:
           model: static_synapse
-          weight: 5. # 2.5
+          weight: 5
           delay: 40
           receptor_type: 3
       io_to_mli_io_to_stellate_cell:
         synapse:
           model: static_synapse
-          weight: 5 # 2.5
+          weight: 6.5 #5
           delay: 40
           receptor_type: 3
       io_to_dcn_p:
@@ -58,7 +58,7 @@ simulations:
       io_to_dcn_i:
         synapse:
           model: static_synapse
-          weight: 0.5 # 0.1
+          weight: 0.25 # 0.5
           delay: 5
           receptor_type: 1
       dcn_i_to_io:
@@ -76,7 +76,7 @@ simulations:
           cell_models:
             - io
     $import:
-      ref: ./dcn_nest.yaml#/simulations/basal_activity/
+      ref: ./dcn_vitro_nest.yaml#/simulations/basal_activity/
       values:
         - simulator
         - resolution
