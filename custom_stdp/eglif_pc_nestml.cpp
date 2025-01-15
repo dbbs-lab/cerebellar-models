@@ -72,6 +72,8 @@ RecordablesMap<eglif_pc_nestml>::create()
    insert_(eglif_pc_nestml_names::_lambda, &eglif_pc_nestml::get_lambda);
    insert_(eglif_pc_nestml_names::_tick, &eglif_pc_nestml::get_tick);
    insert_(eglif_pc_nestml_names::_cf_buffer, &eglif_pc_nestml::get_cf_buffer);
+   insert_(eglif_pc_nestml_names::_gr_buffer, &eglif_pc_nestml::get_gr_buffer);
+   insert_(eglif_pc_nestml_names::_last_io, &eglif_pc_nestml::get_last_io);
    insert_(eglif_pc_nestml_names::_complex_flag, &eglif_pc_nestml::get_complex_flag);
    insert_(eglif_pc_nestml_names::_g1__X__rec1, &eglif_pc_nestml::get_g1__X__rec1);
    insert_(eglif_pc_nestml_names::_g1__X__rec1__d, &eglif_pc_nestml::get_g1__X__rec1__d);
@@ -191,6 +193,8 @@ eglif_pc_nestml::eglif_pc_nestml(const eglif_pc_nestml& __n):
   S_.complex_flag = __n.S_.complex_flag;
   S_.tick = __n.S_.tick;
   S_.cf_buffer = __n.S_.cf_buffer;
+  S_.gr_buffer = __n.S_.gr_buffer;
+  S_.last_io = __n.S_.last_io;
   S_.ode_state[State_::g1__X__rec1] = __n.S_.ode_state[State_::g1__X__rec1];
   S_.ode_state[State_::g1__X__rec1__d] = __n.S_.ode_state[State_::g1__X__rec1__d];
   S_.ode_state[State_::g4__X__rec4] = __n.S_.ode_state[State_::g4__X__rec4];
@@ -305,6 +309,8 @@ void eglif_pc_nestml::init_state_internal_()
   S_.complex_flag = 0.0;
   S_.tick = 0; // as ms
   S_.cf_buffer = 0; // as real
+  S_.gr_buffer = 0; // as real
+  S_.last_io = 1000; // as ms
   S_.ode_state[State_::g1__X__rec1] = 0; // as real
   S_.ode_state[State_::g1__X__rec1__d] = 0; // as 1 / s
   S_.ode_state[State_::g4__X__rec4] = 0; // as real
@@ -476,6 +482,7 @@ void eglif_pc_nestml::update(nest::Time const & origin,const long from, const lo
     {
       get_spike_inputs_grid_sum_()[i] = get_spike_inputs_()[i].get_value(lag);
       get_spike_input_received_grid_sum_()[i] = get_spike_input_received_()[i].get_value(lag);
+
     }
 
     /**
@@ -499,19 +506,28 @@ const double g3__X__rec3__d__tmp_ = V_.__P__g3__X__rec3__d__g3__X__rec3 * S_.ode
 
     S_.tick = get_t();
     S_.cf_buffer = (0.001 * B_.spike_inputs_grid_sum_[CF_SPIKES - MIN_SPIKE_RECEPTOR]);
+    //S_.gr_buffer = (0.001 * B_.spike_inputs_grid_sum_[0]);
 double rec_1 = get_spike_input_received_()[0].get_value(lag);
 double rec_5 = get_spike_input_received_()[4].get_value(lag);
-double weight = get_weight();
+    std::cout << "SPIKE GRID SUM: " << B_.spike_input_received_grid_sum_[4]<< std::endl;
+    std::cout << "SPIKE GRID SUM GRANULAR: " << B_.spike_input_received_grid_sum_[0]<< std::endl;
+    std::cout << "CF BUFFER: " << S_.cf_buffer<< std::endl;
+    std::cout << "GR BUFFER: " << S_.gr_buffer<< std::endl;
+//double weight = get_weight();
     if (S_.cf_buffer != 0)
     {
-        set_spiketime(nest::Time::step(origin.get_steps() + lag) , 0);
+        S_.last_io = get_t();
+        set_spiketime(nest::Time::step(origin.get_steps() + lag), 1);
+        nest::SpikeEvent se;
+        nest::kernel().event_delivery_manager.send(*this, se, lag);
+//        set_spiketime(nest::Time::step(origin.get_steps() + lag) , 1);
+//        std::cout << "REC 5: " << rec_5 << std::endl;
+//
+//        if (rec_5 != 0) {
+//            set_spiketime(nest::Time::step(origin.get_steps() + lag), 1);
+//        }
 
-        if (rec_5 =! 0 && weight != 0) {
-            set_spiketime(nest::Time::step(origin.get_steps() + lag), 1);
-            //std::cout << "QUI OFFSET VA A 1: " << rec_5 << std::endl;
-        }
-
-        S_.complex_flag = 1.0;
+        //S_.complex_flag = 1.0;
         //std::cout << "t: " << S_.tick << " ms\n";
         //std::cout << "COMPLEX FLAG HERE = " << S_.complex_flag << std::endl;
 
@@ -520,7 +536,7 @@ double weight = get_weight();
         **/
 
         //set_spiketime(nest::Time::step(origin.get_steps() + lag), 0);
-        nest::SpikeEvent se;
+//        nest::SpikeEvent se;
         //se.set_offset(P_.offset);
 
 //        std::cout << "PC: My own offset is " << se.get_offset() << "\n";
@@ -528,9 +544,24 @@ double weight = get_weight();
 
         //std::cout << "Spike time = " << get_spiketime() << "\n";
         //nest::kernel().event_delivery_manager.send(*this, se, lag+se.get_offset()/__resolution);
-        nest::kernel().event_delivery_manager.send(*this, se, lag);
+//        nest::kernel().event_delivery_manager.send(*this, se, lag);
 
     }
+//    S_.gr_buffer = get_t();
+//    else if (S_.last_io <= 200 && S_.gr_buffer == 0){
+//        S_.gr_buffer = 1;
+//        S_.last_io = S_.last_io + __resolution;
+//        set_spiketime(nest::Time::step(origin.get_steps() + lag), 1);
+//        nest::SpikeEvent se;
+//        nest::kernel().event_delivery_manager.send(*this, se, lag);
+//    }
+//    std::cout << "LAST_IO ESSERE TIPO: " << S_.last_io << std::endl;
+//    if ((S_.gr_buffer - S_.last_io) > 200){
+//        std::cout << "Inside if" << std::endl;
+//        set_spiketime(nest::Time::step(origin.get_steps() + lag), 0);
+//        nest::SpikeEvent se;
+//        nest::kernel().event_delivery_manager.send(*this, se, lag);
+//    }
     if (S_.r == 0)
     {  
 
@@ -616,8 +647,6 @@ double weight = get_weight();
             nest::SpikeEvent se;
             std::cout << "PC: Emitting simple spike.\n";
             nest::kernel().event_delivery_manager.send(*this, se, lag);
-
-
         }
     }
 

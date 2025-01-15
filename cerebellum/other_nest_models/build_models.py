@@ -1,9 +1,9 @@
 import shutil
-import nest
 from os import makedirs
 from os.path import abspath, dirname, exists, isdir, join
 
 import appdirs
+import nest
 from bsb.services import MPI
 from pynestml.frontend.pynestml_frontend import generate_target
 
@@ -29,7 +29,6 @@ def _build_nest_models(
     model_dir = abspath(model_dir)
     if MPI.get_size() == 1 or MPI.get_rank() == 0:
         if not redo:
-            import nest
 
             nest.ResetKernel()
             try:
@@ -51,9 +50,32 @@ def _build_nest_models(
             target_platform="NEST",
             target_path=build_dir,
             module_name=module_name,
+            codegen_opts={
+                "neuron_synapse_pairs": [
+                    {
+                        "neuron": "eglif_cond_alpha_multisyn",
+                        "synapse": "stdp_connection_sinexp",
+                        "pre_ports": ["pre_spikes"],
+                        "post_ports": ["post_spikes"],
+                        "vt_ports": ["mod_spikes"],
+                    },
+                    {
+                        "neuron": "eglif_cond_alpha_multisyn",
+                        "synapse": "stdp_connection_cosexp",
+                        "pre_ports": ["pre_spikes"],
+                        "post_ports": ["post_spikes"],
+                        "vt_ports": ["mod_spikes"],
+                    },
+                    {
+                        "neuron": "eglif_cond_alpha_multisyn",
+                        "synapse": "stdp_connection_alpha",
+                        "pre_ports": ["pre_spikes"],
+                        "post_ports": ["post_spikes"],
+                        "vt_ports": ["mod_spikes"],
+                    },
+                ]
+            },
         )
 
 
 _build_nest_models()
-nest.ResetKernel()
-nest.Install("custom_stdp_module")

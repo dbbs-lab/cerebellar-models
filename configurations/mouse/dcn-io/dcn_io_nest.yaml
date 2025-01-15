@@ -1,6 +1,6 @@
 name: DBBS Mouse cerebellum w/ DCN and IO NEST basal activity and mf stimulus
 storage:
-  root: mouse_cereb_dcn_io_nest.hdf5
+  root: mouse_cereb_dcn_io_nest_custom.hdf5
 packages:
   - bsb-nest~=4.2
 components:

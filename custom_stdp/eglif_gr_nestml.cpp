@@ -506,7 +506,7 @@ double rec_5 = get_spike_input_received_()[1].get_value(lag);
          * generated code for emit_spike() function
         **/
 
-        set_spiketime(nest::Time::step(origin.get_steps() + lag), 1);
+        set_spiketime(nest::Time::step(origin.get_steps() + lag), 0);
         nest::SpikeEvent se;
         //S_.received_offset = 1;
         std::cout << "Gr: received offset is = " << S_.received_offset << "\n";

@@ -72,6 +72,8 @@ namespace eglif_pc_nestml_names
     const Name _offset( "offset" );
     const Name _tick( "tick" );
     const Name _cf_buffer( "cf_buffer" );
+    const Name _gr_buffer( "gr_buffer" );
+    const Name _last_io( "last_io" );
     const Name _g4__X__rec4( "g4__X__rec4" );
     const Name _g4__X__rec4__d( "g4__X__rec4__d" );
     const Name _g2__X__rec2( "g2__X__rec2" );
@@ -243,6 +245,27 @@ public:
   {
     S_.cf_buffer = __v;
   }
+
+  inline double get_gr_buffer() const
+  {
+    return S_.gr_buffer;
+  }
+
+  inline void set_gr_buffer(const double __v)
+  {
+    S_.gr_buffer = __v;
+  }
+
+  inline double get_last_io() const
+  {
+    return S_.last_io;
+  }
+
+  inline void set_last_io(const double __v)
+  {
+    S_.last_io = __v;
+  }
+
   inline double get_tick() const
   {
     return S_.tick;
@@ -944,6 +967,8 @@ long r;
 double lambda;
 //!  Flag for simple vs complex spikes
 double cf_buffer;
+double gr_buffer;
+double last_io;
 double tick;
 double complex_flag;
     //! Symbolic indices to the elements of the state vector y
@@ -1272,6 +1297,8 @@ inline void eglif_pc_nestml::get_status(DictionaryDatum &__d) const
   def< long >(__d, eglif_pc_nestml_names::_r, get_r());
   def< double >(__d, eglif_pc_nestml_names::_lambda, get_lambda());
   def< double >(__d, eglif_pc_nestml_names::_cf_buffer, get_cf_buffer());
+  def< double >(__d, eglif_pc_nestml_names::_gr_buffer, get_gr_buffer());
+  def< double >(__d, eglif_pc_nestml_names::_last_io, get_last_io());
   def< double >(__d, eglif_pc_nestml_names::_tick, get_tick());
   def< double >(__d, eglif_pc_nestml_names::_complex_flag, get_complex_flag());
   def< double >(__d, eglif_pc_nestml_names::_g4__X__rec4, get_g4__X__rec4());
@@ -1365,6 +1392,10 @@ inline void eglif_pc_nestml::set_status(const DictionaryDatum &__d)
   nest::updateValueParam<double>(__d, eglif_pc_nestml_names::_lambda, tmp_lambda, this);
   double tmp_cf_buffer = get_cf_buffer();
   nest::updateValueParam<double>(__d, eglif_pc_nestml_names::_cf_buffer, tmp_cf_buffer, this);
+  double tmp_gr_buffer = get_gr_buffer();
+  nest::updateValueParam<double>(__d, eglif_pc_nestml_names::_gr_buffer, tmp_gr_buffer, this);
+  double tmp_last_io = get_last_io();
+  nest::updateValueParam<double>(__d, eglif_pc_nestml_names::_last_io, tmp_last_io, this);
   double tmp_tick = get_tick();
   nest::updateValueParam<double>(__d, eglif_pc_nestml_names::_tick, tmp_tick, this);
   double tmp_complex_flag = get_complex_flag();
@@ -1424,6 +1455,8 @@ inline void eglif_pc_nestml::set_status(const DictionaryDatum &__d)
   set_lambda(tmp_lambda);
   set_offset(tmp_offset);
   set_cf_buffer(tmp_cf_buffer);
+  set_gr_buffer(tmp_gr_buffer);
+  set_last_io(tmp_last_io);
   set_tick(tmp_tick);
   set_complex_flag(tmp_complex_flag);
   set_g4__X__rec4(tmp_g4__X__rec4);

@@ -11,7 +11,7 @@ import matplotlib.pyplot as plt
 def run_simulation():
     nest.ResetKernel()
     nest.Install("custom_stdp_module")
-    #nest.Install("cerebmodule")
+    nest.Install("cerebmodule")
 
     params_pc = {"t_ref": 0.5,
           "Vmin": -350,
@@ -23,7 +23,7 @@ def run_simulation():
           "lambda_0": 0.001,
           "tau_V": 0.5,
           "tau_m": 47,
-          "I_e": 742.543,
+          "I_e": 0., #742.543,
           "kadap": 1.491,
           "k1": 0.195,
           "k2": 0.041,
@@ -41,14 +41,14 @@ def run_simulation():
           "V_th": -35,
           "V_reset": -45,
           "E_L": -45,
-          "I_e": 18.101,
+          "I_e": -18.101,
           "V_m": -45,
           "lambda_0": 1.2,
           "tau_V": 0.8,
           "tau_m": 11,
-          "kadap": 1.928,
-          "k1": 0.191,
-          "k2": 0.091,
+          "k_adap": 1.928,
+          "k_1": 0.191,
+          "k_2": 0.091,
           "A1": 1810.923,
           "A2": 1358.197,
           "tau_syn1": 1,
@@ -57,7 +57,7 @@ def run_simulation():
           "E_rev2": -80}
 
     params_gr = {"t_ref": 1.5,
-          "Vmin": -150,
+          "V_min": -150,
           "C_m": 7,
           "V_th": -41,
           "V_reset": -70,
@@ -67,9 +67,9 @@ def run_simulation():
           "lambda_0": 1.0,
           "tau_V": 0.3,
           "tau_m": 24.15,
-          "kadap": 0.022,
-          "k1": 0.311,
-          "k2": 0.041407868,
+          "k_adap": 0.022,
+          "k_1": 0.311,
+          "k_2": 0.041407868,
           "A1": 0.01,
           "A2": -0.94,
           "tau_syn1": 5.8,
@@ -77,27 +77,50 @@ def run_simulation():
           "E_rev1": 0,
           "E_rev2": -80}
 
+    params_dcni = {"t_ref": 3,
+          "C_m": 56,
+          "V_th": -39,
+          "V_reset": -55,
+          "E_L": -40,
+          "I_e": 10., # 2.384
+          "V_m": -40,
+          "lambda_0": 1., # 0.001
+          "tau_V": 0.3,  # 0.5
+          "tau_m": 56,
+          "k_adap": 0.079,
+          "k_1": 0.041,
+          "k_2": 0.044,
+          "A1": 176.358,
+          "A2": 176.358,
+          "tau_syn1": 3.64,
+          "tau_syn2": 1.14,
+          "E_rev1": 0,
+          "E_rev2": -80}
 
-    io = nest.Create("eglif_io_nestml", 1, params = params_io)
+    io = nest.Create("eglif_cond_alpha_multisyn", 1, params = params_io)
     pc = nest.Create("eglif_pc_nestml", 1, params = params_pc)
-    gr = nest.Create("eglif_gr_nestml", 1, params=params_gr)
+    gr = nest.Create("eglif_cond_alpha_multisyn", 1, params=params_gr)
+    dcn_i = nest.Create("eglif_cond_alpha_multisyn", 1, params=params_dcni)
     wr = nest.Create("weight_recorder")
     nest.CopyModel("stdp_synapse_sinexp", "stdp_rec", {"weight_recorder": wr})
     #nest.Connect(pre, post, syn_spec={"synapse_model" : "stdp_synapse_sinexp" , "receptor_type" : 5})
     nest.Connect(io, pc, syn_spec={"synapse_model" : "static_synapse" ,"receptor_type" : 5})
     nest.Connect(gr, pc, syn_spec={"synapse_model": "stdp_rec", "receptor_type" : 1})
+    nest.Connect(dcn_i, io, syn_spec={"synapse_model" : "static_synapse" ,"weight": 1.25, "receptor_type" : 2})
     #nest.SetStatus(pre, {"offset": 1})
     #nest.SetStatus(post, {"offset": 1})
 
-    io_generator = nest.Create("spike_generator", params = {"spike_times": [10]})
-    gr_generator = nest.Create("spike_generator", params={"spike_times": [10, 100, 200]})
-    #gr_2_gen = nest.Create("poisson_generator", params={"rate": 500, "start": 800, "stop": 810})
+    #io_generator = nest.Create("spike_generator", params = {"spike_times": [100, 900]})
+    gr_generator = nest.Create("spike_generator", params={"spike_times": [ 50, 400, 500, 800]})
+    io_pois_1 = nest.Create("poisson_generator", params={"rate": 500, "start": 300, "stop": 310})
+    io_pois_2 = nest.Create("poisson_generator", params={"rate": 500, "start": 700, "stop": 710})
 
     sr_io, sr_pc, sr_gr = nest.Create("spike_recorder", 3)
     nest.Connect(io, sr_io)
     nest.Connect(pc, sr_pc)
     nest.Connect(gr, sr_gr)
-    nest.Connect(io_generator, io, syn_spec={"receptor_type" : 1, "weight" : 5})
+    nest.Connect(io_pois_1, io, syn_spec={"receptor_type" : 1, "weight" : 20})
+    nest.Connect(io_pois_2, io, syn_spec={"receptor_type": 1, "weight": 20})
     nest.Connect(gr_generator, gr, syn_spec={"receptor_type" : 1,"weight" : 1})
     #nest.Connect(gr_2_gen, gr, syn_spec={"receptor_type": 5})
     #nest.Connect(post, pre, syn_spec={"synapse_model": "stdp_synapse_sinexp", "receptor_type" : 5})
@@ -107,6 +130,19 @@ def run_simulation():
 
     pf_pc_conns = nest.GetConnections(synapse_model="stdp_rec")
 
+    io_pot = nest.Create("voltmeter")
+    nest.Connect(io_pot, pc)
+
+    # nest.Simulate(1000)
+    # nest.voltage_trace.from_device(io_pot)
+    # plt.axvline(x= 50, linestyle='--', color="r")
+    # plt.axvline(x= 400, linestyle='--', color="r")
+    # plt.axvline(x= 500, linestyle='--', color="r")
+    # # plt.axhline(y=params_pc["V_th"], linestyle="--", color="r")
+    # plt.show()
+
+    # nest.Simulate(1000)
+    # weights = nest.GetStatus(pf_pc_conns, "weight")
     weights = np.zeros((1000, 1))
     for i in range(1000):
         nest.Simulate(1)
@@ -135,12 +171,13 @@ for z in range(999):
     counter = counter +1
 plt.figure()
 plt.plot(i, np.diff(w, axis =0))
-plt.xlim(0,600)
+#plt.xlim(0,600)
 plt.show()
 
 plt.figure()
 plt.plot(np.append(i, 1000), w)
-plt.xlim(0,600)
+plt.title("Better IO behaviour")
+#plt.xlim(0,600)
 plt.show()
 # counter = 0
 # for i in range(1000):

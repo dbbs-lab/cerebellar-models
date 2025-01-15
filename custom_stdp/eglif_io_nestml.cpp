@@ -583,7 +583,7 @@ const double g1__X__rec1__d__tmp_ = V_.__P__g1__X__rec1__d__g1__X__rec1 * S_.ode
             nest::kernel().event_delivery_manager.send(*this, se, lag);
             //nest::kernel().event_delivery_manager.send(*this, se, lag+se.get_offset()/__resolution);
             **/
-           set_spiketime(nest::Time::step(origin.get_steps() + lag));
+           set_spiketime(nest::Time::step(origin.get_steps() + lag + 1));
            nest::SpikeEvent se;
            P_.offset = se.get_offset();
            //se.set_offset(P_.offset);
