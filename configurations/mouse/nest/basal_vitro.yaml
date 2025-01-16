@@ -208,7 +208,7 @@ simulations:
       stellate_to_purkinje:
         synapse:
           model: static_synapse
-          weight: 1.7
+          weight: 0.17
           delay: 5
           receptor_type: 2
       parallel_fiber_to_basket:

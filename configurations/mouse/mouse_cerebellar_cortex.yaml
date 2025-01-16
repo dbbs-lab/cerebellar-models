@@ -315,6 +315,10 @@ connectivity:
     affinity: 0.1
     voxels_pre: 500
     voxels_post: 500
+    contacts:
+      distribution: norm
+      loc: 10
+      scale: 0.3
   basket_to_purkinje:
     strategy: bsb.connectivity.VoxelIntersection
     presynaptic:
