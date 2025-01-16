@@ -1,0 +1,136 @@
+name: DBBS Mouse cerebellum w/ DCN NEST basal activity and mf stimulus for in vivo state
+storage:
+  root: mouse_cereb_dcn_nest.hdf5
+packages:
+  - bsb-nest~=4.3
+components:
+  - cerebellum/nest_models/build_models.py
+simulations:
+  basal_activity:
+    cell_models:
+      dcn_p:
+        model: eglif_cond_alpha_multisyn
+        constants:
+          t_ref: 1.5
+          C_m: 142
+          V_th: -36
+          V_reset: -55
+          E_L: -45
+          I_e: 75.385
+          V_m: -45
+          lambda_0: 3.0 # 4.0
+          tau_V: 3.0 # 3.5
+          tau_m: 33
+          k_adap: 0.408
+          k_1: 0.697
+          k_2: 0.047
+          A1: 13.857
+          A2: 3.477
+          tau_syn1: 1.0
+          tau_syn2: 0.7
+          E_rev1: 0
+          E_rev2: -80
+      dcn_i:
+        model: eglif_cond_alpha_multisyn
+        constants:
+          t_ref: 3
+          C_m: 56
+          V_th: -39
+          V_reset: -55
+          E_L: -40
+          I_e: 2.384
+          V_m: -40
+          lambda_0: 0.9
+          tau_V: 1.0
+          tau_m: 56
+          k_adap: 0.079
+          k_1: 0.041
+          k_2: 0.044
+          A1: 176.358
+          A2: 176.358
+          tau_syn1: 3.64
+          tau_syn2: 1.14
+          E_rev1: 0
+          E_rev2: -80
+    connection_models:
+      mossy_fibers_to_dcn_p:
+        synapse:
+          model: static_synapse
+          weight: 0.25 # 0.35
+          delay: 4.
+          receptor_type: 1
+      purkinje_to_dcn_p:
+        synapse:
+          model: static_synapse
+          weight: 0.35
+          delay: 4.
+          receptor_type: 2
+      purkinje_to_dcn_i:
+        synapse:
+          model: static_synapse
+          weight: 0.02
+          delay: 4.
+          receptor_type: 2
+    devices:
+      dcn_p_record:
+        device: spike_recorder
+        delay: 0.1
+        targetting:
+          strategy: cell_model
+          cell_models:
+            - dcn_p
+      dcn_i_record:
+        device: spike_recorder
+        delay: 0.1
+        targetting:
+          strategy: cell_model
+          cell_models:
+            - dcn_i
+    $import:
+      ref: ../nest/basal_vivo.yaml#/simulations/basal_activity/
+      values:
+        - simulator
+        - resolution
+        - duration
+        - modules
+        - seed
+        - cell_models
+        - connection_models
+        - devices
+  mf_stimulus:
+    devices:
+      stimulus:
+        targetting:
+          origin:
+            - 150.0
+            - 65.0
+            - 300.0
+      $import:
+        ref: ../nest/stimulus_mossy_vivo.yaml#/simulations/mf_stimulus/devices/
+        values:
+          - stimulus
+    $import:
+      ref: "#/simulations/basal_activity"
+      values:
+        - simulator
+        - resolution
+        - duration
+        - modules
+        - seed
+        - simulator
+        - cell_models
+        - connection_models
+        - devices
+$import:
+  ref: ../dcn-io/dcn.yaml#/
+  values:
+    - packages
+    - storage
+    - network
+    - regions
+    - partitions
+    - morphologies
+    - cell_types
+    - placement
+    - connectivity
+    - after_connectivity
