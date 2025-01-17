@@ -34,7 +34,7 @@ simulations:
       io_to_purkinje:
         synapse:
           model: static_synapse
-          weight: 2e3
+          weight: 800
           delay: 4
           receptor_type: 3
       io_to_mli_io_to_basket_cell:
@@ -109,7 +109,7 @@ simulations:
           cell_models:
             - io
         receptor_type: 1
-        weight: 55
+        weight: 100
         delay: 0.1
 
     $import:
