@@ -34,7 +34,7 @@ simulations:
       io_to_purkinje:
         synapse:
           model: static_synapse
-          weight: 2e3 # 300
+          weight: 2e3
           delay: 4
           receptor_type: 3
       io_to_mli_io_to_basket_cell:
@@ -52,19 +52,19 @@ simulations:
       io_to_dcn_p:
         synapse:
           model: static_synapse
-          weight: 0.4 # 2.5
+          weight: 0.4
           delay: 4
           receptor_type: 1
       io_to_dcn_i:
         synapse:
           model: static_synapse
-          weight: 0.25 # 0.5
+          weight: 0.25
           delay: 5
           receptor_type: 1
       dcn_i_to_io:
         synapse:
           model: static_synapse
-          weight: 0.45 # 0.75
+          weight: 0.45
           delay: 25
           receptor_type: 2
     devices:

@@ -98,13 +98,13 @@ class TestSingleCellModels(
                         },
                         "dcn_p_cell": {
                             "$import": {
-                                "ref": "../configurations/mouse/dcn-io/dcn_io_nest.yaml#/simulations/basal_activity/cell_models/dcn_p",
+                                "ref": "../configurations/mouse/dcn-io/dcn_io_vitro_nest.yaml#/simulations/basal_activity/cell_models/dcn_p",
                                 "values": ["constants", "model"],
                             }
                         },
                         "dcn_i_cell": {
                             "$import": {
-                                "ref": "../configurations/mouse/dcn-io/dcn_io_nest.yaml#/simulations/basal_activity/cell_models/dcn_i",
+                                "ref": "../configurations/mouse/dcn-io/dcn_io_vitro_nest.yaml#/simulations/basal_activity/cell_models/dcn_i",
                                 "values": ["constants", "model"],
                             }
                         },
@@ -124,14 +124,14 @@ class TestSingleCellModels(
                         },
                         "dcn_p_record": {
                             "$import": {
-                                "ref": "../configurations/mouse/dcn-io/dcn_io_nest.yaml#/simulations/basal_activity/devices/dcn_p_record",
+                                "ref": "../configurations/mouse/dcn-io/dcn_io_vitro_nest.yaml#/simulations/basal_activity/devices/dcn_p_record",
                                 "values": ["device", "delay"],
                             },
                             "targetting": {"strategy": "cell_model", "cell_models": ["dcn_p_cell"]},
                         },
                         "dcn_i_record": {
                             "$import": {
-                                "ref": "../configurations/mouse/dcn-io/dcn_io_nest.yaml#/simulations/basal_activity/devices/dcn_i_record",
+                                "ref": "../configurations/mouse/dcn-io/dcn_io_vitro_nest.yaml#/simulations/basal_activity/devices/dcn_i_record",
                                 "values": ["device", "delay"],
                             },
                             "targetting": {"strategy": "cell_model", "cell_models": ["dcn_i_cell"]},
