@@ -40,7 +40,6 @@ class TestSingleCellModels(
 ):
 
     def setUp(self):
-        # TODO: re enable the dcn and io tests
         super().setUp()
         self.configuration_dict = {
             "name": "test",
@@ -288,24 +287,3 @@ class TestSingleCellModels(
                 i_points[i] = protocol[cell_type]["amplitudes"][i]
             slope, slope_std, offset, offset_std = self._fit_lin(i_points[1:], f_points[1:])
             self.assertTrue(abs(slope - predicted[cell_type]["slope"]) <= 2 * slope_std)
-
-    @unittest.skip(reason="Test too time consuming")
-    def test_granule_purkinje(self):
-        # Build a network with a single Purkinje cell and ~ 70 GrCs connected to the Purkinje
-        config = parse_configuration_file(
-            pathlib.Path(__file__).parent / "test_configs" / "test_nrn_grc_pc.json", "json"
-        )
-        scaffold = Scaffold(config, self.storage)
-        scaffold.compile()
-        # Stimulate GrCs with a baseline of 20 pA and a 25 pA current starting at 70 ms.
-        # The expected result is a spike at ~ 80 ms
-        result = scaffold.run_simulation("neurontest_grc_pc_test")
-        simulation_time = float(config.simulations.neurontest_grc_pc_test.duration)
-        resolution = float(config.simulations.neurontest_grc_pc_test.resolution)
-        time = np.arange(68, simulation_time + resolution, resolution)
-        # fixme: brittle retrieval of results
-        avg = np.mean(result.block.segments[0].analogsignals[-1], axis=1)
-        after_transient = int(68.0 / resolution)
-        voltage = avg[after_transient:]
-        peaks, _ = find_peaks(voltage, height=0)
-        self.assertEqual(len(peaks), 1, msg="The expected result is one peak")
