@@ -3,7 +3,7 @@ cd $GITHUB_WORKSPACE/_nest_repo
 git checkout tags/v$1
 mkdir build
 cd build
-apt-get install libgsl-dev -y
+sudo apt install libgsl-dev -y
 pip install cython
 mkdir -p $2
 cmake .. \
