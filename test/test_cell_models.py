@@ -54,7 +54,9 @@ class TestSingleCellModels(
                 "stellate_cell": {"spatial": {"radius": 1, "count": 10}},
                 "unipolar_brush_cell": {"spatial": {"radius": 1, "count": 10}},
                 "dcn_p_cell": {"spatial": {"radius": 1, "count": 10}},
+                "dcn_p_vivo_cell": {"spatial": {"radius": 1, "count": 10}},
                 "dcn_i_cell": {"spatial": {"radius": 1, "count": 10}},
+                "dcn_i_vivo_cell": {"spatial": {"radius": 1, "count": 10}},
             },
             "placement": {
                 "placement_A": {
@@ -68,7 +70,9 @@ class TestSingleCellModels(
                         "stellate_cell",
                         "unipolar_brush_cell",
                         "dcn_p_cell",
+                        "dcn_p_vivo_cell",
                         "dcn_i_cell",
+                        "dcn_i_vivo_cell",
                     ],
                     "partitions": ["B"],
                     "positions": [[1, 1, 1]] * 10,
@@ -107,9 +111,21 @@ class TestSingleCellModels(
                                 "values": ["constants", "model"],
                             }
                         },
+                        "dcn_p_vivo_cell": {
+                            "$import": {
+                                "ref": "../configurations/mouse/dcn-io/dcn_io_vivo_nest.yaml#/simulations/basal_activity/cell_models/dcn_p",
+                                "values": ["constants", "model"],
+                            }
+                        },
                         "dcn_i_cell": {
                             "$import": {
                                 "ref": "../configurations/mouse/dcn-io/dcn_io_vitro_nest.yaml#/simulations/basal_activity/cell_models/dcn_i",
+                                "values": ["constants", "model"],
+                            }
+                        },
+                        "dcn_i_vivo_cell": {
+                            "$import": {
+                                "ref": "../configurations/mouse/dcn-io/dcn_io_vivo_nest.yaml#/simulations/basal_activity/cell_models/dcn_i",
                                 "values": ["constants", "model"],
                             }
                         },
@@ -142,12 +158,28 @@ class TestSingleCellModels(
                             },
                             "targetting": {"strategy": "cell_model", "cell_models": ["dcn_p_cell"]},
                         },
+                        "dcn_p_vivo_record": {
+                            "device": "spike_recorder",
+                            "delay": 0.1,
+                            "targetting": {
+                                "strategy": "cell_model",
+                                "cell_models": ["dcn_p_vivo_cell"],
+                            },
+                        },
                         "dcn_i_record": {
                             "$import": {
                                 "ref": "../configurations/mouse/dcn-io/dcn_io_vitro_nest.yaml#/simulations/basal_activity/devices/dcn_i_record",
                                 "values": ["device", "delay"],
                             },
                             "targetting": {"strategy": "cell_model", "cell_models": ["dcn_i_cell"]},
+                        },
+                        "dcn_i_vivo_record": {
+                            "device": "spike_recorder",
+                            "delay": 0.1,
+                            "targetting": {
+                                "strategy": "cell_model",
+                                "cell_models": ["dcn_i_vivo_cell"],
+                            },
                         },
                     },
                 }
@@ -243,7 +275,17 @@ class TestSingleCellModels(
                 "starts": [10, 12, 14],
                 "stops": [11, 13, 15],
             },
+            "dcn_p_vivo": {
+                "amplitudes": [142, 284, 426],
+                "starts": [10, 12, 14],
+                "stops": [11, 13, 15],
+            },
             "dcn_i": {
+                "amplitudes": [56, 112, 168],
+                "starts": [10, 12, 14],
+                "stops": [11, 13, 15],
+            },
+            "dcn_i_vivo": {
                 "amplitudes": [56, 112, 168],
                 "starts": [10, 12, 14],
                 "stops": [11, 13, 15],
@@ -257,8 +299,10 @@ class TestSingleCellModels(
             "basket": {"autorhythm": 9.51, "slope": 2.16},
             "stellate": {"autorhythm": 9.51, "slope": 2.16},
             "unipolar_brush": {"autorhythm": 0.0, "slope": 2.35},  # no source available
-            "dcn_p": {"autorhythm": 31.48, "slope": 0.28},
-            "dcn_i": {"autorhythm": 14.37, "slope": 0.4},
+            "dcn_p": {"autorhythm": 32.9, "slope": 0.28},  # f tonic slightly increased (+~1.4Hz)
+            "dcn_i": {"autorhythm": 14.1, "slope": 0.4},  # f tonic slightly decreased (-~0.3Hz)
+            "dcn_p_vivo": {"autorhythm": 61.78, "slope": 0.256},  # to match Geminiani et al. 2024
+            "dcn_i_vivo": {"autorhythm": 14.11, "slope": 0.44},  # to match Geminiani et al. 2024
         }
         for cell_type in predicted:
             for i, stim in enumerate(protocol[cell_type]["amplitudes"]):
@@ -284,12 +328,10 @@ class TestSingleCellModels(
             spike_dict = cell_dict[cell_type]
             # Test autorhythm
             f_tonic, std_tonic = self._compute_firing_rate(spike_dict.values(), start=0, stop=10000)
-            # Currently the results are not reproducible
-            # self.assertTrue(abs(predicted[cell_type]["autorhythm"] - f_tonic) <= 2 * std_tonic)
-            # This dummy test is just here to detect any additional "instability".
+            std_tonic = max(std_tonic, 0.01)  # in case std is too small
             self.assertTrue(
-                abs(predicted[cell_type]["autorhythm"] - f_tonic)
-                <= predicted[cell_type]["autorhythm"] / 2
+                abs(predicted[cell_type]["autorhythm"] - f_tonic) <= 2 * std_tonic,
+                f"{cell_type}: {f_tonic} Hz",
             )
 
             # Test F/i curve points
