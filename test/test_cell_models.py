@@ -49,6 +49,7 @@ class TestSingleCellModels(
                 "granule_cell": {"spatial": {"radius": 1, "count": 10}},
                 "golgi_cell": {"spatial": {"radius": 1, "count": 10}},
                 "purkinje_cell": {"spatial": {"radius": 1, "count": 10}},
+                "purkinje_vivo_cell": {"spatial": {"radius": 1, "count": 10}},
                 "basket_cell": {"spatial": {"radius": 1, "count": 10}},
                 "stellate_cell": {"spatial": {"radius": 1, "count": 10}},
                 "unipolar_brush_cell": {"spatial": {"radius": 1, "count": 10}},
@@ -62,6 +63,7 @@ class TestSingleCellModels(
                         "granule_cell",
                         "golgi_cell",
                         "purkinje_cell",
+                        "purkinje_vivo_cell",
                         "basket_cell",
                         "stellate_cell",
                         "unipolar_brush_cell",
@@ -93,6 +95,12 @@ class TestSingleCellModels(
                                 "unipolar_brush_cell",
                             ],
                         },
+                        "purkinje_vivo_cell": {
+                            "$import": {
+                                "ref": "../configurations/mouse/nest/basal_vivo.yaml#/simulations/basal_activity/cell_models/purkinje_cell",
+                                "values": ["constants", "model"],
+                            }
+                        },
                         "dcn_p_cell": {
                             "$import": {
                                 "ref": "../configurations/mouse/dcn-io/dcn_io_vitro_nest.yaml#/simulations/basal_activity/cell_models/dcn_p",
@@ -118,6 +126,14 @@ class TestSingleCellModels(
                                 "stellate_record",
                                 "unipolar_brush_record",
                             ],
+                        },
+                        "purkinje_vivo_record": {
+                            "device": "spike_recorder",
+                            "delay": 0.1,
+                            "targetting": {
+                                "strategy": "cell_model",
+                                "cell_models": ["purkinje_vivo_cell"],
+                            },
                         },
                         "dcn_p_record": {
                             "$import": {
@@ -202,6 +218,11 @@ class TestSingleCellModels(
                 "starts": [10, 12, 14],
                 "stops": [11, 13, 14.01],
             },
+            "purkinje_vivo": {
+                "amplitudes": [500, 1000, 2400],
+                "starts": [10, 12, 14],
+                "stops": [11, 13, 14.01],
+            },
             "basket": {
                 "amplitudes": [12, 24, 36],
                 "starts": [10, 12, 14],
@@ -231,7 +252,8 @@ class TestSingleCellModels(
         predicted = {
             "golgi": {"autorhythm": 12.8, "slope": 0.2},
             "granule": {"autorhythm": 0.0, "slope": 3.70},
-            "purkinje": {"autorhythm": 60.96, "slope": 0.08},
+            "purkinje": {"autorhythm": 45.6, "slope": 0.08},
+            "purkinje_vivo": {"autorhythm": 83.2, "slope": 0.095},  # to match Geminiani et al. 2024
             "basket": {"autorhythm": 9.51, "slope": 2.16},
             "stellate": {"autorhythm": 9.51, "slope": 2.16},
             "unipolar_brush": {"autorhythm": 0.0, "slope": 2.35},  # no source available

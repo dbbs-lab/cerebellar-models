@@ -226,7 +226,7 @@ simulations:
       basket_to_purkinje:
         synapse:
           model: static_synapse
-          weight: 0.5
+          weight: 0.44
           delay: 4
           receptor_type: 2
     devices:

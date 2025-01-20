@@ -200,6 +200,11 @@ The ``affinity`` and ``distributions`` of ``contact`` points parameters of these
 tuned to match connectivity divergence and convergence values from De Schepper et al. (2022)
 [#de_schepper_2022]_.
 
+We introduce a correction for the SC-PC connectivity which consists in a normal distribution of synapse points
+per SC-PC connections (parameters ``loc`` = 10, ``scale`` = 0.3).
+The idea was to have ~50 afferent synapses per PC to match the range of inhibition efficiency described in
+Rizza et al. 2021 [#rizza_2021]_
+
 Extensions to the canonical model
 ---------------------------------
 
@@ -285,3 +290,7 @@ References
 .. [#keller_2018] Keller, D. (2018). Cell Densities in the Mouse Brain: A Systematic Review.
    Frontiers in Neuroanatomy, 12. https://doi.org/10.3389/fnana.2018.00083
 
+.. [#rizza_2021] Rizza, M. F., Locatelli, F., Masoli, S., Sánchez-Ponce, D., Muñoz, A., Prestori, F.,
+   & D’Angelo, E. (2021). Stellate cell computational modeling predicts signal filtering in the molecular
+   layer circuit of cerebellum. Scientific Reports, 11(1), 3873.
+   https://doi.org/10.1038/s41598-021-83209-w
