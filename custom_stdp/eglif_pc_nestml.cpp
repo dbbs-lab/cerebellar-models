@@ -516,7 +516,7 @@ double rec_5 = get_spike_input_received_()[4].get_value(lag);
 //double weight = get_weight();
     if (S_.cf_buffer != 0)
     {
-        S_.last_io = get_t();
+//        S_.last_io = get_t();
         set_spiketime(nest::Time::step(origin.get_steps() + lag), 1);
         nest::SpikeEvent se;
         nest::kernel().event_delivery_manager.send(*this, se, lag);

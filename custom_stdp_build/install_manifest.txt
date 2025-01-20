@@ -1,1 +1,0 @@
-/home/geenetto/Documenti/workspace/bsb-nest/lib/nest/custom_stdp_module.so

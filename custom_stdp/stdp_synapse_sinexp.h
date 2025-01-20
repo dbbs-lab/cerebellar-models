@@ -202,7 +202,7 @@ public:
   {
     weight_ = w;
   }
-  std::vector<double> simple_post_spikes_;
+  std::vector<double> buffer_pre_spikes_;
 
 private:
   double
@@ -272,15 +272,21 @@ stdp_synapse_sinexp< targetidentifierT >::send( Event& e, size_t t, const Common
   double minus_dt;
   //double post = 0;
   double LTD = 0;
+  bool check_LTD = false;
+  double t_spike_buffer = t_spike;
+  buffer_pre_spikes_.push_back(t_spike_buffer);
   //double last_post_spike = 0;
   while ( start != finish )
   {
-    minus_dt = t_lastspike_ - ( start->t_ + dendritic_delay );
+    minus_dt =  start->t_ + dendritic_delay;
     const double offset = start->offset_;
     // get_history() should make sure that
     // start->t_ > t_lastspike - dendritic_delay, i.e. minus_dt < 0
     std::cout << "Custom STDP synapse: processing post spike with offset = " << offset << std::endl;
     std::cout << "VALUE OF MINUS_DT = " << minus_dt << std::endl;
+    std::cout << "TIME LAST SPIKE SYNAPSE: " << t_spike << std::endl;
+    std::cout << "STAR POST SYN TIME: " << start->t_ << std::endl;
+    std::cout << "DELAYYYYYYYYYY: " << dendritic_delay << std::endl;
     //simple_post_spikes_.push_back(t_lastspike_);
     //assert( minus_dt < -1.0 * kernel().connection_manager.get_stdp_eps() );
   //  if (offset != 0)
@@ -291,11 +297,17 @@ stdp_synapse_sinexp< targetidentifierT >::send( Event& e, size_t t, const Common
         //std::cout << "sddddddddddddd: " << sd;
         //double sd_minus = simple_post_spikes_[GR-1] - minus_dt;
     //    if (sd < 0 && sd > -200 && post != 0){
-    if (offset != 0){ //minus_dt nel buffer
+    if (offset != 0 && buffer_pre_spikes_.size() > 0){ //minus_dt nel buffer
       std::cout << "QUI OFFSET PARI A 1: " << offset << std::endl;
-      LTD = depress_(minus_dt);
+      for(int idx = 0; idx < buffer_pre_spikes_.size(); idx++){
+        double t_window = buffer_pre_spikes_[idx] - minus_dt;
+        if (t_window <= 0 && t-t_window >= -200){
+          check_LTD = true;
+          LTD += depress_(t_window);
+        }
+      }
       std::cout << "VALORE LTD: " <<LTD << std::endl;
-      std::cout << "TIME OFFSET 1: " << t_lastspike_ << std::endl;
+      //std::cout << "TIME OFFSET 1: " << t_lastspike_ << std::endl;
       std::cout << "MINUS_DT: " << minus_dt << std::endl;
     }
     //    }
@@ -306,11 +318,7 @@ stdp_synapse_sinexp< targetidentifierT >::send( Event& e, size_t t, const Common
     //    }
     //    last_post_spike = sd;
     //  }
-    weight_ = weight_ + LTD;
-    if (weight_ <= Wmin_)
-    {
-      weight_ = Wmin_;
-    }
+
 
     //  if (last_post_spike <= -200){
     //    post = 0;
@@ -318,17 +326,27 @@ stdp_synapse_sinexp< targetidentifierT >::send( Event& e, size_t t, const Common
   //  }
     ++start;
   }
-
-
-  weight_ = weight_ + facilitate_();
+  if (check_LTD){
+    weight_ = weight_ + LTD;
+    if (weight_ <= Wmin_)
+    {
+      weight_ = Wmin_;
+    }
+  }
+  else {
+    weight_ = weight_ + facilitate_();
 //  std::cout << "t_lastspike STA QUIIIIIII = " << t_lastspike_ << std::endl;
-  if (weight_ >= Wmax_){
-    weight_ = Wmax_;
+    if (weight_ >= Wmax_){
+      weight_ = Wmax_;
+    }
   }
   //  while(simple_post_spikes_[0] < t_spike - 200){
   //    simple_post_spikes_.erase(simple_post_spikes_.begin());
   //  }
   //  std::cout << "vector: " << simple_post_spikes_[0] << std::endl;
+  while(buffer_pre_spikes_[0] < t_spike - 200){
+    buffer_pre_spikes_.erase(buffer_pre_spikes_.begin());
+  }
 
   e.set_receiver( *target );
   e.set_weight( weight_ );

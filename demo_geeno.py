@@ -23,7 +23,7 @@ def run_simulation():
           "lambda_0": 0.001,
           "tau_V": 0.5,
           "tau_m": 47,
-          "I_e": 0., #742.543,
+          "I_e": 742.543,
           "kadap": 1.491,
           "k1": 0.195,
           "k2": 0.041,
@@ -46,9 +46,9 @@ def run_simulation():
           "lambda_0": 1.2,
           "tau_V": 0.8,
           "tau_m": 11,
-          "k_adap": 1.928,
-          "k_1": 0.191,
-          "k_2": 0.091,
+          "kadap": 1.928,
+          "k1": 0.191,
+          "k2": 0.091,
           "A1": 1810.923,
           "A2": 1358.197,
           "tau_syn1": 1,
@@ -57,7 +57,7 @@ def run_simulation():
           "E_rev2": -80}
 
     params_gr = {"t_ref": 1.5,
-          "V_min": -150,
+          "Vmin": -150,
           "C_m": 7,
           "V_th": -41,
           "V_reset": -70,
@@ -67,9 +67,9 @@ def run_simulation():
           "lambda_0": 1.0,
           "tau_V": 0.3,
           "tau_m": 24.15,
-          "k_adap": 0.022,
-          "k_1": 0.311,
-          "k_2": 0.041407868,
+          "kadap": 0.022,
+          "k1": 0.311,
+          "k2": 0.041407868,
           "A1": 0.01,
           "A2": -0.94,
           "tau_syn1": 5.8,
@@ -97,31 +97,34 @@ def run_simulation():
           "E_rev1": 0,
           "E_rev2": -80}
 
-    io = nest.Create("eglif_cond_alpha_multisyn", 1, params = params_io)
+    io = nest.Create("eglif_io_nestml", 1, params = params_io)
+    parrot = nest.Create("parrot_neuron", 1)
     pc = nest.Create("eglif_pc_nestml", 1, params = params_pc)
-    gr = nest.Create("eglif_cond_alpha_multisyn", 1, params=params_gr)
+    gr = nest.Create("eglif_gr_nestml", 1, params=params_gr)
     dcn_i = nest.Create("eglif_cond_alpha_multisyn", 1, params=params_dcni)
     wr = nest.Create("weight_recorder")
     nest.CopyModel("stdp_synapse_sinexp", "stdp_rec", {"weight_recorder": wr})
     #nest.Connect(pre, post, syn_spec={"synapse_model" : "stdp_synapse_sinexp" , "receptor_type" : 5})
-    nest.Connect(io, pc, syn_spec={"synapse_model" : "static_synapse" ,"receptor_type" : 5})
+    # nest.Connect(io, pc, syn_spec={"synapse_model" : "static_synapse" ,"receptor_type" : 5})
+    nest.Connect(parrot, pc, syn_spec={"synapse_model" : "static_synapse" ,"receptor_type" : 5})
     nest.Connect(gr, pc, syn_spec={"synapse_model": "stdp_rec", "receptor_type" : 1})
     nest.Connect(dcn_i, io, syn_spec={"synapse_model" : "static_synapse" ,"weight": 1.25, "receptor_type" : 2})
     #nest.SetStatus(pre, {"offset": 1})
     #nest.SetStatus(post, {"offset": 1})
 
-    #io_generator = nest.Create("spike_generator", params = {"spike_times": [100, 900]})
-    gr_generator = nest.Create("spike_generator", params={"spike_times": [ 50, 400, 500, 800]})
-    io_pois_1 = nest.Create("poisson_generator", params={"rate": 500, "start": 300, "stop": 310})
-    io_pois_2 = nest.Create("poisson_generator", params={"rate": 500, "start": 700, "stop": 710})
+    io_generator = nest.Create("spike_generator", params = {"spike_times": [300, 800]})
+    gr_generator = nest.Create("spike_generator", params={"spike_times": [ 50, 60, 70, 80, 120, 500, 800]})
+    # io_pois_1 = nest.Create("poisson_generator", params={"rate": 500, "start": 300, "stop": 310})
+    # io_pois_2 = nest.Create("poisson_generator", params={"rate": 500, "start": 700, "stop": 710})
 
     sr_io, sr_pc, sr_gr = nest.Create("spike_recorder", 3)
-    nest.Connect(io, sr_io)
+    nest.Connect(parrot, sr_io)
     nest.Connect(pc, sr_pc)
     nest.Connect(gr, sr_gr)
-    nest.Connect(io_pois_1, io, syn_spec={"receptor_type" : 1, "weight" : 20})
-    nest.Connect(io_pois_2, io, syn_spec={"receptor_type": 1, "weight": 20})
+    # nest.Connect(io_pois_1, io, syn_spec={"receptor_type" : 1, "weight" : 20})
+    # nest.Connect(io_pois_2, io, syn_spec={"receptor_type": 1, "weight": 20})
     nest.Connect(gr_generator, gr, syn_spec={"receptor_type" : 1,"weight" : 1})
+    nest.Connect(io_generator, parrot, syn_spec={"weight" : 1})
     #nest.Connect(gr_2_gen, gr, syn_spec={"receptor_type": 5})
     #nest.Connect(post, pre, syn_spec={"synapse_model": "stdp_synapse_sinexp", "receptor_type" : 5})
 
@@ -156,14 +159,23 @@ def run_simulation():
         #     print("PAZZESCOOOOOO: ", weights[i])
 
 
-    return sr_io.events["times"], sr_gr.events["times"], sr_pc.events["times"], weights
+    return sr_io.events, sr_gr.events, sr_pc.events, weights
 
 
 io, gr, pc, w = run_simulation()
 print(np.diff(w, 0))
-print("IO SPIKES: ", io)
-print("GR SPIKES: ", gr)
-print("PC SPIKES: ", pc)
+print("IO SPIKES: ", io["times"])
+print("GR SPIKES: ", gr["times"])
+print("PC SPIKES: ", pc["times"])
+plt.scatter(io["times"], io["senders"], c="b", s=7)
+plt.scatter(gr["times"], gr["senders"], c="r", s=7)
+plt.scatter(pc["times"], pc["senders"], c="g", s=7)
+plt.title("Scatter plot for plasticity test")
+plt.axvline(x= 100, linestyle='--', color="k")
+plt.axvline(x= 300, linestyle='--', color="k")
+plt.axvline(x= 600, linestyle='--', color="c")
+plt.axvline(x= 800, linestyle='--', color="c")
+plt.legend({"GR", "PC","IO"}, loc="best")
 i =  np.zeros((999, 1))
 counter = 0
 for z in range(999):
@@ -171,12 +183,21 @@ for z in range(999):
     counter = counter +1
 plt.figure()
 plt.plot(i, np.diff(w, axis =0))
+plt.title("Weight diff")
+plt.axvline(x= 100, linestyle='--', color="k")
+plt.axvline(x= 300, linestyle='--', color="k")
+plt.axvline(x= 600, linestyle='--', color="c")
+plt.axvline(x= 800, linestyle='--', color="c")
 #plt.xlim(0,600)
 plt.show()
 
 plt.figure()
 plt.plot(np.append(i, 1000), w)
-plt.title("Better IO behaviour")
+plt.title("Weight evolution")
+plt.axvline(x= 100, linestyle='--', color="k")
+plt.axvline(x= 300, linestyle='--', color="k")
+plt.axvline(x= 600, linestyle='--', color="c")
+plt.axvline(x= 800, linestyle='--', color="c")
 #plt.xlim(0,600)
 plt.show()
 # counter = 0
