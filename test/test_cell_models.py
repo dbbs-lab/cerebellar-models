@@ -1,16 +1,14 @@
 import os
-import pathlib
 import unittest
 from os.path import abspath, dirname, getmtime, isfile, join
 
 import nest
 import numpy as np
-from bsb import Scaffold, parse_configuration_content, parse_configuration_file
+from bsb import Scaffold, parse_configuration_content
 from bsb.services import MPI
 from bsb_test import NumpyTestCase, RandomStorageFixture
 from pynestml.exceptions.invalid_path_exception import InvalidPathException
 from scipy.optimize import curve_fit
-from scipy.signal import find_peaks
 
 
 class TestNestModuleLoading(unittest.TestCase):

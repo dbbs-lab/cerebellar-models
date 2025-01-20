@@ -136,7 +136,7 @@ the ``(xy)`` plane.
 
 Connectivity
 ~~~~~~~~~~~~
-The followimg table list all the connections present in the model. The connection id of the first column corresponds to
+The following table list all the connections present in the model. The connection id of the first column corresponds to
 the numbers reported in :numref:`fig-network`.
 
 .. _table-connectivity:
