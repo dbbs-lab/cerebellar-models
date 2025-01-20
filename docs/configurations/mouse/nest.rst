@@ -230,6 +230,7 @@ to the postsynaptic receptor used for the connection (see table :ref:`table-rece
 ---------------
 
 The parameters for the `in-vivo` state are the same as the `in-vitro` state, except for some of the connections:
+
 .. csv-table:: In-vivo Presynaptic parameters
    :header-rows: 1
    :delim: ;
@@ -298,8 +299,8 @@ for each neuron population, we define:
 For this simulation, the mean firing rates and mean ISI obtained for each neuron population are as
 follows (expressed in mean :math:`\pm` standard deviation):
 
-`In-vitro`
-----------
+`In-vitro` state
+++++++++++++++++
 
 .. csv-table:: Results of the canonical circuit in basal activity
    :header-rows: 1
@@ -313,8 +314,8 @@ follows (expressed in mean :math:`\pm` standard deviation):
     Basket cell;:math:`16 \pm 7.7`; :math:`77 \pm 45`
     Stellate cell;:math:`13 \pm 11`; :math:`180 \pm 240`
 
-`In-vivo`
---------
+`In-vivo` state
++++++++++++++++
 
 .. csv-table:: Results of the canonical circuit in basal activity
    :header-rows: 1
@@ -344,8 +345,8 @@ On top of the basal paradigm, we introduce here a ``stimulus`` represented as a 
 For this simulation, **during the stimulus**, the mean firing rates and mean ISI obtained for each
 neuron population are as follows (expressed in mean :math:`\pm` standard deviation):
 
-`In-vitro`
-----------
+`In-vitro` state
+++++++++++++++++
 
 .. csv-table:: Results of the canonical circuit during stimulus of the mossy
    :header-rows: 1
@@ -359,8 +360,8 @@ neuron population are as follows (expressed in mean :math:`\pm` standard deviati
     Basket cell;:math:`59 \pm 88`; :math:`12 \pm 7.3`
     Stellate cell;:math:`55 \pm 98`; :math:`14 \pm 7.5`
 
-`In-vivo`
---------
+`In-vivo` state
++++++++++++++++
 
 .. csv-table:: Results of the canonical circuit during stimulus of the mossy
    :header-rows: 1
