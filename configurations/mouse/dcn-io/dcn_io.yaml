@@ -33,7 +33,7 @@ placement:
       - io
 connectivity:
   io_to_purkinje:
-    strategy: bsb.connectivity.FixedIndegree
+    strategy: cerebellum.connectome.io_purkinje.ConnectomeIoPurkinje
     presynaptic:
       cell_types:
         - io
@@ -41,6 +41,10 @@ connectivity:
       cell_types:
         - purkinje_cell
     indegree: 1
+    contacts:
+      distribution: norm
+      loc: 500
+      scale: 5
   io_to_mli:
     strategy: cerebellum.connectome.io_molecular.ConnectomeIO_MLI
     presynaptic:
@@ -82,14 +86,6 @@ connectivity:
       cell_types:
         - io
     indegree: 33
-after_connectivity:
-  multiply_conns:
-    strategy: cerebellum.connectome.multi_contact.MultiplyConnContacts
-    conn_strat: io_to_purkinje
-    contacts:
-      distribution: norm
-      loc: 500
-      scale: 5
 $import:
   ref: ./dcn.yaml#/
   values:
