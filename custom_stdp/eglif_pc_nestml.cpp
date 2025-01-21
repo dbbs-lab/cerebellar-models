@@ -471,8 +471,6 @@ void eglif_pc_nestml::update(nest::Time const & origin,const long from, const lo
 
   for ( long lag = from ; lag < to ; ++lag )
   {
-    // Reset complex flag to 0 at each time step (ONLY NEEDED TO PLOT)
-    S_.complex_flag = 0.0;
     auto get_t = [origin, lag](){ return nest::Time( nest::Time::step( origin.get_steps() + lag + 1) ).get_ms(); };
     /**
      * buffer spikes from spiking input ports
@@ -505,63 +503,15 @@ const double g3__X__rec3__d__tmp_ = V_.__P__g3__X__rec3__d__g3__X__rec3 * S_.ode
     **/
 
     S_.tick = get_t();
+    // in this condition, if there is an IO spike received from the receptor 5,
+    // it will trigger a "complex flag" change, utilized for the inhibition in the Gr-PC synapse
     S_.cf_buffer = (0.001 * B_.spike_inputs_grid_sum_[CF_SPIKES - MIN_SPIKE_RECEPTOR]);
-    //S_.gr_buffer = (0.001 * B_.spike_inputs_grid_sum_[0]);
-double rec_1 = get_spike_input_received_()[0].get_value(lag);
-double rec_5 = get_spike_input_received_()[4].get_value(lag);
-    std::cout << "SPIKE GRID SUM: " << B_.spike_input_received_grid_sum_[4]<< std::endl;
-    std::cout << "SPIKE GRID SUM GRANULAR: " << B_.spike_input_received_grid_sum_[0]<< std::endl;
-    std::cout << "CF BUFFER: " << S_.cf_buffer<< std::endl;
-    std::cout << "GR BUFFER: " << S_.gr_buffer<< std::endl;
-//double weight = get_weight();
     if (S_.cf_buffer != 0)
     {
-//        S_.last_io = get_t();
         set_spiketime(nest::Time::step(origin.get_steps() + lag), 1);
         nest::SpikeEvent se;
         nest::kernel().event_delivery_manager.send(*this, se, lag);
-//        set_spiketime(nest::Time::step(origin.get_steps() + lag) , 1);
-//        std::cout << "REC 5: " << rec_5 << std::endl;
-//
-//        if (rec_5 != 0) {
-//            set_spiketime(nest::Time::step(origin.get_steps() + lag), 1);
-//        }
-
-        //S_.complex_flag = 1.0;
-        //std::cout << "t: " << S_.tick << " ms\n";
-        //std::cout << "COMPLEX FLAG HERE = " << S_.complex_flag << std::endl;
-
-        /**
-         * generated code for emit_spike() function
-        **/
-
-        //set_spiketime(nest::Time::step(origin.get_steps() + lag), 0);
-//        nest::SpikeEvent se;
-        //se.set_offset(P_.offset);
-
-//        std::cout << "PC: My own offset is " << se.get_offset() << "\n";
-//        std::cout << "Sending spike with offset = " << se.get_offset() << " at spike time = " << nest::Time::step(origin.get_steps() + lag + 1) << "\n";
-
-        //std::cout << "Spike time = " << get_spiketime() << "\n";
-        //nest::kernel().event_delivery_manager.send(*this, se, lag+se.get_offset()/__resolution);
-//        nest::kernel().event_delivery_manager.send(*this, se, lag);
-
     }
-//    S_.gr_buffer = get_t();
-//    else if (S_.last_io <= 200 && S_.gr_buffer == 0){
-//        S_.gr_buffer = 1;
-//        S_.last_io = S_.last_io + __resolution;
-//        set_spiketime(nest::Time::step(origin.get_steps() + lag), 1);
-//        nest::SpikeEvent se;
-//        nest::kernel().event_delivery_manager.send(*this, se, lag);
-//    }
-//    std::cout << "LAST_IO ESSERE TIPO: " << S_.last_io << std::endl;
-//    if ((S_.gr_buffer - S_.last_io) > 200){
-//        std::cout << "Inside if" << std::endl;
-//        set_spiketime(nest::Time::step(origin.get_steps() + lag), 0);
-//        nest::SpikeEvent se;
-//        nest::kernel().event_delivery_manager.send(*this, se, lag);
-//    }
     if (S_.r == 0)
     {  
 
@@ -653,7 +603,6 @@ double rec_5 = get_spike_input_received_()[4].get_value(lag);
     /**
      * Begin NESTML generated code for the onReceive block(s)
     **/
-
 
     /**
      * subthreshold updates of the convolution variables

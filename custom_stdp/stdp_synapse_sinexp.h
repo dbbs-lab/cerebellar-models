@@ -204,6 +204,7 @@ public:
   }
   std::vector<double> buffer_pre_spikes_;
 
+//LTP and LTD equations
 private:
   double
   facilitate_()
@@ -270,60 +271,29 @@ stdp_synapse_sinexp< targetidentifierT >::send( Event& e, size_t t, const Common
   target->get_history( t_lastspike_ - dendritic_delay, t_spike - dendritic_delay, &start, &finish );
   // facilitation due to postsynaptic spikes since last pre-synaptic spike
   double minus_dt;
-  //double post = 0;
   double LTD = 0;
+  // check for weight change after the synapse firing
   bool check_LTD = false;
+  // presynaptic spikes buffer for LTD
   double t_spike_buffer = t_spike;
   buffer_pre_spikes_.push_back(t_spike_buffer);
-  //double last_post_spike = 0;
   while ( start != finish )
   {
     minus_dt =  start->t_ + dendritic_delay;
     const double offset = start->offset_;
     // get_history() should make sure that
     // start->t_ > t_lastspike - dendritic_delay, i.e. minus_dt < 0
-    std::cout << "Custom STDP synapse: processing post spike with offset = " << offset << std::endl;
-    std::cout << "VALUE OF MINUS_DT = " << minus_dt << std::endl;
-    std::cout << "TIME LAST SPIKE SYNAPSE: " << t_spike << std::endl;
-    std::cout << "STAR POST SYN TIME: " << start->t_ << std::endl;
-    std::cout << "DELAYYYYYYYYYY: " << dendritic_delay << std::endl;
-    //simple_post_spikes_.push_back(t_lastspike_);
-    //assert( minus_dt < -1.0 * kernel().connection_manager.get_stdp_eps() );
-  //  if (offset != 0)
-  //  {
-    // le righe di codice commentate sono obsolete !!!
-    //  for (unsigned int GR=0; GR < simple_post_spikes_.size(); GR++) {
-    //    double sd = simple_post_spikes_[GR] - minus_dt;
-        //std::cout << "sddddddddddddd: " << sd;
-        //double sd_minus = simple_post_spikes_[GR-1] - minus_dt;
-    //    if (sd < 0 && sd > -200 && post != 0){
-    if (offset != 0 && buffer_pre_spikes_.size() > 0){ //minus_dt nel buffer
-      std::cout << "QUI OFFSET PARI A 1: " << offset << std::endl;
+    if (offset != 0 && buffer_pre_spikes_.size() > 0){
+    //if the IO fired, there will be an LTD calculus, modulated by the presynaptic spike available
+    //in a 200 ms time window, right before the IO spike
       for(int idx = 0; idx < buffer_pre_spikes_.size(); idx++){
         double t_window = buffer_pre_spikes_[idx] - minus_dt;
-        if (t_window <= 0 && t-t_window >= -200){
+        if (t_window <= 0 && t_window >= -200){
           check_LTD = true;
           LTD += depress_(t_window);
         }
       }
-      std::cout << "VALORE LTD: " <<LTD << std::endl;
-      //std::cout << "TIME OFFSET 1: " << t_lastspike_ << std::endl;
-      std::cout << "MINUS_DT: " << minus_dt << std::endl;
     }
-    //    }
-    //    else if (sd < 0 && sd > -200 && post == 0){
-    //      LTD += 2*depress_(sd);
-          //LTD += depress_(sd_minus);
-    //      ++post;
-    //    }
-    //    last_post_spike = sd;
-    //  }
-
-
-    //  if (last_post_spike <= -200){
-    //    post = 0;
-    //  }
-  //  }
     ++start;
   }
   if (check_LTD){
@@ -335,15 +305,11 @@ stdp_synapse_sinexp< targetidentifierT >::send( Event& e, size_t t, const Common
   }
   else {
     weight_ = weight_ + facilitate_();
-//  std::cout << "t_lastspike STA QUIIIIIII = " << t_lastspike_ << std::endl;
     if (weight_ >= Wmax_){
       weight_ = Wmax_;
     }
   }
-  //  while(simple_post_spikes_[0] < t_spike - 200){
-  //    simple_post_spikes_.erase(simple_post_spikes_.begin());
-  //  }
-  //  std::cout << "vector: " << simple_post_spikes_[0] << std::endl;
+  // buffer reset for old spikes
   while(buffer_pre_spikes_[0] < t_spike - 200){
     buffer_pre_spikes_.erase(buffer_pre_spikes_.begin());
   }

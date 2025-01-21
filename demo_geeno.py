@@ -113,7 +113,7 @@ def run_simulation():
     #nest.SetStatus(post, {"offset": 1})
 
     io_generator = nest.Create("spike_generator", params = {"spike_times": [300, 800]})
-    gr_generator = nest.Create("spike_generator", params={"spike_times": [ 50, 60, 70, 80, 120, 500, 800]})
+    gr_generator = nest.Create("spike_generator", params={"spike_times": [ 50, 60, 70, 80, 120, 500, 600, 730, 900]})
     # io_pois_1 = nest.Create("poisson_generator", params={"rate": 500, "start": 300, "stop": 310})
     # io_pois_2 = nest.Create("poisson_generator", params={"rate": 500, "start": 700, "stop": 710})
 
@@ -175,7 +175,7 @@ plt.axvline(x= 100, linestyle='--', color="k")
 plt.axvline(x= 300, linestyle='--', color="k")
 plt.axvline(x= 600, linestyle='--', color="c")
 plt.axvline(x= 800, linestyle='--', color="c")
-plt.legend({"GR", "PC","IO"}, loc="best")
+plt.legend({"IO", "GR", "PC"}, loc="best")
 i =  np.zeros((999, 1))
 counter = 0
 for z in range(999):
