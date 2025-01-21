@@ -82,6 +82,14 @@ connectivity:
       cell_types:
         - io
     indegree: 33
+after_connectivity:
+  multiply_conns:
+    strategy: cerebellum.connectome.multi_contact.MultiplyConnContacts
+    conn_strat: io_to_purkinje
+    contacts:
+      distribution: norm
+      loc: 500
+      scale: 5
 $import:
   ref: ./dcn.yaml#/
   values:

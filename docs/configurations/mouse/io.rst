@@ -43,12 +43,14 @@ Connectivity
    22; IO; /; PC; / ; :ref:`fix_in`;``indegree`` = 1; Geminiani et al. (2024) [#geminiani_2024]_
    23; IO; /; SC; / ; :ref:`io_mli`; / ; Geminiani et al. (2024) [#geminiani_2024]_
    23; IO; /; BC; / ; :ref:`io_mli`; / ; Geminiani et al. (2024) [#geminiani_2024]_
-   24; IO; / ; DCNp ; / ; :ref:`all_to_all`; / ; Geminiani et al. (2024) [#geminiani_2024]_
-   25; IO; /; DCNi; / ; :ref:`all_to_all`; / ; Geminiani et al. (2024) [#geminiani_2024]_
-   26; DCNi; / ; IO ; / ; :ref:`all_to_all`; / ; Geminiani et al. (2024) [#geminiani_2024]_
+   24; IO; / ; DCNp ; / ; :ref:`fix_out`; ``outdegree`` = 60 ; Geminiani et al. (2024) [#geminiani_2024]_
+   25; IO; /; DCNi; / ; :ref:`fix_out`; ``outdegree`` = 33 ; Geminiani et al. (2024) [#geminiani_2024]_
+   26; DCNi; / ; IO ; / ; :ref:`fix_in`; ``indegree`` = 33 ; Geminiani et al. (2024) [#geminiani_2024]_
 
 NEST simulation
 ^^^^^^^^^^^^^^^
+
+As for the cerebellar cortex, we differentiate parameters for the ``in-vitro`` and ``in-vivo`` states.
 
 Neuron parameters
 +++++++++++++++++
@@ -108,13 +110,10 @@ It is still unclear from the references how these parameters were optimized.
    The reported values were manually adjusted through trial and error to ensure a reasonable excitation/inhibition ratio
    on IO target populations.
 
-   * :math:`weight` (IO-MLI): 2.5 → 5.0 (nS);
+   * :math:`weight` (IO-MLI): 2.5 → 6.5 (nS);
    * :math:`weight` (IO-DCNp): 2.5 → 0.5 (nS);
-   * :math:`weight` (IO-DCNi): 0.1 → 0.5 (nS);
+   * :math:`weight` (IO-DCNi): 0.1 → 0.25 (nS);
    * :math:`weight` (DCNi-IO): 0.75 → 0.45 (nS);
-
-Inhibition
-##########
 
 Simulation paradigms
 ++++++++++++++++++++

@@ -191,7 +191,7 @@ glomerulus.
 .. _io_mli:
 
 :class:`ConnectomeIO_MLI<.connectome.io_molecular.ConnectomeIO_MLI>`
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 The algorithm constists in a connection strategy to connect all the IO cells, via PC, to the molecular layer interneurons
 (MLI). Specifically, for each IO cell connected to a PC, the connection between this IO and MLI takes place in the subset
 of MLI connected to the shared PC.

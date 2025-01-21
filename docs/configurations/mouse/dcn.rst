@@ -72,10 +72,11 @@ Connectivity
 NEST simulation
 ^^^^^^^^^^^^^^^
 
+As for the cerebellar cortex, we differentiate parameters for the ``in-vitro`` and ``in-vivo`` states.
+
 Neuron parameters
 +++++++++++++++++
 DCN populations were represented as a EGLIF point neuron models (see :doc:`NEST section <nest>`).
-As for the cerebellar cortex, we differentiate parameters for the ``in-vitro`` and ``in-vivo`` states.
 
 `In-vitro` state
 ----------------
