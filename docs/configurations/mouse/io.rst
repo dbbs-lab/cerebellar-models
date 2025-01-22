@@ -50,7 +50,7 @@ Connectivity
 NEST simulation
 ^^^^^^^^^^^^^^^
 
-As for the cerebellar cortex, we differentiate parameters for the ``in-vitro`` and ``in-vivo`` states.
+As for the cerebellar cortex, we differentiate parameters for the ``in-vitro`` and ``behaving`` states.
 
 Neuron parameters
 +++++++++++++++++

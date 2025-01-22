@@ -72,7 +72,7 @@ Connectivity
 NEST simulation
 ^^^^^^^^^^^^^^^
 
-As for the cerebellar cortex, we differentiate parameters for the ``in-vitro`` and ``in-vivo`` states.
+As for the cerebellar cortex, we differentiate parameters for the ``in-vitro`` and ``behaving`` states.
 
 Neuron parameters
 +++++++++++++++++
@@ -121,10 +121,10 @@ The postsynaptic receptors are defined as listed in Table 2 of Geminiani et al. 
    DCNi; 1; 0; 3.64; exc.
    DCNi; 2; -80; 1.14; inh.
 
-`In-vivo` state
----------------
+Behaving state
+--------------
 
-The `in-vivo` state is derived from the `in-vitro` state. Here, only the spiking parameters
+The behaving state is derived from the `in-vitro` state. Here, only the spiking parameters
 (i.e :math:`\lambda_0` and :math:`\tau_V`) were tuned for dcn_p to match the Geminiani et al. 2024 [#geminiani_2024]_.
 
 Synapse parameters
@@ -148,10 +148,10 @@ the postsynaptic receptors used for the connections.
     PC-DCNp; 0.8; 4.0; 2
     PC-DCNi; 0.06 ; 4.0; 2
 
-`In-vivo` state
----------------
+Behaving state
+--------------
 
-.. csv-table:: Presynaptic parameters for DCN connections in vivo
+.. csv-table:: Presynaptic parameters for DCN connections in behaving state
    :header-rows: 1
    :delim: ;
 
@@ -185,10 +185,10 @@ follows (expressed in mean :math:`\pm` standard deviation):
     DCNp; :math:`11 \pm 7.0`; :math:`97 \pm 110`
     DCNi; :math:`11 \pm 1.2`; :math:`90 \pm 11`
 
-`In-vivo` state
-###############
+Behaving state
+##############
 
-.. csv-table:: Results of the canonical circuit with DCN in basal activity in vivo
+.. csv-table:: Results of the canonical circuit with DCN in basal activity in behaving state
    :header-rows: 1
    :delim: ;
 
@@ -213,10 +213,10 @@ neuron population are as follows (expressed in mean :math:`\pm` standard deviati
     DCNp; :math:`24 \pm 11`; :math:`30.0 \pm 4.2`
     DCNi; :math:`9.4 \pm 10`; not enough spikes per neuron
 
-`In-vivo` state
-###############
+Behaving state
+##############
 
-.. csv-table:: Results of the canonical circuit with DCN during stimulus of the mossy in vivo
+.. csv-table:: Results of the canonical circuit with DCN during stimulus of the mossy in behaving state
    :header-rows: 1
    :delim: ;
 

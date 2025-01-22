@@ -1,3 +1,7 @@
+"""
+    Module for the configuration node of the IO to purkinje cells ConnectionStrategy
+"""
+
 import numpy as np
 from bsb import FixedIndegree, config, types
 
