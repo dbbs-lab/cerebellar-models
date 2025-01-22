@@ -1,6 +1,6 @@
 name: DBBS Mouse cerebellum configuration v4.2
 packages:
-  - cerebellum~=0.3.0
+  - cerebellum~=0.4.0
   - bsb-core~=4.5
   - bsb-json~=4.1
   - bsb-yaml~=4.1
@@ -63,7 +63,7 @@ cell_types:
     spatial:
       morphologies:
         - PurkinjeCell
-      planar_density: 0.00045
+      planar_density: 0.001166
       radius: 7.5
     plotting:
       display_name: Purkinje cell
@@ -105,7 +105,7 @@ placement:
     cell_types:
       - purkinje_cell
     spacing_x: 130
-    angle: 70
+    angle: 80
   basket_layer_placement:
     strategy: bsb.placement.RandomPlacement
     partitions:

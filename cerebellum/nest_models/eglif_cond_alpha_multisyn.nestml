@@ -26,7 +26,7 @@ where the synaptic current :math:`I_{syn}` integrates the input from 4 postsynap
 
 Here, the synapse `i` is excitatory or inhibitory depending on the value of :math:`E_{rev,i}`.
 
-Neuron produces spikes STOCHASTICALLY according to a point process with the firing intensity:
+Neuron produces spikes stochastically according to a point process with the firing intensity:
 
 .. math::
   \lambda = \lambda_0 \cdot e^{\dfrac{V_m -V_{th}}{\tau_V}}

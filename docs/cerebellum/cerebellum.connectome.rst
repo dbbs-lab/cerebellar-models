@@ -59,3 +59,11 @@ cerebellum.connectome.glomerulus_ubc module
    :members:
    :undoc-members:
    :show-inheritance:
+
+cerebellum.connectome.io_molecular module
+-----------------------------------------
+
+.. automodule:: cerebellum.connectome.io_molecular
+   :members:
+   :undoc-members:
+   :show-inheritance:
