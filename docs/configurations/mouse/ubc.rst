@@ -168,13 +168,13 @@ neuron population are as follows (expressed in mean :math:`\pm` standard deviati
    :delim: ;
 
     Cell name;Mean Firing rate (Hz); Mean ISI (ms)
-    Mossy cell; :math:`46 \pm 73`; :math:`6.3 \pm 2.8`
-    Granule cell; :math:`19 \pm 36`; :math:`9.2 \pm 4.8`
-    Unipolar brush cell; :math:`16 \pm 8.1`; not enough spikes per neuron
+    Mossy cell; :math:`43 \pm 68`; :math:`6.8 \pm 3.5`
+    Granule cell; :math:`20 \pm 3.7`; :math:`9.7 \pm 5.0`
+    Unipolar brush cell; :math:`16 \pm 7.9`; not enough spikes per neuron
     Golgi cell;:math:`32 \pm 16`; :math:`7.2 \pm 3.5`
-    Purkinje cell;:math:`59 \pm 15`; :math:`15 \pm 2.9`
-    Basket cell;:math:`73 \pm 53`; :math:`8.4 \pm 4.1`
-    Stellate cell;:math:`98 \pm 68`; :math:`7.9 \pm 5.3`
+    Purkinje cell;:math:`55 \pm 10`; :math:`17 \pm 5.5`
+    Basket cell;:math:`42 \pm 35`; :math:`14 \pm 5.5`
+    Stellate cell;:math:`37 \pm 35`; :math:`14 \pm 6.0`
 
 References
 ^^^^^^^^^^

@@ -358,7 +358,7 @@ neuron population are as follows (expressed in mean :math:`\pm` standard deviati
     Golgi cell;:math:`52 \pm 45`; :math:`17 \pm 12`
     Purkinje cell;:math:`59 \pm 11`; :math:`17 \pm 3.7`
     Basket cell;:math:`59 \pm 88`; :math:`12 \pm 7.3`
-    Stellate cell;:math:`55 \pm 98`; :math:`14 \pm 7.5`
+    Stellate cell;:math:`52 \pm 47`; :math:`14 \pm 7.5`
 
 Behaving state
 ++++++++++++++

@@ -40,7 +40,7 @@ Connectivity
    :delim: ;
 
    #; Source Name; Source Branch; Target Name; Target Branch; Strategy; Specifics; References
-   22; IO; /; PC; / ; :ref:`fix_in_multi`;``indegree`` = 1; Geminiani et al. (2024) [#geminiani_2024]_
+   22; IO; /; PC; / ; :ref:`fix_in`;``indegree`` = 1; Geminiani et al. (2024) [#geminiani_2024]_
    23; IO; /; SC; / ; :ref:`io_mli`; / ; Geminiani et al. (2024) [#geminiani_2024]_
    23; IO; /; BC; / ; :ref:`io_mli`; / ; Geminiani et al. (2024) [#geminiani_2024]_
    24; IO; / ; DCNp ; / ; :ref:`fix_out`; ``outdegree`` = 60 ; Geminiani et al. (2024) [#geminiani_2024]_
