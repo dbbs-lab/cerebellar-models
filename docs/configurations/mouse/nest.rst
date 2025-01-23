@@ -127,8 +127,8 @@ Then, the following parameters are optimized according to the method described i
    respectively Geminiani et al. (2018 and 2019) papers [#geminiani_2018]_ [#geminiani_2019]_.
 
 .. warning::
-   For the PC, we modified also the :math:`I_e` value so that the tonic firing rate of PC is ~45 Hz but
-   maintained the F/I curve slope from the paper.
+   For the PC, we modified also the :math:`I_e` value so that the tonic firing rate of PC is ~45 Hz
+   [#telgkamp_2002]_ but maintained the F/I curve slope from the paper.
 
 The postsynaptic currents are integrated to the soma with alpha exponential functions. Each function
 is defined with a reversal potential parameter :math:`E_{rev}` and a time constant :math:`\tau_{syn}`.
@@ -223,7 +223,8 @@ to the postsynaptic receptor used for the connection (see table :ref:`table-rece
 
 .. warning::
    In our experiments, we decreased the weights for the pf-SC, pf-BC so that the activity of MLI lies around
-   ~15 Hz for both BC and SC. Then aa-PC, pf-PC were decreased to maintain the PC in a stable low activity ~50Hz.
+   ~15 Hz for both BC and SC [#kim_2021]_. Then aa-PC, pf-PC were decreased to maintain the PC in a stable
+   low activity ~50Hz [#telgkamp_2002]_.
    Finally, the SC-PC was scaled to take into account the increase of synapses from the connectivity rule.
 
 Awake state
@@ -394,3 +395,11 @@ References
    D’Angelo, E. (2024). Mesoscale simulations predict the role of synergistic cerebellar plasticity
    during classical eyeblink conditioning. PLOS Computational Biology, 20(4), e1011277.
    https://doi.org/10.1371/journal.pcbi.1011277
+.. [#telgkamp_2002] Telgkamp, P., & Raman, I. M. (2002).
+   Depression of inhibitory synaptic transmission between Purkinje cells and neurons of the cerebellar nuclei.
+   Journal of Neuroscience, 22(19), 8447-8457.
+   https://doi.org/10.1523/JNEUROSCI.22-19-08447.2002.
+.. [#kim_2021] Kim, J., & Augustine, G. J. (2021).
+   Molecular layer interneurons: key elements of cerebellar network computation and behavior.
+   Neuroscience, 462, 22-35.
+   https://doi.org/10.1016/j.neuroscience.2020.10.008

@@ -105,8 +105,9 @@ Then, the following parameters are optimized according to the method described i
 .. warning::
    It is not clear how the spiking parameters (i.e :math:`\lambda_0` and :math:`\tau_V` and initial :math:`V_m`)
    are obtained in the Geminiani et al. (2019) paper [#geminiani_2019]_ .
-   These parameters were manually set to reproduce the F/I curves from the Figure 4 and Figure 3 from
-   respectively Geminiani et al. (2019) paper [#geminiani_2019]_.
+   These parameters were manually set to reproduce the F/I curves from the Figure 3 from
+   respectively Geminiani et al. (2019) paper [#geminiani_2019]_. The tonic firing rate of each population
+   was slightly changed so that each population firing rate in basal activity remains around ~10Hz [#moscato_2019]_.
 
 The postsynaptic receptors are defined as listed in Table 2 of Geminiani et al. (2019b) [#geminiani_2019b]_:
 
@@ -258,3 +259,7 @@ References
    Complex electroresponsive dynamics in olivocerebellar neurons represented with extended-generalized
    leaky integrate and fire models. Frontiers in Computational Neuroscience, 13, 35.
    https://doi.org/10.3389/fncom.2019.00035
+.. [#moscato_2019] Moscato, L., Montagna, I., De Propris, L., Tritto, S., Mapelli, L., & D’Angelo, E. (2019).
+   Long-lasting response changes in deep cerebellar nuclei in vivo correlate with low-frequency oscillations.
+   Frontiers in Cellular Neuroscience, 13, 433625.
+   https://doi.org/10.3389/fncel.2019.00084
