@@ -538,7 +538,7 @@ class FiringRatesPlot(Spike2Columns):
         self.std_rates = np.zeros((loc_spikes.shape[0] - self.w_single * 2, num_filter))
         for i in range(num_filter):
             if self.nb_neurons[i] <= 0:
-                continue
+                continue  # pragma: nocover
             spikes = loc_spikes[:, int(counts[i]) : int(counts[i + 1])]
             if self.nb_neurons[i] > self.max_neuron_sampled:
                 spikes = spikes[
