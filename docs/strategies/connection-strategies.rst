@@ -238,9 +238,8 @@ See bsb :doc:`documentation <bsb:connectivity/connection-strategies>`.
 :class:`ConnectomeIoPurkinje<.connectome.io_purkinje.ConnectomeIoPurkinje>`
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-Based on :ref:`fix_in`, with the additional possibility to set the number of synapses per connection
-pair following a :doc:`scipy stats <scipy:reference/stats>` function, implemented as a random
-:class:`distribution <bsb.config._distributions.Distribution>`.
+Override the number of synapses per connection pair following a :doc:`scipy stats <scipy:reference/stats>` function,
+implemented as a random :class:`distribution <bsb.config._distributions.Distribution>`.
 
 .. _fix_out:
 
