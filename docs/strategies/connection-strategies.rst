@@ -232,15 +232,6 @@ of MLI connected to the shared PC.
 
 See bsb :doc:`documentation <bsb:connectivity/connection-strategies>`.
 
-
-.. _fix_in_multi:
-
-:class:`ConnectomeIoPurkinje<.connectome.io_purkinje.ConnectomeIoPurkinje>`
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-
-Override the number of synapses per connection pair following a :doc:`scipy stats <scipy:reference/stats>` function,
-implemented as a random :class:`distribution <bsb.config._distributions.Distribution>`.
-
 .. _fix_out:
 
 :doc:`FixedOutdegree <bsb:bsb/bsb.connectivity>`
@@ -254,3 +245,12 @@ See bsb :doc:`documentation <bsb:connectivity/connection-strategies>`.
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 See bsb :doc:`documentation <bsb:connectivity/connection-strategies>`.
+
+
+:class:`DuplicateSynapses<.connectome.io_purkinje.DuplicateSynapses>`
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+BSB :class:`AfterConnectivityHook<bsb.postprocessing.AfterConnectivityHook>` to override the number of
+synapses per connection pair following a :doc:`scipy stats <scipy:reference/stats>` function,
+implemented as a random :class:`distribution <bsb.config._distributions.Distribution>`.
+

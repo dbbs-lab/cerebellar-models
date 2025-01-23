@@ -1,5 +1,5 @@
 """
-    Module for the configuration node of the IO to purkinje cells ConnectionStrategy
+    Module for the configuration node of the IO to purkinje cells AfterConnectivityHook
 """
 
 import numpy as np
@@ -7,20 +7,20 @@ from bsb import AfterConnectivityHook, ConnectionStrategy, config, refs, types
 
 
 @config.node
-class ConnectomeIoPurkinje(AfterConnectivityHook):
+class DuplicateSynapses(AfterConnectivityHook):
     """
-    BSB postprocessing to duplicate the IO to Purkinje cells connections into
+    BSB postprocessing to duplicate connections from a connection strategy into
     multiple synapses per pair.
     """
 
-    io_pc_connectivity: ConnectionStrategy = config.ref(refs.connectivity_ref, required=True)
-    """Connection Strategy that links IO to PC."""
+    conn_strategy: ConnectionStrategy = config.ref(refs.connectivity_ref, required=True)
+    """Connection Strategy to on which to apply the postprocessing."""
 
     contacts = config.attr(type=types.distribution(), default=1)
     """Number or distribution determining the amount of synaptic contacts one cell will form on another"""
 
     def postprocess(self):
-        for cs_name in self.io_pc_connectivity.get_output_names():
+        for cs_name in self.conn_strategy.get_output_names():
             # Draw the number of connection to create
             n = int(self.contacts.draw(1)[0])
             cs = self.scaffold.get_connectivity_set(cs_name)

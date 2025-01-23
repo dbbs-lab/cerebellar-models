@@ -84,8 +84,8 @@ connectivity:
     indegree: 33
 after_connectivity:
   duplicate_conn_io_pc:
-    strategy: cerebellum.connectome.io_purkinje.ConnectomeIoPurkinje
-    io_pc_connectivity: io_to_purkinje
+    strategy: cerebellum.connectome.io_purkinje.DuplicateSynapses
+    conn_strategy: io_to_purkinje
     contacts:
       distribution: norm
       loc: 500
