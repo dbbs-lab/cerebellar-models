@@ -1,4 +1,4 @@
-name: DBBS Mouse cerebellum w/ DCN NEST basal activity and mf stimulus for in vivo state
+name: DBBS Mouse cerebellum w/ DCN NEST basal activity and mf stimulus for in awake state
 storage:
   root: mouse_cereb_dcn_nest.hdf5
 packages:
@@ -87,7 +87,7 @@ simulations:
           cell_models:
             - dcn_i
     $import:
-      ref: ../nest/basal_vivo.yaml#/simulations/basal_activity/
+      ref: ../nest/basal_awake.yaml#/simulations/basal_activity/
       values:
         - simulator
         - resolution
@@ -106,7 +106,7 @@ simulations:
             - 65.0
             - 300.0
       $import:
-        ref: ../nest/stimulus_mossy_vivo.yaml#/simulations/mf_stimulus/devices/
+        ref: ../nest/stimulus_mossy_awake.yaml#/simulations/mf_stimulus/devices/
         values:
           - stimulus
     $import:

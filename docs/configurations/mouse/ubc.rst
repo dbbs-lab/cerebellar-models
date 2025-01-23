@@ -64,7 +64,7 @@ the numbers reported in :numref:`fig-network` and overrides the table :ref:`tabl
 NEST simulation
 ^^^^^^^^^^^^^^^
 
-As for the cerebellar cortex, we differentiate parameters for the ``in-vitro`` and ``behaving`` states.
+As for the cerebellar cortex, we differentiate parameters for the ``in-vitro`` and ``awake`` states.
 For UBC, however, we only have parameters for the `in-vitro` state.
 
 Neuron parameters

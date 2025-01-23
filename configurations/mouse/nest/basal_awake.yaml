@@ -1,4 +1,4 @@
-name: DBBS Mouse cerebellum NEST basal activity for in vivo state
+name: DBBS Mouse cerebellum NEST basal activity for in awake state
 storage:
   root: mouse_cereb_nest.hdf5
 simulations:

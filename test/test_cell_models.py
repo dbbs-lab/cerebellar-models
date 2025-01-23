@@ -49,14 +49,14 @@ class TestSingleCellModels(
                 "granule_cell": {"spatial": {"radius": 1, "count": 10}},
                 "golgi_cell": {"spatial": {"radius": 1, "count": 10}},
                 "purkinje_cell": {"spatial": {"radius": 1, "count": 10}},
-                "purkinje_vivo_cell": {"spatial": {"radius": 1, "count": 10}},
+                "purkinje_awake_cell": {"spatial": {"radius": 1, "count": 10}},
                 "basket_cell": {"spatial": {"radius": 1, "count": 10}},
                 "stellate_cell": {"spatial": {"radius": 1, "count": 10}},
                 "unipolar_brush_cell": {"spatial": {"radius": 1, "count": 10}},
                 "dcn_p_cell": {"spatial": {"radius": 1, "count": 10}},
-                "dcn_p_vivo_cell": {"spatial": {"radius": 1, "count": 10}},
+                "dcn_p_awake_cell": {"spatial": {"radius": 1, "count": 10}},
                 "dcn_i_cell": {"spatial": {"radius": 1, "count": 10}},
-                "dcn_i_vivo_cell": {"spatial": {"radius": 1, "count": 10}},
+                "dcn_i_awake_cell": {"spatial": {"radius": 1, "count": 10}},
             },
             "placement": {
                 "placement_A": {
@@ -65,14 +65,14 @@ class TestSingleCellModels(
                         "granule_cell",
                         "golgi_cell",
                         "purkinje_cell",
-                        "purkinje_vivo_cell",
+                        "purkinje_awake_cell",
                         "basket_cell",
                         "stellate_cell",
                         "unipolar_brush_cell",
                         "dcn_p_cell",
-                        "dcn_p_vivo_cell",
+                        "dcn_p_awake_cell",
                         "dcn_i_cell",
-                        "dcn_i_vivo_cell",
+                        "dcn_i_awake_cell",
                     ],
                     "partitions": ["B"],
                     "positions": [[1, 1, 1]] * 10,
@@ -99,9 +99,9 @@ class TestSingleCellModels(
                                 "unipolar_brush_cell",
                             ],
                         },
-                        "purkinje_vivo_cell": {
+                        "purkinje_awake_cell": {
                             "$import": {
-                                "ref": "../configurations/mouse/nest/basal_vivo.yaml#/simulations/basal_activity/cell_models/purkinje_cell",
+                                "ref": "../configurations/mouse/nest/basal_awake.yaml#/simulations/basal_activity/cell_models/purkinje_cell",
                                 "values": ["constants", "model"],
                             }
                         },
@@ -111,9 +111,9 @@ class TestSingleCellModels(
                                 "values": ["constants", "model"],
                             }
                         },
-                        "dcn_p_vivo_cell": {
+                        "dcn_p_awake_cell": {
                             "$import": {
-                                "ref": "../configurations/mouse/dcn-io/dcn_io_vivo_nest.yaml#/simulations/basal_activity/cell_models/dcn_p",
+                                "ref": "../configurations/mouse/dcn-io/dcn_io_awake_nest.yaml#/simulations/basal_activity/cell_models/dcn_p",
                                 "values": ["constants", "model"],
                             }
                         },
@@ -123,9 +123,9 @@ class TestSingleCellModels(
                                 "values": ["constants", "model"],
                             }
                         },
-                        "dcn_i_vivo_cell": {
+                        "dcn_i_awake_cell": {
                             "$import": {
-                                "ref": "../configurations/mouse/dcn-io/dcn_io_vivo_nest.yaml#/simulations/basal_activity/cell_models/dcn_i",
+                                "ref": "../configurations/mouse/dcn-io/dcn_io_awake_nest.yaml#/simulations/basal_activity/cell_models/dcn_i",
                                 "values": ["constants", "model"],
                             }
                         },
@@ -143,12 +143,12 @@ class TestSingleCellModels(
                                 "unipolar_brush_record",
                             ],
                         },
-                        "purkinje_vivo_record": {
+                        "purkinje_awake_record": {
                             "device": "spike_recorder",
                             "delay": 0.1,
                             "targetting": {
                                 "strategy": "cell_model",
-                                "cell_models": ["purkinje_vivo_cell"],
+                                "cell_models": ["purkinje_awake_cell"],
                             },
                         },
                         "dcn_p_record": {
@@ -158,12 +158,12 @@ class TestSingleCellModels(
                             },
                             "targetting": {"strategy": "cell_model", "cell_models": ["dcn_p_cell"]},
                         },
-                        "dcn_p_vivo_record": {
+                        "dcn_p_awake_record": {
                             "device": "spike_recorder",
                             "delay": 0.1,
                             "targetting": {
                                 "strategy": "cell_model",
-                                "cell_models": ["dcn_p_vivo_cell"],
+                                "cell_models": ["dcn_p_awake_cell"],
                             },
                         },
                         "dcn_i_record": {
@@ -173,12 +173,12 @@ class TestSingleCellModels(
                             },
                             "targetting": {"strategy": "cell_model", "cell_models": ["dcn_i_cell"]},
                         },
-                        "dcn_i_vivo_record": {
+                        "dcn_i_awake_record": {
                             "device": "spike_recorder",
                             "delay": 0.1,
                             "targetting": {
                                 "strategy": "cell_model",
-                                "cell_models": ["dcn_i_vivo_cell"],
+                                "cell_models": ["dcn_i_awake_cell"],
                             },
                         },
                     },
@@ -250,7 +250,7 @@ class TestSingleCellModels(
                 "starts": [10, 12, 14],
                 "stops": [11, 13, 14.01],
             },
-            "purkinje_vivo": {
+            "purkinje_awake": {
                 "amplitudes": [500, 1000, 2400],
                 "starts": [10, 12, 14],
                 "stops": [11, 13, 14.01],
@@ -275,7 +275,7 @@ class TestSingleCellModels(
                 "starts": [10, 12, 14],
                 "stops": [11, 13, 15],
             },
-            "dcn_p_vivo": {
+            "dcn_p_awake": {
                 "amplitudes": [142, 284, 426],
                 "starts": [10, 12, 14],
                 "stops": [11, 13, 15],
@@ -285,7 +285,7 @@ class TestSingleCellModels(
                 "starts": [10, 12, 14],
                 "stops": [11, 13, 15],
             },
-            "dcn_i_vivo": {
+            "dcn_i_awake": {
                 "amplitudes": [56, 112, 168],
                 "starts": [10, 12, 14],
                 "stops": [11, 13, 15],
@@ -295,14 +295,17 @@ class TestSingleCellModels(
             "golgi": {"autorhythm": 12.8, "slope": 0.2},
             "granule": {"autorhythm": 0.0, "slope": 3.70},
             "purkinje": {"autorhythm": 45.6, "slope": 0.08},
-            "purkinje_vivo": {"autorhythm": 83.2, "slope": 0.095},  # to match Geminiani et al. 2024
+            "purkinje_awake": {
+                "autorhythm": 83.2,
+                "slope": 0.095,
+            },  # to match Geminiani et al. 2024
             "basket": {"autorhythm": 9.51, "slope": 2.16},
             "stellate": {"autorhythm": 9.51, "slope": 2.16},
             "unipolar_brush": {"autorhythm": 0.0, "slope": 2.35},  # no source available
             "dcn_p": {"autorhythm": 32.9, "slope": 0.28},  # f tonic slightly increased (+~1.4Hz)
             "dcn_i": {"autorhythm": 14.1, "slope": 0.4},  # f tonic slightly decreased (-~0.3Hz)
-            "dcn_p_vivo": {"autorhythm": 61.78, "slope": 0.256},  # to match Geminiani et al. 2024
-            "dcn_i_vivo": {"autorhythm": 14.11, "slope": 0.44},  # to match Geminiani et al. 2024
+            "dcn_p_awake": {"autorhythm": 61.78, "slope": 0.256},  # to match Geminiani et al. 2024
+            "dcn_i_awake": {"autorhythm": 14.11, "slope": 0.44},  # to match Geminiani et al. 2024
         }
         for cell_type in predicted:
             for i, stim in enumerate(protocol[cell_type]["amplitudes"]):

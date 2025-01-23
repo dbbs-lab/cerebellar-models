@@ -165,10 +165,10 @@ The postsynaptic receptor parameters are listed in Table 2 of Geminiani et al. (
    set to :math:`\dfrac{1}{\tau_m}` to have stable oscillations but this is not the case for most of
    the :math:`k_2` parameters listed in  Geminiani et al. (2019) paper [#geminiani_2019]_ .
 
-Behaving state
---------------
+Awake state
+-----------
 
-The parameters for the behaving state are the same as the `in-vitro` state, except for the PC for which
+The parameters for the awake state are the same as the `in-vitro` state, except for the PC for which
 the endogenous current :math:`I_e` is set to 700 pA and :math:`\lambda_0` :math:`\tau_V` were changed to
 increase the F/I curve slope. We target here ~80 Hz of tonic firing rate to match the range of Table 1
 from Geminiani et al. 2024 [#geminiani_2024]_.
@@ -226,12 +226,12 @@ to the postsynaptic receptor used for the connection (see table :ref:`table-rece
    ~15 Hz for both BC and SC. Then aa-PC, pf-PC were decreased to maintain the PC in a stable low activity ~50Hz.
    Finally, the SC-PC was scaled to take into account the increase of synapses from the connectivity rule.
 
-Behaving state
---------------
+Awake state
+-----------
 
-The parameters for the behaving state are the same as the `in-vitro` state, except for some of the connections:
+The parameters for the awake state are the same as the `in-vitro` state, except for some of the connections:
 
-.. csv-table:: Behaving Presynaptic parameters
+.. csv-table:: Awake Presynaptic parameters
    :header-rows: 1
    :delim: ;
 
@@ -314,8 +314,8 @@ follows (expressed in mean :math:`\pm` standard deviation):
     Basket cell;:math:`16 \pm 7.7`; :math:`77 \pm 45`
     Stellate cell;:math:`13 \pm 11`; :math:`180 \pm 240`
 
-Behaving state
-++++++++++++++
+Awake state
++++++++++++
 
 .. csv-table:: Results of the canonical circuit in basal activity
    :header-rows: 1
@@ -360,8 +360,8 @@ neuron population are as follows (expressed in mean :math:`\pm` standard deviati
     Basket cell;:math:`59 \pm 88`; :math:`12 \pm 7.3`
     Stellate cell;:math:`52 \pm 47`; :math:`14 \pm 7.5`
 
-Behaving state
-++++++++++++++
+Awake state
++++++++++++
 
 .. csv-table:: Results of the canonical circuit during stimulus of the mossy
    :header-rows: 1
