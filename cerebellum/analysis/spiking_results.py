@@ -289,7 +289,7 @@ class SpikeSimulationReport(BSBReport):
                 all_spikes[(spikes, senders)] = True
         nb_neurons = np.zeros(len(cell_dict), dtype=int)
         for i, uf in enumerate(cell_dict.keys()):
-            nb_neurons[i] = np.where(u_cell_types == i)[0].size
+            nb_neurons[i] = len(cell_dict[uf]["senders"])
         return all_spikes, nb_neurons, list(cell_dict.keys())
 
     def add_plot(self, name: str, plot: Plot):
@@ -403,16 +403,17 @@ class RasterPSTHPlot(SpikePlot):
         for i, ct in enumerate(self.populations):
             times, newIds = np.where(loc_spikes[:, int(counts[i]) : int(counts[i + 1])])
             cell_params = loc_params_raster.copy()
-            if "s" not in cell_params:
+            if "s" not in cell_params and self.nb_neurons[i] > 0:
                 cell_params["s"] = 50.0 / self.nb_neurons[i]
             color = self.dict_colors[ct][:3] if ct in self.dict_colors else [0.6, 0.6, 0.6]
             ax = self.get_ax(i)[0]
-            ax.scatter(
-                times * self.dt,
-                newIds,
-                color=color,
-                **cell_params,
-            )
+            if self.nb_neurons[i] > 0:
+                ax.scatter(
+                    times * self.dt,
+                    newIds,
+                    color=color,
+                    **cell_params,
+                )
             ax.invert_yaxis()
             ax.set_xlim(
                 [0, self.time_to - self.time_from]
@@ -424,7 +425,8 @@ class RasterPSTHPlot(SpikePlot):
             ax.set_title(f"{ct}")
 
             ax = self.get_ax(i)[1]
-            ax.hist(times * self.dt, bin_times, color=color, **params_psth)
+            if self.nb_neurons[i] > 0:
+                ax.hist(times * self.dt, bin_times, color=color, **params_psth)
             ax.set_xlabel("Time in ms")
             ax.set_xlim(
                 [0, self.time_to - self.time_from]
@@ -535,6 +537,8 @@ class FiringRatesPlot(Spike2Columns):
         self.firing_rates = np.zeros((loc_spikes.shape[0] - self.w_single * 2, num_filter))
         self.std_rates = np.zeros((loc_spikes.shape[0] - self.w_single * 2, num_filter))
         for i in range(num_filter):
+            if self.nb_neurons[i] <= 0:
+                continue  # pragma: nocover
             spikes = loc_spikes[:, int(counts[i]) : int(counts[i + 1])]
             if self.nb_neurons[i] > self.max_neuron_sampled:
                 spikes = spikes[
@@ -669,16 +673,13 @@ class ISIPlot(Spike2Columns):
             extract_isis(self.all_spikes[:, int(counts[i]) : int(counts[i + 1])], self.dt)
             for i in range(num_filter)
         ]
-        current_ax = 0
         for i, ct in enumerate(self.populations):
+            ax2 = self.get_ax(i)
             if len(isis_dist[i]) > 0:
-                ax2 = self.get_ax(current_ax)
                 ax2.hist(isis_dist[i], self.nb_bins, color=self.dict_colors[ct][:3], **kwargs)
-                ax2.set_xlabel("ISIs bins in ms")
-                ax2.set_yscale("log")
-                ax2.set_title(f"Distribution of {ct} ISIs")
-                current_ax += 1
-        self.set_axis_off(self.get_axes()[current_ax:])
+            ax2.set_xlabel("ISIs bins in ms")
+            ax2.set_yscale("log")
+            ax2.set_title(f"Distribution of {ct} ISIs")
 
 
 class FrequencyPlot(FiringRatesPlot):
@@ -742,6 +743,7 @@ class SimResultsTable(TablePlot, SpikePlot):
         nb_neurons: List,
         populations: List,
         dict_colors: dict = None,
+        dict_abv=None,
         **kwargs,
     ):
         super().__init__(
@@ -757,6 +759,8 @@ class SimResultsTable(TablePlot, SpikePlot):
             **kwargs,
         )
         self.columns = ["Firing rate [Hz]", "Inter Spike Intervals [ms]"]
+        self.dict_abv = dict_abv or {}
+        """Dictionary of abbreviations for cell types"""
 
     def plot(self, **kwargs):
         super().plot()
@@ -777,11 +781,15 @@ class SimResultsTable(TablePlot, SpikePlot):
             self._values.append([all_fr, isi])
             self.table_values.append(
                 [
-                    "{:.2} pm {:.2}".format(np.mean(all_fr), np.std(all_fr)),
+                    (
+                        "{:.2} pm {:.2}".format(np.mean(all_fr), np.std(all_fr))
+                        if len(all_fr) > 0
+                        else "/"
+                    ),
                     "{:.2} pm {:.2}".format(np.mean(isi), np.std(isi)) if len(isi) > 0 else "/",
                 ]
             )
-        self.rows = self.populations.copy()
+        self.rows = [(self.dict_abv[ct] if ct in self.dict_abv else ct) for ct in self.populations]
 
     def get_firing_rates(self):
         """
@@ -842,6 +850,7 @@ class BasicSimulationReport(SpikeSimulationReport):
             all_spikes=self.all_spikes,
             nb_neurons=self.nb_neurons,
             populations=self.populations,
+            dict_abv=self.abbreviations,
         )
         firing_rates = FiringRatesPlot(
             (15, 6),

@@ -97,7 +97,10 @@ spike over the simulation time interval, while its inter-spike interval
 corresponds to the mean of all mean inter-spike interval values computed
 for each of its neuron.
 
-Uses the same constructor parameters as ``SpikePlot``
+On top of the constructor parameters of ``SpikePlot``:
+
+* ``dict_abv``: Dictionary that links each cell type name to an abbreviation
+  to display
 
 
 .. _firing_rates:

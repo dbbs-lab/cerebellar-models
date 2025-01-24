@@ -164,27 +164,39 @@ class ConnectivityTable(TablePlot, ScaffoldPlot):
         Connection strategy name is assumed to be in the form A_B, where
         A is the presynaptic type name and B is the postsynaptic type name.
         """
-        splits = ps.tag.split("_")
+        for cs in self.scaffold.configuration.connectivity:
+            if cs in ps.tag:
+                if ps.tag == cs:
+                    splits = ps.tag
+                else:
+                    splits = ps.tag.split(cs + "_", 1)[-1]
+                break
+        splits = splits.split("_")
         tag = []
-        found = False
         to_convert = []
+
+        def parse_remains():
+            if len(to_convert) > 0:
+                to_test = "_".join(to_convert) + "_cell"
+                if to_test in self.dict_abv:
+                    return [self.dict_abv[to_test]]
+                else:
+                    return to_convert
+            return []
+
         for text in splits:
             if "to" == text:
-                tag.extend(to_convert)
+                tag.extend(parse_remains())
                 to_convert = []
-                if not found:
-                    tag.append(text)
-                    found = True
-                else:
-                    tag = [tag[-1], "to"]
+                tag.append("to")
             else:
                 to_convert.append(text)
-                to_convert = to_convert[-2:]
-                if "_".join(to_convert) in self.dict_abv:
-                    tag.append(self.dict_abv["_".join(to_convert)])
+                to_test = "_".join(to_convert)
+                if to_test in self.dict_abv:
+                    tag.append(self.dict_abv[to_test])
                     to_convert = []
-        if len(to_convert):
-            tag.extend(to_convert)
+        tag.extend(parse_remains())
+
         return " ".join(tag)
 
     def update(self):

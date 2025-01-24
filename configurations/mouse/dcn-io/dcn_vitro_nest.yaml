@@ -1,8 +1,8 @@
-name: DBBS Mouse cerebellum w/ DCN NEST basal activity and mf stimulus
+name: DBBS Mouse cerebellum w/ DCN NEST basal activity and mf stimulus for in vitro state
 storage:
   root: mouse_cereb_dcn_nest.hdf5
 packages:
-  - bsb-nest~=4.2
+  - bsb-nest~=4.3
 components:
   - cerebellum/nest_models/build_models.py
 simulations:
@@ -16,10 +16,10 @@ simulations:
           V_th: -36
           V_reset: -55
           E_L: -45
-          I_e: 150 # 75.385
+          I_e: 75.385
           V_m: -45
-          lambda_0: 1. # 0.001
-          tau_V: 0.3   # 0.5
+          lambda_0: 1.5
+          tau_V: 1.
           tau_m: 33
           k_adap: 0.408
           k_1: 0.697
@@ -38,10 +38,10 @@ simulations:
           V_th: -39
           V_reset: -55
           E_L: -40
-          I_e: 10. # 2.384
+          I_e: 2.384
           V_m: -40
-          lambda_0: 1. # 0.001
-          tau_V: 0.3  # 0.5
+          lambda_0: 0.9
+          tau_V: 1.0
           tau_m: 56
           k_adap: 0.079
           k_1: 0.041
@@ -56,19 +56,19 @@ simulations:
       mossy_fibers_to_dcn_p:
         synapse:
           model: static_synapse
-          weight: 0.25 # 0.05
+          weight: 0.25
           delay: 4.
           receptor_type: 1
       purkinje_to_dcn_p:
         synapse:
           model: static_synapse
-          weight: 3. # 0.4
+          weight: 0.8
           delay: 4.
           receptor_type: 2
       purkinje_to_dcn_i:
         synapse:
           model: static_synapse
-          weight: 0.4 # 0.12
+          weight: 0.06
           delay: 4.
           receptor_type: 2
     devices:
@@ -87,7 +87,7 @@ simulations:
           cell_models:
             - dcn_i
     $import:
-      ref: ../nest/basal.yaml#/simulations/basal_activity/
+      ref: ../nest/basal_vitro.yaml#/simulations/basal_activity/
       values:
         - simulator
         - resolution
@@ -106,7 +106,7 @@ simulations:
             - 65.0
             - 300.0
       $import:
-        ref: ../nest/stimulus_mossy.yaml#/simulations/mf_stimulus/devices/
+        ref: ../nest/stimulus_mossy_vitro.yaml#/simulations/mf_stimulus/devices/
         values:
           - stimulus
     $import:
@@ -122,7 +122,7 @@ simulations:
         - connection_models
         - devices
 $import:
-  ref: ../dcn-io/dcn.yaml#/
+  ref: ./dcn.yaml#/
   values:
     - packages
     - storage
@@ -133,4 +133,4 @@ $import:
     - cell_types
     - placement
     - connectivity
-    # - after_connectivity
+    - after_connectivity

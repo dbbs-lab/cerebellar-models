@@ -106,7 +106,7 @@ simulations:
           delay: 4
           receptor_type: 2
       $import:
-        ref: ../nest/stimulus_mossy.yaml#/simulations/basal_activity/connection_models
+        ref: ../nest/stimulus_mossy_vitro.yaml#/simulations/basal_activity/connection_models
         values:
           - mossy_fibers_to_glomerulus
           - golgi_to_golgi
@@ -129,7 +129,7 @@ simulations:
           cell_models:
             - unipolar_brush_cell
     $import:
-      ref: ../nest/stimulus_mossy.yaml#/simulations/basal_activity
+      ref: ../nest/stimulus_mossy_vitro.yaml#/simulations/basal_activity
       values:
         - cell_models
         - devices
@@ -142,7 +142,7 @@ simulations:
     seed: 1234
     devices:
       $import:
-        ref: ../nest/stimulus_mossy.yaml#/simulations/mf_stimulus/devices
+        ref: ../nest/stimulus_mossy_vitro.yaml#/simulations/mf_stimulus/devices
         values:
           - stimulus
     $import:
@@ -152,7 +152,7 @@ simulations:
         - connection_models
         - devices
 $import:
-  ref: ../nest/stimulus_mossy.yaml#/
+  ref: ../nest/stimulus_mossy_vitro.yaml#/
   values:
     - packages
     - components
@@ -164,3 +164,4 @@ $import:
     - cell_types
     - placement
     - connectivity
+    - after_connectivity

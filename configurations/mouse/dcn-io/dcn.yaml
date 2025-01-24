@@ -17,13 +17,13 @@ cell_types:
   dcn_p:
     spatial:
       radius: 9.5
-      density: 9.92e-6 # 1.33e-6
+      density: 9.92e-6
     plotting:
       display_name: Deep Cerebellar Nuclei type p
   dcn_i:
     spatial:
       radius:  7.0
-      density: 5.58e-6 # 0.7182e-6
+      density: 5.58e-6
     plotting:
       display_name: Deep Cerebellar Nuclei type i
 placement:
@@ -42,7 +42,7 @@ placement:
 connectivity:
   purkinje_to_dcn_p:
     strategy: bsb.connectivity.FixedOutdegree
-    outdegree: 45 # 5
+    outdegree: 45
     presynaptic:
       cell_types:
         - purkinje_cell
@@ -53,7 +53,7 @@ connectivity:
         - dcn_p
   purkinje_to_dcn_i:
     strategy: bsb.connectivity.FixedOutdegree
-    outdegree: 12 # 5
+    outdegree: 12
     presynaptic:
       cell_types:
         - purkinje_cell
@@ -64,7 +64,7 @@ connectivity:
         - dcn_i
   mossy_fibers_to_dcn_p:
     strategy: bsb.connectivity.FixedIndegree
-    indegree: 48 # 147 (not possible because in canonical n_mf=117)
+    indegree: 48
     presynaptic:
       cell_types:
         - mossy_fibers
@@ -83,4 +83,4 @@ $import:
     - cell_types
     - placement
     - connectivity
-    # - after_connectivity
+    - after_connectivity

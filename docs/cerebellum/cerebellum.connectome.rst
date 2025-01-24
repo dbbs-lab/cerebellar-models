@@ -67,3 +67,11 @@ cerebellum.connectome.io_molecular module
    :members:
    :undoc-members:
    :show-inheritance:
+
+cerebellum.connectome.io_purkinje module
+----------------------------------------
+
+.. automodule:: cerebellum.connectome.io_purkinje
+   :members:
+   :undoc-members:
+   :show-inheritance:
