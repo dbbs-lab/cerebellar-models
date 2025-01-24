@@ -73,7 +73,7 @@ class MorphologyBender:
 
         :rtype: numpy.ndarray
         """
-        loc_orient = self.partition.sources["orientations"].raw
+        loc_orient = self.partition.datasets["orientations"].raw
         loc_orient /= np.linalg.norm(loc_orient, axis=3)[..., np.newaxis]
         if 0 <= self.fixed_dimension <= 2:
             loc_orient[..., self.fixed_dimension] = 0.0
@@ -87,7 +87,7 @@ class MorphologyBender:
 
         :rtype: numpy.ndarray
         """
-        return self.partition.sources["thicknesses"].raw * self.partition.voxel_size
+        return self.partition.datasets["thicknesses"].raw * self.partition.voxel_size
 
     @functools.cached_property
     def boundaries(self):
@@ -97,7 +97,7 @@ class MorphologyBender:
 
         :rtype: numpy.ndarray
         """
-        return self.partition.sources["boundaries"].raw.reshape(self.annotations.shape + (3, 3, 3))
+        return self.partition.datasets["boundaries"].raw.reshape(self.annotations.shape + (3, 3, 3))
 
     def get_lay_abv(self, point):
         """
@@ -318,7 +318,7 @@ class MorphologyBender:
         stack_data = []
         for branch in morphology.roots:
             try:
-                rotation = self.partition.voxel_rotation_of(
+                rotation = self.partition.mask_source.voxel_rotation_of(
                     self.orientation_field,
                     branch.points[0],
                 )
@@ -418,7 +418,7 @@ class MorphologyBender:
             if NrrdDependencyNode.is_within(uniq_vox, self.orientation_field):
                 translation_vec = (
                     uniq_vox + 0.5
-                ) * self.partition.voxel_size + self.partition.space_origin
+                ) * self.partition.voxel_size + self.partition.mask_source.space_origin
                 for j, morpho in enumerate(u_morpho):
                     deformed_morpho = morpho.copy()
                     deformed_morpho.translate(translation_vec)

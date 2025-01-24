@@ -87,26 +87,16 @@ partitions:
     type: allen
     struct_name: DEC
     mask_source: data/corrections_cereb/annotations_pu.nrrd
-    keys:
-      - mossy_fiber_density
-      - glomerulus_density
-      - ubc_glomerulus_density
-      - granule_density
-      - golgi_density
-      - unipolar_brush_density
-      - purkinje_density
-      - basket_density
-      - stellate_density
     sources:
-      - data/corrections_cereb/density_volumes/mossy_fiber_density.nrrd
-      - data/corrections_cereb/density_volumes/glomerulus_density.nrrd
-      - data/corrections_cereb/density_volumes/ubc_glomerulus_density.nrrd
-      - data/corrections_cereb/density_volumes/granule_density.nrrd
-      - data/corrections_cereb/density_volumes/golgi_density.nrrd
-      - data/corrections_cereb/density_volumes/unipolar_brushed_density.nrrd
-      - data/corrections_cereb/density_volumes/purkinje_density.nrrd
-      - data/corrections_cereb/density_volumes/basket_density.nrrd
-      - data/corrections_cereb/density_volumes/stellate_density.nrrd
+      mossy_fiber_density: data/corrections_cereb/density_volumes/mossy_fiber_density.nrrd
+      glomerulus_density: data/corrections_cereb/density_volumes/glomerulus_density.nrrd
+      ubc_glomerulus_density: data/corrections_cereb/density_volumes/ubc_glomerulus_density.nrrd
+      granule_density: data/corrections_cereb/density_volumes/granule_density.nrrd
+      golgi_density: data/corrections_cereb/density_volumes/golgi_density.nrrd
+      unipolar_brush_density: data/corrections_cereb/density_volumes/unipolar_brushed_density.nrrd
+      purkinje_density: data/corrections_cereb/density_volumes/purkinje_density.nrrd
+      basket_density: data/corrections_cereb/density_volumes/basket_density.nrrd
+      stellate_density: data/corrections_cereb/density_volumes/stellate_density.nrrd
     atlas_datasets:
       orientations: data/corrections_cereb/orientations.nrrd
       thicknesses: data/corrections_cereb/all_depths.nrrd
