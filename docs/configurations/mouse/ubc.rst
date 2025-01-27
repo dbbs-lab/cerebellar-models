@@ -64,6 +64,9 @@ the numbers reported in :numref:`fig-network` and overrides the table :ref:`tabl
 NEST simulation
 ^^^^^^^^^^^^^^^
 
+As for the cerebellar cortex, we differentiate parameters for the ``in-vitro`` and ``awake`` states.
+For UBC, however, we only have parameters for the `in-vitro` state.
+
 Neuron parameters
 +++++++++++++++++
 
@@ -135,6 +138,9 @@ Basal activity
 For this simulation, the mean firing rates and mean ISI obtained for each neuron population are as
 follows (expressed in mean :math:`\pm` standard deviation):
 
+`In-vitro` state
+----------------
+
 .. csv-table:: Results of the canonical circuit with UBC in basal activity
    :header-rows: 1
    :delim: ;
@@ -142,9 +148,9 @@ follows (expressed in mean :math:`\pm` standard deviation):
     Cell name;Mean Firing rate (Hz); Mean ISI (ms)
     Mossy cell; :math:`4.1 \pm 0.93`; :math:`240 \pm 61`
     Granule cell; :math:`2.9 \pm 2.1`; :math:`480 \pm 440`
-    Unipolar brush cell; :math:`0.2 \pm 0`; not enough spikes per neuron
+    Unipolar brush cell; :math:`0.21 \pm 0`; 1100 pm 91
     Golgi cell;:math:`7.4 \pm 4.2`; :math:`220 \pm 270`
-    Purkinje cell;:math:`48 \pm 1.6`; :math:`21 \pm 0.73`
+    Purkinje cell;:math:`46 \pm 0.89`; :math:`22 \pm 0.42`
     Basket cell;:math:`19 \pm 8.4`; :math:`70 \pm 47`
     Stellate cell;:math:`24 \pm 13`; :math:`80 \pm 130`
 
@@ -154,18 +160,21 @@ Mossy fiber stimulus
 For this simulation, **during the stimulus**, the mean firing rates and mean ISI obtained for each
 neuron population are as follows (expressed in mean :math:`\pm` standard deviation):
 
+`In-vitro` state
+----------------
+
 .. csv-table:: Results of the canonical circuit with UBC during stimulus of the mossy
    :header-rows: 1
    :delim: ;
 
     Cell name;Mean Firing rate (Hz); Mean ISI (ms)
-    Mossy cell; :math:`46 \pm 73`; :math:`6.3 \pm 2.8`
-    Granule cell; :math:`19 \pm 36`; :math:`9.2 \pm 4.8`
-    Unipolar brush cell; :math:`16 \pm 8.1`; not enough spikes per neuron
+    Mossy cell; :math:`43 \pm 68`; :math:`6.8 \pm 3.5`
+    Granule cell; :math:`20 \pm 3.7`; :math:`9.7 \pm 5.0`
+    Unipolar brush cell; :math:`16 \pm 7.9`; not enough spikes per neuron
     Golgi cell;:math:`32 \pm 16`; :math:`7.2 \pm 3.5`
-    Purkinje cell;:math:`59 \pm 15`; :math:`15 \pm 2.9`
-    Basket cell;:math:`73 \pm 53`; :math:`8.4 \pm 4.1`
-    Stellate cell;:math:`98 \pm 68`; :math:`7.9 \pm 5.3`
+    Purkinje cell;:math:`55 \pm 10`; :math:`17 \pm 5.5`
+    Basket cell;:math:`42 \pm 35`; :math:`14 \pm 5.5`
+    Stellate cell;:math:`37 \pm 35`; :math:`14 \pm 6.0`
 
 References
 ^^^^^^^^^^

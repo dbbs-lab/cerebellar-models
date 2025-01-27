@@ -43,17 +43,21 @@ Connectivity
    22; IO; /; PC; / ; :ref:`fix_in`;``indegree`` = 1; Geminiani et al. (2024) [#geminiani_2024]_
    23; IO; /; SC; / ; :ref:`io_mli`; / ; Geminiani et al. (2024) [#geminiani_2024]_
    23; IO; /; BC; / ; :ref:`io_mli`; / ; Geminiani et al. (2024) [#geminiani_2024]_
-   24; IO; / ; DCNp ; / ; :ref:`all_to_all`; / ; Geminiani et al. (2024) [#geminiani_2024]_
-   25; IO; /; DCNi; / ; :ref:`all_to_all`; / ; Geminiani et al. (2024) [#geminiani_2024]_
-   26; DCNi; / ; IO ; / ; :ref:`all_to_all`; / ; Geminiani et al. (2024) [#geminiani_2024]_
+   24; IO; / ; DCNp ; / ; :ref:`fix_out`; ``outdegree`` = 60 ; Geminiani et al. (2024) [#geminiani_2024]_
+   25; IO; /; DCNi; / ; :ref:`fix_out`; ``outdegree`` = 33 ; Geminiani et al. (2024) [#geminiani_2024]_
+   26; DCNi; / ; IO ; / ; :ref:`fix_in`; ``indegree`` = 33 ; Geminiani et al. (2024) [#geminiani_2024]_
 
 NEST simulation
 ^^^^^^^^^^^^^^^
+
+As for the cerebellar cortex, we differentiate parameters for the ``in-vitro`` and ``awake`` states.
 
 Neuron parameters
 +++++++++++++++++
 IO population was represented as an EGLIF point neuron model (see :doc:`NEST section <nest>`).
 Parameters sets for IO neurons are taken from Geminiani et al (2019) [#geminiani_2019]_.
+The IO neuron parameters are the same for the `in-vitro` and awake state because we do not have a reference
+parameter set for this cell.
 The default LIF parameters are reported below:
 
 .. csv-table:: LIF neuron parameters for IO
@@ -93,28 +97,39 @@ IO connections are represented as ``static synapses`` (see :doc:`NEST section <n
 the postsynaptic receptors used for the connections.
 It is still unclear from the references how these parameters were optimized.
 
+.. warning::
+   The reported values were manually adjusted through trial and error to ensure a reasonable excitation/inhibition ratio
+   on IO target populations.
+
+`In-vitro` state
+----------------
+
 .. csv-table:: Presynaptic parameters for IO connections
    :header-rows: 1
    :delim: ;
 
     Source-Target;:math:`weight \ (nS)`;:math:`delay \ (ms)`; Receptor id
-    IO-PC; 300; 4;3
-    IO-MLI; 5.0; 40 ; 3
+    IO-PC; 0.6; 4;3
+    IO-BC; 5.0; 40 ; 3
+    IO-SC; 6.5; 40 ; 3
     IO-DCNp; 0.5; 4; 1
-    IO-DCNi; 0.5; 5; 1
+    IO-DCNi; 0.25; 5; 1
     DCNi-IO; 0.45; 25; 2
 
-.. warning::
-   The reported values were manually adjusted through trial and error to ensure a reasonable excitation/inhibition ratio
-   on IO target populations.
+Awake state
+-----------
 
-   * :math:`weight` (IO-MLI): 2.5 → 5.0 (nS);
-   * :math:`weight` (IO-DCNp): 2.5 → 0.5 (nS);
-   * :math:`weight` (IO-DCNi): 0.1 → 0.5 (nS);
-   * :math:`weight` (DCNi-IO): 0.75 → 0.45 (nS);
+.. csv-table:: Presynaptic parameters for IO connections
+   :header-rows: 1
+   :delim: ;
 
-Inhibition
-##########
+    Source-Target;:math:`weight \ (nS)`;:math:`delay \ (ms)`; Receptor id
+    IO-PC; 1.6; 4;3
+    IO-BC; 5.0; 40 ; 3
+    IO-SC; 5.0; 40 ; 3
+    IO-DCNp; 0.4; 4; 1
+    IO-DCNi; 0.25; 5; 1
+    DCNi-IO; 0.45; 25; 2
 
 Simulation paradigms
 ++++++++++++++++++++
@@ -124,35 +139,55 @@ including all the simulation paradigms described in the :doc:`NEST section <nest
 circuit.
 
 Basal activity
-##############
+--------------
 
 No basal activity changes are observed in the cerebellar network beacause IO presents no autorhythm [#de_gruijl_2012]_
 [#lefler_2013]_.
 
 Stimulation protocol
-####################
+--------------------
 
 To test the functionality of the entire olivocerebellar network, another stimulation protocol was used. It
 simulates the Eyeblink Classical Conditioning, a Pavlovian conditioning consisting in a conditioned stimulus (CS),
 typically a light, paired with an unconditioned stimulus (US), usually an air puff to the eye.
 According to Geminiani et al., 2024 [#geminiani_2024]_, a CS of ``40 Hz``  arrives on ``mossy_fibers`` in the
-interval ``[1000, 1260] ms``, while a US of ``500 Hz`` arrives as a burst on ``io`` in the interval ``[1250, 1260] ms``.
+interval ``[1000, 1250] ms``, while a US of ``500 Hz`` arrives as a burst on ``io`` in the interval ``[1250, 1260] ms``.
 
-.. csv-table:: Results of the canonical circuit with DCN and IO during stimulus of the mossy and the inferior olive
+`In-vitro` state
+################
+
+.. csv-table:: Results of the canonical circuit in `in-vitro` state with DCN and IO during stimulus of the mf and the IO
    :header-rows: 1
    :delim: ;
 
     Cell name;Mean Firing rate (Hz) [CS]; Mean ISI (ms) [CS]; Mean Firing rate (Hz) [CS+US]; Mean ISI (ms) [CS+US]
-    Mossy cell; :math:`44 \pm 27`; :math:`13 \pm 8`; :math:`42 \pm 76`; :math:`2.1 \pm 1.7`
-    Granule cell; :math:`24 \pm 40`; :math:`12 \pm 8.6`; :math:`30 \pm 57`; :math:`6.2 \pm 1.2`
-    Golgi cell;:math:`40 \pm 16`; :math:`8.1 \pm 5.8`; :math:`80 \pm 65`; :math:`6.5 \pm 1.2`
-    Purkinje cell;:math:`66 \pm 19`; :math:`16.0 \pm 4.6`; :math:`130 \pm 80`; :math:`3.2 \pm 1.8`
-    Basket cell;:math:`130 \pm 62`; :math:`7.7 \pm 4.1`; :math:`100 \pm 110`; :math:`5.1 \pm 1.5`
-    Stellate cell;:math:`140 \pm 100`; :math:`7.2 \pm 5.7`; :math:`150 \pm 130`; :math:`4.5 \pm 1.4`
-    DCNp; :math:`32 \pm 15`; :math:`29.0 \pm 7.1`; :math:`40 \pm 49`; not enough spikes per neuron
-    DCNi; :math:`3.7 \pm 7.8`; not enough spikes per neuron;  :math:`4.6 \pm 21`; not enough spikes per neuron
-    IO; 0; no spikes; :math:`200 \pm 63`; :math:`2.10 \pm 0.58`
+    Mossy cell; :math:`44 \pm 13`; :math:`22 \pm 8.0`; :math:`38 \pm 60`; :math:`3.1 \pm 2.3`
+    Granule cell; :math:`21 \pm 30`; :math:`36 \pm 36`; :math:`20 \pm 48`; :math:`6.1 \pm 1.1`
+    Golgi cell;:math:`42 \pm 17`; :math:`28 \pm 13`; :math:`26 \pm 50`; :math:`8.7 \pm 0.2`
+    Purkinje cell;:math:`55 \pm 5.9`; :math:`18.0 \pm 2.0`; :math:`140 \pm 100`; :math:`3.1 \pm 2.8`
+    Basket cell;:math:`66 \pm 24`; :math:`19 \pm 9.5`; :math:`61 \pm 49`; not enough spikes per neuron
+    Stellate cell;:math:`46 \pm 43`; :math:`31 \pm 31`; :math:`48 \pm 57`; :math:`7.2 \pm 1.1`
+    DCNp; :math:`30 \pm 4.7`; :math:`33 \pm 5.2`; :math:`33 \pm 47`; not enough spikes per neuron
+    DCNi; :math:`11 \pm 2.3`; :math:`93 \pm 11`;  :math:`12 \pm 32`; not enough spikes per neuron
+    IO; 0; no spikes; :math:`270 \pm 120`; :math:`1.9 \pm 0.5`
 
+Awake state
+###########
+
+.. csv-table:: Results of the canonical circuit in awake state with DCN and IO during stimulus of the mf and the IO
+   :header-rows: 1
+   :delim: ;
+
+    Cell name;Mean Firing rate (Hz) [CS]; Mean ISI (ms) [CS]; Mean Firing rate (Hz) [CS+US]; Mean ISI (ms) [CS+US]
+    Mossy cell; :math:`43 \pm 13`; :math:`23 \pm 8.1`; :math:`46 \pm 68`; :math:`2.8 \pm 1.8`
+    Granule cell; :math:`22 \pm 35`; :math:`34 \pm 37`; :math:`22 \pm 50`; :math:`6.4 \pm 1.2`
+    Golgi cell;:math:`42 \pm 21`; :math:`29 \pm 15`; :math:`22 \pm 45`; :math:`7.0 \pm 0.0`
+    Purkinje cell;:math:`140 \pm 14`; :math:`7.1 \pm 0.71`; :math:`300 \pm 150`; :math:`2.7 \pm 1.9`
+    Basket cell;:math:`83 \pm 49`; :math:`19 \pm 21`; :math:`55 \pm 54`; :math:`6.3 \pm 1.1`
+    Stellate cell;:math:`74 \pm 68`; :math:`22 \pm 24`; :math:`57 \pm 81`; :math:`5.6 \pm 1.3`
+    DCNp; :math:`59 \pm 7.6`; :math:`17 \pm 2.1`; :math:`65 \pm 56`; :math:`6.0 \pm 2.7`
+    DCNi; :math:`11 \pm 2.0`; :math:`90 \pm 13`; :math:`9.1 \pm 29`; not enough spikes per neuron
+    IO; 0; no spikes; :math:`350 \pm 150`; :math:`1.9 \pm 0.78`
 
 References
 ^^^^^^^^^^

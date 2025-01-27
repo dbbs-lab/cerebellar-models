@@ -191,8 +191,9 @@ glomerulus.
 .. _io_mli:
 
 :class:`ConnectomeIO_MLI<.connectome.io_molecular.ConnectomeIO_MLI>`
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-The algorithm constists in a connection strategy to connect all the IO cells, via PC, to the molecular layer interneurons
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+The algorithm consists in a connection strategy to connect all the IO cells, via PC, to the molecular layer interneurons
 (MLI). Specifically, for each IO cell connected to a PC, the connection between this IO and MLI takes place in the subset
 of MLI connected to the shared PC.
 
@@ -245,4 +246,11 @@ See bsb :doc:`documentation <bsb:connectivity/connection-strategies>`.
 
 See bsb :doc:`documentation <bsb:connectivity/connection-strategies>`.
 
+
+:class:`DuplicateSynapses<.connectome.io_purkinje.DuplicateSynapses>`
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+BSB :class:`AfterConnectivityHook<bsb.postprocessing.AfterConnectivityHook>` to override the number of
+synapses per connection pair following a :doc:`scipy stats <scipy:reference/stats>` function,
+implemented as a random :class:`distribution <bsb.config._distributions.Distribution>`.
 

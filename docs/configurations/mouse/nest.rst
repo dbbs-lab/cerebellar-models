@@ -68,20 +68,31 @@ fibers only transmit spikes coming from other regions of the brain.
     :end-before: References
 
 .. warning::
-   The model described here is incorrect with respect to the other LIF based models because of the
+   The model described here is not matching the other LIF based models because of the
    sign in the membrane potential equations: the leak current should drive the membrane potential
    towards the resting state and not the opposite.
 
    Additionally, the model' s proof written in the paper seems to indicate that the model may
    produce unstable oscillations because of the freedom left to the adaptation parameters.
-
-   We have not being able to reproduce any of the results of the Geminiani et al. (2018 and 2019)
-   [#geminiani_2018]_ [#geminiani_2019]_, so we advise you to be very careful when using it.
    For instance, the granule cell model described below is spiking without any input after several
    seconds.
 
+   We have not being able to reproduce all the results of the Geminiani et al. (2018 and 2019)
+   [#geminiani_2018]_ [#geminiani_2019]_, so we advise you to be careful when using it.
+
 Neuron parameters
 +++++++++++++++++
+We consider here two types of mouse experiments that the `canonical circuit` model is reproducing
+in simulation:
+
+- The ``in-vitro`` experiments of a slice of isolated mouse cerebellar tissue.
+- The ``awake`` experiments of behaving mouse.
+
+Additionally, the ``awake`` state is derived from the ``in-vitro`` state, as only some cells and
+connections receive modifications.
+
+`In-vitro` state
+----------------
 
 The parameters for the eglif models are extracted from Table 2 and Table 3 in Geminiani et al.
 (2019) [#geminiani_2019]_. First, the default LIF parameters are as follows:
@@ -106,13 +117,18 @@ Then, the following parameters are optimized according to the method described i
     Cell name;:math:`k_{adap}\ (nS \cdot ms^{-1})`;:math:`k_1\ (ms^{-1})`;:math:`k_2\ (ms^{-1})`;:math:`A_1\ (pA)`;:math:`A_2\ (pA)`;:math:`I_e\ (pA)`
     Granule Cell; 0.022; 0.311; 0.041; 0.01; -0.94; -0.888
     Golgi Cell; 0.217; 0.031; 0.023; 259.988; 178.01; 16.214
-    Purkinje Cell; 1.491; 0.195; 0.041; 157.622; 172.622; 742.534
+    Purkinje Cell; 1.491; 0.195; 0.041; 157.622; 172.622; 590.0
     Basket and Stellate Cells; 2.025; 1.887; 1.096; 5.953; 5.863; 3.711
 
 .. warning::
-   It is not clear how the spiking parameters (i.e :math:`\lambda_0` and :math:`\tau_V`) are obtained
-   in the Geminiani et al. (2018) paper [#geminiani_2019]_ .
-   The values were extracted from a BSB configuration provided by the authors.
+   It is not clear how the spiking parameters (i.e :math:`\lambda_0` and :math:`\tau_V` and initial :math:`V_m`)
+   are obtained in the Geminiani et al. (2019) paper [#geminiani_2019]_ .
+   These parameters were manually set to reproduce the F/I curves from the Figure 4 and Figure 3 from
+   respectively Geminiani et al. (2018 and 2019) papers [#geminiani_2018]_ [#geminiani_2019]_.
+
+.. warning::
+   For the PC, we modified also the :math:`I_e` value so that the tonic firing rate of PC is ~45 Hz
+   [#telgkamp_2002]_ but maintained the F/I curve slope from the paper.
 
 The postsynaptic currents are integrated to the soma with alpha exponential functions. Each function
 is defined with a reversal potential parameter :math:`E_{rev}` and a time constant :math:`\tau_{syn}`.
@@ -149,6 +165,14 @@ The postsynaptic receptor parameters are listed in Table 2 of Geminiani et al. (
    set to :math:`\dfrac{1}{\tau_m}` to have stable oscillations but this is not the case for most of
    the :math:`k_2` parameters listed in  Geminiani et al. (2019) paper [#geminiani_2019]_ .
 
+Awake state
+-----------
+
+The parameters for the awake state are the same as the `in-vitro` state, except for the PC for which
+the endogenous current :math:`I_e` is set to 700 pA and :math:`\lambda_0` :math:`\tau_V` were changed to
+increase the F/I curve slope. We target here ~80 Hz of tonic firing rate to match the range of Table 1
+from Geminiani et al. 2024 [#geminiani_2024]_.
+
 Synapse models
 ^^^^^^^^^^^^^^
 
@@ -166,6 +190,9 @@ postsynaptic neurons after a provided delay.
 Synapse parameters
 ++++++++++++++++++
 
+`In-vitro` state
+----------------
+
 The synaptic parameters used for the `canonical circuit` corresponds to the one listed in Table B of
 supplementary document 1 in Geminiani et al. (2024) [#geminiani_2024]_. The receptor id corresponds
 to the postsynaptic receptor used for the connection (see table :ref:`table-receptor`).
@@ -181,18 +208,42 @@ to the postsynaptic receptor used for the connection (see table :ref:`table-rece
     GoC-GrC;0.24;2;2
     GoC-GoC;0.007;4;2
     GrC(aa)-GoC ;0.82;2;3
-    GrC(aa)-PC;0.88;2;1
+    GrC(aa)-PC;0.2;2;1
     GrC(pf)-GoC;0.05;5;3
-    GrC(pf)-PC;0.14;5;1
-    GrC(pf)-SC;0.18;5;1
-    GrC(pf)-BC;0.1;5;1
+    GrC(pf)-PC;0.05;5;1
+    GrC(pf)-SC;0.05;5;1
+    GrC(pf)-BC;0.04;5;1
     BC-PC;0.44;4;2
-    SC-PC;1.64;5;2
+    SC-PC;0.17;5;2
     BC-BC ;0.006;4;2
     SC-SC;0.005;4;2
 
 .. warning::
-   It is currently unclear how the synaptic parameters were optimized, or which features were targeted.
+   It is currently unclear from the paper, how the synaptic parameters were optimized, or which features were targeted.
+
+.. warning::
+   In our experiments, we decreased the weights for the pf-SC, pf-BC so that the activity of MLI lies around
+   ~15 Hz for both BC and SC [#kim_2021]_. Then aa-PC, pf-PC were decreased to maintain the PC in a stable
+   low activity ~50Hz [#telgkamp_2002]_.
+   Finally, the SC-PC was scaled to take into account the increase of synapses from the connectivity rule.
+
+Awake state
+-----------
+
+The parameters for the awake state are the same as the `in-vitro` state, except for some of the connections:
+
+.. csv-table:: Awake Presynaptic parameters
+   :header-rows: 1
+   :delim: ;
+
+    Source-Target;:math:`weight \ (nS)`;:math:`delay \ (ms)`; Receptor id
+    GrC(pf)-PC;0.14;5;1
+    GrC(aa)-PC;0.41;2;1
+    GrC(pf)-SC;0.08;5;1
+    GrC(pf)-BC;0.06;5;1
+    BC-PC;0.8;4;2
+
+Our target was to match the Table 1 from Geminiani et al. 2024 [#geminiani_2024]_.
 
 Simulation paradigms
 ^^^^^^^^^^^^^^^^^^^^
@@ -249,17 +300,35 @@ for each neuron population, we define:
 For this simulation, the mean firing rates and mean ISI obtained for each neuron population are as
 follows (expressed in mean :math:`\pm` standard deviation):
 
+`In-vitro` state
+++++++++++++++++
+
 .. csv-table:: Results of the canonical circuit in basal activity
    :header-rows: 1
    :delim: ;
 
     Cell name;Mean Firing rate (Hz); Mean ISI (ms)
-    Mossy cell; :math:`3.9 \pm 0.79`; :math:`250 \pm 59`
-    Granule cell; :math:`3.5 \pm 3.3`; :math:`510 \pm 510`
-    Golgi cell;:math:`13 \pm 4.1`; :math:`82 \pm 29`
-    Purkinje cell;:math:`49 \pm 2.9`; :math:`20 \pm 1.2`
-    Basket cell;:math:`32 \pm 13`; :math:`38 \pm 16`
-    Stellate cell;:math:`34 \pm 25`; :math:`66 \pm 73`
+    Mossy cell; :math:`4.0 \pm 1.4`; :math:`250 \pm 140`
+    Granule cell; :math:`3.4 \pm 3.4`; :math:`330 \pm 270`
+    Golgi cell;:math:`11 \pm 5.4`; :math:`120 \pm 94`
+    Purkinje cell;:math:`47 \pm 1.1`; :math:`22 \pm 0.48`
+    Basket cell;:math:`16 \pm 7.7`; :math:`77 \pm 45`
+    Stellate cell;:math:`13 \pm 11`; :math:`180 \pm 240`
+
+Awake state
++++++++++++
+
+.. csv-table:: Results of the canonical circuit in basal activity
+   :header-rows: 1
+   :delim: ;
+
+    Cell name;Mean Firing rate (Hz); Mean ISI (ms)
+    Mossy cell; :math:`4.0 \pm 1.4`; :math:`250 \pm 140`
+    Granule cell; :math:`3.4 \pm 3.4`; :math:`330 \pm 270`
+    Golgi cell;:math:`11 \pm 5.4`; :math:`120 \pm 94`
+    Purkinje cell;:math:`91 \pm 2.2`; :math:`11 \pm 0.27`
+    Basket cell;:math:`21 \pm 9.0`; :math:`56 \pm 25`
+    Stellate cell;:math:`18 \pm 14`; :math:`120 \pm 140`
 
 Mossy fiber stimulus
 ####################
@@ -277,17 +346,35 @@ On top of the basal paradigm, we introduce here a ``stimulus`` represented as a 
 For this simulation, **during the stimulus**, the mean firing rates and mean ISI obtained for each
 neuron population are as follows (expressed in mean :math:`\pm` standard deviation):
 
+`In-vitro` state
+++++++++++++++++
+
 .. csv-table:: Results of the canonical circuit during stimulus of the mossy
    :header-rows: 1
    :delim: ;
 
     Cell name;Mean Firing rate (Hz); Mean ISI (ms)
-    Mossy cell; :math:`48 \pm 76`; :math:`6.5 \pm 3.6`
-    Granule cell; :math:`28 \pm 57`; :math:`6.5 \pm 4.5`
-    Golgi cell;:math:`56 \pm 36`; :math:`5.6 \pm 2.2`
-    Purkinje cell;:math:`93 \pm 29`; :math:`9.4 \pm 3.0`
-    Basket cell;:math:`150 \pm 88`; :math:`4.4 \pm 1.4`
-    Stellate cell;:math:`190 \pm 98`; :math:`5.1 \pm 3.5`
+    Mossy cell; :math:`45 \pm 74`; :math:`6.5 \pm 3.`
+    Granule cell; :math:`21 \pm 46`; :math:`9.1 \pm 7.3`
+    Golgi cell;:math:`52 \pm 45`; :math:`17 \pm 12`
+    Purkinje cell;:math:`59 \pm 11`; :math:`17 \pm 3.7`
+    Basket cell;:math:`59 \pm 88`; :math:`12 \pm 7.3`
+    Stellate cell;:math:`52 \pm 47`; :math:`14 \pm 7.5`
+
+Awake state
++++++++++++
+
+.. csv-table:: Results of the canonical circuit during stimulus of the mossy
+   :header-rows: 1
+   :delim: ;
+
+    Cell name;Mean Firing rate (Hz); Mean ISI (ms)
+    Mossy cell; :math:`45 \pm 74`; :math:`6.5 \pm 3.`
+    Granule cell; :math:`21 \pm 46`; :math:`9.1 \pm 7.3`
+    Golgi cell;:math:`52 \pm 45`; :math:`17 \pm 12`
+    Purkinje cell;:math:`140 \pm 33`; :math:`7.1 \pm 1.9`
+    Basket cell;:math:`77 \pm 54`; :math:`8.7 \pm 5.9`
+    Stellate cell;:math:`71 \pm 55`; :math:`9.6 \pm 6.2`
 
 References
 ^^^^^^^^^^
@@ -308,3 +395,11 @@ References
    D’Angelo, E. (2024). Mesoscale simulations predict the role of synergistic cerebellar plasticity
    during classical eyeblink conditioning. PLOS Computational Biology, 20(4), e1011277.
    https://doi.org/10.1371/journal.pcbi.1011277
+.. [#telgkamp_2002] Telgkamp, P., & Raman, I. M. (2002).
+   Depression of inhibitory synaptic transmission between Purkinje cells and neurons of the cerebellar nuclei.
+   Journal of Neuroscience, 22(19), 8447-8457.
+   https://doi.org/10.1523/JNEUROSCI.22-19-08447.2002.
+.. [#kim_2021] Kim, J., & Augustine, G. J. (2021).
+   Molecular layer interneurons: key elements of cerebellar network computation and behavior.
+   Neuroscience, 462, 22-35.
+   https://doi.org/10.1016/j.neuroscience.2020.10.008
