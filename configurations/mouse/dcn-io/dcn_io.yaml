@@ -56,29 +56,40 @@ connectivity:
     io_pc_connectivity: io_to_purkinje
     pre_cell_pc: purkinje_cell
   io_to_dcn_p:
-    strategy: bsb.connectivity.AllToAll
+    strategy: bsb.connectivity.FixedOutdegree
     presynaptic:
       cell_types:
         - io
     postsynaptic:
       cell_types:
         - dcn_p
+    outdegree: 60
   io_to_dcn_i:
-    strategy: bsb.connectivity.AllToAll
+    strategy: bsb.connectivity.FixedOutdegree
     presynaptic:
       cell_types:
         - io
     postsynaptic:
       cell_types:
         - dcn_i
+    outdegree: 33
   dcn_i_to_io:
-    strategy: bsb.connectivity.AllToAll
+    strategy: bsb.connectivity.FixedIndegree
     presynaptic:
       cell_types:
         - dcn_i
     postsynaptic:
       cell_types:
         - io
+    indegree: 33
+#  after_connectivity:
+#    duplicate_conn_io_pc:
+#      strategy: cerebellum.connectome.io_purkinje.ConnectomeIoPurkinje
+#      io_pc_connectivity: io_to_purkinje
+#      contacts:
+#        distribution: norm
+#        loc: 500
+#        scale: 5
 $import:
   ref: ./dcn.yaml#/
   values:
@@ -91,4 +102,4 @@ $import:
     - cell_types
     - placement
     - connectivity
-  #   - after_connectivity
+    #- after_connectivity

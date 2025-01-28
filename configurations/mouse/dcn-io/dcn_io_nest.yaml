@@ -2,14 +2,17 @@ name: DBBS Mouse cerebellum w/ DCN and IO NEST basal activity and mf stimulus
 storage:
   root: mouse_cereb_dcn_io_nest_custom.hdf5
 packages:
-  - bsb-nest~=4.2
+  - bsb-nest~=4.3
 components:
   - cerebellum/nest_models/build_models.py
 simulations:
   basal_activity:
+    modules:
+      - cerebmodule
+      - custom_stdp_module
     cell_models:
       io:
-        model: eglif_cond_alpha_multisyn
+        model: eglif_io_nestml
         constants:
           t_ref: 1
           C_m: 189
@@ -21,9 +24,9 @@ simulations:
           lambda_0: 1.2
           tau_V: 0.8
           tau_m: 11
-          k_adap: 1.928
-          k_1: 0.191
-          k_2: 0.091
+          kadap: 1.928
+          k1: 0.191
+          k2: 0.091
           A1: 1810.923
           A2: 1358.197
           tau_syn1: 1
@@ -34,9 +37,9 @@ simulations:
       io_to_purkinje:
         synapse:
           model: static_synapse
-          weight: 300 # 50
+          weight: 800 #1.6 #300 # 50
           delay: 4
-          receptor_type: 3
+          receptor_type: 5
       io_to_mli_io_to_basket_cell:
         synapse:
           model: static_synapse
@@ -52,13 +55,13 @@ simulations:
       io_to_dcn_p:
         synapse:
           model: static_synapse
-          weight: 0.5 # 2.5
+          weight: 0.4 #0.5 # 2.5
           delay: 4
           receptor_type: 1
       io_to_dcn_i:
         synapse:
           model: static_synapse
-          weight: 0.5 # 0.1
+          weight: 0.25 #0.5 # 0.1
           delay: 5
           receptor_type: 1
       dcn_i_to_io:
@@ -81,7 +84,6 @@ simulations:
         - simulator
         - resolution
         - duration
-        - modules
         - seed
         - cell_models
         - connection_models
@@ -92,7 +94,7 @@ simulations:
         device: poisson_generator
         rate: 40
         start: 1000
-        stop: 1260
+        stop: 2000
         targetting:
           strategy: cell_model
           cell_models:
@@ -100,17 +102,44 @@ simulations:
         weight: 1
         delay: 0.1
       cf_stimulus:
-        device: poisson_generator
+        device: sinusoidal_poisson_generator
         rate: 500
-        start: 1250
-        stop: 1260
+        amplitude: 50
+        frequency: 40
+        phase: 0
+        start: 1150
+        stop: 1800
         targetting:
           strategy: cell_model
           cell_models:
             - io
         receptor_type: 1
-        weight: 55
+        weight: 20 #55
         delay: 0.1
+#      cf_stimulus_1:
+#        device: poisson_generator
+#        rate: 500
+#        start: 1200
+#        stop: 1210
+#        targetting:
+#          strategy: cell_model
+#          cell_models:
+#            - io
+#        receptor_type: 1
+#        weight: 50 #55
+#        delay: 0.1
+#      cf_stimulus_2:
+#        device: poisson_generator
+#        rate: 500
+#        start: 1300
+#        stop: 1310
+#        targetting:
+#          strategy: cell_model
+#          cell_models:
+#            - io
+#        receptor_type: 1
+#        weight: 100 #55
+#        delay: 0.1
 
     $import:
       ref: "#/simulations/basal_activity"
@@ -136,4 +165,4 @@ $import:
     - cell_types
     - placement
     - connectivity
- #   - after_connectivity
+    #- after_connectivity

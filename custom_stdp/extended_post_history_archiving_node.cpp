@@ -70,7 +70,7 @@ nest::ExtendedPostHistoryArchivingNode::set_spiketime( Time const& t_sp, double 
     Kminus_ = Kminus_ * std::exp( ( last_spike_ - t_sp_ms ) * tau_minus_inv_ ) + 1.0;
     Kminus_triplet_ = Kminus_triplet_ * std::exp( ( last_spike_ - t_sp_ms ) * tau_minus_triplet_inv_ ) + 1.0;
     last_spike_ = t_sp_ms;
-    std::cout << "Adding extended history entry with offset " << offset << std::endl;
+    //std::cout << "Adding extended history entry with offset " << offset << std::endl;
     history_.push_back( ExtendedHistEntry( last_spike_, Kminus_, Kminus_triplet_, offset, 0 ) ); // store offset separately
   }
   else

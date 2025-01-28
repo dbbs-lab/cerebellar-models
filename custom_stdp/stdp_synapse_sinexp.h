@@ -203,6 +203,7 @@ public:
     weight_ = w;
   }
   std::vector<double> buffer_pre_spikes_;
+  std::vector<double> LTD_values_;
 
 //LTP and LTD equations
 private:
@@ -272,6 +273,7 @@ stdp_synapse_sinexp< targetidentifierT >::send( Event& e, size_t t, const Common
   // facilitation due to postsynaptic spikes since last pre-synaptic spike
   double minus_dt;
   double LTD = 0;
+  double single = 0;
   // check for weight change after the synapse firing
   bool check_LTD = false;
   // presynaptic spikes buffer for LTD
@@ -290,7 +292,9 @@ stdp_synapse_sinexp< targetidentifierT >::send( Event& e, size_t t, const Common
         double t_window = buffer_pre_spikes_[idx] - minus_dt;
         if (t_window <= 0 && t_window >= -200){
           check_LTD = true;
+          single = depress_(t_window);
           LTD += depress_(t_window);
+          LTD_values_.push_back(single);
         }
       }
     }
@@ -313,7 +317,9 @@ stdp_synapse_sinexp< targetidentifierT >::send( Event& e, size_t t, const Common
   while(buffer_pre_spikes_[0] < t_spike - 200){
     buffer_pre_spikes_.erase(buffer_pre_spikes_.begin());
   }
-
+  for(int i=0; i<LTD_values_.size(); i++){
+    std::cout << (LTD_values_[i]*(-1)) << std::endl;
+  }
   e.set_receiver( *target );
   e.set_weight( weight_ );
     // use accessor functions (inherited from Connection< >) to obtain delay in

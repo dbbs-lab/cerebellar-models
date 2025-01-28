@@ -595,7 +595,7 @@ const double g3__X__rec3__d__tmp_ = V_.__P__g3__X__rec3__d__g3__X__rec3 * S_.ode
 
             set_spiketime(nest::Time::step(origin.get_steps() + lag + 1));
             nest::SpikeEvent se;
-            std::cout << "PC: Emitting simple spike.\n";
+            //std::cout << "PC: Emitting simple spike.\n";
             nest::kernel().event_delivery_manager.send(*this, se, lag);
         }
     }

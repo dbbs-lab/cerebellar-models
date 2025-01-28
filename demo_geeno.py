@@ -112,8 +112,8 @@ def run_simulation():
     #nest.SetStatus(pre, {"offset": 1})
     #nest.SetStatus(post, {"offset": 1})
 
-    io_generator = nest.Create("spike_generator", params = {"spike_times": [300, 800]})
-    gr_generator = nest.Create("spike_generator", params={"spike_times": [ 50, 60, 70, 80, 120, 500, 600, 730, 900]})
+    io_generator = nest.Create("spike_generator", params = {"spike_times": [298, 315]})
+    gr_generator = nest.Create("spike_generator", params={"spike_times": [ 225, 230, 235, 400 ]})
     # io_pois_1 = nest.Create("poisson_generator", params={"rate": 500, "start": 300, "stop": 310})
     # io_pois_2 = nest.Create("poisson_generator", params={"rate": 500, "start": 700, "stop": 710})
 
@@ -163,7 +163,7 @@ def run_simulation():
 
 
 io, gr, pc, w = run_simulation()
-print(np.diff(w, 0))
+#print(np.diff(w, 0))
 print("IO SPIKES: ", io["times"])
 print("GR SPIKES: ", gr["times"])
 print("PC SPIKES: ", pc["times"])
@@ -211,3 +211,20 @@ plt.show()
 # np.testing.assert_allclose(pre_t_sp_with_offset_trick, pre_t_sp_without_offset_trick)
 # np.testing.assert_allclose(post_t_sp_with_offset_trick, post_t_sp_without_offset_trick)
 # np.testing.assert_allclose(w_with_offset_trick, w_without_offset_trick)
+LTD = np.array([0.00203423,0.00225064,0.00247454, 0.00270388,0.00293637, 0.00316948, 0.00340048, 0.00363473 ,0.00385241,0.00405902,0.00424474,0.00442108,0.00457795,0.00471289,0.00482011,0.0049061,0.00496489,0.00499551,0.00499747,0.00497072,0.00491574,0.00483695,0.00472961,0.00459798,0.00444419,0.00427063,0.00407997,0.00387504,0.00365878,0.0034342,0.00320425,0.00297182,0.00274821,0.00251869,0.00230242,0.00208474,0.00187588,0.00167731,0.00149692,0.0013217,0.00115938,0.00101028,0.000879261,0.000756088,0.000645696,0.000550989,0.000464057,0.00039065,0.000324329,0.000269213,0.000220209,0.000180139,0.000143907,0.000112998,8.40677e-05,5.72521e-05,3.28335e-05,1.0543e-05])
+gr_spikes = np.array([102.3, 105,  107.7, 110.4, 113.1, 115.8, 118.5, 121.3, 124,  126.7, 129.3, 132,  134.7, 137.4, 140,  142.7, 145.4, 148.1, 150.8, 153.5, 156.2, 158.8, 161.5, 164.2, 166.9, 169.6, 172.3, 175,  177.7,180.4, 183.1, 185.8, 188.4, 191.1, 193.7, 196.4, 199.1, 201.8, 204.4, 207.1, 209.8, 212.5, 215.1, 217.8, 220.5, 223.1, 225.8, 228.4, 231.1, 233.7, 236.4, 239,  241.8, 244.7, 248.1, 252.3, 258,  268.5])
+a=0
+for i in range(np.size(LTD)):
+        if LTD[i] == max(LTD):
+           a = i
+           print(gr_spikes[a])
+           print(max(LTD))
+           break
+plt.plot(gr_spikes, LTD)
+plt.plot(gr_spikes[a], max(LTD), marker='.', markersize=10, color='green')
+plt.annotate('[t_Gr, LTD_value] = [150.8, 0.00499747]', xy=(gr_spikes[a], max(LTD)))
+plt.axvline(x= 298, linestyle='--', color="r")
+plt.axvline(x= 98, linestyle='--', color="r")
+plt.title('LTD curve')
+plt.legend({ "Time window", "Max value","LTD"}, loc='best')
+plt.show()

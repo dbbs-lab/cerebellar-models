@@ -10,7 +10,7 @@ ExtendedHistEntry::ExtendedHistEntry( double t, double Kminus, double Kminus_tri
   , offset_ ( offset )
   , access_counter_( access_counter )
 {
-  std::cout << "Created extended history entry with offset = " << offset_ << std::endl;
+  //std::cout << "Created extended history entry with offset = " << offset_ << std::endl;
 }
 
 }

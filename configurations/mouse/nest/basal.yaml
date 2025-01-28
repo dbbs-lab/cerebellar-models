@@ -9,7 +9,7 @@ simulations:
   basal_activity:
     simulator: nest
     resolution: 0.1
-    duration: 2000
+    duration: 5000
     modules:
       - cerebmodule
     seed: 1234
@@ -50,9 +50,9 @@ simulations:
           V_reset: -75
           E_L: -62
           V_min: -150
-          V_m: -62.0
-          lambda_0: 1.0
-          tau_V: 0.4
+          V_m: -60.0 #-62.0
+          lambda_0: 0.15 #1.0
+          tau_V: 0.09 #0.4
           tau_m: 44
           I_e: 16.214
           k_adap: 0.217
@@ -67,22 +67,22 @@ simulations:
           E_rev2: -80
           E_rev3: 0
       purkinje_cell:
-        model: eglif_cond_alpha_multisyn
+        model: eglif_pc_nestml
         constants:
           t_ref: 0.5
-          V_min: -350
+          Vmin: -350
           C_m: 334
           V_th: -43
           V_reset: -69
           E_L: -59
           V_m: -59.0
-          lambda_0: 0.001
-          tau_V: 0.5
+          lambda_0: 4. #0.001
+          tau_V: 3.5 #0.5
           tau_m: 47
-          I_e: 742.534
-          k_adap: 1.491
-          k_1: 0.195
-          k_2: 0.041
+          I_e: 700 #742.534
+          kadap: 1.491
+          k1: 0.195
+          k2: 0.041
           A1: 157.622
           A2: 172.622
           tau_syn1: 1.1
@@ -99,9 +99,9 @@ simulations:
           V_th: -53
           V_reset: -78
           E_L: -68
-          V_m: -68.0
+          V_m: -60 #-68.0
           lambda_0: 1.8
-          tau_V: 1.1
+          tau_V: 1. #1.1
           tau_m: 9.125
           I_e: 3.711
           k_adap: 2.025
@@ -123,9 +123,9 @@ simulations:
           V_th: -53
           V_reset: -78
           E_L: -68
-          V_m: -68.0
+          V_m: -60. #-68.0
           lambda_0: 1.8
-          tau_V: 1.1
+          tau_V: 1. #1.1
           tau_m: 9.125
           I_e: 3.711
           k_adap: 2.025
@@ -183,7 +183,7 @@ simulations:
           receptor_type: 3
       parallel_fiber_to_purkinje:
         synapse:
-          model: static_synapse
+          model: static_synapse #stdp_synapse_sinexp
           weight: 0.14
           delay: 5
           receptor_type: 1
@@ -196,7 +196,7 @@ simulations:
       parallel_fiber_to_stellate:
         synapse:
           model: static_synapse
-          weight: 0.18
+          weight: 0.08 #0.18
           delay: 5
           receptor_type: 1
       stellate_to_stellate:
@@ -208,13 +208,13 @@ simulations:
       stellate_to_purkinje:
         synapse:
           model: static_synapse
-          weight: 1.64
+          weight: 0.17 #1.64
           delay: 5
           receptor_type: 2
       parallel_fiber_to_basket:
         synapse:
           model: static_synapse
-          weight: 0.1
+          weight: 0.06 #0.1
           delay: 5
           receptor_type: 1
       basket_to_basket:
@@ -226,7 +226,7 @@ simulations:
       basket_to_purkinje:
         synapse:
           model: static_synapse
-          weight: 0.44
+          weight: 0.8 #0.44
           delay: 4
           receptor_type: 2
     devices:

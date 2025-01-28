@@ -509,10 +509,10 @@ double rec_5 = get_spike_input_received_()[1].get_value(lag);
         set_spiketime(nest::Time::step(origin.get_steps() + lag), 0);
         nest::SpikeEvent se;
         //S_.received_offset = 1;
-        std::cout << "Gr: received offset is = " << S_.received_offset << "\n";
+        //std::cout << "Gr: received offset is = " << S_.received_offset << "\n";
         se.set_offset(S_.received_offset);
 
-        std::cout << "Gr: Sending spike with offset = " << se.get_offset() << " at spike time = " << nest::Time::step(origin.get_steps() + lag + 1) << "\n";
+        //std::cout << "Gr: Sending spike with offset = " << se.get_offset() << " at spike time = " << nest::Time::step(origin.get_steps() + lag + 1) << "\n";
 
         //std::cout << "Spike time = " << get_spiketime() << "\n";
         //nest::kernel().event_delivery_manager.send(*this, se, lag+se.get_offset()/__resolution);
@@ -606,7 +606,7 @@ double rec_5 = get_spike_input_received_()[1].get_value(lag);
 //                std::cout << "QUI OFFSET VA A 1: " << rec_5 << std::endl;
 //            }
             nest::SpikeEvent se;
-            std::cout << "Gr: emitting simple spike\n";
+            //std::cout << "Gr: emitting simple spike\n";
             nest::kernel().event_delivery_manager.send(*this, se, lag);
 
 
@@ -670,7 +670,7 @@ void eglif_gr_nestml::handle(nest::SpikeEvent &e)
   assert(e.get_delay_steps() > 0);
   assert( e.get_rport() < B_.spike_inputs_.size() );
 
-  std::cout << "Gr: Got a spike with offset " << e.get_offset() << "\n";
+  //std::cout << "Gr: Got a spike with offset " << e.get_offset() << "\n";
   if (e.get_offset() >0.0)
   {
     S_.received_offset = e.get_offset();

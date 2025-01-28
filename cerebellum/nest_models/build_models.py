@@ -55,5 +55,3 @@ def _build_nest_models(
 
 
 _build_nest_models()
-nest.ResetKernel()
-nest.Install("custom_stdp_module")
