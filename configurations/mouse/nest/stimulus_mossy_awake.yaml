@@ -1,4 +1,4 @@
-name: DBBS Mouse cerebellum NEST basal activity and mf stimulus
+name: DBBS Mouse cerebellum NEST basal activity and mf stimulus for in awake state
 simulations:
   mf_stimulus:
     simulator: nest
@@ -8,7 +8,7 @@ simulations:
       - cerebmodule
     seed: 1234
     $import:
-      ref: ./basal.yaml#/simulations/basal_activity
+      ref: ./basal_awake.yaml#/simulations/basal_activity
       values:
         - cell_models
         - connection_models
@@ -31,7 +31,7 @@ simulations:
         "weight" : 1.0
         "delay" : 0.1
 $import:
-  ref: ./basal.yaml#/
+  ref: ./basal_awake.yaml#/
   values:
     - packages
     - components
@@ -43,4 +43,5 @@ $import:
     - cell_types
     - placement
     - connectivity
+    - after_connectivity
     - simulations

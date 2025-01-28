@@ -1,8 +1,8 @@
-name: DBBS Mouse cerebellum NEST basal activity
+name: DBBS Mouse cerebellum NEST basal activity for in vitro state
 storage:
   root: mouse_cereb_nest.hdf5
 packages:
-  - bsb-nest~=4.2
+  - bsb-nest~=4.3
 components:
   - cerebellum/nest_models/build_models.py
 simulations:
@@ -50,9 +50,9 @@ simulations:
           V_reset: -75
           E_L: -62
           V_min: -150
-          V_m: -62.0
-          lambda_0: 1.0
-          tau_V: 0.4
+          V_m: -60.0
+          lambda_0: 0.15
+          tau_V: 0.09
           tau_m: 44
           I_e: 16.214
           k_adap: 0.217
@@ -76,10 +76,10 @@ simulations:
           V_reset: -69
           E_L: -59
           V_m: -59.0
-          lambda_0: 0.001
-          tau_V: 0.5
+          lambda_0: 0.5
+          tau_V: 2.
           tau_m: 47
-          I_e: 742.534
+          I_e: 590.
           k_adap: 1.491
           k_1: 0.195
           k_2: 0.041
@@ -99,9 +99,9 @@ simulations:
           V_th: -53
           V_reset: -78
           E_L: -68
-          V_m: -68.0
+          V_m: -60.0
           lambda_0: 1.8
-          tau_V: 1.1
+          tau_V: 1.
           tau_m: 9.125
           I_e: 3.711
           k_adap: 2.025
@@ -123,9 +123,9 @@ simulations:
           V_th: -53
           V_reset: -78
           E_L: -68
-          V_m: -68.0
+          V_m: -60.0
           lambda_0: 1.8
-          tau_V: 1.1
+          tau_V: 1
           tau_m: 9.125
           I_e: 3.711
           k_adap: 2.025
@@ -184,19 +184,19 @@ simulations:
       parallel_fiber_to_purkinje:
         synapse:
           model: static_synapse
-          weight: 0.14
+          weight: 0.05
           delay: 5
           receptor_type: 1
       ascending_axon_to_purkinje:
         synapse:
           model: static_synapse
-          weight: 0.41
+          weight: 0.2
           delay: 2
           receptor_type: 1
       parallel_fiber_to_stellate:
         synapse:
           model: static_synapse
-          weight: 0.18
+          weight: 0.05
           delay: 5
           receptor_type: 1
       stellate_to_stellate:
@@ -208,13 +208,13 @@ simulations:
       stellate_to_purkinje:
         synapse:
           model: static_synapse
-          weight: 1.64
+          weight: 0.17
           delay: 5
           receptor_type: 2
       parallel_fiber_to_basket:
         synapse:
           model: static_synapse
-          weight: 0.1
+          weight: 0.04
           delay: 5
           receptor_type: 1
       basket_to_basket:
@@ -300,3 +300,4 @@ $import:
     - cell_types
     - placement
     - connectivity
+    - after_connectivity

@@ -4,7 +4,7 @@ Implementation of the BSB framework for cerebellar cortex reconstructions and si
 
 import os
 
-__version__ = "0.4.0"
+__version__ = "0.5.0"
 
 
 def templates():  # pragma: nocover
@@ -22,6 +22,7 @@ classmap = {
         "glom_golgi": "cerebellum.connectome.glomerulus_golgi.ConnectomeGlomerulusGolgi",
         "ubc_glom": "cerebellum.connectome.to_glomerulus.ConnectomeUBCGlomerulus",
         "glom_ubc": "cerebellum.connectome.glomerulus_ubc.ConnectomeGlomerulusUBC",
+        "io_mli": "cerebellum.connectome.io_molecular.ConnectomeIO_MLI",
     },
     "bsb.postprocessing.AfterConnectivityHook": {
         "struct_report": "cerebellum.analysis.structure_analysis.RunStructureReport",

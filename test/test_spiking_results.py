@@ -24,7 +24,7 @@ class MiniCerebCircuitTest(RandomStorageFixture, unittest.TestCase, engine_name=
     def setUp(self):
         super().setUp()
         # one third of the canonical circuit
-        self.cfg = parse_configuration_file("configurations/mouse/nest/stimulus_mossy.yaml")
+        self.cfg = parse_configuration_file("configurations/mouse/nest/stimulus_mossy_vitro.yaml")
         self.cfg.network.x = 100
         self.cfg.network.y = 66
         self.cfg.network.z = 100
@@ -443,9 +443,13 @@ class TestSpikePlots(ReportBasalSimCircuitTest, NumpyTestCase, engine_name="hdf5
             nb_neurons=self.simulationReport.nb_neurons,
             populations=self.simulationReport.populations,
             dict_colors=self.simulationReport.colors,
+            dict_abv={"bla": "go", "granule_cell": "GrC"},
         )
         plot.plot()
-        self.assertAll(np.array(plot.rows) == np.array(self.simulationReport.populations))
+        rows = self.simulationReport.populations
+        rows[rows.index("granule_cell")] = "GrC"
+
+        self.assertAll(np.array(plot.rows) == np.array(rows))
         self.assertAll(
             np.asarray(np.array(plot.table_values).shape)
             == np.array([len(self.simulationReport.populations), 2])
