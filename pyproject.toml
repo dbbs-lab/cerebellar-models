@@ -12,6 +12,7 @@ requires-python = ">=3.9"
 dynamic = ["version", "description"]
 dependencies = [
     "bsb[parallel,nest,neuron]~=4.4",
+    "click",
     "nestml~=7.0",
     "matplotlib~=3.9"
 ]
@@ -37,6 +38,9 @@ dev = [
 Home = "https://github.com/dbbs-lab/cerebellum"
 "Bug Tracker" = "https://github.com/dbbs-lab/cerebellum/issues/"
 "Source Code" = "https://github.com/dbbs-lab/cerebellum/"
+
+[project.scripts]
+cerebellum = "cerebellum.cli:app"
 
 [tool.black]
 line-length = 100
