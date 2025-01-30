@@ -39,6 +39,12 @@ class TestSingleCellModels(
 
     def setUp(self):
         super().setUp()
+        conf_cell_vitro = (
+            "../configurations/mouse/in-vitro/nest/cell_models/eglif_cond_alpha_multisyn.yaml"
+        )
+        conf_cell_awake = (
+            "../configurations/mouse/awake/nest/cell_models/eglif_cond_alpha_multisyn.yaml"
+        )
         self.configuration_dict = {
             "name": "test",
             "storage": {"engine": "hdf5"},
@@ -89,7 +95,7 @@ class TestSingleCellModels(
                     "modules": ["cerebmodule"],
                     "cell_models": {
                         "$import": {
-                            "ref": "../configurations/mouse/ubc/ubc_nest.yaml#/simulations/basal_activity/cell_models",
+                            "ref": conf_cell_vitro + "#/simulations/basal_activity/cell_models",
                             "values": [
                                 "granule_cell",
                                 "golgi_cell",
@@ -101,31 +107,36 @@ class TestSingleCellModels(
                         },
                         "purkinje_awake_cell": {
                             "$import": {
-                                "ref": "../configurations/mouse/nest/basal_awake.yaml#/simulations/basal_activity/cell_models/purkinje_cell",
+                                "ref": conf_cell_awake
+                                + "#/simulations/basal_activity/cell_models/purkinje_cell",
                                 "values": ["constants", "model"],
                             }
                         },
                         "dcn_p_cell": {
                             "$import": {
-                                "ref": "../configurations/mouse/dcn-io/dcn_io_vitro_nest.yaml#/simulations/basal_activity/cell_models/dcn_p",
+                                "ref": conf_cell_vitro
+                                + "#/simulations/basal_activity/cell_models/dcn_p",
                                 "values": ["constants", "model"],
                             }
                         },
                         "dcn_p_awake_cell": {
                             "$import": {
-                                "ref": "../configurations/mouse/dcn-io/dcn_io_awake_nest.yaml#/simulations/basal_activity/cell_models/dcn_p",
+                                "ref": conf_cell_awake
+                                + "#/simulations/basal_activity/cell_models/dcn_p",
                                 "values": ["constants", "model"],
                             }
                         },
                         "dcn_i_cell": {
                             "$import": {
-                                "ref": "../configurations/mouse/dcn-io/dcn_io_vitro_nest.yaml#/simulations/basal_activity/cell_models/dcn_i",
+                                "ref": conf_cell_vitro
+                                + "#/simulations/basal_activity/cell_models/dcn_i",
                                 "values": ["constants", "model"],
                             }
                         },
                         "dcn_i_awake_cell": {
                             "$import": {
-                                "ref": "../configurations/mouse/dcn-io/dcn_io_awake_nest.yaml#/simulations/basal_activity/cell_models/dcn_i",
+                                "ref": conf_cell_awake
+                                + "#/simulations/basal_activity/cell_models/dcn_i",
                                 "values": ["constants", "model"],
                             }
                         },
@@ -133,7 +144,7 @@ class TestSingleCellModels(
                     "connection_models": {},
                     "devices": {
                         "$import": {
-                            "ref": "../configurations/mouse/ubc/ubc_nest.yaml#/simulations/basal_activity/devices",
+                            "ref": conf_cell_vitro + "#/simulations/basal_activity/devices",
                             "values": [
                                 "granule_record",
                                 "golgi_record",
@@ -152,10 +163,8 @@ class TestSingleCellModels(
                             },
                         },
                         "dcn_p_record": {
-                            "$import": {
-                                "ref": "../configurations/mouse/dcn-io/dcn_io_vitro_nest.yaml#/simulations/basal_activity/devices/dcn_p_record",
-                                "values": ["device", "delay"],
-                            },
+                            "device": "spike_recorder",
+                            "delay": 0.1,
                             "targetting": {"strategy": "cell_model", "cell_models": ["dcn_p_cell"]},
                         },
                         "dcn_p_awake_record": {
@@ -167,10 +176,8 @@ class TestSingleCellModels(
                             },
                         },
                         "dcn_i_record": {
-                            "$import": {
-                                "ref": "../configurations/mouse/dcn-io/dcn_io_vitro_nest.yaml#/simulations/basal_activity/devices/dcn_i_record",
-                                "values": ["device", "delay"],
-                            },
+                            "device": "spike_recorder",
+                            "delay": 0.1,
                             "targetting": {"strategy": "cell_model", "cell_models": ["dcn_i_cell"]},
                         },
                         "dcn_i_awake_record": {

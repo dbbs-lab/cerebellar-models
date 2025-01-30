@@ -1,0 +1,196 @@
+simulations:
+  basal_activity:
+    simulator: nest
+    connection_models:
+      mossy_fibers_to_glomerulus:
+        synapse:
+          model: static_synapse
+          weight: 1
+          delay: 1
+      glomerulus_to_granule:
+        synapse:
+          model: static_synapse
+          weight: 0.23
+          delay: 1
+          receptor_type: 1
+      glomerulus_to_golgi:
+        synapse:
+          model: static_synapse
+          weight: 0.24
+          delay: 1
+          receptor_type: 1
+      golgi_to_glomerulus:
+        synapse:
+          model: static_synapse
+          weight: 0.24
+          delay: 2
+          receptor_type: 2
+      golgi_to_golgi:
+        synapse:
+          model: static_synapse
+          weight: 0.007
+          delay: 4
+          receptor_type: 2
+      ascending_axon_to_golgi:
+        synapse:
+          model: static_synapse
+          weight: 0.82
+          delay: 2
+          receptor_type: 3
+      parallel_fiber_to_golgi:
+        synapse:
+          model: static_synapse
+          weight: 0.05
+          delay: 5
+          receptor_type: 3
+      parallel_fiber_to_purkinje:
+        synapse:
+          model: static_synapse
+          weight: 0.05
+          delay: 5
+          receptor_type: 1
+      ascending_axon_to_purkinje:
+        synapse:
+          model: static_synapse
+          weight: 0.2
+          delay: 2
+          receptor_type: 1
+      parallel_fiber_to_stellate:
+        synapse:
+          model: static_synapse
+          weight: 0.05
+          delay: 5
+          receptor_type: 1
+      stellate_to_stellate:
+        synapse:
+          model: static_synapse
+          weight: 0.005
+          delay: 4
+          receptor_type: 2
+      stellate_to_purkinje:
+        synapse:
+          model: static_synapse
+          weight: 0.17
+          delay: 5
+          receptor_type: 2
+      parallel_fiber_to_basket:
+        synapse:
+          model: static_synapse
+          weight: 0.04
+          delay: 5
+          receptor_type: 1
+      basket_to_basket:
+        synapse:
+          model: static_synapse
+          weight: 0.006
+          delay: 4
+          receptor_type: 2
+      basket_to_purkinje:
+        synapse:
+          model: static_synapse
+          weight: 0.44
+          delay: 4
+          receptor_type: 2
+      ubc_to_ubc_glomerulus:
+        synapse:
+          weight: 1
+          delay: 50
+      glomerulus_to_ubc_ubc_glomerulus_to_unipolar_brush_cell:
+        synapse:
+          weight: 1
+          delay: 50
+          receptor_type: 1
+      glomerulus_to_ubc_glomerulus_to_unipolar_brush_cell:
+        synapse:
+          weight: 1
+          delay: 2
+          receptor_type: 1
+      glomerulus_to_granule_ubc_glomerulus_to_granule_cell:
+        synapse:
+          weight: 0.048
+          delay: 1
+          receptor_type: 1
+      glomerulus_to_granule_glomerulus_to_granule_cell:
+        synapse:
+          model: static_synapse
+          weight: 0.23
+          delay: 1
+          receptor_type: 1
+      glomerulus_to_golgi_ubc_glomerulus_to_golgi_cell:
+        synapse:
+          model: static_synapse
+          weight: 0.24
+          delay: 1
+          receptor_type: 1
+      glomerulus_to_golgi_glomerulus_to_golgi_cell:
+        synapse:
+          model: static_synapse
+          weight: 0.24
+          delay: 1
+          receptor_type: 1
+      golgi_to_glomerulus_golgi_cell_to_granule_cell:
+        synapse:
+          model: static_synapse
+          weight: 0.24
+          delay: 2
+          receptor_type: 2
+      golgi_to_glomerulus_golgi_cell_to_unipolar_brush_cell:
+        synapse:
+          model: static_synapse
+          weight: 0.00211
+          delay: 4
+          receptor_type: 2
+      mossy_fibers_to_dcn_p:
+        synapse:
+          model: static_synapse
+          weight: 0.25
+          delay: 4.
+          receptor_type: 1
+      purkinje_to_dcn_p:
+        synapse:
+          model: static_synapse
+          weight: 0.8
+          delay: 4.
+          receptor_type: 2
+      purkinje_to_dcn_i:
+        synapse:
+          model: static_synapse
+          weight: 0.06
+          delay: 4.
+          receptor_type: 2
+      io_to_purkinje:
+        synapse:
+          model: static_synapse
+          weight: 0.6
+          delay: 4
+          receptor_type: 3
+      io_to_mli_io_to_basket_cell:
+        synapse:
+          model: static_synapse
+          weight: 5
+          delay: 40
+          receptor_type: 3
+      io_to_mli_io_to_stellate_cell:
+        synapse:
+          model: static_synapse
+          weight: 6.5
+          delay: 40
+          receptor_type: 3
+      io_to_dcn_p:
+        synapse:
+          model: static_synapse
+          weight: 0.5
+          delay: 4
+          receptor_type: 1
+      io_to_dcn_i:
+        synapse:
+          model: static_synapse
+          weight: 0.25
+          delay: 5
+          receptor_type: 1
+      dcn_i_to_io:
+          synapse:
+            model: static_synapse
+            weight: 0.45
+            delay: 25
+            receptor_type: 2

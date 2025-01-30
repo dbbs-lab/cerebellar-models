@@ -1,6 +1,3 @@
-name: DBBS Mouse cerebellum w/ UBC
-storage:
-  root: mouse_cereb_ubc.hdf5
 cell_types:
   unipolar_brush_cell:
     spatial:
@@ -96,16 +93,3 @@ connectivity:
       - ubc_glomerulus
     radius: 150
     divergence: 40
-$import:
-  ref: ../mouse_cerebellar_cortex.yaml#/
-  values:
-    - packages
-    - storage
-    - network
-    - regions
-    - partitions
-    - morphologies
-    - cell_types
-    - placement
-    - connectivity
-    - after_connectivity

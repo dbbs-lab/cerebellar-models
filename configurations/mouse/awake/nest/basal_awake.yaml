@@ -1,0 +1,6 @@
+$import:
+  ref: ../../in-vitro/nest/basal_vitro.yaml#/
+  values:
+    - packages
+    - simulations
+    - components
