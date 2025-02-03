@@ -6,12 +6,7 @@ from bsb import Configuration, format_configuration_content, parse_configuration
 from simple_term_menu import TerminalMenu
 
 from cerebellum import __version__
-from cerebellum.utils import (
-    deep_update,
-    get_folders_in_folder,
-    load_configs_in_folder,
-    resolve_dependencies,
-)
+from cerebellum.utils import deep_update, get_folders_in_folder, load_configs_in_folder
 
 ROOT_FOLDER = dirname(dirname(abspath(__file__)))
 CONFIGURATION_FOLDER = join(ROOT_FOLDER, "configurations")
@@ -154,16 +149,17 @@ def _update_cell_types(configuration, cell_types, config_cell_types):
     return configuration
 
 
-def _configure_simulations(config_simulations, state_folder):
-    simulation_names = []
-    for k, v in config_simulations.items():
-        config_simulations[k]["simulations"] = resolve_dependencies(
-            v["simulations"], join(state_folder, k)
+def _configure_simulations(config_simulations):
+    simulation_names = list(
+        set(
+            [
+                f"{simulator}_{simu}"
+                for simulator, v in config_simulations.items()
+                for file_ in v["simulations"].values()
+                for simu in file_["simulations"].keys()
+            ]
         )
-        simulation_names.extend(
-            [f"{k}_{simu}" for simu in config_simulations[k]["simulations"]["simulations"].keys()]
-        )
-    simulation_names = list(set(simulation_names))
+    )
     simulator_options = [
         CerebOption(
             "Simulations",
@@ -177,21 +173,18 @@ def _configure_simulations(config_simulations, state_folder):
     return simulator_options[0].value
 
 
-def _configure_sim_params(config_simulations, simulation_names, state_folder):
-    dict_sim = {}
+def _configure_sim_params(config_simulations, simulation_names):
+    dict_sim = {"simulations": {}}
     choices = {}
     for sim_name in simulation_names:
         simulator, simulation = sim_name.split("_", 1)
         for k, v in config_simulations[simulator]["simulations"].items():
-            if k == "simulations":
+            if simulation in v["simulations"]:
                 for sim, params in v.items():
-                    if sim == simulation:
-                        if k not in dict_sim:
-                            dict_sim[k] = {}
-                        dict_sim[k][simulation] = params
-                        break
-            else:
-                dict_sim[k] = v
+                    if sim == "simulations":
+                        dict_sim[sim][simulation] = params[simulation]
+                    else:
+                        dict_sim[sim] = params
         simulation_options = [
             CerebOption(
                 "Cell models",
@@ -210,22 +203,11 @@ def _configure_sim_params(config_simulations, simulation_names, state_folder):
         ]
         print_panel(simulation_options)
         deep_update(
-            dict_sim,
-            resolve_dependencies(
-                {"xx": config_simulations[simulator]["cell_models"][simulation_options[0].value]},
-                join(state_folder, simulator, "cell_models"),
-            ),
+            dict_sim, config_simulations[simulator]["cell_models"][simulation_options[0].value]
         )
         deep_update(
             dict_sim,
-            resolve_dependencies(
-                {
-                    "xx": config_simulations[simulator]["connection_models"][
-                        simulation_options[1].value
-                    ]
-                },
-                join(state_folder, simulator, "connection_models"),
-            ),
+            config_simulations[simulator]["connection_models"][simulation_options[1].value],
         )
         choices[sim_name] = [c.value for c in simulation_options]
     return dict_sim, choices
@@ -282,12 +264,10 @@ def configure(output_folder: str, species: str, extension: str):
     }
 
     # Step 3: Simulation choice
-    simulation_names = _configure_simulations(config_simulations, state_folder)
+    simulation_names = _configure_simulations(config_simulations)
 
     # Step 4: Simulation models choice
-    dict_sim, sim_choices = _configure_sim_params(
-        config_simulations, simulation_names, state_folder
-    )
+    dict_sim, sim_choices = _configure_sim_params(config_simulations, simulation_names)
     deep_update(configuration, dict_sim)
 
     # Step 5: remove unnecessary cells and connections
