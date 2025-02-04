@@ -1,5 +1,6 @@
 from bsb import from_storage
-
+import numpy as np
+import matplotlib.pyplot as plt
 from cerebellum.analysis.report import PlotTypeInfo
 from cerebellum.analysis.spiking_results import (
     BasicSimulationReport,
@@ -9,11 +10,11 @@ from cerebellum.analysis.spiking_results import (
 )
 from cerebellum.analysis.structure_analysis import StructureReport
 
-reco_file = "mouse_cereb_dcn_io_nest_custom.hdf5"
-nio_folder = "nio_files/dcn_io_stim"
-reco_pdf = "reco_stdp.pdf"
+reco_file = "mouse_cereb_io_trials.hdf5"
+nio_folder = "nio_files/stim_trials_2"
+reco_pdf = "reco_stdp_trials.pdf"
 sim_basal_pdf = "report_io_sim_basal.pdf"
-sim_stim_pdf = "report_io_sinus.pdf"
+sim_stim_pdf = "report_io_trials_2.pdf"
 scaffold = from_storage(reco_file)
 
 
@@ -48,10 +49,17 @@ report_struct.print_report(reco_pdf)
 # report_sim_stim = BasicSimulationReport(
 #     scaffold, simulation_name="mf_cf_stimulus", folder_nio=nio_folder, cell_types_info=LIST_CT_INFO
 # )
-report_sim_stim = BasicSimulationReport(
-    scaffold, simulation_name="mf_cf_stimulus", folder_nio=nio_folder, time_from =0, time_to=2000
-)
-report_sim_stim.print_report(sim_stim_pdf)
+n_trials = 15
+fire_pc =[]
+for i in range(n_trials):
+    report = BasicSimulationReport(scaffold, simulation_name="mf_cf_stimulus", folder_nio=nio_folder, time_from =(i*1000)+500, time_to=(i*1000)+760)
+    #report_sim_stim.print_report("report_io_trials_"+str(i)+".pdf")
+    table = SimResultsTable(fig_size=(10, 10), scaffold=scaffold, simulation_name="mf_cf_stimulus",
+    all_spikes = report.all_spikes, nb_neurons = report.nb_neurons, populations = report.populations,
+    dict_colors = report.colors, time_from = report.time_from, time_to = report.time_to)
+    table.update()
+    firing_rates = table.get_firing_rates()
+    print(np.mean(firing_rates["purkinje_cell"]))
 
 # SIMULATION REPORT - mossy fiber stimulus
 # report_sim_stim = BasicSimulationReport(

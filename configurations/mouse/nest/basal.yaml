@@ -9,7 +9,7 @@ simulations:
   basal_activity:
     simulator: nest
     resolution: 0.1
-    duration: 5000
+    duration: 15200
     modules:
       - cerebmodule
     seed: 1234
@@ -183,7 +183,7 @@ simulations:
           receptor_type: 3
       parallel_fiber_to_purkinje:
         synapse:
-          model: static_synapse #stdp_synapse_sinexp
+          model: stdp_synapse_sinexp
           weight: 0.14
           delay: 5
           receptor_type: 1

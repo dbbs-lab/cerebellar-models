@@ -3,7 +3,7 @@ simulations:
   mf_stimulus:
     simulator: nest
     resolution: 0.1
-    duration: 5000
+    duration: 15200
     modules:
       - cerebmodule
     seed: 1234

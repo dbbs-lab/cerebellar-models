@@ -758,9 +758,9 @@ class SimResultsTable(TablePlot, SpikePlot):
         )
         self.columns = ["Firing rate [Hz]", "Inter Spike Intervals [ms]"]
 
-    def plot(self, **kwargs):
-        super().plot()
-        self.plot_table(**kwargs)
+    # def plot(self, **kwargs):
+    #     super().plot()
+    #     self.plot_table(**kwargs)
 
     def update(self):
         super().update()
@@ -781,7 +781,8 @@ class SimResultsTable(TablePlot, SpikePlot):
                     "{:.2} pm {:.2}".format(np.mean(isi), np.std(isi)) if len(isi) > 0 else "/",
                 ]
             )
-        self.rows = self.populations.copy()
+            self.rows = self.populations.copy()
+
 
     def get_firing_rates(self):
         """
