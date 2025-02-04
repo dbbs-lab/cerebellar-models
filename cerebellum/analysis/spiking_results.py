@@ -1,5 +1,5 @@
 """
-    Module for the plots and reports related to the simulation analysis of BSB scaffold.
+Module for the plots and reports related to the simulation analysis of BSB scaffold.
 """
 
 from os import listdir
@@ -8,9 +8,13 @@ from typing import List, Tuple, Union
 
 import numpy as np
 from bsb import Scaffold
+from elephant.kernels import GaussianKernel
+from elephant.statistics import instantaneous_rate
 from matplotlib import gridspec as gs
 from matplotlib import pyplot as plt
+from neo import SpikeTrain
 from neo import io as nio
+from quantities import ms
 from scipy import signal
 
 from cerebellum.analysis.plots import Legend, Plot, ScaffoldPlot
@@ -259,11 +263,9 @@ class SpikeSimulationReport(BSBReport):
         """
         spikes_res, cell_dict = self._extract_spikes_dict()
         u_gids = []
-        u_cell_types = []
         for i, cell_type in enumerate(cell_dict):
             senders = cell_dict[cell_type]["senders"].tolist()
             u_gids.extend(senders)
-            u_cell_types.extend([i] * len(senders))
         time_to = self.scaffold.simulations[self.simulation_name].duration
         if len(u_gids) == 0:
             return (
@@ -273,7 +275,6 @@ class SpikeSimulationReport(BSBReport):
             )
         sorting = np.argsort(u_gids)
         u_gids = np.array(u_gids)[sorting]
-        u_cell_types = np.array(u_cell_types)[sorting]
 
         inv_convert = np.full(np.max(u_gids) + 1, -1)
         for i, u_gid in enumerate(u_gids):
@@ -354,6 +355,9 @@ class RasterPSTHPlot(SpikePlot):
         """Number of bins for the PSTH subplot."""
 
     def init_plot(self, **kwargs):
+        if self.is_initialized:
+            plt.close(self.figure)
+        self.is_initialized = True
         self.is_plotted = False
         self.nb_cols = 2
         num_filter = len(self.populations)
@@ -470,6 +474,9 @@ class Spike2Columns(SpikePlot):
         )
 
     def init_plot(self, **kwargs):
+        if self.is_initialized:
+            plt.close(self.figure)
+        self.is_initialized = True
         self.is_plotted = False
         self.nb_cols = 2
         num_filter = len(self.populations)
@@ -531,25 +538,23 @@ class FiringRatesPlot(Spike2Columns):
         counts[1:] = np.cumsum(self.nb_neurons)
 
         # normalized triangle kernel for single-trial firing rate
-        kernel_single = signal.windows.triang(self.w_single) * 2 / self.w_single
 
         loc_spikes = self.get_filt_spikes()
-        self.firing_rates = np.zeros((loc_spikes.shape[0] - self.w_single * 2, num_filter))
-        self.std_rates = np.zeros((loc_spikes.shape[0] - self.w_single * 2, num_filter))
+        self.firing_rates = np.zeros((loc_spikes.shape[0], num_filter))
         for i in range(num_filter):
             if self.nb_neurons[i] <= 0:
                 continue  # pragma: nocover
-            spikes = loc_spikes[:, int(counts[i]) : int(counts[i + 1])]
-            if self.nb_neurons[i] > self.max_neuron_sampled:
-                spikes = spikes[
-                    :,
-                    np.linspace(
-                        0, self.nb_neurons[i], self.max_neuron_sampled, endpoint=False, dtype=int
-                    ),
-                ]
-            R = signal.lfilter(kernel_single, 1, spikes, axis=0) / self.dt * 1000.0
-            self.firing_rates[:, i] = np.mean(R, axis=1)[self.w_single : -self.w_single]
-            self.std_rates[:, i] = np.std(R, axis=1)[self.w_single : -self.w_single]
+            times, _ = np.where(loc_spikes[:, int(counts[i]) : int(counts[i + 1])])
+            spike_train = SpikeTrain((times * self.dt) * ms, t_stop=self.time_to * ms)
+            self.firing_rates[:, i] = (
+                instantaneous_rate(
+                    spike_train,
+                    sampling_period=self.dt * ms,
+                    kernel=GaussianKernel(self.w_single * ms),
+                    border_correction=True,
+                ).magnitude[:, 0]
+                / self.nb_neurons[i]
+            )
 
     def plot(self, relative_time=False, **kwargs):
         """
@@ -560,19 +565,12 @@ class FiringRatesPlot(Spike2Columns):
         """
         super().plot()
         time_interval = np.arange(
-            self.time_from + self.w_single * self.dt,
-            self.time_to + (-self.w_single) * self.dt,
+            self.time_from,
+            self.time_to,
             self.dt,
         )
         for i, ct in enumerate(self.populations):
             ax = self.get_ax(i)
-            ax.fill_between(
-                time_interval,
-                (np.maximum(0, self.firing_rates[:, i] - self.std_rates[:, i])),
-                (self.firing_rates[:, i] + self.std_rates[:, i]),
-                alpha=0.5,
-                color=self.dict_colors[ct][:3],
-            )
             ax.plot(
                 time_interval,
                 self.firing_rates[:, i],

@@ -13,7 +13,8 @@ dynamic = ["version", "description"]
 dependencies = [
     "bsb[parallel,nest,neuron]~=4.4",
     "nestml~=7.0",
-    "matplotlib~=3.9"
+    "matplotlib~=3.9",
+    "elephant~=1.1"
 ]
 
 [project.optional-dependencies]
@@ -28,8 +29,8 @@ docs = [
 dev = [
     "cerebellum[test,docs]",
     "pre-commit~=3.5",
-    "black~=24.1",
-    "isort~=5.12",
+    "black~=25.1.0",
+    "isort~=6.0.0",
     "bump-my-version~=0.21"
 ]
 

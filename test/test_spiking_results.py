@@ -273,20 +273,14 @@ class TestSpikePlots(ReportBasalSimCircuitTest, NumpyTestCase, engine_name="hdf5
         self.assertEqual(plot.nb_rows, 3)
         xlims = np.array(
             [
-                self.simulationReport.time_from + 500 * self.simulationReport.dt,
-                self.simulationReport.time_to - 501 * self.simulationReport.dt,
+                self.simulationReport.time_from,
+                self.simulationReport.time_to - self.simulationReport.dt,
             ]
         )
-        self.assertAll(np.array(plot.firing_rates.shape) == np.array([9000, 6]))
-        self.assertAll(np.array(plot.std_rates.shape) == np.array([9000, 6]))
+        self.assertAll(np.array(plot.firing_rates.shape) == np.array([10000, 6]))
         self.assertAll(np.absolute(np.array(plot.get_ax().get_xlim()) - xlims) <= 1e-7)
-        self.assertEqual(len(plot.get_ax().collections), 1)
         self.assertEqual(len(plot.get_ax().lines), 1)
         self.assertAll(plot.get_ax().lines[0].get_path().vertices[:, 1] == plot.firing_rates[:, 0])
-        self.assertAll(
-            plot.get_ax().collections[0].get_paths()[0].vertices[-9001:-1, 1][::-1]
-            == plot.firing_rates[:, 0] + plot.std_rates[:, 0]
-        )
         plot.plot(relative_time=True)
         self.assertAll(np.absolute(np.array(plot.get_ax().get_xlim()) - xlims + xlims[0]) <= 1e-7)
         # Test that an empty plot does not throw error.
@@ -396,10 +390,9 @@ class TestSpikePlots(ReportBasalSimCircuitTest, NumpyTestCase, engine_name="hdf5
             max_neuron_sampled=100,
         )
         plot.plot()
-        self.assertAll(np.array(plot.firing_rates.shape) == np.array([9000, 6]))
-        self.assertAll(np.array(plot.std_rates.shape) == np.array([9000, 6]))
-        self.assertAll(np.array(plot.frequencies.shape) == np.array((6, 4500)))
-        self.assertAll(np.array(plot.freq_powers.shape) == np.array((6, 4500)))
+        self.assertAll(np.array(plot.firing_rates.shape) == np.array([10000, 6]))
+        self.assertAll(np.array(plot.frequencies.shape) == np.array((6, 5000)))
+        self.assertAll(np.array(plot.freq_powers.shape) == np.array((6, 5000)))
         self.assertEqual(
             len(plot.get_ax().lines),
             4,
@@ -493,18 +486,15 @@ class TestSpikePlots(ReportBasalSimCircuitTest, NumpyTestCase, engine_name="hdf5
         # Raster PSTH plot should have two sub plots for each population
         self.assertEqual(len(report.plots["raster_psth"].get_ax()[0].collections), 1)
         self.assertEqual(len(report.plots["raster_psth"].get_ax()[1].containers), 1)
-        # Firing rates plot should store firing_rates and std_rates
+        # Firing rates plot should store firing_rates
         self.assertAll(
-            np.array(report.plots["firing_rates"].firing_rates.shape) == np.array([8000, 6])
-        )
-        self.assertAll(
-            np.array(report.plots["firing_rates"].std_rates.shape) == np.array([8000, 6])
+            np.array(report.plots["firing_rates"].firing_rates.shape) == np.array([10000, 6])
         )
         # ISIs histogram should have 50 bars
         self.assertEqual(len(report.plots["isis"].get_ax().containers[0]), 50)
         # Frequency analysis plot should store the frequencies distrib.
-        self.assertAll(np.array(report.plots["freq"].frequencies.shape) == np.array((6, 4000)))
-        self.assertAll(np.array(report.plots["freq"].freq_powers.shape) == np.array((6, 4000)))
+        self.assertAll(np.array(report.plots["freq"].frequencies.shape) == np.array((6, 5000)))
+        self.assertAll(np.array(report.plots["freq"].freq_powers.shape) == np.array((6, 5000)))
         # only 6 cell types in the legend
         self.assertEqual(len(report.plots["legend"].get_ax().legend_.legend_handles), 6)
         self.assertTrue(filename in os.listdir())

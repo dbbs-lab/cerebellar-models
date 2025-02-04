@@ -25,11 +25,14 @@ class TestPlot(unittest.TestCase, NumpyTestCase):
         plt.close("all")
 
     def test_init(self):
+        self.plot.init_plot()
         self.assertAll(
             np.array(self.plot.figure.bbox_inches.bounds) == np.array([0.0, 0.0, 7.5, 6.8])
         )
         plot = Plot((2, 2), 1, 6)
+        plot.init_plot()
         plot2 = Plot((2, 2))
+        plot2.init_plot()
         with self.assertRaises(ValueError):
             Plot((2, 2), nb_rows=1, nb_cols=0)
         self.assertEqual(self.plot.axes.shape, (2, 3))
