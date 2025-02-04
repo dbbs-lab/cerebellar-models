@@ -1,5 +1,5 @@
 """
-    Module for the configuration node of the IO to purkinje cells AfterConnectivityHook
+Module for the configuration node of the IO to purkinje cells AfterConnectivityHook
 """
 
 import numpy as np

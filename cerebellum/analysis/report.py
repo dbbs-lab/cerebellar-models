@@ -1,5 +1,5 @@
 """
-    Module for the Report class.
+Module for the Report class.
 """
 
 from typing import List, Union

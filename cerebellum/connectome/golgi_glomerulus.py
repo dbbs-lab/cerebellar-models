@@ -1,5 +1,5 @@
 """
-    Module for the configuration node of the Golgi to Glomerulus ConnectionStrategy
+Module for the configuration node of the Golgi to Glomerulus ConnectionStrategy
 """
 
 import itertools
