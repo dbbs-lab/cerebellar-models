@@ -19,9 +19,8 @@ Constructor parameters:
   configuration.
 * ``time_from``: The starting time from which the analysis will be performed
 * ``time_to``: The end time at which the analysis will end.
-* ``all_spikes``: A Boolean numpy array of shape (N*M) storing spike events for
-  each time step. N corresponds to the number of time steps, M to the number of
-  neuron. Neurons are sorted by neuron type.
+* ``all_spikes``: List of :class:`SpikeTrain <neo.core.SpikeTrain>` for each cell
+  type.
 * ``nb_neurons``: A list containing the number of neuron spiking during the
   simulation for each cell type with the same order as ``all_spikes``.
 * ``populations``: The list of the cell type names producing spikes during the
@@ -57,9 +56,8 @@ Constructor parameters:
 This class will load the results from nio files produced by the BSB simulation
 and store them  in the following attributes:
 
-* ``all_spikes``: A Boolean numpy array of shape (N*M) storing spike events for
-  each time step. N corresponds to the number of time steps, M to the number of
-  neuron. Neurons are sorted by neuron type.
+* ``all_spikes``: List of :class:`SpikeTrain <neo.core.SpikeTrain>` for each cell
+  type.
 * ``nb_neurons``: A list containing the number of neuron spiking during the
   simulation for each cell type with the same order as ``all_spikes``.
 * ``populations``: The list of the cell type names producing spikes during the
@@ -133,13 +131,12 @@ Additionally, we define :math:`\sigma` the width of the kernel (in ms)
 
 Different kernel functions would have different smoothening properties.
 Here we are using a normalized version of the
-:doc:`triangle <scipy:reference/generated/scipy.signal.windows.triang>`
+:doc:`gaussian <scipy:reference/generated/scipy.signal.windows.gaussian>`
 function from scipy.
 
 To avoid the edge effects of the kernel convolution with the spike train
 (i.e. the time where the kernel can not fully overlap the spike train
-because of its width), we extract the computed :math:`\lambda _m (t)`
-values on the interval :math:`[time\_from + \sigma; time\_to - \sigma]`.
+because of its width), a compensation effect is calculated.
 
 The final displayed signal :math:`\lambda (t)` corresponds to the mean of
 the neurons' :math:`\lambda _m (t)` surrounded by its standard deviation
@@ -150,9 +147,6 @@ On top of the constructor parameters of ``SpikePlot``:
 
 * ``w_single``: Width of the kernel :math:`\sigma` expressed as number
   of time steps.
-* ``max_neuron_sampled``: Maximum number of neurons used to compute
-  the firing rate signal. It is used to limit the time it takes to
-  complete the kernel convolution operation.
 
 
 .. _isis_distrib:

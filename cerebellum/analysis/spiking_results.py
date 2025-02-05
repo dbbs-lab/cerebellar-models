@@ -9,13 +9,12 @@ from typing import List, Tuple, Union
 import numpy as np
 from bsb import Scaffold
 from elephant.kernels import GaussianKernel
-from elephant.statistics import instantaneous_rate
+from elephant.statistics import instantaneous_rate, isi
 from matplotlib import gridspec as gs
 from matplotlib import pyplot as plt
 from neo import SpikeTrain
 from neo import io as nio
 from quantities import ms
-from scipy import signal
 
 from cerebellum.analysis.plots import Legend, Plot, ScaffoldPlot
 from cerebellum.analysis.report import BSBReport, PlotTypeInfo
@@ -130,10 +129,10 @@ class SpikePlot(ScaffoldPlot):
         """
         Filter the spike events for the time of the analysis.
 
-        :return: Boolean numpy array storing spike events for the analysis time step.
-        :rtype: numpy.ndarray[numpy.ndarray[bool]]
+        :return: Sliced List of SpikeTrain.
+        :rtype: List[neo.core.SpikeTrain]
         """
-        return self.all_spikes[int(self.time_from / self.dt) : int(self.time_to / self.dt)]
+        return [st.time_slice(self.time_from * ms, self.time_to * ms) for st in self.all_spikes]
 
 
 class SpikeSimulationReport(BSBReport):
@@ -166,9 +165,7 @@ class SpikeSimulationReport(BSBReport):
         self.ignored_ct = ignored_ct or ["glomerulus", "ubc_glomerulus"]
         """List of ignored cell type names"""
         self.all_spikes = None
-        """Boolean numpy array of shape (N*M) storing spike events for each time step. 
-                   N corresponds to the number of time steps, M to the number of neuron.
-                   Neurons are sorted by neuron type"""
+        """List of SpikeTrain for each cell type"""
         self.nb_neurons = None
         """Number of neuron for each neuron type"""
         self.populations = None
@@ -259,38 +256,18 @@ class SpikeSimulationReport(BSBReport):
                    N corresponds to the number of time steps, M to the number of neuron. Neurons are sorted by type.
                  - List of number of unique neuron per type.
                  - List of cell type names.
-        :rtype: Tuple[numpy.ndarray[numpy.ndarray[bool]], numpy.ndarray[int], List[str]]
+        :rtype: Tuple[List[neo.core.SpikeTrain], numpy.ndarray[int], List[str]]
         """
         spikes_res, cell_dict = self._extract_spikes_dict()
-        u_gids = []
-        for i, cell_type in enumerate(cell_dict):
-            senders = cell_dict[cell_type]["senders"].tolist()
-            u_gids.extend(senders)
-        time_to = self.scaffold.simulations[self.simulation_name].duration
-        if len(u_gids) == 0:
-            return (
-                np.zeros((int(time_to / self.dt), 0), dtype=bool),
-                np.array([], dtype=int),
-                [],
-            )
-        sorting = np.argsort(u_gids)
-        u_gids = np.array(u_gids)[sorting]
-
-        inv_convert = np.full(np.max(u_gids) + 1, -1)
-        for i, u_gid in enumerate(u_gids):
-            inv_convert[u_gid] = i
-
-        tot_num_neuron = len(u_gids)
-        all_spikes = np.zeros((int(time_to / self.dt) + 1, tot_num_neuron), dtype=bool)
-        for cell_type in cell_dict:
-            for st in spikes_res[cell_dict[cell_type]["id"]]:
-                spikes = st.magnitude
-                senders = np.array(inv_convert[np.array(st.annotations["senders"])])
-                spikes = np.asarray(np.floor(spikes / self.dt), dtype=int)
-                all_spikes[(spikes, senders)] = True
+        all_spikes = []
         nb_neurons = np.zeros(len(cell_dict), dtype=int)
-        for i, uf in enumerate(cell_dict.keys()):
-            nb_neurons[i] = len(cell_dict[uf]["senders"])
+        for i, cell_type in enumerate(cell_dict):
+            for st in spikes_res[cell_dict[cell_type]["id"]]:
+                if len(all_spikes) == i:
+                    all_spikes.append(st)
+                else:
+                    all_spikes[i] = all_spikes[i].merge(st)
+            nb_neurons[i] += len(all_spikes[i].annotations["senders"])
         return all_spikes, nb_neurons, list(cell_dict.keys())
 
     def add_plot(self, name: str, plot: Plot):
@@ -309,10 +286,10 @@ class SpikeSimulationReport(BSBReport):
         """
         Filter the spike events for the time of the analysis.
 
-        :return: Boolean numpy array storing spike events for the analysis time step.
-        :rtype: numpy.ndarray[numpy.ndarray[bool]]
+        :return: Sliced List of SpikeTrain.
+        :rtype: List[neo.core.SpikeTrain]
         """
-        return self.all_spikes[int(self.time_from / self.dt) : int(self.time_to / self.dt)]
+        return [st.time_slice(self.time_from * ms, self.time_to * ms) for st in self.all_spikes]
 
 
 class RasterPSTHPlot(SpikePlot):
@@ -405,7 +382,8 @@ class RasterPSTHPlot(SpikePlot):
         bin_times = np.linspace(0, self.time_to - self.time_from, self.nb_bins)
         loc_spikes = self.get_filt_spikes()
         for i, ct in enumerate(self.populations):
-            times, newIds = np.where(loc_spikes[:, int(counts[i]) : int(counts[i + 1])])
+            times = loc_spikes[i].magnitude
+            newIds = loc_spikes[i].annotations["senders"]
             cell_params = loc_params_raster.copy()
             if "s" not in cell_params and self.nb_neurons[i] > 0:
                 cell_params["s"] = 50.0 / self.nb_neurons[i]
@@ -508,7 +486,6 @@ class FiringRatesPlot(Spike2Columns):
         nb_neurons: List,
         populations: List,
         w_single=1000,
-        max_neuron_sampled=10000,
         dict_colors: dict = None,
         **kwargs,
     ):
@@ -524,12 +501,10 @@ class FiringRatesPlot(Spike2Columns):
             dict_colors,
             **kwargs,
         )
-        if w_single <= 0 or max_neuron_sampled <= 0:
-            raise ValueError("w_single and max_neuron_sampled must be greater than 0")
+        if w_single <= 0:
+            raise ValueError("w_single must be greater than 0")
         self.w_single = w_single
         """Width of the kernel expressed as number of time steps"""
-        self.max_neuron_sampled = max_neuron_sampled
-        """Maximum number of neurons used to compute the firing rate signal."""
 
     def update(self):
         super().update()
@@ -540,15 +515,14 @@ class FiringRatesPlot(Spike2Columns):
         # normalized triangle kernel for single-trial firing rate
 
         loc_spikes = self.get_filt_spikes()
-        self.firing_rates = np.zeros((loc_spikes.shape[0], num_filter))
+        duration = int((self.time_to - self.time_from) / self.dt)
+        self.firing_rates = np.zeros((duration, num_filter))
         for i in range(num_filter):
             if self.nb_neurons[i] <= 0:
                 continue  # pragma: nocover
-            times, _ = np.where(loc_spikes[:, int(counts[i]) : int(counts[i + 1])])
-            spike_train = SpikeTrain((times * self.dt) * ms, t_stop=self.time_to * ms)
             self.firing_rates[:, i] = (
                 instantaneous_rate(
-                    spike_train,
+                    loc_spikes[i],
                     sampling_period=self.dt * ms,
                     kernel=GaussianKernel(self.w_single * ms),
                     border_correction=True,
@@ -604,25 +578,20 @@ def extract_isis(spikes, dt):
     Extract inter-spike intervals from a list of spike trains.
     One mean inter-spike interval value is computed for each neuron.
 
-    :param numpy.ndarray[numpy.ndarray[bool]] spikes: Boolean numpy array of shape (N*M)
-                                                      storing spike events for each time step.
-                                                      N corresponds to the number of time steps,
-                                                      M to the number of neuron.
+    :param neo.core.SpikeTrain spikes: population SpikeTrain
     :param float dt: time step
 
     :return: list of inter-spike intervals
     :rtype: List[float]
     """
-    filter_ = np.where(spikes.T)
-    u, idx = np.unique(filter_[0], return_index=True)
-    times = np.split(filter_[1], idx[1:])
 
-    isi = []
-    for k in range(len(u)):
-        isis = np.diff(times[k]) * dt
+    isi_ = []
+    senders = spikes.annotations["senders"]
+    for sender in np.unique(senders):
+        isis = isi(spikes.magnitude[senders == sender])
         if len(isis) > 0:
-            isi.append(np.mean(isis))
-    return isi
+            isi_.append(np.mean(isis))
+    return isi_
 
 
 class ISIPlot(Spike2Columns):
@@ -667,10 +636,7 @@ class ISIPlot(Spike2Columns):
         num_filter = len(self.nb_neurons)
         counts = np.zeros(num_filter + 1)
         counts[1:] = np.cumsum(self.nb_neurons)
-        isis_dist = [
-            extract_isis(self.all_spikes[:, int(counts[i]) : int(counts[i + 1])], self.dt)
-            for i in range(num_filter)
-        ]
+        isis_dist = [extract_isis(self.all_spikes[i], self.dt) for i in range(num_filter)]
         for i, ct in enumerate(self.populations):
             ax2 = self.get_ax(i)
             if len(isis_dist[i]) > 0:
@@ -772,8 +738,11 @@ class SimResultsTable(TablePlot, SpikePlot):
         counts[1:] = np.cumsum(self.nb_neurons)
         loc_spikes = self.get_filt_spikes()
         for i in range(num_filter):
-            spikes = loc_spikes[:, int(counts[i]) : int(counts[i + 1])]
-            all_fr = np.sum(spikes, axis=0) / ((self.time_to - self.time_from) / 1000.0)
+            spikes = loc_spikes[i]
+
+            all_fr = np.unique(spikes.annotations["senders"], return_counts=True)[1] / (
+                (self.time_to - self.time_from) / 1000.0
+            )
             isi = extract_isis(spikes, self.dt)
 
             self._values.append([all_fr, isi])

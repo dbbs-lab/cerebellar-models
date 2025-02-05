@@ -68,10 +68,7 @@ class TestSpikePlots(ReportBasalSimCircuitTest, NumpyTestCase, engine_name="hdf5
             len(self.simulationReport.nb_neurons), len(self.simulationReport.populations)
         )
         self.assertEqual(
-            len(self.simulationReport.all_spikes), int(self.simulation_duration / 0.1) + 1
-        )
-        self.assertEqual(
-            len(self.simulationReport.all_spikes[0]), sum(self.simulationReport.nb_neurons)
+            len(self.simulationReport.all_spikes), sum(self.simulationReport.nb_neurons)
         )
         self.assertAll(np.sum(self.simulationReport.all_spikes, axis=0) > 0)
         self.assertTrue("mossy_fibers" in self.simulationReport.populations)
@@ -199,7 +196,10 @@ class TestSpikePlots(ReportBasalSimCircuitTest, NumpyTestCase, engine_name="hdf5
         self.assertTrue(scatter.get_rasterized())
         mf_spike_times = (
             np.array(
-                np.where(self.simulationReport.all_spikes[:, : self.simulationReport.nb_neurons[0]])
+                (
+                    self.simulationReport.all_spikes[0],
+                    self.simulationReport.all_spikes[0].annotations["senders"],
+                )
             )
             * np.array([[self.simulationReport.dt, 1.0]]).T
         )
@@ -235,7 +235,7 @@ class TestSpikePlots(ReportBasalSimCircuitTest, NumpyTestCase, engine_name="hdf5
             simulation_name="basal_activity",
             time_from=None,
             time_to=None,
-            all_spikes=np.zeros((10001, 0), dtype=bool),
+            all_spikes=[],
             nb_neurons=np.zeros(0, dtype=int),
             populations=[],
         )
@@ -248,7 +248,7 @@ class TestSpikePlots(ReportBasalSimCircuitTest, NumpyTestCase, engine_name="hdf5
                 simulation_name="basal_activity",
                 time_from=None,
                 time_to=None,
-                all_spikes=np.zeros((10001, 0), dtype=bool),
+                all_spikes=[],
                 nb_neurons=np.zeros(0, dtype=int),
                 populations=[],
                 nb_bins=0,
@@ -290,7 +290,7 @@ class TestSpikePlots(ReportBasalSimCircuitTest, NumpyTestCase, engine_name="hdf5
             simulation_name="basal_activity",
             time_from=None,
             time_to=None,
-            all_spikes=np.zeros((10001, 0), dtype=bool),
+            all_spikes=[],
             nb_neurons=np.zeros(0, dtype=int),
             populations=[],
         )
@@ -304,7 +304,7 @@ class TestSpikePlots(ReportBasalSimCircuitTest, NumpyTestCase, engine_name="hdf5
                 simulation_name="basal_activity",
                 time_from=None,
                 time_to=None,
-                all_spikes=np.zeros((10001, 0), dtype=bool),
+                all_spikes=[],
                 nb_neurons=np.zeros(0, dtype=int),
                 populations=[],
                 w_single=0,
@@ -316,7 +316,7 @@ class TestSpikePlots(ReportBasalSimCircuitTest, NumpyTestCase, engine_name="hdf5
                 simulation_name="basal_activity",
                 time_from=None,
                 time_to=None,
-                all_spikes=np.zeros((10001, 0), dtype=bool),
+                all_spikes=[],
                 nb_neurons=np.zeros(0, dtype=int),
                 populations=[],
                 max_neuron_sampled=0,
@@ -354,7 +354,7 @@ class TestSpikePlots(ReportBasalSimCircuitTest, NumpyTestCase, engine_name="hdf5
             simulation_name="basal_activity",
             time_from=None,
             time_to=None,
-            all_spikes=np.zeros((10001, 0), dtype=bool),
+            all_spikes=[],
             nb_neurons=np.zeros(0, dtype=int),
             populations=[],
             dict_colors=self.simulationReport.colors,
@@ -368,7 +368,7 @@ class TestSpikePlots(ReportBasalSimCircuitTest, NumpyTestCase, engine_name="hdf5
                 simulation_name="basal_activity",
                 time_from=None,
                 time_to=None,
-                all_spikes=np.zeros((10001, 0), dtype=bool),
+                all_spikes=[],
                 nb_neurons=np.zeros(0, dtype=int),
                 populations=[],
                 dict_colors=self.simulationReport.colors,
@@ -417,7 +417,7 @@ class TestSpikePlots(ReportBasalSimCircuitTest, NumpyTestCase, engine_name="hdf5
             simulation_name="basal_activity",
             time_from=None,
             time_to=None,
-            all_spikes=np.zeros((10001, 0), dtype=bool),
+            all_spikes=[],
             nb_neurons=np.zeros(0, dtype=int),
             populations=[],
             dict_colors=self.simulationReport.colors,
@@ -467,7 +467,7 @@ class TestSpikePlots(ReportBasalSimCircuitTest, NumpyTestCase, engine_name="hdf5
             simulation_name="basal_activity",
             time_from=None,
             time_to=None,
-            all_spikes=np.zeros((10001, 0), dtype=bool),
+            all_spikes=[],
             nb_neurons=np.zeros(0, dtype=int),
             populations=[],
             dict_colors=self.simulationReport.colors,
