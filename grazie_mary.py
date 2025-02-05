@@ -92,8 +92,8 @@ def plot_fr(loc_spikes, nb_neurons, cell_names,dt, time_from, time_to):
         spike_train = SpikeTrain((times*dt) * ms, t_stop=time_to*ms)
         ist_rate = instantaneous_rate(spike_train, sampling_period= 0.1* ms,
                                   kernel=GaussianKernel(10 * ms), border_correction=True)
-        plt.figure()
-        plt.title(f"Mean firing rate of {cell_names[i]}")
+        plt.figure(figsize=(20,15))
+        plt.title(f"Firing rate of {cell_names[i]}")
         plt.plot(ist_rate.times, ist_rate.magnitude / nb_neurons[i], color="red")
         plt.xlabel("Time (ms)")
         plt.ylabel("Firing rate (Hz)")
@@ -109,7 +109,7 @@ def compute_firing_rates(scaffold, folder_nio, simulation_name,time_from, time_t
         plot_fr(loc_spikes, nb_neurons, populations,dt, time_from, time_to)
     return extract_fr(loc_spikes, nb_neurons, time_from, time_to, populations)
 if __name__ == "__main__":
-    folder_nio = "nio_files/stim_trials_2"
+    folder_nio = "nio_files/trials_no_io"
     scaffold_name = "mouse_cereb_io_trials.hdf5"
     scaffold = from_storage(scaffold_name)
     simulation_name = "mf_cf_stimulus"
@@ -125,13 +125,18 @@ if __name__ == "__main__":
         pc_mean_fr.append(fr['purkinje_cell'])
         dcn_p_fr.append(fr['dcn_p'])
 
+    # time_from = 0
+    # time_to = 15200
+    # dt = 0.1
+    # fr_long = compute_firing_rates(scaffold, folder_nio, simulation_name, time_from, time_to, dt, plot=True)
+
     plt.figure()
-    plt.plot(np.arange(1,n_trials+1), pc_mean_fr, '--', marker='o', color='blue', markersize = 5)
-    plt.plot(np.arange(1, n_trials + 1), dcn_p_fr, '--', marker='o', color='red', markersize=5)
+    plt.plot(np.arange(1,n_trials+1), pc_mean_fr, '--', marker='o', color='blue', markersize = 5, label ='PC')
+    plt.plot(np.arange(1, n_trials + 1), dcn_p_fr, '--', marker='o', color='red', markersize=5, label ='DCNp')
     plt.xlabel("Trials")
     plt.ylabel("Mean firing rate")
     plt.title("PC and DCNp mean firing rate over trials")
-    plt.legend({"PC","DCNp"})
+    plt.legend()
     plt.xlim(1,15)
     plt.show()
 

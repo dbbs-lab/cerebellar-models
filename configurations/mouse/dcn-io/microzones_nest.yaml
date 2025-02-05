@@ -2,27 +2,32 @@ name: DBBS Mouse cerebellum w/ DCN and IO NEST basal activity and mf stimulus w/
 storage:
   root: mouse_cereb_microzones_nest.hdf5
 packages:
-  - bsb-nest~=4.1
+  - bsb-nest~=4.2
+components:
+  - cerebellum/nest_models/build_models.py
 simulations:
   basal_activity:
+    modules:
+      - cerebmodule
+      - custom_stdp_module
     cell_models:
       purkinje_cell_minus:
-        model: eglif_cond_alpha_multisyn
+        model: eglif_pc_nestml #eglif_cond_alpha_multisyn
         constants:
           t_ref: 0.5
-          V_min: -350
+          Vmin: -350
           C_m: 334
           V_th: -43
           V_reset: -69
           E_L: -59
           V_m: -59.0
-          lambda_0: 0.001
-          tau_V: 0.5
+          lambda_0: 4. #0.001
+          tau_V: 3.5 #0.5
           tau_m: 47
-          I_e: 742.543
-          k_adap: 1.491
-          k_1: 0.195
-          k_2: 0.041
+          I_e: 700 #742.543
+          kadap: 1.491
+          k1: 0.195
+          k2: 0.041
           A1: 157.622
           A2: 172.622
           tau_syn1: 1.1
@@ -39,10 +44,10 @@ simulations:
           V_th: -36
           V_reset: -55
           E_L: -45
-          I_e: 150 # 75.385
+          I_e: 75.385 #150
           V_m: -45
-          lambda_0: 1. # 0.001
-          tau_V: 0.3   # 0.5
+          lambda_0: 3. #1. # 0.001
+          tau_V: 3. #0.3   # 0.5
           tau_m: 33
           k_adap: 0.408
           k_1: 0.697
@@ -61,10 +66,10 @@ simulations:
           V_th: -36
           V_reset: -55
           E_L: -45
-          I_e: 150 # 75.385
+          I_e: 75.385 #150
           V_m: -45
-          lambda_0: 1. # 0.001
-          tau_V: 0.3   # 0.5
+          lambda_0: 3. #1. # 0.001
+          tau_V: 3. #0.3   # 0.5
           tau_m: 33
           k_adap: 0.408
           k_1: 0.697
@@ -83,10 +88,10 @@ simulations:
           V_th: -39
           V_reset: -55
           E_L: -40
-          I_e: 10. # 2.384
+          I_e: 2.384 #10.
           V_m: -40
-          lambda_0: 1. # 0.001
-          tau_V: 0.3  # 0.5
+          lambda_0: 0.9 #1. # 0.001
+          tau_V: 1. #0.3  # 0.5
           tau_m: 56
           k_adap: 0.079
           k_1: 0.041
@@ -105,10 +110,10 @@ simulations:
           V_th: -39
           V_reset: -55
           E_L: -40
-          I_e: 10. # 2.384
+          I_e: 2.384 #10.
           V_m: -40
-          lambda_0: 1. # 0.001
-          tau_V: 0.3  # 0.5
+          lambda_0: 0.9 #1. # 0.001
+          tau_V: 1. #0.3  # 0.5
           tau_m: 56
           k_adap: 0.079
           k_1: 0.041
@@ -120,21 +125,21 @@ simulations:
           E_rev1: 0
           E_rev2: -80
       io_plus:
-        model: eglif_cond_alpha_multisyn
+        model: eglif_io_nestml #eglif_cond_alpha_multisyn
         constants:
           t_ref: 1
           C_m: 189
           V_th: -35
           V_reset: -45
           E_L: -45
-          I_e: 18.101
+          I_e: -18.101
           V_m: -45
           lambda_0: 1.2
           tau_V: 0.8
           tau_m: 11
-          k_adap: 1.928
-          k_1: 0.191
-          k_2: 0.091
+          kadap: 1.928
+          k1: 0.191
+          k2: 0.091
           A1: 1810.923
           A2: 1358.197
           tau_syn1: 1
@@ -142,21 +147,21 @@ simulations:
           E_rev1: 0
           E_rev2: -80
       io_minus:
-        model: eglif_cond_alpha_multisyn
+        model: eglif_io_nestml #eglif_cond_alpha_multisyn
         constants:
           t_ref: 1
           C_m: 189
           V_th: -35
           V_reset: -45
           E_L: -45
-          I_e: 18.101
+          I_e: -18.101
           V_m: -45
           lambda_0: 1.2
           tau_V: 0.8
           tau_m: 11
-          k_adap: 1.928
-          k_1: 0.191
-          k_2: 0.091
+          kadap: 1.928
+          k1: 0.191
+          k2: 0.091
           A1: 1810.923
           A2: 1358.197
           tau_syn1: 1
@@ -172,20 +177,20 @@ simulations:
           receptor_type: 1
       parallel_fiber_to_purkinje_minus:
         synapse:
-          model: static_synapse
+          model: stdp_synapse_sinexp
           weight: 0.14
           delay: 5
           receptor_type: 1
       stellate_to_purkinje_minus:
         synapse:
           model: static_synapse
-          weight: 1.64
+          weight: 0.17 #1.64
           delay: 5
           receptor_type: 2
       basket_to_purkinje_minus:
         synapse:
           model: static_synapse
-          weight: 0.44
+          weight: 0.8 #0.44
           delay: 4
           receptor_type: 2
       mossy_fibers_to_dcn_p_plus:
@@ -203,39 +208,39 @@ simulations:
       purkinje_to_dcn_p_plus:
         synapse:
           model: static_synapse
-          weight: 3. # 0.4
+          weight: 0.35 #3. # 0.4
           delay: 4.
           receptor_type: 2
       purkinje_to_dcn_p_minus:
         synapse:
           model: static_synapse
-          weight: 3. # 0.4
+          weight: 0.35 #3. # 0.4
           delay: 4.
           receptor_type: 2
       purkinje_to_dcn_i_plus:
         synapse:
           model: static_synapse
-          weight: 0.4 # 0.12
+          weight: 0.02 #0.4 # 0.12
           delay: 4.
           receptor_type: 2
       purkinje_to_dcn_i_minus:
         synapse:
           model: static_synapse
-          weight: 0.4 # 0.12
+          weight: 0.02 #0.4 # 0.12
           delay: 4.
           receptor_type: 2
       io_to_purkinje:
         synapse:
           model: static_synapse
-          weight: 300 # 50
+          weight: 800 #300 # 50
           delay: 4
-          receptor_type: 3
+          receptor_type: 5
       io_to_purkinje_minus:
         synapse:
           model: static_synapse
-          weight: 300 # 50
+          weight: 800 #300 # 50
           delay: 4
-          receptor_type: 3
+          receptor_type: 5
       io_to_mli_io_plus_to_basket_cell:
         synapse:
           model: static_synapse
@@ -263,25 +268,25 @@ simulations:
       io_to_dcn_p_plus:
         synapse:
           model: static_synapse
-          weight: 0.5 # 2.5
+          weight: 0.4 #0.5 # 2.5
           delay: 4
           receptor_type: 1
       io_to_dcn_p_minus:
         synapse:
           model: static_synapse
-          weight: 0.5 # 2.5
+          weight: 0.4 #0.5 # 2.5
           delay: 4
           receptor_type: 1
       io_to_dcn_i_plus:
         synapse:
           model: static_synapse
-          weight: 0.5 # 0.1
+          weight: 0.25 #0.5 # 0.1
           delay: 5
           receptor_type: 1
       io_to_dcn_i_minus:
         synapse:
           model: static_synapse
-          weight: 0.5 # 0.1
+          weight: 0.25 #0.5 # 0.1
           delay: 5
           receptor_type: 1
       dcn_i_to_io_plus:
@@ -352,18 +357,28 @@ simulations:
         - simulator
         - resolution
         - duration
-        - modules
         - seed
         - cell_models
         - connection_models
         - devices
   mf_cf_stimulus:
     devices:
-      mf_stimulus:
+      mf_stimulus_1:
         device: poisson_generator
         rate: 40
-        start: 1000
-        stop: 1260
+        start: 500
+        stop: 760
+        targetting:
+          strategy: cell_model
+          cell_models:
+            - mossy_fibers
+        weight: 1
+        delay: 0.1
+      mf_stimulus_2:
+        device: poisson_generator
+        rate: 40
+        start: 1500
+        stop: 1760
         targetting:
           strategy: cell_model
           cell_models:
@@ -373,8 +388,8 @@ simulations:
       cf_stimulus_plus:
         device: poisson_generator
         rate: 500
-        start: 1550
-        stop: 1560
+        start: 750
+        stop: 760
         targetting:
           strategy: cell_model
           cell_models:
@@ -385,8 +400,8 @@ simulations:
       cf_stimulus_minus:
         device: poisson_generator
         rate: 500
-        start: 1750
-        stop: 1760
+        start: 750
+        stop: 760
         targetting:
           strategy: cell_model
           cell_models:

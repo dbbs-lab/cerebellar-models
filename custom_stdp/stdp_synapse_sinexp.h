@@ -317,9 +317,10 @@ stdp_synapse_sinexp< targetidentifierT >::send( Event& e, size_t t, const Common
   while(buffer_pre_spikes_[0] < t_spike - 200){
     buffer_pre_spikes_.erase(buffer_pre_spikes_.begin());
   }
-  for(int i=0; i<LTD_values_.size(); i++){
-    std::cout << (LTD_values_[i]*(-1)) << std::endl;
-  }
+  //printing LTD values (for testing)
+//  for(int i=0; i<LTD_values_.size(); i++){
+//    std::cout << (LTD_values_[i]*(-1)) << std::endl;
+//  }
   e.set_receiver( *target );
   e.set_weight( weight_ );
     // use accessor functions (inherited from Connection< >) to obtain delay in

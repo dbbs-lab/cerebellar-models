@@ -64,7 +64,7 @@ cell_types:
     spatial:
       morphologies:
         - PurkinjeCell
-      planar_density: 0.00045
+      planar_density: 0.001166 #0.00045
       radius: 7.5
     plotting:
       display_name: Purkinje cell plus
@@ -72,7 +72,7 @@ cell_types:
     spatial:
       morphologies:
         - PurkinjeCell
-      planar_density: 0.00045
+      planar_density: 0.001166 #0.00045
       radius: 7.5
     plotting:
       display_name: Purkinje cell minus
@@ -102,14 +102,14 @@ cell_types:
       display_name: Deep Cerebellar Nuclei type i minus
   io_plus:
     spatial:
-      count_ratio: 0.1428
+      count_ratio: 0.2 #0.1428
       radius: 7.5
       relative_to: purkinje_cell
     plotting:
       display_name: Inferior olive cells plus
   io_minus:
     spatial:
-      count_ratio: 0.1428
+      count_ratio: 0.2 #0.1428
       radius: 7.5
       relative_to: purkinje_cell_minus
     plotting:
@@ -122,7 +122,7 @@ placement:
     cell_types:
       - purkinje_cell
     spacing_x: 130
-    angle: 70
+    angle: 80 #70
   purkinje_layer_placement_minus:
     strategy: bsb.placement.ParallelArrayPlacement
     partitions:
@@ -130,7 +130,7 @@ placement:
     cell_types:
       - purkinje_cell_minus
     spacing_x: 130
-    angle: 70
+    angle: 80 #70
   dcn_p_layer_placement_plus:
     strategy: bsb.placement.RandomPlacement
     partitions:
@@ -183,10 +183,10 @@ connectivity:
     affinity: 0.05
     voxels_pre: 500
     voxels_post: 500
-    contacts:
-      distribution: norm
-      loc: 3
-      scale: 1
+#    contacts:
+#      distribution: norm
+#      loc: 3
+#      scale: 1
   parallel_fiber_to_purkinje_minus:
     strategy: bsb.connectivity.VoxelIntersection
     presynaptic:
@@ -217,6 +217,10 @@ connectivity:
     affinity: 0.1
     voxels_pre: 500
     voxels_post: 500
+    contacts:
+      distribution: norm
+      loc: 10
+      scale: 0.3
   basket_to_purkinje_minus:
     strategy: bsb.connectivity.VoxelIntersection
     presynaptic:
@@ -340,53 +344,60 @@ connectivity:
     io_pc_connectivity: io_to_purkinje_minus
     pre_cell_pc: purkinje_cell_minus
   io_to_dcn_p_plus:
-    strategy: bsb.connectivity.AllToAll
+    strategy: bsb.connectivity.FixedOutdegree
     presynaptic:
       cell_types:
         - io_plus
     postsynaptic:
       cell_types:
         - dcn_p_plus
+    outdegree: 60
   io_to_dcn_p_minus:
-    strategy: bsb.connectivity.AllToAll
+    strategy: bsb.connectivity.FixedOutdegree
     presynaptic:
       cell_types:
         - io_minus
     postsynaptic:
       cell_types:
         - dcn_p_minus
+    outdegree: 60
   io_to_dcn_i_plus:
-    strategy: bsb.connectivity.AllToAll
+    strategy: bsb.connectivity.FixedOutdegree
     presynaptic:
       cell_types:
         - io_plus
     postsynaptic:
       cell_types:
         - dcn_i_plus
+    outdegree: 33
   io_to_dcn_i_minus:
-    strategy: bsb.connectivity.AllToAll
+    strategy: bsb.connectivity.FixedOutdegree
     presynaptic:
       cell_types:
         - io_minus
     postsynaptic:
       cell_types:
         - dcn_i_minus
+    outdegree: 33
   dcn_i_to_io_plus:
-    strategy: bsb.connectivity.AllToAll
+    strategy: bsb.connectivity.FixedIndegree
     presynaptic:
       cell_types:
         - dcn_i_plus
     postsynaptic:
       cell_types:
         - io_plus
+    indegree: 33
   dcn_i_to_io_minus:
-    strategy: bsb.connectivity.AllToAll
+    strategy: bsb.connectivity.FixedIndegree
     presynaptic:
       cell_types:
         - dcn_i_minus
     postsynaptic:
       cell_types:
         - io_minus
+    indegree: 33
+
 $import:
   ref: ../mouse_cerebellar_cortex.yaml#/
   values:
