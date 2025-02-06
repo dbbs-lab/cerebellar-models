@@ -329,7 +329,6 @@ stdp_synapse_sinexp< targetidentifierT >::send( Event& e, size_t t, const Common
   e.set_rport( get_rport() );
   e();
   t_lastspike_ = t_spike;
-//  }
 
   return true;
 }

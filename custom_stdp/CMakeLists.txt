@@ -44,6 +44,7 @@ set( MODULE_SOURCES
       eglif_io_nestml.cpp eglif_io_nestml.h
       eglif_pc_nestml.cpp eglif_pc_nestml.h
       eglif_gr_nestml.cpp eglif_gr_nestml.h
+      eglif_mli.cpp eglif_mli.h
       stdp_synapse_sinexp.h stdp_synapse_sinexp.cpp
       stdp_synapse_cosexp.h stdp_synapse_cosexp.cpp
       stdp_synapse_alpha.h stdp_synapse_alpha.cpp

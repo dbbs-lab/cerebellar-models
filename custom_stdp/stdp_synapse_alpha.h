@@ -36,6 +36,8 @@
 #include "dictdatum.h"
 #include "dictutils.h"
 
+#include "histentry.h"
+#include "archiving_node.h"
 #include "extended_hist_entry.h"
 #include "extended_post_history_archiving_node.h"
 
@@ -200,7 +202,8 @@ public:
   {
     weight_ = w;
   }
-  std::vector<double> simple_post_spikes_;
+  std::vector<double> buffer_pre_spikes_;
+  std::vector<double> LTP_values_;
 
 private:
   double
@@ -213,7 +216,7 @@ private:
   double
   facilitate_(double tempo)
   {
-    double k = (-tempo/tau_) * std::exp(1-(-tempo/tau_));
+    double k = (std::exp(1)/0.05) * (-tempo/tau_) * std::exp(tempo/50);
     return k * Aplus_;
   }
 
@@ -222,7 +225,6 @@ private:
   double Wmin_;
   double Wmax_;
   double tau_;
-  double t0_;
   double Aplus_;
   double Aminus_;
 
@@ -266,68 +268,64 @@ stdp_synapse_alpha< targetidentifierT >::send( Event& e, size_t t, const CommonS
   target->get_history( t_lastspike_ - dendritic_delay, t_spike - dendritic_delay, &start, &finish );
   // facilitation due to postsynaptic spikes since last pre-synaptic spike
   double minus_dt;
+  double LTP = 0;
+  double single = 0;
+  // check for weight change after the synapse firing
+  bool check_LTP = false;
+  // presynaptic spikes buffer for LTP
+  double t_spike_buffer = t_spike;
+  buffer_pre_spikes_.push_back(t_spike_buffer);
   while ( start != finish )
   {
-    minus_dt = t_lastspike_ - ( start->t_ + dendritic_delay );
-    // const double offset = start->offset_;
-    double post = 0;
+    minus_dt = start->t_ + dendritic_delay;
+    const double offset = start->offset_;
     // get_history() should make sure that
     // start->t_ > t_lastspike - dendritic_delay, i.e. minus_dt < 0
-    std::cout << "Custom STDP synapse: processing post spike with offset = " << e.get_offset() << std::endl;
-    assert( minus_dt < -1.0 * kernel().connection_manager.get_stdp_eps() );
-    if (e.get_offset() != 0 && t_lastspike_ >= t0_)
-    {
-      double LTP = 0;
-      double last_post_spike = 0;
-      for (unsigned int GR=0; GR < simple_post_spikes_.size(); GR++) {
-        double sd = simple_post_spikes_[GR] - minus_dt;
-        double sd_minus = simple_post_spikes_[GR-1] - minus_dt;
-        if (sd < 0 && sd > -200 && post != 0){
-          LTP += facilitate_(sd);
+    // assert( minus_dt < -1.0 * kernel().connection_manager.get_stdp_eps() );
+    if (offset != 0 && buffer_pre_spikes_.size() > 0){
+      //if the IO fired, there will be an LTP calculus, modulated by the presynaptic spike available
+      //in a 200 ms time window, right before the IO spike
+      for (int idx=0; idx < buffer_pre_spikes_.size(); idx++) {
+        double t_window = buffer_pre_spikes_[idx] - minus_dt;
+        if (t_window <= 0 && t_window >= -200){
+          check_LTP = true;
+          single = facilitate_(t_window);
+          LTP += facilitate_(t_window);
+          LTP_values_.push_back(single);
         }
-        else if (sd < 0 && sd > -200 && post == 0){
-          LTP += facilitate_(sd);
-          LTP += facilitate_(sd_minus);
-          ++post;
-        }
-        last_post_spike = sd;
-      }
-      weight_ = weight_ + LTP;
-      if (weight_ >= Wmax_)
-      {
-        weight_ = Wmax_;
-      }
-      if (last_post_spike <= -200){
-        post = 0;
       }
     }
-
-    e.set_receiver( *target );
-    e.set_weight( weight_ );
-    e.set_delay_steps( get_delay_steps() );
-    e.set_rport( get_rport() );
-    t_lastspike_ = t_spike;
     ++start;
   }
-
-  if (e.get_offset() == 0){
+  if (check_LTP){
+    weight_ = weight_ + LTP;
+    if (weight_ >= Wmax_){
+      weight_ = Wmax_;
+    }
+  }
+  else {
     weight_ = weight_ + depress_();
     if (weight_ <= Wmin_){
       weight_ = Wmin_;
     }
-    simple_post_spikes_.push_back(t_spike);
-    while(simple_post_spikes_[0] < t_spike - 200){
-      simple_post_spikes_.erase(simple_post_spikes_.begin());
-    }
-    e.set_receiver( *target );
-    e.set_weight( weight_ );
-    // use accessor functions (inherited from Connection< >) to obtain delay in
-    // steps and rport
-    e.set_delay_steps( get_delay_steps() );
-    e.set_rport( get_rport() );
-    e();
-    t_lastspike_ = t_spike;
   }
+
+  // buffer reset for old spikes
+  while(buffer_pre_spikes_[0] < t_spike - 200){
+    buffer_pre_spikes_.erase(buffer_pre_spikes_.begin());
+  }
+  //printing LTP values (for testing)
+//  for(int i=0; i<LTP_values_.size(); i++){
+//    std::cout << (LTP_values_[i]) << std::endl;
+//  }
+  e.set_receiver( *target );
+  e.set_weight( weight_ );
+  // use accessor functions (inherited from Connection< >) to obtain delay in
+  // steps and rport
+  e.set_delay_steps( get_delay_steps() );
+  e.set_rport( get_rport() );
+  e();
+  t_lastspike_ = t_spike;
 
   return true;
 }
@@ -336,13 +334,12 @@ stdp_synapse_alpha< targetidentifierT >::send( Event& e, size_t t, const CommonS
 template < typename targetidentifierT >
 stdp_synapse_alpha< targetidentifierT >::stdp_synapse_alpha()
   : ConnectionBase()
-  , weight_( 0.07 )
+  , weight_( 5.0 )
   , Wmin_( 0.0 )
-  , Wmax_( 0.2 )
-  , tau_(50)
-  , t0_( 100 )
-  , Aplus_( 0.012 )
-  , Aminus_( -0.0002 )
+  , Wmax_( 200 )
+  , tau_(1000)
+  , Aplus_( 1.0 )
+  , Aminus_( -1.5 )
 
   , t_lastspike_( 0.0 )
 {
