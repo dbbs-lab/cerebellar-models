@@ -185,6 +185,7 @@ be plotted on top of each panel:
 - Theta band: :math:`[4; 8]` Hz
 - Alpha band: :math:`[8; 12]` Hz
 - Beta band: :math:`[12; 30]` Hz
+- Gamma band: :math:`[30; 100]` Hz
 
 
 .. _basic_sim_report:
