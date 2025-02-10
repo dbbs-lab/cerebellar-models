@@ -12,6 +12,7 @@ simulations:
     duration: 15200
     modules:
       - cerebmodule
+      - custom_stdp_module
     seed: 1234
     cell_models:
       mossy_fibers:
@@ -92,7 +93,7 @@ simulations:
           E_rev2: -80
           E_rev3: 0
       basket_cell:
-        model: eglif_cond_alpha_multisyn
+        model: eglif_mli #eglif_cond_alpha_multisyn
         constants:
           t_ref: 1.59
           C_m: 14.6
@@ -104,9 +105,9 @@ simulations:
           tau_V: 1. #1.1
           tau_m: 9.125
           I_e: 3.711
-          k_adap: 2.025
-          k_1: 1.887
-          k_2: 1.096
+          kadap: 2.025
+          k1: 1.887
+          k2: 1.096
           A1: 5.953
           A2: 5.863
           tau_syn1: 0.64
@@ -116,7 +117,7 @@ simulations:
           E_rev2: -80
           E_rev3: 0
       stellate_cell:
-        model: eglif_cond_alpha_multisyn
+        model: eglif_mli #eglif_cond_alpha_multisyn
         constants:
           t_ref: 1.59
           C_m: 14.6
@@ -128,9 +129,9 @@ simulations:
           tau_V: 1. #1.1
           tau_m: 9.125
           I_e: 3.711
-          k_adap: 2.025
-          k_1: 1.887
-          k_2: 1.096
+          kadap: 2.025
+          k1: 1.887
+          k2: 1.096
           A1: 5.953
           A2: 5.863
           tau_syn1: 0.64
@@ -195,9 +196,11 @@ simulations:
           receptor_type: 1
       parallel_fiber_to_stellate:
         synapse:
-          model: static_synapse
+          model: stdp_synapse_alpha #static_synapse
           weight: 0.08 #0.18
           delay: 5
+          Aplus: 0.0002
+          Aminus: -0.0001 #-0.00008
           receptor_type: 1
       stellate_to_stellate:
         synapse:
@@ -213,9 +216,11 @@ simulations:
           receptor_type: 2
       parallel_fiber_to_basket:
         synapse:
-          model: static_synapse
+          model: stdp_synapse_alpha #static_synapse
           weight: 0.06 #0.1
           delay: 5
+          Aplus: 0.00005 #0.0001
+          Aminus: -0.00002
           receptor_type: 1
       basket_to_basket:
         synapse:

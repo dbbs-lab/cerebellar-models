@@ -43,7 +43,7 @@ simulations:
       io_to_mli_io_to_basket_cell:
         synapse:
           model: static_synapse
-          weight: 5. # 2.5
+          weight: 2.5
           delay: 40
           receptor_type: 3
       io_to_mli_io_to_stellate_cell:
