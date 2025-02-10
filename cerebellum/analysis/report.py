@@ -103,6 +103,13 @@ class Report:
         self.set_plot_colors(plot)
         self.plots[name] = plot
 
+    def postprocessing(self):
+        """
+        Function to apply modifications to the report's plots
+        after the plotting is done.
+        """
+        pass
+
     def print_report(self, output_name: str, dpi: int = 200, pad: int = 0, **kwargs):
         """
         Print the report and export it in a pdf file.
@@ -113,6 +120,7 @@ class Report:
                 plot.plot()
             plot.figure.tight_layout(pad=pad)
             plot.figure.savefig(pdf, format="pdf", dpi=dpi, **kwargs)
+        self.postprocessing()
         pdf.close()
 
     def save_plot(self, plot_name: str, output_name: str, dpi: int = 200, pad: int = 0, **kwargs):

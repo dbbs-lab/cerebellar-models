@@ -883,6 +883,8 @@ class BasicSimulationReport(SpikeSimulationReport):
         self.add_plot("isis", isis)
         self.add_plot("freq", freq)
         self.add_plot("legend", legend)
-        table.set_axis_off()
-        legend.set_axis_off()
         legend.remove_ct(self.cell_names, self.ignored_ct)
+
+    def postprocessing(self):
+        self.plots["table"].set_axis_off()
+        self.plots["legend"].set_axis_off()
