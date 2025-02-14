@@ -23,7 +23,6 @@ classmap = {
         "ubc_glom": "cerebellum.connectome.to_glomerulus.ConnectomeUBCGlomerulus",
         "glom_ubc": "cerebellum.connectome.glomerulus_ubc.ConnectomeGlomerulusUBC",
         "io_mli": "cerebellum.connectome.io_molecular.ConnectomeIO_MLI",
-        "grc_to": "cerebellum.connectome.granule_voxel_intersect.GranuleToMorphologyIntersection",
     },
     "bsb.postprocessing.AfterConnectivityHook": {
         "struct_report": "cerebellum.analysis.structure_analysis.RunStructureReport",

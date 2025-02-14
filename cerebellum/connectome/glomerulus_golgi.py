@@ -51,7 +51,7 @@ class ConnectomeGlomerulusGolgi(PresynDistStrat, ConnectionStrategy):
             )
             if basal_dendrides_branches.size == 0:
                 raise ConnectivityError(
-                    "The golgi morphology provided has no terminal branches.\n"
+                    "The golgi morphology provided has no basal dendrite terminal branches.\n"
                     "Check the morphology_labels."
                 )
 

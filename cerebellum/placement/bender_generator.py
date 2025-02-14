@@ -25,7 +25,7 @@ class BenderGenerator(MorphologyBender, MorphologyGenerator, classmap_entry="mor
 
 
 @config.node
-class GranuleBender(MorphologyBender):
+class GranuleGenerator(BenderGenerator, classmap_entry="granule_bender"):
     """Specific bender for granule cell."""
 
     SIZE_ASCENDING_AXON = 140.0  # um
@@ -157,10 +157,11 @@ class GolgiGenerator(BenderGenerator, classmap_entry="golgi_bender"):
         # Re-label the dendrites based on their layer location.
         id_den_gr = id_den_mol = -1
         for k, v in morphology.labelsets.items():
+            v = list(v)
             if "dendrites" in v:
-                if "basal" in v:
+                if "basal_dendrites" in v:
                     id_den_gr = k
-                elif "apical" in v:
+                elif "apical_dendrites" in v:
                     id_den_mol = k
         for branch in morphology.branches:
             is_dendrite = np.array(
