@@ -1,9 +1,11 @@
 import os
+from enum import Enum
 from os.path import abspath, basename, dirname, join, splitext
 
 import click
+import numpy as np
+import survey
 from bsb import Configuration, format_configuration_content, parse_configuration_file
-from simple_term_menu import TerminalMenu
 
 from cerebellum import __version__
 from cerebellum.utils import deep_update, get_folders_in_folder, load_configs_in_folder
@@ -12,54 +14,45 @@ ROOT_FOLDER = dirname(dirname(abspath(__file__)))
 CONFIGURATION_FOLDER = join(ROOT_FOLDER, "configurations")
 
 
+class TypeTermElem(Enum):
+    Selection = 1
+    Basket = 2
+    Text = 3
+    Number = 4
+    Boolean = 5
+
+
 class CerebOption:
-    def __init__(self, name, title, choices, default_value=None, is_multi=False, dependencies=None):
+    def __init__(self, name, title, choices, default_value=None, type=TypeTermElem.Selection):
         self.name = name
         self.title = title
-        self.choices = choices
-        self.value = default_value or (choices[0] if not is_multi else [])
-        self.is_multi = is_multi
-        self.dependencies = dependencies
+        self.choices = np.array(choices)
+        self.value = default_value or (choices[0] if type != TypeTermElem.Basket else [])
+        self.type = type
 
     def menu(self):
-        menu = TerminalMenu(
-            self.choices,
-            multi_select=self.is_multi,
-            show_multi_select_hint=self.is_multi,
-            multi_select_select_on_accept=False,
-            multi_select_empty_ok=True,
-            title=self.title,
-        )
-        menu.show()
-        if self.is_multi:
-            choices = menu.chosen_menu_entries or ()
-            if self.dependencies is not None:
-                for choice in choices:
-                    while choice in self.dependencies and self.dependencies[choice] not in choices:
-                        choices = (self.dependencies[choice],) + choices
-                        choice = self.dependencies[choice]
-            self.value = choices
-        else:
-            self.value = menu.chosen_menu_entry
+        if self.type == TypeTermElem.Basket:
+            return survey.widgets.Basket(
+                options=self.choices, active=np.where(np.isin(self.choices, self.value))[0]
+            )
+        elif self.type == TypeTermElem.Selection:
+            return survey.widgets.Select(options=self.choices)
+        elif self.type == TypeTermElem.Text:
+            return survey.widgets.Input(value=str(self.choices))
 
     def main_menu_str(self):
         return f"{self.name} [{self.value}]"
 
 
-def print_panel(options):
-    while True:
-        main_options = [option.main_menu_str() for option in options] + ["", "Confirm"]
-        menu = TerminalMenu(
-            main_options,
-            skip_empty_entries=True,
-            title="Configure your cerebellum circuit.\nSelect the option you want to change or confirm:",
-        )
-        idx = menu.show()
-        if idx == len(main_options) - 1:
-            break
+def print_panel(options, title="Configure your cerebellum circuit."):
+    form = survey.routines.form(title, form={option.name: option.menu() for option in options})
+    for option in options:
+        if option.type == TypeTermElem.Basket:
+            option.value = option.choices[np.array(list(form[option.name]), dtype=int)]
+        elif option.type == TypeTermElem.Selection:
+            option.value = option.choices[form[option.name]]
         else:
-            option = options[idx]
-            option.menu()
+            option.value = form[option.name]
 
 
 @click.group(help="Cerebellum CLI")
@@ -74,7 +67,7 @@ AVAILABLE_SPECIES = click.Choice(get_folders_in_folder(CONFIGURATION_FOLDER), ca
 AVAILABLE_EXTENSIONS = click.Choice(["yaml", "json"], case_sensitive=True)
 
 
-def _configure_species(species, extension):
+def _configure_species(species):
     main_options = [
         CerebOption(
             "Species",
@@ -82,34 +75,23 @@ def _configure_species(species, extension):
             AVAILABLE_SPECIES.choices,
             species,
         ),
-        CerebOption(
-            "File extension",
-            "Select an extension from the following list:",
-            AVAILABLE_EXTENSIONS.choices,
-            extension,
-        ),
     ]
-    print_panel(main_options)
-    return [option.value for option in main_options]
+    print_panel(main_options, "Select your configuration's species")
+    return main_options[0].value
 
 
-def _configure_cell_types(species_folder, config_cell_types, common_cell_types):
+def _configure_cell_types(species_folder, config_cell_types):
     cell_type_names = []
-    dependencies = {}
-
-    for filename, config_ in config_cell_types.items():
-        for cell_type in config_["cell_types"]:
-            if cell_type not in common_cell_types:
-                if "$import" in config_:
-                    k = splitext(basename((config_["$import"]["ref"]).split("#")[0]))[0]
-                    if k in cell_type_names:
-                        cell_type_names.insert(cell_type_names.index(k) + 1, filename)
-                    else:
-                        cell_type_names.append(filename)
-                    dependencies[filename] = k
-                else:
-                    cell_type_names.insert(0, filename)
+    for filename1, config_1 in config_cell_types.items():
+        cell_types1 = list(config_1["cell_types"].keys())
+        for filename2, config_2 in config_cell_types.items():
+            if filename1 != filename2 and np.all(
+                np.isin(cell_types1, list(config_2["cell_types"].keys()))
+            ):
+                cell_type_names.insert(0, filename1)
                 break
+        if filename1 not in cell_type_names:
+            cell_type_names.append(filename1)
 
     species_options = [
         CerebOption(
@@ -122,12 +104,13 @@ def _configure_cell_types(species_folder, config_cell_types, common_cell_types):
             "Extra cell types",
             "Select the optional cell types that you want in the final configuration from the following list:",
             cell_type_names,
-            is_multi=True,
-            dependencies=dependencies,
+            type=TypeTermElem.Basket,
             # default_value=["dcn", "io"],
         ),
     ]
-    print_panel(species_options)
+    print_panel(
+        species_options, "Select the state of the subject and the cell types to add in the circuit"
+    )
     return [option.value for option in species_options]
 
 
@@ -139,8 +122,6 @@ def _update_cell_types(configuration, cell_types, config_cell_types):
                 for net_key, net_v in v.items():
                     if net_key in ["x", "y", "z"]:
                         configuration[k][net_key] = max(configuration[k][net_key], net_v)
-            elif k == "$import":
-                continue
             else:
                 if k not in configuration:
                     configuration[k] = v
@@ -165,11 +146,13 @@ def _configure_simulations(config_simulations):
             "Simulations",
             "Select the simulations(s) that you want to perform from the following list:",
             simulation_names,
-            is_multi=True,
+            type=TypeTermElem.Basket,
             # default_value=["nest_basal_activity"],
         ),
     ]
-    print_panel(simulator_options)
+    print_panel(
+        simulator_options, "Select the simulations(s) that you want your circuit to perform"
+    )
     return simulator_options[0].value
 
 
@@ -190,18 +173,19 @@ def _configure_sim_params(config_simulations, simulation_names):
                 "Cell models",
                 f"Select the model of neuron for the simulation {simulation} from the following list:",
                 list(config_simulations[simulator]["cell_models"].keys()),
-                is_multi=False,
                 # default_value="eglif_cond_alpha_multisyn"
             ),
             CerebOption(
                 "Connection models",
                 f"Select the model of synapse for the simulation {simulation} from the following list:",
                 list(config_simulations[simulator]["connection_models"].keys()),
-                is_multi=False,
                 # default_value="static_synapse",
             ),
         ]
-        print_panel(simulation_options)
+        print_panel(
+            simulation_options,
+            f"Select the neuron and synapse model to use during the simulation {simulation}.",
+        )
         deep_update(
             dict_sim, config_simulations[simulator]["cell_models"][simulation_options[0].value]
         )
@@ -213,31 +197,9 @@ def _configure_sim_params(config_simulations, simulation_names):
     return dict_sim, choices
 
 
-@app.command(help="Create a BSB configuration file for your cerebellum circuit.")
-@click.option(
-    "--output_folder",
-    type=EXISTING_DIR_PATH,
-    required=False,
-    default=os.getcwd(),
-    help="Path where to write the output configuration file.",
-)
-@click.option(
-    "--species",
-    type=AVAILABLE_SPECIES,
-    required=False,
-    default="mouse",
-    help="Species to reconstruct the circuit from.",
-)
-@click.option(
-    "--extension",
-    type=AVAILABLE_EXTENSIONS,
-    required=False,
-    default="yaml",
-    help="Extension for the configuration file.",
-)
 def configure(output_folder: str, species: str, extension: str):
     # Step 1: Species choice
-    species, extension = _configure_species(species, extension)
+    species = _configure_species(species)
     species_folder = join(CONFIGURATION_FOLDER, species)
 
     # Step 2: state and cell types choice
@@ -246,9 +208,7 @@ def configure(output_folder: str, species: str, extension: str):
     ).__tree__()
 
     config_cell_types = load_configs_in_folder(join(species_folder, "cell_types"))
-    state, cell_types = _configure_cell_types(
-        species_folder, config_cell_types, configuration["cell_types"]
-    )
+    state, cell_types = _configure_cell_types(species_folder, config_cell_types)
     configuration = _update_cell_types(configuration, cell_types, config_cell_types)
     state_folder = join(species_folder, state)
 
@@ -329,16 +289,30 @@ def configure(output_folder: str, species: str, extension: str):
         print(f"\t\tCell model: {sim_choices[simulation][0]}")
         print(f"\t\tSynapse model: {sim_choices[simulation][1]}")
 
-    output_folder = (
-        input(f"\nConfigure the folder in which to put the configuration file.\n[{output_folder}]:")
-        or output_folder
+    output_options = [
+        CerebOption(
+            "Configuration folder",
+            f"Configure the folder in which to put the configuration file",
+            output_folder,
+            type=TypeTermElem.Text,
+        ),
+        CerebOption(
+            "File extension",
+            "Select an extension from the following list:",
+            AVAILABLE_EXTENSIONS.choices,
+            extension,
+        ),
+    ]
+    print_panel(
+        output_options,
+        "Configure the folder in which to put the configuration file and its extension.",
     )
-    filename = os.path.join(output_folder, f"circuit.{extension}")
+    filename = os.path.join(output_options[0].value, f"circuit.{output_options[1].value}")
     configuration = Configuration.default(**configuration)  # Check that the configuration works
     with open(filename, "w") as outfile:
         outfile.write(format_configuration_content(extension, configuration))
     print(f"Created the BSB configuration file: {filename}")
 
 
-# if __name__ == "__main__":
-#     configure(os.getcwd(), "mouse", "yaml")
+if __name__ == "__main__":
+    configure(os.getcwd(), "mouse", "yaml")
