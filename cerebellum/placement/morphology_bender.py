@@ -184,7 +184,7 @@ class MorphologyBender:
             child.translate(delta)
         branch.delete_point(i)
 
-    def rotate_point(self, source, branch, i, old_rots):
+    def rotate_point(self, source, branch, i, old_rots, no_turn_back=True):
         """
         Compute the rotation to apply at a source point so that it follows the change in the
         orientation field while making sure the target remains within the frontiers of the region.
@@ -196,21 +196,29 @@ class MorphologyBender:
         :return: Euler angle of the rotation to apply at the source point
         :rtype: numpy.ndarray
         """
+        max_angle = np.pi / 2
         target = branch.points[i]
         to_rotate = True
         new_rotation = self.partition.mask_source.voxel_rotation_of(self.orientation_field, source)
         diff_rotation = signed_modulo(
             new_rotation.as_euler("xyz") - old_rots.last_rotation.as_euler("xyz"), 2 * np.pi
         )
+        orig_rotation = np.copy(diff_rotation)
         scaled_diff_rotation = None
         inc = 1.0
         branch_labels = list(branch.labelsets[branch.labels[i]])
         while to_rotate:
             scaled_diff_rotation = diff_rotation * inc
-            if (np.absolute(scaled_diff_rotation) > np.pi / 2).any():
+            if (np.absolute(scaled_diff_rotation) > max_angle).any():
                 if inc >= 1:
                     diff_rotation -= np.sign(diff_rotation) * 1e-3
                     inc = -1.0
+                    continue
+                elif not no_turn_back:
+                    diff_rotation = orig_rotation
+                    inc = 1.0
+                    max_angle = np.pi
+                    no_turn_back = True
                     continue
                 else:
                     raise ValueError("Hit a wall. Stopping")
@@ -337,7 +345,7 @@ class MorphologyBender:
                 old_diff_rotation = np.zeros(3)
                 old_diff_rotation[axis_max] = 1e-2
                 stack_data.append(
-                    (branch, RotationReminder(rotation, old_diff_rotation), curr_scaling)
+                    (branch, RotationReminder(rotation, old_diff_rotation), curr_scaling, set())
                 )
             except ValueError as _:
                 continue
@@ -345,7 +353,7 @@ class MorphologyBender:
 
         while True:
             try:
-                branch, old_rots, curr_scaling = stack.pop()
+                branch, old_rots, curr_scaling, labels_seen = stack.pop()
             except IndexError:
                 break
             else:
@@ -353,21 +361,29 @@ class MorphologyBender:
                 last_index = 0
                 i = 0
                 while i < len(branch.points):
-                    branch_labels = list(branch.labelsets[branch.labels[i]])
-                    if np.isin(branch_labels, self.rescale).any() and i > 0:
+                    branch_labels = branch.labelsets[branch.labels[i]]
+                    if np.isin(list(branch_labels), self.rescale).any() and i > 0:
                         rescale, curr_scaling = self.scale_morpho(branch, i, curr_scaling)
                         if rescale:
                             self.delete_point(branch, i)
                             continue
-                    if np.isin(branch_labels, self.deform).any():
+                    if np.isin(list(branch_labels), self.deform).any():
                         try:
                             rotation = Rotation.from_euler(
-                                "xyz", self.rotate_point(last_point, branch, i, old_rots)
+                                "xyz",
+                                self.rotate_point(
+                                    last_point,
+                                    branch,
+                                    i,
+                                    old_rots,
+                                    no_turn_back=len(branch_labels & labels_seen) > 0,
+                                ),
                             )
                             branch.root_rotate(rotation, downstream_of=last_index)
                         except ValueError as _:
                             self.delete_point(branch, i)
                             continue
+                    labels_seen.update(branch_labels)
                     last_point = branch.points[i]
                     last_index = i
                     i += 1
@@ -378,7 +394,7 @@ class MorphologyBender:
                     if len(branch.children):
                         stack.extend(
                             [
-                                (child, old_rots.copy(), curr_scaling)
+                                (child, old_rots.copy(), curr_scaling, labels_seen)
                                 for child in branch.children
                                 if NrrdDependencyNode.is_within(
                                     self.partition.mask_source.voxel_of(child.points[0]),

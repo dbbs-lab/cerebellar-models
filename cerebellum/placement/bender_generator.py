@@ -32,7 +32,6 @@ class GranuleGenerator(BenderGenerator, classmap_entry="granule_bender"):
     NB_ASCENDING_AXON_SEGMENTS = 12  # +1 to include the soma
     nb_section_left = NB_ASCENDING_AXON_SEGMENTS
 
-    rescale = False
     ratio_gr = None
 
     def process_scaling(self, point):
@@ -59,9 +58,9 @@ class GranuleGenerator(BenderGenerator, classmap_entry="granule_bender"):
 
     def scale_morpho(self, branch, i, scaling):
         old_deriv = branch.points[i] - branch.points[i - 1]
-        rescale, new_scaling = super().scale_morpho(branch, i, scaling)
+        could_rescale, new_scaling = super().scale_morpho(branch, i, scaling)
         self.has_rescale = False
-        if not rescale:
+        if not could_rescale:
             if self.nb_section_left <= 0 and self.get_lay_abv(branch.points[i]) != "mo":
                 # If the last point does not land on molecular layer, add an ascending axon point.
                 self.nb_section_left = 1
@@ -74,7 +73,7 @@ class GranuleGenerator(BenderGenerator, classmap_entry="granule_bender"):
             # If the difference of orientation between the current point of the ascending axon
             # according to its first point yields an angle greater than 90 degrees, the ascending
             # axon has crossed a frontier of the region, and its last two points can be removed.
-            rescale = np.any(
+            could_rescale = np.any(
                 np.absolute(
                     get_diff_angle(
                         self.orientation_field,
@@ -84,7 +83,7 @@ class GranuleGenerator(BenderGenerator, classmap_entry="granule_bender"):
                 )
                 > np.pi / 2
             )
-            if rescale:
+            if could_rescale:
                 self.has_rescale = True
                 old_coord = np.copy(branch.points[i])
                 branch.points[i] = np.copy(branch.points[i - 2])
@@ -93,7 +92,7 @@ class GranuleGenerator(BenderGenerator, classmap_entry="granule_bender"):
                 # translate all the children of the branch
                 for child in branch.children:
                     child.points += branch.points[i] - old_coord
-        return rescale, new_scaling
+        return could_rescale, new_scaling
 
     def delete_point(self, branch, i):
         # Delete 2 points instead of 1
@@ -102,8 +101,8 @@ class GranuleGenerator(BenderGenerator, classmap_entry="granule_bender"):
             branch.delete_point(i - 1)
             self.has_rescale = False
 
-    def rotate_point(self, source, branch, i, old_rots):
-        rotation = super().rotate_point(source, branch, i, old_rots)
+    def rotate_point(self, source, branch, i, old_rots, no_turn_back=True):
+        rotation = super().rotate_point(source, branch, i, old_rots, no_turn_back)
         if np.isin(list(branch.labelsets[branch.labels[i]]), ["parallel_fiber"]).any():
             target = branch.points[i]
             target_ = Rotation.from_euler("xyz", rotation).apply(target - source) + source
