@@ -37,24 +37,29 @@ class GranuleGenerator(BenderGenerator, classmap_entry="granule_bender"):
     def process_scaling(self, point):
         # We calculate the scaling ratio so that the tip of the ascending axon's depth ratio within
         # the molecular layer is equal to the depth ratio of the soma within the granular layer.
-        distances = self.partition.mask_source.voxel_data_of(point, self.thicknesses)
-        top_dist = distances[1]  # dist to gr/mol boundary
-        if self.ratio_gr is None:
-            self.ratio_gr = top_dist / (top_dist + distances[2])  # ratio depth within gr.
-        if "mo" in self.get_lay_abv(point):
-            ascending_axon_length = (1 - self.ratio_gr) * (distances[0] + top_dist) - top_dist
-        else:
-            ascending_axon_length = top_dist + (1 - self.ratio_gr) * (distances[0] - top_dist)
+        curr_ann = self.partition.mask_source.voxel_data_of(point, self.annotations)
+        _, lay = self._ann_to_abv(curr_ann)
+        if lay is not None:
+            distances = self.partition.mask_source.voxel_data_of(point, self.thicknesses)
+            top_dist = distances[1]  # dist to gr/mol boundary
+            if self.ratio_gr is None:
+                self.ratio_gr = top_dist / (top_dist + distances[2])  # ratio depth within gr.
+            if "mo" in lay:
+                ascending_axon_length = (1 - self.ratio_gr) * (distances[0] + top_dist) - top_dist
+            else:
+                ascending_axon_length = top_dist + (1 - self.ratio_gr) * (distances[0] - top_dist)
 
-        self.scaling = np.maximum(
-            ascending_axon_length
-            / self.nb_section_left
-            / self.SIZE_ASCENDING_AXON
-            * self.NB_ASCENDING_AXON_SEGMENTS,
-            0.1,
-        )
+            scaling = np.maximum(
+                ascending_axon_length
+                / self.nb_section_left
+                / self.SIZE_ASCENDING_AXON
+                * self.NB_ASCENDING_AXON_SEGMENTS,
+                0.1,
+            )
+        else:  # out of the annotations / depth / orientations fields.
+            scaling = 0.1
         self.nb_section_left -= 1
-        return self.scaling  # ratio according to default axon length
+        return scaling  # ratio according to default axon length
 
     def scale_morpho(self, branch, i, scaling):
         old_deriv = branch.points[i] - branch.points[i - 1]
