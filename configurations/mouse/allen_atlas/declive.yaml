@@ -164,6 +164,10 @@ placement:
     distribute:
       morphologies:
         strategy: cerebellum.placement.bender_generator.GranuleGenerator
+        deform:
+          - parallel_fiber
+        rescale:
+          - ascending_axon
     partitions:
       - declive
     strategy: bsb.placement.RandomPlacement
@@ -173,6 +177,7 @@ placement:
     distribute:
       morphologies:
         strategy: cerebellum.placement.bender_generator.GolgiGenerator
+        no_turn_back: false
     partitions:
       - declive
     strategy: bsb.placement.RandomPlacement

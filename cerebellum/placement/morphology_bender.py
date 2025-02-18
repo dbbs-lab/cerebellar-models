@@ -46,6 +46,8 @@ class MorphologyBender:
     fixed_dimension: int = config.attr(required=False, type=int, default=-1)
     """axis on which the orientation field will not be considered."""
 
+    no_turn_back: bool = config.attr(required=False, type=bool, default=True)
+
     partition = None
 
     @property
@@ -184,7 +186,7 @@ class MorphologyBender:
             child.translate(delta)
         branch.delete_point(i)
 
-    def rotate_point(self, source, branch, i, old_rots, no_turn_back=True):
+    def rotate_point(self, source, branch, i, old_rots):
         """
         Compute the rotation to apply at a source point so that it follows the change in the
         orientation field while making sure the target remains within the frontiers of the region.
@@ -196,14 +198,13 @@ class MorphologyBender:
         :return: Euler angle of the rotation to apply at the source point
         :rtype: numpy.ndarray
         """
-        max_angle = np.pi / 2
+        max_angle = np.pi / 2 if self.no_turn_back else np.pi
         target = branch.points[i]
         to_rotate = True
         new_rotation = self.partition.mask_source.voxel_rotation_of(self.orientation_field, source)
         diff_rotation = signed_modulo(
             new_rotation.as_euler("xyz") - old_rots.last_rotation.as_euler("xyz"), 2 * np.pi
         )
-        orig_rotation = np.copy(diff_rotation)
         scaled_diff_rotation = None
         inc = 1.0
         branch_labels = list(branch.labelsets[branch.labels[i]])
@@ -213,12 +214,6 @@ class MorphologyBender:
                 if inc >= 1:
                     diff_rotation -= np.sign(diff_rotation) * 1e-3
                     inc = -1.0
-                    continue
-                elif not no_turn_back:
-                    diff_rotation = orig_rotation
-                    inc = 1.0
-                    max_angle = np.pi
-                    no_turn_back = True
                     continue
                 else:
                     raise ValueError("Hit a wall. Stopping")
@@ -345,7 +340,7 @@ class MorphologyBender:
                 old_diff_rotation = np.zeros(3)
                 old_diff_rotation[axis_max] = 1e-2
                 stack_data.append(
-                    (branch, RotationReminder(rotation, old_diff_rotation), curr_scaling, set())
+                    (branch, RotationReminder(rotation, old_diff_rotation), curr_scaling)
                 )
             except ValueError as _:
                 continue
@@ -353,7 +348,7 @@ class MorphologyBender:
 
         while True:
             try:
-                branch, old_rots, curr_scaling, labels_seen = stack.pop()
+                branch, old_rots, curr_scaling = stack.pop()
             except IndexError:
                 break
             else:
@@ -370,20 +365,12 @@ class MorphologyBender:
                     if np.isin(list(branch_labels), self.deform).any():
                         try:
                             rotation = Rotation.from_euler(
-                                "xyz",
-                                self.rotate_point(
-                                    last_point,
-                                    branch,
-                                    i,
-                                    old_rots,
-                                    no_turn_back=len(branch_labels & labels_seen) > 0,
-                                ),
+                                "xyz", self.rotate_point(last_point, branch, i, old_rots)
                             )
                             branch.root_rotate(rotation, downstream_of=last_index)
                         except ValueError as _:
                             self.delete_point(branch, i)
                             continue
-                    labels_seen.update(branch_labels)
                     last_point = branch.points[i]
                     last_index = i
                     i += 1
@@ -394,7 +381,7 @@ class MorphologyBender:
                     if len(branch.children):
                         stack.extend(
                             [
-                                (child, old_rots.copy(), curr_scaling, labels_seen)
+                                (child, old_rots.copy(), curr_scaling)
                                 for child in branch.children
                                 if NrrdDependencyNode.is_within(
                                     self.partition.mask_source.voxel_of(child.points[0]),

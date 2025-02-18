@@ -101,8 +101,8 @@ class GranuleGenerator(BenderGenerator, classmap_entry="granule_bender"):
             branch.delete_point(i - 1)
             self.has_rescale = False
 
-    def rotate_point(self, source, branch, i, old_rots, no_turn_back=True):
-        rotation = super().rotate_point(source, branch, i, old_rots, no_turn_back)
+    def rotate_point(self, source, branch, i, old_rots):
+        rotation = super().rotate_point(source, branch, i, old_rots)
         if np.isin(list(branch.labelsets[branch.labels[i]]), ["parallel_fiber"]).any():
             target = branch.points[i]
             target_ = Rotation.from_euler("xyz", rotation).apply(target - source) + source
