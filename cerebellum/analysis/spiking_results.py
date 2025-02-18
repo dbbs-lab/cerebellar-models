@@ -885,6 +885,6 @@ class BasicSimulationReport(SpikeSimulationReport):
         self.add_plot("legend", legend)
         legend.remove_ct(self.cell_names, self.ignored_ct)
 
-    def postprocessing(self):
+    def preprocessing(self):
         self.plots["table"].set_axis_off()
         self.plots["legend"].set_axis_off()

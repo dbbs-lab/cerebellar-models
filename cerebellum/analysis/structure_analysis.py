@@ -392,7 +392,7 @@ class StructureReport(BSBReport):
         self.add_plot("legend", legend)
         legend.remove_ct(self.cell_names, ["glomerulus", "ubc_glomerulus"])
 
-    def postprocessing(self):
+    def preprocessing(self):
         self.plots["legend"].set_axis_off()
         self.plots["density_table"].set_axis_off()
         self.plots["connectivity_table"].set_axis_off()
