@@ -159,7 +159,7 @@ class GolgiGenerator(BenderGenerator, classmap_entry="golgi_bender"):
     def deform_morphology(self, morphology):
         # recenter because the actual origin of the neurites is at
         # the last point of the soma.
-        morphology.translate(-morphology.roots[0].points[-1])
+        morphology.translate(morphology.roots[0].points[0] - morphology.roots[0].points[-1])
         morphology = super().deform_morphology(morphology)
         # Re-label the dendrites based on their layer location.
         id_den_gr = id_den_mol = -1
