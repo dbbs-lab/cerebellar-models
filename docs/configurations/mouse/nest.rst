@@ -245,6 +245,95 @@ The parameters for the awake state are the same as the `in-vitro` state, except 
 
 Our target was to match the Table 1 from Geminiani et al. 2024 [#geminiani_2024]_.
 
+Tsodyks Markram Synapse
+#######################
+
+Description
++++++++++++
+
+This synapse model implements synaptic short-term depression and short-term facilitation according to Tsodyks MV et al [1]_ and Fuhrman et al [2]_. 
+It solves Eq (2) from Tsodyks MV et al [1]_ and modulates U accordingly. 
+This connection merely scales the synaptic weight, based on the spike history parameters of the kinetic model. 
+Thus, it is suitable for any type of synapse that is current or conductance based.
+The parameter A_se from the publications is represented by the synaptic weight. 
+The variable x in the synapse properties is the factor that scales the synaptic weight. See also Maass W, et al [3]_.
+
+Synapse parameters
+++++++++++++++++++
+
+========  ======  ========================================================
+ U        real    Parameter determining the increase in u with each spike
+                  (U1) [0,1], default = 0.5
+ u        real    The probability of release (U_se) [0,1],
+                  default = U
+ x        real    Current scaling factor of the weight, default = 1.0
+ tau_fac  ms      Time constant for facilitation, default = 0 (off)
+ tau_rec  ms      Time constant for depression, default = 800
+========  ======  ========================================================
+
+
+`In-vitro` state
+----------------
+
+The synaptic parameters used for the canonical circuit correspond to those 
+listed in the table below, derived from Masoli, Stefano, et al. (2022) [4]_ .
+The receptor ID corresponds to the postsynaptic receptor used for the connection (see Table :ref:`table-receptor`).
+The weights have been rescaled under the assumption
+that the first peak of the synaptic conductance (:math:`g_{syn}`) for 
+the Tsodyks–Markram synapse must have the same amplitude as the 
+static peaks.
+
+:math:`new_{weight} = weight^2/(g_{syn})​[peaks[firstpeak]]`. 
+
+.. csv-table:: Presynaptic parameters
+   :header-rows: 1
+   :delim: ;
+
+    Source-Target;:math:`weight \ (nS)`;:math:`delay \ (ms)`; Receptor id; U; u; x; tau_fac; tau_rec  
+    Mf-glom;1;1;1
+    glom-GrC;0.53;1;1;0.43;0;1;8;5
+    glom-GoC;0.43;1;1;0.43;0;1;8;5
+    GoC-GrC;0.68;2;2;0.35;0;1;36;58
+    GoC-GoC;0.007;4;2
+    GrC(aa)-GoC;2.05;2;3;0.4;0;1;35.1;54
+    GrC(aa)-PC;1.53;2;1;0.13;0;1;35.1;54
+    GrC(pf)-GoC;0.125;5;3;0.4;0;1;35.1;54
+    GrC(pf)-PC;0.13;5;1;0.13;0;1;35.1;54
+    GrC(pf)-SC;0.15;5;1;0.15;0;1;35.1;10.8
+    GrC(pf)-BC;0.15;5;1;0.15;0;1;35.1;10.8
+    BC-PC;0.35;4;2;0.35;0;1;15;4
+    SC-PC;0.48;5;2;0.35;0;1;15;4
+    BC-BC;0.020;4;2;0.42;0;1;35.1;10.8
+    SC-SC;0.0005;4;2;0.42;0;1;38.7;4
+
+.. Note:: 
+
+   The connections MF-GloM and GoC-GoC are both considered static since, for these two connections, we do not have Tsodyks parameters. 
+   Moreover, for the PF-SC connection, the weight was adjusted manually to keep the firing rate within the desired range. 
+
+
+Awake state
+-----------
+
+The parameters for the awake state are the same as the in-vitro state, except for some of the connections:
+
+.. csv-table:: Presynaptic parameters
+   :header-rows: 1
+   :delim: ;
+
+    Source-Target;:math:`weight \ (nS)`;:math:`delay \ (ms)`; Receptor id; U; u; x; tau_fac; tau_rec  
+    GrC(pf)-PC;1.07;5;1;0.13;0;1;35.1;54
+    GrC(aa)-PC;3.15;2;1;0.13;0;1;35.1;54
+    GrC(pf)-SC;0.10;5;1;0.15;0;1;35.1;10.8
+    GrC(pf)-BC;0.40;5;1;0.15;0;1;35.1;10.8
+    BC-PC; 2.28;4;2;0.35;0;1;15;4
+
+.. Note:: 
+   For Tsodyks Markram simulation, the mean firing rates and mean interspike intervals (ISI)
+   obtained for each neuron population from both in-vitro and awake states are expected to be the same,
+   as explained in the simulation section for static models. 
+   For pf-SC connection weight was adjusted manually to keep the firing rate in the desried range.
+
 Simulation paradigms
 ^^^^^^^^^^^^^^^^^^^^
 
@@ -403,3 +492,19 @@ References
    Molecular layer interneurons: key elements of cerebellar network computation and behavior.
    Neuroscience, 462, 22-35.
    https://doi.org/10.1016/j.neuroscience.2020.10.008
+.. [1] Tsodyks MV,  Markram H (1997). The neural code between neocortical
+   pyramidal neurons depends on neurotransmitter release probability.
+   PNAS, 94(2):719-23.
+   DOI: https://doi.org/10.1073/pnas.94.2.719
+.. [2] Fuhrman, G, Segev I, Markram H, Tsodyks MV (2002). Coding of
+   temporal information by activity-dependent synapses. Journal of
+   Neurophysiology, 87(1):140-8.
+   DOI: https://doi.org/10.1152/jn.00258.2001
+.. [3] Maass W, Markram H (2002). Synapses as dynamic memory buffers.
+.. [4]  Neural Networks, 15(2):155-61.
+   DOI: https://doi.org/10.1016/S0893-6080(01)00144-7
+   Masoli, S., Rizza, M. F., Tognolina, M., Prestori, F., & D’Angelo, E. (2022). 
+   Computational models of neurotransmission at cerebellar synapses unveil the impact on network computation. 
+   Frontiers in Computational Neuroscience, 16, 1006989.
+   DOI:  https://doi.org/10.3389/fncom.2022.1006989 
+

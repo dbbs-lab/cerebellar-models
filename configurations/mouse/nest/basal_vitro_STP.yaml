@@ -1,15 +1,15 @@
-name: DBBS Mouse cerebellum NEST basal activity
+name: DBBS Mouse cerebellum NEST basal activity for in vitro state
 storage:
   root: mouse_cereb_nest.hdf5
 packages:
-  - bsb-nest~=4.2
+  - bsb-nest~=4.3
 components:
   - cerebellum/nest_models/build_models.py
 simulations:
   basal_activity:
     simulator: nest
     resolution: 0.1
-    duration: 1000
+    duration: 5000
     modules:
       - cerebmodule
     seed: 1234
@@ -40,7 +40,7 @@ simulations:
           tau_syn1: 5.8
           tau_syn2: 13.61
           E_rev1: 0
-          E_rev2: -80   
+          E_rev2: -80
       golgi_cell:
         model: eglif_cond_alpha_multisyn
         constants:
@@ -50,9 +50,9 @@ simulations:
           V_reset: -75
           E_L: -62
           V_min: -150
-          V_m: -62.0
-          lambda_0: 1.0
-          tau_V: 0.4
+          V_m: -60.0
+          lambda_0: 0.15
+          tau_V: 0.09
           tau_m: 44
           I_e: 16.214
           k_adap: 0.217
@@ -76,10 +76,10 @@ simulations:
           V_reset: -69
           E_L: -59
           V_m: -59.0
-          lambda_0: 0.001
-          tau_V: 0.5
+          lambda_0: 0.5
+          tau_V: 2.
           tau_m: 47
-          I_e: 742.534
+          I_e: 590.
           k_adap: 1.491
           k_1: 0.195
           k_2: 0.041
@@ -99,9 +99,9 @@ simulations:
           V_th: -53
           V_reset: -78
           E_L: -68
-          V_m: -68.0
+          V_m: -60.0
           lambda_0: 1.8
-          tau_V: 1.1
+          tau_V: 1.
           tau_m: 9.125
           I_e: 3.711
           k_adap: 2.025
@@ -123,9 +123,9 @@ simulations:
           V_th: -53
           V_reset: -78
           E_L: -68
-          V_m: -68.0
+          V_m: -60.0
           lambda_0: 1.8
-          tau_V: 1.1
+          tau_V: 1
           tau_m: 9.125
           I_e: 3.711
           k_adap: 2.025
@@ -142,11 +142,7 @@ simulations:
     connection_models:
       mossy_fibers_to_glomerulus:
         synapse:
-          model: tsodyks2_synapse
-          U: 0.43
-          x: 1
-          tau_rec: 8
-          tau_fac: 5
+          model: static_synapse
           weight: 1
           delay: 1
       glomerulus_to_granule:
@@ -156,19 +152,19 @@ simulations:
           x: 1
           tau_rec: 8
           tau_fac: 5
-          weight: 0.23
+          weight: 0.53
           delay: 1
           receptor_type: 1
       glomerulus_to_golgi:
         synapse:
           model: tsodyks2_synapse
           U: 0.43
-          x: 1.0
+          x: 1
           tau_rec: 8
           tau_fac: 5
-          weight: 0.24
+          weight: 0.56
           delay: 1
-          receptor_type: 2
+          receptor_type: 1
       golgi_to_glomerulus:
         synapse:
           model: tsodyks2_synapse
@@ -176,7 +172,7 @@ simulations:
           x: 1
           tau_rec: 36
           tau_fac: 58
-          weight: 0.24
+          weight: 0.68
           delay: 2
           receptor_type: 2
       golgi_to_golgi:
@@ -192,7 +188,7 @@ simulations:
           x: 1
           tau_rec: 35.1
           tau_fac: 54
-          weight: 0.82
+          weight: 2.05
           delay: 2
           receptor_type: 3
       parallel_fiber_to_golgi:
@@ -212,7 +208,7 @@ simulations:
           x: 1
           tau_rec: 35.1
           tau_fac: 54
-          weight: 1.07
+          weight: 0.38
           delay: 5
           receptor_type: 1
       ascending_axon_to_purkinje:
@@ -222,7 +218,7 @@ simulations:
           x: 1
           tau_rec: 35.1
           tau_fac: 54
-          weight: 0.41
+          weight:  1.53
           delay: 2
           receptor_type: 1
       parallel_fiber_to_stellate:
@@ -232,7 +228,7 @@ simulations:
           x: 1
           tau_rec: 35.1
           tau_fac: 10.8
-          weight: 0.18
+          weight: 0.15
           delay: 5
           receptor_type: 1
       stellate_to_stellate:
@@ -242,7 +238,7 @@ simulations:
           x: 1
           tau_rec: 38.7
           tau_fac: 4
-          weight: 0.000
+          weight: 0.0005
           delay: 4
           receptor_type: 2
       stellate_to_purkinje:
@@ -252,7 +248,7 @@ simulations:
           x: 1
           tau_rec: 15
           tau_fac: 4
-          weight: -0.22
+          weight: 0.48
           delay: 5
           receptor_type: 2
       parallel_fiber_to_basket:
@@ -262,17 +258,17 @@ simulations:
           x: 1
           tau_rec: 35.1
           tau_fac: 10.8
-          weight: 0.66
+          weight: 0.26
           delay: 5
           receptor_type: 1
       basket_to_basket:
         synapse:
           model: tsodyks2_synapse
-          U: 0.42 
+          U: 0.42
           x: 1
-          tau_rec: 38.7
-          tau_fac: 4
-          weight: 0.003
+          tau_rec: 35.1
+          tau_fac: 10.8
+          weight: 0.020
           delay: 4
           receptor_type: 2
       basket_to_purkinje:
@@ -282,13 +278,13 @@ simulations:
           x: 1
           tau_rec: 15
           tau_fac: 4
-          weight: 0.44
+          weight: 1.25
           delay: 4
           receptor_type: 2
     devices:
       background_noise:
         device: poisson_generator
-        rate: 200
+        rate: 4
         targetting:
           strategy: cell_model
           cell_models:
@@ -343,33 +339,7 @@ simulations:
         targetting:
           strategy: cell_model
           cell_models:
-            - stellate_cell                  
-#       stellate_v_m_record:
-#         device: spike_recorder
-#         delay: 0.1
-#         properties:
-#           - "V_m"
-#           - "I_syn"
-#         units:
-#           - "mV"
-#           - "pA"
-#         targetting: 
-#           strategy: cell_model
-#           cell_models:
-#             - stellate_cell
-#       golgi_v_m_record:
-#         device: multimeter
-#         delay: 0.1
-#         properties:
-#           - "V_m"
-#           - "I_syn"
-#         units:
-#           -  "mV"
-#           -  "pA"
-#         targetting:
-#           strategy: cell_model
-#           cell_models:
-#             - golgi_cell      
+            - stellate_cell
 $import:
   ref: ../mouse_cerebellar_cortex.yaml#/
   values:
@@ -382,3 +352,4 @@ $import:
     - cell_types
     - placement
     - connectivity
+    - after_connectivity
