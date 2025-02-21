@@ -341,7 +341,6 @@ class MorphologyBender:
                 )
             except ValueError as _:
                 continue
-            return stack_data
         return stack_data
 
     def deform_morphology(self, morphology):
