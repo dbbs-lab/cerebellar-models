@@ -47,6 +47,7 @@ class MorphologyBender:
     """axis on which the orientation field will not be considered."""
 
     no_turn_back: bool = config.attr(required=False, type=bool, default=True)
+    """allow for branches section to rotate with respect to their parent with an angle greater than 90 degrees"""
 
     partition: AllenStructure = None
 
@@ -55,7 +56,7 @@ class MorphologyBender:
         """
         Return RegionMap instance to manipulate the Allen mouse brain region hierarchy.
 
-        :rtype: voxcell.region_mdeformed_morphoap.RegionMap
+        :rtype: voxcell.region_map.RegionMap
         """
         return self.partition.region_map
 
@@ -312,6 +313,7 @@ class MorphologyBender:
     def _init_stack(self, morphology):
         """
         Initialize stack and perform the roots' rotation.
+
         :param bsb.morphologies.Morphology morphology: Morphology to deform
         :return: stack of branch to deform
         """
@@ -347,6 +349,7 @@ class MorphologyBender:
         """
         Visit each point of the morphology and rescale and or deform them according to the
         orientation field and the space available.
+
         :param bsb.morphologies.Morphology morphology: Morphology to deform
         :return: deformed morphology
         :rtype: bsb.morphologies.Morphology
@@ -398,6 +401,7 @@ class MorphologyBender:
                             ]
                         )
         morphology.close_gaps()
+        morphology.optimize(force=True)
         return morphology
 
     def process(self, positions, morphologies):
