@@ -2,7 +2,7 @@ import functools
 from collections import deque
 
 import numpy as np
-from bsb import NrrdDependencyNode, config
+from bsb import AllenStructure, NrrdDependencyNode, config
 from bsb.config._attrs import cfgdict
 from scipy.spatial.transform import Rotation
 
@@ -48,7 +48,7 @@ class MorphologyBender:
 
     no_turn_back: bool = config.attr(required=False, type=bool, default=True)
 
-    partition = None
+    partition: AllenStructure = None
 
     @property
     def region_map(self):
@@ -309,15 +309,12 @@ class MorphologyBender:
 
         return rescale, scaling
 
-    def deform_morphology(self, morphology):
+    def _init_stack(self, morphology):
         """
-        Visit each point of the morphology and rescale and or deform them according to the
-        orientation field and the space available.
+        Initialize stack and perform the roots' rotation.
         :param bsb.morphologies.Morphology morphology: Morphology to deform
-        :return: deformed morphology
-        :rtype: bsb.morphologies.Morphology
+        :return: stack of branch to deform
         """
-        # initialize stack and perform the roots' rotation.
         stack_data = []
         for branch in morphology.roots:
             try:
@@ -344,6 +341,18 @@ class MorphologyBender:
                 )
             except ValueError as _:
                 continue
+            return stack_data
+        return stack_data
+
+    def deform_morphology(self, morphology):
+        """
+        Visit each point of the morphology and rescale and or deform them according to the
+        orientation field and the space available.
+        :param bsb.morphologies.Morphology morphology: Morphology to deform
+        :return: deformed morphology
+        :rtype: bsb.morphologies.Morphology
+        """
+        stack_data = self._init_stack(morphology)
         stack = deque(stack_data)
 
         while True:

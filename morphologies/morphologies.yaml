@@ -5,6 +5,7 @@ morphologies:
         axis1: 1
         axis2: 2
     parser:
+      skip_boundary_labels: ["soma"]
       tags:
         16:
           - axon
@@ -24,6 +25,7 @@ morphologies:
         axis1: 1
         axis2: 2
     parser:
+      skip_boundary_labels: ["soma"]
       tags:
         16:
           - dendrites
@@ -40,6 +42,7 @@ morphologies:
         axis1: 1
         axis2: 2
     parser:
+      skip_boundary_labels: ["soma"]
       tags:
         16:
           - axon
@@ -70,6 +73,7 @@ morphologies:
         axis1: 1
         axis2: 2
     parser:
+      skip_boundary_labels: ["soma"]
       tags:
         16:
           - dendrites
@@ -86,6 +90,7 @@ morphologies:
         axis1: 1
         axis2: 2
     parser:
+      skip_boundary_labels: ["soma"]
       tags:
         16:
           - axon

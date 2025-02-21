@@ -156,10 +156,14 @@ class GranuleGenerator(BenderGenerator, classmap_entry="granule_bender"):
 class GolgiGenerator(BenderGenerator, classmap_entry="golgi_bender"):
     """Specific bender for golgi cell."""
 
-    def deform_morphology(self, morphology):
+    def _init_stack(self, morphology):
+        stack_data = super()._init_stack(morphology)
         # recenter because the actual origin of the neurites is at
         # the last point of the soma.
-        morphology.translate(morphology.roots[0].points[0] - morphology.roots[0].points[-1])
+        morphology.translate((morphology.roots[0].points[0] - morphology.roots[0].points[-1]) / 2)
+        return stack_data
+
+    def deform_morphology(self, morphology):
         morphology = super().deform_morphology(morphology)
         # Re-label the dendrites based on their layer location.
         id_den_gr = id_den_mol = -1
