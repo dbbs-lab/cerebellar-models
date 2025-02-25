@@ -369,8 +369,8 @@ class MorphologyBender:
                 while i < len(branch.points):
                     branch_labels = branch.labelsets[branch.labels[i]]
                     if np.isin(list(branch_labels), self.rescale).any() and i > 0:
-                        rescale, curr_scaling = self.scale_morpho(branch, i, curr_scaling)
-                        if rescale:
+                        fail_rescale, curr_scaling = self.scale_morpho(branch, i, curr_scaling)
+                        if fail_rescale:
                             self.delete_point(branch, i)
                             continue
                     if np.isin(list(branch_labels), self.deform).any():

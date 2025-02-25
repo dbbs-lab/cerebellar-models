@@ -9,7 +9,6 @@ network:
 morphologies:
   - file: ./morphologies/GranuleCell.swc
     parser:
-      skip_boundary_labels: ["soma"]
       tags:
         16:
           - axon
@@ -173,6 +172,7 @@ placement:
           - parallel_fiber
         rescale:
           - ascending_axon
+        fixed_dimension: 0
     partitions:
       - declive
     strategy: bsb.placement.RandomPlacement
@@ -227,3 +227,4 @@ $import:
     - storage
     - simulations
     - connectivity
+    - after_connectivity
