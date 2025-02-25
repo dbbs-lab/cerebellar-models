@@ -277,7 +277,7 @@ same amplitude as the ones obtained with a static_synapse model.
    :header-rows: 1
    :delim: ;
 
-    Source-Target;:math:`weight \ (nS)`;:math:`delay \ (ms)`; :math:`U`; :math:`\tau_{fac} (ms)`; :math:`\tau_{rec}\ (ms)`; Receptor id
+    Source-Target;:math:`weight \ (nS)`;:math:`delay \ (ms)`; :math:`U`; :math:`\tau_{rec}\ (ms)`; :math:`\tau_{fac} (ms)`; Receptor id
     glom-GrC;0.53;1;0.43;8;5;1
     glom-GoC;0.43;1;0.43;8;5;1
     GoC-GrC;0.68;2;0.35;36;58;2
@@ -289,7 +289,7 @@ same amplitude as the ones obtained with a static_synapse model.
     GrC(pf)-BC;0.15;5;0.15;35.1;10.8;1
     BC-PC;0.35;4;0.35;15;4;2
     SC-PC;0.48;5;0.35;15;4;2
-    BC-BC;0.020;4;0.42;35.1;10.8;2
+    BC-BC;0.020;4;0.42;38.7;4;2
     SC-SC;0.0005;4;0.42;38.7;4;2
 
 .. Note::
@@ -308,7 +308,7 @@ The parameters for the awake state are the same as the in-vitro state, except fo
    :header-rows: 1
    :delim: ;
 
-    Source-Target;:math:`weight \ (nS)`;:math:`delay \ (ms)`; :math:`U`; :math:`\tau_{fac} (ms)`; :math:`\tau_{rec}\ (ms)`; Receptor id
+    Source-Target;:math:`weight \ (nS)`;:math:`delay \ (ms)`; :math:`U`; :math:`\tau_{rec}\ (ms)`; :math:`\tau_{fac} (ms)`; Receptor id
     GrC(pf)-PC;1.07;5;0.13;35.1;54;1
     GrC(aa)-PC;3.15;2;0.13;35.1;54;1
     GrC(pf)-SC;0.10;5;0.15;35.1;10.8;1

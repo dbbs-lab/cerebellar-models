@@ -87,7 +87,7 @@ simulations:
           cell_models:
             - dcn_i
     $import:
-      ref: ../nest/basal_awake_STP.yaml#/simulations/basal_activity/
+      ref: ../nest/basal_awake_tsodyks.yaml#/simulations/basal_activity/
       values:
         - simulator
         - resolution
