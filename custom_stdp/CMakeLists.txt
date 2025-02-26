@@ -40,7 +40,6 @@ set( MODULE_NAME ${SHORT_NAME} )
 set( MODULE_SOURCES
     custom_stdp_module.cpp
 
-      iaf_cond_alpha_neuron_nestml.cpp iaf_cond_alpha_neuron_nestml.h
       eglif_io_nestml.cpp eglif_io_nestml.h
       eglif_pc_nestml.cpp eglif_pc_nestml.h
       eglif_gr_nestml.cpp eglif_gr_nestml.h

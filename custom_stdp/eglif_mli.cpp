@@ -262,9 +262,6 @@ void eglif_mli::calibrate_time( const nest::TimeConverter& tc )
 }
 void eglif_mli::init_state_internal_()
 {
-#ifdef DEBUG
-  std::cout << "eglif_mli::init_state_internal_()" << std::endl;
-#endif
 
   const double __resolution = nest::Time::get_resolution().get_ms();  // do not remove, this is necessary for the resolution() function
   // by default, integrate all variables
@@ -505,7 +502,6 @@ const double g3__X__rec3__d__tmp_ = V_.__P__g3__X__rec3__d__g3__X__rec3 * S_.ode
     // in this condition, if there is an IO spike received from the receptor 3,
     // it will trigger a "complex flag" change, utilized for the facilitation in the Pf-MLI synapses
     S_.cf_buffer = (0.001 * B_.spike_inputs_grid_sum_[REC3 - MIN_SPIKE_RECEPTOR]);
-    std::cout << "BUFFER: " << S_.cf_buffer << std::endl;
     if (S_.cf_buffer != 0)
     {
         set_spiketime(nest::Time::step(origin.get_steps() + lag), 1);

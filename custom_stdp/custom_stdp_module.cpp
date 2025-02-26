@@ -26,7 +26,6 @@
 #include "nest_extension_interface.h"
 
 // include headers with your own stuff
-#include "iaf_cond_alpha_neuron_nestml.h"
 #include "eglif_io_nestml.h"
 #include "eglif_pc_nestml.h"
 #include "eglif_gr_nestml.h"
@@ -52,7 +51,6 @@ custom_stdp_module custom_stdp_module_LTX_module;
 void custom_stdp_module::initialize()
 {
     // register neurons, synapse or device models
-    register_iaf_cond_alpha_neuron_nestml("iaf_cond_alpha_neuron_nestml");
     nest::register_eglif_io_nestml("eglif_io_nestml");
     nest::register_eglif_pc_nestml("eglif_pc_nestml");
     nest::register_eglif_gr_nestml("eglif_gr_nestml");

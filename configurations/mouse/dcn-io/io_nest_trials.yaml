@@ -255,186 +255,186 @@ simulations:
             - mossy_fibers
         weight: 1
         delay: 0.1
-#      cf_stimulus_1:
-#        device: poisson_generator
-#        rate: 500
-#        start: 750
-#        stop: 760
-#        targetting:
-#          strategy: cell_model
-#          cell_models:
-#            - io
-#        receptor_type: 1
-#        weight: 55
-#        delay: 0.1
-#      cf_stimulus_2:
-#        device: poisson_generator
-#        rate: 500
-#        start: 1750
-#        stop: 1760
-#        targetting:
-#          strategy: cell_model
-#          cell_models:
-#            - io
-#        receptor_type: 1
-#        weight: 55
-#        delay: 0.1
-#      cf_stimulus_3:
-#        device: poisson_generator
-#        rate: 500
-#        start: 2750
-#        stop: 2760
-#        targetting:
-#          strategy: cell_model
-#          cell_models:
-#            - io
-#        receptor_type: 1
-#        weight: 55
-#        delay: 0.1
-#      cf_stimulus_4:
-#        device: poisson_generator
-#        rate: 500
-#        start: 3750
-#        stop: 3760
-#        targetting:
-#          strategy: cell_model
-#          cell_models:
-#            - io
-#        receptor_type: 1
-#        weight: 55
-#        delay: 0.1
-#      cf_stimulus_5:
-#        device: poisson_generator
-#        rate: 500
-#        start: 4750
-#        stop: 4760
-#        targetting:
-#          strategy: cell_model
-#          cell_models:
-#            - io
-#        receptor_type: 1
-#        weight: 55
-#        delay: 0.1
-#      cf_stimulus_6:
-#        device: poisson_generator
-#        rate: 500
-#        start: 5750
-#        stop: 5760
-#        targetting:
-#          strategy: cell_model
-#          cell_models:
-#            - io
-#        receptor_type: 1
-#        weight: 55
-#        delay: 0.1
-#      cf_stimulus_7:
-#        device: poisson_generator
-#        rate: 500
-#        start: 6750
-#        stop: 6760
-#        targetting:
-#          strategy: cell_model
-#          cell_models:
-#            - io
-#        receptor_type: 1
-#        weight: 55
-#        delay: 0.1
-#      cf_stimulus_8:
-#        device: poisson_generator
-#        rate: 500
-#        start: 7750
-#        stop: 7760
-#        targetting:
-#          strategy: cell_model
-#          cell_models:
-#            - io
-#        receptor_type: 1
-#        weight: 55
-#        delay: 0.1
-#      cf_stimulus_9:
-#        device: poisson_generator
-#        rate: 500
-#        start: 8750
-#        stop: 8760
-#        targetting:
-#          strategy: cell_model
-#          cell_models:
-#            - io
-#        receptor_type: 1
-#        weight: 55
-#        delay: 0.1
-#      cf_stimulus_10:
-#        device: poisson_generator
-#        rate: 500
-#        start: 9750
-#        stop: 9760
-#        targetting:
-#          strategy: cell_model
-#          cell_models:
-#            - io
-#        receptor_type: 1
-#        weight: 55
-#        delay: 0.1
-#      cf_stimulus_11:
-#        device: poisson_generator
-#        rate: 500
-#        start: 10750
-#        stop: 10760
-#        targetting:
-#          strategy: cell_model
-#          cell_models:
-#            - io
-#        receptor_type: 1
-#        weight: 55
-#        delay: 0.1
-#      cf_stimulus_12:
-#        device: poisson_generator
-#        rate: 500
-#        start: 11750
-#        stop: 11760
-#        targetting:
-#          strategy: cell_model
-#          cell_models:
-#            - io
-#        receptor_type: 1
-#        weight: 55
-#        delay: 0.1
-#      cf_stimulus_13:
-#        device: poisson_generator
-#        rate: 500
-#        start: 12750
-#        stop: 12760
-#        targetting:
-#          strategy: cell_model
-#          cell_models:
-#            - io
-#        receptor_type: 1
-#        weight: 55
-#        delay: 0.1
-#      cf_stimulus_14:
-#        device: poisson_generator
-#        rate: 500
-#        start: 13750
-#        stop: 13760
-#        targetting:
-#          strategy: cell_model
-#          cell_models:
-#            - io
-#        receptor_type: 1
-#        weight: 55
-#        delay: 0.1
-#      cf_stimulus_15:
-#        device: poisson_generator
-#        rate: 500
-#        start: 14750
-#        stop: 14760
-#        targetting:
-#          strategy: cell_model
-#          cell_models:
-#            - io
-#        receptor_type: 1
-#        weight: 55
-#        delay: 0.1
+      cf_stimulus_1:
+        device: poisson_generator
+        rate: 500
+        start: 750
+        stop: 760
+        targetting:
+          strategy: cell_model
+          cell_models:
+            - io
+        receptor_type: 1
+        weight: 55
+        delay: 0.1
+      cf_stimulus_2:
+        device: poisson_generator
+        rate: 500
+        start: 1750
+        stop: 1760
+        targetting:
+          strategy: cell_model
+          cell_models:
+            - io
+        receptor_type: 1
+        weight: 55
+        delay: 0.1
+      cf_stimulus_3:
+        device: poisson_generator
+        rate: 500
+        start: 2750
+        stop: 2760
+        targetting:
+          strategy: cell_model
+          cell_models:
+            - io
+        receptor_type: 1
+        weight: 55
+        delay: 0.1
+      cf_stimulus_4:
+        device: poisson_generator
+        rate: 500
+        start: 3750
+        stop: 3760
+        targetting:
+          strategy: cell_model
+          cell_models:
+            - io
+        receptor_type: 1
+        weight: 55
+        delay: 0.1
+      cf_stimulus_5:
+        device: poisson_generator
+        rate: 500
+        start: 4750
+        stop: 4760
+        targetting:
+          strategy: cell_model
+          cell_models:
+            - io
+        receptor_type: 1
+        weight: 55
+        delay: 0.1
+      cf_stimulus_6:
+        device: poisson_generator
+        rate: 500
+        start: 5750
+        stop: 5760
+        targetting:
+          strategy: cell_model
+          cell_models:
+            - io
+        receptor_type: 1
+        weight: 55
+        delay: 0.1
+      cf_stimulus_7:
+        device: poisson_generator
+        rate: 500
+        start: 6750
+        stop: 6760
+        targetting:
+          strategy: cell_model
+          cell_models:
+            - io
+        receptor_type: 1
+        weight: 55
+        delay: 0.1
+      cf_stimulus_8:
+        device: poisson_generator
+        rate: 500
+        start: 7750
+        stop: 7760
+        targetting:
+          strategy: cell_model
+          cell_models:
+            - io
+        receptor_type: 1
+        weight: 55
+        delay: 0.1
+      cf_stimulus_9:
+        device: poisson_generator
+        rate: 500
+        start: 8750
+        stop: 8760
+        targetting:
+          strategy: cell_model
+          cell_models:
+            - io
+        receptor_type: 1
+        weight: 55
+        delay: 0.1
+      cf_stimulus_10:
+        device: poisson_generator
+        rate: 500
+        start: 9750
+        stop: 9760
+        targetting:
+          strategy: cell_model
+          cell_models:
+            - io
+        receptor_type: 1
+        weight: 55
+        delay: 0.1
+      cf_stimulus_11:
+        device: poisson_generator
+        rate: 500
+        start: 10750
+        stop: 10760
+        targetting:
+          strategy: cell_model
+          cell_models:
+            - io
+        receptor_type: 1
+        weight: 55
+        delay: 0.1
+      cf_stimulus_12:
+        device: poisson_generator
+        rate: 500
+        start: 11750
+        stop: 11760
+        targetting:
+          strategy: cell_model
+          cell_models:
+            - io
+        receptor_type: 1
+        weight: 55
+        delay: 0.1
+      cf_stimulus_13:
+        device: poisson_generator
+        rate: 500
+        start: 12750
+        stop: 12760
+        targetting:
+          strategy: cell_model
+          cell_models:
+            - io
+        receptor_type: 1
+        weight: 55
+        delay: 0.1
+      cf_stimulus_14:
+        device: poisson_generator
+        rate: 500
+        start: 13750
+        stop: 13760
+        targetting:
+          strategy: cell_model
+          cell_models:
+            - io
+        receptor_type: 1
+        weight: 55
+        delay: 0.1
+      cf_stimulus_15:
+        device: poisson_generator
+        rate: 500
+        start: 14750
+        stop: 14760
+        targetting:
+          strategy: cell_model
+          cell_models:
+            - io
+        receptor_type: 1
+        weight: 55
+        delay: 0.1
 
     $import:
       ref: "#/simulations/basal_activity"
