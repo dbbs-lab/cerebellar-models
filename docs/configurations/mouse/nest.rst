@@ -265,7 +265,7 @@ For each synapse of the canonical circuit, the initial value of ``u`` was set to
 ----------------
 
 The synaptic parameters used for the canonical circuit correspond to those 
-listed in the table below, optained from Masoli et al. (2022) [#masoli_2022]_ .
+listed in the table below, obtained from Masoli et al. (2022) [#masoli_2022]_ .
 The receptor ID corresponds to the postsynaptic receptor used for the connection (see Table :ref:`table-receptor`).
 The weights have been rescaled under the assumption
 that the first peak of the postsynaptic conductance (:math:`g_{syn_0}`) for the Tsodyks–Markram synapse must have the
@@ -293,9 +293,9 @@ same amplitude as the ones obtained with a static_synapse model.
     SC-SC;0.0005;4;0.42;38.7;4;2
 
 .. Note::
-   The connections MF-Glom and GoC-GoC are both considered static since, for these two connections,
+   The connections mf-glom and GoC-GoC are both considered static since, for these two connections,
    we do not have Tsodyks-Markram parameters.
-   Moreover, for the PF-SC connection, the weight was adjusted manually to keep the firing rate
+   Moreover, for the pf-SC connection, the weight was adjusted manually to keep the firing rate
    within the desired range.
 
 
