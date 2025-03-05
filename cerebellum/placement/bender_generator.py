@@ -3,8 +3,8 @@ from bsb import AllenStructure, MorphologyGenerator, TopologyError, config
 from bsb._util import rotation_matrix_from_vectors
 from scipy.spatial.transform import Rotation
 
-from cerebellum.placement.morphology_bender import MorphologyBender, signed_modulo
-from cerebellum.placement.utils import get_diff_angle
+from cerebellum.placement.morphology_bender import MorphologyBender
+from cerebellum.placement.utils import signed_modulo
 
 
 @config.node
@@ -40,7 +40,7 @@ class GranuleGenerator(BenderGenerator, classmap_entry="granule_bender"):
         curr_ann = self.partition.mask_source.voxel_data_of(point, self.annotations)
         _, lay = self._ann_to_abv(curr_ann)
         if lay is not None:
-            distances = self.partition.mask_source.voxel_data_of(point, self.thicknesses)
+            distances = self.partition.mask_source.voxel_data_of(point, self.thicknesses())
             top_dist = distances[1]  # dist to gr/mol boundary
             if self.ratio_gr is None:
                 self.ratio_gr = top_dist / (top_dist + distances[2])  # ratio depth within gr.
@@ -74,30 +74,6 @@ class GranuleGenerator(BenderGenerator, classmap_entry="granule_bender"):
                 # translate all the children of the branch
                 for child in branch.children:
                     child.translate(old_deriv)
-
-            # If the difference of orientation between the current point of the ascending axon
-            # according to its first point yields an angle greater than 90 degrees, the ascending
-            # axon has crossed a frontier of the region, and its last two points can be removed.
-            max_angle = np.pi / 2 if self.no_turn_back else np.pi
-            fail_rescale = np.any(
-                np.absolute(
-                    get_diff_angle(
-                        self.orientation_field,
-                        self.partition.mask_source.voxel_of(branch.points[i]),
-                        self.partition.mask_source.voxel_of(branch.points[0]),
-                    )
-                )
-                > max_angle
-            )
-            if fail_rescale:
-                self.has_rescale = True
-                old_coord = np.copy(branch.points[i])
-                branch.points[i] = np.copy(branch.points[i - 2])
-                # translate all the points of the branch starting at i
-                branch.points[i + 1 :] += branch.points[i] - old_coord
-                # translate all the children of the branch
-                for child in branch.children:
-                    child.points += branch.points[i] - old_coord
         return fail_rescale, new_scaling
 
     def delete_point(self, branch, i):
@@ -108,11 +84,24 @@ class GranuleGenerator(BenderGenerator, classmap_entry="granule_bender"):
             self.has_rescale = False
 
     def rotate_point(self, source, branch, i, old_rots):
+        is_parallel_fiber = np.isin(
+            list(branch.labelsets[branch.labels[i]]), ["parallel_fiber"]
+        ).any()
+        if is_parallel_fiber and i == 0:
+            # reset rotations
+            fix_dim_rot = self.partition.mask_source.voxel_rotation_of(
+                self.fix_orientation(branch, 0), branch.parent.points[-1]
+            )
+            # bring back the branch to its original orientation.
+            branch.root_rotate(old_rots.original_rotation.inv())
+            branch.root_rotate(fix_dim_rot)
+            old_rots.original_rotation = fix_dim_rot
+            old_rots.last_rotation = fix_dim_rot
         rotation = super().rotate_point(source, branch, i, old_rots)
-        if np.isin(list(branch.labelsets[branch.labels[i]]), ["parallel_fiber"]).any():
+        if is_parallel_fiber:
             target = branch.points[i]
-            target_ = Rotation.from_euler("xyz", rotation).apply(target - source) + source
-            distances = self.partition.mask_source.voxel_data_of(target_, self.thicknesses)
+            target_ = rotation.apply(target - source) + source
+            distances = self.partition.mask_source.voxel_data_of(target_, self.thicknesses())
             if np.sum(distances[:1]) > 1e-6 and np.linalg.norm(source - target) > 1e-3:
                 ratio_mol = distances[0] / (distances[1] + distances[0])
                 if ratio_mol > self.ratio_gr + (1 - self.ratio_gr) / 3:  # go too deep
@@ -121,7 +110,7 @@ class GranuleGenerator(BenderGenerator, classmap_entry="granule_bender"):
                             Rotation.from_matrix(
                                 rotation_matrix_from_vectors(
                                     self.partition.mask_source.voxel_orient(
-                                        self.orientation_field,
+                                        self.fix_orientation(branch, i),
                                         target_,
                                     ),
                                     target_ - source,
@@ -132,19 +121,19 @@ class GranuleGenerator(BenderGenerator, classmap_entry="granule_bender"):
                     )
                     # bring back the fiber at 90 degree with respect to the orientation field.
                     # works only on parallel fibers !
-                    correction_angle = np.sign(angle) * np.pi / 2 - angle
-                    next_loc = (
-                        Rotation.from_euler("xyz", rotation + correction_angle).apply(
-                            target - source
-                        )
-                        + source
+                    final_angle = np.zeros(3)
+                    ax = self.fixed_dimension(branch, i)
+                    final_angle[ax] = np.sign(angle[ax]) * np.pi / 2 - angle[ax]
+                    correction_angle = Rotation.from_euler("xyz", final_angle)
+                    next_loc = (rotation * correction_angle).apply(target - source) + source
+                    distances = self.partition.mask_source.voxel_data_of(
+                        next_loc, self.thicknesses()
                     )
-                    distances = self.partition.mask_source.voxel_data_of(next_loc, self.thicknesses)
                     if (
                         not self.is_target_wrong(source, next_loc)
                         and distances[0] / (distances[1] + distances[0]) < ratio_mol
                     ):
-                        return rotation + correction_angle
+                        return rotation * correction_angle
         return rotation
 
     def deform_morphology(self, morphology):
@@ -214,8 +203,8 @@ class BasketGenerator(BenderGenerator, classmap_entry="basket_bender"):
             return "mo" not in current_abv
 
         # axon should get closer to Purkinje layer.
-        current_dist = self.partition.mask_source.voxel_data_of(new_target, self.thicknesses)
-        old_dist = self.partition.mask_source.voxel_data_of(source, self.thicknesses)
+        current_dist = self.partition.mask_source.voxel_data_of(new_target, self.thicknesses())
+        old_dist = self.partition.mask_source.voxel_data_of(source, self.thicknesses())
         if "mo" in current_abv:
             return current_dist[1] > 62.5 and old_dist[1] < current_dist[1]
         elif "gr" in current_abv:

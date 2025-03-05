@@ -1,6 +1,4 @@
 import numpy as np
-from bsb._util import rotation_matrix_from_vectors
-from scipy.spatial.transform import Rotation
 
 
 def signed_modulo(a, mod):
@@ -90,22 +88,3 @@ def boundaries_index_of(vox, new_vox):
     :rtype: Tuple(int, int, int)
     """
     return tuple(np.minimum(np.maximum((new_vox - vox), -1), 1) + 1)
-
-
-def get_diff_angle(orientation_field, vox, old_vox):
-    """
-    Get the Euler angle between the orientation vectors of two different position.
-
-    :param numpy.ndarray orientation_field: brain orientation field
-    :param numpy.ndarray vox: first voxel position
-    :param numpy.ndarray old_vox: second voxel position
-    :return: Euler angle between the two orientation field vectors.
-    :rtype: numpy.ndarray
-    """
-    loc_rot = Rotation.from_matrix(
-        rotation_matrix_from_vectors(
-            orientation_field[old_vox[0], old_vox[1], old_vox[2]],
-            orientation_field[vox[0], vox[1], vox[2]],
-        )
-    )
-    return loc_rot.as_euler("xyz")

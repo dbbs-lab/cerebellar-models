@@ -1,16 +1,11 @@
-import functools
 from collections import deque
 
 import numpy as np
-from bsb import AllenStructure, NrrdDependencyNode, config
+from bsb import AllenStructure, NrrdDependencyNode, config, pool_cache, types
 from bsb.config._attrs import cfgdict
 from scipy.spatial.transform import Rotation
 
-from cerebellum.placement.utils import (
-    boundaries_index_of,
-    bresenham_line,
-    signed_modulo,
-)
+from cerebellum.placement.utils import boundaries_index_of, bresenham_line
 
 
 class RotationReminder:
@@ -22,11 +17,12 @@ class RotationReminder:
         :param last_rotation: Last rotation applied to the morphology's points.
         """
         self.last_rotation = last_rotation
+        self.original_rotation = last_rotation
         if rotation_to_correct is None:
-            self.rotation_to_correct = np.zeros(3)
+            self.rotation_to_correct = Rotation.from_euler("xyz", np.zeros(3))
         else:
-            self.rotation_to_correct = np.copy(rotation_to_correct)
-        self.old_diff_rotation = np.copy(old_diff_rotation)
+            self.rotation_to_correct = rotation_to_correct
+        self.old_diff_rotation = old_diff_rotation
 
     def copy(self):
         return RotationReminder(
@@ -43,7 +39,9 @@ class MorphologyBender:
 
     deform: list[str] = config.list(required=False, type=str, default=["axon", "dendrites"])
 
-    fixed_dimension: int = config.attr(required=False, type=int, default=-1)
+    fixed_dimensions: dict[str:int] = config.attr(
+        required=False, type=types.or_(int, dict[str:int]), default=-1
+    )
     """axis on which the orientation field will not be considered."""
 
     no_turn_back: bool = config.attr(required=False, type=bool, default=True)
@@ -69,7 +67,6 @@ class MorphologyBender:
         """
         return self.partition.annotations.raw
 
-    @functools.cached_property
     def orientation_field(self):
         """
         Return the brain orientation field pointing towards the outer shell of molecular layer
@@ -78,12 +75,53 @@ class MorphologyBender:
         """
         loc_orient = self.partition.datasets["orientations"].raw
         loc_orient /= np.linalg.norm(loc_orient, axis=3)[..., np.newaxis]
-        if 0 <= self.fixed_dimension <= 2:
-            loc_orient[..., self.fixed_dimension] = 0.0
-            loc_orient /= np.linalg.norm(loc_orient, axis=3)[..., np.newaxis]
         return loc_orient
 
-    @functools.cached_property
+    @pool_cache
+    def _fixed_orientation(self):
+        return self.orientation_field()
+
+    @pool_cache
+    def _fixed_orientation_0(self):
+        loc_orient = np.copy(self.orientation_field())
+        loc_orient[..., 0] = 0.0
+        loc_orient /= np.linalg.norm(loc_orient, axis=3)[..., np.newaxis]
+        return loc_orient
+
+    @pool_cache
+    def _fixed_orientation_1(self):
+        loc_orient = np.copy(self.orientation_field())
+        loc_orient[..., 1] = 0.0
+        loc_orient /= np.linalg.norm(loc_orient, axis=3)[..., np.newaxis]
+        return loc_orient
+
+    @pool_cache
+    def _fixed_orientation_2(self):
+        loc_orient = np.copy(self.orientation_field())
+        loc_orient[..., 2] = 0.0
+        loc_orient /= np.linalg.norm(loc_orient, axis=3)[..., np.newaxis]
+        return loc_orient
+
+    def fixed_dimension(self, branch, i):
+        if type(self.fixed_dimensions) == int:
+            return self.fixed_dimensions
+        labels = list(branch.labelsets[branch.labels[i]])
+        for l in labels:
+            if l in self.fixed_dimensions:
+                return self.fixed_dimensions[l]
+        return -1
+
+    def fix_orientation(self, branch, i):
+        fixed_dim = self.fixed_dimension(branch, i)
+        if fixed_dim == 0:
+            return self._fixed_orientation_0()
+        elif fixed_dim == 1:
+            return self._fixed_orientation_1()
+        elif fixed_dim == 2:
+            return self._fixed_orientation_2()
+        return self._fixed_orientation()
+
+    @pool_cache
     def thicknesses(self):
         """
         Return the brain depth field, i.e. the distance of each voxel from its layer boundaries
@@ -92,7 +130,7 @@ class MorphologyBender:
         """
         return self.partition.datasets["thicknesses"].raw * self.partition.voxel_size
 
-    @functools.cached_property
+    @pool_cache
     def boundaries(self):
         """
         Return a boolean array which tells for each voxel transition (3,3,3), if it remains in the
@@ -146,7 +184,7 @@ class MorphologyBender:
             last_vox = old_vox
             for voxel in bresenham_line(old_vox, new_vox)[1:]:
                 voxel = np.array(voxel)
-                if not self.boundaries[last_vox[0], last_vox[1], last_vox[2]][
+                if not self.boundaries()[last_vox[0], last_vox[1], last_vox[2]][
                     boundaries_index_of(last_vox, voxel)
                 ]:
                     # we hit the border of the region
@@ -197,15 +235,16 @@ class MorphologyBender:
         :param int i: current index in branch
         :param RotationReminder old_rots: Previous rotations applied to the previous points.
         :return: Euler angle of the rotation to apply at the source point
-        :rtype: numpy.ndarray
+        :rtype: scipy.spatial.transform.Rotation
         """
         max_angle = np.pi / 2 if self.no_turn_back else np.pi
         target = branch.points[i]
         to_rotate = True
-        new_rotation = self.partition.mask_source.voxel_rotation_of(self.orientation_field, source)
-        diff_rotation = signed_modulo(
-            new_rotation.as_euler("xyz") - old_rots.last_rotation.as_euler("xyz"), 2 * np.pi
+        new_rotation = self.partition.mask_source.voxel_rotation_of(
+            self.fix_orientation(branch, i), source
         )
+        diff_rotation = (new_rotation * old_rots.last_rotation.inv()).as_euler("xyz")
+        diff_rotation[diff_rotation < 1e-3] = 0
         scaled_diff_rotation = None
         inc = 1.0
         branch_labels = list(branch.labelsets[branch.labels[i]])
@@ -224,29 +263,29 @@ class MorphologyBender:
                 branch_labels,
             ):
                 if np.linalg.norm(diff_rotation) == 0:
-                    diff_rotation = np.copy(old_rots.old_diff_rotation)
+                    diff_rotation = old_rots.old_diff_rotation.as_euler("xyz")
                 else:
                     inc += inc / 4
-
+        scaled_diff_rotation = Rotation.from_euler("xyz", scaled_diff_rotation)
         if (
-            np.linalg.norm(old_rots.rotation_to_correct) > 1e-5
+            np.linalg.norm(old_rots.rotation_to_correct.as_euler("xyz")) > 1e-5
             and inc == 1.0
             and not self.is_target_wrong(
                 source,
-                Rotation.from_euler(
-                    "xyz", scaled_diff_rotation + old_rots.rotation_to_correct
-                ).apply(target - source)
+                (scaled_diff_rotation * old_rots.rotation_to_correct).apply(target - source)
                 + source,
                 branch_labels,
             )
         ):
-            scaled_diff_rotation += old_rots.rotation_to_correct
+            scaled_diff_rotation = scaled_diff_rotation * old_rots.rotation_to_correct
         # Update previous rotations.
         old_rots.last_rotation = new_rotation
         if np.linalg.norm(diff_rotation) > 0:
-            old_rots.old_diff_rotation = np.copy(diff_rotation)
-        old_rots.rotation_to_correct = signed_modulo(
-            old_rots.rotation_to_correct - scaled_diff_rotation + diff_rotation, 2 * np.pi
+            old_rots.old_diff_rotation = Rotation.from_euler("xyz", diff_rotation)
+        old_rots.rotation_to_correct = (
+            old_rots.rotation_to_correct
+            * scaled_diff_rotation.inv()
+            * Rotation.from_euler("xyz", diff_rotation)
         )
         return scaled_diff_rotation
 
@@ -264,7 +303,7 @@ class MorphologyBender:
         if lay is not None:
             return np.maximum(
                 np.sum(
-                    self.partition.mask_source.voxel_data_of(point, self.thicknesses)[
+                    self.partition.mask_source.voxel_data_of(point, self.thicknesses())[
                         thick : thick + 2
                     ]
                 )
@@ -293,8 +332,9 @@ class MorphologyBender:
             scaling = new_scaling
         old_coord = np.copy(branch.points[i])
         new_coord = branch.points[i - 1] + (old_coord - branch.points[i - 1]) * scaling
-        if 0 <= self.fixed_dimension <= 2:
-            new_coord[self.fixed_dimension] = old_coord[self.fixed_dimension]
+        fixed_dimension = self.fixed_dimension(branch, i)
+        if 0 <= fixed_dimension <= 2:
+            new_coord[fixed_dimension] = old_coord[fixed_dimension]
         # check that every voxel between the points remain within the region boundary
         rescale = self.test_voxels_between(
             self.partition.mask_source.voxel_of(branch.points[i - 1]),
@@ -321,7 +361,7 @@ class MorphologyBender:
         for branch in morphology.roots:
             try:
                 rotation = self.partition.mask_source.voxel_rotation_of(
-                    self.orientation_field,
+                    self.fix_orientation(branch, 0),
                     branch.points[0],
                 )
                 branch.root_rotate(rotation)
@@ -330,7 +370,7 @@ class MorphologyBender:
                     enumerate(
                         np.absolute(
                             self.partition.mask_source.voxel_data_of(
-                                branch.points[0], self.orientation_field
+                                branch.points[0], self.fix_orientation(branch, 0)
                             )
                         )
                     ),
@@ -339,7 +379,11 @@ class MorphologyBender:
                 old_diff_rotation = np.zeros(3)
                 old_diff_rotation[axis_max] = 1e-2
                 stack_data.append(
-                    (branch, RotationReminder(rotation, old_diff_rotation), curr_scaling)
+                    (
+                        branch,
+                        RotationReminder(rotation, Rotation.from_euler("xyz", old_diff_rotation)),
+                        curr_scaling,
+                    )
                 )
             except ValueError as _:
                 continue
@@ -356,7 +400,6 @@ class MorphologyBender:
         """
         stack_data = self._init_stack(morphology)
         stack = deque(stack_data)
-
         while True:
             try:
                 branch, old_rots, curr_scaling = stack.pop()
@@ -375,9 +418,8 @@ class MorphologyBender:
                             continue
                     if np.isin(list(branch_labels), self.deform).any():
                         try:
-                            rotation = Rotation.from_euler(
-                                "xyz", self.rotate_point(last_point, branch, i, old_rots)
-                            )
+                            rotation = self.rotate_point(last_point, branch, i, old_rots)
+                            old_rots.original_rotation = old_rots.original_rotation * rotation
                             branch.root_rotate(rotation, downstream_of=last_index)
                         except ValueError as _:
                             self.delete_point(branch, i)
@@ -430,7 +472,7 @@ class MorphologyBender:
             u_morpho, u_index = np.unique(morpho_ids[filter_pos], return_inverse=True)
             u_morpho = morphology_list[u_morpho]
             # filter for positions inside the orientation and depth field.
-            if NrrdDependencyNode.is_within(uniq_vox, self.orientation_field):
+            if NrrdDependencyNode.is_within(uniq_vox, self.orientation_field()):
                 translation_vec = (
                     uniq_vox + 0.5
                 ) * self.partition.voxel_size + self.partition.mask_source.space_origin
