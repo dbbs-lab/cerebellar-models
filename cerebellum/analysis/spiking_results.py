@@ -58,9 +58,7 @@ class SpikePlot(ScaffoldPlot):
         self.dt = self.scaffold.simulations[simulation_name].resolution
         """Time step of the simulation in ms"""
         self.all_spikes = all_spikes
-        """Boolean numpy array of shape (N*M) storing spike events for each time step. 
-           N corresponds to the number of time steps, M to the number of neuron.
-           Neurons are sorted by neuron type"""
+        """List of SpikeTrain for each cell type"""
         if len(nb_neurons) != len(populations):
             raise ValueError("populations and nb_neurons must have the same length")
         self.nb_neurons = nb_neurons

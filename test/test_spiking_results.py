@@ -265,7 +265,6 @@ class TestSpikePlots(ReportBasalSimCircuitTest, NumpyTestCase, engine_name="hdf5
             nb_neurons=self.simulationReport.nb_neurons,
             populations=self.simulationReport.populations,
             dict_colors=self.simulationReport.colors,
-            w_single=500,
             max_neuron_sampled=100,
         )
         plot.plot()
@@ -297,7 +296,7 @@ class TestSpikePlots(ReportBasalSimCircuitTest, NumpyTestCase, engine_name="hdf5
         plot.plot()
         self.assertEqual(len(plot.get_axes()), 0)
 
-        with self.assertRaises(ValueError):
+        with self.assertRaises(TypeError):
             FiringRatesPlot(
                 (15, 10),
                 scaffold=self.scaffold,
@@ -307,7 +306,7 @@ class TestSpikePlots(ReportBasalSimCircuitTest, NumpyTestCase, engine_name="hdf5
                 all_spikes=[],
                 nb_neurons=np.zeros(0, dtype=int),
                 populations=[],
-                w_single=0,
+                kernel=0,
             )
         with self.assertRaises(ValueError):
             FiringRatesPlot(
@@ -386,7 +385,6 @@ class TestSpikePlots(ReportBasalSimCircuitTest, NumpyTestCase, engine_name="hdf5
             nb_neurons=self.simulationReport.nb_neurons,
             populations=self.simulationReport.populations,
             dict_colors=self.simulationReport.colors,
-            w_single=500,
             max_neuron_sampled=100,
         )
         plot.plot()

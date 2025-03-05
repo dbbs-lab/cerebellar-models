@@ -1,0 +1,47 @@
+name: DBBS Mouse cerebellum NEST basal activity and mf stimulus for in vitro state
+simulations:
+  mf_stimulus:
+    simulator: nest
+    resolution: 0.1
+    duration: 5000
+    modules:
+      - cerebmodule
+    seed: 1234
+    $import:
+      ref: ./basal_vitro_tsodyks.yaml#/simulations/basal_activity
+      values:
+        - cell_models
+        - connection_models
+        - devices
+    devices:
+      stimulus:
+        device: poisson_generator
+        rate: 150
+        start : 1200
+        stop : 1250
+        targetting:
+          strategy: sphere
+          radius: 90
+          origin:
+            - 150.0
+            - 65.0
+            - 100.0
+          cell_models:
+            - mossy_fibers
+        "weight" : 1.0
+        "delay" : 0.1
+$import:
+  ref: ./basal_vitro_tsodyks.yaml#/
+  values:
+    - packages
+    - components
+    - storage
+    - network
+    - regions
+    - partitions
+    - morphologies
+    - cell_types
+    - placement
+    - connectivity
+    - after_connectivity
+    - simulations
