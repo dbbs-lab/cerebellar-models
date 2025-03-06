@@ -170,9 +170,11 @@ placement:
         strategy: cerebellum.placement.bender_generator.GranuleGenerator
         deform:
           - parallel_fiber
+          - ascending_axon
         rescale:
           - ascending_axon
-        fixed_dimension: 0
+        fixed_dimensions:
+          parallel_fiber: 0
     partitions:
       - declive
     strategy: bsb.placement.RandomPlacement
@@ -193,7 +195,7 @@ placement:
       morphologies:
         deform:
           - dendrites
-        fixed_dimension: 2
+        fixed_dimensions: 2
         rescale:
           - dendrites
         strategy: cerebellum.placement.bender_generator.PurkinjeGenerator
@@ -205,7 +207,7 @@ placement:
       - stellate_cell
     distribute:
       morphologies:
-        fixed_dimension: 2
+        fixed_dimensions: 2
         strategy: cerebellum.placement.bender_generator.BenderGenerator
     partitions:
       - declive
@@ -215,7 +217,7 @@ placement:
       - basket_cell
     distribute:
       morphologies:
-        fixed_dimension: 2
+        fixed_dimensions: 2
         strategy: cerebellum.placement.bender_generator.BasketGenerator
     partitions:
       - declive
