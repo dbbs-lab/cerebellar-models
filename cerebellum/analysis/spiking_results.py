@@ -162,7 +162,7 @@ class SpikeSimulationReport(BSBReport):
         """Time step of the simulation in ms"""
         self.ignored_ct = ignored_ct or ["glomerulus", "ubc_glomerulus"]
         """List of ignored cell type names"""
-        self.all_spikes = None
+        self.all_spikes: List[SpikeTrain] = None
         """List of SpikeTrain for each cell type"""
         self.nb_neurons = None
         """Number of neuron for each neuron type"""
@@ -241,6 +241,10 @@ class SpikeSimulationReport(BSBReport):
                         if isinstance(st.annotations["senders"], np.int64):  # pragma: nocover
                             st.annotations["senders"] = [st.annotations["senders"]]
                         if isinstance(st.annotations["senders"], list):
+                            # TODO: bsb is not storing senders data in the right dictionary
+                            # See https://github.com/dbbs-lab/bsb-nest/issues/18
+                            st.array_annotations["senders"] = st.annotations["senders"]
+                            del st.annotations["senders"]
                             spikes_res[cell_dict[cell_type]].append(st)
         return spikes_res, cell_dict
 
@@ -259,31 +263,10 @@ class SpikeSimulationReport(BSBReport):
         nb_neurons = np.zeros(len(cell_dict), dtype=int)
         for i, cell_type in enumerate(cell_dict):
             sts = spikes_res[cell_dict[cell_type]]
-            # all_spikes.append(sts[0].merge(sts[1:]))
-            # Do manual merge because bsb is not storing senders data in the right dictionary
-            # See https://github.com/dbbs-lab/bsb-nest/issues/18
-            all_spiketrains = [sts[0]]
-            all_spiketrains.extend([st.rescale(sts[0].units) for st in sts[1:]])
-            merged = np.concatenate([np.asarray(st) for st in all_spiketrains])
-            senders = np.concatenate(
-                [np.asarray(st.annotations["senders"]) for st in all_spiketrains]
-            )
-            sorting = np.argsort(merged)
-            annotations = sts[0].annotations
-            annotations["senders"] = senders[sorting]
-            all_spikes.append(
-                SpikeTrain(
-                    merged[sorting],
-                    units=sts[0].units,
-                    dtype=sts[0].dtype,
-                    copy=False,
-                    t_start=sts[0].t_start,
-                    t_stop=sts[0].t_stop,
-                    sampling_rate=sts[0].sampling_rate,
-                    left_sweep=sts[0].left_sweep,
-                    **annotations,
-                )
-            )
+            merged = sts[0]
+            for st in sts[1:]:
+                merged = merged.merge(st)
+            all_spikes.append(merged)
             nb_neurons[i] = all_spikes[i].annotations["pop_size"]
         return all_spikes, nb_neurons, list(cell_dict.keys())
 
@@ -400,7 +383,7 @@ class RasterPSTHPlot(SpikePlot):
         loc_spikes = self.get_filt_spikes()
         for i, ct in enumerate(self.populations):
             times = loc_spikes[i].magnitude
-            _, newIds = np.unique(loc_spikes[i].annotations["senders"], return_inverse=True)
+            _, newIds = np.unique(loc_spikes[i].array_annotations["senders"], return_inverse=True)
             cell_params = loc_params_raster.copy()
             if "s" not in cell_params and self.nb_neurons[i] > 0:
                 cell_params["s"] = 50.0 / self.nb_neurons[i]
@@ -602,7 +585,7 @@ def extract_isis(spikes, dt):
     """
 
     isi_ = []
-    senders = spikes.annotations["senders"]
+    senders = spikes.array_annotations["senders"]
     u_senders, inv = np.unique(senders, return_inverse=True)
     mat = np.zeros((int((spikes.t_stop - spikes.t_start) / dt), len(u_senders)), dtype=bool)
     mat[np.asarray(spikes.times / dt, dtype=int) - 1, inv] = True
@@ -760,7 +743,7 @@ class SimResultsTable(TablePlot, SpikePlot):
         for i in range(num_filter):
             spikes = loc_spikes[i]
 
-            all_fr = np.unique(spikes.annotations["senders"], return_counts=True)[1] / (
+            all_fr = np.unique(spikes.array_annotations["senders"], return_counts=True)[1] / (
                 (self.time_to - self.time_from) / 1000.0
             )
             isi = extract_isis(spikes, self.dt)
