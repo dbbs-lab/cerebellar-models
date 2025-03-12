@@ -1,5 +1,5 @@
 """
-    Module for the configuration node of the IO to molecular layer interneurons (MLI) ConnectionStrategy
+Module for the configuration node of the IO to molecular layer interneurons (MLI) ConnectionStrategy
 """
 
 import numpy as np

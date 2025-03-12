@@ -1,5 +1,5 @@
 """
-    Module for the configuration node of every presynaptic cell to Glomerulus ConnectionStrategy
+Module for the configuration node of every presynaptic cell to Glomerulus ConnectionStrategy
 """
 
 import abc

@@ -1,5 +1,5 @@
 """
-    Module for the configuration node of the Golgi to Glomerulus ConnectionStrategy
+Module for the configuration node of the Golgi to Glomerulus ConnectionStrategy
 """
 
 import itertools
@@ -206,6 +206,10 @@ class ConnectomeGolgiGlomerulus(ConnectionStrategy):
 
         # TODO: implement random rounding and adapt tests.
         num_glom_to_connect = np.min([int(self.divergence), len(postsyn_locs)])
+        if num_glom_to_connect == 0:
+            raise ConnectivityError(
+                "The resolved potential targets or the divergence value should be greater than 0."
+            )
         n_conn = (
             len(golgi_pos)
             * num_glom_to_connect
