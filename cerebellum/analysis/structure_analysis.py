@@ -1,5 +1,5 @@
 """
-    Module for the plots and reports related to the structural analysis of BSB scaffold.
+Module for the plots and reports related to the structural analysis of BSB scaffold.
 """
 
 from typing import List, Tuple, Union
@@ -289,6 +289,9 @@ class CellPlacement3D(ScaffoldPlot):
         """List of cell type names to ignore in the plot."""
 
     def init_plot(self, **kwargs):
+        if self.is_initialized:
+            plt.close(self.figure)
+        self.is_initialized = True
         self.is_plotted = False
         self.figure = plt.figure(figsize=self.fig_size, **kwargs)
         self.axes = self.figure.add_subplot(111, projection="3d")
@@ -373,20 +376,26 @@ class StructureReport(BSBReport):
             dict_legend=dict(columnspacing=2.0, handletextpad=0.1, fontsize=20, loc="lower center"),
         )
         density_table = PlacementTable(
-            (5, 2.5), scaffold=self.scaffold, dict_abv=self.abbreviations
+            (5, 0.25 * (len(self.scaffold.get_placement_sets()) + 1)),
+            scaffold=self.scaffold,
+            dict_abv=self.abbreviations,
         )
         connectivity_table = ConnectivityTable(
-            (10, 5), scaffold=self.scaffold, dict_abv=self.abbreviations
+            (10, 0.25 * (len(self.scaffold.get_connectivity_sets()) + 1)),
+            scaffold=self.scaffold,
+            dict_abv=self.abbreviations,
         )
         plot3d = CellPlacement3D((10, 10), scaffold=self.scaffold)
         self.add_plot("density_table", density_table)
         self.add_plot("connectivity_table", connectivity_table)
         self.add_plot("placement_3d", plot3d)
         self.add_plot("legend", legend)
-        legend.set_axis_off()
         legend.remove_ct(self.cell_names, ["glomerulus", "ubc_glomerulus"])
-        density_table.set_axis_off()
-        connectivity_table.set_axis_off()
+
+    def preprocessing(self):
+        self.plots["legend"].set_axis_off()
+        self.plots["density_table"].set_axis_off()
+        self.plots["connectivity_table"].set_axis_off()
 
 
 @config.node

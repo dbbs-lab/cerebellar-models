@@ -1,5 +1,5 @@
 """
-    Module for the utility class for postsynaptically-sorted ConnectionStrategy
+Module for the utility class for postsynaptically-sorted ConnectionStrategy
 """
 
 import itertools

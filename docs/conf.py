@@ -40,6 +40,7 @@ intersphinx_mapping = {
     "numpy": ("https://numpy.org/doc/stable/", None),
     "scipy": ("https://scipy.github.io/devdocs/", None),
     "bsb": ("https://bsb.readthedocs.io/en/latest", None),
+    "neo": ("https://neo.readthedocs.io/en/latest/", None),
     "voxcell": ("https://voxcell.readthedocs.io/en/stable/", None),
 }
 

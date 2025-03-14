@@ -6,7 +6,13 @@ import unittest
 from os.path import abspath, dirname, join
 
 import numpy as np
-from bsb import Configuration, ConfigurationError, Scaffold, WorkflowError
+from bsb import (
+    Configuration,
+    ConfigurationError,
+    ConnectivityError,
+    Scaffold,
+    WorkflowError,
+)
 from bsb_test import NetworkFixture, NumpyTestCase, RandomStorageFixture
 
 from cerebellum.connectome.glomerulus_golgi import ConnectomeGlomerulusGolgi
@@ -148,9 +154,10 @@ class TestGolgiGlomerulus(
                 glom_post_strats=["glom_to_post"],
             ),
         )
-        # Fixme: test the sub-error: should be ConnectivityError
-        with self.assertRaises(WorkflowError):
+        with self.assertRaises(WorkflowError) as wfe:
             self.network.compile(append=True, skip_placement=True)
+
+        self.assertIn(ConnectivityError, [type(e.error) for e in wfe.exception.exceptions])
 
     def test_golgi_glom_strat(self):
         self.network.connectivity["golgi_glom"] = ConnectomeGolgiGlomerulus(
