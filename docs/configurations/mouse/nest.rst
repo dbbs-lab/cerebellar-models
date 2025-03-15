@@ -245,6 +245,82 @@ The parameters for the awake state are the same as the `in-vitro` state, except 
 
 Our target was to match the Table 1 from Geminiani et al. 2024 [#geminiani_2024]_.
 
+Tsodyks Markram Synapse
+#######################
+
+Description
++++++++++++
+
+The `Tsodyks-Markram synapse <https://nest-simulator.readthedocs.io/en/latest/models/tsodyks2_synapse.html>`_ synapse
+model implements synaptic short-term depression and short-term facilitation according to
+Tsodyks et al. [#tsodyks_1997]_ and Fuhrman et al. [#fuhrman_2002]_.
+This connection merely scales the synaptic weight, based on the spike history parameters of the kinetic model.
+
+Synapse parameters
+++++++++++++++++++
+
+For each synapse of the canonical circuit, the initial value of ``u`` was set to ``0`` and ``x`` to ``1.0``.
+
+`In-vitro` state
+----------------
+
+The synaptic parameters used for the canonical circuit correspond to those 
+listed in the table below, obtained from Masoli et al. (2022) [#masoli_2022]_ .
+The receptor ID corresponds to the postsynaptic receptor used for the connection (see Table :ref:`table-receptor`).
+The weights have been rescaled under the assumption
+that the first peak of the postsynaptic conductance (:math:`g_{syn_0}`) for the Tsodyks–Markram synapse must have the
+same amplitude as the ones obtained with a static_synapse model.
+
+:math:`weight_{tsodyks} = \dfrac{{weight_{static}}^2}{g_{syn_0}}`
+
+.. csv-table:: Presynaptic parameters
+   :header-rows: 1
+   :delim: ;
+
+    Source-Target;:math:`weight \ (nS)`;:math:`delay \ (ms)`; :math:`U`; :math:`\tau_{rec}\ (ms)`; :math:`\tau_{fac} (ms)`; Receptor id
+    glom-GrC;0.53;1;0.43;8;5;1
+    glom-GoC;0.43;1;0.43;8;5;1
+    GoC-GrC;0.68;2;0.35;36;58;2
+    GrC(aa)-GoC;2.05;2;0.4;35.1;54;3
+    GrC(aa)-PC;1.53;2;0.13;35.1;54;1
+    GrC(pf)-GoC;0.125;5;0.4;35.1;54;3
+    GrC(pf)-PC;0.13;5;0.13;35.1;54;1
+    GrC(pf)-SC;0.15;5;0.15;35.1;10.8;1
+    GrC(pf)-BC;0.15;5;0.15;35.1;10.8;1
+    BC-PC;0.35;4;0.35;15;4;2
+    SC-PC;0.48;5;0.35;15;4;2
+    BC-BC;0.020;4;0.42;38.7;4;2
+    SC-SC;0.0005;4;0.42;38.7;4;2
+
+.. Note::
+   The connections mf-glom and GoC-GoC are both considered static since, for these two connections,
+   we do not have Tsodyks-Markram parameters.
+   Moreover, for the pf-SC connection, the weight was adjusted manually to keep the firing rate
+   within the desired range.
+
+
+Awake state
+-----------
+
+The parameters for the awake state are the same as the in-vitro state, except for the following connections:
+
+.. csv-table:: Presynaptic parameters
+   :header-rows: 1
+   :delim: ;
+
+    Source-Target;:math:`weight \ (nS)`;:math:`delay \ (ms)`; :math:`U`; :math:`\tau_{rec}\ (ms)`; :math:`\tau_{fac} (ms)`; Receptor id
+    GrC(pf)-PC;1.07;5;0.13;35.1;54;1
+    GrC(aa)-PC;3.15;2;0.13;35.1;54;1
+    GrC(pf)-SC;0.10;5;0.15;35.1;10.8;1
+    GrC(pf)-BC;0.40;5;0.15;35.1;10.8;1
+    BC-PC; 2.28;4;0.35;15;4;2
+
+.. Note:: 
+   For the simulations using Tsodyks-Markram synapse, the mean firing rates and mean interspike intervals (ISI)
+   obtained for each neuron population from both in-vitro and awake states are expected to be the same,
+   as the ones obtained with static synapses.
+   For pf-SC connection weight was adjusted manually to keep the firing rate in the desired range.
+
 Simulation paradigms
 ^^^^^^^^^^^^^^^^^^^^
 
@@ -403,3 +479,15 @@ References
    Molecular layer interneurons: key elements of cerebellar network computation and behavior.
    Neuroscience, 462, 22-35.
    https://doi.org/10.1016/j.neuroscience.2020.10.008
+.. [#tsodyks_1997] Tsodyks MV,  Markram H (1997). The neural code between neocortical
+   pyramidal neurons depends on neurotransmitter release probability.
+   PNAS, 94(2):719-23.
+   DOI: https://doi.org/10.1073/pnas.94.2.719
+.. [#fuhrman_2002] Fuhrman, G, Segev I, Markram H, Tsodyks MV (2002). Coding of
+   temporal information by activity-dependent synapses. Journal of
+   Neurophysiology, 87(1):140-8.
+   DOI: https://doi.org/10.1152/jn.00258.2001
+.. [#masoli_2022] Masoli, S., Rizza, M. F., Tognolina, M., Prestori, F., & D’Angelo, E. (2022).
+   Computational models of neurotransmission at cerebellar synapses unveil the impact on network computation. 
+   Frontiers in Computational Neuroscience, 16, 1006989.
+   DOI:  https://doi.org/10.3389/fncom.2022.1006989 

@@ -1,11 +1,14 @@
 import os
 import unittest
+from copy import deepcopy
 from os.path import join
 
 import numpy as np
 from bsb import Scaffold, parse_configuration_content
 from bsb_test import NumpyTestCase, RandomStorageFixture
 from matplotlib import pyplot as plt
+from neo import SpikeTrain
+from quantities import ms
 
 from cerebellum.analysis.plots import ScaffoldPlot
 from cerebellum.analysis.spiking_results import (
@@ -21,9 +24,10 @@ from cerebellum.analysis.spiking_results import (
 )
 
 
-class MiniCerebCircuitTest(RandomStorageFixture, unittest.TestCase, engine_name="hdf5"):
-    def setUp(self):
-        super().setUp()
+class MiniCerebCircuitFixture(RandomStorageFixture, engine_name="hdf5", setup_cls=True):
+    @classmethod
+    def setUpClass(cls):
+        super().setUpClass()
         # one third of the canonical circuit
         nest_folder = "configurations/mouse/in-vitro/nest/"
         dict_cfg = {
@@ -139,43 +143,50 @@ class MiniCerebCircuitTest(RandomStorageFixture, unittest.TestCase, engine_name=
                 },
             },
         }
-        self.cfg = parse_configuration_content(dict_cfg, path=os.path.abspath("./config.json"))
-        self.cfg.network.x = 100
-        self.cfg.network.y = 66
-        self.cfg.network.z = 100
-        self.cfg.partitions.granular_layer.thickness = 40
-        self.cfg.partitions.purkinje_layer.thickness = 10
-        self.cfg.partitions.b_molecular_layer.thickness = 17
-        self.cfg.partitions.t_molecular_layer.thickness = 33
+        cls.cfg = parse_configuration_content(dict_cfg, path=os.path.abspath("./config.json"))
+        cls.cfg.network.x = 100
+        cls.cfg.network.y = 66
+        cls.cfg.network.z = 100
+        cls.cfg.partitions.granular_layer.thickness = 40
+        cls.cfg.partitions.purkinje_layer.thickness = 10
+        cls.cfg.partitions.b_molecular_layer.thickness = 17
+        cls.cfg.partitions.t_molecular_layer.thickness = 33
         # make sure there are enough mfs.
-        self.cfg.cell_types.glomerulus.spatial.density = 0.00034
+        cls.cfg.cell_types.glomerulus.spatial.density = 0.00034
 
-        self.simulation_duration = 1000.0
-        self.cfg.simulations.basal_activity.duration = self.simulation_duration
-        self.cfg.simulations.mf_stimulus.duration = self.simulation_duration
-
-        self.scaffold = Scaffold(self.cfg, self.storage)
-        self.scaffold.compile(skip_after_connectivity=True, clear=True)
+        cls.scaffold = Scaffold(cls.cfg, cls.storage)
+        cls.scaffold.compile(skip_after_connectivity=True, clear=True)
 
 
-class ReportBasalSimCircuitTest(MiniCerebCircuitTest, engine_name="hdf5"):
-    def setUp(self):
-        super().setUp()
-        self.simulation_results = self.scaffold.run_simulation("basal_activity")
-        self.simulation_results.write("test_sim_results.nio", "ow")
-        self.simulationReport = SpikeSimulationReport(
-            self.scaffold,
+class ReportBasalSimCircuitFixture(MiniCerebCircuitFixture, engine_name="hdf5", setup_cls=True):
+    @classmethod
+    def setUpClass(cls):
+        super().setUpClass()
+        cls.simulation_duration = 1000.0
+        cls.scaffold.simulations["basal_activity"].duration = cls.simulation_duration
+        cls.scaffold.simulations["mf_stimulus"].duration = cls.simulation_duration
+        cls.simulation_results = cls.scaffold.run_simulation("basal_activity")
+        cls.simulation_results.write("test_sim_results.nio", "ow")
+        cls.simulationReport = SpikeSimulationReport(
+            cls.scaffold,
             "basal_activity",
             "./",
         )
 
-    def tearDown(self):
-        super().tearDown()
+    @classmethod
+    def tearDownClass(cls):
+        super().tearDownClass()
         plt.close("all")
         os.remove("test_sim_results.nio")
 
 
-class TestSpikePlots(ReportBasalSimCircuitTest, NumpyTestCase, engine_name="hdf5"):
+class TestSpikePlots(
+    ReportBasalSimCircuitFixture,
+    NumpyTestCase,
+    unittest.TestCase,
+    engine_name="hdf5",
+    setup_cls=True,
+):
     def test_spike_reports(self):
         self.assertEqual(self.simulationReport.time_to, self.simulation_duration)
         self.assertEqual(self.simulationReport.dt, 0.1)
@@ -183,20 +194,16 @@ class TestSpikePlots(ReportBasalSimCircuitTest, NumpyTestCase, engine_name="hdf5
             len(self.simulationReport.nb_neurons), len(self.simulationReport.populations)
         )
         self.assertEqual(
-            len(self.simulationReport.all_spikes), int(self.simulation_duration / 0.1) + 1
+            len(self.simulationReport.all_spikes), len(self.simulationReport.nb_neurons)
         )
-        self.assertEqual(
-            len(self.simulationReport.all_spikes[0]), sum(self.simulationReport.nb_neurons)
-        )
-        self.assertAll(np.sum(self.simulationReport.all_spikes, axis=0) > 0)
+        self.assertAll(np.array([len(st.magnitude) for st in self.simulationReport.all_spikes]) > 0)
         self.assertTrue("mossy_fibers" in self.simulationReport.populations)
         self.assertTrue("glomerulus" not in self.simulationReport.populations)
         with self.assertRaises(ValueError):
             SpikeSimulationReport(self.scaffold, "blabla", "./")
 
         empty_report = SpikeSimulationReport(self.scaffold, "basal_activity", "./cerebellum")
-        self.assertEqual(empty_report.all_spikes.shape[0], int(self.simulation_duration / 0.1))
-        self.assertEqual(empty_report.all_spikes.shape[1], 0)
+        self.assertEqual(len(empty_report.all_spikes), 0)
         self.assertEqual(empty_report.nb_neurons.size, 0)
         self.assertEqual(empty_report.populations, [])
 
@@ -260,7 +267,7 @@ class TestSpikePlots(ReportBasalSimCircuitTest, NumpyTestCase, engine_name="hdf5
             "mf_stimulus",
             None,
             None,
-            np.copy(self.simulationReport.all_spikes),
+            deepcopy(self.simulationReport.all_spikes),
             np.copy(self.simulationReport.nb_neurons),
             self.simulationReport.populations.copy(),
         )
@@ -269,7 +276,14 @@ class TestSpikePlots(ReportBasalSimCircuitTest, NumpyTestCase, engine_name="hdf5
         plot2 = ScaffoldPlot((10, 10), None)
         self.simulationReport.add_plot("simulation", plot)
         self.simulationReport.add_plot("scaffold", plot2)
-        self.assertAll(self.simulationReport.all_spikes == plot.all_spikes)
+        self.assertAll(
+            np.array(
+                [
+                    np.all(s1 == s2)
+                    for s1, s2 in zip(self.simulationReport.all_spikes, plot.all_spikes)
+                ]
+            )
+        )
         self.assertAll(self.simulationReport.nb_neurons == plot.nb_neurons)
         self.assertAll(np.array(self.simulationReport.populations) == np.array(plot.populations))
         self.assertFalse(plot.is_updated)
@@ -314,11 +328,14 @@ class TestSpikePlots(ReportBasalSimCircuitTest, NumpyTestCase, engine_name="hdf5
         self.assertTrue(scatter.get_rasterized())
         mf_spike_times = (
             np.array(
-                np.where(self.simulationReport.all_spikes[:, : self.simulationReport.nb_neurons[0]])
+                (
+                    self.simulationReport.all_spikes[0].magnitude / self.simulationReport.dt,
+                    self.simulationReport.all_spikes[0].array_annotations["senders"] - 1,
+                )
             )
             * np.array([[self.simulationReport.dt, 1.0]]).T
         )
-        self.assertAll(mf_spike_times == np.array(scatter.get_offsets()).T)
+        self.assertAll(np.absolute(mf_spike_times - np.array(scatter.get_offsets()).T) <= 1e-7)
         self.assertEqual(len(hist), 30)
         self.assertEqual(hist.orientation, "vertical")
 
@@ -339,7 +356,7 @@ class TestSpikePlots(ReportBasalSimCircuitTest, NumpyTestCase, engine_name="hdf5
         self.assertEqual(scatter.get_alpha(), 0.8)
         self.assertTrue(scatter.get_rasterized())
         self.assertAll(scatter.get_edgecolor()[0] == np.array([0, 0, 0, 0.8]))
-        self.assertAll(mf_spike_times == np.array(scatter.get_offsets()).T)
+        self.assertAll(np.absolute(mf_spike_times - np.array(scatter.get_offsets()).T) <= 1e-7)
         self.assertEqual(len(hist), 30)
         self.assertEqual(hist.orientation, "horizontal")
 
@@ -350,7 +367,7 @@ class TestSpikePlots(ReportBasalSimCircuitTest, NumpyTestCase, engine_name="hdf5
             simulation_name="basal_activity",
             time_from=None,
             time_to=None,
-            all_spikes=np.zeros((10001, 0), dtype=bool),
+            all_spikes=[],
             nb_neurons=np.zeros(0, dtype=int),
             populations=[],
         )
@@ -363,7 +380,7 @@ class TestSpikePlots(ReportBasalSimCircuitTest, NumpyTestCase, engine_name="hdf5
                 simulation_name="basal_activity",
                 time_from=None,
                 time_to=None,
-                all_spikes=np.zeros((10001, 0), dtype=bool),
+                all_spikes=[],
                 nb_neurons=np.zeros(0, dtype=int),
                 populations=[],
                 nb_bins=0,
@@ -380,28 +397,20 @@ class TestSpikePlots(ReportBasalSimCircuitTest, NumpyTestCase, engine_name="hdf5
             nb_neurons=self.simulationReport.nb_neurons,
             populations=self.simulationReport.populations,
             dict_colors=self.simulationReport.colors,
-            w_single=500,
-            max_neuron_sampled=100,
         )
         plot.plot()
         self.assertEqual(plot.nb_cols, 2)
         self.assertEqual(plot.nb_rows, 3)
         xlims = np.array(
             [
-                self.simulationReport.time_from + 500 * self.simulationReport.dt,
-                self.simulationReport.time_to - 501 * self.simulationReport.dt,
+                self.simulationReport.time_from,
+                self.simulationReport.time_to - self.simulationReport.dt,
             ]
         )
-        self.assertAll(np.array(plot.firing_rates.shape) == np.array([9000, 6]))
-        self.assertAll(np.array(plot.std_rates.shape) == np.array([9000, 6]))
+        self.assertAll(np.array(plot.firing_rates.shape) == np.array([10000, 6]))
         self.assertAll(np.absolute(np.array(plot.get_ax().get_xlim()) - xlims) <= 1e-7)
-        self.assertEqual(len(plot.get_ax().collections), 1)
         self.assertEqual(len(plot.get_ax().lines), 1)
         self.assertAll(plot.get_ax().lines[0].get_path().vertices[:, 1] == plot.firing_rates[:, 0])
-        self.assertAll(
-            plot.get_ax().collections[0].get_paths()[0].vertices[-9001:-1, 1][::-1]
-            == plot.firing_rates[:, 0] + plot.std_rates[:, 0]
-        )
         plot.plot(relative_time=True)
         self.assertAll(np.absolute(np.array(plot.get_ax().get_xlim()) - xlims + xlims[0]) <= 1e-7)
         # Test that an empty plot does not throw error.
@@ -411,36 +420,24 @@ class TestSpikePlots(ReportBasalSimCircuitTest, NumpyTestCase, engine_name="hdf5
             simulation_name="basal_activity",
             time_from=None,
             time_to=None,
-            all_spikes=np.zeros((10001, 0), dtype=bool),
+            all_spikes=[],
             nb_neurons=np.zeros(0, dtype=int),
             populations=[],
         )
         plot.plot()
         self.assertEqual(len(plot.get_axes()), 0)
 
-        with self.assertRaises(ValueError):
+        with self.assertRaises(TypeError):
             FiringRatesPlot(
                 (15, 10),
                 scaffold=self.scaffold,
                 simulation_name="basal_activity",
                 time_from=None,
                 time_to=None,
-                all_spikes=np.zeros((10001, 0), dtype=bool),
+                all_spikes=[],
                 nb_neurons=np.zeros(0, dtype=int),
                 populations=[],
-                w_single=0,
-            )
-        with self.assertRaises(ValueError):
-            FiringRatesPlot(
-                (15, 10),
-                scaffold=self.scaffold,
-                simulation_name="basal_activity",
-                time_from=None,
-                time_to=None,
-                all_spikes=np.zeros((10001, 0), dtype=bool),
-                nb_neurons=np.zeros(0, dtype=int),
-                populations=[],
-                max_neuron_sampled=0,
+                kernel=0,
             )
 
     def test_plot_isis(self):
@@ -475,7 +472,7 @@ class TestSpikePlots(ReportBasalSimCircuitTest, NumpyTestCase, engine_name="hdf5
             simulation_name="basal_activity",
             time_from=None,
             time_to=None,
-            all_spikes=np.zeros((10001, 0), dtype=bool),
+            all_spikes=[],
             nb_neurons=np.zeros(0, dtype=int),
             populations=[],
             dict_colors=self.simulationReport.colors,
@@ -489,7 +486,7 @@ class TestSpikePlots(ReportBasalSimCircuitTest, NumpyTestCase, engine_name="hdf5
                 simulation_name="basal_activity",
                 time_from=None,
                 time_to=None,
-                all_spikes=np.zeros((10001, 0), dtype=bool),
+                all_spikes=[],
                 nb_neurons=np.zeros(0, dtype=int),
                 populations=[],
                 dict_colors=self.simulationReport.colors,
@@ -507,18 +504,15 @@ class TestSpikePlots(ReportBasalSimCircuitTest, NumpyTestCase, engine_name="hdf5
             nb_neurons=self.simulationReport.nb_neurons,
             populations=self.simulationReport.populations,
             dict_colors=self.simulationReport.colors,
-            w_single=500,
-            max_neuron_sampled=100,
         )
         plot.plot()
-        self.assertAll(np.array(plot.firing_rates.shape) == np.array([9000, 6]))
-        self.assertAll(np.array(plot.std_rates.shape) == np.array([9000, 6]))
-        self.assertAll(np.array(plot.frequencies.shape) == np.array((6, 4500)))
-        self.assertAll(np.array(plot.freq_powers.shape) == np.array((6, 4500)))
+        self.assertAll(np.array(plot.firing_rates.shape) == np.array([10000, 6]))
+        self.assertAll(np.array(plot.frequencies.shape) == np.array((6, 5000)))
+        self.assertAll(np.array(plot.freq_powers.shape) == np.array((6, 5000)))
         self.assertEqual(
             len(plot.get_ax().lines),
-            4,
-            "There should be 1 line for the freq + 3 vertical lines for bands",
+            5,
+            "There should be 1 line for the freq + 4 vertical lines for bands",
         )
         self.assertEqual(plot.get_ax().lines[0].get_alpha(), None)
         self.assertAll(
@@ -539,7 +533,7 @@ class TestSpikePlots(ReportBasalSimCircuitTest, NumpyTestCase, engine_name="hdf5
             simulation_name="basal_activity",
             time_from=None,
             time_to=None,
-            all_spikes=np.zeros((10001, 0), dtype=bool),
+            all_spikes=[],
             nb_neurons=np.zeros(0, dtype=int),
             populations=[],
             dict_colors=self.simulationReport.colors,
@@ -589,7 +583,7 @@ class TestSpikePlots(ReportBasalSimCircuitTest, NumpyTestCase, engine_name="hdf5
             simulation_name="basal_activity",
             time_from=None,
             time_to=None,
-            all_spikes=np.zeros((10001, 0), dtype=bool),
+            all_spikes=[],
             nb_neurons=np.zeros(0, dtype=int),
             populations=[],
             dict_colors=self.simulationReport.colors,
@@ -608,18 +602,15 @@ class TestSpikePlots(ReportBasalSimCircuitTest, NumpyTestCase, engine_name="hdf5
         # Raster PSTH plot should have two sub plots for each population
         self.assertEqual(len(report.plots["raster_psth"].get_ax()[0].collections), 1)
         self.assertEqual(len(report.plots["raster_psth"].get_ax()[1].containers), 1)
-        # Firing rates plot should store firing_rates and std_rates
+        # Firing rates plot should store firing_rates
         self.assertAll(
-            np.array(report.plots["firing_rates"].firing_rates.shape) == np.array([8000, 6])
-        )
-        self.assertAll(
-            np.array(report.plots["firing_rates"].std_rates.shape) == np.array([8000, 6])
+            np.array(report.plots["firing_rates"].firing_rates.shape) == np.array([10000, 6])
         )
         # ISIs histogram should have 50 bars
         self.assertEqual(len(report.plots["isis"].get_ax().containers[0]), 50)
         # Frequency analysis plot should store the frequencies distrib.
-        self.assertAll(np.array(report.plots["freq"].frequencies.shape) == np.array((6, 4000)))
-        self.assertAll(np.array(report.plots["freq"].freq_powers.shape) == np.array((6, 4000)))
+        self.assertAll(np.array(report.plots["freq"].frequencies.shape) == np.array((6, 5000)))
+        self.assertAll(np.array(report.plots["freq"].freq_powers.shape) == np.array((6, 5000)))
         # only 6 cell types in the legend
         self.assertEqual(len(report.plots["legend"].get_ax().legend_.legend_handles), 6)
         self.assertTrue(filename in os.listdir())
@@ -629,13 +620,22 @@ class TestSpikePlots(ReportBasalSimCircuitTest, NumpyTestCase, engine_name="hdf5
 class TestExtractISIs(unittest.TestCase):
     def test_extract_isis(self):
         spikes = np.random.random((20, 10)) >= 0.85
-        isis = extract_isis(spikes, 0.1)
+        spike_times = np.where(spikes)[0]
+        senders = np.where(spikes)[1]
+        st = SpikeTrain(
+            (spike_times + 1) * 0.1,
+            units="ms",
+            array_annotations={"senders": senders},
+            t_stop=2,
+        )
+        isis = extract_isis(st, 0.1)
         enough_spikes = np.zeros(10, dtype=bool)
-        u, c = np.unique(np.where(spikes)[1], return_counts=True)
+        u, c = np.unique(senders, return_counts=True)
         enough_spikes[u] = c >= 2
         self.assertEqual(len(isis), np.count_nonzero(enough_spikes))
         loc_spikes = spikes[:, enough_spikes]
         for i in range(len(isis)):
             self.assertTrue(
-                np.absolute(isis[i] - np.mean(np.diff(np.where(loc_spikes[:, i])[0] * 0.1))) <= 1e-7
+                np.absolute(isis[i] - np.mean(np.diff(np.where(loc_spikes[:, i])[0] * 0.1)) * ms)
+                <= 1e-7
             )

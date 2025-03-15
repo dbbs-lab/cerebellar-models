@@ -1,5 +1,5 @@
 """
-    Module for the configuration node of the Glomerulus to UBC ConnectionStrategy
+Module for the configuration node of the Glomerulus to UBC ConnectionStrategy
 """
 
 import numpy as np

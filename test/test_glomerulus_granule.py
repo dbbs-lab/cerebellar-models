@@ -9,7 +9,10 @@ import numpy as np
 from bsb import Configuration, ConfigurationError, Scaffold, WorkflowError
 from bsb_test import NetworkFixture, NumpyTestCase, RandomStorageFixture
 
-from cerebellum.connectome.glomerulus_granule import ConnectomeGlomerulusGranule
+from cerebellum.connectome.glomerulus_granule import (
+    ConnectomeGlomerulusGranule,
+    TooFewGlomeruliClusters,
+)
 
 
 class TestGlomerulusGranule(
@@ -163,9 +166,9 @@ class TestGlomerulusGranule(
             ),
         )
         network = Scaffold(self.cfg, self.storage)
-        # Fixme: test the sub-error: should be TooFewGlomeruliClusters
-        with self.assertRaises(WorkflowError):
+        with self.assertRaises(WorkflowError) as wfe:
             network.compile(clear=True)
+        self.assertIn(TooFewGlomeruliClusters, [type(e.error) for e in wfe.exception.exceptions])
 
     def test_mf_glom_strat(self):
         self.network.connectivity["glom_to_gran"] = ConnectomeGlomerulusGranule(

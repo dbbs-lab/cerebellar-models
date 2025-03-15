@@ -1,0 +1,43 @@
+simulations:
+  basal_activity:
+    simulator: nest
+    connection_models:
+      parallel_fiber_to_purkinje:
+        synapse:
+          weight: 1.07
+      ascending_axon_to_purkinje:
+        synapse:
+          weight: 3.15
+      parallel_fiber_to_stellate:
+        synapse:
+          weight: 0.10
+      parallel_fiber_to_basket:
+        synapse:
+          weight: 0.40
+          receptor_type: 1
+      basket_to_purkinje:
+        synapse:
+          weight: 2.28
+      mossy_fibers_to_dcn_p:
+        synapse:
+          model: static_synapse
+          weight: 0.25
+          delay: 4.
+          receptor_type: 1
+      purkinje_to_dcn_p:
+        synapse:
+          model: static_synapse
+          weight: 0.35
+          delay: 4.
+          receptor_type: 2
+      purkinje_to_dcn_i:
+        synapse:
+          model: static_synapse
+          weight: 0.02
+          delay: 4.
+          receptor_type: 2
+
+$import:
+  ref: ../../../in-vitro/nest/connection_models/tsodyks2_synapse.yaml#/
+  values:
+    - simulations

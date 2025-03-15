@@ -197,6 +197,28 @@ def _configure_sim_params(config_simulations, simulation_names):
     return dict_sim, choices
 
 
+@app.command(help="Create a BSB configuration file for your cerebellum circuit.")
+@click.option(
+    "--output_folder",
+    type=EXISTING_DIR_PATH,
+    required=False,
+    default=os.getcwd(),
+    help="Path where to write the output configuration file.",
+)
+@click.option(
+    "--species",
+    type=AVAILABLE_SPECIES,
+    required=False,
+    default="mouse",
+    help="Species to reconstruct the circuit from.",
+)
+@click.option(
+    "--extension",
+    type=AVAILABLE_EXTENSIONS,
+    required=False,
+    default="yaml",
+    help="Extension for the configuration file.",
+)
 def configure(output_folder: str, species: str, extension: str):
     # Step 1: Species choice
     species = _configure_species(species)
@@ -314,5 +336,5 @@ def configure(output_folder: str, species: str, extension: str):
     print(f"Created the BSB configuration file: {filename}")
 
 
-if __name__ == "__main__":
-    configure(os.getcwd(), "mouse", "yaml")
+# if __name__ == "__main__":
+#     configure(os.getcwd(), "mouse", "yaml")

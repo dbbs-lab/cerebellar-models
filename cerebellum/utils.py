@@ -3,7 +3,7 @@ from collections.abc import Mapping
 from glob import glob
 from os.path import basename, isdir, join, splitext
 
-from bsb import parse_configuration_dict
+from bsb import parse_configuration_content_to_dict
 
 
 def get_folders_in_folder(folder_path: str, excepts: set = None):
@@ -26,7 +26,7 @@ def load_configs_from_files(filenames):
     for filename in filenames:
         with open(filename, "r") as f:
             data = f.read()
-            configs[splitext(basename(filename))[0]] = parse_configuration_dict(
+            configs[splitext(basename(filename))[0]] = parse_configuration_content_to_dict(
                 data, path=filename
             )[0]
     return configs
