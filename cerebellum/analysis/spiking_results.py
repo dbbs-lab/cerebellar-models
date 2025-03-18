@@ -379,7 +379,7 @@ class RasterPSTHPlot(SpikePlot):
         counts = np.zeros(num_filter + 1)
         counts[1:] = np.cumsum(self.nb_neurons)
 
-        bin_times = np.linspace(0, self.time_to - self.time_from, self.nb_bins)
+        bin_times = np.linspace(self.time_from, self.time_to, self.nb_bins)
         loc_spikes = self.get_filt_spikes()
         for i, ct in enumerate(self.populations):
             times = loc_spikes[i].magnitude
@@ -588,7 +588,7 @@ def extract_isis(spikes, dt):
     senders = spikes.array_annotations["senders"]
     u_senders, inv = np.unique(senders, return_inverse=True)
     mat = np.zeros((int((spikes.t_stop - spikes.t_start) / dt), len(u_senders)), dtype=bool)
-    mat[np.asarray(spikes.times / dt, dtype=int) - 1, inv] = True
+    mat[np.asarray((spikes.times - spikes.t_start) / dt, dtype=int) - 1, inv] = True
     for sender in range(len(u_senders)):
         isis = isi(np.where(mat[:, sender])[0] * dt * ms)
         if len(isis) > 0:
