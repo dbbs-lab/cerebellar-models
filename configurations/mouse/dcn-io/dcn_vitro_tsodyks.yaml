@@ -87,7 +87,7 @@ simulations:
           cell_models:
             - dcn_i
     $import:
-      ref: ../nest/basal_vitro_STP.yaml#/simulations/basal_activity/
+      ref: ../nest/basal_vitro_tsodyks.yaml#/simulations/basal_activity/
       values:
         - simulator
         - resolution
@@ -106,7 +106,7 @@ simulations:
             - 65.0
             - 300.0
       $import:
-        ref: ../nest/stimulus_mossy_vitro.yaml#/simulations/mf_stimulus/devices/
+        ref: ../nest/stimulus_mossy_vitro_tsodyks.yaml#/simulations/mf_stimulus/devices/
         values:
           - stimulus
     $import:

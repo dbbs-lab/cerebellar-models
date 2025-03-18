@@ -1,5 +1,5 @@
 """
-    Module for abstract classes interfacing matplotlib plots.
+Module for abstract classes interfacing matplotlib plots.
 """
 
 import abc
@@ -32,10 +32,12 @@ class Plot(abc.ABC):
         """Number of sub-panel columns in the plot."""
         self.fig_size = fig_size
         """Tuple size of the figure in inches."""
+        self.is_initialized = False
+        """Flag to indicate if this plot figure has been initialized."""
         self.is_plotted = False
-        """Flag to indicate if this plot has been plotted."""
+        """Flag to indicate if this plot figure has been plotted."""
         self.is_updated = False
-        """Flag to indicate if this plot has been updated."""
+        """Flag to indicate if this plot data has been updated."""
         self.figure = None
         """Matplotlib Figure of the plot."""
         self.axes = None
@@ -45,7 +47,6 @@ class Plot(abc.ABC):
         if dict_colors is not None:
             for key, value in dict_colors.items():
                 self.set_color(key, value)
-        self.init_plot(**kwargs)
 
     def clear(self):
         """
@@ -59,15 +60,19 @@ class Plot(abc.ABC):
         """
         Initialize the plot and return figure and axes.
         """
-        self.clear()
+        if self.is_initialized:
+            plt.close(self.figure)
         self.figure, self.axes = plt.subplots(
             nrows=self.nb_rows, ncols=self.nb_cols, figsize=self.fig_size, **kwargs
         )
+        self.is_initialized = True
 
     def get_axes(self):
         """
         Return figure axes as a flat list.
         """
+        if not self.is_initialized:
+            self.init_plot()
         if self.axes is None:
             return []
         elif self.nb_cols == 1 and self.nb_rows == 1:
@@ -81,6 +86,8 @@ class Plot(abc.ABC):
         """
         Return the axis at the given index.
         """
+        if not self.is_initialized:
+            self.init_plot()
         if idx >= self.nb_cols * self.nb_rows or idx < 0:
             raise IndexError(
                 f"Index of matplotlib ax out of range. Max {self.nb_cols * self.nb_rows}"
@@ -124,6 +131,8 @@ class Plot(abc.ABC):
         Plot or replot the figure.
         Calls the update function if needed.
         """
+        if not self.is_initialized:
+            self.init_plot()
         if self.is_plotted:
             self.clear()
         if not self.is_updated:

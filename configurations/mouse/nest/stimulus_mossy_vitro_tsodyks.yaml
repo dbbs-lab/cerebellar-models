@@ -8,7 +8,7 @@ simulations:
       - cerebmodule
     seed: 1234
     $import:
-      ref: ./basal_vitro_STP.yaml#/simulations/basal_activity
+      ref: ./basal_vitro_tsodyks.yaml#/simulations/basal_activity
       values:
         - cell_models
         - connection_models
@@ -31,7 +31,7 @@ simulations:
         "weight" : 1.0
         "delay" : 0.1
 $import:
-  ref: ./basal_vitro_STP.yaml#/
+  ref: ./basal_vitro_tsodyks.yaml#/
   values:
     - packages
     - components

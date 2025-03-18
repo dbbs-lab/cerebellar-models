@@ -266,8 +266,8 @@ simulations:
           model: tsodyks2_synapse
           U: 0.42
           x: 1
-          tau_rec: 35.1
-          tau_fac: 10.8
+          tau_rec: 38.7
+          tau_fac: 4
           weight: 0.020
           delay: 4
           receptor_type: 2

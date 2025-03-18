@@ -1,5 +1,5 @@
 """
-    Module for the Report class.
+Module for the Report class.
 """
 
 from typing import List, Union
@@ -103,11 +103,19 @@ class Report:
         self.set_plot_colors(plot)
         self.plots[name] = plot
 
+    def preprocessing(self):
+        """
+        Function to apply modifications to the report's plots
+        after the plotting is done.
+        """
+        pass
+
     def print_report(self, output_name: str, dpi: int = 200, pad: int = 0, **kwargs):
         """
         Print the report and export it in a pdf file.
         """
         pdf = matplotlib.backends.backend_pdf.PdfPages(output_name)
+        self.preprocessing()
         for name, plot in self.plots.items():
             if not plot.is_plotted:
                 plot.plot()

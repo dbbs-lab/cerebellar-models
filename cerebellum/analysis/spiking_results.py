@@ -1,5 +1,5 @@
 """
-    Module for the plots and reports related to the simulation analysis of BSB scaffold.
+Module for the plots and reports related to the simulation analysis of BSB scaffold.
 """
 
 from os import listdir
@@ -8,10 +8,13 @@ from typing import List, Tuple, Union
 
 import numpy as np
 from bsb import Scaffold
+from elephant.kernels import GaussianKernel, Kernel
+from elephant.statistics import instantaneous_rate, isi
 from matplotlib import gridspec as gs
 from matplotlib import pyplot as plt
+from neo import SpikeTrain
 from neo import io as nio
-from scipy import signal
+from quantities import ms
 
 from cerebellum.analysis.plots import Legend, Plot, ScaffoldPlot
 from cerebellum.analysis.report import BSBReport, PlotTypeInfo
@@ -55,9 +58,7 @@ class SpikePlot(ScaffoldPlot):
         self.dt = self.scaffold.simulations[simulation_name].resolution
         """Time step of the simulation in ms"""
         self.all_spikes = all_spikes
-        """Boolean numpy array of shape (N*M) storing spike events for each time step. 
-           N corresponds to the number of time steps, M to the number of neuron.
-           Neurons are sorted by neuron type"""
+        """List of SpikeTrain for each cell type"""
         if len(nb_neurons) != len(populations):
             raise ValueError("populations and nb_neurons must have the same length")
         self.nb_neurons = nb_neurons
@@ -126,10 +127,10 @@ class SpikePlot(ScaffoldPlot):
         """
         Filter the spike events for the time of the analysis.
 
-        :return: Boolean numpy array storing spike events for the analysis time step.
-        :rtype: numpy.ndarray[numpy.ndarray[bool]]
+        :return: Sliced List of SpikeTrain.
+        :rtype: List[neo.core.SpikeTrain]
         """
-        return self.all_spikes[int(self.time_from / self.dt) : int(self.time_to / self.dt)]
+        return [st.time_slice(self.time_from * ms, self.time_to * ms) for st in self.all_spikes]
 
 
 class SpikeSimulationReport(BSBReport):
@@ -161,10 +162,8 @@ class SpikeSimulationReport(BSBReport):
         """Time step of the simulation in ms"""
         self.ignored_ct = ignored_ct or ["glomerulus", "ubc_glomerulus"]
         """List of ignored cell type names"""
-        self.all_spikes = None
-        """Boolean numpy array of shape (N*M) storing spike events for each time step. 
-                   N corresponds to the number of time steps, M to the number of neuron.
-                   Neurons are sorted by neuron type"""
+        self.all_spikes: List[SpikeTrain] = None
+        """List of SpikeTrain for each cell type"""
         self.nb_neurons = None
         """Number of neuron for each neuron type"""
         self.populations = None
@@ -226,25 +225,27 @@ class SpikeSimulationReport(BSBReport):
         for f in listdir(self.folder_nio):
             file_ = join(self.folder_nio, f)
             if isfile(file_) and (".nio" in file_):
-                block = nio.NixIO(file_, mode="ro").read_all_blocks()[0]
-                spiketrains = block.segments[0].spiketrains
+                block = nio.NixIO(file_, mode="ro").read_all_blocks()[0]  # assume only one block
+                spiketrains = block.segments[0].spiketrains  # assume only one segment
 
                 for st in spiketrains:
+                    st.segment = None  # remove spiketrain segment to allow merging
                     cell_type = self.extract_ct_device_name(st.annotations["device"])
                     if cell_type not in self.cell_names:
                         cell_type += "_cell"
                     if cell_type in self.cell_names and cell_type not in self.ignored_ct:
                         if cell_type not in cell_dict:
-                            cell_dict[cell_type] = {"id": current_id, "senders": []}
+                            cell_dict[cell_type] = current_id
                             current_id += 1
                             spikes_res.append([])
                         if isinstance(st.annotations["senders"], np.int64):  # pragma: nocover
                             st.annotations["senders"] = [st.annotations["senders"]]
-                        if len(st.annotations["senders"]) > 0:
-                            spikes_res[cell_dict[cell_type]["id"]].append(st)
-                            cell_dict[cell_type]["senders"].extend(st.annotations["senders"])
-        for cell_type in cell_dict:
-            cell_dict[cell_type]["senders"] = np.unique(cell_dict[cell_type]["senders"])
+                        if isinstance(st.annotations["senders"], list):
+                            # TODO: bsb is not storing senders data in the right dictionary
+                            # See https://github.com/dbbs-lab/bsb-nest/issues/18
+                            st.array_annotations["senders"] = st.annotations["senders"]
+                            del st.annotations["senders"]
+                            spikes_res[cell_dict[cell_type]].append(st)
         return spikes_res, cell_dict
 
     def load_spikes(self):
@@ -255,41 +256,18 @@ class SpikeSimulationReport(BSBReport):
                    N corresponds to the number of time steps, M to the number of neuron. Neurons are sorted by type.
                  - List of number of unique neuron per type.
                  - List of cell type names.
-        :rtype: Tuple[numpy.ndarray[numpy.ndarray[bool]], numpy.ndarray[int], List[str]]
+        :rtype: Tuple[List[neo.core.SpikeTrain], numpy.ndarray[int], List[str]]
         """
         spikes_res, cell_dict = self._extract_spikes_dict()
-        u_gids = []
-        u_cell_types = []
-        for i, cell_type in enumerate(cell_dict):
-            senders = cell_dict[cell_type]["senders"].tolist()
-            u_gids.extend(senders)
-            u_cell_types.extend([i] * len(senders))
-        time_to = self.scaffold.simulations[self.simulation_name].duration
-        if len(u_gids) == 0:
-            return (
-                np.zeros((int(time_to / self.dt), 0), dtype=bool),
-                np.array([], dtype=int),
-                [],
-            )
-        sorting = np.argsort(u_gids)
-        u_gids = np.array(u_gids)[sorting]
-        u_cell_types = np.array(u_cell_types)[sorting]
-
-        inv_convert = np.full(np.max(u_gids) + 1, -1)
-        for i, u_gid in enumerate(u_gids):
-            inv_convert[u_gid] = i
-
-        tot_num_neuron = len(u_gids)
-        all_spikes = np.zeros((int(time_to / self.dt) + 1, tot_num_neuron), dtype=bool)
-        for cell_type in cell_dict:
-            for st in spikes_res[cell_dict[cell_type]["id"]]:
-                spikes = st.magnitude
-                senders = np.array(inv_convert[np.array(st.annotations["senders"])])
-                spikes = np.asarray(np.floor(spikes / self.dt), dtype=int)
-                all_spikes[(spikes, senders)] = True
+        all_spikes = []
         nb_neurons = np.zeros(len(cell_dict), dtype=int)
-        for i, uf in enumerate(cell_dict.keys()):
-            nb_neurons[i] = len(cell_dict[uf]["senders"])
+        for i, cell_type in enumerate(cell_dict):
+            sts = spikes_res[cell_dict[cell_type]]
+            merged = sts[0]
+            for st in sts[1:]:
+                merged = merged.merge(st)
+            all_spikes.append(merged)
+            nb_neurons[i] = all_spikes[i].annotations["pop_size"]
         return all_spikes, nb_neurons, list(cell_dict.keys())
 
     def add_plot(self, name: str, plot: Plot):
@@ -308,10 +286,10 @@ class SpikeSimulationReport(BSBReport):
         """
         Filter the spike events for the time of the analysis.
 
-        :return: Boolean numpy array storing spike events for the analysis time step.
-        :rtype: numpy.ndarray[numpy.ndarray[bool]]
+        :return: Sliced List of SpikeTrain.
+        :rtype: List[neo.core.SpikeTrain]
         """
-        return self.all_spikes[int(self.time_from / self.dt) : int(self.time_to / self.dt)]
+        return [st.time_slice(self.time_from * ms, self.time_to * ms) for st in self.all_spikes]
 
 
 class RasterPSTHPlot(SpikePlot):
@@ -354,6 +332,9 @@ class RasterPSTHPlot(SpikePlot):
         """Number of bins for the PSTH subplot."""
 
     def init_plot(self, **kwargs):
+        if self.is_initialized:
+            plt.close(self.figure)
+        self.is_initialized = True
         self.is_plotted = False
         self.nb_cols = 2
         num_filter = len(self.populations)
@@ -398,10 +379,11 @@ class RasterPSTHPlot(SpikePlot):
         counts = np.zeros(num_filter + 1)
         counts[1:] = np.cumsum(self.nb_neurons)
 
-        bin_times = np.linspace(0, self.time_to - self.time_from, self.nb_bins)
+        bin_times = np.linspace(self.time_from, self.time_to, self.nb_bins)
         loc_spikes = self.get_filt_spikes()
         for i, ct in enumerate(self.populations):
-            times, newIds = np.where(loc_spikes[:, int(counts[i]) : int(counts[i + 1])])
+            times = loc_spikes[i].magnitude
+            _, newIds = np.unique(loc_spikes[i].array_annotations["senders"], return_inverse=True)
             cell_params = loc_params_raster.copy()
             if "s" not in cell_params and self.nb_neurons[i] > 0:
                 cell_params["s"] = 50.0 / self.nb_neurons[i]
@@ -409,7 +391,7 @@ class RasterPSTHPlot(SpikePlot):
             ax = self.get_ax(i)[0]
             if self.nb_neurons[i] > 0:
                 ax.scatter(
-                    times * self.dt,
+                    times,
                     newIds,
                     color=color,
                     **cell_params,
@@ -421,19 +403,44 @@ class RasterPSTHPlot(SpikePlot):
                 else [self.time_from, self.time_to]
             )
             ax.get_xaxis().set_visible(False)
-            ax.set_ylabel("Neuron id")
-            ax.set_title(f"{ct}")
+
+            #             if i == 0:  # Print y-axis label only once (for the first row)
+            #             ax.set_ylabel("Neuron ID", fontsize=14, fontweight="bold", fontname="Arial")
+            #             ax.set_title(f"{ct}", fontsize=16, fontweight="bold")
+
+            ax.set_ylabel(
+                "Spike counts",
+                fontsize=14,
+                # fontweight="bold"
+            )
+            ax.set_title(
+                f"{ct}",
+                fontsize=16,
+                # fontweight="bold"
+            )
 
             ax = self.get_ax(i)[1]
             if self.nb_neurons[i] > 0:
-                ax.hist(times * self.dt, bin_times, color=color, **params_psth)
-            ax.set_xlabel("Time in ms")
-            ax.set_xlim(
-                [0, self.time_to - self.time_from]
-                if relative_time
-                else [self.time_from, self.time_to]
-            )
-            ax.set_ylabel("Spike counts")
+                ax.hist(times, bin_times, color=color, **params_psth)
+                #             if i == len(self.populations) - 1:  # Print x-axis label only once (for the last row)
+                #                 ax.set_xlabel("Time (ms)", fontsize=14, fontweight="bold", fontname="Arial")
+
+                #             if i == 0:  #  Print y-axis label only once (for the first row)
+                #                 ax.set_ylabel("Spike Counts", fontsize=14, fontweight="bold", fontname="Arial")
+
+                ax.set_xlabel(
+                    "Time in ms",
+                    fontsize=14,
+                    # fontweight="bold"
+                )
+                ax.set_xlim(
+                    [0, self.time_to - self.time_from]
+                    if relative_time
+                    else [self.time_from, self.time_to]
+                )
+
+
+#             ax.set_ylabel("Spike counts", fontsize=14, fontweight="bold", fontname="Arial")
 
 
 class Spike2Columns(SpikePlot):
@@ -470,6 +477,9 @@ class Spike2Columns(SpikePlot):
         )
 
     def init_plot(self, **kwargs):
+        if self.is_initialized:
+            plt.close(self.figure)
+        self.is_initialized = True
         self.is_plotted = False
         self.nb_cols = 2
         num_filter = len(self.populations)
@@ -500,8 +510,7 @@ class FiringRatesPlot(Spike2Columns):
         all_spikes,
         nb_neurons: List,
         populations: List,
-        w_single=1000,
-        max_neuron_sampled=10000,
+        kernel=None,
         dict_colors: dict = None,
         **kwargs,
     ):
@@ -517,12 +526,10 @@ class FiringRatesPlot(Spike2Columns):
             dict_colors,
             **kwargs,
         )
-        if w_single <= 0 or max_neuron_sampled <= 0:
-            raise ValueError("w_single and max_neuron_sampled must be greater than 0")
-        self.w_single = w_single
-        """Width of the kernel expressed as number of time steps"""
-        self.max_neuron_sampled = max_neuron_sampled
-        """Maximum number of neurons used to compute the firing rate signal."""
+        if kernel is not None and not isinstance(kernel, Kernel):
+            raise TypeError("Kernel must be an instance of elephant Kernel or None")
+        self.kernel = kernel or "auto"
+        """Width of the kernel expressed as number of ms"""
 
     def update(self):
         super().update()
@@ -530,26 +537,21 @@ class FiringRatesPlot(Spike2Columns):
         counts = np.zeros(num_filter + 1)
         counts[1:] = np.cumsum(self.nb_neurons)
 
-        # normalized triangle kernel for single-trial firing rate
-        kernel_single = signal.windows.triang(self.w_single) * 2 / self.w_single
-
         loc_spikes = self.get_filt_spikes()
-        self.firing_rates = np.zeros((loc_spikes.shape[0] - self.w_single * 2, num_filter))
-        self.std_rates = np.zeros((loc_spikes.shape[0] - self.w_single * 2, num_filter))
+        duration = int((self.time_to - self.time_from) / self.dt)
+        self.firing_rates = np.zeros((duration, num_filter))
         for i in range(num_filter):
-            if self.nb_neurons[i] <= 0:
+            if loc_spikes[i].size <= 0:
                 continue  # pragma: nocover
-            spikes = loc_spikes[:, int(counts[i]) : int(counts[i + 1])]
-            if self.nb_neurons[i] > self.max_neuron_sampled:
-                spikes = spikes[
-                    :,
-                    np.linspace(
-                        0, self.nb_neurons[i], self.max_neuron_sampled, endpoint=False, dtype=int
-                    ),
-                ]
-            R = signal.lfilter(kernel_single, 1, spikes, axis=0) / self.dt * 1000.0
-            self.firing_rates[:, i] = np.mean(R, axis=1)[self.w_single : -self.w_single]
-            self.std_rates[:, i] = np.std(R, axis=1)[self.w_single : -self.w_single]
+            self.firing_rates[:, i] = (
+                instantaneous_rate(
+                    loc_spikes[i],
+                    sampling_period=self.dt * ms,
+                    kernel=self.kernel,
+                    border_correction=True,
+                ).magnitude[:, 0]
+                / self.nb_neurons[i]
+            )
 
     def plot(self, relative_time=False, **kwargs):
         """
@@ -560,19 +562,12 @@ class FiringRatesPlot(Spike2Columns):
         """
         super().plot()
         time_interval = np.arange(
-            self.time_from + self.w_single * self.dt,
-            self.time_to + (-self.w_single) * self.dt,
+            self.time_from,
+            self.time_to,
             self.dt,
         )
         for i, ct in enumerate(self.populations):
             ax = self.get_ax(i)
-            ax.fill_between(
-                time_interval,
-                (np.maximum(0, self.firing_rates[:, i] - self.std_rates[:, i])),
-                (self.firing_rates[:, i] + self.std_rates[:, i]),
-                alpha=0.5,
-                color=self.dict_colors[ct][:3],
-            )
             ax.plot(
                 time_interval,
                 self.firing_rates[:, i],
@@ -581,9 +576,10 @@ class FiringRatesPlot(Spike2Columns):
             )
             ax.set_xlabel("Time in ms")
             ax.set_ylabel("Rate in Hz")
-            ax.set_title(
-                f"Mean estimated firing rate for {ct} (kernel width = {self.w_single * self.dt} ms)"
+            kernel_text = (
+                f" (kernel width = {self.kernel.sigma})" if isinstance(self.kernel, Kernel) else ""
             )
+            ax.set_title(f"Mean estimated firing rate for {ct}{kernel_text}")
             ax.set_xlim(
                 [0, time_interval[-1] - time_interval[0]]
                 if relative_time
@@ -606,25 +602,23 @@ def extract_isis(spikes, dt):
     Extract inter-spike intervals from a list of spike trains.
     One mean inter-spike interval value is computed for each neuron.
 
-    :param numpy.ndarray[numpy.ndarray[bool]] spikes: Boolean numpy array of shape (N*M)
-                                                      storing spike events for each time step.
-                                                      N corresponds to the number of time steps,
-                                                      M to the number of neuron.
+    :param neo.core.SpikeTrain spikes: population SpikeTrain
     :param float dt: time step
 
     :return: list of inter-spike intervals
     :rtype: List[float]
     """
-    filter_ = np.where(spikes.T)
-    u, idx = np.unique(filter_[0], return_index=True)
-    times = np.split(filter_[1], idx[1:])
 
-    isi = []
-    for k in range(len(u)):
-        isis = np.diff(times[k]) * dt
+    isi_ = []
+    senders = spikes.array_annotations["senders"]
+    u_senders, inv = np.unique(senders, return_inverse=True)
+    mat = np.zeros((int((spikes.t_stop - spikes.t_start) / dt), len(u_senders)), dtype=bool)
+    mat[np.asarray((spikes.times - spikes.t_start) / dt, dtype=int) - 1, inv] = True
+    for sender in range(len(u_senders)):
+        isis = isi(np.where(mat[:, sender])[0] * dt * ms)
         if len(isis) > 0:
-            isi.append(np.mean(isis))
-    return isi
+            isi_.append(np.mean(isis))
+    return isi_
 
 
 class ISIPlot(Spike2Columns):
@@ -669,10 +663,7 @@ class ISIPlot(Spike2Columns):
         num_filter = len(self.nb_neurons)
         counts = np.zeros(num_filter + 1)
         counts[1:] = np.cumsum(self.nb_neurons)
-        isis_dist = [
-            extract_isis(self.all_spikes[:, int(counts[i]) : int(counts[i + 1])], self.dt)
-            for i in range(num_filter)
-        ]
+        isis_dist = [extract_isis(self.all_spikes[i], self.dt) for i in range(num_filter)]
         for i, ct in enumerate(self.populations):
             ax2 = self.get_ax(i)
             if len(isis_dist[i]) > 0:
@@ -691,7 +682,7 @@ class FrequencyPlot(FiringRatesPlot):
         super().update()
         self.frequencies = np.zeros((self.firing_rates.shape[1], self.firing_rates.shape[0] // 2))
         self.freq_powers = np.zeros((self.firing_rates.shape[1], self.firing_rates.shape[0] // 2))
-        for i, (fr, ct) in enumerate(zip(self.firing_rates.T, self.populations)):
+        for i, fr in enumerate(self.firing_rates.T):
             glob_fr = fr[:-1]
             t = np.abs(np.fft.fft(glob_fr))
             x = np.fft.fftfreq(t.shape[0], self.dt / 1e3)  # convert ms to s
@@ -722,6 +713,7 @@ class FrequencyPlot(FiringRatesPlot):
                 ax.axvline(4.0, ls="--", color="black")
                 ax.axvline(8.0, ls="--", color="black")
                 ax.axvline(12.0, ls="--", color="black")
+                ax.axvline(30.0, ls="--", color="black")
 
 
 class SimResultsTable(TablePlot, SpikePlot):
@@ -774,8 +766,11 @@ class SimResultsTable(TablePlot, SpikePlot):
         counts[1:] = np.cumsum(self.nb_neurons)
         loc_spikes = self.get_filt_spikes()
         for i in range(num_filter):
-            spikes = loc_spikes[:, int(counts[i]) : int(counts[i + 1])]
-            all_fr = np.sum(spikes, axis=0) / ((self.time_to - self.time_from) / 1000.0)
+            spikes = loc_spikes[i]
+
+            all_fr = np.unique(spikes.array_annotations["senders"], return_counts=True)[1] / (
+                (self.time_to - self.time_from) / 1000.0
+            )
             isi = extract_isis(spikes, self.dt)
 
             self._values.append([all_fr, isi])
@@ -832,7 +827,7 @@ class BasicSimulationReport(SpikeSimulationReport):
         )
 
         raster = RasterPSTHPlot(
-            (15, 10),
+            (15, 3 * np.ceil(len(self.nb_neurons) / 2)),
             scaffold=self.scaffold,
             simulation_name=self.simulation_name,
             time_from=self.time_from,
@@ -842,7 +837,7 @@ class BasicSimulationReport(SpikeSimulationReport):
             populations=self.populations,
         )
         table = SimResultsTable(
-            (5, 2.5),
+            (5, 0.25 * (len(self.nb_neurons) + 1)),
             scaffold=self.scaffold,
             simulation_name=self.simulation_name,
             time_from=self.time_from,
@@ -853,7 +848,7 @@ class BasicSimulationReport(SpikeSimulationReport):
             dict_abv=self.abbreviations,
         )
         firing_rates = FiringRatesPlot(
-            (15, 6),
+            (15, 2 * np.ceil(len(self.nb_neurons) / 2)),
             scaffold=self.scaffold,
             simulation_name=self.simulation_name,
             time_from=self.time_from,
@@ -861,9 +856,10 @@ class BasicSimulationReport(SpikeSimulationReport):
             all_spikes=self.all_spikes,
             nb_neurons=self.nb_neurons,
             populations=self.populations,
+            kernel=GaussianKernel(sigma=20 * ms),
         )
         isis = ISIPlot(
-            (15, 6),
+            (15, 2 * np.ceil(len(self.nb_neurons) / 2)),
             scaffold=self.scaffold,
             simulation_name=self.simulation_name,
             time_from=self.time_from,
@@ -873,7 +869,7 @@ class BasicSimulationReport(SpikeSimulationReport):
             populations=self.populations,
         )
         freq = FrequencyPlot(
-            (15, 6),
+            (15, 2 * np.ceil(len(self.nb_neurons) / 2)),
             scaffold=self.scaffold,
             simulation_name=self.simulation_name,
             time_from=self.time_from,
@@ -893,6 +889,8 @@ class BasicSimulationReport(SpikeSimulationReport):
         self.add_plot("isis", isis)
         self.add_plot("freq", freq)
         self.add_plot("legend", legend)
-        table.set_axis_off()
-        legend.set_axis_off()
         legend.remove_ct(self.cell_names, self.ignored_ct)
+
+    def preprocessing(self):
+        self.plots["table"].set_axis_off()
+        self.plots["legend"].set_axis_off()
