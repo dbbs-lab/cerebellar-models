@@ -588,7 +588,7 @@ def extract_isis(spikes, dt):
     senders = spikes.array_annotations["senders"]
     u_senders, inv = np.unique(senders, return_inverse=True)
     mat = np.zeros((int((spikes.t_stop - spikes.t_start) / dt), len(u_senders)), dtype=bool)
-    mat[np.asarray((spikes.times - spikes.t_start) / dt, dtype=int) - 1, inv] = True
+    mat[np.asarray(np.rint((spikes.times - spikes.t_start) / dt), dtype=int) - 1, inv] = True
     for sender in range(len(u_senders)):
         isis = isi(np.where(mat[:, sender])[0] * dt * ms)
         if len(isis) > 0:

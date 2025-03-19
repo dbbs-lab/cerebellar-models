@@ -597,3 +597,27 @@ class TestExtractISIs(unittest.TestCase):
                 np.absolute(isis[i] - np.mean(np.diff(np.where(loc_spikes[:, i])[0] * 0.1)) * ms)
                 <= 1e-7
             )
+
+    def test_extract_isis_shift(self):
+        time_shift = 0.5
+        spikes = np.random.random((20, 10)) >= 0.85
+        spike_times = np.where(spikes)[0]
+        senders = np.where(spikes)[1]
+        st = SpikeTrain(
+            (spike_times + 1) * 0.1 + time_shift,
+            units="ms",
+            array_annotations={"senders": senders},
+            t_start=time_shift,
+            t_stop=2 + time_shift,
+        )
+        enough_spikes = np.zeros(10, dtype=bool)
+        u, c = np.unique(senders, return_counts=True)
+        enough_spikes[u] = c >= 2
+        loc_spikes = spikes[:, enough_spikes]
+        isis = extract_isis(st, 0.1)
+        self.assertEqual(len(isis), np.count_nonzero(enough_spikes))
+        for i in range(len(isis)):
+            self.assertTrue(
+                np.absolute(isis[i] - np.mean(np.diff(np.where(loc_spikes[:, i])[0] * 0.1)) * ms)
+                <= 1e-7
+            )
