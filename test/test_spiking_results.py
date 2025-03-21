@@ -214,11 +214,13 @@ class TestSpikePlots(
         )
         self.assertEqual(scatter.get_alpha(), 1)
         self.assertTrue(scatter.get_rasterized())
+        mf_spikes = self.simulationReport.all_spikes[0]
         mf_spike_times = (
             np.array(
                 (
-                    self.simulationReport.all_spikes[0].magnitude / self.simulationReport.dt,
-                    self.simulationReport.all_spikes[0].array_annotations["senders"] - 1,
+                    mf_spikes.magnitude / self.simulationReport.dt,
+                    mf_spikes.array_annotations["senders"]
+                    - np.min(mf_spikes.array_annotations["senders"]),
                 )
             )
             * np.array([[self.simulationReport.dt, 1.0]]).T
@@ -293,7 +295,8 @@ class TestSpikePlots(
             np.array(
                 (
                     loc_mf_spikes.magnitude / self.simulationReport.dt,
-                    loc_mf_spikes.array_annotations["senders"] - 1,
+                    loc_mf_spikes.array_annotations["senders"]
+                    - np.min(loc_mf_spikes.array_annotations["senders"]),
                 )
             )
             * np.array([[self.simulationReport.dt, 1.0]]).T
