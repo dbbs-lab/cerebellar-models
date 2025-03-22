@@ -219,8 +219,7 @@ class TestSpikePlots(
             np.array(
                 (
                     mf_spikes.magnitude / self.simulationReport.dt,
-                    mf_spikes.array_annotations["senders"]
-                    - np.min(mf_spikes.array_annotations["senders"]),
+                    np.unique(mf_spikes.array_annotations["senders"], return_inverse=True)[1],
                 )
             )
             * np.array([[self.simulationReport.dt, 1.0]]).T
@@ -243,11 +242,12 @@ class TestSpikePlots(
             nb_bins=31,
         )
         xlims = np.array([self.simulationReport.time_from, self.simulationReport.time_to])
+        mf_spikes = self.simulationReport.all_spikes[0]
         mf_spike_times = (
             np.array(
                 (
-                    self.simulationReport.all_spikes[0].magnitude / self.simulationReport.dt,
-                    self.simulationReport.all_spikes[0].array_annotations["senders"] - 1,
+                    mf_spikes.magnitude / self.simulationReport.dt,
+                    np.unique(mf_spikes.array_annotations["senders"], return_inverse=True)[1],
                 )
             )
             * np.array([[self.simulationReport.dt, 1.0]]).T
@@ -295,8 +295,7 @@ class TestSpikePlots(
             np.array(
                 (
                     loc_mf_spikes.magnitude / self.simulationReport.dt,
-                    loc_mf_spikes.array_annotations["senders"]
-                    - np.min(loc_mf_spikes.array_annotations["senders"]),
+                    np.unique(loc_mf_spikes.array_annotations["senders"], return_inverse=True)[1],
                 )
             )
             * np.array([[self.simulationReport.dt, 1.0]]).T
