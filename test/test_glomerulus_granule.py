@@ -45,7 +45,7 @@ class TestGlomerulusGranule(
             ],
             cell_types=dict(
                 pre_cell=dict(spatial=dict(radius=2, count=100)),
-                pre_cell2=dict(spatial=dict(radius=2, count=1)),
+                pre_cell2=dict(spatial=dict(radius=2, count=3)),
                 pre_cell3=dict(spatial=dict(radius=2, count=100)),
                 test_cell=dict(spatial=dict(radius=2, count=100, morphologies=["GranuleCell"])),
                 test_cell2=dict(spatial=dict(radius=2, count=100, morphologies=["GranuleCell"])),
@@ -64,7 +64,18 @@ class TestGlomerulusGranule(
                 random_placement=dict(
                     strategy="bsb.placement.RandomPlacement",
                     partitions=["layer"],
-                    cell_types=["pre_cell", "pre_cell2", "pre_cell3", "test_cell", "test_cell2"],
+                    cell_types=["pre_cell", "pre_cell3", "test_cell", "test_cell2"],
+                ),
+                fixed_placement=dict(
+                    strategy="bsb.placement.FixedPositions",
+                    partitions=["layer"],
+                    cell_types=["pre_cell2"],
+                    # 3 cells at the center so they can all be detected.
+                    positions=[
+                        np.array([30, 30, 30]),
+                        np.array([30, 30, 30]),
+                        np.array([30, 30, 30]),
+                    ],
                 ),
             ),
             connectivity=dict(
@@ -137,12 +148,7 @@ class TestGlomerulusGranule(
                 ),
             )
 
-        del (
-            self.cfg.connectivity["x_to_glomerulus"],
-            self.cfg.connectivity["glom_to_gran"],
-            self.cfg.connectivity["glom_to_gran2"],
-            self.cfg.connectivity["glom_to_gran3"],
-        )
+    def test_too_few_glom_error(self):
         self.cfg.connectivity.add(
             "x_to_glomerulus2",
             dict(
