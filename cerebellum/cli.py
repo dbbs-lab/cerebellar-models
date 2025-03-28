@@ -16,6 +16,10 @@ CONFIGURATION_FOLDER = join(ROOT_FOLDER, "configurations")
 
 
 class TypeTermElem(Enum):
+    """
+    Enum for all supported survey widgets
+    """
+
     Selection = 1
     Basket = 2
     Text = 3
@@ -24,9 +28,22 @@ class TypeTermElem(Enum):
 
 
 class CerebOption:
-    def __init__(self, name, title, choices=None, default_value=None, type=TypeTermElem.Selection):
+    """
+    Class to store the information of an element of a survey form
+    """
+
+    def __init__(
+        self,
+        name: str,
+        title: str,
+        choices=None,
+        default_value=None,
+        type: TypeTermElem = TypeTermElem.Selection,
+    ):
         self.name = name
+        """Name of the option"""
         self.title = title
+        """Help text for the option"""
         if type is TypeTermElem.Number:
             choices = [0]
         elif type is TypeTermElem.Text:
@@ -36,10 +53,17 @@ class CerebOption:
         elif choices is None:
             raise TypeError("Provide a list of choices for Selection or Basket options")
         self.choices = np.array(choices)
+        """List of possible choices for this option"""
         self.value = default_value or (self.choices[0] if type != TypeTermElem.Basket else [])
+        """Current value for the option"""
         self.type = type
+        """Type of the option"""
 
-    def menu(self):
+    def get_widget(self):
+        """
+        Return the survey widget for this option
+        """
+
         if self.type == TypeTermElem.Basket:
             return survey.widgets.Basket(
                 options=self.choices, active=np.where(np.isin(self.choices, self.value))[0]
@@ -53,12 +77,18 @@ class CerebOption:
         elif self.type == TypeTermElem.Number:
             return survey.widgets.Numeric(value=float(self.value), decimal=True)
 
-    def main_menu_str(self):
-        return f"{self.name} [{self.value}]"
-
 
 def print_panel(options, title="Configure your cerebellum circuit."):
-    form = survey.routines.form(title, form={option.name: option.menu() for option in options})
+    """
+    Print a survey form based on a list of options.
+    The result of the form will be saved in its options.
+
+    :param list[CerebOption] options: List of options to display
+    :param str title: Title to display on top of the form
+    """
+    form = survey.routines.form(
+        title, form={option.name: option.get_widget() for option in options}
+    )
     for option in options:
         if option.type == TypeTermElem.Basket:
             option.value = option.choices[np.array(list(form[option.name]), dtype=int)]
@@ -313,6 +343,13 @@ def _write_config(configuration, output_folder, extension):
     help="Extension for the configuration file.",
 )
 def configure(output_folder: str, species: str, extension: str):
+    """
+    Resolve a cerebellum configuration file for BSB based on user choices
+
+    :param str output_folder: default path where to write the output configuration file.
+    :param str species: default species to reconstruct the circuit from.
+    :param str extension: default extension for the configuration file.
+    """
     # Step 1: Species choice
     species = _configure_species(species)
     species_folder = join(CONFIGURATION_FOLDER, species)

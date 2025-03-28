@@ -1,9 +1,6 @@
 cerebellum.connectome package
 =============================
 
-Module contents
----------------
-
 .. automodule:: cerebellum.connectome
    :members:
    :undoc-members:
@@ -13,7 +10,7 @@ Submodules
 ----------
 
 cerebellum.connectome.presyn_dist_strat module
-----------------------------------------------
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 .. automodule:: cerebellum.connectome.presyn_dist_strat
    :members:
@@ -21,7 +18,7 @@ cerebellum.connectome.presyn_dist_strat module
    :show-inheritance:
 
 cerebellum.connectome.to_glomerulus module
-------------------------------------------
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 .. automodule:: cerebellum.connectome.to_glomerulus
    :members:
@@ -29,7 +26,7 @@ cerebellum.connectome.to_glomerulus module
    :show-inheritance:
 
 cerebellum.connectome.glomerulus_granule module
------------------------------------------------
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 .. automodule:: cerebellum.connectome.glomerulus_granule
    :members:
@@ -37,7 +34,7 @@ cerebellum.connectome.glomerulus_granule module
    :show-inheritance:
 
 cerebellum.connectome.glomerulus_golgi module
----------------------------------------------
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 .. automodule:: cerebellum.connectome.glomerulus_golgi
    :members:
@@ -45,7 +42,7 @@ cerebellum.connectome.glomerulus_golgi module
    :show-inheritance:
 
 cerebellum.connectome.golgi_glomerulus module
----------------------------------------------
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 .. automodule:: cerebellum.connectome.golgi_glomerulus
    :members:
@@ -53,7 +50,7 @@ cerebellum.connectome.golgi_glomerulus module
    :show-inheritance:
 
 cerebellum.connectome.glomerulus_ubc module
--------------------------------------------
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 .. automodule:: cerebellum.connectome.glomerulus_ubc
    :members:
@@ -61,7 +58,7 @@ cerebellum.connectome.glomerulus_ubc module
    :show-inheritance:
 
 cerebellum.connectome.io_molecular module
------------------------------------------
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 .. automodule:: cerebellum.connectome.io_molecular
    :members:
@@ -69,7 +66,7 @@ cerebellum.connectome.io_molecular module
    :show-inheritance:
 
 cerebellum.connectome.io_purkinje module
-----------------------------------------
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 .. automodule:: cerebellum.connectome.io_purkinje
    :members:

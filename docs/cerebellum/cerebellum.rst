@@ -1,9 +1,6 @@
 cerebellum package
 ==================
 
-Module contents
----------------
-
 .. automodule:: cerebellum
    :members:
    :undoc-members:
@@ -18,3 +15,22 @@ Subpackages
    cerebellum.connectome
    cerebellum.placement
    cerebellum.analysis
+
+Submodules
+----------
+
+cerebellum.cli module
+^^^^^^^^^^^^^^^^^^^^^
+
+.. automodule:: cerebellum.cli
+   :members:
+   :undoc-members:
+   :show-inheritance:
+
+cerebellum.utils module
+^^^^^^^^^^^^^^^^^^^^^^^
+
+.. automodule:: cerebellum.utils
+   :members:
+   :undoc-members:
+   :show-inheritance:
