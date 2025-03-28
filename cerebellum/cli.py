@@ -1,6 +1,7 @@
+import copy
 import os
 from enum import Enum
-from os.path import abspath, basename, dirname, join, splitext
+from os.path import abspath, dirname, join
 
 import click
 import numpy as np
@@ -23,11 +24,19 @@ class TypeTermElem(Enum):
 
 
 class CerebOption:
-    def __init__(self, name, title, choices, default_value=None, type=TypeTermElem.Selection):
+    def __init__(self, name, title, choices=None, default_value=None, type=TypeTermElem.Selection):
         self.name = name
         self.title = title
+        if type is TypeTermElem.Number:
+            choices = [0]
+        elif type is TypeTermElem.Text:
+            choices = [""]
+        elif type is TypeTermElem.Boolean:
+            choices = [False, True]
+        elif choices is None:
+            raise TypeError("Provide a list of choices for Selection or Basket options")
         self.choices = np.array(choices)
-        self.value = default_value or (choices[0] if type != TypeTermElem.Basket else [])
+        self.value = default_value or (self.choices[0] if type != TypeTermElem.Basket else [])
         self.type = type
 
     def menu(self):
@@ -38,7 +47,11 @@ class CerebOption:
         elif self.type == TypeTermElem.Selection:
             return survey.widgets.Select(options=self.choices)
         elif self.type == TypeTermElem.Text:
-            return survey.widgets.Input(value=str(self.choices))
+            return survey.widgets.Input(value=str(self.value))
+        elif self.type == TypeTermElem.Boolean:
+            return survey.widgets.Inquire(default=bool(self.value))
+        elif self.type == TypeTermElem.Number:
+            return survey.widgets.Numeric(value=float(self.value), decimal=True)
 
     def main_menu_str(self):
         return f"{self.name} [{self.value}]"
@@ -171,20 +184,20 @@ def _configure_sim_params(config_simulations, simulation_names):
         simulation_options = [
             CerebOption(
                 "Cell models",
-                f"Select the model of neuron for the simulation {simulation} from the following list:",
+                f"Select the model of neuron for the simulation {sim_name} from the following list:",
                 list(config_simulations[simulator]["cell_models"].keys()),
                 # default_value="eglif_cond_alpha_multisyn"
             ),
             CerebOption(
                 "Connection models",
-                f"Select the model of synapse for the simulation {simulation} from the following list:",
+                f"Select the model of synapse for the simulation {sim_name} from the following list:",
                 list(config_simulations[simulator]["connection_models"].keys()),
                 # default_value="static_synapse",
             ),
         ]
         print_panel(
             simulation_options,
-            f"Select the neuron and synapse model to use during the simulation {simulation}.",
+            f"Select the neuron and synapse model to use during the simulation {sim_name}.",
         )
         deep_update(
             dict_sim, config_simulations[simulator]["cell_models"][simulation_options[0].value]
@@ -194,7 +207,86 @@ def _configure_sim_params(config_simulations, simulation_names):
             config_simulations[simulator]["connection_models"][simulation_options[1].value],
         )
         choices[sim_name] = [c.value for c in simulation_options]
+        # Add simulator to simulation name so that we avoid duplicates
+        dict_sim["simulations"][sim_name] = dict_sim["simulations"][simulation]
+        del dict_sim["simulations"][simulation]
     return dict_sim, choices
+
+
+def _clear_unnecessary_params(configuration):
+    dict_cells = {}
+    dict_conns = {}
+    dict_devices = {}
+    for sim_name, simulation in configuration["simulations"].items():
+        dict_cells[sim_name] = []
+        dict_conns[sim_name] = []
+        dict_devices[sim_name] = []
+        for cell in simulation["cell_models"]:
+            if cell not in configuration["cell_types"]:
+                dict_cells[sim_name].append(cell)
+        for syn in simulation["connection_models"]:
+            found = False
+            for strat in configuration["connectivity"]:
+                if strat in syn:
+                    loc_strat = configuration["connectivity"][strat]
+                    simple_conn = (
+                        len(loc_strat["presynaptic"]["cell_types"]) == 1
+                        and len(loc_strat["postsynaptic"]["cell_types"]) == 1
+                    )
+                    if simple_conn and strat == syn:
+                        found = True
+                        break
+                    elif simple_conn != (strat == syn):
+                        continue
+                    cells = syn.split(strat + "_", 1)[1].split("_to_")
+                    if (
+                        cells[0] in loc_strat["presynaptic"]["cell_types"]
+                        and cells[1] in loc_strat["postsynaptic"]["cell_types"]
+                    ):
+                        found = True
+                        break
+            if not found:
+                dict_conns[sim_name].append(syn)
+        for device_name, device in simulation["devices"].items():
+            for target in device["targetting"]["cell_models"]:
+                if target not in configuration["cell_types"]:
+                    dict_devices[sim_name].append(device_name)
+
+    for sim_name, to_remove in dict_cells.items():
+        for cell in to_remove:
+            del configuration["simulations"][sim_name]["cell_models"][cell]
+        for syn in dict_conns[sim_name]:
+            del configuration["simulations"][sim_name]["connection_models"][syn]
+        for device in dict_devices[sim_name]:
+            del configuration["simulations"][sim_name]["devices"][device]
+
+    return configuration
+
+
+def _write_config(configuration, output_folder, extension):
+    output_options = [
+        CerebOption(
+            "Configuration folder",
+            f"Configure the folder in which to put the configuration file",
+            default_value=output_folder,
+            type=TypeTermElem.Text,
+        ),
+        CerebOption(
+            "File extension",
+            "Select an extension from the following list:",
+            AVAILABLE_EXTENSIONS.choices,
+            extension,
+        ),
+    ]
+    print_panel(
+        output_options,
+        "Configure the folder in which to put the configuration file and its extension.",
+    )
+    filename = os.path.join(output_options[0].value, f"circuit.{output_options[1].value}")
+    configuration = Configuration.default(**configuration)  # Check that the configuration works
+    with open(filename, "w") as outfile:
+        outfile.write(format_configuration_content(extension, configuration))
+    print(f"Created the BSB configuration file: {filename}")
 
 
 @app.command(help="Create a BSB configuration file for your cerebellum circuit.")
@@ -253,88 +345,77 @@ def configure(output_folder: str, species: str, extension: str):
     deep_update(configuration, dict_sim)
 
     # Step 5: remove unnecessary cells and connections
-    dict_cells = {}
-    dict_conns = {}
-    dict_devices = {}
-    for sim_name, simulation in configuration["simulations"].items():
-        dict_cells[sim_name] = []
-        dict_conns[sim_name] = []
-        dict_devices[sim_name] = []
-        for cell in simulation["cell_models"]:
-            if cell not in configuration["cell_types"]:
-                dict_cells[sim_name].append(cell)
-        for syn in simulation["connection_models"]:
-            found = False
-            for strat in configuration["connectivity"]:
-                if strat in syn:
-                    loc_strat = configuration["connectivity"][strat]
-                    simple_conn = (
-                        len(loc_strat["presynaptic"]["cell_types"]) == 1
-                        and len(loc_strat["postsynaptic"]["cell_types"]) == 1
-                    )
-                    if simple_conn and strat == syn:
-                        found = True
-                        break
-                    elif simple_conn != (strat == syn):
-                        continue
-                    cells = syn.split(strat + "_", 1)[1].split("_to_")
-                    if (
-                        cells[0] in loc_strat["presynaptic"]["cell_types"]
-                        and cells[1] in loc_strat["postsynaptic"]["cell_types"]
-                    ):
-                        found = True
-                        break
-            if not found:
-                dict_conns[sim_name].append(syn)
-        for device_name, device in simulation["devices"].items():
-            for target in device["targetting"]["cell_models"]:
-                if target not in configuration["cell_types"]:
-                    dict_devices[sim_name].append(device_name)
+    configuration = _clear_unnecessary_params(configuration)
 
-    for sim_name, to_remove in dict_cells.items():
-        for cell in to_remove:
-            del configuration["simulations"][sim_name]["cell_models"][cell]
-        for syn in dict_conns[sim_name]:
-            del configuration["simulations"][sim_name]["connection_models"][syn]
-        for device in dict_devices[sim_name]:
-            del configuration["simulations"][sim_name]["devices"][device]
+    # Step 6: Add stimulus simulation
+    if species == "mouse":
+        sim_names = list(configuration["simulations"].keys())
+        for sim_name in sim_names:
+            simulation = configuration["simulations"][sim_name]
+            simulator, _ = sim_name.split("_", 1)
+            if simulator == "nest":
+                default_stim = {
+                    "mf_stimulus": {
+                        "device": "poisson_generator",
+                        "rate": 150,
+                        "start": 1200,
+                        "stop": 1260,
+                        "targetting": {
+                            "strategy": "sphere",
+                            "radius": 90,
+                            "origin": [150, 65, 100],
+                            "cell_models": ["mossy_fibers"],
+                        },
+                        "weight": 1,
+                        "delay": 0.1,
+                    }
+                }
+                simulation_name = "nest_mf_stimulus"
+                if "io" in cell_types:
+                    default_stim["mf_stimulus"] = {
+                        "device": "poisson_generator",
+                        "rate": 40,
+                        "start": 1000,
+                        "stop": 1260,
+                        "targetting": {"strategy": "cell_model", "cell_models": ["mossy_fibers"]},
+                        "weight": 1,
+                        "delay": 0.1,
+                    }
+                    default_stim["cf_stimulus"] = {
+                        "device": "poisson_generator",
+                        "rate": 500,
+                        "start": 1250,
+                        "stop": 1260,
+                        "targetting": {"strategy": "cell_model", "cell_models": ["io"]},
+                        "receptor_type": 1,
+                        "weight": 55 if state == "vitro" else 100.0,
+                        "delay": 0.1,
+                    }
+                    simulation_name = "nest_mf_cf_stimulus"
+                elif "dcn" in cell_types:
+                    default_stim["mf_stimulus"]["targetting"]["origin"][2] = 300
+
+                configuration["simulations"][simulation_name] = copy.deepcopy(
+                    configuration["simulations"][sim_name]
+                )
+                deep_update(configuration["simulations"][simulation_name]["devices"], default_stim)
+                sim_choices[simulation_name] = sim_choices[sim_name]
+            else:
+                raise ValueError(
+                    f"Only nest configurations are implemented. Provided simulator: {simulator}"
+                )
+    else:
+        raise ValueError(f"Only mouse configuration are implemented. Provided species: {species}")
 
     # Step 6: output_folder
-    print("Your choices are:")
+    print("\n\nYour choices are:")
     print(f"Species: {species}")
-    print(f"File extension: {extension}")
     print(f"State: {state}")
     print(f"Cell types: {cell_types}")
     print("Simulations:")
-    for simulation in simulation_names:
+    for simulation, choices in sim_choices.items():
         print(f"\t{simulation}:")
-        print(f"\t\tCell model: {sim_choices[simulation][0]}")
-        print(f"\t\tSynapse model: {sim_choices[simulation][1]}")
+        print(f"\t\tCell model: {choices[0]}")
+        print(f"\t\tSynapse model: {choices[1]}")
 
-    output_options = [
-        CerebOption(
-            "Configuration folder",
-            f"Configure the folder in which to put the configuration file",
-            output_folder,
-            type=TypeTermElem.Text,
-        ),
-        CerebOption(
-            "File extension",
-            "Select an extension from the following list:",
-            AVAILABLE_EXTENSIONS.choices,
-            extension,
-        ),
-    ]
-    print_panel(
-        output_options,
-        "Configure the folder in which to put the configuration file and its extension.",
-    )
-    filename = os.path.join(output_options[0].value, f"circuit.{output_options[1].value}")
-    configuration = Configuration.default(**configuration)  # Check that the configuration works
-    with open(filename, "w") as outfile:
-        outfile.write(format_configuration_content(extension, configuration))
-    print(f"Created the BSB configuration file: {filename}")
-
-
-# if __name__ == "__main__":
-#     configure(os.getcwd(), "mouse", "yaml")
+    _write_config(configuration, output_folder, extension)

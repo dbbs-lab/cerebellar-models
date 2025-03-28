@@ -1,7 +1,5 @@
 packages:
   - bsb-nest~=4.3
-  - cerebellum~=0.5.0
-  - bsb~=4.4
 components:
   - cerebellum/nest_models/build_models.py
 simulations:
