@@ -36,8 +36,24 @@ simulations:
           weight: 0.02
           delay: 4.
           receptor_type: 2
-
+      $import:
+        ref: ../../../in-vitro/nest/connection_models/tsodyks2_synapse.yaml#/simulations/basal_activity/connection_models
+        values:
+          - glomerulus_to_granule
+          - glomerulus_to_golgi
+          - golgi_to_glomerulus
+          - golgi_to_golgi
+          - ascending_axon_to_golgi
+          - parallel_fiber_to_golgi
+          - parallel_fiber_to_purkinje
+          - ascending_axon_to_purkinje
+          - parallel_fiber_to_stellate
+          - stellate_to_stellate
+          - stellate_to_purkinje
+          - parallel_fiber_to_basket
+          - basket_to_basket
+          - basket_to_purkinje
 $import:
-  ref: ../../../in-vitro/nest/connection_models/tsodyks2_synapse.yaml#/
+  ref: static_synapse.yaml#/
   values:
     - simulations

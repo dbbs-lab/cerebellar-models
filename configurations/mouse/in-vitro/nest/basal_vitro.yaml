@@ -1,4 +1,6 @@
 packages:
+  - cerebellum~=0.6.0
+  - bsb~=4.4
   - bsb-nest~=4.3
 components:
   - cerebellum/nest_models/build_models.py

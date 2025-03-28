@@ -173,6 +173,7 @@ def _configure_sim_params(config_simulations, simulation_names):
     dict_sim = {"simulations": {}}
     choices = {}
     for sim_name in simulation_names:
+        sim_name = str(sim_name)
         simulator, simulation = sim_name.split("_", 1)
         for k, v in config_simulations[simulator]["simulations"].items():
             if simulation in v["simulations"]:
@@ -326,6 +327,7 @@ def configure(output_folder: str, species: str, extension: str):
     configuration = _update_cell_types(configuration, cell_types, config_cell_types)
     state_folder = join(species_folder, state)
 
+    # Step 3: Simulation choice
     config_simulations = {
         simulator: {
             "cell_models": load_configs_in_folder(join(state_folder, simulator, "cell_models")),
@@ -336,8 +338,6 @@ def configure(output_folder: str, species: str, extension: str):
         }
         for simulator in get_folders_in_folder(state_folder)
     }
-
-    # Step 3: Simulation choice
     simulation_names = _configure_simulations(config_simulations)
 
     # Step 4: Simulation models choice
@@ -407,7 +407,7 @@ def configure(output_folder: str, species: str, extension: str):
     else:
         raise ValueError(f"Only mouse configuration are implemented. Provided species: {species}")
 
-    # Step 6: output_folder
+    # Step 7: Recap choices
     print("\n\nYour choices are:")
     print(f"Species: {species}")
     print(f"State: {state}")
@@ -418,4 +418,5 @@ def configure(output_folder: str, species: str, extension: str):
         print(f"\t\tCell model: {choices[0]}")
         print(f"\t\tSynapse model: {choices[1]}")
 
+    # Step 8: output folder and extension
     _write_config(configuration, output_folder, extension)
