@@ -38,25 +38,25 @@ class CerebOption:
         title: str,
         choices=None,
         default_value=None,
-        type: TypeTermElem = TypeTermElem.Selection,
+        type_term: TypeTermElem = TypeTermElem.Selection,
     ):
         self.name = name
         """Name of the option"""
         self.title = title
         """Help text for the option"""
-        if type is TypeTermElem.Number:
+        if type_term is TypeTermElem.Number:
             choices = [0]
-        elif type is TypeTermElem.Text:
+        elif type_term is TypeTermElem.Text:
             choices = [""]
-        elif type is TypeTermElem.Boolean:
+        elif type_term is TypeTermElem.Boolean:
             choices = [False, True]
         elif choices is None:
             raise TypeError("Provide a list of choices for Selection or Basket options")
         self.choices = np.array(choices)
         """List of possible choices for this option"""
-        self.value = default_value or (self.choices[0] if type != TypeTermElem.Basket else [])
+        self.value = default_value or (self.choices[0] if type_term != TypeTermElem.Basket else [])
         """Current value for the option"""
-        self.type = type
+        self.type = type_term
         """Type of the option"""
 
     def get_widget(self):
@@ -147,7 +147,7 @@ def _configure_cell_types(species_folder, config_cell_types):
             "Extra cell types",
             "Select the optional cell types that you want in the final configuration from the following list:",
             cell_type_names,
-            type=TypeTermElem.Basket,
+            type_term=TypeTermElem.Basket,
             # default_value=["dcn", "io"],
         ),
     ]
@@ -189,7 +189,7 @@ def _configure_simulations(config_simulations):
             "Simulations",
             "Select the simulations(s) that you want to perform from the following list:",
             simulation_names,
-            type=TypeTermElem.Basket,
+            type_term=TypeTermElem.Basket,
             # default_value=["nest_basal_activity"],
         ),
     ]
@@ -295,25 +295,38 @@ def _clear_unnecessary_params(configuration):
 
 
 def _write_config(configuration, output_folder, extension):
-    output_options = [
-        CerebOption(
-            "Configuration folder",
-            f"Configure the folder in which to put the configuration file",
-            default_value=output_folder,
-            type=TypeTermElem.Text,
-        ),
-        CerebOption(
-            "File extension",
-            "Select an extension from the following list:",
-            AVAILABLE_EXTENSIONS.choices,
-            extension,
-        ),
-    ]
-    print_panel(
-        output_options,
-        "Configure the folder in which to put the configuration file and its extension.",
-    )
-    filename = os.path.join(output_options[0].value, f"circuit.{output_options[1].value}")
+    output_options = []
+    if output_folder is None:
+        output_options.append(
+            CerebOption(
+                "Configuration folder",
+                f"Configure the folder in which to put the configuration file",
+                default_value=os.getcwd(),
+                type_term=TypeTermElem.Text,
+            )
+        )
+    else:
+        output_folder = abspath(output_folder)
+        print(f"Output folder chosen: {output_folder}")
+    if extension is None:
+        output_options.append(
+            CerebOption(
+                "File extension",
+                "Select an extension from the following list:",
+                AVAILABLE_EXTENSIONS.choices,
+                default_value=AVAILABLE_EXTENSIONS.choices[0],
+            )
+        )
+    else:
+        print(f"File extension chosen: {extension}")
+    if len(output_options) > 0:
+        print_panel(
+            output_options,
+            "Configure the folder in which to put the configuration file and its extension.",
+        )
+        output_folder = output_folder or output_options[0].value
+        extension = extension or output_options[-1].value
+    filename = os.path.join(output_folder, f"circuit.{extension}")
     configuration = Configuration.default(**configuration)  # Check that the configuration works
     with open(filename, "w") as outfile:
         outfile.write(format_configuration_content(extension, configuration))
@@ -322,36 +335,36 @@ def _write_config(configuration, output_folder, extension):
 
 @app.command(help="Create a BSB configuration file for your cerebellum circuit.")
 @click.option(
-    "--output_folder",
-    type=EXISTING_DIR_PATH,
-    required=False,
-    default=os.getcwd(),
-    help="Path where to write the output configuration file.",
-)
-@click.option(
     "--species",
     type=AVAILABLE_SPECIES,
     required=False,
-    default="mouse",
     help="Species to reconstruct the circuit from.",
+)
+@click.option(
+    "--output_folder",
+    type=EXISTING_DIR_PATH,
+    required=False,
+    help="Path where to write the output configuration file.",
 )
 @click.option(
     "--extension",
     type=AVAILABLE_EXTENSIONS,
     required=False,
-    default="yaml",
     help="Extension for the configuration file.",
 )
-def configure(output_folder: str, species: str, extension: str):
+def configure(species: str = None, output_folder: str = None, extension: str = None):
     """
-    Resolve a cerebellum configuration file for BSB based on user choices
+    Resolve a canonical cerebellum configuration file for BSB based on user choices.
 
-    :param str output_folder: default path where to write the output configuration file.
-    :param str species: default species to reconstruct the circuit from.
-    :param str extension: default extension for the configuration file.
+    :param str species: species to reconstruct the circuit from.
+    :param str output_folder: path where to write the output configuration file.
+    :param str extension: extension for the configuration file.
     """
     # Step 1: Species choice
-    species = _configure_species(species)
+    if species is None:
+        species = _configure_species(species)
+    else:
+        print(f"Species chosen: {species}")
     species_folder = join(CONFIGURATION_FOLDER, species)
 
     # Step 2: state and cell types choice
@@ -388,7 +401,6 @@ def configure(output_folder: str, species: str, extension: str):
     if species == "mouse":
         sim_names = list(configuration["simulations"].keys())
         for sim_name in sim_names:
-            simulation = configuration["simulations"][sim_name]
             simulator, _ = sim_name.split("_", 1)
             if simulator == "nest":
                 default_stim = {
@@ -454,6 +466,6 @@ def configure(output_folder: str, species: str, extension: str):
         print(f"\t{simulation}:")
         print(f"\t\tCell model: {choices[0]}")
         print(f"\t\tSynapse model: {choices[1]}")
-
+    print("----------------------------\n")
     # Step 8: output folder and extension
     _write_config(configuration, output_folder, extension)

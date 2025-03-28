@@ -6,7 +6,7 @@
 This repository provides the code, configuration and morphology data to reconstruct and simulate 
 cerebellar cortex circuits using the [Brain Scaffold Builder](https://github.com/dbbs-lab/bsb) 
 framework. These models are based on the iterative work of the [Department of Brain and Behavioral 
-Sciences](https://dbbs.dip.unipv.it/en) of the university of Pavia. 
+Sciences](https://dbbs.dip.unipv.it/en) (DBBS) of the university of Pavia. 
 
 ## Installation
 `cerebellum` is a package that contains implementation of connectivity or placement rules for BSB.
@@ -73,19 +73,22 @@ This will produce html web pages that can be read with your favorite internet br
 
 ## Building a circuit
 
-Depending on the circuit you wish to obtain and/or simulate, the process will vary. Check the 
-documentation for more information. 
-
-As an example, we present the process to reconstruct the cerebellar cortex of the rodent brain, 
-based on the reconstruction of [De Schepper et al. 2022](https://doi.org/10.1038/s42003-022-04213-y) 
-with BSB.
+Depending on the circuit you wish to obtain and/or simulate, the process will vary.
+This package provides a command-line interface to generate the BSB configuration 
+of the canonical circuits developed by the DBBS based on a few choices.
 
 Assuming you are in the `cerebellum` folder, run the following command in your terminal:
 ```bash
-bsb compile configurations/mouse/mouse_cerebellar_cortex.yaml -v4 --clear
+cerebellum configure
 ```
-This command will produce a microcircuit of the mouse cerebellar cortex and store it in the
-`cerebellum.hdf5` file. This process might take a while depending on your machine.
+Once you filled the forms provided by the command within your terminal, your BSB configuration
+should be ready to be compiled:
+
+```bash
+bsb compile circuit.yaml -v4 --clear
+```
+This command will produce the desired circuit of the cerebellar cortex and store it in
+an `.hdf5` file. This process might take a while depending on your machine.
 
 ## Running a simulation
 As for the previous paragraph the following command might vary depending on your reconstruction and 
