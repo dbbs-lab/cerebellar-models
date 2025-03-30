@@ -204,17 +204,17 @@ public:
 
 private:
   double
-  depress_()
+  facilitate_()
   {
-    double k = Aminus_;
+    double k = Aplus_;
     return k;
   }
 
   double
-  facilitate_(double tempo)
+  depress_(double tempo)
   {
     double k = std::exp(-std::abs(C_ * tempo/tau_)) * std::pow(cos(tempo/tau_), 2);
-    return k * Aplus_;
+    return k * Aminus_;
   }
 
   // data members of each connection
@@ -266,67 +266,64 @@ stdp_synapse_cosexp< targetidentifierT >::send( Event& e, size_t t, const Common
   target->get_history( t_lastspike_ - dendritic_delay, t_spike - dendritic_delay, &start, &finish );
   // facilitation due to postsynaptic spikes since last pre-synaptic spike
   double minus_dt;
+  double LTD = 0;
+  double single = 0;
+  // check for weight change after the synapse firing
+  bool check_LTD = false;
+  // presynaptic spikes buffer for LTD
+  double t_spike_buffer = t_spike;
+  buffer_pre_spikes_.push_back(t_spike_buffer);
   while ( start != finish )
   {
-    minus_dt = t_lastspike_ - ( start->t_ + dendritic_delay );
-    // const double offset = start->offset_;
-    double post = 0;
+    minus_dt = start->t_ + dendritic_delay;
+    const double offset = start->offset_;
     // get_history() should make sure that
     // start->t_ > t_lastspike - dendritic_delay, i.e. minus_dt < 0
-    std::cout << "Custom STDP synapse: processing post spike with offset = " << e.get_offset() << std::endl;
-    assert( minus_dt < -1.0 * kernel().connection_manager.get_stdp_eps() );
-    if (e.get_offset() != 0)
+    if (offset() != 0)
     {
-      double LTP = 0;
-      double last_post_spike = 0;
-      for (unsigned int GR=0; GR < simple_post_spikes_.size(); GR++) {
-        double sd = simple_post_spikes_[GR] - minus_dt;
+      for (int idx=0; idx < buffer_pre_spikes_.size(); idx++) {
+        double t_window = buffer_pre_spikes_[idx] - minus_dt;
         double sd_minus = simple_post_spikes_[GR-1] - minus_dt;
-        if (sd >= -10 && sd <= 10 && post != 0){
-          LTP += facilitate_(sd);
+        if (t_window <= 10 && t_window >= -10){
+          check_LTD = true;
+          single = depress_(t_window);
+          LTD += depress_(t_window);
+          LTD_values_.push_back(single);
         }
-        else if (sd >= -10 && sd <= 10 && post == 0){
-          LTP += facilitate_(sd);
-          LTP += facilitate_(sd_minus);
-          ++post;
-        }
-        last_post_spike = sd;
-      }
-      weight_ = weight_ + LTP;
-      if (weight_ >= Wmax_)
-      {
-        weight_ = Wmax_;
-      }
-      if (last_post_spike > 10){
-        post = 0;
       }
     }
-    e.set_receiver( *target );
-    e.set_weight( weight_ );
-    e.set_delay_steps( get_delay_steps() );
-    e.set_rport( get_rport() );
-    t_lastspike_ = t_spike;
     ++start;
   }
-
-  if (e.get_offset() == 0) {
-    weight_ = weight_ + depress_();
+  if (check_LTD){
+    weight_ = weight_ + LTD;
     if (weight_ <= Wmin_){
       weight_ = Wmin_;
     }
-    simple_post_spikes_.push_back(t_spike);
-    while(simple_post_spikes_[0] < t_spike - 10){
-      simple_post_spikes_.erase(simple_post_spikes_.begin());
+  }
+  else {
+    weight_ = weight_ + facilitate_();
+    if (weight_ >= Wmax_){
+      weight_ = Wmax_;
     }
-    e.set_receiver( *target );
-    e.set_weight( weight_ );
+  }
+
+  // buffer reset for old spikes
+  while(buffer_pre_spikes_[0] < t_spike - 10){
+    buffer_pre_spikes_.erase(buffer_pre_spikes_.begin());
+  }
+
+  //printing LTD values (for testing)
+  for(int i=0; i<LTD_values_.size(); i++){
+    std::cout << (LTD_values_[i]*(-1)) << std::endl;
+  }
+  e.set_receiver( *target );
+  e.set_weight( weight_ );
     // use accessor functions (inherited from Connection< >) to obtain delay in
     // steps and rport
-    e.set_delay_steps( get_delay_steps() );
-    e.set_rport( get_rport() );
-    e();
-    t_lastspike_ = t_spike;
-  }
+  e.set_delay_steps( get_delay_steps() );
+  e.set_rport( get_rport() );
+  e();
+  t_lastspike_ = t_spike;
 
   return true;
 }

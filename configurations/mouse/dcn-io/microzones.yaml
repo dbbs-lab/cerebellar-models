@@ -351,7 +351,7 @@ connectivity:
     postsynaptic:
       cell_types:
         - dcn_p_plus
-    outdegree: 60
+    outdegree: 30 #60
   io_to_dcn_p_minus:
     strategy: bsb.connectivity.FixedOutdegree
     presynaptic:
@@ -360,7 +360,7 @@ connectivity:
     postsynaptic:
       cell_types:
         - dcn_p_minus
-    outdegree: 60
+    outdegree: 30 #60
   io_to_dcn_i_plus:
     strategy: bsb.connectivity.FixedOutdegree
     presynaptic:
@@ -369,7 +369,7 @@ connectivity:
     postsynaptic:
       cell_types:
         - dcn_i_plus
-    outdegree: 33
+    outdegree: 16 #33
   io_to_dcn_i_minus:
     strategy: bsb.connectivity.FixedOutdegree
     presynaptic:
@@ -378,7 +378,7 @@ connectivity:
     postsynaptic:
       cell_types:
         - dcn_i_minus
-    outdegree: 33
+    outdegree: 16 #33
   dcn_i_to_io_plus:
     strategy: bsb.connectivity.FixedIndegree
     presynaptic:
@@ -387,7 +387,7 @@ connectivity:
     postsynaptic:
       cell_types:
         - io_plus
-    indegree: 33
+    indegree: 16 #33
   dcn_i_to_io_minus:
     strategy: bsb.connectivity.FixedIndegree
     presynaptic:
@@ -396,7 +396,7 @@ connectivity:
     postsynaptic:
       cell_types:
         - io_minus
-    indegree: 33
+    indegree: 16 #33
 
 $import:
   ref: ../mouse_cerebellar_cortex.yaml#/

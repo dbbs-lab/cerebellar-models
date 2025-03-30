@@ -101,6 +101,7 @@ def run_simulation():
     mli = nest.Create("eglif_mli", 1, params = params_mli)
     gr = nest.Create("eglif_cond_alpha_multisyn", 1, params=params_gr)
     dcn_i = nest.Create("eglif_cond_alpha_multisyn", 1, params=params_dcni)
+    #MF are parrot neurons
     wr = nest.Create("weight_recorder")
     nest.CopyModel("stdp_synapse_alpha", "stdp_rec", {"weight_recorder": wr})
     nest.Connect(io, mli, syn_spec={"synapse_model": "static_synapse" , "receptor_type": 3})

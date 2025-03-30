@@ -109,7 +109,7 @@ def compute_firing_rates(scaffold, folder_nio, simulation_name,time_from, time_t
         plot_fr(loc_spikes, nb_neurons, populations,dt, time_from, time_to)
     return extract_fr(loc_spikes, nb_neurons, time_from, time_to, populations)
 if __name__ == "__main__":
-    folder_nio = "nio_files/alpha_no_io"
+    folder_nio = "nio_files/trials_alpha"
     scaffold_name = "mouse_cereb_io_trials.hdf5"
     scaffold = from_storage(scaffold_name)
     simulation_name = "mf_cf_stimulus"
@@ -136,10 +136,10 @@ if __name__ == "__main__":
     # fr_long = compute_firing_rates(scaffold, folder_nio, simulation_name, time_from, time_to, dt, plot=True)
 
     plt.figure()
-    plt.plot(np.arange(1,n_trials+1), pc_mean_fr, '--', marker='o', color='blue', markersize = 5, label ='PC')
-    plt.plot(np.arange(1, n_trials + 1), dcn_p_fr, '--', marker='o', color='red', markersize=5, label ='DCNp')
-    plt.plot(np.arange(1, n_trials + 1), bc_fr, '--', marker='o', color='green', markersize=5, label='BC')
-    plt.plot(np.arange(1, n_trials + 1), sc_fr, '--', marker='o', color='orange', markersize=5, label='SC')
+    plt.plot(np.arange(1,n_trials+1), pc_mean_fr, '--', marker='o', color='green', markersize = 5, label ='PC')
+    plt.plot(np.arange(1, n_trials + 1), dcn_p_fr, '--', marker='o', color='grey', markersize=5, label ='DCN')
+    plt.plot(np.arange(1, n_trials + 1), bc_fr, '--', marker='o', color='orange', markersize=5, label='BC')
+    plt.plot(np.arange(1, n_trials + 1), sc_fr, '--', marker='o', color='gold', markersize=5, label='SC')
     plt.xlabel("Trials")
     plt.ylabel("Mean firing rate")
     plt.title("PC, DCNp and MLI mean firing rate over trials")
