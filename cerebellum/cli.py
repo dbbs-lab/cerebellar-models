@@ -5,7 +5,6 @@ from os.path import abspath, dirname, join
 
 import click
 import numpy as np
-import survey
 from bsb import Configuration, format_configuration_content, parse_configuration_file
 
 from cerebellum import __version__
@@ -59,10 +58,11 @@ class CerebOption:
         self.type = type_term
         """Type of the option"""
 
-    def get_widget(self):
+    def get_widget(self):  # pragma: no cover
         """
         Return the survey widget for this option
         """
+        import survey
 
         if self.type == TypeTermElem.Basket:
             return survey.widgets.Basket(
@@ -78,7 +78,7 @@ class CerebOption:
             return survey.widgets.Numeric(value=float(self.value), decimal=True)
 
 
-def print_panel(options, title="Configure your cerebellum circuit."):
+def print_panel(options, title="Configure your cerebellum circuit."):  # pragma: no cover
     """
     Print a survey form based on a list of options.
     The result of the form will be saved in its options.
@@ -86,6 +86,8 @@ def print_panel(options, title="Configure your cerebellum circuit."):
     :param list[CerebOption] options: List of options to display
     :param str title: Title to display on top of the form
     """
+    import survey
+
     form = survey.routines.form(
         title, form={option.name: option.get_widget() for option in options}
     )
@@ -100,12 +102,14 @@ def print_panel(options, title="Configure your cerebellum circuit."):
 
 @click.group(help="Cerebellum CLI")
 @click.version_option(__version__)
-def app():
+def app():  # pragma: no cover
     """The main CLI entry point"""
     pass
 
 
-EXISTING_DIR_PATH = click.Path(exists=True, readable=True, dir_okay=True, resolve_path=True)
+EXISTING_DIR_PATH = click.Path(
+    exists=True, readable=True, writable=True, file_okay=False, resolve_path=True
+)
 AVAILABLE_SPECIES = click.Choice(get_folders_in_folder(CONFIGURATION_FOLDER), case_sensitive=True)
 AVAILABLE_EXTENSIONS = click.Choice(["yaml", "json"], case_sensitive=True)
 
@@ -141,14 +145,14 @@ def _configure_cell_types(species_folder, config_cell_types):
             "State",
             "Select the state of the subject to model from the following list:",
             get_folders_in_folder(species_folder, {"cell_types"}),
-            # default_value="awake",
+            default_value="awake",
         ),
         CerebOption(
             "Extra cell types",
             "Select the optional cell types that you want in the final configuration from the following list:",
             cell_type_names,
             type_term=TypeTermElem.Basket,
-            # default_value=["dcn", "io"],
+            default_value=["dcn", "io"],
         ),
     ]
     print_panel(
@@ -190,7 +194,7 @@ def _configure_simulations(config_simulations):
             "Select the simulations(s) that you want to perform from the following list:",
             simulation_names,
             type_term=TypeTermElem.Basket,
-            # default_value=["nest_basal_activity"],
+            default_value=["nest_basal_activity"],
         ),
     ]
     print_panel(
@@ -223,7 +227,7 @@ def _configure_sim_params(config_simulations, simulation_names):
                 "Connection models",
                 f"Select the model of synapse for the simulation {sim_name} from the following list:",
                 list(config_simulations[simulator]["connection_models"].keys()),
-                # default_value="static_synapse",
+                default_value="tsodyks2_synapse",
             ),
         ]
         print_panel(
