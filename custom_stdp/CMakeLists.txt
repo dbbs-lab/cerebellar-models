@@ -46,10 +46,18 @@ set( MODULE_SOURCES
       eglif_mli.cpp eglif_mli.h
       eglif_dcnp.cpp eglif_dcnp.h
       stdp_synapse_sinexp.h stdp_synapse_sinexp.cpp
-      stdp_synapse_cosexp.h stdp_synapse_cosexp.cpp
+      #stdp_synapse_cosexp.h stdp_synapse_cosexp.cpp
       stdp_synapse_alpha.h stdp_synapse_alpha.cpp
       extended_post_history_archiving_node.cpp extended_post_history_archiving_node.h
       extended_hist_entry.cpp extended_hist_entry.h
+
+      tracking_neuron_nestml.cpp tracking_neuron_nestml.h
+      custom_stdp_module.cpp custom_stdp_module.h
+      basic_neuron_nestml.cpp basic_neuron_nestml.h
+      diff_neuron_nestml.cpp diff_neuron_nestml.h
+      rb_neuron_nestml.cpp rb_neuron_nestml.h
+      tracking_neuron_planner_nestml.cpp tracking_neuron_planner_nestml.h
+      state_neuron_nestml.cpp state_neuron_nestml.h
 
     )
 
