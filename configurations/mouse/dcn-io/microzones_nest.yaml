@@ -2,356 +2,89 @@ name: DBBS Mouse cerebellum w/ DCN and IO NEST basal activity and mf stimulus w/
 storage:
   root: mouse_cereb_microzones_nest.hdf5
 packages:
-  - bsb-nest~=4.2
+  - bsb-nest~=4.3
 components:
   - cerebellum/nest_models/build_models.py
 simulations:
   basal_activity:
     modules:
       - cerebmodule
-    cell_models:
-      purkinje_cell_minus:
-        model: eglif_cond_alpha_multisyn
-        constants:
-          t_ref: 0.5
-          V_min: -350
-          C_m: 334
-          V_th: -43
-          V_reset: -69
-          E_L: -59
-          V_m: -59.0
-          lambda_0: 4. #0.001
-          tau_V: 3.5 #0.5
-          tau_m: 47
-          I_e: 700 #742.543
-          k_adap: 1.491
-          k_1: 0.195
-          k_2: 0.041
-          A1: 157.622
-          A2: 172.622
-          tau_syn1: 1.1
-          tau_syn2: 2.8
-          tau_syn3: 0.4
-          E_rev1: 0
-          E_rev2: -80
-          E_rev3: 0
-      dcn_p_plus:
-        model: eglif_cond_alpha_multisyn
-        constants:
-          t_ref: 1.5
-          C_m: 142
-          V_th: -36
-          V_reset: -55
-          E_L: -45
-          I_e: 75.385 #150
-          V_m: -45
-          lambda_0: 3. #1. # 0.001
-          tau_V: 3. #0.3   # 0.5
-          tau_m: 33
-          k_adap: 0.408
-          k_1: 0.697
-          k_2: 0.047
-          A1: 13.857
-          A2: 3.477
-          tau_syn1: 1.0
-          tau_syn2: 0.7
-          E_rev1: 0
-          E_rev2: -80
-      dcn_p_minus:
-        model: eglif_cond_alpha_multisyn
-        constants:
-          t_ref: 1.5
-          C_m: 142
-          V_th: -36
-          V_reset: -55
-          E_L: -45
-          I_e: 75.385 #150
-          V_m: -45
-          lambda_0: 3. #1. # 0.001
-          tau_V: 3. #0.3   # 0.5
-          tau_m: 33
-          k_adap: 0.408
-          k_1: 0.697
-          k_2: 0.047
-          A1: 13.857
-          A2: 3.477
-          tau_syn1: 1.0
-          tau_syn2: 0.7
-          E_rev1: 0
-          E_rev2: -80
-      dcn_i_plus:
-        model: eglif_cond_alpha_multisyn
-        constants:
-          t_ref: 3
-          C_m: 56
-          V_th: -39
-          V_reset: -55
-          E_L: -40
-          I_e: 2.384 #10.
-          V_m: -40
-          lambda_0: 0.9 #1. # 0.001
-          tau_V: 1. #0.3  # 0.5
-          tau_m: 56
-          k_adap: 0.079
-          k_1: 0.041
-          k_2: 0.044
-          A1: 176.358
-          A2: 176.358
-          tau_syn1: 3.64
-          tau_syn2: 1.14
-          E_rev1: 0
-          E_rev2: -80
-      dcn_i_minus:
-        model: eglif_cond_alpha_multisyn
-        constants:
-          t_ref: 3
-          C_m: 56
-          V_th: -39
-          V_reset: -55
-          E_L: -40
-          I_e: 2.384 #10.
-          V_m: -40
-          lambda_0: 0.9 #1. # 0.001
-          tau_V: 1. #0.3  # 0.5
-          tau_m: 56
-          k_adap: 0.079
-          k_1: 0.041
-          k_2: 0.044
-          A1: 176.358
-          A2: 176.358
-          tau_syn1: 3.64
-          tau_syn2: 1.14
-          E_rev1: 0
-          E_rev2: -80
-      io_plus:
-        model: eglif_cond_alpha_multisyn
-        constants:
-          t_ref: 1
-          C_m: 189
-          V_th: -35
-          V_reset: -45
-          E_L: -45
-          I_e: -18.101
-          V_m: -45
-          lambda_0: 1.2
-          tau_V: 0.8
-          tau_m: 11
-          k_adap: 1.928
-          k_1: 0.191
-          k_2: 0.091
-          A1: 1810.923
-          A2: 1358.197
-          tau_syn1: 1
-          tau_syn2: 60
-          E_rev1: 0
-          E_rev2: -80
-      io_minus:
-        model: eglif_cond_alpha_multisyn
-        constants:
-          t_ref: 1
-          C_m: 189
-          V_th: -35
-          V_reset: -45
-          E_L: -45
-          I_e: -18.101
-          V_m: -45
-          lambda_0: 1.2
-          tau_V: 0.8
-          tau_m: 11
-          k_adap: 1.928
-          k_1: 0.191
-          k_2: 0.091
-          A1: 1810.923
-          A2: 1358.197
-          tau_syn1: 1
-          tau_syn2: 60
-          E_rev1: 0
-          E_rev2: -80
     connection_models:
-      ascending_axon_to_purkinje_minus:
-        synapse:
-          model: static_synapse
-          weight: 0.41
-          delay: 2
-          receptor_type: 1
-      parallel_fiber_to_purkinje_minus:
-        synapse:
-          model: static_synapse
-          weight: 0.14
-          delay: 5
-          receptor_type: 1
-      stellate_to_purkinje_minus:
-        synapse:
-          model: static_synapse
-          weight: 0.17 #1.64
-          delay: 5
-          receptor_type: 2
-      basket_to_purkinje_minus:
-        synapse:
-          model: static_synapse
-          weight: 0.8 #0.44
-          delay: 4
-          receptor_type: 2
-      mossy_fibers_to_dcn_p_plus:
-        synapse:
-          model: static_synapse
-          weight: 0.25 # 0.05
-          delay: 4.
-          receptor_type: 1
-      mossy_fibers_to_dcn_p_minus:
-        synapse:
-          model: static_synapse
-          weight: 0.25 # 0.05
-          delay: 4.
-          receptor_type: 1
-      purkinje_to_dcn_p_plus:
-        synapse:
-          model: static_synapse
-          weight: 0.35 #3. # 0.4
-          delay: 4.
-          receptor_type: 2
       purkinje_to_dcn_p_minus:
-        synapse:
-          model: static_synapse
-          weight: 0.35 #3. # 0.4
-          delay: 4.
-          receptor_type: 2
-      purkinje_to_dcn_i_plus:
-        synapse:
-          model: static_synapse
-          weight: 0.02 #0.4 # 0.12
-          delay: 4.
-          receptor_type: 2
+        $import:
+          ref: ./dcn_io_awake_nest.yaml#/simulations/basal_activity/connection_models/purkinje_to_dcn_p
+          values: [ synapse ]
       purkinje_to_dcn_i_minus:
-        synapse:
-          model: static_synapse
-          weight: 0.02 #0.4 # 0.12
-          delay: 4.
-          receptor_type: 2
-      io_to_purkinje:
-        synapse:
-          model: static_synapse
-          weight: 800 #300 # 50
-          delay: 4
-          receptor_type: 3
+        $import:
+          ref: ./dcn_io_awake_nest.yaml#/simulations/basal_activity/connection_models/purkinje_to_dcn_i
+          values: [ synapse ]
       io_to_purkinje_minus:
-        synapse:
-          model: static_synapse
-          weight: 800 #300 # 50
-          delay: 4
-          receptor_type: 3
-      io_to_mli_io_plus_to_basket_cell:
-        synapse:
-          model: static_synapse
-          weight: 5. # 2.5
-          delay: 40
-          receptor_type: 3
-      io_to_mli_io_plus_to_stellate_cell:
-        synapse:
-          model: static_synapse
-          weight: 5. # 2.5
-          delay: 40
-          receptor_type: 3
-      io_to_mli_minus_io_minus_to_basket_cell:
-        synapse:
-          model: static_synapse
-          weight: 5. # 2.5
-          delay: 40
-          receptor_type: 3
-      io_to_mli_minus_io_minus_to_stellate_cell:
-        synapse:
-          model: static_synapse
-          weight: 5. # 2.5
-          delay: 40
-          receptor_type: 3
-      io_to_dcn_p_plus:
-        synapse:
-          model: static_synapse
-          weight: 0.4 #0.5 # 2.5
-          delay: 4
-          receptor_type: 1
+        $import:
+          ref: ./dcn_io_awake_nest.yaml#/simulations/basal_activity/connection_models/io_to_purkinje
+          values: [ synapse ]
       io_to_dcn_p_minus:
-        synapse:
-          model: static_synapse
-          weight: 0.4 #0.5 # 2.5
-          delay: 4
-          receptor_type: 1
-      io_to_dcn_i_plus:
-        synapse:
-          model: static_synapse
-          weight: 0.25 #0.5 # 0.1
-          delay: 5
-          receptor_type: 1
+        $import:
+          ref: ./dcn_io_awake_nest.yaml#/simulations/basal_activity/connection_models/io_to_dcn_p
+          values: [ synapse ]
       io_to_dcn_i_minus:
-        synapse:
-          model: static_synapse
-          weight: 0.25 #0.5 # 0.1
-          delay: 5
-          receptor_type: 1
-      dcn_i_to_io_plus:
-        synapse:
-          model: static_synapse
-          weight: 0.45 # 0.75
-          delay: 25
-          receptor_type: 2
+        $import:
+          ref: ./dcn_io_awake_nest.yaml#/simulations/basal_activity/connection_models/io_to_dcn_i
+          values: [ synapse ]
       dcn_i_to_io_minus:
-        synapse:
-          model: static_synapse
-          weight: 0.45 # 0.75
-          delay: 25
-          receptor_type: 2
+        $import:
+          ref: ./dcn_io_awake_nest.yaml#/simulations/basal_activity/connection_models/dcn_i_to_io
+          values: [ synapse ]
     devices:
-      purkinje_cell_minus_record:
+      purkinje_record:
+        targetting:
+          strategy: by_label
+          labels: [ Z+ ]
+      purkinje_minus_record:
         device: spike_recorder
         delay: 0.1
         targetting:
-          strategy: cell_model
+          strategy: by_label
           cell_models:
-            - purkinje_cell_minus
-      dcn_p_plus_record:
-        device: spike_recorder
-        delay: 0.1
+            - purkinje_cell
+          labels: [ Z- ]
+      dcn_p_record:
         targetting:
-          strategy: cell_model
-          cell_models:
-            - dcn_p_plus
+          strategy: by_label
+          labels: [ Z+ ]
       dcn_p_minus_record:
         device: spike_recorder
         delay: 0.1
         targetting:
-          strategy: cell_model
+          strategy: by_label
           cell_models:
-            - dcn_p_minus
-      dcn_i_plus_record:
-        device: spike_recorder
-        delay: 0.1
+            - dcn_p
+          labels: [ Z- ]
+      dcn_i_record:
         targetting:
-          strategy: cell_model
-          cell_models:
-            - dcn_i_plus
+          strategy: by_label
+          labels: [ Z+ ]
       dcn_i_minus_record:
         device: spike_recorder
         delay: 0.1
         targetting:
-          strategy: cell_model
+          strategy: by_label
           cell_models:
-            - dcn_i_minus
-      io_plus_record:
-        device: spike_recorder
-        delay: 0.1
+            - dcn_i
+          labels: [ Z- ]
+      io_record:
         targetting:
-          strategy: cell_model
-          cell_models:
-            - io_plus
+          strategy: by_label
+          labels: [ Z+ ]
       io_minus_record:
         device: spike_recorder
         delay: 0.1
         targetting:
-          strategy: cell_model
+          strategy: by_label
           cell_models:
-            - io_minus
+            - io
+          labels: [ Z- ]
     $import:
-      ref: ../nest/basal_awake.yaml#/simulations/basal_activity/
+      ref: ./dcn_io_awake_nest.yaml#/simulations/basal_activity/
       values:
         - simulator
         - resolution
@@ -362,52 +95,11 @@ simulations:
         - devices
   mf_cf_stimulus:
     devices:
-      mf_stimulus_1:
-        device: poisson_generator
-        rate: 40
-        start: 500
-        stop: 760
-        targetting:
-          strategy: cell_model
-          cell_models:
-            - mossy_fibers
-        weight: 1
-        delay: 0.1
-      mf_stimulus_2:
-        device: poisson_generator
-        rate: 40
-        start: 1500
-        stop: 1760
-        targetting:
-          strategy: cell_model
-          cell_models:
-            - mossy_fibers
-        weight: 1
-        delay: 0.1
-      cf_stimulus_plus:
-        device: poisson_generator
-        rate: 500
-        start: 750
-        stop: 760
-        targetting:
-          strategy: cell_model
-          cell_models:
-            - io_plus
-        receptor_type: 1
-        weight: 55
-        delay: 0.1
-      cf_stimulus_minus:
-        device: poisson_generator
-        rate: 500
-        start: 750
-        stop: 760
-        targetting:
-          strategy: cell_model
-          cell_models:
-            - io_minus
-        receptor_type: 1
-        weight: 55
-        delay: 0.1
+      $import:
+        ref: ./dcn_io_awake_nest.yaml#/simulations/mf_cf_stimulus/devices/
+        values:
+          - mf_stimulus
+          - cf_stimulus
     $import:
       ref: "#/simulations/basal_activity"
       values:
@@ -431,4 +123,6 @@ $import:
     - morphologies
     - cell_types
     - placement
+    - after_placement
     - connectivity
+    - after_connectivity

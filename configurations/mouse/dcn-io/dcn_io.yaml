@@ -53,7 +53,7 @@ connectivity:
     mli_pc_connectivity:
       - basket_to_purkinje
       - stellate_to_purkinje
-    io_pc_connectivity: io_to_purkinje
+    io_pc_connectivity: [ io_to_purkinje ]
     pre_cell_pc: purkinje_cell
   io_to_dcn_p:
     strategy: bsb.connectivity.FixedOutdegree
