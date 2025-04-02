@@ -95,7 +95,7 @@ class ConnectomeIO_MLI(NotParallel, ConnectionStrategy):
         Will only keep one connection location information for each unique pair of MLI-PC.
 
         :param list[bsb.connectivity.strategy.ConnectionStrategy] strategies: Connection
-        strategies to load.
+         strategies to load.
         :param bsb.connectivity.strategy.HemitypeCollection hemitype: Hemitype
         :return: A tuple containing:
                 - an array of the presynaptic connection locations
