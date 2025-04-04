@@ -38,7 +38,7 @@ simulations:
       purkinje_record:
         targetting:
           strategy: by_label
-          labels: [ Z+ ]
+          labels: [ upbound ]
       purkinje_minus_record:
         device: spike_recorder
         delay: 0.1
@@ -46,11 +46,11 @@ simulations:
           strategy: by_label
           cell_models:
             - purkinje_cell
-          labels: [ Z- ]
+          labels: [ downbound ]
       dcn_p_record:
         targetting:
           strategy: by_label
-          labels: [ Z+ ]
+          labels: [ upbound ]
       dcn_p_minus_record:
         device: spike_recorder
         delay: 0.1
@@ -58,11 +58,11 @@ simulations:
           strategy: by_label
           cell_models:
             - dcn_p
-          labels: [ Z- ]
+          labels: [ downbound ]
       dcn_i_record:
         targetting:
           strategy: by_label
-          labels: [ Z+ ]
+          labels: [ upbound ]
       dcn_i_minus_record:
         device: spike_recorder
         delay: 0.1
@@ -70,11 +70,11 @@ simulations:
           strategy: by_label
           cell_models:
             - dcn_i
-          labels: [ Z- ]
+          labels: [ downbound ]
       io_record:
         targetting:
           strategy: by_label
-          labels: [ Z+ ]
+          labels: [ upbound ]
       io_minus_record:
         device: spike_recorder
         delay: 0.1
@@ -82,7 +82,7 @@ simulations:
           strategy: by_label
           cell_models:
             - io
-          labels: [ Z- ]
+          labels: [ downbound ]
     $import:
       ref: ./dcn_io_awake_nest.yaml#/simulations/basal_activity/
       values:
