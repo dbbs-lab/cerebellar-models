@@ -88,16 +88,18 @@ class PlacementTable(TablePlot, ScaffoldPlot):
         self.reset_table()
         for i, ps in enumerate(self.scaffold.get_placement_sets()):
             ct = ps.cell_type
-            self.rows.append(self.extract_ct_name(ct))
-            counts = ps.load_positions().shape[0]
             volume = np.sum([p.volume() for place in ct.get_placement() for p in place.partitions])
-            self._values.append([counts, volume])
-            self.table_values.append(
-                [
-                    "{:.2E}".format(counts),
-                    "{:.2E}".format((counts / volume) if volume > 0.0 else 0.0),
-                ]
-            )
+            ct_name = self.extract_ct_name(ct)
+            for labels in ps.get_unique_labels():
+                count = np.count_nonzero(ps.get_labelled(labels))
+                self.rows.append(self.get_labelled_ct_name(ct_name, labels))
+                self._values.append([count, volume])
+                self.table_values.append(
+                    [
+                        "{:.2E}".format(count),
+                        "{:.2E}".format((count / volume) if volume > 0.0 else 0.0),
+                    ]
+                )
 
     def plot(self, **kwargs):
         super().plot()
@@ -166,10 +168,11 @@ class ConnectivityTable(TablePlot, ScaffoldPlot):
         """
         for cs in self.scaffold.configuration.connectivity:
             if cs in ps.tag:
-                if ps.tag == cs:
+                text = ps.tag.split(cs + "_", 1)[-1]
+                if ps.tag == cs or "_" not in text:
                     splits = ps.tag
                 else:
-                    splits = ps.tag.split(cs + "_", 1)[-1]
+                    splits = text
                 break
         splits = splits.split("_")
         tag = []
@@ -327,27 +330,40 @@ class CellPlacement3D(ScaffoldPlot):
     def plot(self, **kwargs):
         super().plot()
         ax = self.get_ax()
+        grey = [0.6, 0.6, 0.6, 1.0]
         for i, ps in enumerate(self.scaffold.get_placement_sets()):
             ct = ps.cell_type
             if not ct.name in self.ignored_ct:
                 positions = ps.load_positions()
                 if len(positions) > 0:
-                    if ct.name not in self.dict_colors:
-                        # default color is grey
-                        color = [0.6, 0.6, 0.6]
-                        alpha = 1.0
-                    elif len(self.dict_colors[ct.name]) == 3:
-                        color = self.dict_colors[ct.name]
-                        alpha = 1.0
+                    u_labels = ps.get_unique_labels()
+                    if len(u_labels) > 1:
+                        color = [
+                            self.labelled_dict_colors.get(
+                                self.get_labelled_ct_name(ct.name, labels), grey
+                            )
+                            for labels in u_labels
+                        ]
+                        colors = np.ones((len(positions), 4))
+                        for j, labels in enumerate(u_labels):
+                            colors[ps.get_labelled(labels)] = color[j]
+                        alphas = colors[:, -1]
+                        colors = colors[:, :-1]
                     else:
-                        *color, alpha = self.dict_colors[ct.name]
+                        if ct.name in self.dict_colors and len(self.dict_colors[ct.name]) == 3:
+                            color = self.dict_colors[ct.name]
+                            alpha = 1.0
+                        else:
+                            *color, alpha = self.dict_colors.get(ct.name, grey)
+                        colors = np.repeat([color], len(positions), axis=0)
+                        alphas = np.repeat([alpha], len(positions), axis=0)
                     scale = np.power(ct.spatial.radius, 2)
                     ax.scatter(
                         positions[:, 0],
                         positions[:, 1],
                         positions[:, 2],
-                        c=np.repeat([color], len(positions), axis=0),
-                        alpha=np.repeat([alpha], len(positions), axis=0),
+                        c=colors,
+                        alpha=alphas,
                         s=scale,
                     )
         ax.set_xlabel("x in $\mu m$")
@@ -370,18 +386,23 @@ class StructureReport(BSBReport):
 
     def __init__(self, scaffold: Union[str, Scaffold], cell_type_info: List[PlotTypeInfo] = None):
         super().__init__(scaffold, cell_type_info)
+        to_ignore = ["glomerulus", "ubc_glomerulus"]
+        num_labelled_ct = sum(
+            len(ps.get_unique_labels()) for ps in self.scaffold.get_placement_sets()
+        )
         legend = Legend(
-            (10, 2.5),
+            (10, 0.6 * (num_labelled_ct - len(to_ignore)) / 3.0),
             3,
             dict_legend=dict(columnspacing=2.0, handletextpad=0.1, fontsize=20, loc="lower center"),
+            dict_abbreviations=self.labelled_abbreviations,
         )
         density_table = PlacementTable(
-            (5, 0.25 * (len(self.scaffold.get_placement_sets()) + 1)),
+            (5, 0.22 * (num_labelled_ct + 1)),
             scaffold=self.scaffold,
             dict_abv=self.abbreviations,
         )
         connectivity_table = ConnectivityTable(
-            (10, 0.25 * (len(self.scaffold.get_connectivity_sets()) + 1)),
+            (10, 0.22 * (len(self.scaffold.get_connectivity_sets()) + 1)),
             scaffold=self.scaffold,
             dict_abv=self.abbreviations,
         )
@@ -390,7 +411,8 @@ class StructureReport(BSBReport):
         self.add_plot("connectivity_table", connectivity_table)
         self.add_plot("placement_3d", plot3d)
         self.add_plot("legend", legend)
-        legend.remove_ct(self.cell_names, ["glomerulus", "ubc_glomerulus"])
+        legend.dict_colors = plot3d.labelled_dict_colors.copy()
+        legend.remove_ct(self.labelled_cell_names, to_ignore)
 
     def preprocessing(self):
         self.plots["legend"].set_axis_off()

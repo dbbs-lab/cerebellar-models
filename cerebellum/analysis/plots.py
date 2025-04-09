@@ -190,6 +190,26 @@ class ScaffoldPlot(Plot):
                 self.clear()
         return is_different
 
+    @staticmethod
+    def get_labelled_ct_name(ct_name, labels):
+        extra = "_".join(labels)
+        return ct_name + (extra if len(extra) == 0 else "_" + extra)
+
+    @property
+    def labelled_dict_colors(self):
+        result = self.dict_colors.copy()
+        for ps in self.scaffold.get_placement_sets():
+            ct_name = ps.cell_type.name
+            u_labels = ps.get_unique_labels()
+            if len(u_labels) > 1:
+                color = np.array(result[ct_name])
+                del result[ct_name]
+                for j, labels in enumerate(u_labels):
+                    result[self.get_labelled_ct_name(ct_name, labels)] = color * (
+                        [np.power(2 / 3, j)] * 3 + [1.0]
+                    )
+        return result
+
 
 class Legend(Plot):
     """
@@ -201,11 +221,13 @@ class Legend(Plot):
         fig_size: Tuple[float, float],
         nb_cols: int = 1,
         dict_colors: dict = None,
+        dict_abbreviations: dict = None,
         dict_legend=None,
         **kwargs,
     ):
         super().__init__(fig_size, 1, 1, dict_colors, **kwargs)
         self.dict_legend = dict_legend or dict()
+        self.dict_abbreviations = dict_abbreviations or dict()
         self.cols_legend = nb_cols
 
     def plot(self, **kwargs):
@@ -215,7 +237,8 @@ class Legend(Plot):
         ]
         dict_plot = self.dict_legend.copy()
         dict_plot.update(kwargs)
-        self.get_ax().legend(patchs, self.dict_colors.keys(), ncol=self.cols_legend, **dict_plot)
+        keys = [self.dict_abbreviations.get(k, k) for k in self.dict_colors.keys()]
+        self.get_ax().legend(patchs, keys, ncol=self.cols_legend, **dict_plot)
 
     def remove_ct(self, to_keep: List[str], to_ignore: List[str] = None):
         """

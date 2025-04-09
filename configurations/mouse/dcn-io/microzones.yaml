@@ -17,19 +17,19 @@ after_placement:
       - dcn_i
       - io
     labels:
-      - upbound
-      - downbound
+      - plus
+      - minus
 connectivity:
   purkinje_to_dcn_p:
     presynaptic:
-      labels: [ upbound ]
+      labels: [ plus ]
     postsynaptic:
-      labels: [ upbound ]
+      labels: [ plus ]
   purkinje_to_dcn_p_minus:
     presynaptic:
-      labels: [ downbound ]
+      labels: [ minus ]
     postsynaptic:
-      labels: [ downbound ]
+      labels: [ minus ]
     $import:
       ref: ./dcn_io.yaml#/connectivity/purkinje_to_dcn_p
       values:
@@ -39,14 +39,14 @@ connectivity:
         - outdegree
   purkinje_to_dcn_i:
     presynaptic:
-      labels: [ upbound ]
+      labels: [ plus ]
     postsynaptic:
-      labels: [ upbound ]
+      labels: [ plus ]
   purkinje_to_dcn_i_minus:
     presynaptic:
-      labels: [ downbound ]
+      labels: [ minus ]
     postsynaptic:
-      labels: [ downbound ]
+      labels: [ minus ]
     $import:
       ref: ./dcn_io.yaml#/connectivity/purkinje_to_dcn_i
       values:
@@ -56,14 +56,14 @@ connectivity:
         - outdegree
   io_to_purkinje:
     presynaptic:
-      labels: [ upbound ]
+      labels: [ plus ]
     postsynaptic:
-      labels: [ upbound ]
+      labels: [ plus ]
   io_to_purkinje_minus:
     presynaptic:
-      labels: [ downbound ]
+      labels: [ minus ]
     postsynaptic:
-      labels: [ downbound ]
+      labels: [ minus ]
     $import:
       ref: ./dcn_io.yaml#/connectivity/io_to_purkinje
       values:
@@ -77,14 +77,14 @@ connectivity:
       - io_to_purkinje_minus
   io_to_dcn_p:
     presynaptic:
-      labels: [ upbound ]
+      labels: [ plus ]
     postsynaptic:
-      labels: [ upbound ]
+      labels: [ plus ]
   io_to_dcn_p_minus:
     presynaptic:
-      labels: [ downbound ]
+      labels: [ minus ]
     postsynaptic:
-      labels: [ downbound ]
+      labels: [ minus ]
     $import:
       ref: ./dcn_io.yaml#/connectivity/io_to_dcn_p
       values:
@@ -94,14 +94,14 @@ connectivity:
         - outdegree
   io_to_dcn_i:
     presynaptic:
-      labels: [ upbound ]
+      labels: [ plus ]
     postsynaptic:
-      labels: [ upbound ]
+      labels: [ plus ]
   io_to_dcn_i_minus:
     presynaptic:
-      labels: [ downbound ]
+      labels: [ minus ]
     postsynaptic:
-      labels: [ downbound ]
+      labels: [ minus ]
     $import:
       ref: ./dcn_io.yaml#/connectivity/io_to_dcn_i
       values:
@@ -111,14 +111,14 @@ connectivity:
         - outdegree
   dcn_i_to_io:
     presynaptic:
-      labels: [ upbound ]
+      labels: [ plus ]
     postsynaptic:
-      labels: [ upbound ]
+      labels: [ plus ]
   dcn_i_to_io_minus:
     presynaptic:
-      labels: [ downbound ]
+      labels: [ minus ]
     postsynaptic:
-      labels: [ downbound ]
+      labels: [ minus ]
     $import:
       ref: ./dcn_io.yaml#/connectivity/dcn_i_to_io
       values:

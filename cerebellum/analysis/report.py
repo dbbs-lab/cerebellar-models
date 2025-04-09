@@ -164,6 +164,24 @@ class BSBReport(Report):
         """
         return list(self.scaffold.cell_types.keys())
 
+    @property
+    def labelled_cell_names(self):
+        ct_names = []
+        for ps in self.scaffold.get_placement_sets():
+            ct_name = ps.cell_type.name
+            for labels in ps.get_unique_labels():
+                ct_names.append(ScaffoldPlot.get_labelled_ct_name(ct_name, labels))
+        return ct_names
+
+    @property
+    def labelled_abbreviations(self):
+        dict_abv = self.abbreviations.copy()
+        for ct_name in self.labelled_cell_names:
+            if ct_name not in self.cell_names:
+                ct, label = ct_name.rsplit("_", 1)
+                dict_abv[ct_name] = self.abbreviations[ct] + "_" + label
+        return dict_abv
+
     def add_plot(self, name: str, plot: Plot):
         super().add_plot(name, plot)
         if isinstance(plot, ScaffoldPlot):
