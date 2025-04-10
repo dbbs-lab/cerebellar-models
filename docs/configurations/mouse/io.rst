@@ -43,9 +43,9 @@ Connectivity
    22; IO; /; PC; / ; :ref:`fix_in`;``indegree`` = 1; Geminiani et al. (2024) [#geminiani_2024]_
    23; IO; /; SC; / ; :ref:`io_mli`; / ; Geminiani et al. (2024) [#geminiani_2024]_
    23; IO; /; BC; / ; :ref:`io_mli`; / ; Geminiani et al. (2024) [#geminiani_2024]_
-   24; IO; / ; DCNp ; / ; :ref:`fix_out`; ``outdegree`` = 60 ; Geminiani et al. (2024) [#geminiani_2024]_
-   25; IO; /; DCNi; / ; :ref:`fix_out`; ``outdegree`` = 33 ; Geminiani et al. (2024) [#geminiani_2024]_
-   26; DCNi; / ; IO ; / ; :ref:`fix_in`; ``indegree`` = 33 ; Geminiani et al. (2024) [#geminiani_2024]_
+   24; IO; / ; DCNp ; / ; :ref:`all_to_all`; ``affinity`` = 0.5 ; Geminiani et al. (2024) [#geminiani_2024]_
+   25; IO; /; DCNi; / ; :ref:`all_to_all`; ``affinity`` = 0.5 ; Geminiani et al. (2024) [#geminiani_2024]_
+   26; DCNi; / ; IO ; / ; :ref:`all_to_all`; ``affinity`` = 0.5 ; Geminiani et al. (2024) [#geminiani_2024]_
 
 NEST simulation
 ^^^^^^^^^^^^^^^

@@ -2,12 +2,6 @@ name: DBBS Mouse cerebellum w/ DCN and IO split in microzones
 storage:
   root: mouse_cereb_microzones.hdf5
 cell_types:
-  dcn_p:
-    spatial:
-      density: 10.5e-6  # increase to guarantee enough cells per io.
-  dcn_i:
-    spatial:
-      density: 6.0e-6  # increase to guarantee enough cells per io.
 after_placement:
   label_microzones:
     strategy: cerebellum.placement.microzones.LabelMicrozones

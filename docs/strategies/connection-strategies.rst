@@ -231,13 +231,6 @@ The algorithm consists in a connection strategy to connect IO cells, via PC, to 
 
 See bsb :doc:`documentation <bsb:connectivity/connection-strategies>`.
 
-.. _fix_out:
-
-:doc:`FixedOutdegree <bsb:bsb/bsb.connectivity>`
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-
-See bsb :doc:`documentation <bsb:connectivity/connection-strategies>`.
-
 .. _all_to_all:
 
 :doc:`AllToAll <bsb:bsb/bsb.connectivity>`

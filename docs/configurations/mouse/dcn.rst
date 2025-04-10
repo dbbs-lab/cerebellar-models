@@ -64,9 +64,9 @@ Connectivity
    :delim: ;
 
    #; Source Name; Source Branch; Target Name; Target Branch; Strategy; Specifics; References
-   19; PC; axon; DCNp; / ; :ref:`fix_out`;``outdegree`` =45; Geminiani et al. (2024) [#geminiani_2024]_
-   20; PC; axon; DCNi; / ; :ref:`fix_out`;``outdegree`` =12; Geminiani et al. (2024) [#geminiani_2024]_
-   21; mf; / ; DCNp ; / ; :ref:`fix_in`; ``indegree`` =48; Geminiani et al. (2024) [#geminiani_2024]_
+   19; PC; axon; DCNp; / ; :ref:`all_to_all`;``affinity`` =0.375; Geminiani et al. (2024) [#geminiani_2024]_
+   20; PC; axon; DCNi; / ; :ref:`all_to_all`;``affinity`` =0.18; Geminiani et al. (2024) [#geminiani_2024]_
+   21; mf; / ; DCNp ; / ; :ref:`all_to_all`; ``affinity`` =0.4; Geminiani et al. (2024) [#geminiani_2024]_
 
 
 NEST simulation

@@ -32,6 +32,7 @@ Sciences <https://dbbs.dip.unipv.it/en>`_ of the University of Pavia.
    :maxdepth: 2
    :caption: Strategies
 
+   strategies/placement-strategies
    strategies/connection-strategies
 
 .. toctree::

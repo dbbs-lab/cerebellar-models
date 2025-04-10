@@ -11,3 +11,8 @@ Module contents
 
 Submodules
 ----------
+
+.. automodule:: cerebellum.placement.microzones
+   :members:
+   :undoc-members:
+   :show-inheritance:
