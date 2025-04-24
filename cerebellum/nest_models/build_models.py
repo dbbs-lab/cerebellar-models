@@ -14,7 +14,7 @@ def _build_nest_models(
     model_dir=dirname(__file__),
     build_dir=join(_cache_path, "nest_build"),
     module_name="cerebmodule",
-    redo=False,
+    redo=True,
 ):
     """
     Build all the nestml models within the provided model directory and deploy them.
