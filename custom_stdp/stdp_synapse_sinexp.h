@@ -41,6 +41,16 @@
 #include "extended_hist_entry.h"
 #include "extended_post_history_archiving_node.h"
 
+
+#include "structural_plasticity_node.h"
+#include "connection.h"
+#include "dict_util.h"
+#include "event.h"
+#include "nest_types.h"
+#include "ring_buffer.h"
+#include "universal_data_logger.h"
+
+
 namespace nest
 {
 
@@ -118,6 +128,15 @@ EndUserDocs */
 
 // connections are templates of target identifier type (used for pointer /
 // target index addressing) derived from generic connection template
+
+
+namespace stdp_names
+{
+    const Name t_0( "t_0" );
+
+}
+
+
 
 void register_stdp_synapse_sinexp( const std::string& name );
 
@@ -217,9 +236,22 @@ private:
   double
   depress_(double tempo)
   {
-    double k = (1/C_) * std::exp((-tempo+t0_)/tau_) * std::pow(sin(2*3.14159*(tempo-t0_)/tau_), 20);
+    double k = (1/C_) * std::exp((-tempo+P_.t_0)/tau_) * std::pow(sin(2*3.14159*(tempo-P_.t_0)/tau_), 20);
     return k * Aminus_;
   }
+
+
+  inline double get_t0() const
+  {
+    return P_.t_0;
+  }
+
+  inline void set_t0(const double __t0)
+  {
+    P_.t_0 = __t0;
+  }
+
+
 
   // data members of each connection
   double weight_;
@@ -227,12 +259,26 @@ private:
   double Wmax_;
   double tau_;
   double C_;
-  double t0_;
+  //double t_0;
   double Aplus_;
   double Aminus_;
+
+
+  struct Parameters_
+  {    
+    
+    double t_0 ;
+    
+    Parameters_(){
+      t_0 = 100.0;
+    };
+  };
+
   
 
   double t_lastspike_;
+
+  Parameters_       P_;        //!< Free parameters.
 };
 
 template < typename targetidentifierT >
@@ -307,11 +353,9 @@ stdp_synapse_sinexp< targetidentifierT >::send( Event& e, size_t t, const Common
       weight_ = Wmin_;
     }
   }
-  else {
-    weight_ = weight_ + facilitate_();
-    if (weight_ >= Wmax_){
-      weight_ = Wmax_;
-    }
+  weight_ = weight_ + facilitate_();
+  if (weight_ >= Wmax_){
+    weight_ = Wmax_;
   }
   // buffer reset for old spikes
   while(buffer_pre_spikes_[0] < t_spike - 200){
@@ -342,7 +386,7 @@ stdp_synapse_sinexp< targetidentifierT >::stdp_synapse_sinexp()
   , Wmax_( 0.6 )
   , tau_(1000)
   , C_( 1.2848 )
-  , t0_( 100 )
+  //, t_0( 100 )
   , Aplus_( 0.00005 )
   , Aminus_( -0.005 )
 
@@ -361,6 +405,10 @@ stdp_synapse_sinexp< targetidentifierT >::get_status( DictionaryDatum& d ) const
   def< double >( d, names::tau, tau_ );
   def< double >( d, names::Aplus, Aplus_ );
   def< double >( d, names::Aminus, Aminus_ );
+
+
+  def< double >(d, nest::stdp_names::t_0, get_t0());
+
   def< long >( d, names::size_of, sizeof( *this ) );
 }
 
@@ -375,6 +423,9 @@ stdp_synapse_sinexp< targetidentifierT >::set_status( const DictionaryDatum& d, 
   updateValue< double >( d, names::tau, tau_ );
   updateValue< double >( d, names::Aplus, Aplus_ );
   updateValue< double >( d, names::Aminus, Aminus_ );
+
+  double tmp_t0 = get_t0();
+  updateValue<double>(d, nest::stdp_names::t_0, tmp_t0);
 
   // check if weight_ and Wmax_ has the same sign
   if ( not( ( ( weight_ >= 0 ) - ( weight_ < 0 ) ) == ( ( Wmax_ >= 0 ) - ( Wmax_ < 0 ) ) ) )
@@ -391,6 +442,8 @@ stdp_synapse_sinexp< targetidentifierT >::set_status( const DictionaryDatum& d, 
   {
     throw BadProperty( "Aminus must be non-positive." );
   }
+
+  set_t0(tmp_t0);
 }
 
 } // of namespace nest

@@ -30,3 +30,4 @@ nest::register_stdp_synapse_sinexp( const std::string& name )
 {
   nest::register_connection_model< stdp_synapse_sinexp >( name );
 }
+
