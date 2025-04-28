@@ -259,7 +259,6 @@ private:
   double Wmax_;
   double tau_;
   double C_;
-  //double t_0;
   double Aplus_;
   double Aminus_;
 
