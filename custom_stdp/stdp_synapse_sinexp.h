@@ -377,7 +377,6 @@ stdp_synapse_sinexp< targetidentifierT >::stdp_synapse_sinexp()
   , Wmax_( 0.6 )
   , tau_(1000)
   , C_( 1.2848 )
-  //, t_0( 100 )
   , Aplus_( 0.00005 )
   , Aminus_( -0.005 )
 
