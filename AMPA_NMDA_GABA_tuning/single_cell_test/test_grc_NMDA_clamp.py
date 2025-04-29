@@ -1,9 +1,10 @@
-"""Before executing this code fix MgBlock = 0.04 in the .nestml module to simulate voltage clamp protocol to compare synaptic shape with NEURON trace """
+"""Before executing this code fix MgBlock = 0.04 and multiply for Mg_block_scaling=0.47 (NEURON clamp value)
+in the .nestml module to simulate voltage clamp protocol to compare synaptic shape with NEURON trace """
 
 import matplotlib.pyplot as plt
 import numpy as np
 import nest
-
+import pandas as pd
 
 
 NMDA_g_scaling = 18.8 * 1 * 1.4     # https://github.com/dbbs-lab/catalogue/tree/main/dbbs_catalogue/mods
@@ -36,7 +37,7 @@ params_grc = {
 }
 
 # activate AMPA synapse
-syn_spec = {"weight": 4*1. , "delay": 1, "receptor_type": 2}
+syn_spec = {"weight": 1. , "delay": 1, "receptor_type": 2}
 
 # nest settings
 nest.ResetKernel()
@@ -47,7 +48,7 @@ nest.SetKernelStatus({"resolution": dt})
 # input settings
 freq = 25 # Hz
 spike_interval = 1000 / freq
-spike_times =  [float(format(freq + i * 25, ".1f")) for i in range(10)]
+spike_times =  [float(format(freq + i * 25, ".1f")) for i in range(1)]
 print('Input spike times: ', spike_times)
 
 
@@ -80,20 +81,25 @@ Mg_block_grc = multimeter_grc['Mg_block']
 I_syn_NMDA = multimeter_grc['I_syn_nmda']
 
 NMDA_E_rev = -3.7
-g_syn_NMDA = I_syn_NMDA / ((NMDA_E_rev - V_m_grc)*Mg_block_grc)
+g_syn_NMDA = I_syn_NMDA / ((NMDA_E_rev - V_m_grc) * 0.04)
 print('Number of emitted spikes: ', len(spike_times_grc))
 if len(spikes_grc) > 0:
     print('Spikes times ', spike_times_grc)
 
+# print in comparison with neuron trace
+file_path = "../NEURON_traces/NMDA_GrC.csv"
+df = pd.read_csv(file_path, delim_whitespace=True)
+df.columns = ["Time", "Current"]
+df["g_NMDA"] = df["Current"].values* 1000  /( (-40.) * 0.47 )  # multiplying 10^3 to convert in nS
 
 plt.figure()
 plt.title('NMDA conductance')
+plt.plot(df['Time']-225,df['g_NMDA'], color='gray', linestyle='dashed', label='Neuron trace')
 plt.plot(times_grc, g_syn_NMDA, 'b', label='NEST trace')
 plt.xlabel('Time [ms]')
 plt.ylabel(r'$g_{syn_{AMPA}}$ [ns]')
 plt.xlim(0,1000)
 plt.legend()
-plt.savefig('g_NMDA_test_10inputspikes.png')
 plt.show()
 
 plt.figure()
@@ -102,7 +108,6 @@ plt.plot(times_grc, V_m_grc, 'b')
 plt.xlabel('Time [ms]')
 plt.ylabel(r'$V_m$ [mV]')
 plt.axhline(params_grc['V_th'], color='r', linestyle='--')
-plt.savefig('V_m_NMDA_test_10inputspikes.png')
 plt.show()
 
 plt.figure()
@@ -110,7 +115,6 @@ plt.title('NMDA current')
 plt.plot(times_grc, I_syn_NMDA, 'b')
 plt.xlabel('Time [ms]')
 plt.ylabel(r'$I_{syn_{NMDA}}$ [pA]')
-plt.savefig('I_NMDA_test_10inputspikes.png')
 plt.show()
 
 plt.figure()
@@ -118,7 +122,6 @@ plt.title('Mg block')
 plt.plot(times_grc, Mg_block_grc, 'b')
 plt.xlabel('Time [ms]')
 plt.ylabel(r'Mg_Block')
-plt.savefig('Mg_block_NMDA_test_10inputspikes.png')
 plt.show()
 
 print('Max conductance NMDA: ', max(g_syn_NMDA))
