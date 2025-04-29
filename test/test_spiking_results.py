@@ -91,7 +91,50 @@ class TestSpikePlots(
         self.assertEqual(len(empty_report.all_spikes), 0)
         self.assertEqual(empty_report.nb_neurons.size, 0)
         self.assertEqual(empty_report.populations, [])
+        with self.assertRaises(ValueError):
+            self.simulationReport.time_from = -1
+        with self.assertRaises(ValueError):
+            self.simulationReport.time_from = 100000
+        with self.assertRaises(ValueError):
+            self.simulationReport.time_from = -1
+        with self.assertRaises(ValueError):
+            self.simulationReport.time_to = 100000
 
+    def test_update_spike_report(self):
+        plot = SpikePlot(
+            (10, 10),
+            self.scaffold,
+            "mf_stimulus",
+            None,
+            None,
+            deepcopy(self.simulationReport.all_spikes),
+            np.copy(self.simulationReport.nb_neurons),
+            self.simulationReport.populations.copy(),
+        )
+        plot.is_updated = True
+
+        plot2 = ScaffoldPlot((10, 10), None)
+        self.simulationReport.add_plot("simulation", plot)
+        self.simulationReport.add_plot("scaffold", plot2)
+        self.assertAll(
+            np.array(
+                [
+                    np.all(s1 == s2)
+                    for s1, s2 in zip(self.simulationReport.all_spikes, plot.all_spikes)
+                ]
+            )
+        )
+        self.assertAll(self.simulationReport.nb_neurons == plot.nb_neurons)
+        self.assertAll(np.array(self.simulationReport.populations) == np.array(plot.populations))
+        self.assertFalse(plot.is_updated)
+        self.assertEqual(self.simulationReport.simulation_name, plot.simulation_name)
+        self.assertEqual(self.scaffold, plot2.scaffold)
+        self.simulationReport.time_to = 500.0
+        self.simulationReport.time_from = 500.0
+        self.assertEqual(plot.time_to, 500.0)
+        self.assertEqual(plot.time_from, 500.0)
+
+    def test_errors_spike_plot(self):
         with self.assertRaises(ValueError):
             SpikePlot((10, 10), self.scaffold, "bla", None, None, None, None, None)
         with self.assertRaises(ValueError):
@@ -138,46 +181,6 @@ class TestSpikePlots(
                 nb_neurons=[1],
                 populations=["cell"],
             )
-        with self.assertRaises(ValueError):
-            self.simulationReport.time_from = -1
-        with self.assertRaises(ValueError):
-            self.simulationReport.time_from = 100000
-        with self.assertRaises(ValueError):
-            self.simulationReport.time_from = -1
-        with self.assertRaises(ValueError):
-            self.simulationReport.time_to = 100000
-        plot = SpikePlot(
-            (10, 10),
-            self.scaffold,
-            "mf_stimulus",
-            None,
-            None,
-            deepcopy(self.simulationReport.all_spikes),
-            np.copy(self.simulationReport.nb_neurons),
-            self.simulationReport.populations.copy(),
-        )
-        plot.is_updated = True
-
-        plot2 = ScaffoldPlot((10, 10), None)
-        self.simulationReport.add_plot("simulation", plot)
-        self.simulationReport.add_plot("scaffold", plot2)
-        self.assertAll(
-            np.array(
-                [
-                    np.all(s1 == s2)
-                    for s1, s2 in zip(self.simulationReport.all_spikes, plot.all_spikes)
-                ]
-            )
-        )
-        self.assertAll(self.simulationReport.nb_neurons == plot.nb_neurons)
-        self.assertAll(np.array(self.simulationReport.populations) == np.array(plot.populations))
-        self.assertFalse(plot.is_updated)
-        self.assertEqual(self.simulationReport.simulation_name, plot.simulation_name)
-        self.assertEqual(self.scaffold, plot2.scaffold)
-        self.simulationReport.time_to = 500.0
-        self.simulationReport.time_from = 500.0
-        self.assertEqual(plot.time_to, 500.0)
-        self.assertEqual(plot.time_from, 500.0)
 
     def test_raster_psth(self):
         plot = RasterPSTHPlot(
@@ -211,11 +214,12 @@ class TestSpikePlots(
         )
         self.assertEqual(scatter.get_alpha(), 1)
         self.assertTrue(scatter.get_rasterized())
+        mf_spikes = self.simulationReport.all_spikes[0]
         mf_spike_times = (
             np.array(
                 (
-                    self.simulationReport.all_spikes[0].magnitude / self.simulationReport.dt,
-                    self.simulationReport.all_spikes[0].array_annotations["senders"] - 1,
+                    mf_spikes.magnitude / self.simulationReport.dt,
+                    np.unique(mf_spikes.array_annotations["senders"], return_inverse=True)[1],
                 )
             )
             * np.array([[self.simulationReport.dt, 1.0]]).T
@@ -224,6 +228,31 @@ class TestSpikePlots(
         self.assertEqual(len(hist), 30)
         self.assertEqual(hist.orientation, "vertical")
 
+    def test_relative_time(self):
+        plot = RasterPSTHPlot(
+            (15, 10),
+            scaffold=self.scaffold,
+            simulation_name="basal_activity",
+            time_from=None,
+            time_to=None,
+            all_spikes=self.simulationReport.all_spikes,
+            nb_neurons=self.simulationReport.nb_neurons,
+            populations=self.simulationReport.populations,
+            dict_colors=self.simulationReport.colors,
+            nb_bins=31,
+        )
+        xlims = np.array([self.simulationReport.time_from, self.simulationReport.time_to])
+        mf_spikes = self.simulationReport.all_spikes[0]
+        mf_spike_times = (
+            np.array(
+                (
+                    mf_spikes.magnitude / self.simulationReport.dt,
+                    np.unique(mf_spikes.array_annotations["senders"], return_inverse=True)[1],
+                )
+            )
+            * np.array([[self.simulationReport.dt, 1.0]]).T
+        )
+        # test also if absence of color
         del plot.dict_colors["mossy_fibers"]
         plot.plot(
             relative_time=True,
@@ -245,6 +274,42 @@ class TestSpikePlots(
         self.assertEqual(len(hist), 30)
         self.assertEqual(hist.orientation, "horizontal")
 
+    def test_raster_psth_subinterval(self):
+        # check for sub interval
+        xlims = np.array([200.0, 800.0])
+        plot = RasterPSTHPlot(
+            (15, 10),
+            scaffold=self.scaffold,
+            simulation_name="basal_activity",
+            time_from=xlims[0],
+            time_to=xlims[1],
+            all_spikes=self.simulationReport.all_spikes,
+            nb_neurons=self.simulationReport.nb_neurons,
+            populations=self.simulationReport.populations,
+            dict_colors=self.simulationReport.colors,
+            nb_bins=31,
+        )
+        plot.plot()
+        loc_mf_spikes = self.simulationReport.all_spikes[0].time_slice(xlims[0], xlims[1])
+        mf_spike_times = (
+            np.array(
+                (
+                    loc_mf_spikes.magnitude / self.simulationReport.dt,
+                    np.unique(loc_mf_spikes.array_annotations["senders"], return_inverse=True)[1],
+                )
+            )
+            * np.array([[self.simulationReport.dt, 1.0]]).T
+        )
+        self.assertAll(np.array(plot.get_ax()[0].get_xlim()) == xlims)
+        self.assertAll(np.array(plot.get_ax()[1].get_xlim()) == xlims)
+        self.assertEqual(len(plot.get_ax()[0].collections), 1)
+        scatter = plot.get_ax()[0].collections[0]
+        self.assertAll(np.absolute(mf_spike_times - np.array(scatter.get_offsets()).T) <= 1e-7)
+        self.assertEqual(len(plot.get_ax()[1].containers), 1)
+        hist = plot.get_ax()[1].containers[0]
+        self.assertEqual(len(hist), 30)
+
+    def test_raster_psth_empty(self):
         # Test that an empty plot does not throw error.
         plot = RasterPSTHPlot(
             (15, 10),
@@ -258,6 +323,8 @@ class TestSpikePlots(
         )
         plot.plot()
         self.assertEqual(len(plot.get_axes()), 0)
+
+    def test_raster_psth_bins_error(self):
         with self.assertRaises(ValueError):
             RasterPSTHPlot(
                 (15, 10),
@@ -298,6 +365,8 @@ class TestSpikePlots(
         self.assertAll(plot.get_ax().lines[0].get_path().vertices[:, 1] == plot.firing_rates[:, 0])
         plot.plot(relative_time=True)
         self.assertAll(np.absolute(np.array(plot.get_ax().get_xlim()) - xlims + xlims[0]) <= 1e-7)
+
+    def test_firing_rates_empty(self):
         # Test that an empty plot does not throw error.
         plot = FiringRatesPlot(
             (15, 6),
@@ -312,6 +381,7 @@ class TestSpikePlots(
         plot.plot()
         self.assertEqual(len(plot.get_axes()), 0)
 
+    def test_firing_rates_error_kernel(self):
         with self.assertRaises(TypeError):
             FiringRatesPlot(
                 (15, 10),
@@ -350,6 +420,7 @@ class TestSpikePlots(
         self.assertEqual(len(hist), 50)
         self.assertEqual(hist.orientation, "horizontal")
 
+    def test_plot_isis_empty(self):
         # Test that an empty plot does not throw error.
         plot = ISIPlot(
             (15, 10),
@@ -364,6 +435,8 @@ class TestSpikePlots(
         )
         plot.plot()
         self.assertEqual(len(plot.get_axes()), 0)
+
+    def test_plot_isis_error_bins(self):
         with self.assertRaises(ValueError):
             ISIPlot(
                 (15, 10),
@@ -411,6 +484,7 @@ class TestSpikePlots(
             np.absolute(np.array(plot.get_ax().get_xlim()) - np.array([0, 40.0])) <= 1e-7
         )
 
+    def test_freq_plot_empty(self):
         # Test that an empty plot does not throw error.
         plot = FrequencyPlot(
             (15, 10),
@@ -461,6 +535,7 @@ class TestSpikePlots(
         for expected, tested in zip([v[1] for v in plot._values], plot.get_isis_values().values()):
             self.assertAll(np.array(tested) == np.array(expected))
 
+    def test_sim_table_empty(self):
         # Test that an empty plot does not throw error.
         plot = SimResultsTable(
             (5, 2.5),
@@ -519,6 +594,30 @@ class TestExtractISIs(unittest.TestCase):
         enough_spikes[u] = c >= 2
         self.assertEqual(len(isis), np.count_nonzero(enough_spikes))
         loc_spikes = spikes[:, enough_spikes]
+        for i in range(len(isis)):
+            self.assertTrue(
+                np.absolute(isis[i] - np.mean(np.diff(np.where(loc_spikes[:, i])[0] * 0.1)) * ms)
+                <= 1e-7
+            )
+
+    def test_extract_isis_shift(self):
+        time_shift = 0.5
+        spikes = np.random.random((20, 10)) >= 0.85
+        spike_times = np.where(spikes)[0]
+        senders = np.where(spikes)[1]
+        st = SpikeTrain(
+            (spike_times + 1) * 0.1 + time_shift,
+            units="ms",
+            array_annotations={"senders": senders},
+            t_start=time_shift,
+            t_stop=2 + time_shift,
+        )
+        enough_spikes = np.zeros(10, dtype=bool)
+        u, c = np.unique(senders, return_counts=True)
+        enough_spikes[u] = c >= 2
+        loc_spikes = spikes[:, enough_spikes]
+        isis = extract_isis(st, 0.1)
+        self.assertEqual(len(isis), np.count_nonzero(enough_spikes))
         for i in range(len(isis)):
             self.assertTrue(
                 np.absolute(isis[i] - np.mean(np.diff(np.where(loc_spikes[:, i])[0] * 0.1)) * ms)
