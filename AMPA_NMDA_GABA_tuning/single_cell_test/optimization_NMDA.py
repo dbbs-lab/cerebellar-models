@@ -1,3 +1,6 @@
+"""Before executing this code fix MgBlock = 0.04 and multiply for Mg_block_scaling=0.47 (NEURON clamp value)
+in the .nestml module to simulate voltage clamp protocol to compare synaptic shape with NEURON trace """
+
 from scipy.optimize import minimize
 import matplotlib.pyplot as plt
 import numpy as np
@@ -27,11 +30,11 @@ params_grc = {
     "NMDA_block": 1,
     "NMDA_g_peak": 0.0983349791,
     "NMDA_Tau_rise": 5.1937904737528555,
-    "NMDA_Tau_decay1": 0.1538075620377694,
-    "NMDA_Tau_decay2": 27.190522726451153,
+    "NMDA_Tau_decay1": 24.57775773680422,
+    "NMDA_Tau_decay2": 193.4353325366958,
     "NMDA_A_rise":  0.004458015923894151*NMDA_g_scaling,
-    "NMDA_A1_decay1": 9.999999999752668e-07*NMDA_g_scaling,
-    "NMDA_A2_decay2": 0.0037741253463865533*NMDA_g_scaling,
+    "NMDA_A1_decay1": 0.0932765171732793*NMDA_g_scaling,
+    "NMDA_A2_decay2": 0.0051941479889267925*NMDA_g_scaling,
 }
 
 def mae(y_true, y_pred):
@@ -70,7 +73,7 @@ def single_sim(params_grc):
     I_syn_NMDA = multimeter_grc['I_syn_nmda']
     V_m_grc = multimeter_grc['V_m']
     NMDA_E_rev = -3.7
-    g_syn_NMDA = I_syn_NMDA / ((NMDA_E_rev - V_m_grc) * 0.04)
+    g_syn_NMDA = I_syn_NMDA / ((NMDA_E_rev - V_m_grc) * 0.04) # 0.04 is the max of the mg_block for not having oscillations near resting
 
     return times_grc, g_syn_NMDA
 
@@ -78,15 +81,13 @@ def extract_trace():
     file_path = "../NEURON_traces/NMDA_GrC.csv"
     df = pd.read_csv(file_path, delim_whitespace=True)
     df.columns = ["Time", "Current"]
-    df["g_NMDA"] = df["Current"].values / ((-40.) * 1000 * 0.47)
+    df["g_NMDA"] = df["Current"].values * 1000 / ((-40.)  * 0.47) # 0.47 is the mg_block value associated to -40 mV
 
     return df["Time"], df["g_NMDA"]
 
 def objective_function(params):
-    # Estrai i parametri ottimizzati
     NMDA_g_peak, NMDA_Tau_rise, NMDA_Tau_decay1, NMDA_Tau_decay2, NMDA_A_rise, NMDA_A1_decay1, NMDA_A2_decay2 = params
 
-    # Aggiorna i parametri del modello
     params_grc["NMDA_g_peak"] = NMDA_g_peak
     params_grc["NMDA_Tau_rise"] = NMDA_Tau_rise
     params_grc["NMDA_Tau_decay1"] = NMDA_Tau_decay1
@@ -97,32 +98,30 @@ def objective_function(params):
 
     times_grc, g_syn_NMDA= single_sim(params_grc)
     trace_t, trace_g = extract_trace()
-    mask_t = np.logical_and(times_grc <= 300, times_grc > 250)
+    mask_t = np.logical_and(times_grc <= 400, times_grc > 250)
 
     return mse(trace_g[mask_t], g_syn_NMDA[mask_t])
 
 
-# Definisci i valori iniziali dei parametri
 initial_params = [
-    0.0510351113,
+    0.0983349791,
     5.1937904737528555,
-    0.1538075620377694,
-    27.190522726451153,
+    24.57775773680422,
+    193.4353325366958,
     0.004458015923894151 * NMDA_g_scaling,
-    9.999999999752668e-07 * NMDA_g_scaling,
-    0.0037741253463865533 * NMDA_g_scaling,
+    0.0932765171732793 * NMDA_g_scaling,
+    0.0051941479889267925 * NMDA_g_scaling,
 ]
 
-# Definisci i limiti (se necessario)
-k = 5000.
+k = 1000.
 bounds = [
     (0, initial_params[0]*k),  # AMPA_g_peak
     (0, initial_params[1]*k),  # AMPA_Tau_r
     (0, initial_params[2]*k),  # AMPA_Tau_d1
     (0, initial_params[3]*k),  # AMPA_Tau_d2
-    (0, initial_params[4]*k**2),  # AMPA_A_r
-    (0, initial_params[5]*k**2),  # AMPA_A_d1
-    (0, initial_params[6]*k**2)  # AMPA_A_d2
+    (0, initial_params[4]*k),  # AMPA_A_r
+    (0, initial_params[5]*k),  # AMPA_A_d1
+    (0, initial_params[6]*k)  # AMPA_A_d2
 ]
 
 # Ottimizzazione usando il metodo 'Nelder-Mead' o 'L-BFGS-B'
@@ -153,8 +152,12 @@ print("Parametri iniziali: ", initial_params)
 times_grc, g_syn_NMDA = single_sim(params_grc)
 trace_t, trace_g = extract_trace()
 
+plt.title('NMDA conductance')
 plt.plot(times_grc, g_syn_NMDA, label=f"NMDA")
 plt.plot(times_grc, trace_g, label=f"Recordings", linestyle="dashed")
 plt.legend()
 plt.xlim(240, 600)
+plt.xlabel('Time [ms]')
+plt.ylabel(r'$g_{syn_{AMPA}}$ [ns]')
+plt.savefig('opt_NMDA.png')
 plt.show()

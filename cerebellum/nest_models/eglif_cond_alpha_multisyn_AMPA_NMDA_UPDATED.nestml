@@ -98,13 +98,13 @@ neuron eglif_cond_alpha_multisyn3:
 
         # Recordable Magnesium block output
 
-        recordable inline Mg_block real = 0.04 # 1 / (1 + exp((NMDA_Vact - V_m_2) / NMDA_Sact))
+        recordable inline Mg_block real =  1 / (1 + exp((NMDA_Vact - V_m_2) / NMDA_Sact)) # 0.04
 
 
         # Update synaptic current
 
         recordable inline I_syn_ampa pA = -(convolve(g_AMPA_d1, AMPA) + convolve(g_AMPA_d2, AMPA)) * nS * (V_m - AMPA_E_rev)
-        recordable inline I_syn_nmda pA = -(convolve(g_NMDA_d1, NMDA) + convolve(g_NMDA_d2, NMDA))* nS * (V_m  - NMDA_E_rev) * Mg_block * NMDA_block * MG_block_scaling_clamp
+        recordable inline I_syn_nmda pA = -(convolve(g_NMDA_d1, NMDA) + convolve(g_NMDA_d2, NMDA))* nS * (V_m  - NMDA_E_rev) * Mg_block * NMDA_block # * MG_block_scaling_clamp
         recordable inline I_syn_gaba_a pA = -convolve(g_GABAA, GABA_A) * nS * (V_m - GABA_A_E_rev)
         recordable inline I_syn pA =  I_syn_ampa + I_syn_nmda + I_syn_gaba_a
 
@@ -139,7 +139,7 @@ neuron eglif_cond_alpha_multisyn3:
         AMPA_Tau_d2 ms =  3.7435528414523125 ms
 
 
-        MG_block_scaling_clamp real = 0.46161414343735935
+        # MG_block_scaling_clamp real = 0.46161414343735935 # to uncomment if clamp
         NMDA_g_scaling real = 18.8 * 1 * 1.4
         NMDA_g_peak nS = 0.04621744018494022 nS # peak conductance
         NMDA_E_rev mV = -3.7 mV  # reversal potential
