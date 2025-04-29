@@ -1,5 +1,4 @@
 import matplotlib.pyplot as plt
-import nest
 import numpy as np
 import nest
 import pandas as pd
@@ -24,13 +23,13 @@ params_grc = {
     "k_2": 0.041407868,
     "A1": 0.01,
     "A2": -0.94,
-    "AMPA_g_peak": 0.4*3,
-    "AMPA_Tau_r": 0.36*k,
-    "AMPA_Tau_d1": 0.34*k,
-    "AMPA_Tau_d2": 3.7*k,
-    "AMPA_A_r": 0.017*AMPA_g_scaling*k,
-    "AMPA_A_d1": 0.0025*AMPA_g_scaling*k,
-    "AMPA_A_d2": 0.007*AMPA_g_scaling*k,
+    "AMPA_g_peak": 1.3759309170370668,
+    "AMPA_Tau_r": 0.2544471307219706,
+    "AMPA_Tau_d1": 0.46069430011332685,
+    "AMPA_Tau_d2": 3.880472444625639,
+    "AMPA_A_r": 1.6901118286685446,
+    "AMPA_A_d1": 0.8042811722460251,
+    "AMPA_A_d2": 1.41112229607203,
 }
 
 # activate AMPA synapse
@@ -54,7 +53,7 @@ input_spikes = nest.Create("spike_generator", params={"spike_times": spike_times
 
 nest.Connect(input_spikes,grc, syn_spec = dict(syn_spec, synapse_model="static_synapse"))
 
-multimeter = nest.Create("multimeter", params={"interval": 0.1,
+multimeter = nest.Create("multimeter", params={"interval": 0.025,
                           "record_from": ["V_m","V_m_2","I_dep","I_adap","I_syn","I_syn_ampa","I_syn_nmda",
                                           "I_syn_gaba_a", "Mg_block"], "record_to": "memory", "label": "grc_multimeter"})
 spike_recorder  = nest.Create("spike_recorder",params={"record_to": "memory", "label": "grc_spike_recorder"})
@@ -64,7 +63,7 @@ nest.Connect(grc, spike_recorder)
 duration = np.max(spike_times)+200
 print('The simulation duration is ', duration)
 
-nest.Simulate(duration)
+nest.Simulate(1000)
 
 # Collect results
 multimeter_grc= multimeter.get()['events']
@@ -98,19 +97,12 @@ df["g_AMPA"] = df["Current"].values / (-40.) * 1000   # multiplying 10^3 to conv
 
 plt.figure()
 plt.title('AMPA conductance')
-plt.plot(df['Time']-224,df['g_AMPA'], color='gray', linestyle='dashed', label='Neuron trace')
+#plt.plot(df['Time'],df['g_AMPA'], color='gray', linestyle='dashed', label='Neuron trace')
 plt.plot(times_grc, g_syn_AMPA, 'b', label='NEST trace')
 plt.xlabel('Time [ms]')
 plt.ylabel(r'$g_{syn_{AMPA}}$ [ns]')
-plt.xlim(0, 50)
+#plt.xlim(245, 260)
 plt.legend()
-plt.show()
-
-plt.figure()
-plt.title('AMPA conductance')
-plt.plot(times_grc, g_syn_AMPA, 'b')
-plt.xlabel('Time [ms]')
-plt.ylabel(r'$g_{syn_{AMPA}}$ [ns]')
 plt.show()
 
 plt.figure()

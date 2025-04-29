@@ -64,23 +64,34 @@ neuron eglif_cond_alpha_multisyn3:
         I_dep pA = 0 * pA                   # Depolarizing spike-triggered current
         I_adap pA = 0 * pA                  # Adaptation current
         r integer = 0                       # Refractory state
-        g_AMPA real = 0
+        g_AMPA_d1 real = 0
+        g_AMPA_d2 real = 0
+        g_NMDA_d1 real = 0
+        g_NMDA_d2 real = 0
         g_NMDA real = 0
         g_GABAA real = 0
         g_GABAB real = 0
-        g_AMPA$ real = AMPA_g_peak  # we tuned with k factor not with function from https://github.com/nest/nestml/blob/master/models/neurons/hill_tononi_neuron.nestml because single exp
-        g_NMDA$ real = NMDA_g_peak  # we tuned with k factor not with function from https://github.com/nest/nestml/blob/master/models/neurons/hill_tononi_neuron.nestml because single exp
+        g_AMPA_r2 real = AMPA_g_peak
+        g_AMPA_r1 real = AMPA_g_peak  # we tuned with k factor not with function from https://github.com/nest/nestml/blob/master/models/neurons/hill_tononi_neuron.nestml because single exp
+        g_NMDA_r1 real = NMDA_g_peak  # we tuned with k factor not with function from https://github.com/nest/nestml/blob/master/models/neurons/hill_tononi_neuron.nestml because single exp
+        g_NMDA_r2 real = NMDA_g_peak
         g_GABAA$ real = GABA_A_g_peak
 
     equations:
-        
-        # exponential kernels for the postsynaptic receptor
-        
-        kernel g_AMPA' = g_AMPA$ - AMPA_A_d1  * (g_AMPA / AMPA_Tau_d1) - AMPA_A_d2 * (g_AMPA / AMPA_Tau_d2),
-               g_AMPA$' =  AMPA_A_r * (-g_AMPA$ / AMPA_Tau_r)
 
-        kernel g_NMDA' =  g_NMDA$ - NMDA_A1_decay1 * (g_NMDA / NMDA_Tau_decay1) - NMDA_A2_decay2 * (g_NMDA /NMDA_Tau_decay2),
-               g_NMDA$' = NMDA_A_rise * (-g_NMDA$ / NMDA_Tau_rise)
+        # exponential kernels for the postsynaptic receptor
+
+        kernel g_AMPA_d1' = g_AMPA_r1 * AMPA_A_d1  - (g_AMPA_d1/ AMPA_Tau_d1),
+               g_AMPA_r1' =  AMPA_A_r * (-g_AMPA_r1 / AMPA_Tau_r)
+
+        kernel g_AMPA_d2' = g_AMPA_r2 * AMPA_A_d2  - (g_AMPA_d2/ AMPA_Tau_d2),
+               g_AMPA_r2' =  AMPA_A_r * (-g_AMPA_r2 / AMPA_Tau_r)
+
+        kernel g_NMDA_d1' =  g_NMDA_r1 * NMDA_A1_decay1 - (g_NMDA_d1 / NMDA_Tau_decay1),
+               g_NMDA_r1' = NMDA_A_rise * (-g_NMDA_r1 / NMDA_Tau_rise)
+
+        kernel g_NMDA_d2' =  g_NMDA_r2 * NMDA_A2_decay2 - (g_NMDA_d2 / NMDA_Tau_decay2),
+               g_NMDA_r2' = NMDA_A_rise * (-g_NMDA_r2 / NMDA_Tau_rise)
 
         kernel g_GABAA' = g_GABAA$ - g_GABAA / GABA_A_Tau_2,
                g_GABAA$' = -g_GABAA$ / GABA_A_Tau_1
@@ -89,17 +100,17 @@ neuron eglif_cond_alpha_multisyn3:
 
         recordable inline Mg_block real = 0.04 # 1 / (1 + exp((NMDA_Vact - V_m_2) / NMDA_Sact))
 
-        
+
         # Update synaptic current
 
-        recordable inline I_syn_ampa pA = -convolve(g_AMPA, AMPA) * nS * (V_m - AMPA_E_rev)
-        recordable inline I_syn_nmda pA = -convolve(g_NMDA, NMDA) * nS * (V_m  - NMDA_E_rev) * Mg_block * NMDA_block * MG_block_scaling_clamp
+        recordable inline I_syn_ampa pA = -(convolve(g_AMPA_d1, AMPA) + convolve(g_AMPA_d2, AMPA)) * nS * (V_m - AMPA_E_rev)
+        recordable inline I_syn_nmda pA = -(convolve(g_NMDA_d1, NMDA) + convolve(g_NMDA_d2, NMDA))* nS * (V_m  - NMDA_E_rev) * Mg_block * NMDA_block * MG_block_scaling_clamp
         recordable inline I_syn_gaba_a pA = -convolve(g_GABAA, GABA_A) * nS * (V_m - GABA_A_E_rev)
         recordable inline I_syn pA =  I_syn_ampa + I_syn_nmda + I_syn_gaba_a
-        
+
         # Update membrane potential, adaptation and spike triggered currents
         # WARNING: SIGN BELOW IS INCORRECT FOR A LIF MODEL -> Should be V_m' = - (V_m - E_L) / tau_m + ...
-        V_m' = (V_m - E_L) / tau_m + (I_e + I_stim - I_adap + I_dep + I_syn) / C_m 
+        V_m' = (V_m - E_L) / tau_m + (I_e + I_stim - I_adap + I_dep + I_syn) / C_m
         I_dep' = - I_dep * k_1 / ms
         I_adap' = (V_m - E_L) * (k_adap * nS / ms) - I_adap * (k_2 / ms)
 
@@ -111,14 +122,14 @@ neuron eglif_cond_alpha_multisyn3:
         t_ref ms = 0.0 ms            # Refractory period
         I_e pA = 0 pA                # Constant endogenous current
         V_min mV = -150.0 mV         # Minimal membrane potential value
-        V_min_nmda mV = -40 mV       # Minimal membrane potential value NMDA  
+        V_min_nmda mV = -40 mV       # Minimal membrane potential value NMDA
         V_max_nmda mV = 40 mV        # Maxmium membrane potential value NMDA
         I_AMPA pA = 10 pA
         V_th mV = -50.4 mV           # Spike Threshold
-        lambda_0 real = 0.001 / ms    
+        lambda_0 real = 0.001 / ms
 
         AMPA_g_peak nS = 0.4025071911 nS
-        AMPA_g_scaling nS = 1.2 * 1 * 35 nS
+        AMPA_g_scaling nS = 1.2 * 1 * 1.4 nS
         AMPA_E_rev mV = 0.0 mV   # reversal potential
         AMPA_A_r real = 0.016880774981067756 * AMPA_g_scaling
         AMPA_Tau_r ms = 0.35863884707513854 ms
@@ -129,7 +140,7 @@ neuron eglif_cond_alpha_multisyn3:
 
 
         MG_block_scaling_clamp real = 0.46161414343735935
-        NMDA_g_scaling real = 18.8 * 1 * 35
+        NMDA_g_scaling real = 18.8 * 1 * 1.4
         NMDA_g_peak nS = 0.04621744018494022 nS # peak conductance
         NMDA_E_rev mV = -3.7 mV  # reversal potential
         NMDA_Tau_rise ms = 14.648 ms
@@ -143,7 +154,7 @@ neuron eglif_cond_alpha_multisyn3:
         NMDA_block real = 0
         MGBlock_SpikeInstant mV = 20 mV
 
-    
+
         GABA_A_g_peak nS = 0.33 nS   # peak conductance
         GABA_A_Tau_1 ms = 1.0 ms     # rise timecompute_synapse_constant
         GABA_A_Tau_2 ms = 7.0 ms     # decay time, Tau_1 < Tau_2
@@ -159,12 +170,12 @@ neuron eglif_cond_alpha_multisyn3:
 
     internals:
         RefractoryCounts integer = steps(t_ref) # refractory time in steps
-        
+
 
     input:
 
         AMPA <- spike
-        NMDA <- spike  
+        NMDA <- spike
         GABA_A <- spike
         I_stim pA <- continuous         # external stimulation current
 
@@ -172,13 +183,13 @@ neuron eglif_cond_alpha_multisyn3:
         spike
 
     update:
-    
+
         V_m = max(V_m, V_min)
         V_m_2 = V_m
         integrate_odes()
-        
 
-        
+
+
         if r > 0:
             r -= 1
             V_m = V_reset
