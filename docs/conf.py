@@ -6,20 +6,27 @@
 
 # -- Path setup --------------------------------------------------------------
 
+import importlib.metadata
+
 # If extensions (or modules to document with autodoc) are in another directory,
 # add these directories to sys.path here. If the directory is relative to the
 # documentation root, use os.path.abspath to make it absolute, like shown here.
 #
-# import os
+from os.path import dirname, join
+
 # import sys
 # sys.path.insert(0, os.path.abspath('.'))
 
+# Fetch the `__version__`
+proj_folder = dirname(dirname(__file__))
+bsb_init_file = join(proj_folder, "pyproject.toml")
 
 # -- Project information -----------------------------------------------------
 
 project = "Cerebellum"
-copyright = "2022, DBBS Lab"
-author = "DBBS Lab"
+copyright = "2025, DBBS University of Pavia"
+author = "DBBS University of Pavia"
+release = importlib.metadata.version("cerebellum")
 
 
 # -- General configuration ---------------------------------------------------
@@ -43,6 +50,9 @@ intersphinx_mapping = {
     "neo": ("https://neo.readthedocs.io/en/latest/", None),
 }
 
+autoclass_content = "both"
+autodoc_typehints = "both"
+
 # Add any paths that contain templates here, relative to this directory.
 templates_path = ["_templates"]
 exclude_patterns = [
@@ -64,6 +74,12 @@ numfig = True  # allow figure numbering
 # a list of builtin themes.
 #
 html_theme = "furo"
+
+html_context = {
+    "maintainer": "Dimitri Rodarie",
+    "project_pretty_name": "Cerebellum",
+    "projects": {"DBBS Scaffold": "https://github.com/dbbs/cerebellum"},
+}
 
 # Add any paths that contain custom static files (such as style sheets) here,
 # relative to this directory. They are copied after the builtin static files,

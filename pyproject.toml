@@ -25,7 +25,7 @@ test = [
 ]
 docs = [
     "sphinx~=7.0",
-    "furo~=2023.9"
+    "furo~=2024.0"
 ]
 dev = [
     "cerebellum[test,docs]",
@@ -33,6 +33,11 @@ dev = [
     "black~=25.1.0",
     "isort~=6.0.0",
     "bump-my-version~=0.21"
+]
+
+[dependency-groups]
+dev = [
+  "cerebellum[dev]",
 ]
 
 [project.urls]
