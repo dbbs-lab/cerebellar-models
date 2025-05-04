@@ -1,4 +1,5 @@
 from collections import deque
+from copy import deepcopy
 
 import numpy as np
 from bsb import AllenStructure, NrrdDependencyNode, config, pool_cache, types
@@ -16,13 +17,13 @@ class RotationReminder:
 
         :param last_rotation: Last rotation applied to the morphology's points.
         """
-        self.last_rotation = last_rotation
-        self.original_rotation = last_rotation
+        self.last_rotation = deepcopy(last_rotation)
+        self.original_rotation = deepcopy(last_rotation)
         if rotation_to_correct is None:
             self.rotation_to_correct = Rotation.from_euler("xyz", np.zeros(3))
         else:
-            self.rotation_to_correct = rotation_to_correct
-        self.old_diff_rotation = old_diff_rotation
+            self.rotation_to_correct = deepcopy(rotation_to_correct)
+        self.old_diff_rotation = deepcopy(old_diff_rotation)
 
     def copy(self):
         return RotationReminder(
@@ -244,7 +245,7 @@ class MorphologyBender:
             self.fix_orientation(branch, i), source
         )
         diff_rotation = (new_rotation * old_rots.last_rotation.inv()).as_euler("xyz")
-        diff_rotation[diff_rotation < 1e-3] = 0
+        diff_rotation[np.absolute(diff_rotation) < 1e-5] = 0
         scaled_diff_rotation = None
         inc = 1.0
         branch_labels = list(branch.labelsets[branch.labels[i]])
@@ -419,8 +420,8 @@ class MorphologyBender:
                     if np.isin(list(branch_labels), self.deform).any():
                         try:
                             rotation = self.rotate_point(last_point, branch, i, old_rots)
-                            old_rots.original_rotation = old_rots.original_rotation * rotation
                             branch.root_rotate(rotation, downstream_of=last_index)
+                            old_rots.original_rotation = old_rots.original_rotation * rotation
                         except ValueError as _:
                             self.delete_point(branch, i)
                             continue
