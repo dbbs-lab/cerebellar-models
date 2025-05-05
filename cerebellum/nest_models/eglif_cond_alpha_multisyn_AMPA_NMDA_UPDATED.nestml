@@ -98,7 +98,7 @@ neuron eglif_cond_alpha_multisyn3:
 
         # Recordable Magnesium block output
 
-        recordable inline Mg_block real =  1 / (1 + exp((NMDA_Vact - V_m_2) / NMDA_Sact)) # 0.04
+        recordable inline Mg_block real =  1 / (1 + exp((v0_block - V_m_2) / k_block)) # 0.04
 
 
         # Update synaptic current
@@ -149,8 +149,8 @@ neuron eglif_cond_alpha_multisyn3:
         NMDA_A2 real = 6.062937306724449e-06 * NMDA_g_scaling
         NMDA_Tau_d1 ms = 21.250 ms
         NMDA_Tau_d2 ms = 128.771 ms
-        NMDA_Vact mV = -20.0 mV      # inactive for V << Vact, inflection of sigmoid
-        NMDA_Sact mV = 13 mV        # scale of inactivation
+        v0_block mV = -20.0 mV      # inactive for V << Vact, inflection of sigmoid
+        k_block mV = 13 mV        # scale of inactivation
         NMDA_block real = 0
         MGBlock_SpikeInstant mV = 20 mV
 
