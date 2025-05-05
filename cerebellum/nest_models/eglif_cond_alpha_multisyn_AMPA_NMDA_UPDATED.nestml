@@ -29,7 +29,7 @@ Here, the synapse `i` is excitatory or inhibitory depending on the value of :mat
 Neuron produces spikes stochastically according to a point process with the firing intensity:
 
 .. math::
-  \lambda = \lambda_0 \cdot e^{\dfrac{V_m -V_{th}}{\tau_V}}
+  \lambda = \lambda_0 \cdot e^{\dfrac{V_m-V_{th}}{\tau_V}}
 
 In case of spike emission, the spike-triggered adaptation currents :math:`I_{adap}` and
 :math:`I_{dep}` are respectively increased and set by their respective constant
@@ -71,11 +71,11 @@ neuron eglif_cond_alpha_multisyn3:
         g_NMDA real = 0
         g_GABAA real = 0
         g_GABAB real = 0
-        g_AMPA_r2 real = AMPA_g_peak
-        g_AMPA_r1 real = AMPA_g_peak  # we tuned with k factor not with function from https://github.com/nest/nestml/blob/master/models/neurons/hill_tononi_neuron.nestml because single exp
-        g_NMDA_r1 real = NMDA_g_peak  # we tuned with k factor not with function from https://github.com/nest/nestml/blob/master/models/neurons/hill_tononi_neuron.nestml because single exp
-        g_NMDA_r2 real = NMDA_g_peak
-        g_GABAA$ real = GABA_A_g_peak
+        g_AMPA_r2 real = AMPA_g_init
+        g_AMPA_r1 real = AMPA_g_init  # we tuned with k factor not with function from https://github.com/nest/nestml/blob/master/models/neurons/hill_tononi_neuron.nestml because single exp
+        g_NMDA_r1 real = NMDA_g_init  # we tuned with k factor not with function from https://github.com/nest/nestml/blob/master/models/neurons/hill_tononi_neuron.nestml because single exp
+        g_NMDA_r2 real = NMDA_g_init
+        g_GABAA$ real = GABA_A_g_init
 
     equations:
 
@@ -87,11 +87,11 @@ neuron eglif_cond_alpha_multisyn3:
         kernel g_AMPA_d2' = g_AMPA_r2 * AMPA_A_d2  - (g_AMPA_d2/ AMPA_Tau_d2),
                g_AMPA_r2' =  AMPA_A_r * (-g_AMPA_r2 / AMPA_Tau_r)
 
-        kernel g_NMDA_d1' =  g_NMDA_r1 * NMDA_A1_decay1 - (g_NMDA_d1 / NMDA_Tau_decay1),
-               g_NMDA_r1' = NMDA_A_rise * (-g_NMDA_r1 / NMDA_Tau_rise)
+        kernel g_NMDA_d1' =  g_NMDA_r1 * NMDA_A1 - (g_NMDA_d1 / NMDA_Tau_d1),
+               g_NMDA_r1' = NMDA_A_r * (-g_NMDA_r1 / NMDA_Tau_r)
 
-        kernel g_NMDA_d2' =  g_NMDA_r2 * NMDA_A2_decay2 - (g_NMDA_d2 / NMDA_Tau_decay2),
-               g_NMDA_r2' = NMDA_A_rise * (-g_NMDA_r2 / NMDA_Tau_rise)
+        kernel g_NMDA_d2' =  g_NMDA_r2 * NMDA_A2 - (g_NMDA_d2 / NMDA_Tau_d2),
+               g_NMDA_r2' = NMDA_A_r * (-g_NMDA_r2 / NMDA_Tau_r)
 
         kernel g_GABAA' = g_GABAA$ - g_GABAA / GABA_A_Tau_2,
                g_GABAA$' = -g_GABAA$ / GABA_A_Tau_1
@@ -103,8 +103,8 @@ neuron eglif_cond_alpha_multisyn3:
 
         # Update synaptic current
 
-        recordable inline I_syn_ampa pA = -(convolve(g_AMPA_d1, AMPA) + convolve(g_AMPA_d2, AMPA)) * nS * (V_m - AMPA_E_rev)
-        recordable inline I_syn_nmda pA = -(convolve(g_NMDA_d1, NMDA) + convolve(g_NMDA_d2, NMDA))* nS * (V_m  - NMDA_E_rev) * Mg_block * NMDA_block # * MG_block_scaling_clamp
+        recordable inline I_syn_ampa pA = -(convolve(g_AMPA_d1, AMPA) + convolve(g_AMPA_d2, AMPA)) * nS * (V_m-AMPA_E_rev)
+        recordable inline I_syn_nmda pA = -(convolve(g_NMDA_d1, NMDA) + convolve(g_NMDA_d2, NMDA))* nS * (V_m-NMDA_E_rev) * Mg_block * NMDA_block # * MG_block_scaling_clamp
         recordable inline I_syn_gaba_a pA = -convolve(g_GABAA, GABA_A) * nS * (V_m - GABA_A_E_rev)
         recordable inline I_syn pA =  I_syn_ampa + I_syn_nmda + I_syn_gaba_a
 
@@ -128,7 +128,7 @@ neuron eglif_cond_alpha_multisyn3:
         V_th mV = -50.4 mV           # Spike Threshold
         lambda_0 real = 0.001 / ms
 
-        AMPA_g_peak nS = 0.4025071911 nS
+        AMPA_g_init nS = 0.4025071911 nS
         AMPA_g_scaling nS = 1.2 * 1 * 1.4 nS
         AMPA_E_rev mV = 0.0 mV   # reversal potential
         AMPA_A_r real = 0.016880774981067756 * AMPA_g_scaling
@@ -141,21 +141,21 @@ neuron eglif_cond_alpha_multisyn3:
 
         # MG_block_scaling_clamp real = 0.46161414343735935 # to uncomment if clamp
         NMDA_g_scaling real = 18.8 * 1 * 1.4
-        NMDA_g_peak nS = 0.04621744018494022 nS # peak conductance
+        NMDA_g_init nS = 0.04621744018494022 nS # peak conductance
         NMDA_E_rev mV = -3.7 mV  # reversal potential
-        NMDA_Tau_rise ms = 14.648 ms
-        NMDA_A_rise real = 0.00017425244405793106  * NMDA_g_scaling
-        NMDA_A1_decay1 real = 7.06597147410452e-05 * NMDA_g_scaling
-        NMDA_A2_decay2 real = 6.062937306724449e-06 * NMDA_g_scaling
-        NMDA_Tau_decay1 ms = 21.250 ms
-        NMDA_Tau_decay2 ms = 128.771 ms
+        NMDA_Tau_r ms = 14.648 ms
+        NMDA_A_r real = 0.00017425244405793106  * NMDA_g_scaling
+        NMDA_A1 real = 7.06597147410452e-05 * NMDA_g_scaling
+        NMDA_A2 real = 6.062937306724449e-06 * NMDA_g_scaling
+        NMDA_Tau_d1 ms = 21.250 ms
+        NMDA_Tau_d2 ms = 128.771 ms
         NMDA_Vact mV = -20.0 mV      # inactive for V << Vact, inflection of sigmoid
         NMDA_Sact mV = 13 mV        # scale of inactivation
         NMDA_block real = 0
         MGBlock_SpikeInstant mV = 20 mV
 
 
-        GABA_A_g_peak nS = 0.33 nS   # peak conductance
+        GABA_A_g_init nS = 0.33 nS   # peak conductance
         GABA_A_Tau_1 ms = 1.0 ms     # rise timecompute_synapse_constant
         GABA_A_Tau_2 ms = 7.0 ms     # decay time, Tau_1 < Tau_2
         GABA_A_E_rev mV = -70.0 mV   # reversal potentiaMGBlock_SpikeInstantlscape rate parameter
@@ -187,8 +187,6 @@ neuron eglif_cond_alpha_multisyn3:
         V_m = max(V_m, V_min)
         V_m_2 = V_m
         integrate_odes()
-
-
 
         if r > 0:
             r -= 1
