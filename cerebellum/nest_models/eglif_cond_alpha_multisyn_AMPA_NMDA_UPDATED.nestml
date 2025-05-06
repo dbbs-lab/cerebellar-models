@@ -81,10 +81,10 @@ neuron eglif_cond_alpha_multisyn3:
 
         # exponential kernels for the postsynaptic receptor
 
-        kernel g_AMPA_d1' = g_AMPA_r1 * AMPA_A_d1  - (g_AMPA_d1/ AMPA_Tau_d1),
+        kernel g_AMPA_d1' = g_AMPA_r1 * AMPA_A1  - (g_AMPA_d1/ AMPA_Tau_d1),
                g_AMPA_r1' =  AMPA_A_r * (-g_AMPA_r1 / AMPA_Tau_r)
 
-        kernel g_AMPA_d2' = g_AMPA_r2 * AMPA_A_d2  - (g_AMPA_d2/ AMPA_Tau_d2),
+        kernel g_AMPA_d2' = g_AMPA_r2 * AMPA_A2  - (g_AMPA_d2/ AMPA_Tau_d2),
                g_AMPA_r2' =  AMPA_A_r * (-g_AMPA_r2 / AMPA_Tau_r)
 
         kernel g_NMDA_d1' =  g_NMDA_r1 * NMDA_A1 - (g_NMDA_d1 / NMDA_Tau_d1),
@@ -133,8 +133,8 @@ neuron eglif_cond_alpha_multisyn3:
         AMPA_E_rev mV = 0.0 mV   # reversal potential
         AMPA_A_r real = 0.016880774981067756 * AMPA_g_scaling
         AMPA_Tau_r ms = 0.35863884707513854 ms
-        AMPA_A_d1 real = 0.002547827236535141 * AMPA_g_scaling
-        AMPA_A_d2 real = 0.006991204522455618 * AMPA_g_scaling
+        AMPA_A1 real = 0.002547827236535141 * AMPA_g_scaling
+        AMPA_A2 real = 0.006991204522455618 * AMPA_g_scaling
         AMPA_Tau_d1 ms = 0.3397839945982897 ms
         AMPA_Tau_d2 ms =  3.7435528414523125 ms
 
