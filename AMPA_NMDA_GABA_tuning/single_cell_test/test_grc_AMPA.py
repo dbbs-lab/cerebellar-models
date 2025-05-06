@@ -3,10 +3,9 @@ import numpy as np
 import nest
 import pandas as pd
 
-AMPA_g_scaling = 1.2 * 1 * 35
-k =1.
+AMPA_g_scaling = 1.2 * 1 * 1.4
+k =2.
 params_grc = {
-
     "t_ref": 1.5,
     "V_min": -150,
     "C_m": 7,
@@ -23,13 +22,13 @@ params_grc = {
     "k_2": 0.041407868,
     "A1": 0.01,
     "A2": -0.94,
-    "AMPA_g_peak": 1.3759309170370668,
-    "AMPA_Tau_r": 0.2544471307219706,
-    "AMPA_Tau_d1": 0.46069430011332685,
-    "AMPA_Tau_d2": 3.880472444625639,
-    "AMPA_A_r": 1.6901118286685446,
-    "AMPA_A_d1": 0.8042811722460251,
-    "AMPA_A_d2": 1.41112229607203,
+    "AMPA_g_init": 49.99770425187628,
+    "AMPA_Tau_r": 0.03860269857016296,
+    "AMPA_Tau_d1": 0.32894309944849703,
+    "AMPA_Tau_d2":3.71405056519806,
+    "AMPA_A_r": 0.8708806368411421,
+    "AMPA_A1": 0.07264536636611472,
+    "AMPA_A2": 0.14681591004769137,
 }
 
 # activate AMPA synapse
@@ -95,32 +94,40 @@ df.columns = ["Time", "Current"]
 df["g_AMPA"] = df["Current"].values / (-40.) * 1000   # multiplying 10^3 to convert in nS
 
 
-plt.figure()
-plt.title('AMPA conductance')
-#plt.plot(df['Time'],df['g_AMPA'], color='gray', linestyle='dashed', label='Neuron trace')
-plt.plot(times_grc, g_syn_AMPA, 'b', label='NEST trace')
-plt.xlabel('Time [ms]')
-plt.ylabel(r'$g_{syn_{AMPA}}$ [ns]')
-#plt.xlim(245, 260)
-plt.legend()
-plt.savefig('g_AMPA_test_10inputspikes.png')
-plt.show()
+fig, axs = plt.subplots(3, 1, figsize=(8, 10), sharex=True)
 
-plt.figure()
-plt.title('Membrane voltage')
-plt.plot(times_grc, V_m_grc, 'b')
-plt.xlabel('Time [ms]')
-plt.ylabel(r'$V_m$ [mV]')
-plt.axhline(params_grc['V_th'], color='r', linestyle='--')
-plt.savefig('V_m_AMPA_test_10inputspikes.png')
-plt.show()
+axs[0].set_title('AMPA conductance')
+# axs[0].plot(df['Time'], df['g_AMPA'], color='gray', linestyle='dashed', label='Neuron trace')
+axs[0].plot(times_grc, g_syn_AMPA, 'b', label='NEST trace')
+axs[0].set_ylabel(r'$g_{syn_{AMPA}}$ [ns]')
+axs[0].legend()
+axs[0].set_xlim(0, 400)
 
-plt.figure()
-plt.title('AMPA current')
-plt.plot(times_grc, I_syn_AMPA, 'b')
-plt.xlabel('Time [ms]')
-plt.ylabel(r'$I_{syn_{AMPA}}$ [pA]')
-plt.savefig('I_AMPA_test_10inputspikes.png')
-plt.show()
 
-print('Max conductance AMPA: ', max(g_syn_AMPA))
+axs[1].set_title('Membrane voltage')
+axs[1].plot(times_grc, V_m_grc, 'black', label='NEST trace')
+axs[1].axhline(params_grc['V_th'], color='r', linestyle='--', label=r'$V_{th}$')
+axs[1].set_ylabel(r'$V_m$ [mV]')
+axs[1].legend()
+axs[1].set_xlim(0, 400)
+
+
+axs[2].set_title('AMPA current')
+axs[2].plot(times_grc, I_syn_AMPA, 'r', label='NEST trace')
+axs[2].set_xlabel('Time [ms]')
+axs[2].set_ylabel(r'$I_{syn_{AMPA}}$ [pA]')
+axs[2].set_xlim(0, 400)
+
+
+for i, ax in enumerate(axs):
+    for j, spike in enumerate(spike_times):
+        label = 'input spikes' if i == 0 and j == 0 else None
+        ax.axvline(spike, color='gray', linestyle='--', linewidth=0.5, label=label)
+
+axs[0].legend()
+axs[1].legend()
+axs[2].legend()
+
+plt.tight_layout()
+plt.savefig('AMPA_10inputspikes.png', dpi=300)
+plt.show()
