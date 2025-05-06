@@ -26,22 +26,23 @@ params_grc = {
     "A1": 0.01,
     "A2": -0.94,
     "NMDA_block": 1,
-    "NMDA_g_peak": 0.9258781235440162,
-    "NMDA_Tau_rise": 16.264348266410412,
-    "NMDA_Tau_decay1":9.363679425892062,
-    "NMDA_Tau_decay2": 64.4289489798666,
-    "NMDA_A_rise": 1.7370012497430958,
-    "NMDA_A1_decay1": 0.04769192935011541,
-    "NMDA_A2_decay2":  0.00569343358168372,
+    "NMDA_g_init": 7.618718942871291,
+    "NMDA_Tau_r": 16.38748791597963,
+    "NMDA_Tau_d1":9.363893772753693,
+    "NMDA_Tau_d2": 64.42657189216386,
+    "NMDA_A_r":  1.7501718153210402,
+    "NMDA_A1": 0.007104204842947981,
+    "NMDA_A2": 0.000848123147461344,
 }
 
 # activate AMPA synapse
-syn_spec = {"weight": 4*1. , "delay": 1, "receptor_type": 2}
+k=2
+syn_spec = {"weight": 1.*2 , "delay": 1, "receptor_type": 2}
 
 # nest settings
 nest.ResetKernel()
 nest.Install('cerebmodule')
-dt =0.025
+dt = 0.025
 nest.SetKernelStatus({"resolution": dt})
 
 # input settings
@@ -80,45 +81,52 @@ Mg_block_grc = multimeter_grc['Mg_block']
 I_syn_NMDA = multimeter_grc['I_syn_nmda']
 
 NMDA_E_rev = -3.7
-g_syn_NMDA = I_syn_NMDA / ((NMDA_E_rev - V_m_grc)*Mg_block_grc)
+g_syn_NMDA = I_syn_NMDA / ((NMDA_E_rev - V_m_grc))#*Mg_block_grc)
 print('Number of emitted spikes: ', len(spike_times_grc))
 if len(spikes_grc) > 0:
     print('Spikes times ', spike_times_grc)
 
 
-plt.figure()
-plt.title('NMDA conductance')
-plt.plot(times_grc, g_syn_NMDA, 'b', label='NEST trace')
-plt.xlabel('Time [ms]')
-plt.ylabel(r'$g_{syn_{AMPA}}$ [ns]')
-plt.xlim(0,1000)
-plt.legend()
-plt.savefig('g_NMDA_test_10inputspikes.png')
+fig, axs = plt.subplots(4, 1, figsize=(8, 12), sharex=True)
+
+axs[0].set_title('NMDA conductance')
+axs[0].plot(times_grc, g_syn_NMDA, 'b', label='NEST trace')
+axs[0].set_ylabel(r'$g_{syn_{NMDA}}$ [ns]')
+axs[0].set_xlim(0, 400)
+
+
+axs[1].set_title('Membrane voltage')
+axs[1].plot(times_grc, V_m_grc, 'black',label='NEST trace')
+axs[1].axhline(params_grc['V_th'], color='r', linestyle='--', label=r'$V_{th}$')
+axs[1].set_ylabel(r'$V_m$ [mV]')
+axs[1].set_xlim(0, 400)
+
+
+axs[2].set_title('NMDA current')
+axs[2].plot(times_grc, I_syn_NMDA, 'red', label='NEST trace')
+axs[2].set_ylabel(r'$I_{syn_{NMDA}}$ [pA]')
+axs[2].set_xlim(0, 400)
+
+axs[3].set_title('Mg block')
+axs[3].plot(times_grc, Mg_block_grc, 'green',label='NEST trace')
+axs[3].set_xlabel('Time [ms]')
+axs[3].set_ylabel(r'Mg_Block')
+axs[3].set_xlim(0, 400)
+
+
+for i, ax in enumerate(axs):
+    for j, spike in enumerate(spike_times):
+        label = 'input spikes' if i == 0 and j == 0 else None
+        ax.axvline(spike, color='gray', linestyle='--', linewidth=0.5, label=label)
+
+
+axs[0].legend()
+axs[1].legend()
+axs[2].legend()
+axs[3].legend()
+
+
+plt.tight_layout()
+plt.savefig('NMDA_test_10inputspikes.png', dpi=300)
 plt.show()
 
-plt.figure()
-plt.title('Membrane voltage')
-plt.plot(times_grc, V_m_grc, 'b')
-plt.xlabel('Time [ms]')
-plt.ylabel(r'$V_m$ [mV]')
-plt.axhline(params_grc['V_th'], color='r', linestyle='--')
-plt.savefig('V_m_NMDA_test_10inputspikes.png')
-plt.show()
-
-plt.figure()
-plt.title('NMDA current')
-plt.plot(times_grc, I_syn_NMDA, 'b')
-plt.xlabel('Time [ms]')
-plt.ylabel(r'$I_{syn_{NMDA}}$ [pA]')
-plt.savefig('I_NMDA_test_10inputspikes.png')
-plt.show()
-
-plt.figure()
-plt.title('Mg block')
-plt.plot(times_grc, Mg_block_grc, 'b')
-plt.xlabel('Time [ms]')
-plt.ylabel(r'Mg_Block')
-plt.savefig('Mg_block_NMDA_test_10inputspikes.png')
-plt.show()
-
-print('Max conductance NMDA: ', max(g_syn_NMDA))
