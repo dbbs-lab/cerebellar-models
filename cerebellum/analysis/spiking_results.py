@@ -238,13 +238,7 @@ class SpikeSimulationReport(BSBReport):
                             cell_dict[cell_type] = current_id
                             current_id += 1
                             spikes_res.append([])
-                        if isinstance(st.annotations["senders"], np.int64):  # pragma: nocover
-                            st.annotations["senders"] = [st.annotations["senders"]]
-                        if isinstance(st.annotations["senders"], list):
-                            # TODO: bsb is not storing senders data in the right dictionary
-                            # See https://github.com/dbbs-lab/bsb-nest/issues/18
-                            st.array_annotations["senders"] = st.annotations["senders"]
-                            del st.annotations["senders"]
+                        if "senders" in st.array_annotations:
                             spikes_res[cell_dict[cell_type]].append(st)
         return spikes_res, cell_dict
 
