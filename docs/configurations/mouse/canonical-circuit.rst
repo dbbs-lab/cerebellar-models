@@ -42,13 +42,13 @@ layer at the bottom and the molecular layer at the top. We derived a coordinate 
 the bottom of the circuit, the z axis pointing to the top of the molecular layer. The ``(y-z)``
 plane corresponds to the para-sagittal sections that are co-planar with the Purkinje dendritic trees
 and normal to the granule cells parallel fibers. Finally, unit of distance in the configurations are
-expressed in micrometers ``µm``. Note that the morphologies provided are oriented by default to
+expressed in micrometers ``\mu m``. Note that the morphologies provided are oriented by default to
 match this convention.
 
 Network dimensions
 ~~~~~~~~~~~~~~~~~~
 
-The ``canonical circuit`` is built in a cubic volume of :math:`300 \times 200 \times 295` µm in the
+The ``canonical circuit`` is built in a cubic volume of :math:`300 \times 200 \times 295 \mu m` in the
 ``(x,y,z)`` convention (see ``network``, ``regions`` and ``partitions`` in the configuration). The
 thickness of each of its layer has been determined according to literature findings and to match the
 size and shape of the available morphologies:
@@ -56,10 +56,10 @@ size and shape of the available morphologies:
 - The Purkinje layer corresponds to a one cell thick sheet of Purkinje cells. The Purkinje cell soma
   diameters determine therefore the thickness of this layer. According to
   Hendelman & Aggerwal (1980) [#hendelman_1980]_, Purkinje cell’s soma diameters have been
-  estimated to less than 20µm in mice. We chose here ``15µm``.
+  estimated to less than 20 \mu m in mice. We chose here ``15 \mu m``.
 
 - The molecular layer total thickness has been calculated to fit the size of the dendritic
-  arborization of the Purkinje cell’s morphology as ``150µm``. The molecular layer is itself divided
+  arborization of the Purkinje cell’s morphology as ``150 \mu m``. The molecular layer is itself divided
   in the ``canonical circuit`` into two sub-layers based on their neuronal composition. Here, the
   bottom part of the molecular layer (hence the part stacked right on top of the Purkinje layer)
   contains the Basket cells (``b_molecular_layer`` in the configuration); while the top part hold
@@ -67,10 +67,10 @@ size and shape of the available morphologies:
   (J. Kim & Augustine, 2021 [#kim_2021]_; Sultan & Bower, 1998 [#sultan_1998]_), SCs are more likely
   located in the outer two-third of the Molecular layer. While this distribution of cells is closer
   to gradient in real mice, we assumed a clear separation between the populations. The
-  ``basket layer`` is therefore ``50µm`` thick while the ``stellate layer`` is ``100µm`` thick.
+  ``basket layer`` is therefore ``50 \mu m`` thick while the ``stellate layer`` is ``100 \mu m`` thick.
 
 - The granular layer’s thickness has been similarly fitted to match the size of the Golgi cell basal
-  dendritic tree, here ``130µm``. Note that the size of the granule cell ascending axons have been
+  dendritic tree, here ``130 \mu m``. Note that the size of the granule cell ascending axons have been
   set to this constraint.
 
 Cellular composition
@@ -89,7 +89,7 @@ We will describe here the spatial parameters used in ``canonical circuit``:
    :header-rows: 1
    :delim: ;
 
-   Layer;Cell name;Type;Radius (:math:`µm`);Density (:math:`µm^{-3}`);References
+   Layer;Cell name;Type;Radius (:math:` \mu m`);Density (:math:` \mu m^{-3}`);References
    Granular layer;Glomerulus (glom);Exc.;1.5;0.0003;Solinas et al. (2010) [#solinas_2010]_
    Granular layer;Mossy fibers (mf);Exc.;/;count relative to glom. ratio=0.05;Billings et al. (2014) [#billings_2014]_
    Granular layer;Granule Cell (GrC);Exc.;2.5;0.0039;Casali et al. (2019) [#casali_2019]_
@@ -128,7 +128,7 @@ However, comparative analysis conducted in ``[CITATION]`` have shown that the la
 limited impact on connectivity and simulation results, while the computational cost of checking soma
 overlapping is not negligible.
 
-PC are placed in arrays, ``130 μm`` apart from each other along the
+PC are placed in arrays, ``130  \mu m`` apart from each other along the
 para-sagittal plane ``(xz)`` to guarantee that their dendritic
 arborizations do not overlap. Furthermore, each row of PC somas is
 shifted with respect to its predecessor to form a ``80`` degree angle on
@@ -169,24 +169,24 @@ voxel intersection techniques to implement their related connection rules. We th
 the geometry of the neurites involved in these connections.
 
 Sultan provides ranges of distance between gloms and their respective mf in their paper [#sultan_2001]_:
-:math:`57.6 \pm 60 \times 19.6 \pm 18.8` µm along respectively the x and y axes in our coordinate
+:math:`57.6 \pm 60 \times 19.6 \pm 18.8`  \mu m along respectively the x and y axes in our coordinate
 system. In our model, we used the rounded mean values as the maximum distance between mf and their
 gloms.
 
-GrC of the adult mouse cerebellar cortex has :math:`3.9 \pm 0.1` dendrites that spreads for ~40μm in
+GrC of the adult mouse cerebellar cortex has :math:`3.9 \pm 0.1` dendrites that spreads for ~40 \mu m in
 each direction, as reported in Houston et al. (2017) [#houston_2017]_ (see Figure 2G).
-In our model, we therefore assumed that each GrC has ``4`` dendrites of ``40μm``, to
+In our model, we therefore assumed that each GrC has ``4`` dendrites of ``40 \mu m``, to
 match also the number of branches of the respective morphology. These values are used in the glom to
 GrC connectivity rule. The convergence value of this connection pair is set here to the number of
 dendrites.
 
-GoC basolateral arborizations spread across 100μm in P25 rat according to Kanichay and Silver (2008)
-[#kanichay_2008]_. This has been simplified to a sphere of ``50μm`` radius surrounding their soma
+GoC basolateral arborizations spread across 100 \mu m in P25 rat according to Kanichay and Silver (2008)
+[#kanichay_2008]_. This has been simplified to a sphere of ``50 \mu m`` radius surrounding their soma
 for the GoC to glom connectivity.
 
 Barmack and Yakhnitsa (2008) [#barmack_2008]_ reported that the mean mediolateral extent of the GoC
-axon is :math:`180 \pm 40` μm, and that it spreads along the parasagittal plane. In our connection
-from GoC to GrC (through glom), we used a ``150μm`` sphere surrounding the GoC soma to find
+axon is :math:`180 \pm 40`  \mu m, and that it spreads along the parasagittal plane. In our connection
+from GoC to GrC (through glom), we used a ``150 \mu m`` sphere surrounding the GoC soma to find
 potential glom targets. The maximum number of glom target (divergence) for each GoC was set to ``40``
 in Solinas et al. (2010) [#solinas_2010]_. However, the rationale behind this particular value is
 unclear but probably to balance the granular layer excitation and inhibition.

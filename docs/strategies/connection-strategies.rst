@@ -6,7 +6,7 @@ Connection strategies
 :class:`ConnectomeMossyGlomerulus <.connectome.to_glomerulus.ConnectomeMossyGlomerulus>`
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-The algorithm selects one mossy fiber within the :math:`x\_length \times y\_length \times z\_size` μm box surrounding
+The algorithm selects one mossy fiber within the :math:`x\_length \times y\_length \times z\_size`  \mu m box surrounding
 each glomerulus. Here ``z_size`` is the size of the partition where the glomeruli are (i.e. no limit).
 This selection is random and performed with a truncated exponential distribution.
 
