@@ -216,7 +216,7 @@ private:
   double
   facilitate_(double tempo)
   {
-    double k = (std::exp(1)/0.05) * (-tempo/tau_) * std::exp(tempo/50);
+    double k = std::exp(1) * (-tempo/tau_) * std::exp(tempo/tau_);
     return k * Aplus_;
   }
 
@@ -303,12 +303,13 @@ stdp_synapse_alpha< targetidentifierT >::send( Event& e, size_t t, const CommonS
       weight_ = Wmax_;
     }
   }
-  else {
-    weight_ = weight_ + depress_();
-    if (weight_ <= Wmin_){
-      weight_ = Wmin_;
-    }
+
+  weight_ = weight_ + depress_();
+  if (weight_ <= Wmin_){
+        weight_ = Wmin_;
   }
+  
+  
 
   // buffer reset for old spikes
   while(buffer_pre_spikes_[0] < t_spike - 200){

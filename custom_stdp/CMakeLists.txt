@@ -42,14 +42,16 @@ set( MODULE_SOURCES
 
       eglif_io_nestml.cpp eglif_io_nestml.h
       eglif_pc_nestml.cpp eglif_pc_nestml.h
-      eglif_gr_nestml.cpp eglif_gr_nestml.h
+      
       eglif_mli.cpp eglif_mli.h
       eglif_dcnp.cpp eglif_dcnp.h
       stdp_synapse_sinexp.h stdp_synapse_sinexp.cpp
-      #stdp_synapse_cosexp.h stdp_synapse_cosexp.cpp
+      
       stdp_synapse_alpha.h stdp_synapse_alpha.cpp
       extended_post_history_archiving_node.cpp extended_post_history_archiving_node.h
       extended_hist_entry.cpp extended_hist_entry.h
+
+      eglif_cond_alpha_multisyn.cpp eglif_cond_alpha_multisyn.h
 
       tracking_neuron_nestml.cpp tracking_neuron_nestml.h
       custom_stdp_module.cpp custom_stdp_module.h
