@@ -216,7 +216,7 @@ private:
   double
   facilitate_(double tempo)
   {
-    double k = (std::exp(1)/0.05) * (-tempo/tau_) * std::exp(tempo/50);
+    double k = std::exp(1) * (-tempo/tau_) * std::exp(tempo/tau_);
     return k * Aplus_;
   }
 
