@@ -251,6 +251,7 @@ private:
   double Wmax_;
   double tau_;
   double C_;
+  //double t_0;
   double Aplus_;
   double Aminus_;
 
@@ -344,10 +345,12 @@ stdp_synapse_sinexp< targetidentifierT >::send( Event& e, size_t t, const Common
       weight_ = Wmin_;
     }
   }
+
   weight_ = weight_ + facilitate_();
   if (weight_ >= Wmax_){
-    weight_ = Wmax_;
+      weight_ = Wmax_;
   }
+  
   // buffer reset for old spikes
   while(buffer_pre_spikes_[0] < t_spike - 200){
     buffer_pre_spikes_.erase(buffer_pre_spikes_.begin());
@@ -377,6 +380,7 @@ stdp_synapse_sinexp< targetidentifierT >::stdp_synapse_sinexp()
   , Wmax_( 0.6 )
   , tau_(1000)
   , C_( 1.2848 )
+  //, t_0( 100 )
   , Aplus_( 0.00005 )
   , Aminus_( -0.005 )
 

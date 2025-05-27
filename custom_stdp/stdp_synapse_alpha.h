@@ -303,12 +303,13 @@ stdp_synapse_alpha< targetidentifierT >::send( Event& e, size_t t, const CommonS
       weight_ = Wmax_;
     }
   }
-  else {
-    weight_ = weight_ + depress_();
-    if (weight_ <= Wmin_){
-      weight_ = Wmin_;
-    }
+
+  weight_ = weight_ + depress_();
+  if (weight_ <= Wmin_){
+        weight_ = Wmin_;
   }
+  
+  
 
   // buffer reset for old spikes
   while(buffer_pre_spikes_[0] < t_spike - 200){
