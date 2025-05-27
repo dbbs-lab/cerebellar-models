@@ -216,6 +216,8 @@ private:
   double
   facilitate_(double tempo)
   {
+    // The denominator was changed from 0.05/50 to tau_ as part of issue #61
+    // to align the facilitation formula with the updated theoretical model.
     double k = std::exp(1) * (-tempo/tau_) * std::exp(tempo/tau_);
     return k * Aplus_;
   }
