@@ -28,7 +28,6 @@
 // include headers with your own stuff
 #include "eglif_io_nestml.h"
 #include "eglif_pc_nestml.h"
-//#include "eglif_gr_nestml.h"
 #include "eglif_mli.h"
 #include "eglif_dcnp.h"
 #include "stdp_synapse_sinexp.h"
