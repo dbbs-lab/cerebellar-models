@@ -379,7 +379,7 @@ stdp_synapse_sinexp< targetidentifierT >::stdp_synapse_sinexp()
   , C_( 1.2848 )
   , Aplus_( 0.00005 )
   , Aminus_( -0.005 )
-
+  
   , t_lastspike_( 0.0 )
 {
 }

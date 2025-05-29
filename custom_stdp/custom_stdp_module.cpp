@@ -28,7 +28,6 @@
 // include headers with your own stuff
 #include "eglif_io_nestml.h"
 #include "eglif_pc_nestml.h"
-#include "eglif_gr_nestml.h"
 #include "eglif_mli.h"
 #include "eglif_dcnp.h"
 #include "stdp_synapse_sinexp.h"
@@ -42,6 +41,8 @@
 #include  "rb_neuron_nestml.h"
 #include  "tracking_neuron_planner_nestml.h"
 #include "state_neuron_nestml.h"
+
+#include "eglif_cond_alpha_multisyn.h"
 
 
 class custom_stdp_module : public nest::NESTExtensionInterface
@@ -61,11 +62,11 @@ void custom_stdp_module::initialize()
     // register neurons, synapse or device models
     nest::register_eglif_io_nestml("eglif_io_nestml");
     nest::register_eglif_pc_nestml("eglif_pc_nestml");
-    nest::register_eglif_gr_nestml("eglif_gr_nestml");
+  
     nest::register_eglif_mli("eglif_mli");
     nest::register_eglif_dcnp("eglif_dcnp");
     nest::register_stdp_synapse_sinexp( "stdp_synapse_sinexp" );
-    //nest::register_stdp_synapse_cosexp( "stdp_synapse_cosexp" );
+   
     nest::register_stdp_synapse_alpha( "stdp_synapse_alpha" );
     register_tracking_neuron_nestml("tracking_neuron_nestml");
 
@@ -75,6 +76,8 @@ void custom_stdp_module::initialize()
     register_rb_neuron_nestml("rb_neuron_nestml");
     register_tracking_neuron_planner_nestml("tracking_neuron_planner_nestml");
     register_state_neuron_nestml("state_neuron_nestml");
+
+    register_eglif_cond_alpha_multisyn("eglif_cond_alpha_multisyn");
 
 
     
