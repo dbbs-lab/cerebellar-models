@@ -21,7 +21,7 @@ params_grc = {
     "A2": -0.94,
     "AMPA_E_rev": 0,
     "NMDA_E_rev": -3.7,
-    "GABA_E_rev": -70.0,
+    "GABA_E_rev": -70.0000001,  # to ensure no division for 0
 }
 
 

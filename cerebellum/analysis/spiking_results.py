@@ -35,17 +35,17 @@ class SpikePlot(ScaffoldPlot):
     """
 
     def __init__(
-            self,
-            fig_size: Tuple[float, float],
-            scaffold: Scaffold,
-            simulation_name: str,
-            time_from: float,
-            time_to: float,
-            all_spikes,
-            nb_neurons: List,
-            populations: List,
-            dict_colors: dict = None,
-            **kwargs,
+        self,
+        fig_size: Tuple[float, float],
+        scaffold: Scaffold,
+        simulation_name: str,
+        time_from: float,
+        time_to: float,
+        all_spikes,
+        nb_neurons: List,
+        populations: List,
+        dict_colors: dict = None,
+        **kwargs,
     ):
         _check_simulation(scaffold, simulation_name)
         super().__init__(fig_size, scaffold, dict_colors=dict_colors, **kwargs)
@@ -94,21 +94,21 @@ class SpikePlot(ScaffoldPlot):
         self._time_from = value
 
     def _set_simulation_params(
-            self,
-            simulation_name: str,
-            time_from: float,
-            time_to: float,
-            all_spikes,
-            nb_neurons,
-            populations,
+        self,
+        simulation_name: str,
+        time_from: float,
+        time_to: float,
+        all_spikes,
+        nb_neurons,
+        populations,
     ):
         is_different = (
-                self.simulation_name != simulation_name
-                or self.time_from != time_from
-                or self.time_to != time_to
-                or np.any(self.all_spikes != all_spikes)
-                or np.any(self.nb_neurons != nb_neurons)
-                or self.populations != populations
+            self.simulation_name != simulation_name
+            or self.time_from != time_from
+            or self.time_to != time_to
+            or np.any(self.all_spikes != all_spikes)
+            or np.any(self.nb_neurons != nb_neurons)
+            or self.populations != populations
         )
         if is_different:
             _check_simulation(self.scaffold, simulation_name)
@@ -139,14 +139,14 @@ class SpikeSimulationReport(BSBReport):
     """
 
     def __init__(
-            self,
-            scaffold: Union[str, Scaffold],
-            simulation_name: str,
-            folder_nio: str,
-            time_from: float = 0,
-            time_to: float = None,
-            ignored_ct=None,
-            cell_types_info: List[PlotTypeInfo] = None,
+        self,
+        scaffold: Union[str, Scaffold],
+        simulation_name: str,
+        folder_nio: str,
+        time_from: float = 0,
+        time_to: float = None,
+        ignored_ct=None,
+        cell_types_info: List[PlotTypeInfo] = None,
     ):
         super().__init__(scaffold, cell_types_info)
         _check_simulation(self.scaffold, simulation_name)
@@ -299,18 +299,18 @@ class RasterPSTHPlot(SpikePlot):
     """
 
     def __init__(
-            self,
-            fig_size: Tuple[float, float],
-            scaffold: Scaffold,
-            simulation_name: str,
-            time_from: float,
-            time_to: float,
-            all_spikes,
-            nb_neurons: List,
-            populations: List,
-            nb_bins: int = 30,
-            dict_colors: dict = None,
-            **kwargs,
+        self,
+        fig_size: Tuple[float, float],
+        scaffold: Scaffold,
+        simulation_name: str,
+        time_from: float,
+        time_to: float,
+        all_spikes,
+        nb_neurons: List,
+        populations: List,
+        nb_bins: int = 30,
+        dict_colors: dict = None,
+        **kwargs,
     ):
         # population needs to be set before the super.__init__ because it is used in init_plot
         self.populations = populations
@@ -424,17 +424,17 @@ class Spike2Columns(SpikePlot):
     """
 
     def __init__(
-            self,
-            fig_size: Tuple[float, float],
-            scaffold: Scaffold,
-            simulation_name: str,
-            time_from: float,
-            time_to: float,
-            all_spikes,
-            nb_neurons: List,
-            populations: List,
-            dict_colors: dict = None,
-            **kwargs,
+        self,
+        fig_size: Tuple[float, float],
+        scaffold: Scaffold,
+        simulation_name: str,
+        time_from: float,
+        time_to: float,
+        all_spikes,
+        nb_neurons: List,
+        populations: List,
+        dict_colors: dict = None,
+        **kwargs,
     ):
         # population needs to be set before the super.__init__ because it is used in init_plot
         self.populations = populations
@@ -476,18 +476,18 @@ class FiringRatesPlot(Spike2Columns):
     """
 
     def __init__(
-            self,
-            fig_size: Tuple[float, float],
-            scaffold: Scaffold,
-            simulation_name: str,
-            time_from: float,
-            time_to: float,
-            all_spikes,
-            nb_neurons: List,
-            populations: List,
-            kernel=None,
-            dict_colors: dict = None,
-            **kwargs,
+        self,
+        fig_size: Tuple[float, float],
+        scaffold: Scaffold,
+        simulation_name: str,
+        time_from: float,
+        time_to: float,
+        all_spikes,
+        nb_neurons: List,
+        populations: List,
+        kernel=None,
+        dict_colors: dict = None,
+        **kwargs,
     ):
         super().__init__(
             fig_size,
@@ -519,13 +519,13 @@ class FiringRatesPlot(Spike2Columns):
             if loc_spikes[i].size <= 0:
                 continue  # pragma: nocover
             self.firing_rates[:, i] = (
-                    instantaneous_rate(
-                        loc_spikes[i],
-                        sampling_period=self.dt * ms,
-                        kernel=self.kernel,
-                        border_correction=True,
-                    ).magnitude[:, 0]
-                    / self.nb_neurons[i]
+                instantaneous_rate(
+                    loc_spikes[i],
+                    sampling_period=self.dt * ms,
+                    kernel=self.kernel,
+                    border_correction=True,
+                ).magnitude[:, 0]
+                / self.nb_neurons[i]
             )
 
     def plot(self, relative_time=False, **kwargs):
@@ -603,18 +603,18 @@ class ISIPlot(Spike2Columns):
     """
 
     def __init__(
-            self,
-            fig_size: Tuple[float, float],
-            scaffold: Scaffold,
-            simulation_name: str,
-            time_from: float,
-            time_to: float,
-            all_spikes,
-            nb_neurons: List,
-            populations: List,
-            nb_bins: int = 50,
-            dict_colors: dict = None,
-            **kwargs,
+        self,
+        fig_size: Tuple[float, float],
+        scaffold: Scaffold,
+        simulation_name: str,
+        time_from: float,
+        time_to: float,
+        all_spikes,
+        nb_neurons: List,
+        populations: List,
+        nb_bins: int = 50,
+        dict_colors: dict = None,
+        **kwargs,
     ):
         super().__init__(
             fig_size,
@@ -700,18 +700,18 @@ class SimResultsTable(TablePlot, SpikePlot):
     """
 
     def __init__(
-            self,
-            fig_size: Tuple[float, float],
-            scaffold: Scaffold,
-            simulation_name: str,
-            time_from: float,
-            time_to: float,
-            all_spikes,
-            nb_neurons: List,
-            populations: List,
-            dict_colors: dict = None,
-            dict_abv=None,
-            **kwargs,
+        self,
+        fig_size: Tuple[float, float],
+        scaffold: Scaffold,
+        simulation_name: str,
+        time_from: float,
+        time_to: float,
+        all_spikes,
+        nb_neurons: List,
+        populations: List,
+        dict_colors: dict = None,
+        dict_abv=None,
+        **kwargs,
     ):
         super().__init__(
             fig_size,
@@ -744,7 +744,7 @@ class SimResultsTable(TablePlot, SpikePlot):
             spikes = loc_spikes[i]
 
             all_fr = np.unique(spikes.array_annotations["senders"], return_counts=True)[1] / (
-                    (self.time_to - self.time_from) / 1000.0
+                (self.time_to - self.time_from) / 1000.0
             )
             isi = extract_isis(spikes, self.dt)
 
@@ -788,14 +788,14 @@ class BasicSimulationReport(SpikeSimulationReport):
     """
 
     def __init__(
-            self,
-            scaffold: Union[str, Scaffold],
-            simulation_name: str,
-            folder_nio: str,
-            time_from: float = 0,
-            time_to: float = None,
-            ignored_ct=None,
-            cell_types_info: List[PlotTypeInfo] = None,
+        self,
+        scaffold: Union[str, Scaffold],
+        simulation_name: str,
+        folder_nio: str,
+        time_from: float = 0,
+        time_to: float = None,
+        ignored_ct=None,
+        cell_types_info: List[PlotTypeInfo] = None,
     ):
         super().__init__(
             scaffold, simulation_name, folder_nio, time_from, time_to, ignored_ct, cell_types_info
