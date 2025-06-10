@@ -403,7 +403,7 @@ class RasterPSTHPlot(SpikePlot):
                 else [self.time_from, self.time_to]
             )
             ax.get_xaxis().set_visible(False)
-            ax.set_ylabel("Neuron id")
+            ax.set_ylabel("Neuron_Masoli id")
             ax.set_title(f"{ct}")
 
             ax = self.get_ax(i)[1]

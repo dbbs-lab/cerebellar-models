@@ -1,0 +1,221 @@
+"""
+eglif_multisyn_AMPA_NMDA_GABA - Conductance based extended generalized leaky integrate and fire neuron model
+########################################################################################################
+
+Description
++++++++++++
+
+eglif_multisyn is the generalized leaky integrate and fire neuron according to
+Geminiani et al. (2018) [#geminiani_2018]_, with specific post-synaptic conductances for AMPA, NMDA and GABA receptors.
+
+The membrane potential is given by the following differential equation:
+
+.. math::
+   \begin{cases}
+       C_m \dfrac{dV_m}{dt} = \dfrac{C_m}{\tau_m}(V_m-E_L)
+                                - I_{adap} + I_{dep} + I_e + I_{stim} + I_{syn}\\
+       \dfrac{dI_{adap}}{dt}=k_{adap}(V_m-E_L)-k_2 \cdot I_{adap}\\
+       \dfrac{dI_{dep}}{dt} =-k_1 \cdot I_{dep}\\
+   \end{cases}
+
+where the synaptic current :math:`I_{syn}` integrates the input from the postsynaptic receptors:
+
+.. math::
+       I_{syn} = \sum_{i=1} ^{4} g_i (V - E_{rev,i})
+
+Here, the synapse `i` is excitatory or inhibitory depending on the value of :math:`E_{rev,i}`.
+
+Neuron produces spikes stochastically according to a point process with the firing intensity:
+
+.. math::
+  \lambda = \lambda_0 \cdot e^{\dfrac{V_m-V_{th}}{\tau_V}}
+
+In case of spike emission, the spike-triggered adaptation currents :math:`I_{adap}` and
+:math:`I_{dep}` are respectively increased and set by their respective constant
+(which can be positive or negative):
+
+.. math::
+   V_m &= V_{reset}\\
+   I_{dep} &= A1\\
+   I_{adap} &= I_{adap} + A2
+
+References
+++++++++++
+
+.. start-references
+A
+.. [#geminiani_2018] Geminiani, A., Casellato, C., Locatelli, F., Prestori, F., Pedrocchi, A.,
+   & D'Angelo, E. (2018). Complex dynamics in simplified neuronal models:
+   reproducing Golgi cell electroresponsiveness. Frontiers in neuroinformatics, 12, 88.
+   https://doi.org/10.3389/fninf.2018.00088
+
+
+See also
+++++++++
+
+aeif_cond_alpha, aeif_cond_exp, ht_neuron
+"""
+
+neuron eglif_multisyn:
+    state:
+        V_m mV = -40.0 mV                   # Membrane potential in mV
+        V_m_2 mV = 0.0 mV                   # Auxiliary variable for Mg_Block voltage dependency
+        I_dep pA = 0 * pA                   # Depolarizing spike-triggered current
+        I_adap pA = 0 * pA                  # Adaptation current
+        r integer = 0                       # Refractory state
+        m integer = 0                       # Mg Unblock state
+
+        # Conductance kernels initial values
+
+        g_AMPA_d1 real = 0
+        g_AMPA_d2 real = 0
+        g_AMPA_r2 real = AMPA_g_init
+        g_AMPA_r1 real = AMPA_g_init
+
+        g_NMDA_d1 real = 0
+        g_NMDA_d2 real = 0
+        g_NMDA_r1 real = NMDA_g_init
+        g_NMDA_r2 real = NMDA_g_init
+
+        g_GABA_d1 real = 0
+        g_GABA_d2 real = 0
+        g_GABA_r1 real = GABA_g_init
+        g_GABA_r2 real = GABA_g_init
+
+    equations:
+
+        # Exponential kernels for the postsynaptic receptors
+
+        kernel g_AMPA_d1' = g_AMPA_r1 * AMPA_A1  - (g_AMPA_d1/ AMPA_Tau_d1),
+               g_AMPA_r1' = AMPA_A_r * (-g_AMPA_r1 / AMPA_Tau_r)
+
+        kernel g_AMPA_d2' = g_AMPA_r2 * AMPA_A2  - (g_AMPA_d2/ AMPA_Tau_d2),
+               g_AMPA_r2' = AMPA_A_r * (-g_AMPA_r2 / AMPA_Tau_r)
+
+        kernel g_NMDA_d1' = g_NMDA_r1 * NMDA_A1 - (g_NMDA_d1 / NMDA_Tau_d1),
+               g_NMDA_r1' = NMDA_A_r * (-g_NMDA_r1 / NMDA_Tau_r)
+
+        kernel g_NMDA_d2' = g_NMDA_r2 * NMDA_A2 - (g_NMDA_d2 / NMDA_Tau_d2),
+               g_NMDA_r2' = NMDA_A_r * (-g_NMDA_r2 / NMDA_Tau_r)
+
+        kernel g_GABA_d1' = g_GABA_r1 * GABA_A1 - (g_GABA_d1 / GABA_Tau_d1),
+               g_GABA_r1' = GABA_A_r * (-g_GABA_r1 / GABA_Tau_r)
+
+        kernel g_GABA_d2' = g_GABA_r2 * GABA_A2 - (g_GABA_d2 / GABA_Tau_d2),
+               g_GABA_r2' = GABA_A_r * (-g_GABA_r2 / GABA_Tau_r)
+
+        # Magnesium block for NMDA synaps
+
+        recordable inline Mg_block real =  1 / (1 + exp((v0_block - V_m_2) / k_block))
+
+        # Update synaptic current
+        recordable inline I_ampa1 pA = - convolve(g_AMPA_d1, AMPA) * nS * (V_m-AMPA_E_rev)
+        recordable inline I_ampa2 pA = - convolve(g_AMPA_d2, AMPA) * nS * (V_m-AMPA_E_rev)
+        recordable inline I_syn_ampa pA = I_ampa1 + I_ampa2
+        recordable inline I_nmda1 pA = - convolve(g_NMDA_d1, NMDA)* nS * (V_m-NMDA_E_rev) * Mg_block
+        recordable inline I_nmda2 pA = - convolve(g_NMDA_d2, NMDA)* nS * (V_m-NMDA_E_rev) * Mg_block
+        recordable inline I_syn_nmda pA = I_nmda1 + I_nmda2
+        recordable inline I_gaba1 pA = - convolve(g_GABA_d1, GABA) * nS * (V_m - GABA_E_rev)
+        recordable inline I_gaba2 pA = - convolve(g_GABA_d2, GABA) * nS * (V_m - GABA_E_rev)
+        recordable inline I_syn_gaba pA = I_gaba1 + I_gaba2
+        recordable inline I_syn pA =  I_syn_ampa + I_syn_nmda + I_syn_gaba
+
+        # Update membrane potential, adaptation and spike triggered currents
+        # WARNING: SIGN BELOW IS INCORRECT FOR A LIF MODEL -> Should be V_m' = - (V_m - E_L) / tau_m + ...
+        V_m' = (V_m - E_L) / tau_m + (I_e + I_stim - I_adap + I_dep + I_syn) / C_m
+        I_dep' = - I_dep * k_1 / ms
+        I_adap' = (V_m - E_L) * (k_adap * nS / ms) - I_adap * (k_2 / ms)
+
+    parameters:
+
+        C_m pF = 281.0 pF                           # Membrane Capacitance
+        tau_m ms = 30.0 ms                          # Membrane time constant
+        E_L mV = -70.6 mV                           # Leak reversal Potential (aka resting potential)
+        t_ref ms = 0.0 ms                           # Refractory period
+        I_e pA = 0 pA                               # Constant endogenous current
+        V_min mV = -150.0 mV                        # Minimal membrane potential value
+        V_th mV = -50.4 mV                          # Spike Threshold
+        lambda_0 real = 0.001 / ms                  # Escape rate parameter
+        tau_V mV = 0.5 mV                           # Escape rate parameter
+        V_reset mV = -60.0 mV                       # Reset potential
+        k_1 real = pow(144.0, -1) / ms              # Decay rate
+        k_2 real = pow(80.5, -1) / ms               # Adaptation constant
+        k_adap real = 4 * nS / ms                   # Adaptation constant
+        A1 pA = 100.0 pA                            # Current update constant
+        A2 pA = 100.0 pA                            # Current update constant
+
+        # default for mf_Grc connection
+
+        AMPA_g_init nS = 1.34 nS                    # Initial condition for AMPA rise
+        AMPA_E_rev mV = 0.0 mV                      # Reversal potential for AMPA synapse
+        AMPA_A_r real = 6.97                        # Rise scaling factor for AMPA synapse
+        AMPA_Tau_r ms = 1.00 ms                     # Rise time constant for AMPA synapse
+        AMPA_A1 real = 1.46                         # Fast decay scaling factor for AMPA synapse
+        AMPA_Tau_d1 ms = 0.386 ms                   # Fast decay time constant for AMPA synapse
+        AMPA_A2 real = 1.60                         # Slow decay scaling factor for AMPA synapse
+        AMPA_Tau_d2 ms = 3.70 ms                    # Slow decay time constant for AMPA synapse
+
+        # default for mf_Grc connection
+
+        NMDA_g_init nS = 0.0234 nS                  # Initial condition for NMDA rise
+        NMDA_E_rev mV = -3.7 mV                     # Reversal potential for NMDA synapse
+        NMDA_A_r real = 3.30                        # Rise scaling factor for NMDA synapse
+        NMDA_Tau_r ms = 21.2 ms                     # Rise time constant for NMDA synapse
+        NMDA_A1 real = 2.95                         # Fast decay scaling factor for NMDA synapse
+        NMDA_Tau_d1 ms = 14.9 ms                    # Fast decay time constant for NMDA synapse
+        NMDA_A2 real = 0.213                        # Slow decay scaling factor for NMDA synapse
+        NMDA_Tau_d2 ms = 121 ms                     # Slow decay time constant for NMDA synapse
+        v0_block mV = -20.0 mV                      # Inflection of Mg block sigmoid for NMDA synapse
+        k_block mV = 13 mV                          # Scale of inactivation of NMDA synapse
+        V_Mg_Unblock mV = 20 mV                       # Fixed voltage value when a spike occurs to ensure NMDA receptor activation
+        t_Mg_Unblock ms = 0.5 ms                    # Mg Block activation time
+
+        # default for GoC_GrC connection
+
+        GABA_g_init nS = 0.162 nS                  # Initial condition for GABA rise
+        GABA_E_rev mV = -70 mV                     # Reversal potential for GABA synapse
+        GABA_A_r real = 4.54                       # Rise scaling factor for GABA synapse
+        GABA_Tau_r ms = 0.376 ms                   # Rise time constant for GABA synapse
+        GABA_A1 real = 10.6                        # Fast decay scaling factor for GABA synapse
+        GABA_Tau_d1 ms = 27.3 ms                   # Fast decay time constant for GABA synapse
+        GABA_A2 real = 3.15                        # Slow decay scaling factor for GABA synapse
+        GABA_Tau_d2 ms = 269 ms                    # Slow decay time constant for GABA synapse
+
+
+    internals:
+        RefractoryCounts integer = steps(t_ref)                     # Refractory time in steps
+        MgUnblockCounts integer = steps(min(t_Mg_Unblock, t_ref))               # Mg block activation time in steps
+
+    input:
+        AMPA <- spike
+        NMDA <- spike
+        GABA <- spike
+        I_stim pA <- continuous                     # External stimulation current
+
+    output:
+        spike
+
+    update:
+
+        V_m = max(V_m, V_min)
+        V_m_2 = V_m
+        integrate_odes()
+
+        if r > 0:
+            r -= 1
+            V_m = V_reset
+            if m > 0:
+                V_m_2 = V_Mg_Unblock
+                m -= 1
+            else:
+                V_m_2 = V_m
+        else:
+            inline lambda real = lambda_0 * exp((V_m - V_th) / tau_V)
+            if random_uniform(0, 1) < - expm1(-lambda * resolution()):
+                r = RefractoryCounts
+                m = MgUnblockCounts
+                I_dep = A1
+                I_adap += A2
+                V_m = V_reset
+                V_m_2 = V_Mg_Unblock
+                emit_spike()
