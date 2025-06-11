@@ -1,6 +1,6 @@
 For developers
 ---------------
-The ``cerebellum`` package requires Python 3.9+.
+The ``cerebellum`` package requires Python 3.10+.
 
 Developers best use pip’s *editable* install. This creates a live link between the installed package
 and the local git repository:

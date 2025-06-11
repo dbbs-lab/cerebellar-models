@@ -8,11 +8,11 @@ authors = [{ name = "Dimitri RODARIE", email = "dimitri.rodarie@cref.it" }]
 readme = "README.md"
 license = { file = "LICENSE" }
 classifiers = ["License :: OSI Approved :: GNU General Public License v3 or later (GPLv3+)"]
-requires-python = ">=3.9"
+requires-python = ">=3.10"
 dynamic = ["version", "description"]
 dependencies = [
     "cmake~=3.31.6",
-    "bsb[parallel,nest,neuron]~=4.4",
+    "bsb[parallel,nest,neuron]~=6.0",
     "nestml~=7.0",
     "matplotlib~=3.9",
     "elephant~=1.1"
@@ -20,11 +20,11 @@ dependencies = [
 
 [project.optional-dependencies]
 test = [
-    "bsb-test~=4.2",
+    "bsb-test~=6.0",
     "coverage~=7.3",
 ]
 docs = [
-    "sphinx~=7.0",
+    "sphinx~=8.1",
     "furo~=2024.0"
 ]
 dev = [
