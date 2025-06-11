@@ -238,7 +238,12 @@ class SpikeSimulationReport(BSBReport):
                 for st in spiketrains:
                     st.segment = None  # remove spiketrain segment to allow merging
                     cell_type, labels = self._extract_ct_device_name(st.annotations["device"])
-                    if "senders" in st.array_annotations:
+                    if cell_type in self.cell_names and cell_type not in self.ignored_ct:
+                        cell_type_label = ScaffoldPlot.get_labelled_ct_name(cell_type, labels)
+                        if cell_type_label not in cell_dict:
+                            cell_dict[cell_type_label] = current_id
+                            current_id += 1
+                            spikes_res.append([])
                         spikes_res[cell_dict[cell_type_label]].append(st)
         return spikes_res, cell_dict
 
