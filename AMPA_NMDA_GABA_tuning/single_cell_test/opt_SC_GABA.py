@@ -18,7 +18,7 @@ cell_params = {
     "k_2": 1.096,
     "A1": 5.953,
     "A2": 5.863,
-    "GABA_E_rev": -70.0,
+    "GABA_E_rev": -65.0,
 }
 sim_params = {
     "receptor_type": 3,

@@ -19,7 +19,7 @@ cell_params = {
     "k_2": 0.023,
     "A1": 259.988,
     "A2": 178.01,
-    "GABA_E_rev": -70.0,
+    "GABA_E_rev": -65.0,
 }
 sim_params = {
     "receptor_type": 3,
@@ -50,7 +50,7 @@ problem = SynapseOptimization(
     tmax=1200,
 )
 problem.xl = np.array([0, 0.0, 0, 10, 0, 0, 0])
-problem.xu = np.array([5, 5.0, 10.0, 100.0, 15, 10, 10])
+problem.xu = np.array([5, 5.0, 10.0, 100.0, 10, 10, 10])
 res = optimization(problem, n_gen=600)
 sol_idx, solution = select_solution(res.F, threshold=0.01)
 opt_params_dict = dict(zip(opt_param_names, res.X[sol_idx]))

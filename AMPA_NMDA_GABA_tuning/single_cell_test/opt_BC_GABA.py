@@ -18,7 +18,7 @@ cell_params = {
     "k_2": 1.096,
     "A1": 5.953,
     "A2": 5.863,
-    "GABA_E_rev": -70.0,
+    "GABA_E_rev": -65.0,
 }
 sim_params = {
     "receptor_type": 3,
@@ -71,7 +71,7 @@ plot_conductance(
     E_rev=cell_params["GABA_E_rev"],
     optimized_params=opt_params_dict,
     title="GABA conductance BC",
-    xlim=(190, 600),
+    xlim=(190, 400),
     duration=1201,
     save_path="./figs/opt_GABA_BC.png",
 )

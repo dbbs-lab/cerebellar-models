@@ -19,7 +19,7 @@ cell_params = {
     "k_2": 0.041407868,
     "A1": 0.01,
     "A2": -0.94,
-    "GABA_E_rev": -70.0,
+    "GABA_E_rev": -65.0,
 }
 sim_params = {
     "receptor_type": 3,
@@ -29,6 +29,7 @@ sim_params = {
     "current_name": "I_syn_gaba",
     "spike_time": 200.0 - 36 * 0.025,
 }
+
 trace_file = "../NEURON_traces/Danilo_synapses/GrCGABA.txt"
 opt_param_names = [
     "GABA_g_init",
