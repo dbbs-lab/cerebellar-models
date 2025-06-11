@@ -561,7 +561,7 @@ class FiringRatesPlot(Spike2Columns):
             ax.text(
                 0.01,
                 0.95,
-                "FR: {:.2} $\pm$ {:.2}".format(
+                r"FR: {:.2} $\pm$ {:.2}".format(
                     np.mean(self.firing_rates[:, i]), np.std(self.firing_rates[:, i])
                 ),
                 ha="left",

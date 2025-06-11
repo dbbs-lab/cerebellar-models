@@ -73,7 +73,7 @@ class PlacementTable(TablePlot, ScaffoldPlot):
             dict_colors=dict_colors,
             **kwargs,
         )
-        self.columns = ["Cell counts", "Cell densities [$\mu m^{-3}$]"]
+        self.columns = ["Cell counts", r"Cell densities [$\mu m^{-3}$]"]
         self.dict_abv = dict_abv or {}
         """Dictionary of abbreviations for cell types"""
 
@@ -91,7 +91,7 @@ class PlacementTable(TablePlot, ScaffoldPlot):
             volume = np.sum([p.volume() for place in ct.get_placement() for p in place.partitions])
             ct_name = self.extract_ct_name(ct)
             for labels in ps.get_unique_labels():
-                count = np.count_nonzero(ps.get_labelled(labels))
+                count = ps.get_labelled(labels).size
                 self.rows.append(self.get_labelled_ct_name(ct_name, labels))
                 self._values.append([count, volume])
                 self.table_values.append(
@@ -223,9 +223,11 @@ class ConnectivityTable(TablePlot, ScaffoldPlot):
             self.table_values.append(
                 [
                     len(pre_locs),
-                    "{:.2} $\pm$ {:.2}".format(np.mean(combo_counts), np.std(combo_counts)),
-                    "{:.2} $\pm$ {:.2}".format(np.mean(uniquePost_count), np.std(uniquePost_count)),
-                    "{:.2} $\pm$ {:.2}".format(np.mean(uniquePre_count), np.std(uniquePre_count)),
+                    r"{:.2} $\pm$ {:.2}".format(np.mean(combo_counts), np.std(combo_counts)),
+                    r"{:.2} $\pm$ {:.2}".format(
+                        np.mean(uniquePost_count), np.std(uniquePost_count)
+                    ),
+                    r"{:.2} $\pm$ {:.2}".format(np.mean(uniquePre_count), np.std(uniquePre_count)),
                 ]
             )
 
@@ -366,9 +368,9 @@ class CellPlacement3D(ScaffoldPlot):
                         alpha=alphas,
                         s=scale,
                     )
-        ax.set_xlabel("x in $\mu m$")
-        ax.set_ylabel("y in $\mu m$")
-        ax.set_zlabel("z in $\mu m$")
+        ax.set_xlabel(r"x in $\mu m$")
+        ax.set_ylabel(r"y in $\mu m$")
+        ax.set_zlabel(r"z in $\mu m$")
         self.set_axes_equal(ax)
         ax.set_title("Placement results", fontsize=40)
 

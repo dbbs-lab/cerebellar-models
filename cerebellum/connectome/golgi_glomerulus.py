@@ -15,8 +15,6 @@ from bsb import (
     refs,
 )
 
-from cerebellum.connectome.presyn_dist_strat import get_close_chunks
-
 
 @config.node
 class ConnectomeGolgiGlomerulus(ConnectionStrategy):

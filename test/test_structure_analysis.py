@@ -133,13 +133,13 @@ class TestConnectivityTable(
             [
                 [
                     str(counts1),
-                    "{:.2} $\pm$ {:.2}".format(1.0, 0.0),
-                    "{:.2} $\pm$ {:.2}".format(1.0, 0.0),
+                    r"{:.2} $\pm$ {:.2}".format(1.0, 0.0),
+                    r"{:.2} $\pm$ {:.2}".format(1.0, 0.0),
                 ],
                 [
                     str(counts2),
-                    "{:.2} $\pm$ {:.2}".format(1.0, 0.0),
-                    "{:.2} $\pm$ {:.2}".format(1.0, 0.0),
+                    r"{:.2} $\pm$ {:.2}".format(1.0, 0.0),
+                    r"{:.2} $\pm$ {:.2}".format(1.0, 0.0),
                 ],
             ]
         )
