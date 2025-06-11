@@ -43,6 +43,7 @@ class ConnectomeGlomerulusGranule(InvertedRoI, ConnectionStrategy):
     """Connection Strategies that links Pre-presyn cell to Glomeruli."""
     pre_cell_types = config.reflist(refs.cell_type_ref, required=True)
     """Celltype used for the pre-presyn cell."""
+    depends_on: list[ConnectionStrategy] = config.reflist(refs.connectivity_ref)
 
     @config.property
     def depends_on(self):

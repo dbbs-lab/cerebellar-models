@@ -20,6 +20,7 @@ class ConnectomeIO_MLI(NotParallel, ConnectionStrategy):
     """List of Connection Strategies that links MLI to PC."""
     pre_cell_pc = config.ref(refs.cell_type_ref, required=True)
     """Celltype used for to represent PC."""
+    depends_on: list[ConnectionStrategy] = config.reflist(refs.connectivity_ref)
 
     @config.property
     def depends_on(self):

@@ -141,8 +141,8 @@ cell is randomly selected. All ``postsynaptic targets`` that are connected to th
 
 .. _voxel_int:
 
-:doc:`VoxelIntersection <bsb:bsb/bsb.connectivity.detailed>`
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+:doc:`VoxelIntersection <bsb-core:bsb/bsb.connectivity.detailed>`
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 See bsb :doc:`documentation <bsb:connectivity/connection-strategies>`.
 
@@ -226,15 +226,15 @@ The algorithm consists in a connection strategy to connect IO cells, via PC, to 
 
 .. _fix_in:
 
-:doc:`FixedIndegree <bsb:bsb/bsb.connectivity>`
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+:doc:`FixedIndegree <bsb-core:bsb/bsb.connectivity>`
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 See bsb :doc:`documentation <bsb:connectivity/connection-strategies>`.
 
 .. _all_to_all:
 
-:doc:`AllToAll <bsb:bsb/bsb.connectivity>`
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+:doc:`AllToAll <bsb-core:bsb/bsb.connectivity>`
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 See bsb :doc:`documentation <bsb:connectivity/connection-strategies>`.
 
