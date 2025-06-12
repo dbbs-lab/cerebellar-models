@@ -7,15 +7,10 @@
 # -- Path setup --------------------------------------------------------------
 
 import importlib.metadata
+import sys
+from os.path import abspath, dirname, join
 
-# If extensions (or modules to document with autodoc) are in another directory,
-# add these directories to sys.path here. If the directory is relative to the
-# documentation root, use os.path.abspath to make it absolute, like shown here.
-#
-from os.path import dirname, join
-
-# import sys
-# sys.path.insert(0, os.path.abspath('.'))
+sys.path.insert(0, abspath("."))
 
 # Fetch the `__version__`
 proj_folder = dirname(dirname(__file__))
@@ -38,6 +33,7 @@ release = importlib.metadata.version("cerebellum")
 extensions = [
     "sphinx.ext.autodoc",
     "sphinx.ext.intersphinx",
+    "sphinx_extensions",
 ]
 autodoc_type_aliases = {"JobPool": "bsb.services.pool.JobPool"}
 autodoc_mock_imports = ["nest"]

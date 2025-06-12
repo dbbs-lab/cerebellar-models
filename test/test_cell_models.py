@@ -193,8 +193,8 @@ class TestSingleCellModels(
             cell_type = st.annotations["device"].split("_rec")[0]
             if cell_type not in cell_dict:
                 cell_dict[cell_type] = {}
-            if len(st.annotations["senders"]) > 0:
-                u_senders, inv = np.unique(st.annotations["senders"], return_inverse=True)
+            if len(st.array_annotations["senders"]) > 0:
+                u_senders, inv = np.unique(st.array_annotations["senders"], return_inverse=True)
                 for i, sender in enumerate(u_senders):
                     if str(sender) not in cell_dict[cell_type]:
                         cell_dict[cell_type][str(sender)] = []

@@ -63,8 +63,7 @@ the most basic neuron model of NEST. They basically emits one spike for every in
 receive. We are using them here to represent the mossy fibers and glomerulus population as these
 fibers only transmit spikes coming from other regions of the brain.
 
-.. include:: ../../../cerebellum/nest_models/eglif_cond_alpha_multisyn.nestml
-    :start-after: """
+.. include-nestml:: ../../../cerebellum/nest_models/eglif_cond_alpha_multisyn.nestml
     :end-before: References
 
 .. warning::
@@ -455,7 +454,7 @@ Awake state
 References
 ^^^^^^^^^^
 
-.. include:: ../../../cerebellum/nest_models/eglif_cond_alpha_multisyn.nestml
+.. include-nestml:: ../../../cerebellum/nest_models/eglif_cond_alpha_multisyn.nestml
     :start-after: start-references
     :end-before: See also
 

@@ -13,7 +13,7 @@ dynamic = ["version", "description"]
 dependencies = [
     "cmake~=3.31.6",
     "bsb[parallel,nest,neuron]~=6.0",
-    "nestml~=7.0",
+    "nestml~=8.0",
     "matplotlib~=3.9",
     "elephant~=1.1"
 ]
