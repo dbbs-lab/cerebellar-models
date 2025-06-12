@@ -14,6 +14,7 @@ dependencies = [
     "cmake~=3.31.6",
     "bsb[parallel,nest,neuron]~=6.0",
     "nestml~=8.0",
+    "odetoolbox==2.5.8",  # remove it next nestml release
     "matplotlib~=3.9",
     "elephant~=1.1"
 ]
