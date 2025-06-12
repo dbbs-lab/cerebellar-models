@@ -15,8 +15,6 @@ from bsb import (
     refs,
 )
 
-from cerebellum.connectome.presyn_dist_strat import get_close_chunks
-
 
 @config.node
 class ConnectomeGolgiGlomerulus(ConnectionStrategy):
@@ -35,6 +33,7 @@ class ConnectomeGolgiGlomerulus(ConnectionStrategy):
     """Connection Strategies that links Glomeruli to the postsynaptic cells."""
     glom_cell_types = config.reflist(refs.cell_type_ref, required=True)
     """Cell types used for the Glomeruli."""
+    depends_on: list[ConnectionStrategy] = config.reflist(refs.connectivity_ref)
 
     @config.property
     def depends_on(self):

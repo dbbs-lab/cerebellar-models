@@ -14,7 +14,7 @@ Create a virtual environment in the current folder and activate it:
    # if you need to leave the environment
    deactivate
 
-The ``cerebellum`` package requires Python 3.9+.
+The ``cerebellum`` package requires Python 3.10+.
 
 .. code-block:: bash
 

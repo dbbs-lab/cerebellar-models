@@ -6,20 +6,22 @@
 
 # -- Path setup --------------------------------------------------------------
 
-# If extensions (or modules to document with autodoc) are in another directory,
-# add these directories to sys.path here. If the directory is relative to the
-# documentation root, use os.path.abspath to make it absolute, like shown here.
-#
-# import os
-# import sys
-# sys.path.insert(0, os.path.abspath('.'))
+import importlib.metadata
+import sys
+from os.path import abspath, dirname, join
 
+sys.path.insert(0, abspath("."))
+
+# Fetch the `__version__`
+proj_folder = dirname(dirname(__file__))
+bsb_init_file = join(proj_folder, "pyproject.toml")
 
 # -- Project information -----------------------------------------------------
 
 project = "Cerebellum"
-copyright = "2022, DBBS Lab"
-author = "DBBS Lab"
+copyright = "2025, DBBS University of Pavia"
+author = "DBBS University of Pavia"
+release = importlib.metadata.version("cerebellum")
 
 
 # -- General configuration ---------------------------------------------------
@@ -31,6 +33,7 @@ author = "DBBS Lab"
 extensions = [
     "sphinx.ext.autodoc",
     "sphinx.ext.intersphinx",
+    "sphinx_extensions",
 ]
 autodoc_type_aliases = {"JobPool": "bsb.services.pool.JobPool"}
 autodoc_mock_imports = ["nest"]
@@ -40,8 +43,12 @@ intersphinx_mapping = {
     "numpy": ("https://numpy.org/doc/stable/", None),
     "scipy": ("https://scipy.github.io/devdocs/", None),
     "bsb": ("https://bsb.readthedocs.io/en/latest", None),
+    "bsb-core": ("https://bsb-core.readthedocs.io/en/latest", None),
     "neo": ("https://neo.readthedocs.io/en/latest/", None),
 }
+
+autoclass_content = "both"
+autodoc_typehints = "both"
 
 # Add any paths that contain templates here, relative to this directory.
 templates_path = ["_templates"]
@@ -64,6 +71,12 @@ numfig = True  # allow figure numbering
 # a list of builtin themes.
 #
 html_theme = "furo"
+
+html_context = {
+    "maintainer": "Dimitri Rodarie",
+    "project_pretty_name": "Cerebellum",
+    "projects": {"DBBS Scaffold": "https://github.com/dbbs/cerebellum"},
+}
 
 # Add any paths that contain custom static files (such as style sheets) here,
 # relative to this directory. They are copied after the builtin static files,

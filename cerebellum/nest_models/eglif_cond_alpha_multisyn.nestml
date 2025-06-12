@@ -1,63 +1,61 @@
-"""
-eglif_cond_alpha_multisyn - Conductance based extended generalized leaky integrate and fire neuron model
-########################################################################################################
+# eglif_cond_alpha_multisyn - Conductance based extended generalized leaky integrate and fire neuron model
+# ########################################################################################################
+#
+# Description
+# +++++++++++
+#
+# eglif_cond_alpha_multisyn is the generalized leaky integrate and fire neuron according to
+# Geminiani et al. (2018) [#geminiani_2018]_, with post-synaptic conductances in the form of a
+# bi-exponential ("alpha") function.
+#
+# The membrane potential is given by the following differential equation:
+#
+# .. math::
+#    \begin{cases}
+#        C_m \dfrac{dV_m}{dt} = \dfrac{C_m}{\tau_m}(V_m-E_L)
+#                                 - I_{adap} + I_{dep} + I_e + I_{stim} + I_{syn}\\
+#        \dfrac{dI_{adap}}{dt}=k_{adap}(V_m-E_L)-k_2 \cdot I_{adap}\\
+#        \dfrac{dI_{dep}}{dt} =-k_1 \cdot I_{dep}\\
+#    \end{cases}
 
-Description
-+++++++++++
-
-eglif_cond_alpha_multisyn is the generalized leaky integrate and fire neuron according to
-Geminiani et al. (2018) [#geminiani_2018]_, with post-synaptic conductances in the form of a
-bi-exponential ("alpha") function.
-
-The membrane potential is given by the following differential equation:
-
-.. math::
-   \begin{cases}
-       C_m \dfrac{dV_m}{dt} = \dfrac{C_m}{\tau_m}(V_m-E_L)
-                                - I_{adap} + I_{dep} + I_e + I_{stim} + I_{syn}\\
-       \dfrac{dI_{adap}}{dt}=k_{adap}(V_m-E_L)-k_2 \cdot I_{adap}\\
-       \dfrac{dI_{dep}}{dt} =-k_1 \cdot I_{dep}\\
-   \end{cases}
-
-where the synaptic current :math:`I_{syn}` integrates the input from 4 postsynaptic receptors:
-
-.. math::
-       I_{syn} = \sum_{i=1} ^{4} g_i (V - E_{rev,i})
-
-Here, the synapse `i` is excitatory or inhibitory depending on the value of :math:`E_{rev,i}`.
-
-Neuron produces spikes stochastically according to a point process with the firing intensity:
-
-.. math::
-  \lambda = \lambda_0 \cdot e^{\dfrac{V_m -V_{th}}{\tau_V}}
-
-In case of spike emission, the spike-triggered adaptation currents :math:`I_{adap}` and
-:math:`I_{dep}` are respectively increased and set by their respective constant
-(which can be positive or negative):
-
-.. math::
-   V_m &= V_{reset}\\
-   I_{dep} &= A1\\
-   I_{adap} &= I_{adap} + A2
-
-References
-++++++++++
-
-.. start-references
-
-.. [#geminiani_2018] Geminiani, A., Casellato, C., Locatelli, F., Prestori, F., Pedrocchi, A.,
-   & D'Angelo, E. (2018). Complex dynamics in simplified neuronal models:
-   reproducing Golgi cell electroresponsiveness. Frontiers in neuroinformatics, 12, 88.
-   https://doi.org/10.3389/fninf.2018.00088
-
-
-See also
-++++++++
-
-aeif_cond_alpha, aeif_cond_exp
-"""
-
-neuron eglif_cond_alpha_multisyn:
+# where the synaptic current :math:`I_{syn}` integrates the input from 4 postsynaptic receptors:
+#
+# .. math::
+#        I_{syn} = \sum_{i=1} ^{4} g_i (V - E_{rev,i})
+#
+# Here, the synapse `i` is excitatory or inhibitory depending on the value of :math:`E_{rev,i}`.
+#
+# Neuron produces spikes stochastically according to a point process with the firing intensity:
+#
+# .. math::
+#   \lambda = \lambda_0 \cdot e^{\dfrac{V_m -V_{th}}{\tau_V}}
+#
+# In case of spike emission, the spike-triggered adaptation currents :math:`I_{adap}` and
+# :math:`I_{dep}` are respectively increased and set by their respective constant
+# (which can be positive or negative):
+#
+# .. math::
+#    V_m &= V_{reset}\\
+#    I_{dep} &= A1\\
+#    I_{adap} &= I_{adap} + A2
+#
+# References
+# ++++++++++
+#
+# .. start-references
+#
+# .. [#geminiani_2018] Geminiani, A., Casellato, C., Locatelli, F., Prestori, F., Pedrocchi, A.,
+#    & D'Angelo, E. (2018). Complex dynamics in simplified neuronal models:
+#    reproducing Golgi cell electroresponsiveness. Frontiers in neuroinformatics, 12, 88.
+#    https://doi.org/10.3389/fninf.2018.00088
+#
+#
+# See also
+# ++++++++
+#
+# aeif_cond_alpha, aeif_cond_exp
+#
+model eglif_cond_alpha_multisyn:
     state:
         V_m mV = -60.0 mV                   # Membrane potential in mV
         I_dep pA = 0 * pA                   # Depolarizing spike-triggered current

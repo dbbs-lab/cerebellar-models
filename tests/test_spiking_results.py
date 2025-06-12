@@ -1,6 +1,7 @@
 import os
 import unittest
 from copy import deepcopy
+from os.path import abspath, dirname, join
 
 import numpy as np
 from bsb import Scaffold, parse_configuration_file
@@ -28,7 +29,10 @@ class MiniCerebCircuitFixture(RandomStorageFixture, engine_name="hdf5", setup_cl
     def setUpClass(cls):
         super().setUpClass()
         # one third of the canonical circuit
-        cls.cfg = parse_configuration_file("configurations/mouse/nest/stimulus_mossy_vitro.yaml")
+        main_folder = dirname(dirname(abspath(__file__)))
+        cls.cfg = parse_configuration_file(
+            join(main_folder, "configurations/mouse/nest/stimulus_mossy_vitro.yaml")
+        )
         cls.cfg.network.x = 100
         cls.cfg.network.y = 66
         cls.cfg.network.z = 100

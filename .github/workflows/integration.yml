@@ -1,17 +1,17 @@
-name: Build and test cerebellum
+name: Build and Tests
 
 env:
-  NEST_VERSION: 3.7
+  NEST_VERSION: 3.8
 
 on: [push, pull_request]
 
 jobs:
   build:
     if: github.event_name == 'push' || github.event.pull_request.head.repo.full_name != github.repository
-    runs-on: ubuntu-22.04
+    runs-on: ubuntu-latest
     strategy:
       matrix:
-        python-version: ["3.9", "3.10", "3.11"]
+        python-version: ["3.10", "3.12"]
     steps:
     - uses: actions/checkout@v4
 
@@ -19,11 +19,12 @@ jobs:
       uses: actions/setup-python@v5
       with:
         python-version: ${{ matrix.python-version }}
+
     - name: Setup MPI
       run: |
         sudo apt update
-        # Install `libopenmpi` for MPI
-        sudo apt install openmpi-bin libopenmpi-dev
+        # Install `libopenmpi` for MPI and libgsl for NEST
+        sudo apt install openmpi-bin libopenmpi-dev libgsl-dev
 
     - name: Cache NEST
       id: cache-nest
@@ -53,7 +54,7 @@ jobs:
     - name: Run tests & coverage
       run: |
         source ${{ github.workspace }}/simulators/nest/bin/nest_vars.sh
-        coverage run -p -m unittest discover -v -s ./test
+        coverage run -p -m unittest discover -v -s ./tests
 
     - name: Send coverage
       uses: codecov/codecov-action@v4.0.1

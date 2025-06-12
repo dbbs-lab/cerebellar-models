@@ -1,0 +1,128 @@
+name: DBBS Mouse cerebellum w/ DCN and IO NEST basal activity and mf stimulus w/ microzones
+storage:
+  root: mouse_cereb_microzones_nest.hdf5
+packages:
+  - bsb-nest~=4.3
+components:
+  - cerebellum/nest_models/build_models.py
+simulations:
+  basal_activity:
+    modules:
+      - cerebmodule
+    connection_models:
+      purkinje_to_dcn_p_minus:
+        $import:
+          ref: ./dcn_io_awake_nest.yaml#/simulations/basal_activity/connection_models/purkinje_to_dcn_p
+          values: [ synapse ]
+      purkinje_to_dcn_i_minus:
+        $import:
+          ref: ./dcn_io_awake_nest.yaml#/simulations/basal_activity/connection_models/purkinje_to_dcn_i
+          values: [ synapse ]
+      io_to_purkinje_minus:
+        $import:
+          ref: ./dcn_io_awake_nest.yaml#/simulations/basal_activity/connection_models/io_to_purkinje
+          values: [ synapse ]
+      io_to_dcn_p_minus:
+        $import:
+          ref: ./dcn_io_awake_nest.yaml#/simulations/basal_activity/connection_models/io_to_dcn_p
+          values: [ synapse ]
+      io_to_dcn_i_minus:
+        $import:
+          ref: ./dcn_io_awake_nest.yaml#/simulations/basal_activity/connection_models/io_to_dcn_i
+          values: [ synapse ]
+      dcn_i_to_io_minus:
+        $import:
+          ref: ./dcn_io_awake_nest.yaml#/simulations/basal_activity/connection_models/dcn_i_to_io
+          values: [ synapse ]
+    devices:
+      purkinje_record:
+        targetting:
+          strategy: by_label
+          labels: [ plus ]
+      purkinje_minus_record:
+        device: spike_recorder
+        delay: 0.1
+        targetting:
+          strategy: by_label
+          cell_models:
+            - purkinje_cell
+          labels: [ minus ]
+      dcn_p_record:
+        targetting:
+          strategy: by_label
+          labels: [ plus ]
+      dcn_p_minus_record:
+        device: spike_recorder
+        delay: 0.1
+        targetting:
+          strategy: by_label
+          cell_models:
+            - dcn_p
+          labels: [ minus ]
+      dcn_i_record:
+        targetting:
+          strategy: by_label
+          labels: [ plus ]
+      dcn_i_minus_record:
+        device: spike_recorder
+        delay: 0.1
+        targetting:
+          strategy: by_label
+          cell_models:
+            - dcn_i
+          labels: [ minus ]
+      io_record:
+        targetting:
+          strategy: by_label
+          labels: [ plus ]
+      io_minus_record:
+        device: spike_recorder
+        delay: 0.1
+        targetting:
+          strategy: by_label
+          cell_models:
+            - io
+          labels: [ minus ]
+    $import:
+      ref: ./dcn_io_awake_nest.yaml#/simulations/basal_activity/
+      values:
+        - simulator
+        - resolution
+        - duration
+        - seed
+        - cell_models
+        - connection_models
+        - devices
+  mf_cf_stimulus:
+    devices:
+      $import:
+        ref: ./dcn_io_awake_nest.yaml#/simulations/mf_cf_stimulus/devices/
+        values:
+          - mf_stimulus
+          - cf_stimulus
+    $import:
+      ref: "#/simulations/basal_activity"
+      values:
+        - simulator
+        - resolution
+        - duration
+        - modules
+        - seed
+        - simulator
+        - cell_models
+        - connection_models
+        - devices
+$import:
+  ref: ./microzones.yaml#/
+  values:
+    - packages
+    - storage
+    - network
+    - regions
+    - partitions
+    - morphologies
+    - cell_types
+    - placement
+    - after_placement
+    - connectivity
+    - after_connectivity

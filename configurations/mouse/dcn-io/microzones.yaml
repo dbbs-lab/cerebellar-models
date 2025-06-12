@@ -1,0 +1,135 @@
+name: DBBS Mouse cerebellum w/ DCN and IO split in microzones
+storage:
+  root: mouse_cereb_microzones.hdf5
+cell_types:
+after_placement:
+  label_microzones:
+    strategy: cerebellum.placement.microzones.LabelMicrozones
+    cell_types:
+      - purkinje_cell
+      - dcn_p
+      - dcn_i
+      - io
+    labels:
+      - plus
+      - minus
+connectivity:
+  purkinje_to_dcn_p:
+    presynaptic:
+      labels: [ plus ]
+    postsynaptic:
+      labels: [ plus ]
+  purkinje_to_dcn_p_minus:
+    presynaptic:
+      labels: [ minus ]
+    postsynaptic:
+      labels: [ minus ]
+    $import:
+      ref: ./dcn_io.yaml#/connectivity/purkinje_to_dcn_p
+      values:
+        - strategy
+        - presynaptic
+        - postsynaptic
+        - outdegree
+  purkinje_to_dcn_i:
+    presynaptic:
+      labels: [ plus ]
+    postsynaptic:
+      labels: [ plus ]
+  purkinje_to_dcn_i_minus:
+    presynaptic:
+      labels: [ minus ]
+    postsynaptic:
+      labels: [ minus ]
+    $import:
+      ref: ./dcn_io.yaml#/connectivity/purkinje_to_dcn_i
+      values:
+        - strategy
+        - presynaptic
+        - postsynaptic
+        - outdegree
+  io_to_purkinje:
+    presynaptic:
+      labels: [ plus ]
+    postsynaptic:
+      labels: [ plus ]
+  io_to_purkinje_minus:
+    presynaptic:
+      labels: [ minus ]
+    postsynaptic:
+      labels: [ minus ]
+    $import:
+      ref: ./dcn_io.yaml#/connectivity/io_to_purkinje
+      values:
+        - strategy
+        - presynaptic
+        - postsynaptic
+        - indegree
+  io_to_mli:
+    io_pc_connectivity:
+      - io_to_purkinje
+      - io_to_purkinje_minus
+  io_to_dcn_p:
+    presynaptic:
+      labels: [ plus ]
+    postsynaptic:
+      labels: [ plus ]
+  io_to_dcn_p_minus:
+    presynaptic:
+      labels: [ minus ]
+    postsynaptic:
+      labels: [ minus ]
+    $import:
+      ref: ./dcn_io.yaml#/connectivity/io_to_dcn_p
+      values:
+        - strategy
+        - presynaptic
+        - postsynaptic
+        - outdegree
+  io_to_dcn_i:
+    presynaptic:
+      labels: [ plus ]
+    postsynaptic:
+      labels: [ plus ]
+  io_to_dcn_i_minus:
+    presynaptic:
+      labels: [ minus ]
+    postsynaptic:
+      labels: [ minus ]
+    $import:
+      ref: ./dcn_io.yaml#/connectivity/io_to_dcn_i
+      values:
+        - strategy
+        - presynaptic
+        - postsynaptic
+        - outdegree
+  dcn_i_to_io:
+    presynaptic:
+      labels: [ plus ]
+    postsynaptic:
+      labels: [ plus ]
+  dcn_i_to_io_minus:
+    presynaptic:
+      labels: [ minus ]
+    postsynaptic:
+      labels: [ minus ]
+    $import:
+      ref: ./dcn_io.yaml#/connectivity/dcn_i_to_io
+      values:
+        - strategy
+        - presynaptic
+        - postsynaptic
+        - indegree
+$import:
+  ref: ./dcn_io.yaml#/
+  values:
+    - packages
+    - storage
+    - network
+    - regions
+    - partitions
+    - morphologies
+    - cell_types
+    - placement
+    - connectivity
+    - after_connectivity

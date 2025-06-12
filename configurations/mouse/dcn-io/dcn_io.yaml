@@ -53,35 +53,35 @@ connectivity:
     mli_pc_connectivity:
       - basket_to_purkinje
       - stellate_to_purkinje
-    io_pc_connectivity: io_to_purkinje
+    io_pc_connectivity: [ io_to_purkinje ]
     pre_cell_pc: purkinje_cell
   io_to_dcn_p:
-    strategy: bsb.connectivity.FixedOutdegree
+    strategy: bsb.connectivity.AllToAll
     presynaptic:
       cell_types:
         - io
     postsynaptic:
       cell_types:
         - dcn_p
-    outdegree: 60
+    affinity: 0.5
   io_to_dcn_i:
-    strategy: bsb.connectivity.FixedOutdegree
+    strategy: bsb.connectivity.AllToAll
     presynaptic:
       cell_types:
         - io
     postsynaptic:
       cell_types:
         - dcn_i
-    outdegree: 33
+    affinity: 0.5
   dcn_i_to_io:
-    strategy: bsb.connectivity.FixedIndegree
+    strategy: bsb.connectivity.AllToAll
     presynaptic:
       cell_types:
         - dcn_i
     postsynaptic:
       cell_types:
         - io
-    indegree: 33
+    affinity: 0.5
 after_connectivity:
   duplicate_conn_io_pc:
     strategy: cerebellum.connectome.io_purkinje.DuplicateSynapses

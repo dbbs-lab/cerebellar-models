@@ -1,0 +1,141 @@
+{
+    "@context": "https://doi.org/10.5063/schema/codemeta-2.0",
+    "type": "SoftwareSourceCode",
+    "name": "Cerebellar Models",
+    "license": "https://spdx.org/licenses/GPL-3.0-or-later",
+    "codeRepository": "git+https://github.com/dbbs-lab/cerebellar-models.git",
+    "downloadUrl": "https://github.com/dbbs-lab/cerebellar-models/archive/refs/tags/v0.7.0.tar.gz",
+    "dateCreated": "2021-02-09",
+    "datePublished": "2025-06-09",
+    "dateModified": "2025-06-14",
+    "version": "0.7",
+    "releaseNotes": "https://github.com/dbbs-lab/cerebellar-models/releases/tag/v0.7.0",
+    "funding": "785907 (Human Brain Project SGA2), 945539 (Human Brain Project SGA3), 101147319 (EBRAINS 2.0 Project) and 800858 (ICEI project), 101137289 (Virtual Brain Twin Project)",
+    "funder": {
+        "type": "Organization",
+        "name": "European Commission"
+    },
+    "description": "Developed by the Department of Brain and Behavioral Sciences at the University of Pavia, the Brain Scaffold Builder (BSB) is a component framework for neural modelling, which focuses on component declarations to piece together a brain model. The component declarations can be made in any supported configuration language, or using the library functions in Python. It offers parallel reconstruction and simulation of any network topology, placement and/or connectivity strategy.",
+    "keywords": [
+        "Cerebellum",
+        "Mouse",
+        "NEST",
+        "BSB",
+        "modelling",
+        "simulation"
+    ],
+    "author": [
+        {
+            "id": "https://orcid.org/0000-0003-2496-2311",
+            "type": "Person",
+            "affiliation": {
+                "type": "Organization",
+                "name": "DBBS Unipv"
+            },
+            "familyName": "Rodarie",
+            "givenName": "Dimitri"
+        },
+        {
+            "id": "https://orcid.org/0000-0003-2879-3893",
+            "type": "Person",
+            "affiliation": {
+                "type": "Organization",
+                "name": "DBBS Unipv"
+            },
+            "familyName": "Marchetti",
+            "givenName": "Filippo"
+        },
+        {
+            "id": "",
+            "type": "Person",
+            "affiliation": {
+                "type": "Organization",
+                "name": "DBBS Unipv"
+            },
+            "familyName": "De Grazia",
+            "givenName": "Marialaura"
+        },
+        {
+            "id": "https://search.kg.ebrains.eu/instances/2905ce6c-bc89-4c99-b8b0-0fa9a17d1897",
+            "type": "Person",
+            "affiliation": {
+                "type": "Organization",
+                "name": "DBBS Unipv"
+            },
+            "familyName": "De Schepper",
+            "givenName": "Robin"
+        },
+        {
+            "id": "https://orcid.org/0009-0007-9740-9070",
+            "type": "Person",
+            "affiliation": {
+                "type": "Organization",
+                "name": "DBBS Unipv"
+            },
+            "familyName": "Buttarazzi",
+            "givenName": "Emiliano"
+        },
+        {
+            "id": "https://orcid.org/0000-0003-0355-5880",
+            "type": "Person",
+            "affiliation": {
+                "type": "Organization",
+                "name": "DBBS Unipv"
+            },
+            "familyName": "Butt",
+            "givenName": "Abdul Haleem"
+        },
+        {
+            "id": "https://orcid.org/0000-0002-3388-7168",
+            "type": "Person",
+            "affiliation": {
+                "type": "Organization",
+                "name": "DBBS Unipv"
+            },
+            "familyName": "Marta",
+            "givenName": "Alessio"
+        },
+        {
+            "id": "https://search.kg.ebrains.eu/instances/a594cfe2-f53a-470f-b52e-697b8d5a8958",
+            "type": "Person",
+            "affiliation": {
+                "type": "Organization",
+                "name": "DBBS Unipv"
+            },
+            "familyName": "Geminiani",
+            "givenName": "Alice"
+        },
+        {
+            "id": "https://search.kg.ebrains.eu/instances/5ad4749a-6e5a-4512-86ff-b89834c1b87c",
+            "type": "Person",
+            "affiliation": {
+                "type": "Organization",
+                "name": "DBBS Unipv"
+            },
+            "familyName": "Casellato",
+            "givenName": "Claudia"
+        },
+        {
+            "id": "https://search.kg.ebrains.eu/instances/762bd286-9d46-4ac5-889f-63b08d33c895",
+            "type": "Person",
+            "affiliation": {
+                "type": "Organization",
+                "name": "DBBS Unipv"
+            },
+            "familyName": "D'Angelo",
+            "givenName": "Egidio"
+        }
+    ],
+    "operatingSystem": [
+        "Linux",
+        "Windows",
+        "macOS"
+    ],
+    "programmingLanguage": ["Python"],
+    "developmentStatus": "active",
+    "softwareRequirements": ["Python (version 3.10+)"],
+    "relatedLink": ["https://cerebellar-models.readthedocs.io/en/latest/"],
+    "applicationCategory": "neuroscience",
+    "issueTracker": "https://github.com/dbbs-lab/cerebellar-models/issues",
+    "contIntegration": "https://github.com/dbbs-lab/cerebellar-models/actions"
+}

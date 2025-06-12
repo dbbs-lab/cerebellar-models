@@ -5,7 +5,7 @@ Module for the utility class for postsynaptically-sorted ConnectionStrategy
 import itertools
 
 import numpy as np
-from bsb import BoxTree, Chunk, InvertedRoI, config
+from bsb import BoxTree, InvertedRoI, config
 
 
 def get_close_chunks(chunk, target_chunks, radius):

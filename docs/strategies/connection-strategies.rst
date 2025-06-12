@@ -6,7 +6,7 @@ Connection strategies
 :class:`ConnectomeMossyGlomerulus <.connectome.to_glomerulus.ConnectomeMossyGlomerulus>`
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-The algorithm selects one mossy fiber within the :math:`x\_length \times y\_length \times z\_size` μm box surrounding
+The algorithm selects one mossy fiber within the :math:`x\_length \times y\_length \times z\_size`  \mu m box surrounding
 each glomerulus. Here ``z_size`` is the size of the partition where the glomeruli are (i.e. no limit).
 This selection is random and performed with a truncated exponential distribution.
 
@@ -141,8 +141,8 @@ cell is randomly selected. All ``postsynaptic targets`` that are connected to th
 
 .. _voxel_int:
 
-:doc:`VoxelIntersection <bsb:bsb/bsb.connectivity.detailed>`
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+:doc:`VoxelIntersection <bsb-core:bsb/bsb.connectivity.detailed>`
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 See bsb :doc:`documentation <bsb:connectivity/connection-strategies>`.
 
@@ -226,22 +226,15 @@ The algorithm consists in a connection strategy to connect IO cells, via PC, to 
 
 .. _fix_in:
 
-:doc:`FixedIndegree <bsb:bsb/bsb.connectivity>`
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-
-See bsb :doc:`documentation <bsb:connectivity/connection-strategies>`.
-
-.. _fix_out:
-
-:doc:`FixedOutdegree <bsb:bsb/bsb.connectivity>`
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+:doc:`FixedIndegree <bsb-core:bsb/bsb.connectivity>`
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 See bsb :doc:`documentation <bsb:connectivity/connection-strategies>`.
 
 .. _all_to_all:
 
-:doc:`AllToAll <bsb:bsb/bsb.connectivity>`
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+:doc:`AllToAll <bsb-core:bsb/bsb.connectivity>`
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 See bsb :doc:`documentation <bsb:connectivity/connection-strategies>`.
 

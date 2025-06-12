@@ -13,7 +13,7 @@ Submodules
 ----------
 
 cerebellum.analysis.plots module
---------------------------------
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 .. automodule:: cerebellum.analysis.plots
    :members:
@@ -21,7 +21,7 @@ cerebellum.analysis.plots module
    :show-inheritance:
 
 cerebellum.analysis.report module
----------------------------------
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 .. automodule:: cerebellum.analysis.report
    :members:
@@ -29,7 +29,7 @@ cerebellum.analysis.report module
    :show-inheritance:
 
 cerebellum.analysis.structure_analysis module
----------------------------------------------
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 .. automodule:: cerebellum.analysis.structure_analysis
    :members:
@@ -37,7 +37,7 @@ cerebellum.analysis.structure_analysis module
    :show-inheritance:
 
 cerebellum.analysis.spiking_results module
-------------------------------------------
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 .. automodule:: cerebellum.analysis.spiking_results
    :members:
