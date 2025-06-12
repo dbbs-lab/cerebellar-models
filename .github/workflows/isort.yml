@@ -1,6 +1,5 @@
 name: Run isort
-on:
-  - push
+on: [workflow_call]
 
 jobs:
   isort:

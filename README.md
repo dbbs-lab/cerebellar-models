@@ -1,4 +1,5 @@
 [![Build and Test](https://github.com/dbbs-lab/cerebellar-models/actions/workflows/integration.yml/badge.svg)](https://github.com/dbbs-lab/cerebellar-models/actions/workflows/integration.yml)
+[![Documentation Status](https://readthedocs.org/projects/cerebellar-models/badge/?version=latest)](https://bsb.readthedocs.io/en/latest/?badge=latest)
 [![Code style: black](https://img.shields.io/badge/code%20style-black-000000.svg)](https://github.com/psf/black)
 [![codecov](https://codecov.io/gh/dbbs-lab/cerebellar-models/graph/badge.svg?token=KBEE3D83YQ)](https://codecov.io/gh/dbbs-lab/cerebellar-models)
 
@@ -7,6 +8,8 @@ This repository provides the code, configuration and morphology data to reconstr
 cerebellar cortex circuits using the [Brain Scaffold Builder](https://github.com/dbbs-lab/bsb) 
 framework. These models are based on the iterative work of the [Department of Brain and Behavioral 
 Sciences](https://dbbs.dip.unipv.it/en) of the university of Pavia. 
+
+<h3>:closed_book: Read the documentation on  https://cerebellar-models.readthedocs.io/en/latest
 
 ## Installation
 `cerebellar-models` is a package that contains implementation of connectivity or placement rules for BSB.
@@ -31,6 +34,13 @@ simulator(s) of your interest. Please follow the instructions:
 
 ### Cerebellar-models installation
 
+#### pip
+Cerebellar-models can be installed from PyPI through `pip`:
+```bash
+pip install cerebellar-models
+```
+
+#### Developers
 Developers best use pip's *editable* install. This creates a live link between the
 installed package and the local git repository:
 
@@ -53,23 +63,6 @@ In this repository, the BSB configurations are stored in the
 Sub-folders within `configurations` corresponds to different species reconstructions. Each specie 
 have its default configuration to reconstruct the models as well as `extensions` that can be added 
 to override or extend the default one. This includes the different simulation' paradigms.
-
-## Create documentation
-
-You can generate the documentation related to the different circuits and the code using sphinx.
-Assuming you are in the `cerebellar-models` folder, run the following command in your terminal:
-```bash
-pip install -e .[docs]
-````
-to install the required packages. 
-
-Then, you can build the documentation with the sphinx command: 
-```bash
-cd docs
-sphinx-build -n -b html . _build/html
-```
-This will produce html web pages that can be read with your favorite internet browser at: 
-`docs/_build/html/index.html`
 
 ## Building a circuit
 

@@ -1,0 +1,16 @@
+name: Check branch commit
+
+on:
+  push:
+    branches:
+      - '**'  # matches every branch ...
+
+jobs:
+  isort:
+    uses: ./.github/workflows/isort.yml
+  black:
+    uses: ./.github/workflows/black.yml
+  build:
+    uses: ./.github/workflows/integration.yml
+  docs:
+    uses: ./.github/workflows/docs.yml
