@@ -1,4 +1,4 @@
-name: Build and test cerebellum
+name: Build and Tests
 
 env:
   NEST_VERSION: 3.8
@@ -54,7 +54,7 @@ jobs:
     - name: Run tests & coverage
       run: |
         source ${{ github.workspace }}/simulators/nest/bin/nest_vars.sh
-        coverage run -p -m unittest discover -v -s ./test
+        coverage run -p -m unittest discover -v -s ./tests
 
     - name: Send coverage
       uses: codecov/codecov-action@v4.0.1

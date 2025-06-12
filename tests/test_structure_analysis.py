@@ -1,6 +1,5 @@
 import os
 import unittest
-from test.test_reports import DictTestCase
 
 import numpy as np
 from bsb import Configuration, Scaffold, parse_configuration_file
@@ -14,6 +13,7 @@ from cerebellum.analysis.structure_analysis import (
     PlacementTable,
     StructureReport,
 )
+from tests.test_reports import DictTestCase
 
 
 class TestPlacementTable(
