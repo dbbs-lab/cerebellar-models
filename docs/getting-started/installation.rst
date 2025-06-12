@@ -1,6 +1,6 @@
 Installation
 ------------
-We advise you to implement the ``cerebellum`` package and the related simulators within a Conda
+We advise you to implement the ``cerebellar-models`` package and the related simulators within a Conda
 or Python virtual environment.
 
 Create a virtual environment in the current folder and activate it:
@@ -14,15 +14,15 @@ Create a virtual environment in the current folder and activate it:
    # if you need to leave the environment
    deactivate
 
-The ``cerebellum`` package requires Python 3.10+.
+The ``cerebellar-models`` package requires Python 3.10+.
 
 .. code-block:: bash
 
-    git clone git@github.com:dbbs-lab/cerebellum
-    cd cerebellum
+    git clone git@github.com:dbbs-lab/cerebellar-models
+    cd cerebellar-models
     pip install -e .
 
-If you wish to contribute to the cerebellum repository, please also install
+If you wish to contribute to the cerebellar-models repository, please also install
 the :doc:`developers' packages <for-developers>`.
 
 NEST simulator

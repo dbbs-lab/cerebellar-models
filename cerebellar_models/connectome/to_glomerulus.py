@@ -8,7 +8,7 @@ import itertools
 import numpy as np
 from bsb import Chunk, ConnectionStrategy, InvertedRoI, config
 
-from cerebellum.connectome.presyn_dist_strat import PresynDistStrat
+from cerebellar_models.connectome.presyn_dist_strat import PresynDistStrat
 
 
 def norm_exp_dist(size: int = 1, b: float = 2.0):

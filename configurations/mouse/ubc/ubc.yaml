@@ -1,4 +1,4 @@
-name: DBBS Mouse cerebellum w/ UBC
+name: DBBS Mouse cerebellar_models w/ UBC
 storage:
   root: mouse_cereb_ubc.hdf5
 cell_types:
@@ -25,7 +25,7 @@ placement:
       - ubc_glomerulus
 connectivity:
   ubc_to_ubc_glomerulus:
-    strategy: cerebellum.connectome.to_glomerulus.ConnectomeUBCGlomerulus
+    strategy: cerebellar_models.connectome.to_glomerulus.ConnectomeUBCGlomerulus
     presynaptic:
       cell_types:
         - unipolar_brush_cell
@@ -34,7 +34,7 @@ connectivity:
         - ubc_glomerulus
     radius: 500
   glomerulus_to_ubc:
-    strategy: cerebellum.connectome.glomerulus_ubc.ConnectomeGlomerulusUBC
+    strategy: cerebellar_models.connectome.glomerulus_ubc.ConnectomeGlomerulusUBC
     presynaptic:
       cell_types:
         - ubc_glomerulus
@@ -47,7 +47,7 @@ connectivity:
       glomerulus: 2.
     radius: 50
   glomerulus_to_granule:
-    strategy: cerebellum.connectome.glomerulus_granule.ConnectomeGlomerulusGranule
+    strategy: cerebellar_models.connectome.glomerulus_granule.ConnectomeGlomerulusGranule
     presynaptic:
       cell_types:
         - glomerulus
@@ -66,7 +66,7 @@ connectivity:
     radius: 40
     convergence: 4
   glomerulus_to_golgi:
-    strategy: cerebellum.connectome.glomerulus_golgi.ConnectomeGlomerulusGolgi
+    strategy: cerebellar_models.connectome.glomerulus_golgi.ConnectomeGlomerulusGolgi
     presynaptic:
       cell_types:
         - glomerulus
@@ -78,7 +78,7 @@ connectivity:
         - basal_dendrites
     radius: 50
   golgi_to_glomerulus:
-    strategy: cerebellum.connectome.golgi_glomerulus.ConnectomeGolgiGlomerulus
+    strategy: cerebellar_models.connectome.golgi_glomerulus.ConnectomeGolgiGlomerulus
     presynaptic:
       cell_types:
         - golgi_cell

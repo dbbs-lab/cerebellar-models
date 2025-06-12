@@ -6,8 +6,8 @@ from bsb import Configuration, Scaffold, parse_configuration_file
 from bsb_test import NumpyTestCase, RandomStorageFixture
 from matplotlib import pyplot as plt
 
-from cerebellum.analysis.plots import Legend, ScaffoldPlot
-from cerebellum.analysis.report import LIST_CT_INFO, BSBReport, Report
+from cerebellar_models.analysis.plots import Legend, ScaffoldPlot
+from cerebellar_models.analysis.report import LIST_CT_INFO, BSBReport, Report
 
 
 class DictTestCase:

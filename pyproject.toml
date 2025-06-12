@@ -3,7 +3,7 @@ requires = ["flit_core >=3.2,<4"]
 build-backend = "flit_core.buildapi"
 
 [project]
-name = "cerebellum"
+name = "cerebellar-models"
 authors = [{ name = "Dimitri RODARIE", email = "dimitri.rodarie@cref.it" }]
 readme = "README.md"
 license = { file = "LICENSE" }
@@ -29,7 +29,7 @@ docs = [
     "furo~=2024.0"
 ]
 dev = [
-    "cerebellum[test,docs]",
+    "cerebellar-models[test,docs]",
     "pre-commit~=3.5",
     "black~=25.1.0",
     "isort~=6.0.0",
@@ -38,13 +38,13 @@ dev = [
 
 [dependency-groups]
 dev = [
-  "cerebellum[dev]",
+  "cerebellar-models[dev]",
 ]
 
 [project.urls]
-Home = "https://github.com/dbbs-lab/cerebellum"
-"Bug Tracker" = "https://github.com/dbbs-lab/cerebellum/issues/"
-"Source Code" = "https://github.com/dbbs-lab/cerebellum/"
+Home = "https://github.com/dbbs-lab/cerebellar-models"
+"Bug Tracker" = "https://github.com/dbbs-lab/cerebellar-models/issues/"
+"Source Code" = "https://github.com/dbbs-lab/cerebellar-models/"
 
 [tool.black]
 line-length = 100
@@ -54,7 +54,7 @@ profile = "black"
 known_third_party = ["nest"]
 
 [project.entry-points."bsb.components"]
-my_components = "cerebellum:classmap"
+my_components = "cerebellar_models:classmap"
 
 [tool.bumpversion]
 current_version = "0.6.0"
@@ -78,10 +78,10 @@ values = ["dev", "a", "b", "rc", "final"]
 optional_value = "final"
 
 [[tool.bumpversion.files]]
-filename = "cerebellum/__init__.py"
+filename = "cerebellar_models/__init__.py"
 
 [[tool.bumpversion.files]]
 filename = "configurations/mouse/mouse_cerebellar_cortex.yaml"
-search = 'cerebellum~={current_version}'
-replace = 'cerebellum~={new_version}'
+search = 'cerebellar_models~={current_version}'
+replace = 'cerebellar_models~={new_version}'
 

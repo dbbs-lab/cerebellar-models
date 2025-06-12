@@ -12,7 +12,7 @@ through the provided configurations:
 .. code-block:: yaml
 
     components:
-      - cerebellum.nest_models.build_models
+      - cerebellar_models.nest_models.build_models
     simulations:
         simulation_name:
             simulator: nest
@@ -20,7 +20,7 @@ through the provided configurations:
                 - cerebmodule
 
 Alternatively, you can manually compile them, running the
-`build_models.py <https://github.com/dbbs-lab/cerebellum/blob/master/cerebellum/nest_models/build_models.py>`_
+`build_models.py <https://github.com/dbbs-lab/cerebellar-models/blob/master/cerebellar_models/nest_models/build_models.py>`_
 python script.
 
 Neuron models
@@ -63,7 +63,7 @@ the most basic neuron model of NEST. They basically emits one spike for every in
 receive. We are using them here to represent the mossy fibers and glomerulus population as these
 fibers only transmit spikes coming from other regions of the brain.
 
-.. include-nestml:: ../../../cerebellum/nest_models/eglif_cond_alpha_multisyn.nestml
+.. include-nestml:: ../../../cerebellar_models/nest_models/eglif_cond_alpha_multisyn.nestml
     :end-before: References
 
 .. warning::
@@ -333,7 +333,7 @@ Basal activity
 ##############
 
 The basal activity configuration file
-`basal.yaml <https://github.com/dbbs-lab/cerebellum/blob/master/configurations/mouse/nest/basal.yaml>`_
+`basal.yaml <https://github.com/dbbs-lab/cerebellar-models/blob/master/configurations/mouse/nest/basal.yaml>`_
 implements to the default activity of the cerebellar cortex circuit. Neurons are represented as
 `eglif_cond_alpha_multisyn` and are connected with `static synapses`.
 
@@ -409,7 +409,7 @@ Mossy fiber stimulus
 ####################
 
 The mossy fiber stimulus configuration file
-`stimulus_mossy.yaml <https://github.com/dbbs-lab/cerebellum/blob/master/configurations/mouse/nest/stimulus_mossy.yaml>`_
+`stimulus_mossy.yaml <https://github.com/dbbs-lab/cerebellar-models/blob/master/configurations/mouse/nest/stimulus_mossy.yaml>`_
 adds to the basal activity configuration file another simulation configuration ``mf_stimulus``. ``mf_stimulus`` has the
 same parameters as the ``basal_activity`` but with a stimulus of the mossy fibers (see :ref:`basal-activity`).
 
@@ -454,7 +454,7 @@ Awake state
 References
 ^^^^^^^^^^
 
-.. include-nestml:: ../../../cerebellum/nest_models/eglif_cond_alpha_multisyn.nestml
+.. include-nestml:: ../../../cerebellar_models/nest_models/eglif_cond_alpha_multisyn.nestml
     :start-after: start-references
     :end-before: See also
 

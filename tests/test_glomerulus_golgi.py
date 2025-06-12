@@ -9,7 +9,7 @@ import numpy as np
 from bsb import Configuration, ConnectivityError, Scaffold, WorkflowError
 from bsb_test import NetworkFixture, NumpyTestCase, RandomStorageFixture
 
-from cerebellum.connectome.glomerulus_golgi import ConnectomeGlomerulusGolgi
+from cerebellar_models.connectome.glomerulus_golgi import ConnectomeGlomerulusGolgi
 
 
 class TestGlomerulusGolgi(

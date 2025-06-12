@@ -74,7 +74,7 @@ class TestIoMolecular(
             self.cfg.connectivity.add(
                 "io_to_mli",
                 dict(
-                    strategy="cerebellum.connectome.io_molecular.ConnectomeIO_MLI",
+                    strategy="cerebellar_models.connectome.io_molecular.ConnectomeIO_MLI",
                     presynaptic=dict(cell_types=["io"]),
                     postsynaptic=dict(cell_types=["mli", "mli2"]),
                     io_pc_connectivity=["io_to_pc"],
@@ -87,7 +87,7 @@ class TestIoMolecular(
             self.cfg.connectivity.add(
                 "io_to_mli2",
                 dict(
-                    strategy="cerebellum.connectome.io_molecular.ConnectomeIO_MLI",
+                    strategy="cerebellar_models.connectome.io_molecular.ConnectomeIO_MLI",
                     presynaptic=dict(cell_types=["io"]),
                     postsynaptic=dict(cell_types=["mli", "mli2", "mli3"]),
                     io_pc_connectivity=["io_to_pc"],
@@ -100,7 +100,7 @@ class TestIoMolecular(
             self.cfg.connectivity.add(
                 "io_to_mli3",
                 dict(
-                    strategy="cerebellum.connectome.io_molecular.ConnectomeIO_MLI",
+                    strategy="cerebellar_models.connectome.io_molecular.ConnectomeIO_MLI",
                     presynaptic=dict(cell_types=["io"]),
                     postsynaptic=dict(cell_types=["mli", "mli2"]),
                     io_pc_connectivity=["mli_to_mli2"],
@@ -113,7 +113,7 @@ class TestIoMolecular(
             self.cfg.connectivity.add(
                 "io_to_mli4",
                 dict(
-                    strategy="cerebellum.connectome.io_molecular.ConnectomeIO_MLI",
+                    strategy="cerebellar_models.connectome.io_molecular.ConnectomeIO_MLI",
                     presynaptic=dict(cell_types=["io", "mli3"]),
                     postsynaptic=dict(cell_types=["mli", "mli2"]),
                     io_pc_connectivity=["io_to_pc"],
@@ -126,7 +126,7 @@ class TestIoMolecular(
         self.cfg.connectivity.add(
             "io_to_mli",
             dict(
-                strategy="cerebellum.connectome.io_molecular.ConnectomeIO_MLI",
+                strategy="cerebellar_models.connectome.io_molecular.ConnectomeIO_MLI",
                 presynaptic=dict(cell_types=["io"]),
                 postsynaptic=dict(cell_types=["mli", "mli2"]),
                 io_pc_connectivity=["io_to_pc"],

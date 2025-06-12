@@ -10,8 +10,8 @@ from matplotlib import pyplot as plt
 from neo import SpikeTrain
 from quantities import ms
 
-from cerebellum.analysis.plots import ScaffoldPlot
-from cerebellum.analysis.spiking_results import (
+from cerebellar_models.analysis.plots import ScaffoldPlot
+from cerebellar_models.analysis.spiking_results import (
     BasicSimulationReport,
     FiringRatesPlot,
     FrequencyPlot,
@@ -91,7 +91,7 @@ class TestSpikePlots(
         with self.assertRaises(ValueError):
             SpikeSimulationReport(self.scaffold, "blabla", "./")
 
-        empty_report = SpikeSimulationReport(self.scaffold, "basal_activity", "./cerebellum")
+        empty_report = SpikeSimulationReport(self.scaffold, "basal_activity", "./cerebellar_models")
         self.assertEqual(len(empty_report.all_spikes), 0)
         self.assertEqual(empty_report.nb_neurons.size, 0)
         self.assertEqual(empty_report.populations, [])

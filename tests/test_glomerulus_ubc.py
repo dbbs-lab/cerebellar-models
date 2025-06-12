@@ -54,7 +54,7 @@ class TestGlomerulus_to_UBC(
             self.cfg.connectivity.add(
                 "glom_ubc",
                 dict(
-                    strategy="cerebellum.connectome.glomerulus_ubc.ConnectomeGlomerulusUBC",
+                    strategy="cerebellar_models.connectome.glomerulus_ubc.ConnectomeGlomerulusUBC",
                     presynaptic=dict(cell_types=["pre_cell", "pre_cell2"]),
                     postsynaptic=dict(cell_types=["test_cell"]),
                     radius=self.radius,
@@ -68,7 +68,7 @@ class TestGlomerulus_to_UBC(
             self.cfg.connectivity.add(
                 "glom_ubc",
                 dict(
-                    strategy="cerebellum.connectome.glomerulus_ubc.ConnectomeGlomerulusUBC",
+                    strategy="cerebellar_models.connectome.glomerulus_ubc.ConnectomeGlomerulusUBC",
                     presynaptic=dict(cell_types=["pre_cell", "pre_cell2"]),
                     postsynaptic=dict(cell_types=["test_cell"]),
                     radius=self.radius,
@@ -84,7 +84,7 @@ class TestGlomerulus_to_UBC(
         self.cfg.connectivity.add(
             "glom_ubc",
             dict(
-                strategy="cerebellum.connectome.glomerulus_ubc.ConnectomeGlomerulusUBC",
+                strategy="cerebellar_models.connectome.glomerulus_ubc.ConnectomeGlomerulusUBC",
                 presynaptic=dict(cell_types=["pre_cell", "pre_cell2"]),
                 postsynaptic=dict(cell_types=["test_cell"]),
                 radius=self.radius,
@@ -136,7 +136,7 @@ class TestGlomerulus_to_UBC(
         self.cfg.connectivity.add(
             "glom_ubc",
             dict(
-                strategy="cerebellum.connectome.glomerulus_ubc.ConnectomeGlomerulusUBC",
+                strategy="cerebellar_models.connectome.glomerulus_ubc.ConnectomeGlomerulusUBC",
                 presynaptic=dict(cell_types=["single_cell"]),
                 postsynaptic=dict(cell_types=["test_cell"]),
                 radius=self.radius,

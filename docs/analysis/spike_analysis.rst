@@ -2,7 +2,7 @@ Spike analysis and report of simulation results
 ===============================================
 
 This section describes in details all the spiking analysis and plots
-available through the cerebellum reporting, based on the results of
+available through the cerebellar-models reporting, based on the results of
 BSB simulations.
 
 .. _sim_plot:

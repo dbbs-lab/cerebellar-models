@@ -16,9 +16,9 @@ from neo import SpikeTrain
 from neo import io as nio
 from quantities import ms
 
-from cerebellum.analysis.plots import Legend, Plot, ScaffoldPlot
-from cerebellum.analysis.report import BSBReport, PlotTypeInfo
-from cerebellum.analysis.structure_analysis import TablePlot
+from cerebellar_models.analysis.plots import Legend, Plot, ScaffoldPlot
+from cerebellar_models.analysis.report import BSBReport, PlotTypeInfo
+from cerebellar_models.analysis.structure_analysis import TablePlot
 
 
 def _check_simulation(scaffold: Scaffold, simulation_name: str):

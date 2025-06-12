@@ -7,7 +7,7 @@ from bsb import Scaffold, parse_configuration_file
 from bsb_test import NumpyTestCase, RandomStorageFixture
 from matplotlib import pyplot as plt
 
-from cerebellum.analysis.plots import Legend, Plot, ScaffoldPlot
+from cerebellar_models.analysis.plots import Legend, Plot, ScaffoldPlot
 
 
 def mock_update(self):

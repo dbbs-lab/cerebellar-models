@@ -8,8 +8,8 @@ import numpy as np
 from bsb import AfterConnectivityHook, CellType, ConnectivitySet, Scaffold, config, warn
 from matplotlib import pyplot as plt
 
-from cerebellum.analysis.plots import Legend, ScaffoldPlot
-from cerebellum.analysis.report import LIST_CT_INFO, BSBReport, PlotTypeInfo
+from cerebellar_models.analysis.plots import Legend, ScaffoldPlot
+from cerebellar_models.analysis.report import LIST_CT_INFO, BSBReport, PlotTypeInfo
 
 
 class TablePlot:

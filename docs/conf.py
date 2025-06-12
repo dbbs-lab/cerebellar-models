@@ -18,10 +18,10 @@ bsb_init_file = join(proj_folder, "pyproject.toml")
 
 # -- Project information -----------------------------------------------------
 
-project = "Cerebellum"
+project = "DBBS Cerebellar models"
 copyright = "2025, DBBS University of Pavia"
 author = "DBBS University of Pavia"
-release = importlib.metadata.version("cerebellum")
+release = importlib.metadata.version("cerebellar_models")
 
 
 # -- General configuration ---------------------------------------------------
@@ -74,8 +74,8 @@ html_theme = "furo"
 
 html_context = {
     "maintainer": "Dimitri Rodarie",
-    "project_pretty_name": "Cerebellum",
-    "projects": {"DBBS Scaffold": "https://github.com/dbbs/cerebellum"},
+    "project_pretty_name": "DBBS Cerebellar Models",
+    "projects": {"DBBS Scaffold": "https://github.com/dbbs/cerebellar-models"},
 }
 
 # Add any paths that contain custom static files (such as style sheets) here,

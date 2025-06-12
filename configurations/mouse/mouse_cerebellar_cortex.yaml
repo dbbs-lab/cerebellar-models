@@ -1,6 +1,6 @@
 name: DBBS Mouse cerebellum configuration v4.2
 packages:
-  - cerebellum~=0.6.0
+  - cerebellar-models~=0.6.0
   - bsb~=6.0
 storage:
   engine: hdf5
@@ -117,7 +117,7 @@ placement:
       - stellate_cell
 connectivity:
   mossy_fibers_to_glomerulus:
-    strategy: cerebellum.connectome.to_glomerulus.ConnectomeMossyGlomerulus
+    strategy: cerebellar_models.connectome.to_glomerulus.ConnectomeMossyGlomerulus
     presynaptic:
       cell_types:
         - mossy_fibers
@@ -127,7 +127,7 @@ connectivity:
     x_length: 60
     y_length: 20
   glomerulus_to_granule:
-    strategy: cerebellum.connectome.glomerulus_granule.ConnectomeGlomerulusGranule
+    strategy: cerebellar_models.connectome.glomerulus_granule.ConnectomeGlomerulusGranule
     presynaptic:
       cell_types:
         - glomerulus
@@ -143,7 +143,7 @@ connectivity:
     radius: 40
     convergence: 4
   glomerulus_to_golgi:
-    strategy: cerebellum.connectome.glomerulus_golgi.ConnectomeGlomerulusGolgi
+    strategy: cerebellar_models.connectome.glomerulus_golgi.ConnectomeGlomerulusGolgi
     presynaptic:
       cell_types:
         - glomerulus
@@ -154,7 +154,7 @@ connectivity:
         - basal_dendrites
     radius: 50
   golgi_to_glomerulus:
-    strategy: cerebellum.connectome.golgi_glomerulus.ConnectomeGolgiGlomerulus
+    strategy: cerebellar_models.connectome.golgi_glomerulus.ConnectomeGolgiGlomerulus
     presynaptic:
       cell_types:
         - golgi_cell
@@ -370,7 +370,7 @@ connectivity:
       scale: 4
 after_connectivity:
   print_structure_report:
-    strategy: cerebellum.analysis.structure_analysis.RunStructureReport
+    strategy: cerebellar_models.analysis.structure_analysis.RunStructureReport
     output_filename: bsb_report_structure.pdf
 $import:
   ref: ../../morphologies/morphologies.yaml#/
