@@ -335,7 +335,7 @@ class CellPlacement3D(ScaffoldPlot):
         grey = [0.6, 0.6, 0.6, 1.0]
         for i, ps in enumerate(self.scaffold.get_placement_sets()):
             ct = ps.cell_type
-            if not ct.name in self.ignored_ct:
+            if ct.name not in self.ignored_ct:
                 positions = ps.load_positions()
                 if len(positions) > 0:
                     u_labels = ps.get_unique_labels()
