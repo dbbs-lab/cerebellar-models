@@ -8,10 +8,9 @@ on:
     secrets:
       CODECOV_TOKEN:
         required: true
-    inputs:
-      ACTIONS_ID_TOKEN_REQUEST_URL:
-        required: true
-        type: string
+
+permissions:
+  id-token: write
 
 jobs:
   build:
