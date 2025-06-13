@@ -82,13 +82,13 @@ filename = "cerebellar_models/__init__.py"
 
 [[tool.bumpversion.files]]
 filename = "configurations/mouse/mouse_cerebellar_cortex.yaml"
-search = 'cerebellar_models~={current_version}'
-replace = 'cerebellar_models~={new_version}'
+search = 'cerebellar-models~={current_version}'
+replace = 'cerebellar-models~={new_version}'
 
 [[tool.bumpversion.files]]
 filename = "codemeta.json"
-search = '"version": {current_version}'
-replace = '"version": {new_version}'
+search = '"version": "{current_version}"'
+replace = '"version": "{new_version}"'
 
 [[tool.bumpversion.files]]
 filename = "codemeta.json"
