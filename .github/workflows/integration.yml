@@ -3,7 +3,11 @@ name: Build and Tests
 env:
   NEST_VERSION: 3.8
 
-on: [workflow_call]
+on:
+  workflow_call:
+    secrets:
+      CODECOV_TOKEN:
+        required: true
 
 jobs:
   build:

@@ -12,5 +12,7 @@ jobs:
     uses: ./.github/workflows/black.yml
   build:
     uses: ./.github/workflows/integration.yml
+    secrets:
+      CODECOV_TOKEN: ${{ secrets.CODECOV_TOKEN }}
   docs:
     uses: ./.github/workflows/docs.yml
