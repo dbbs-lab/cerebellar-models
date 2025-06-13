@@ -13,7 +13,7 @@ from scipy.optimize import curve_fit
 
 class TestNestModuleLoading(unittest.TestCase):
     def test_build_models(self):
-        from cerebellum.nest_models.build_models import _build_nest_models
+        from cerebellar_models.nest_models.build_models import _build_nest_models
 
         # cerebmodule should have been built
         cerebmodule_file = join(
@@ -43,7 +43,7 @@ class TestSingleCellModels(
             "name": "test",
             "storage": {"engine": "hdf5"},
             "network": {"x": 1, "y": 1, "z": 1},
-            "components": ["cerebellum/nest_models/build_models.py"],
+            "components": ["cerebellar_models/nest_models/build_models.py"],
             "partitions": {"B": {"type": "layer", "thickness": 1}},
             "cell_types": {
                 "granule_cell": {"spatial": {"radius": 1, "count": 10}},

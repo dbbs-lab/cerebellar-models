@@ -15,8 +15,8 @@ from bsb import (
 )
 from bsb_test import NetworkFixture, NumpyTestCase, RandomStorageFixture
 
-from cerebellum.connectome.glomerulus_golgi import ConnectomeGlomerulusGolgi
-from cerebellum.connectome.golgi_glomerulus import ConnectomeGolgiGlomerulus
+from cerebellar_models.connectome.glomerulus_golgi import ConnectomeGlomerulusGolgi
+from cerebellar_models.connectome.golgi_glomerulus import ConnectomeGolgiGlomerulus
 
 
 class TestGolgiGlomerulus(
@@ -99,7 +99,7 @@ class TestGolgiGlomerulus(
             ),
             connectivity=dict(
                 glom_to_post=dict(
-                    strategy="cerebellum.connectome.glomerulus_golgi.ConnectomeGlomerulusGolgi",
+                    strategy="cerebellar_models.connectome.glomerulus_golgi.ConnectomeGlomerulusGolgi",
                     presynaptic=dict(cell_types=["glom_cell"]),
                     postsynaptic=dict(
                         cell_types=["golgi_cell"], morphology_labels=["basal_dendrites"]
@@ -118,7 +118,7 @@ class TestGolgiGlomerulus(
             self.cfg.connectivity.add(
                 "golgi_glom",
                 dict(
-                    strategy="cerebellum.connectome.golgi_glomerulus.ConnectomeGolgiGlomerulus",
+                    strategy="cerebellar_models.connectome.golgi_glomerulus.ConnectomeGolgiGlomerulus",
                     presynaptic=dict(cell_types=["golgi_cell"], morphology_labels=["axon"]),
                     postsynaptic=dict(cell_types=["error_cell"]),
                     radius=self.radius,
@@ -132,7 +132,7 @@ class TestGolgiGlomerulus(
             self.cfg.connectivity.add(
                 "golgi_glom2",
                 dict(
-                    strategy="cerebellum.connectome.golgi_glomerulus.ConnectomeGolgiGlomerulus",
+                    strategy="cerebellar_models.connectome.golgi_glomerulus.ConnectomeGolgiGlomerulus",
                     presynaptic=dict(cell_types=["golgi_cell"], morphology_labels=["axon"]),
                     postsynaptic=dict(cell_types=["golgi_cell"]),
                     radius=self.radius,
@@ -145,7 +145,7 @@ class TestGolgiGlomerulus(
         self.cfg.connectivity.add(
             "golgi_glom3",
             dict(
-                strategy="cerebellum.connectome.golgi_glomerulus.ConnectomeGolgiGlomerulus",
+                strategy="cerebellar_models.connectome.golgi_glomerulus.ConnectomeGolgiGlomerulus",
                 presynaptic=dict(cell_types=["golgi_cell"], morphology_labels=["wrong_label"]),
                 postsynaptic=dict(cell_types=["golgi_cell"]),
                 radius=self.radius,
@@ -216,7 +216,7 @@ class TestGolgiGlomerulus(
         self.cfg.connectivity.add(
             "golgi_glom",
             dict(
-                strategy="cerebellum.connectome.golgi_glomerulus.ConnectomeGolgiGlomerulus",
+                strategy="cerebellar_models.connectome.golgi_glomerulus.ConnectomeGolgiGlomerulus",
                 presynaptic=dict(cell_types=["golgi_cell"], morphology_labels=["axon"]),
                 postsynaptic=dict(cell_types=["golgi_cell"]),
                 radius=self.radius,

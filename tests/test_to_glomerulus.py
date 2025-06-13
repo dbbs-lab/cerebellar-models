@@ -66,7 +66,7 @@ class TestConnectomeMossyGlomerulus(
         self.cfg.connectivity.add(
             "x_to_glomerulus",
             dict(
-                strategy="cerebellum.connectome.to_glomerulus.ConnectomeMossyGlomerulus",
+                strategy="cerebellar_models.connectome.to_glomerulus.ConnectomeMossyGlomerulus",
                 presynaptic=dict(cell_types=["test_cell"]),
                 postsynaptic=dict(cell_types=["test_cell"]),
                 x_length=self.x_length,
@@ -110,7 +110,7 @@ class TestConnectomeUBCGlomerulus(
         self.cfg.connectivity.add(
             "x_to_glomerulus",
             dict(
-                strategy="cerebellum.connectome.to_glomerulus.ConnectomeUBCGlomerulus",
+                strategy="cerebellar_models.connectome.to_glomerulus.ConnectomeUBCGlomerulus",
                 presynaptic=dict(cell_types=["test_cell"]),
                 postsynaptic=dict(cell_types=["test_cell"]),
                 radius=self.radius,

@@ -9,7 +9,7 @@ import numpy as np
 from bsb import Configuration, ConfigurationError, Scaffold, WorkflowError
 from bsb_test import NetworkFixture, NumpyTestCase, RandomStorageFixture
 
-from cerebellum.connectome.glomerulus_granule import (
+from cerebellar_models.connectome.glomerulus_granule import (
     ConnectomeGlomerulusGranule,
     TooFewGlomeruliClusters,
 )
@@ -80,14 +80,14 @@ class TestGlomerulusGranule(
             ),
             connectivity=dict(
                 x_to_glomerulus=dict(
-                    strategy="cerebellum.connectome.to_glomerulus.ConnectomeMossyGlomerulus",
+                    strategy="cerebellar_models.connectome.to_glomerulus.ConnectomeMossyGlomerulus",
                     presynaptic=dict(cell_types=["pre_cell"]),
                     postsynaptic=dict(cell_types=["test_cell"]),
                     x_length=60,
                     y_length=20,
                 ),
                 y_to_glomerulus=dict(
-                    strategy="cerebellum.connectome.to_glomerulus.ConnectomeMossyGlomerulus",
+                    strategy="cerebellar_models.connectome.to_glomerulus.ConnectomeMossyGlomerulus",
                     presynaptic=dict(cell_types=["pre_cell3"]),
                     postsynaptic=dict(cell_types=["test_cell2"]),
                     x_length=60,
@@ -104,7 +104,7 @@ class TestGlomerulusGranule(
             self.cfg.connectivity.add(
                 "glom_to_gran",
                 dict(
-                    strategy="cerebellum.connectome.glomerulus_granule.ConnectomeGlomerulusGranule",
+                    strategy="cerebellar_models.connectome.glomerulus_granule.ConnectomeGlomerulusGranule",
                     presynaptic=dict(cell_types=["pre_cell"]),
                     postsynaptic=dict(cell_types=["test_cell"], morphology_labels=["dendrites"]),
                     radius=self.radius,
@@ -119,7 +119,7 @@ class TestGlomerulusGranule(
             self.cfg.connectivity.add(
                 "glom_to_gran2",
                 dict(
-                    strategy="cerebellum.connectome.glomerulus_granule.ConnectomeGlomerulusGranule",
+                    strategy="cerebellar_models.connectome.glomerulus_granule.ConnectomeGlomerulusGranule",
                     presynaptic=dict(cell_types=["test_cell"]),
                     postsynaptic=dict(cell_types=["test_cell"], morphology_labels=["dendrites"]),
                     radius=self.radius,
@@ -138,7 +138,7 @@ class TestGlomerulusGranule(
             self.cfg.connectivity.add(
                 "glom_to_gran3",
                 dict(
-                    strategy="cerebellum.connectome.glomerulus_granule.ConnectomeGlomerulusGranule",
+                    strategy="cerebellar_models.connectome.glomerulus_granule.ConnectomeGlomerulusGranule",
                     presynaptic=dict(cell_types=["test_cell"]),
                     postsynaptic=dict(cell_types=["test_cell"], morphology_labels=["dendrites"]),
                     radius=self.radius,
@@ -152,7 +152,7 @@ class TestGlomerulusGranule(
         self.cfg.connectivity.add(
             "x_to_glomerulus2",
             dict(
-                strategy="cerebellum.connectome.to_glomerulus.ConnectomeMossyGlomerulus",
+                strategy="cerebellar_models.connectome.to_glomerulus.ConnectomeMossyGlomerulus",
                 presynaptic=dict(cell_types=["pre_cell2"]),
                 postsynaptic=dict(cell_types=["test_cell"]),
                 x_length=60,
@@ -162,7 +162,7 @@ class TestGlomerulusGranule(
         self.cfg.connectivity.add(
             "glom_to_gran_f",
             dict(
-                strategy="cerebellum.connectome.glomerulus_granule.ConnectomeGlomerulusGranule",
+                strategy="cerebellar_models.connectome.glomerulus_granule.ConnectomeGlomerulusGranule",
                 presynaptic=dict(cell_types=["test_cell"]),
                 postsynaptic=dict(cell_types=["test_cell"], morphology_labels=["dendrites"]),
                 radius=self.radius,
@@ -231,7 +231,7 @@ class TestGlomerulusGranule(
         self.cfg.connectivity.add(
             "glom_to_gran",
             dict(
-                strategy="cerebellum.connectome.glomerulus_granule.ConnectomeGlomerulusGranule",
+                strategy="cerebellar_models.connectome.glomerulus_granule.ConnectomeGlomerulusGranule",
                 presynaptic=dict(cell_types=["test_cell"]),
                 postsynaptic=dict(cell_types=["test_cell"], morphology_labels=["dendrites"]),
                 radius=self.radius,

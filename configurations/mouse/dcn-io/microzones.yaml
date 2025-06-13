@@ -4,7 +4,7 @@ storage:
 cell_types:
 after_placement:
   label_microzones:
-    strategy: cerebellum.placement.microzones.LabelMicrozones
+    strategy: cerebellar_models.placement.microzones.LabelMicrozones
     cell_types:
       - purkinje_cell
       - dcn_p

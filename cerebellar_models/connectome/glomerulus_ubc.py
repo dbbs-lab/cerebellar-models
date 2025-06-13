@@ -5,7 +5,7 @@ Module for the configuration node of the Glomerulus to UBC ConnectionStrategy
 import numpy as np
 from bsb import ConfigurationError, ConnectionStrategy, config
 
-from cerebellum.connectome.presyn_dist_strat import PresynDistStrat
+from cerebellar_models.connectome.presyn_dist_strat import PresynDistStrat
 
 
 @config.node

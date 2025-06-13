@@ -1,4 +1,4 @@
-name: DBBS Mouse cerebellum w/ UBC NEST basal activity and mf stimulus
+name: DBBS Mouse cerebellar_models w/ UBC NEST basal activity and mf stimulus
 storage:
   root: mouse_cereb_ubc_nest.hdf5
 cell_types:

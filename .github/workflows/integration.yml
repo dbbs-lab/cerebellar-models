@@ -3,11 +3,17 @@ name: Build and Tests
 env:
   NEST_VERSION: 3.8
 
-on: [push, pull_request]
+on:
+  workflow_call:
+    secrets:
+      CODECOV_TOKEN:
+        required: true
+
+permissions:
+  id-token: write
 
 jobs:
   build:
-    if: github.event_name == 'push' || github.event.pull_request.head.repo.full_name != github.repository
     runs-on: ubuntu-latest
     strategy:
       matrix:
@@ -20,7 +26,7 @@ jobs:
       with:
         python-version: ${{ matrix.python-version }}
 
-    - name: Setup MPI
+    - name: Install libraries
       run: |
         sudo apt update
         # Install `libopenmpi` for MPI and libgsl for NEST
@@ -57,7 +63,7 @@ jobs:
         coverage run -p -m unittest discover -v -s ./tests
 
     - name: Send coverage
-      uses: codecov/codecov-action@v4.0.1
+      uses: codecov/codecov-action@v5.4.1
       with:
         token: ${{ secrets.CODECOV_TOKEN }}
-        slug: dbbs-lab/cerebellum
+        slug: dbbs-lab/cerebellar-models

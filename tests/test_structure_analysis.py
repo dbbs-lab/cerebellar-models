@@ -6,8 +6,8 @@ from bsb import Configuration, Scaffold, parse_configuration_file
 from bsb_test import NumpyTestCase, RandomStorageFixture
 from matplotlib import pyplot as plt
 
-from cerebellum.analysis.report import LIST_CT_INFO
-from cerebellum.analysis.structure_analysis import (
+from cerebellar_models.analysis.report import LIST_CT_INFO
+from cerebellar_models.analysis.structure_analysis import (
     CellPlacement3D,
     ConnectivityTable,
     PlacementTable,
@@ -94,7 +94,7 @@ class TestConnectivityTable(
         }
         self.cfg.connectivity.clear()
         self.cfg.connectivity["mossy_fibers_to_glomerulus"] = {
-            "strategy": "cerebellum.connectome.to_glomerulus.ConnectomeMossyGlomerulus",
+            "strategy": "cerebellar_models.connectome.to_glomerulus.ConnectomeMossyGlomerulus",
             "presynaptic": {"cell_types": ["mossy_fibers"]},
             # to test complex connectivity set names
             "postsynaptic": {"cell_types": ["glomerulus", "mossy_fibers"]},
@@ -234,7 +234,7 @@ class TestStructureReport(
         }
         self.cfg.connectivity.clear()
         self.cfg.connectivity["mossy_fibers_to_glomerulus"] = {
-            "strategy": "cerebellum.connectome.to_glomerulus.ConnectomeMossyGlomerulus",
+            "strategy": "cerebellar_models.connectome.to_glomerulus.ConnectomeMossyGlomerulus",
             "presynaptic": {"cell_types": ["mossy_fibers"]},
             "postsynaptic": {"cell_types": ["glomerulus"]},
             "x_length": 60,

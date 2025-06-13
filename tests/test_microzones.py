@@ -44,7 +44,7 @@ class TestMicrozones(
             ),
             after_placement=dict(
                 label_cell=dict(
-                    strategy="cerebellum.placement.microzones.LabelMicrozones",
+                    strategy="cerebellar_models.placement.microzones.LabelMicrozones",
                     cell_types=["io"],
                     labels=self.labels,
                 ),

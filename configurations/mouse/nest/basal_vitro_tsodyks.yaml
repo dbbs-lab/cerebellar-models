@@ -2,9 +2,9 @@ name: DBBS Mouse cerebellum NEST basal activity for in vitro state
 storage:
   root: mouse_cereb_nest.hdf5
 packages:
-  - bsb-nest~=4.3
+  - bsb-nest~=6.0
 components:
-  - cerebellum/nest_models/build_models.py
+  - cerebellar_models/nest_models/build_models.py
 simulations:
   basal_activity:
     simulator: nest

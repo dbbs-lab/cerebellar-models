@@ -9,7 +9,7 @@ import matplotlib.backends.backend_pdf
 import numpy as np
 from bsb import Scaffold, from_storage
 
-from cerebellum.analysis.plots import Plot, ScaffoldPlot
+from cerebellar_models.analysis.plots import Plot, ScaffoldPlot
 
 
 class PlotTypeInfo:

@@ -1,14 +1,14 @@
 For developers
 ---------------
-The ``cerebellum`` package requires Python 3.10+.
+The ``cerebellar-models`` package requires Python 3.10+.
 
 Developers best use pip’s *editable* install. This creates a live link between the installed package
 and the local git repository:
 
 .. code-block:: bash
 
-    git clone git@github.com:dbbs-lab/cerebellum
-    cd cerebellum
+    git clone git@github.com:dbbs-lab/cerebellar-models
+    cd cerebellar-models
     pip install -e .[dev]
     pre-commit install
 
@@ -16,7 +16,7 @@ Documentation
 ~~~~~~~~~~~~~
 
 You can produce the documentation for this code using the following commands, assuming you are in
-the ``cerebellum`` folder:
+the ``cerebellar-models`` folder:
 
 .. code-block:: bash
 
@@ -27,7 +27,7 @@ the ``cerebellum`` folder:
 Testing
 ~~~~~~~
 You can also run the unit tests and functional tests using the following commands, assuming you are
-in the ``cerebellum`` folder:
+in the ``cerebellar-models`` folder:
 
 .. code-block:: bash
 

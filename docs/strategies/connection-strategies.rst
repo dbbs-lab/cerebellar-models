@@ -32,7 +32,7 @@ exponential distribution based on the distance between the tip of each dendrite 
 .. code-block:: yaml
 
       glomerulus_to_golgi:
-        strategy: cerebellum.connectome.glomerulus_golgi.ConnectomeGlomerulusGolgi
+        strategy: cerebellar_models.connectome.glomerulus_golgi.ConnectomeGlomerulusGolgi
         presynaptic:
           cell_types:
             - glomerulus
@@ -70,7 +70,7 @@ glomerulus connected to one of the not yet selected mossy fibers is chosen.
 .. code-block:: yaml
 
       glomerulus_to_granule:
-        strategy: cerebellum.connectome.glomerulus_granule.ConnectomeGlomerulusGranule
+        strategy: cerebellar_models.connectome.glomerulus_granule.ConnectomeGlomerulusGranule
         presynaptic:
           cell_types:
             - glomerulus
@@ -116,7 +116,7 @@ cell is randomly selected. All ``postsynaptic targets`` that are connected to th
 .. code-block:: yaml
 
       golgi_to_granule:
-        strategy: cerebellum.connectome.golgi_glomerulus.ConnectomeGolgiGlomerulus
+        strategy: cerebellar_models.connectome.golgi_glomerulus.ConnectomeGolgiGlomerulus
         presynaptic:
           cell_types:
             - golgi_cell
@@ -174,7 +174,7 @@ glomerulus.
 .. code-block:: yaml
 
     glomerulus_to_ubc:
-        strategy: cerebellum.connectome.glomerulus_ubc.ConnectomeGlomerulus_to_UBC
+        strategy: cerebellar_models.connectome.glomerulus_ubc.ConnectomeGlomerulus_to_UBC
         presynaptic:
           cell_types:
             - ubc_glomerulus
@@ -209,7 +209,7 @@ The algorithm consists in a connection strategy to connect IO cells, via PC, to 
 .. code-block:: yaml
 
       io_to_mli:
-        strategy: cerebellum.connectome.io_molecular.ConnectomeIO_MLI
+        strategy: cerebellar_models.connectome.io_molecular.ConnectomeIO_MLI
         presynaptic:
           cell_types:
             - io

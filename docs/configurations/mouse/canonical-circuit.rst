@@ -11,7 +11,7 @@ These reconstructions are based on the iterative work of many researchers distri
 papers. The role of this file is to make explicit the origin of each value and strategy extracted
 from the literature and integrated into these configurations. All the configurations present in
 this folder are based on the
-`mouse_cerebellar_cortex.yaml <https://github.com/dbbs-lab/cerebellum/blob/master/configurations/mouse/mouse_cerebellar_cortex.yaml>`_
+`mouse_cerebellar_cortex.yaml <https://github.com/dbbs-lab/cerebellar-models/blob/master/configurations/mouse/mouse_cerebellar_cortex.yaml>`_
 file. It corresponds to the configuration file written for the reconstruction of the cerebellar
 circuit presented in the De Schepper et al. (2022) [#de_schepper_2022]_ paper. This circuit
 configuration will be later referred to as the ``canonical circuit``.
@@ -48,7 +48,7 @@ match this convention.
 Network dimensions
 ~~~~~~~~~~~~~~~~~~
 
-The ``canonical circuit`` is built in a cubic volume of :math:`300 \times 200 \times 295 \mu m` in the
+The ``canonical circuit`` is built in a cubic volume of :math:`300 \times 200 \times 295 \mu m^3` in the
 ``(x,y,z)`` convention (see ``network``, ``regions`` and ``partitions`` in the configuration). The
 thickness of each of its layer has been determined according to literature findings and to match the
 size and shape of the available morphologies:

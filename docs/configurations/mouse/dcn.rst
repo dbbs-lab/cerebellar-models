@@ -5,12 +5,12 @@ Deep cerebellar nuclei (DCN) are the primary output structures of the cerebellar
 They receive inhibitory input from Purkinje cells and excitatory input from mossy fibers and climbing fibers (from IO).
 DCN are composed by three distinct nuclei: dentate nucleus, fastigial nucleus and interposed nucleus.
 The default configuration with DCN is implemented in
-`dcn.yaml <https://github.com/dbbs-lab/cerebellum/blob/master/configurations/mouse/dcn-io/dcn.yaml>`_.
+`dcn.yaml <https://github.com/dbbs-lab/cerebellar-models/blob/master/configurations/mouse/dcn-io/dcn.yaml>`_.
 
 
 Configuration
 ^^^^^^^^^^^^^
-In `dcn.yaml <https://github.com/dbbs-lab/cerebellum/blob/master/configurations/mouse/dcn-io/dcn.yaml>`_ ,
+In `dcn.yaml <https://github.com/dbbs-lab/cerebellar-models/blob/master/configurations/mouse/dcn-io/dcn.yaml>`_ ,
 a new region called ``cerebellar_nuclei`` was added to the ``canonical circuit``.
 This region contains only one ``Layer`` Partition: ``dcn layer``.
 ``dcn layer`` has a thickness of ``200  \mu m`` . Additionally, to ensure that ``cerebellar_nuclei`` are placed under
@@ -165,7 +165,7 @@ Awake state
 Simulation paradigms
 ++++++++++++++++++++
 
-The `dcn_nest.yaml <https://github.com/dbbs-lab/cerebellum/blob/master/configurations/mouse/dcn-io/dcn_nest.yaml>`_ are
+The `dcn_nest.yaml <https://github.com/dbbs-lab/cerebellar-models/blob/master/configurations/mouse/dcn-io/dcn_nest.yaml>`_ are
 including all the simulation paradigms described in the :doc:`NEST section <nest>`) but include the DCN cells in the
 circuit. In the following subsections, we will only report the firing rates and ISI of the DCN cells since they have
 no effect on the rest of the circuit

@@ -4,7 +4,7 @@ storage:
 packages:
   - bsb-nest~=4.3
 components:
-  - cerebellum/nest_models/build_models.py
+  - cerebellar_models/nest_models/build_models.py
 simulations:
   basal_activity:
     modules:

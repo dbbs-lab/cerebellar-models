@@ -6,7 +6,7 @@ import appdirs
 from bsb.services import MPI
 from pynestml.frontend.pynestml_frontend import generate_target
 
-_cereb_dirs = appdirs.AppDirs("cerebellum")
+_cereb_dirs = appdirs.AppDirs("cerebellar_models")
 _cache_path = _cereb_dirs.user_cache_dir
 
 

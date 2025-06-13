@@ -3,7 +3,7 @@ Unipolar Brush Cells
 
 Unipolar Brush cells (UBC) are excitatory interneurons located in the granular layer that acts as relay cells for
 glomerulus [#mugnaini_2011]_. The default configuration for UBCs is implemented in
-`ubc.yaml <https://github.com/dbbs-lab/cerebellum/blob/master/configurations/mouse/ubc/ubc.yaml>`_.
+`ubc.yaml <https://github.com/dbbs-lab/cerebellar-models/blob/master/configurations/mouse/ubc/ubc.yaml>`_.
 
 Cellular density
 ^^^^^^^^^^^^^^^^
@@ -128,7 +128,7 @@ However, it is currently unclear how these parameters were optimized, or which f
 Simulation paradigms
 ++++++++++++++++++++
 
-The `ubc_nest.yaml <https://github.com/dbbs-lab/cerebellum/blob/master/configurations/mouse/ubc/ubc_nest.yaml>`_ are
+The `ubc_nest.yaml <https://github.com/dbbs-lab/cerebellar-models/blob/master/configurations/mouse/ubc/ubc_nest.yaml>`_ are
 including all the simulation paradigms described in the :doc:`NEST section <nest>`) but include the UBC cells in the
 circuit.
 
