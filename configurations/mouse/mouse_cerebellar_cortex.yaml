@@ -1,6 +1,6 @@
 name: DBBS Mouse cerebellum configuration v4.2
 packages:
-  - cerebellar-models~=0.6.0
+  - cerebellar-models~=0.7.0
   - bsb~=6.0
 storage:
   engine: hdf5

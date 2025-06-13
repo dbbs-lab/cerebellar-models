@@ -57,7 +57,7 @@ known_third_party = ["nest"]
 my_components = "cerebellar_models:classmap"
 
 [tool.bumpversion]
-current_version = "0.6.0"
+current_version = "0.7.0"
 parse = "(?P<major>\\d+)\\.(?P<minor>\\d+)\\.(?P<patch>\\d+)"
 serialize = ["{major}.{minor}.{patch}"]
 search = "{current_version}"
