@@ -85,3 +85,23 @@ filename = "configurations/mouse/mouse_cerebellar_cortex.yaml"
 search = 'cerebellar_models~={current_version}'
 replace = 'cerebellar_models~={new_version}'
 
+[[tool.bumpversion.files]]
+filename = "codemeta.json"
+search = '"version": {current_version}'
+replace = '"version": {new_version}'
+
+[[tool.bumpversion.files]]
+filename = "codemeta.json"
+search = '"releaseNotes": "https://github.com/dbbs-lab/cerebellar-models/releases/tag/v{current_version}"'
+replace = '"releaseNotes": "https://github.com/dbbs-lab/cerebellar-models/releases/tag/v{new_version}"'
+
+[[tool.bumpversion.files]]
+filename = "codemeta.json"
+search = '"downloadUrl": "https://github.com/dbbs-lab/cerebellar-models/archive/refs/tags/v{current_version}.tar.gz"'
+replace = '"downloadUrl": "https://github.com/dbbs-lab/cerebellar-models/archive/refs/tags/v{new_version}.tar.gz"'
+
+[[tool.bumpversion.files]]
+filename = "codemeta.json"
+search = '"dateModified": "\d{{4}}-\d{{2}}-\d{{2}}"'
+replace = '"dateModified": "{now:%Y-%m-%d}"'
+regex = true
