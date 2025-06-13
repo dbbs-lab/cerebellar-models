@@ -14,5 +14,7 @@ jobs:
     uses: ./.github/workflows/integration.yml
     secrets:
       CODECOV_TOKEN: ${{ secrets.CODECOV_TOKEN }}
+    with:
+      ACTIONS_ID_TOKEN_REQUEST_URL: ${{ env.ACTIONS_ID_TOKEN_REQUEST_URL }}
   docs:
     uses: ./.github/workflows/docs.yml

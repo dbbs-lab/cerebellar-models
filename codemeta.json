@@ -46,7 +46,7 @@
             "givenName": "Filippo"
         },
         {
-            "id": "",
+            "id": "https://orcid.org/0009-0004-6158-1707",
             "type": "Person",
             "affiliation": {
                 "type": "Organization",
