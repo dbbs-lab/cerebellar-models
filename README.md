@@ -1,5 +1,5 @@
 [![Build and Test](https://github.com/dbbs-lab/cerebellar-models/actions/workflows/integration.yml/badge.svg)](https://github.com/dbbs-lab/cerebellar-models/actions/workflows/integration.yml)
-[![Documentation Status](https://readthedocs.org/projects/cerebellar-models/badge/?version=latest)](https://bsb.readthedocs.io/en/latest/?badge=latest)
+[![Documentation Status](https://readthedocs.org/projects/cerebellar-models/badge/?version=latest)](https://cerebellar-models.readthedocs.io/en/latest/?badge=latest)
 [![Code style: black](https://img.shields.io/badge/code%20style-black-000000.svg)](https://github.com/psf/black)
 [![codecov](https://codecov.io/gh/dbbs-lab/cerebellar-models/graph/badge.svg?token=KBEE3D83YQ)](https://codecov.io/gh/dbbs-lab/cerebellar-models)
 
