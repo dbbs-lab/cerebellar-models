@@ -46,7 +46,7 @@ based on the reconstruction of `De Schepper et al. 2022 <https://doi.org/10.1038
 with BSB. This corresponds to our ``canonical circuit`` for the mouse so there is no need to assemble
 multiple configuration files.
 
-Assuming you are in the ``cerebellum`` folder, run the following command in your terminal:
+Assuming you are in the ``cerebellar-models`` folder, run the following command in your terminal:
 
 .. code-block:: bash
 
@@ -65,16 +65,16 @@ Simulation of the reconstructed circuits
 A list of simulations can be attached to a BSB reconstruction through its configuration file (read
 more :doc:`here <bsb:simulation/intro>`). These simulations are dependant on the simulator you
 choose and their paradigm. Some examples are provided for each simulator sustained by the
-`cerebellum` package in the :doc:`configurations section <../configurations/configurations>`.
+`cerebellar-models` package in the :doc:`configurations section <../configurations/configurations>`.
 
-After the simulation has completed, `cerebellum` allows you to run a list of predefined analysis on the
+After the simulation has completed, `cerebellar-models` allows you to run a list of predefined analysis on the
 simulation results. For instance, for spiking based simulation, you can run the following python script
 to produce a full pdf report with basic spike analysis of the simulation results (see more in
 :doc:`spike reporting section <../analysis/spike_analysis>`):
 
 .. code-block:: python
 
-    from cerebellum.analysis.spiking_results import BasicSimulationReport
+    from cerebellar_models.analysis.spiking_results import BasicSimulationReport
 
     scaffold_file = "path/to/your_bsb_scaffold.hdf5"
     simulation_name = "name_of_your_simulation"

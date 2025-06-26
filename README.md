@@ -1,16 +1,19 @@
-[![Build and test cerebellum](https://github.com/dbbs-lab/cerebellum/actions/workflows/integration.yml/badge.svg)](https://github.com/dbbs-lab/cerebellum/actions/workflows/integration.yml)
+[![Build and Test](https://github.com/dbbs-lab/cerebellar-models/actions/workflows/integration.yml/badge.svg)](https://github.com/dbbs-lab/cerebellar-models/actions/workflows/integration.yml)
+[![Documentation Status](https://readthedocs.org/projects/cerebellar-models/badge/?version=latest)](https://cerebellar-models.readthedocs.io/en/latest/?badge=latest)
 [![Code style: black](https://img.shields.io/badge/code%20style-black-000000.svg)](https://github.com/psf/black)
-[![codecov](https://codecov.io/gh/dbbs-lab/cerebellum/graph/badge.svg?token=KBEE3D83YQ)](https://codecov.io/gh/dbbs-lab/cerebellum)
+[![codecov](https://codecov.io/gh/dbbs-lab/cerebellar-models/graph/badge.svg?token=KBEE3D83YQ)](https://codecov.io/gh/dbbs-lab/cerebellar-models)
 
-# Cerebellum: A full scaffold model of the cerebellum, using the BSB.
+# DBBS Cerebellar models: Models of the cerebellum, using the BSB.
 This repository provides the code, configuration and morphology data to reconstruct and simulate 
 cerebellar cortex circuits using the [Brain Scaffold Builder](https://github.com/dbbs-lab/bsb) 
 framework. These models are based on the iterative work of the [Department of Brain and Behavioral 
 Sciences](https://dbbs.dip.unipv.it/en) of the university of Pavia. 
 
+<h3>:closed_book: Read the documentation on  https://cerebellar-models.readthedocs.io/en/latest
+
 ## Installation
-`cerebellum` is a package that contains implementation of connectivity or placement rules for BSB.
-The `cerebellum` package requires Python 3.9+.
+`cerebellar-models` is a package that contains implementation of connectivity or placement rules for BSB.
+The `cerebellar-models` package requires Python 3.10+.
 
 ### Pre-requirements
 
@@ -29,14 +32,21 @@ simulator(s) of your interest. Please follow the instructions:
 - For the [NEST](https://nest-simulator.readthedocs.io/en/stable/installation/index.html) simulator
 - For the [NEURON](https://nrn.readthedocs.io/en/8.2.4/install/install.html) simulator
 
-### Cerebellum installation
+### Cerebellar-models installation
 
+#### pip
+Cerebellar-models can be installed from PyPI through `pip`:
+```bash
+pip install cerebellar-models
+```
+
+#### Developers
 Developers best use pip's *editable* install. This creates a live link between the
 installed package and the local git repository:
 
 ```bash
- git clone git@github.com:dbbs-lab/cerebellum
- cd cerebellum
+ git clone git@github.com:dbbs-lab/cerebellar-models
+ cd cerebellar_models
  pip install -e .
 ```
 
@@ -44,32 +54,15 @@ installed package and the local git repository:
 
 ### Morphologies
 Cerebellar cortex neuron morphology reconstructions used in our microcircuits are stored in the 
-[morphologies](https://github.com/dbbs-lab/cerebellum/tree/master/configurations) folder. 
+[morphologies](https://github.com/dbbs-lab/cerebellar-models/tree/master/configurations) folder. 
 The folder contains also more information about each file.
 
 ### BSB configuration files for cerebellar cortex circuits
 In this repository, the BSB configurations are stored in the 
-[configurations](https://github.com/dbbs-lab/cerebellum/tree/master/configurations) folder. 
+[configurations](https://github.com/dbbs-lab/cerebellar-models/tree/master/configurations) folder. 
 Sub-folders within `configurations` corresponds to different species reconstructions. Each specie 
 have its default configuration to reconstruct the models as well as `extensions` that can be added 
 to override or extend the default one. This includes the different simulation' paradigms.
-
-## Create documentation
-
-You can generate the documentation related to the different circuits and the code using sphinx.
-Assuming you are in the `cerebellum` folder, run the following command in your terminal:
-```bash
-pip install -e .[docs]
-````
-to install the required packages. 
-
-Then, you can build the documentation with the sphinx command: 
-```bash
-cd docs
-sphinx-build -n -b html . _build/html
-```
-This will produce html web pages that can be read with your favorite internet browser at: 
-`docs/_build/html/index.html`
 
 ## Building a circuit
 
@@ -80,7 +73,7 @@ As an example, we present the process to reconstruct the cerebellar cortex of th
 based on the reconstruction of [De Schepper et al. 2022](https://doi.org/10.1038/s42003-022-04213-y) 
 with BSB.
 
-Assuming you are in the `cerebellum` folder, run the following command in your terminal:
+Assuming you are in the `cerebellar-models` folder, run the following command in your terminal:
 ```bash
 bsb compile configurations/mouse/mouse_cerebellar_cortex.yaml -v4 --clear
 ```
@@ -91,7 +84,7 @@ This command will produce a microcircuit of the mouse cerebellar cortex and stor
 As for the previous paragraph the following command might vary depending on your reconstruction and 
 simulation. 
 
-Assuming you are in the `cerebellum` folder, and you want to run the simulation `simulation_name`, 
+Assuming you are in the `cerebellar-models` folder, and you want to run the simulation `simulation_name`, 
 run the following command in your terminal:
 ```bash
 bsb simulate cerebellum.hdf5 simulation_name -o output_file_name -v4

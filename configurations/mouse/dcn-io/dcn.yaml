@@ -41,8 +41,8 @@ placement:
       - dcn_i
 connectivity:
   purkinje_to_dcn_p:
-    strategy: bsb.connectivity.FixedOutdegree
-    outdegree: 45
+    strategy: bsb.connectivity.AllToAll
+    affinity: 0.375
     presynaptic:
       cell_types:
         - purkinje_cell
@@ -52,8 +52,8 @@ connectivity:
       cell_types:
         - dcn_p
   purkinje_to_dcn_i:
-    strategy: bsb.connectivity.FixedOutdegree
-    outdegree: 12
+    strategy: bsb.connectivity.AllToAll
+    affinity: 0.18
     presynaptic:
       cell_types:
         - purkinje_cell
@@ -63,8 +63,8 @@ connectivity:
       cell_types:
         - dcn_i
   mossy_fibers_to_dcn_p:
-    strategy: bsb.connectivity.FixedIndegree
-    indegree: 48
+    strategy: bsb.connectivity.AllToAll
+    affinity: 0.4
     presynaptic:
       cell_types:
         - mossy_fibers

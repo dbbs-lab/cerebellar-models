@@ -4,4 +4,4 @@ Packages
 .. toctree::
    :maxdepth: 4
 
-   cerebellum/cerebellum
+   cerebellar_models/cerebellar_models
