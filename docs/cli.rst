@@ -16,7 +16,7 @@ Retrieve a canonical circuit configuration
 ==========================================
 
 .. warning::
-    For the time being, this command has to be run inside the cerebellum folder.
+    For the time being, this command has to be run inside the `cerebellar-models` folder.
 
 .. code-block:: bash
 

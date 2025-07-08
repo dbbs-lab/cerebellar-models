@@ -1,0 +1,24 @@
+name: Validate Pull Request
+
+on:
+  pull_request:
+    types: [opened, synchronize, reopened, edited]
+
+jobs:
+  preview-docs:
+    runs-on: ubuntu-latest
+    if: github.event.action != 'edited'
+    steps:
+      - uses: actions/checkout@v4
+      - name: Check modifications on docs
+        uses: dorny/paths-filter@v3
+        id: filter
+        with:
+          filters: |
+            docs:  # name of the filter
+              - 'docs/**'
+      - name: Preview Readthedocs
+        if: steps.filter.outputs.docs == 'true'
+        uses: readthedocs/actions/preview@v1
+        with:
+          project-slug: "cerebellar-models"

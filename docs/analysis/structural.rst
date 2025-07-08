@@ -1,12 +1,12 @@
 Structural analysis and report
 ==============================
 
-The cerebellum repository provides a list of analysis and plot that can be
+The cerebellar-models repository provides a list of analysis and plot that can be
 performed during or after the BSB reconstruction to extract structural
 properties of the produced circuit.
 
 The following section will describe in more details all the plots and analysis
-available through the cerebellum reporting.
+available through the cerebellar-models reporting.
 
 .. _placement_table:
 
@@ -97,5 +97,5 @@ compilation add the following section to your configuration:
 
     after_connectivity:
         print_structure_report:
-            strategy: cerebellum.analysis.structure_analysis.RunStructureReport
+            strategy: cerebellar_models.analysis.structure_analysis.RunStructureReport
             output_filename: bsb_report_structure.pdf

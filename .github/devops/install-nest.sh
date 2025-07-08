@@ -3,8 +3,7 @@ cd $GITHUB_WORKSPACE/_nest_repo
 git checkout tags/v$1
 mkdir build
 cd build
-sudo apt install libgsl-dev -y
-pip install cython
+pip install cython~=3.0.0
 mkdir -p $2
 cmake .. \
   -DCMAKE_INSTALL_PREFIX=$2 \
