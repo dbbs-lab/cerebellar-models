@@ -450,8 +450,8 @@ def _write_config(configuration, output_folder, extension):
     filename = os.path.join(output_folder, f"circuit.{extension}")
     try:
         configuration = Configuration.default(**configuration)  # Check that the configuration works
-    except ConfigurationError as e:
-        raise ValueError("BSB Error while configuring your cerebellar circuit") from e
+    except ConfigurationError as e:  # pragma: no cover
+        raise ValueError("A BSB error happened when loading your cerebellar circuit") from e
     with open(filename, "w") as outfile:
         outfile.write(format_configuration_content(extension, configuration))
     print(f"Created the BSB configuration file: {filename}")
@@ -596,11 +596,11 @@ def configure(
                 )
                 deep_update(configuration["simulations"][simulation_name]["devices"], default_stim)
                 sim_choices[simulation_name] = sim_choices[sim_name]
-            else:
+            else:  # pragma: no cover
                 raise ValueError(
                     f"Only nest configurations are implemented. Provided simulator: {simulator}"
                 )
-    else:
+    else:  # pragma: no cover
         raise ValueError(f"Only mouse configuration are implemented. Provided species: {species}")
 
     # Step 7: Recap choices
