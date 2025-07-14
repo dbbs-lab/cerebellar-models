@@ -87,6 +87,19 @@ class CerebOption:
             return survey.widgets.Numeric(value=float(self.value), decimal=True)
 
 
+class MicrozonesParams:
+    """Class to save the parameters for the micro-zones labelling"""
+
+    def __init__(
+        self,
+        labels: list[str] = None,
+        cell_types: list[str] = None,
+    ):
+        self.labels = labels or []
+        self.cell_types = cell_types or []
+        self.conn_duplicated = {}
+
+
 def print_panel(options, title="Configure your cerebellum circuit."):  # pragma: no cover
     """
     Print a survey form based on a list of options.
@@ -163,6 +176,12 @@ def _configure_cell_types(species_folder, config_cell_types):
             type_term=TypeTermElem.Basket,
             default_value=["dcn", "io"],
         ),
+        CerebOption(
+            "Add microzones?",
+            "Tick this box if you want to add microzones to your circuit",
+            type_term=TypeTermElem.Boolean,
+            default_value=False,
+        ),
     ]
     print_panel(
         species_options, "Select the state of the subject and the cell types to add in the circuit"
@@ -183,6 +202,66 @@ def _update_cell_types(configuration, cell_types, config_cell_types):
                     configuration[k] = v
                 else:
                     deep_update(configuration[k], v)
+    return configuration
+
+
+def _add_microzones(configuration, micro_params: MicrozonesParams):
+    # Keep only the labelled cells that are in the final config.
+    cells_found = []
+    for cell_type in configuration["cell_types"]:
+        if cell_type in micro_params.cell_types:
+            cells_found.append(cell_type)
+    micro_params.cell_types = cells_found
+
+    # add labelling strat
+    configuration["after_placement"] = {
+        "label_microzones": {
+            "strategy": "cerebellar_models.placement.microzones.LabelMicrozones",
+            "cell_types": cells_found,
+            "labels": micro_params.labels,
+        }
+    }
+
+    # The connectivity rules that have both their pre- and post- synaptic cell types
+    # labelled are updated to filter the first label (no change of name)
+    first_label = micro_params.labels[0]
+    for strat_name, strat in configuration["connectivity"].items():
+        found = True
+        for hemitype in ["presynaptic", "postsynaptic"]:
+            if not found:
+                break
+            for cell_type in strat[hemitype]["cell_types"]:
+                if cell_type not in micro_params.cell_types:
+                    found = False
+                    break
+        if found:
+            duplicate_rules = [copy.deepcopy(strat)] * len(micro_params.labels[1:])
+            for hemitype in ["presynaptic", "postsynaptic"]:
+                if "labels" not in strat[hemitype]:
+                    strat[hemitype]["labels"] = []
+                    for duplicate_rule in duplicate_rules:
+                        duplicate_rule[hemitype]["labels"] = []
+
+                strat[hemitype]["labels"].append(first_label)
+                for label, duplicate_rule in zip(micro_params.labels[1:], duplicate_rules):
+                    duplicate_rule[hemitype]["labels"].append(label)
+            micro_params.conn_duplicated[strat_name] = duplicate_rules
+
+    # Duplicate the connectivity rule for each extra label
+    for strat_name, duplicate_rules in micro_params.conn_duplicated.items():
+        for i in range(len(duplicate_rules)):
+            new_name = f"{strat_name}_{micro_params.labels[1 + i]}"
+            configuration["connectivity"][new_name] = duplicate_rules[i]
+            micro_params.conn_duplicated[strat_name][i] = new_name  # keep only new names
+
+    # Update references to the connectivity rules
+    for strat_name, strat in configuration["connectivity"].items():
+        for k, v in strat.items():
+            if isinstance(v, list):
+                for elem in v:
+                    if elem in micro_params.conn_duplicated:
+                        new_names = [f"{elem}_{label}" for label in micro_params.labels[1:]]
+                        strat[k].extend(new_names)
     return configuration
 
 
@@ -212,7 +291,7 @@ def _configure_simulations(config_simulations):
     return simulator_options[0].value
 
 
-def _configure_sim_params(config_simulations, simulation_names):
+def _configure_sim_params(config_simulations, simulation_names, micro_params: MicrozonesParams):
     dict_sim = {"simulations": {}}
     choices = {}
     for sim_name in simulation_names:
@@ -254,6 +333,32 @@ def _configure_sim_params(config_simulations, simulation_names):
         # Add simulator to simulation name so that we avoid duplicates
         dict_sim["simulations"][sim_name] = dict_sim["simulations"][simulation]
         del dict_sim["simulations"][simulation]
+
+        # duplicate connections linked to micro-zones
+        simulation = dict_sim["simulations"][sim_name]
+        for conn, new_names in micro_params.conn_duplicated.items():
+            for new_name in new_names:
+                simulation["connection_models"][new_name] = copy.deepcopy(
+                    simulation["connection_models"][conn]
+                )
+        # duplicate devices to record labelled cells separately
+        names = list(simulation["devices"].keys())
+        for cell_type in micro_params.cell_types:
+            for name in names:
+                device = simulation["devices"][name]
+                if (
+                    "_record" in name
+                    and device["targetting"]["strategy"] == "cell_model"
+                    and cell_type in device["targetting"]["cell_models"]
+                ):
+                    device["targetting"]["strategy"] = "by_label"
+                    device["targetting"]["labels"] = [micro_params.labels[0]]
+                    for label in micro_params.labels[1:]:
+                        new_name = f"{name.split("_record")[0]}_{label}_record"
+                        simulation["devices"][new_name] = copy.deepcopy(device)
+                        simulation["devices"][new_name]["targetting"]["labels"] = [label]
+                    break
+
     return dict_sim, choices
 
 
@@ -389,9 +494,16 @@ def configure(species: str = None, output_folder: str = None, extension: str = N
     ).__tree__()
 
     config_cell_types = load_configs_in_folder(join(species_folder, "cell_types"))
-    state, cell_types = _configure_cell_types(species_folder, config_cell_types)
+    state, cell_types, add_microzones = _configure_cell_types(species_folder, config_cell_types)
     configuration = _update_cell_types(configuration, cell_types, config_cell_types)
     state_folder = join(species_folder, state)
+    if add_microzones:
+        micro_params = MicrozonesParams(
+            cell_types=["purkinje_cell", "dcn_p", "dcn_i", "io"], labels=["plus", "minus"]
+        )
+        configuration = _add_microzones(configuration, micro_params)
+    else:
+        micro_params = MicrozonesParams()
 
     # Step 3: Simulation choice
     config_simulations = {
@@ -407,7 +519,9 @@ def configure(species: str = None, output_folder: str = None, extension: str = N
     simulation_names = _configure_simulations(config_simulations)
 
     # Step 4: Simulation models choice
-    dict_sim, sim_choices = _configure_sim_params(config_simulations, simulation_names)
+    dict_sim, sim_choices = _configure_sim_params(
+        config_simulations, simulation_names, micro_params
+    )
     deep_update(configuration, dict_sim)
 
     # Step 5: remove unnecessary cells and connections
@@ -477,6 +591,10 @@ def configure(species: str = None, output_folder: str = None, extension: str = N
     print(f"Species: {species}")
     print(f"State: {state}")
     print(f"Cell types: {cell_types}")
+    print(f"With microzones: {add_microzones}")
+    if add_microzones:
+        print(f"\tCell types: {micro_params.cell_types}")
+        print(f"\tLabels: {micro_params.labels}")
     print("Simulations:")
     for simulation, choices in sim_choices.items():
         print(f"\t{simulation}:")
