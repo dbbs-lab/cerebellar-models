@@ -48,7 +48,7 @@ match this convention.
 Network dimensions
 ~~~~~~~~~~~~~~~~~~
 
-The ``canonical circuit`` is built in a cubic volume of :math:`300 \times 200 \times 295 \mu m^3` in the
+The ``canonical circuit`` is built in a cubic volume of :math:`300 \times 200 \times 295` :math:`\mu m^3` in the
 ``(x,y,z)`` convention (see ``network``, ``regions`` and ``partitions`` in the configuration). The
 thickness of each of its layer has been determined according to literature findings and to match the
 size and shape of the available morphologies:
