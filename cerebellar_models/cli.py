@@ -354,7 +354,7 @@ def _configure_sim_params(config_simulations, simulation_names, micro_params: Mi
                     device["targetting"]["strategy"] = "by_label"
                     device["targetting"]["labels"] = [micro_params.labels[0]]
                     for label in micro_params.labels[1:]:
-                        new_name = f"{name.split("_record")[0]}_{label}_record"
+                        new_name = f"{name.split('_record')[0]}_{label}_record"
                         simulation["devices"][new_name] = copy.deepcopy(device)
                         simulation["devices"][new_name]["targetting"]["labels"] = [label]
                     break
@@ -418,7 +418,7 @@ def _write_config(configuration, output_folder, extension):
         output_options.append(
             CerebOption(
                 "Configuration folder",
-                f"Configure the folder in which to put the configuration file",
+                "Configure the folder in which to put the configuration file",
                 default_value=os.getcwd(),
                 type_term=TypeTermElem.Text,
             )
