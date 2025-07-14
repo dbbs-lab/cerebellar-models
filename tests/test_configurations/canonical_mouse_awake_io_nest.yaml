@@ -9,6 +9,17 @@ after_connectivity:
   print_structure_report:
     output_filename: bsb_report_structure.pdf
     strategy: cerebellar_models.analysis.structure_analysis.RunStructureReport
+after_placement:
+  label_microzones:
+    cell_types:
+    - purkinje_cell
+    - dcn_p
+    - dcn_i
+    - io
+    labels:
+    - plus
+    - minus
+    strategy: cerebellar_models.placement.microzones.LabelMicrozones
 cell_types:
   basket_cell:
     plotting:
@@ -148,13 +159,30 @@ connectivity:
     voxels_post: 500
     voxels_pre: 500
   dcn_i_to_io:
+    affinity: 0.5
     postsynaptic:
       cell_types:
       - io
+      labels:
+      - plus
     presynaptic:
       cell_types:
       - dcn_i
+      labels:
+      - plus
+    strategy: bsb.connectivity.AllToAll
+  dcn_i_to_io_minus:
     affinity: 0.5
+    postsynaptic:
+      cell_types:
+      - io
+      labels:
+      - minus
+    presynaptic:
+      cell_types:
+      - dcn_i
+      labels:
+      - minus
     strategy: bsb.connectivity.AllToAll
   gap_goc:
     affinity: 0.3
@@ -238,25 +266,61 @@ connectivity:
     voxels_post: 500
     voxels_pre: 500
   io_to_dcn_i:
+    affinity: 0.5
     postsynaptic:
       cell_types:
       - dcn_i
+      labels:
+      - plus
     presynaptic:
       cell_types:
       - io
+      labels:
+      - plus
     strategy: bsb.connectivity.AllToAll
+  io_to_dcn_i_minus:
     affinity: 0.5
+    postsynaptic:
+      cell_types:
+      - dcn_i
+      labels:
+      - minus
+    presynaptic:
+      cell_types:
+      - io
+      labels:
+      - minus
+    strategy: bsb.connectivity.AllToAll
   io_to_dcn_p:
+    affinity: 0.5
     postsynaptic:
       cell_types:
       - dcn_p
+      labels:
+      - plus
     presynaptic:
       cell_types:
       - io
+      labels:
+      - plus
+    strategy: bsb.connectivity.AllToAll
+  io_to_dcn_p_minus:
     affinity: 0.5
+    postsynaptic:
+      cell_types:
+      - dcn_p
+      labels:
+      - minus
+    presynaptic:
+      cell_types:
+      - io
+      labels:
+      - minus
     strategy: bsb.connectivity.AllToAll
   io_to_mli:
-    io_pc_connectivity: [ io_to_purkinje ]
+    io_pc_connectivity:
+    - io_to_purkinje
+    - io_to_purkinje_minus
     mli_pc_connectivity:
     - basket_to_purkinje
     - stellate_to_purkinje
@@ -274,9 +338,26 @@ connectivity:
     postsynaptic:
       cell_types:
       - purkinje_cell
+      labels:
+      - plus
     presynaptic:
       cell_types:
       - io
+      labels:
+      - plus
+    strategy: bsb.connectivity.FixedIndegree
+  io_to_purkinje_minus:
+    indegree: 1
+    postsynaptic:
+      cell_types:
+      - purkinje_cell
+      labels:
+      - minus
+    presynaptic:
+      cell_types:
+      - io
+      labels:
+      - minus
     strategy: bsb.connectivity.FixedIndegree
   mossy_fibers_to_dcn_p:
     affinity: 0.4
@@ -362,9 +443,28 @@ connectivity:
     postsynaptic:
       cell_types:
       - dcn_i
+      labels:
+      - plus
     presynaptic:
       cell_types:
       - purkinje_cell
+      labels:
+      - plus
+      morphology_labels:
+      - axon
+    strategy: bsb.connectivity.AllToAll
+  purkinje_to_dcn_i_minus:
+    affinity: 0.18
+    postsynaptic:
+      cell_types:
+      - dcn_i
+      labels:
+      - minus
+    presynaptic:
+      cell_types:
+      - purkinje_cell
+      labels:
+      - minus
       morphology_labels:
       - axon
     strategy: bsb.connectivity.AllToAll
@@ -373,9 +473,28 @@ connectivity:
     postsynaptic:
       cell_types:
       - dcn_p
+      labels:
+      - plus
     presynaptic:
       cell_types:
       - purkinje_cell
+      labels:
+      - plus
+      morphology_labels:
+      - axon
+    strategy: bsb.connectivity.AllToAll
+  purkinje_to_dcn_p_minus:
+    affinity: 0.375
+    postsynaptic:
+      cell_types:
+      - dcn_p
+      labels:
+      - minus
+    presynaptic:
+      cell_types:
+      - purkinje_cell
+      labels:
+      - minus
       morphology_labels:
       - axon
     strategy: bsb.connectivity.AllToAll
@@ -853,6 +972,12 @@ simulations:
           model: static_synapse
           receptor_type: 2
           weight: 0.45
+      dcn_i_to_io_minus:
+        synapse:
+          delay: 25.0
+          model: static_synapse
+          receptor_type: 2
+          weight: 0.45
       glomerulus_to_golgi:
         synapse:
           U: 0.43
@@ -895,7 +1020,19 @@ simulations:
           model: static_synapse
           receptor_type: 1
           weight: 0.25
+      io_to_dcn_i_minus:
+        synapse:
+          delay: 5.0
+          model: static_synapse
+          receptor_type: 1
+          weight: 0.25
       io_to_dcn_p:
+        synapse:
+          delay: 4.0
+          model: static_synapse
+          receptor_type: 1
+          weight: 0.4
+      io_to_dcn_p_minus:
         synapse:
           delay: 4.0
           model: static_synapse
@@ -914,6 +1051,12 @@ simulations:
           receptor_type: 3
           weight: 5.0
       io_to_purkinje:
+        synapse:
+          delay: 4.0
+          model: static_synapse
+          receptor_type: 3
+          weight: 1.6
+      io_to_purkinje_minus:
         synapse:
           delay: 4.0
           model: static_synapse
@@ -976,7 +1119,19 @@ simulations:
           model: static_synapse
           receptor_type: 2
           weight: 0.02
+      purkinje_to_dcn_i_minus:
+        synapse:
+          delay: 4.0
+          model: static_synapse
+          receptor_type: 2
+          weight: 0.02
       purkinje_to_dcn_p:
+        synapse:
+          delay: 4.0
+          model: static_synapse
+          receptor_type: 2
+          weight: 0.35
+      purkinje_to_dcn_p_minus:
         synapse:
           delay: 4.0
           model: static_synapse
@@ -1019,20 +1174,42 @@ simulations:
           cell_models:
           - basket_cell
           strategy: cell_model
+      dcn_i_minus_record:
+        delay: 0.1
+        device: spike_recorder
+        targetting:
+          cell_models:
+          - dcn_i
+          labels:
+          - minus
+          strategy: by_label
       dcn_i_record:
         delay: 0.1
         device: spike_recorder
         targetting:
           cell_models:
           - dcn_i
-          strategy: cell_model
+          labels:
+          - plus
+          strategy: by_label
+      dcn_p_minus_record:
+        delay: 0.1
+        device: spike_recorder
+        targetting:
+          cell_models:
+          - dcn_p
+          labels:
+          - minus
+          strategy: by_label
       dcn_p_record:
         delay: 0.1
         device: spike_recorder
         targetting:
           cell_models:
           - dcn_p
-          strategy: cell_model
+          labels:
+          - plus
+          strategy: by_label
       glomerulus_record:
         delay: 0.1
         device: spike_recorder
@@ -1054,13 +1231,24 @@ simulations:
           cell_models:
           - granule_cell
           strategy: cell_model
+      io_minus_record:
+        delay: 0.1
+        device: spike_recorder
+        targetting:
+          cell_models:
+          - io
+          labels:
+          - minus
+          strategy: by_label
       io_record:
         delay: 0.1
         device: spike_recorder
         targetting:
           cell_models:
           - io
-          strategy: cell_model
+          labels:
+          - plus
+          strategy: by_label
       mossy_fibers_record:
         delay: 0.1
         device: spike_recorder
@@ -1068,13 +1256,24 @@ simulations:
           cell_models:
           - mossy_fibers
           strategy: cell_model
+      purkinje_minus_record:
+        delay: 0.1
+        device: spike_recorder
+        targetting:
+          cell_models:
+          - purkinje_cell
+          labels:
+          - minus
+          strategy: by_label
       purkinje_record:
         delay: 0.1
         device: spike_recorder
         targetting:
           cell_models:
           - purkinje_cell
-          strategy: cell_model
+          labels:
+          - plus
+          strategy: by_label
       stellate_record:
         delay: 0.1
         device: spike_recorder
@@ -1328,6 +1527,12 @@ simulations:
           model: static_synapse
           receptor_type: 2
           weight: 0.45
+      dcn_i_to_io_minus:
+        synapse:
+          delay: 25.0
+          model: static_synapse
+          receptor_type: 2
+          weight: 0.45
       glomerulus_to_golgi:
         synapse:
           U: 0.43
@@ -1370,7 +1575,19 @@ simulations:
           model: static_synapse
           receptor_type: 1
           weight: 0.25
+      io_to_dcn_i_minus:
+        synapse:
+          delay: 5.0
+          model: static_synapse
+          receptor_type: 1
+          weight: 0.25
       io_to_dcn_p:
+        synapse:
+          delay: 4.0
+          model: static_synapse
+          receptor_type: 1
+          weight: 0.4
+      io_to_dcn_p_minus:
         synapse:
           delay: 4.0
           model: static_synapse
@@ -1389,6 +1606,12 @@ simulations:
           receptor_type: 3
           weight: 5.0
       io_to_purkinje:
+        synapse:
+          delay: 4.0
+          model: static_synapse
+          receptor_type: 3
+          weight: 1.6
+      io_to_purkinje_minus:
         synapse:
           delay: 4.0
           model: static_synapse
@@ -1451,7 +1674,19 @@ simulations:
           model: static_synapse
           receptor_type: 2
           weight: 0.02
+      purkinje_to_dcn_i_minus:
+        synapse:
+          delay: 4.0
+          model: static_synapse
+          receptor_type: 2
+          weight: 0.02
       purkinje_to_dcn_p:
+        synapse:
+          delay: 4.0
+          model: static_synapse
+          receptor_type: 2
+          weight: 0.35
+      purkinje_to_dcn_p_minus:
         synapse:
           delay: 4.0
           model: static_synapse
@@ -1506,20 +1741,42 @@ simulations:
           - io
           strategy: cell_model
         weight: 100.0
+      dcn_i_minus_record:
+        delay: 0.1
+        device: spike_recorder
+        targetting:
+          cell_models:
+          - dcn_i
+          labels:
+          - minus
+          strategy: by_label
       dcn_i_record:
         delay: 0.1
         device: spike_recorder
         targetting:
           cell_models:
           - dcn_i
-          strategy: cell_model
+          labels:
+          - plus
+          strategy: by_label
+      dcn_p_minus_record:
+        delay: 0.1
+        device: spike_recorder
+        targetting:
+          cell_models:
+          - dcn_p
+          labels:
+          - minus
+          strategy: by_label
       dcn_p_record:
         delay: 0.1
         device: spike_recorder
         targetting:
           cell_models:
           - dcn_p
-          strategy: cell_model
+          labels:
+          - plus
+          strategy: by_label
       glomerulus_record:
         delay: 0.1
         device: spike_recorder
@@ -1541,13 +1798,24 @@ simulations:
           cell_models:
           - granule_cell
           strategy: cell_model
+      io_minus_record:
+        delay: 0.1
+        device: spike_recorder
+        targetting:
+          cell_models:
+          - io
+          labels:
+          - minus
+          strategy: by_label
       io_record:
         delay: 0.1
         device: spike_recorder
         targetting:
           cell_models:
           - io
-          strategy: cell_model
+          labels:
+          - plus
+          strategy: by_label
       mf_stimulus:
         delay: 0.1
         device: poisson_generator
@@ -1566,13 +1834,24 @@ simulations:
           cell_models:
           - mossy_fibers
           strategy: cell_model
+      purkinje_minus_record:
+        delay: 0.1
+        device: spike_recorder
+        targetting:
+          cell_models:
+          - purkinje_cell
+          labels:
+          - minus
+          strategy: by_label
       purkinje_record:
         delay: 0.1
         device: spike_recorder
         targetting:
           cell_models:
           - purkinje_cell
-          strategy: cell_model
+          labels:
+          - plus
+          strategy: by_label
       stellate_record:
         delay: 0.1
         device: spike_recorder

@@ -96,8 +96,11 @@ class MicrozonesParams:
         cell_types: list[str] = None,
     ):
         self.labels = labels or []
+        """Labels to associate to each microzone"""
         self.cell_types = cell_types or []
+        """Cell types to split into microzones"""
         self.conn_duplicated = {}
+        """Duplicated connections obtained from the cell type labelling"""
 
 
 def print_panel(options, title="Configure your cerebellum circuit."):  # pragma: no cover
@@ -149,7 +152,7 @@ def _configure_species(species):
     return main_options[0].value
 
 
-def _configure_cell_types(species_folder, config_cell_types):
+def _configure_cell_types(species_folder, config_cell_types, add_microzones: bool):
     cell_type_names = []
     for filename1, config_1 in config_cell_types.items():
         cell_types1 = list(config_1["cell_types"].keys())
@@ -178,9 +181,9 @@ def _configure_cell_types(species_folder, config_cell_types):
         ),
         CerebOption(
             "Add microzones?",
-            "Tick this box if you want to add microzones to your circuit",
+            "Split your circuit into microzones",
             type_term=TypeTermElem.Boolean,
-            default_value=False,
+            default_value=add_microzones,
         ),
     ]
     print_panel(
@@ -473,13 +476,25 @@ def _write_config(configuration, output_folder, extension):
     required=False,
     help="Extension for the configuration file.",
 )
-def configure(species: str = None, output_folder: str = None, extension: str = None):
+@click.option(
+    "--microzones",
+    required=False,
+    is_flag=True,
+    help="Split your circuit into 2 separated microzones.",
+)
+def configure(
+    species: str = None,
+    output_folder: str = None,
+    extension: str = None,
+    microzones: bool = False,
+):
     """
     Resolve a canonical cerebellum configuration file for BSB based on user choices.
 
     :param str species: species to reconstruct the circuit from.
     :param str output_folder: path where to write the output configuration file.
     :param str extension: extension for the configuration file.
+    :param bool microzones: whether to split the circuit into microzones.
     """
     # Step 1: Species choice
     if species is None:
@@ -494,10 +509,12 @@ def configure(species: str = None, output_folder: str = None, extension: str = N
     ).__tree__()
 
     config_cell_types = load_configs_in_folder(join(species_folder, "cell_types"))
-    state, cell_types, add_microzones = _configure_cell_types(species_folder, config_cell_types)
+    state, cell_types, microzones = _configure_cell_types(
+        species_folder, config_cell_types, microzones
+    )
     configuration = _update_cell_types(configuration, cell_types, config_cell_types)
     state_folder = join(species_folder, state)
-    if add_microzones:
+    if microzones:
         micro_params = MicrozonesParams(
             cell_types=["purkinje_cell", "dcn_p", "dcn_i", "io"], labels=["plus", "minus"]
         )
@@ -591,8 +608,8 @@ def configure(species: str = None, output_folder: str = None, extension: str = N
     print(f"Species: {species}")
     print(f"State: {state}")
     print(f"Cell types: {cell_types}")
-    print(f"With microzones: {add_microzones}")
-    if add_microzones:
+    print(f"With microzones: {microzones}")
+    if microzones:
         print(f"\tCell types: {micro_params.cell_types}")
         print(f"\tLabels: {micro_params.labels}")
     print("Simulations:")

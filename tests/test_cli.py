@@ -14,7 +14,7 @@ def deep_equal(d, u, path="/"):
         if isinstance(v, Mapping):
             deep_equal(d.get(k, {}), v, path + k + "/")
         elif k not in d or d[k] != v:
-            return False
+            return False  # pragma: no cover
     return True
 
 
@@ -77,7 +77,16 @@ class TestCli(unittest.TestCase):
             config2 = yaml.safe_load(f)
         runner = CliRunner()
         result = runner.invoke(
-            configure, ["--species", "mouse", "--output_folder", os.getcwd(), "--extension", "yaml"]
+            configure,
+            [
+                "--species",
+                "mouse",
+                "--output_folder",
+                os.getcwd(),
+                "--extension",
+                "yaml",
+                "--microzones",
+            ],
         )
         self.assertEqual(result.exit_code, 0)
         with open("./circuit.yaml", "r") as f:
@@ -87,7 +96,7 @@ class TestCli(unittest.TestCase):
         os.remove("./circuit.yaml")
 
         # Test default parameters
-        result = runner.invoke(configure, [])
+        result = runner.invoke(configure, ["--microzones"])
         self.assertEqual(result.exit_code, 0)
         with open("./circuit.yaml", "r") as f:
             config = yaml.safe_load(f)
