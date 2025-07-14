@@ -13,7 +13,7 @@ Configuration
 In `dcn.yaml <https://github.com/dbbs-lab/cerebellar-models/blob/master/configurations/mouse/dcn-io/dcn.yaml>`_ ,
 a new region called ``cerebellar_nuclei`` was added to the ``canonical circuit``.
 This region contains only one ``Layer`` Partition: ``dcn layer``.
-``dcn layer`` has a thickness of ``200  \mu m`` . Additionally, to ensure that ``cerebellar_nuclei`` are placed under
+``dcn layer`` has a thickness of :math:`200  \mu m` . Additionally, to ensure that ``cerebellar_nuclei`` are placed under
 the ``cerebellar_cortex``, the ``origin`` of the ``granular_layer`` was set to ``[0, 0, 200]`` (above DCN).
 
 Cell types
@@ -40,7 +40,7 @@ From this ratio, considering the total amount of GrC placed in the ``canonical c
 number of DCN to be placed.
 Literature data reported that DCNp are around the 57% of the total number of neurons in the cerebellar nuclei,
 while DCNi around the 32% [#baumel_2009]_ [#batini_1992]_. Taking into account these percentages and dividing by the
-volume of the DCN layer (set to :math:`200 \times 200 \times 300`  \mu m), the values reported in the following table
+volume of the DCN layer (set to :math:`200 \times 200 \times 300  \mu m`), the values reported in the following table
 were obtained.
 
 .. csv-table::
