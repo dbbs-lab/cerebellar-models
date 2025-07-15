@@ -1,0 +1,50 @@
+simulations:
+  basal_activity:
+    simulator: nest
+    connection_models:
+      parallel_fiber_to_purkinje:
+        synapse:
+          weight: 0.14
+      ascending_axon_to_purkinje:
+        synapse:
+          weight: 0.41
+      parallel_fiber_to_stellate:
+        synapse:
+          weight: 0.08
+      parallel_fiber_to_basket:
+        synapse:
+          weight: 0.06
+      basket_to_purkinje:
+        synapse:
+          weight: 0.8
+      mossy_fibers_to_dcn_p:
+        synapse:
+          weight: 0.25
+      purkinje_to_dcn_p:
+        synapse:
+          weight: 0.35
+      purkinje_to_dcn_i:
+        synapse:
+          weight: 0.02
+      io_to_purkinje:
+        synapse:
+          weight: 1.6
+      io_to_mli_io_to_basket_cell:
+        synapse:
+          weight: 5
+      io_to_mli_io_to_stellate_cell:
+        synapse:
+          weight: 5
+      io_to_dcn_p:
+        synapse:
+          weight: 0.4
+      io_to_dcn_i:
+        synapse:
+          weight: 0.25
+      dcn_i_to_io:
+        synapse:
+          weight: 0.45
+$import:
+  ref: ../../../in-vitro/nest/connection_models/static_synapse.yaml#/
+  values:
+    - simulations

@@ -148,7 +148,7 @@ follows (expressed in mean :math:`\pm` standard deviation):
     Cell name;Mean Firing rate (Hz); Mean ISI (ms)
     Mossy cell; :math:`4.1 \pm 0.93`; :math:`240 \pm 61`
     Granule cell; :math:`2.9 \pm 2.1`; :math:`480 \pm 440`
-    Unipolar brush cell; :math:`0.21 \pm 0`; 1100 pm 91
+    Unipolar brush cell; :math:`0.21 \pm 0`; :math:`1100 pm 91`
     Golgi cell;:math:`7.4 \pm 4.2`; :math:`220 \pm 270`
     Purkinje cell;:math:`46 \pm 0.89`; :math:`22 \pm 0.42`
     Basket cell;:math:`19 \pm 8.4`; :math:`70 \pm 47`

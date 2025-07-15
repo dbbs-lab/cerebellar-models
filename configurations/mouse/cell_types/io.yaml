@@ -1,6 +1,3 @@
-name: DBBS Mouse cerebellum w/ DCN and IO
-storage:
-  root: mouse_cereb_dcn_io.hdf5
 network:
   z: 595
 regions:
@@ -93,13 +90,9 @@ after_connectivity:
 $import:
   ref: ./dcn.yaml#/
   values:
-    - packages
-    - storage
     - network
     - regions
     - partitions
-    - morphologies
     - cell_types
     - placement
     - connectivity
-    - after_connectivity

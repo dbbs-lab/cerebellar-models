@@ -320,6 +320,8 @@ The parameters for the awake state are the same as the in-vitro state, except fo
    as the ones obtained with static synapses.
    For pf-SC connection weight was adjusted manually to keep the firing rate in the desired range.
 
+.. _nest-paradigms:
+
 Simulation paradigms
 ^^^^^^^^^^^^^^^^^^^^
 

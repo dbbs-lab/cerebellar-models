@@ -1,10 +1,10 @@
 import os
 import unittest
 from copy import deepcopy
-from os.path import abspath, dirname, join
+from os.path import join
 
 import numpy as np
-from bsb import Scaffold, parse_configuration_file
+from bsb import Scaffold, parse_configuration_content
 from bsb_test import NumpyTestCase, RandomStorageFixture
 from matplotlib import pyplot as plt
 from neo import SpikeTrain
@@ -29,10 +29,121 @@ class MiniCerebCircuitFixture(RandomStorageFixture, engine_name="hdf5", setup_cl
     def setUpClass(cls):
         super().setUpClass()
         # one third of the canonical circuit
-        main_folder = dirname(dirname(abspath(__file__)))
-        cls.cfg = parse_configuration_file(
-            join(main_folder, "configurations/mouse/nest/stimulus_mossy_vitro.yaml")
-        )
+        nest_folder = "configurations/mouse/in-vitro/nest/"
+        dict_cfg = {
+            "components": ["cerebellar_models/nest_models/build_models.py"],
+            "$import": {
+                "ref": "configurations/mouse/mouse_cerebellar_cortex.yaml#/",
+                "values": [
+                    "storage",
+                    "network",
+                    "regions",
+                    "partitions",
+                    "morphologies",
+                    "cell_types",
+                    "placement",
+                    "connectivity",
+                ],
+            },
+            "simulations": {
+                "basal_activity": {
+                    "modules": ["cerebmodule"],
+                    "$import": {
+                        "ref": join(nest_folder, "basal_vitro.yaml")
+                        + "#/simulations/basal_activity",
+                        "values": [
+                            "simulator",
+                            "resolution",
+                            "duration",
+                            "seed",
+                            "cell_models",
+                            "devices",
+                        ],
+                    },
+                    "cell_models": {
+                        "$import": {
+                            "ref": join(nest_folder, "cell_models/eglif_cond_alpha_multisyn.yaml")
+                            + "#/simulations/basal_activity/cell_models",
+                            "values": [
+                                "granule_cell",
+                                "golgi_cell",
+                                "purkinje_cell",
+                                "basket_cell",
+                                "stellate_cell",
+                            ],
+                        },
+                    },
+                    "connection_models": {
+                        "$import": {
+                            "ref": join(nest_folder, "connection_models/static_synapse.yaml")
+                            + "#/simulations/basal_activity/connection_models",
+                            "values": [
+                                "mossy_fibers_to_glomerulus",
+                                "glomerulus_to_granule",
+                                "glomerulus_to_golgi",
+                                "golgi_to_glomerulus",
+                                "golgi_to_golgi",
+                                "ascending_axon_to_golgi",
+                                "parallel_fiber_to_golgi",
+                                "parallel_fiber_to_purkinje",
+                                "ascending_axon_to_purkinje",
+                                "parallel_fiber_to_stellate",
+                                "stellate_to_stellate",
+                                "stellate_to_purkinje",
+                                "parallel_fiber_to_basket",
+                                "basket_to_basket",
+                                "basket_to_purkinje",
+                            ],
+                        },
+                    },
+                    "devices": {
+                        "$import": {
+                            "ref": join(nest_folder, "cell_models/eglif_cond_alpha_multisyn.yaml")
+                            + "#/simulations/basal_activity/devices",
+                            "values": [
+                                "granule_record",
+                                "golgi_record",
+                                "purkinje_record",
+                                "basket_record",
+                                "stellate_record",
+                            ],
+                        }
+                    },
+                },
+                "mf_stimulus": {
+                    "$import": {
+                        "ref": "#/simulations/basal_activity",
+                        "values": [
+                            "simulator",
+                            "resolution",
+                            "duration",
+                            "modules",
+                            "seed",
+                            "cell_models",
+                            "connection_models",
+                            "devices",
+                        ],
+                    },
+                    "devices": {
+                        "stimulus": {
+                            "device": "poisson_generator",
+                            "rate": 150,
+                            "start": 1200,
+                            "stop": 1250,
+                            "targetting": {
+                                "strategy": "sphere",
+                                "radius": 90,
+                                "origin": [150.0, 65.0, 100.0],
+                                "cell_models": ["mossy_fibers"],
+                            },
+                            "weight": 1.0,
+                            "delay": 0.1,
+                        }
+                    },
+                },
+            },
+        }
+        cls.cfg = parse_configuration_content(dict_cfg, path=os.path.abspath("./config.json"))
         cls.cfg.network.x = 100
         cls.cfg.network.y = 66
         cls.cfg.network.z = 100

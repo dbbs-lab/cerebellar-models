@@ -1,3 +1,12 @@
+# v0.7.0 - 2025-06-13
+
+* fix: spike plot offsets and random tests by @drodarie in https://github.com/dbbs-lab/cerebellar-models/pull/56
+* feat: Add microzones labelling by @drodarie in https://github.com/dbbs-lab/cerebellar-models/pull/63
+* feat: Change repository name to cerebellar-models by @drodarie in https://github.com/dbbs-lab/cerebellar-models/pull/64
+
+
+**Full Changelog**: https://github.com/dbbs-lab/cerebellar-models/compare/v0.6.0...v0.7.0
+
 # v0.6.0 - 2025-03-12
 
 ## What's Changed
