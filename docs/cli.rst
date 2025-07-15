@@ -2,10 +2,10 @@
 Command-Line Interface
 ######################
 
-Open up your favorite terminal and enter the ``cerebellum --help`` command
+Open up your favorite terminal and enter the ``cerebellar-models --help`` command
 to verify you correctly installed the software.
 
-The list of cerebellum commands are listed below.
+The list of ``cerebellar-models`` commands are listed below.
 
 .. note::
   Parameters included between angle brackets are example values, parameters between square
@@ -20,7 +20,7 @@ Retrieve a canonical circuit configuration
 
 .. code-block:: bash
 
-  cerebellum configure [--output_folder <./path>] [--species <mouse>] [--extension <yaml>] [--microzones]
+  cerebellar-models configure [--output_folder <./path>] [--species <mouse>] [--extension <yaml>] [--microzones]
 
 This command will construct a BSB configuration file based on the canonical cerebellar circuit
 developed by the DBBS.

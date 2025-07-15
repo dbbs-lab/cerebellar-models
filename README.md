@@ -72,7 +72,7 @@ of the canonical circuits developed by the DBBS based on a few choices.
 
 Assuming you are in the `cerebellar-models` folder, run the following command in your terminal:
 ```bash
-cerebellum configure
+cerebellar-models configure
 ```
 Once you filled the forms provided by the command within your terminal, your BSB configuration
 should be ready to be compiled:
