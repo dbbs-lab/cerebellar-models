@@ -152,7 +152,27 @@ def _configure_species(species):
     return main_options[0].value
 
 
-def _configure_cell_types(species_folder, config_cell_types, add_microzones: bool):
+def _choose_atlas(species_folder, species):
+    use_atlas = False
+    if species == "mouse":
+        atlas_options = [
+            CerebOption(
+                "Use allen mouse cell atlas?",
+                "Use the atlas-based datasets to build your circuit.",
+                type_term=TypeTermElem.Boolean,
+                default_value=False,
+            ),
+        ]
+        print_panel(atlas_options, "Standard reconstruction or atlas-based")
+        use_atlas = atlas_options[0].value
+    if not use_atlas:
+        filename = f"{species}_cerebellar_cortex.yaml"
+    else:
+        filename = f"{species}_atlas_region.yaml"
+    return parse_configuration_file(join(species_folder, filename)).__tree__(), use_atlas
+
+
+def _configure_cell_types(species_folder, config_cell_types, add_microzones: bool, use_atlas: bool):
     cell_type_names = []
     for filename1, config_1 in config_cell_types.items():
         cell_types1 = list(config_1["cell_types"].keys())
@@ -164,7 +184,9 @@ def _configure_cell_types(species_folder, config_cell_types, add_microzones: boo
                 break
         if filename1 not in cell_type_names:
             cell_type_names.append(filename1)
-
+    if use_atlas:
+        # ubc are already included in the atlas config.
+        cell_type_names.remove("ubc")
     species_options = [
         CerebOption(
             "State",
@@ -192,14 +214,24 @@ def _configure_cell_types(species_folder, config_cell_types, add_microzones: boo
     return [option.value for option in species_options]
 
 
-def _update_cell_types(configuration, cell_types, config_cell_types):
+def _update_cell_types(configuration, cell_types, config_cell_types, use_atlas: bool):
     for cell_type in cell_types:
         config_ = config_cell_types[cell_type]
+        current_origin = [0, 0, 0]
         for k, v in config_.items():  # update within the main components
-            if k == "network":
+            if k == "network" and not use_atlas:
                 for net_key, net_v in v.items():
                     if net_key in ["x", "y", "z"]:
                         configuration[k][net_key] = max(configuration[k][net_key], net_v)
+            if k == "partitions" and use_atlas:
+                for partition_key, partition_v in v.items():
+                    if partition_key.split("_layer")[0] == cell_type:  # take the cell type layer
+                        configuration[k][partition_key] = {
+                            "type": "rhomboid",
+                            "origin": current_origin,
+                            "dimensions": [300, 200, partition_v["thickness"]],
+                        }
+                        current_origin[2] += partition_v["thickness"]
             else:
                 if k not in configuration:
                     configuration[k] = v
@@ -502,17 +534,14 @@ def configure(
     else:
         print(f"Species chosen: {species}")
     species_folder = join(CONFIGURATION_FOLDER, species)
-
-    # Step 2: state and cell types choice
-    configuration = parse_configuration_file(
-        join(species_folder, f"{species}_cerebellar_cortex.yaml")
-    ).__tree__()
-
+    # Step 2: atlas or canonical
+    configuration, use_atlas = _choose_atlas(species_folder, species)
+    # Step 3: state and cell types choice
     config_cell_types = load_configs_in_folder(join(species_folder, "cell_types"))
     state, cell_types, microzones = _configure_cell_types(
-        species_folder, config_cell_types, microzones
+        species_folder, config_cell_types, microzones, use_atlas
     )
-    configuration = _update_cell_types(configuration, cell_types, config_cell_types)
+    configuration = _update_cell_types(configuration, cell_types, config_cell_types, use_atlas)
     state_folder = join(species_folder, state)
     if microzones:
         micro_params = MicrozonesParams(
@@ -522,7 +551,7 @@ def configure(
     else:
         micro_params = MicrozonesParams()
 
-    # Step 3: Simulation choice
+    # Step 4: Simulation choice
     config_simulations = {
         simulator: {
             "cell_models": load_configs_in_folder(join(state_folder, simulator, "cell_models")),
@@ -535,16 +564,16 @@ def configure(
     }
     simulation_names = _configure_simulations(config_simulations)
 
-    # Step 4: Simulation models choice
+    # Step 5: Simulation models choice
     dict_sim, sim_choices = _configure_sim_params(
         config_simulations, simulation_names, micro_params
     )
     deep_update(configuration, dict_sim)
 
-    # Step 5: remove unnecessary cells and connections
+    # Step 6: remove unnecessary cells and connections
     configuration = _clear_unnecessary_params(configuration)
 
-    # Step 6: Add stimulus simulation
+    # Step 7: Add stimulus simulation
     if species == "mouse":
         sim_names = list(configuration["simulations"].keys())
         for sim_name in sim_names:
@@ -603,9 +632,10 @@ def configure(
     else:  # pragma: no cover
         raise ValueError(f"Only mouse configuration are implemented. Provided species: {species}")
 
-    # Step 7: Recap choices
+    # Step 8: Recap choices
     print("\n\nYour choices are:")
     print(f"Species: {species}")
+    print(f"Using atlas: {use_atlas}")
     print(f"State: {state}")
     print(f"Cell types: {cell_types}")
     print(f"With microzones: {microzones}")

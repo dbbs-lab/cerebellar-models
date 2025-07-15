@@ -1,5 +1,6 @@
 name: Allen based Declive mouse brain NEST
 storage:
+  engine: hdf5
   root: declive_reconstruction.hdf5
 network:
   x: 13200  # 528 * 25.
@@ -222,11 +223,18 @@ placement:
     partitions:
       - declive
     strategy: bsb.placement.RandomPlacement
+connectivity:
+  $import:
+    ref: ./cell_types/ubc.yaml#/connectivity
+    values:
+      - ubc_to_ubc_glomerulus
+      - glomerulus_to_ubc
+      - glomerulus_to_granule
+      - glomerulus_to_golgi
+      - golgi_to_glomerulus
 $import:
-  ref: ../ubc/ubc_nest.yaml#/
+  ref: ./mouse_cerebellar_cortex.yaml#/
   values:
     - packages
-    - storage
-    - simulations
     - connectivity
     - after_connectivity

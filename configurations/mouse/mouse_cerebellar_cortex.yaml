@@ -27,6 +27,32 @@ partitions:
     thickness: 50
   t_molecular_layer:
     thickness: 100
+morphologies:
+  - name: GranuleCell
+    pipeline:
+      - func: swap_axes
+        axis1: 1
+        axis2: 2
+  - name: GolgiCell
+    pipeline:
+      - func: swap_axes
+        axis1: 1
+        axis2: 2
+  - name: PurkinjeCell
+    pipeline:
+      - func: swap_axes
+        axis1: 1
+        axis2: 2
+  - name: StellateCell
+    pipeline:
+      - func: swap_axes
+        axis1: 1
+        axis2: 2
+  - name: BasketCell
+    pipeline:
+      - func: swap_axes
+        axis1: 1
+        axis2: 2
 cell_types:
   glomerulus:
     spatial:

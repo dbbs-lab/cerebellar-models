@@ -1,9 +1,6 @@
 morphologies:
-  - file: ./morphologies/GranuleCell.swc
-    pipeline:
-      - func: swap_axes
-        axis1: 1
-        axis2: 2
+  - name: GranuleCell
+    file: ./morphologies/GranuleCell.swc
     parser:
       skip_boundary_labels: ["soma"]
       tags:
@@ -19,11 +16,8 @@ morphologies:
         19:
           - axon
           - parallel_fiber
-  - file: ./morphologies/GolgiCell.swc
-    pipeline:
-      - func: swap_axes
-        axis1: 1
-        axis2: 2
+  - name: GolgiCell
+    file: ./morphologies/GolgiCell.swc
     parser:
       skip_boundary_labels: ["soma"]
       tags:
@@ -36,11 +30,8 @@ morphologies:
         18:
           - axon
           - axon_initial_segment
-  - file: ./morphologies/PurkinjeCell.swc
-    pipeline:
-      - func: swap_axes
-        axis1: 1
-        axis2: 2
+  - name: PurkinjeCell
+    file: ./morphologies/PurkinjeCell.swc
     parser:
       skip_boundary_labels: ["soma"]
       tags:
@@ -67,11 +58,8 @@ morphologies:
           - dendrites
           - aa_targets
           - sc_targets
-  - file: ./morphologies/StellateCell.swc
-    pipeline:
-      - func: swap_axes
-        axis1: 1
-        axis2: 2
+  - name: StellateCell
+    file: ./morphologies/StellateCell.swc
     parser:
       skip_boundary_labels: ["soma"]
       tags:
@@ -84,11 +72,8 @@ morphologies:
         18:
           - axon
           - axon_initial_segment
-  - file: ./morphologies/BasketCell.swc
-    pipeline:
-      - func: swap_axes
-        axis1: 1
-        axis2: 2
+  - name: BasketCell
+    file: ./morphologies/BasketCell.swc
     parser:
       skip_boundary_labels: ["soma"]
       tags:
