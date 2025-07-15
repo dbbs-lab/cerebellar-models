@@ -1,6 +1,3 @@
-name: DBBS Mouse cerebellum w/ DCN
-storage:
-  root: mouse_cereb_dcn.hdf5
 network:
   z: 495
 regions:
@@ -71,16 +68,3 @@ connectivity:
     postsynaptic:
       cell_types:
         - dcn_p
-$import:
-  ref: ../mouse_cerebellar_cortex.yaml#/
-  values:
-    - packages
-    - storage
-    - network
-    - regions
-    - partitions
-    - morphologies
-    - cell_types
-    - placement
-    - connectivity
-    - after_connectivity
