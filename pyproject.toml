@@ -49,7 +49,7 @@ Home = "https://github.com/dbbs-lab/cerebellar-models"
 "Source Code" = "https://github.com/dbbs-lab/cerebellar-models/"
 
 [project.scripts]
-cerebellum = "cerebellar_models.cli:app"
+cerebellar-models = "cerebellar_models.cli:app"
 
 [tool.black]
 line-length = 100
