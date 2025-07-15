@@ -1,3 +1,10 @@
+# v0.8.0 - 2025-07-15
+
+* feat: Add CLI by @drodarie in https://github.com/dbbs-lab/cerebellar-models/pull/65
+
+
+**Full Changelog**: https://github.com/dbbs-lab/cerebellar-models/compare/v0.7.0...v0.8.0
+
 # v0.7.0 - 2025-06-13
 
 * fix: spike plot offsets and random tests by @drodarie in https://github.com/dbbs-lab/cerebellar-models/pull/56
