@@ -539,6 +539,7 @@ connectivity:
 morphologies:
 - file: ./morphologies/GranuleCell.swc
   parser:
+    skip_boundary_labels: ["soma"]
     tags:
       16:
       - axon
@@ -558,6 +559,7 @@ morphologies:
     func: swap_axes
 - file: ./morphologies/GolgiCell.swc
   parser:
+    skip_boundary_labels: ["soma"]
     tags:
       16:
       - dendrites
@@ -574,6 +576,7 @@ morphologies:
     func: swap_axes
 - file: ./morphologies/PurkinjeCell.swc
   parser:
+    skip_boundary_labels: ["soma"]
     tags:
       16:
       - axon
@@ -604,6 +607,7 @@ morphologies:
     func: swap_axes
 - file: ./morphologies/StellateCell.swc
   parser:
+    skip_boundary_labels: ["soma"]
     tags:
       16:
       - dendrites
@@ -620,6 +624,7 @@ morphologies:
     func: swap_axes
 - file: ./morphologies/BasketCell.swc
   parser:
+    skip_boundary_labels: ["soma"]
     tags:
       16:
       - axon
@@ -637,10 +642,6 @@ network:
   x: 300.0
   y: 200.0
   z: 595.0
-packages:
-- cerebellar-models~=0.7.0
-- bsb~=6.0
-- bsb-nest~=6.0
 partitions:
   b_molecular_layer:
     thickness: 50.0
