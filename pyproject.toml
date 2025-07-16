@@ -91,7 +91,7 @@ search = 'cerebellar-models~={current_version}'
 replace = 'cerebellar-models~={new_version}'
 
 [[tool.bumpversion.files]]
-filename = "configurations/mouse/in-vitro/basal_vitro.yaml"
+filename = "configurations/mouse/in-vitro/nest/basal_vitro.yaml"
 search = 'cerebellar-models~={current_version}'
 replace = 'cerebellar-models~={new_version}'
 

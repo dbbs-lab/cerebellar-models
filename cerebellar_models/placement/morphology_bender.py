@@ -35,15 +35,17 @@ class MorphologyBender:
     default_depth: cfgdict[str, float] = config.dict(
         required=False, type=float, default={"mo": 150.0, "gr": 150.0, "pu": 150}
     )
+    """reference layers' thickness to use during rescale"""
 
     rescale: list[str] = config.list(required=False, type=str, default=["axon", "dendrites"])
+    """list of labels to filter morphologies' branches to rescale"""
 
     deform: list[str] = config.list(required=False, type=str, default=["axon", "dendrites"])
+    """list of labels to filter morphologies' branches to deform"""
 
-    fixed_dimensions: dict[str:int] = config.attr(
-        required=False, type=types.or_(int, dict[str:int]), default=-1
-    )
-    """axis on which the orientation field will not be considered."""
+    fixed_dimensions = config.attr(required=False, type=types.or_(int, dict[str:int]), default=-1)
+    """axis `x` on which the orientation field will not be considered or dictionary 
+    linking morphology label to their corresponding `x` axis"""
 
     no_turn_back: bool = config.attr(required=False, type=bool, default=True)
     """allow for branches section to rotate with respect to their parent with an angle greater than 90 degrees"""
