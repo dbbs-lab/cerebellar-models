@@ -1,0 +1,19 @@
+simulations:
+  basal_activity:
+    simulator: nest
+    modules:
+      - cerebmodule
+    cell_models:
+      purkinje_cell:
+        constants:
+          lambda_0: 4.
+          tau_V: 3.5
+          I_e: 700
+      dcn_p:
+        constants:
+          lambda_0: 3.0
+          tau_V: 3.0
+$import:
+  ref: ../../../in-vitro/nest/cell_models/eglif_cond_alpha_multisyn.yaml#/
+  values:
+    - simulations

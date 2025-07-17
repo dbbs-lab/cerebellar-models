@@ -3,7 +3,7 @@ Unipolar Brush Cells
 
 Unipolar Brush cells (UBC) are excitatory interneurons located in the granular layer that acts as relay cells for
 glomerulus [#mugnaini_2011]_. The default configuration for UBCs is implemented in
-`ubc.yaml <https://github.com/dbbs-lab/cerebellum/blob/master/configurations/mouse/ubc/ubc.yaml>`_.
+`ubc.yaml <https://github.com/dbbs-lab/cerebellar-models/blob/master/configurations/mouse/ubc/ubc.yaml>`_.
 
 Cellular density
 ^^^^^^^^^^^^^^^^
@@ -128,7 +128,7 @@ However, it is currently unclear how these parameters were optimized, or which f
 Simulation paradigms
 ++++++++++++++++++++
 
-The `ubc_nest.yaml <https://github.com/dbbs-lab/cerebellum/blob/master/configurations/mouse/ubc/ubc_nest.yaml>`_ are
+The `ubc_nest.yaml <https://github.com/dbbs-lab/cerebellar-models/blob/master/configurations/mouse/ubc/ubc_nest.yaml>`_ are
 including all the simulation paradigms described in the :doc:`NEST section <nest>`) but include the UBC cells in the
 circuit.
 
@@ -148,7 +148,7 @@ follows (expressed in mean :math:`\pm` standard deviation):
     Cell name;Mean Firing rate (Hz); Mean ISI (ms)
     Mossy cell; :math:`4.1 \pm 0.93`; :math:`240 \pm 61`
     Granule cell; :math:`2.9 \pm 2.1`; :math:`480 \pm 440`
-    Unipolar brush cell; :math:`0.21 \pm 0`; 1100 pm 91
+    Unipolar brush cell; :math:`0.21 \pm 0`; :math:`1100 pm 91`
     Golgi cell;:math:`7.4 \pm 4.2`; :math:`220 \pm 270`
     Purkinje cell;:math:`46 \pm 0.89`; :math:`22 \pm 0.42`
     Basket cell;:math:`19 \pm 8.4`; :math:`70 \pm 47`

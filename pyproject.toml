@@ -3,41 +3,53 @@ requires = ["flit_core >=3.2,<4"]
 build-backend = "flit_core.buildapi"
 
 [project]
-name = "cerebellum"
+name = "cerebellar-models"
 authors = [{ name = "Dimitri RODARIE", email = "dimitri.rodarie@cref.it" }]
 readme = "README.md"
 license = { file = "LICENSE" }
 classifiers = ["License :: OSI Approved :: GNU General Public License v3 or later (GPLv3+)"]
-requires-python = ">=3.9"
+requires-python = ">=3.10"
 dynamic = ["version", "description"]
 dependencies = [
-    "bsb[parallel,nest,neuron]~=4.4",
-    "nestml~=7.0",
+    "bsb[parallel,nest,neuron]~=6.0",
+    "nestml~=8.0",
+    "cmake~=3.31.6",  # remove it next nestml release
+    "odetoolbox==2.5.8",  # remove it next nestml release
+    "click~=8.1",
+    "survey~=5.4.2",
     "matplotlib~=3.9",
     "elephant~=1.1"
 ]
 
 [project.optional-dependencies]
 test = [
-    "bsb-test~=4.2",
+    "bsb-test~=6.0",
     "coverage~=7.3",
 ]
 docs = [
-    "sphinx~=7.0",
-    "furo~=2023.9"
+    "sphinx~=8.1",
+    "furo~=2024.0"
 ]
 dev = [
-    "cerebellum[test,docs]",
+    "cerebellar-models[test,docs]",
     "pre-commit~=3.5",
     "black~=25.1.0",
     "isort~=6.0.0",
     "bump-my-version~=0.21"
 ]
 
+[dependency-groups]
+dev = [
+  "cerebellar-models[dev]",
+]
+
 [project.urls]
-Home = "https://github.com/dbbs-lab/cerebellum"
-"Bug Tracker" = "https://github.com/dbbs-lab/cerebellum/issues/"
-"Source Code" = "https://github.com/dbbs-lab/cerebellum/"
+Home = "https://github.com/dbbs-lab/cerebellar-models"
+"Bug Tracker" = "https://github.com/dbbs-lab/cerebellar-models/issues/"
+"Source Code" = "https://github.com/dbbs-lab/cerebellar-models/"
+
+[project.scripts]
+cerebellar-models = "cerebellar_models.cli:app"
 
 [tool.black]
 line-length = 100
@@ -47,10 +59,10 @@ profile = "black"
 known_third_party = ["nest"]
 
 [project.entry-points."bsb.components"]
-my_components = "cerebellum:classmap"
+my_components = "cerebellar_models:classmap"
 
 [tool.bumpversion]
-current_version = "0.6.0"
+current_version = "0.8.0"
 parse = "(?P<major>\\d+)\\.(?P<minor>\\d+)\\.(?P<patch>\\d+)"
 serialize = ["{major}.{minor}.{patch}"]
 search = "{current_version}"
@@ -71,10 +83,30 @@ values = ["dev", "a", "b", "rc", "final"]
 optional_value = "final"
 
 [[tool.bumpversion.files]]
-filename = "cerebellum/__init__.py"
+filename = "cerebellar_models/__init__.py"
 
 [[tool.bumpversion.files]]
 filename = "configurations/mouse/mouse_cerebellar_cortex.yaml"
-search = 'cerebellum~={current_version}'
-replace = 'cerebellum~={new_version}'
+search = 'cerebellar-models~={current_version}'
+replace = 'cerebellar-models~={new_version}'
 
+[[tool.bumpversion.files]]
+filename = "codemeta.json"
+search = '"version": "{current_version}"'
+replace = '"version": "{new_version}"'
+
+[[tool.bumpversion.files]]
+filename = "codemeta.json"
+search = '"releaseNotes": "https://github.com/dbbs-lab/cerebellar-models/releases/tag/v{current_version}"'
+replace = '"releaseNotes": "https://github.com/dbbs-lab/cerebellar-models/releases/tag/v{new_version}"'
+
+[[tool.bumpversion.files]]
+filename = "codemeta.json"
+search = '"downloadUrl": "https://github.com/dbbs-lab/cerebellar-models/archive/refs/tags/v{current_version}.tar.gz"'
+replace = '"downloadUrl": "https://github.com/dbbs-lab/cerebellar-models/archive/refs/tags/v{new_version}.tar.gz"'
+
+[[tool.bumpversion.files]]
+filename = "codemeta.json"
+search = '"dateModified": "\d{{4}}-\d{{2}}-\d{{2}}"'
+replace = '"dateModified": "{now:%Y-%m-%d}"'
+regex = true

@@ -8,15 +8,15 @@ temporarily silence the cells. Empirical evidence indicates that cf can transmit
 an IO cell somatic spike, potentially increasing the amount of information transferred to the cerebellum with each
 activation [#de_gruijl_2012]_.
 The default configuration with IO is implemented in
-`dcn_io.yaml <https://github.com/dbbs-lab/cerebellum/blob/master/configurations/mouse/dcn-io/dcn_io.yaml>`_.
+`dcn_io.yaml <https://github.com/dbbs-lab/cerebellar-models/blob/master/configurations/mouse/dcn-io/dcn_io.yaml>`_.
 
 Configuration
 ^^^^^^^^^^^^^
-In `dcn_io.yaml <https://github.com/dbbs-lab/cerebellum/blob/master/configurations/mouse/dcn-io/dcn_io.yaml>`_ ,
+In `dcn_io.yaml <https://github.com/dbbs-lab/cerebellar-models/blob/master/configurations/mouse/dcn-io/dcn_io.yaml>`_ ,
 a new region called ``inferior_olivary`` was added to the ``canonical circuit + DCN`` model
-(see `dcn.yaml <https://github.com/dbbs-lab/cerebellum/blob/master/configurations/mouse/dcn-io/dcn.yaml>`_
+(see `dcn.yaml <https://github.com/dbbs-lab/cerebellar-models/blob/master/configurations/mouse/dcn-io/dcn.yaml>`_
 and :doc:`DCN section <dcn>` for more microcircuital info).
-This region contains only one ``Layer`` Partition: ``io layer``. ``io layer`` has a thickness of ``100 µm`` .
+This region contains only one ``Layer`` Partition: ``io layer``. ``io layer`` has a thickness of :math:`100  \mu m` .
 Additionally, to ensure that ``inferior_olivary`` are placed under the ``cerebellar_nuclei``, the ``origin``
 of the ``dcn_layer`` was set to ``[0, 0, 100]`` and the ``origin`` of the ``granular_layer`` was updated to ``[0, 0, 300]``.
 
@@ -43,9 +43,9 @@ Connectivity
    22; IO; /; PC; / ; :ref:`fix_in`;``indegree`` = 1; Geminiani et al. (2024) [#geminiani_2024]_
    23; IO; /; SC; / ; :ref:`io_mli`; / ; Geminiani et al. (2024) [#geminiani_2024]_
    23; IO; /; BC; / ; :ref:`io_mli`; / ; Geminiani et al. (2024) [#geminiani_2024]_
-   24; IO; / ; DCNp ; / ; :ref:`fix_out`; ``outdegree`` = 60 ; Geminiani et al. (2024) [#geminiani_2024]_
-   25; IO; /; DCNi; / ; :ref:`fix_out`; ``outdegree`` = 33 ; Geminiani et al. (2024) [#geminiani_2024]_
-   26; DCNi; / ; IO ; / ; :ref:`fix_in`; ``indegree`` = 33 ; Geminiani et al. (2024) [#geminiani_2024]_
+   24; IO; / ; DCNp ; / ; :ref:`all_to_all`; ``affinity`` = 0.5 ; Geminiani et al. (2024) [#geminiani_2024]_
+   25; IO; /; DCNi; / ; :ref:`all_to_all`; ``affinity`` = 0.5 ; Geminiani et al. (2024) [#geminiani_2024]_
+   26; DCNi; / ; IO ; / ; :ref:`all_to_all`; ``affinity`` = 0.5 ; Geminiani et al. (2024) [#geminiani_2024]_
 
 NEST simulation
 ^^^^^^^^^^^^^^^
@@ -134,7 +134,7 @@ Awake state
 Simulation paradigms
 ++++++++++++++++++++
 
-The `dcn_io_nest.yaml <https://github.com/dbbs-lab/cerebellum/blob/feature/dcn-io/configurations/mouse/dcn-io/dcn_io_nest.yaml>`_ are
+The `dcn_io_nest.yaml <https://github.com/dbbs-lab/cerebellar-models/blob/master/configurations/mouse/dcn-io/dcn_io_nest.yaml>`_ are
 including all the simulation paradigms described in the :doc:`NEST section <nest>`) but include the DCN and IO cells in the
 circuit.
 

@@ -1,6 +1,6 @@
 Contents
 --------
-This section deals with the content of the cerebellum repository.
+This section deals with the content of the cerebellar-models repository.
 
 Morphologies
 ~~~~~~~~~~~~

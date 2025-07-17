@@ -5,15 +5,15 @@ Deep cerebellar nuclei (DCN) are the primary output structures of the cerebellar
 They receive inhibitory input from Purkinje cells and excitatory input from mossy fibers and climbing fibers (from IO).
 DCN are composed by three distinct nuclei: dentate nucleus, fastigial nucleus and interposed nucleus.
 The default configuration with DCN is implemented in
-`dcn.yaml <https://github.com/dbbs-lab/cerebellum/blob/master/configurations/mouse/dcn-io/dcn.yaml>`_.
+`dcn.yaml <https://github.com/dbbs-lab/cerebellar-models/blob/master/configurations/mouse/dcn-io/dcn.yaml>`_.
 
 
 Configuration
 ^^^^^^^^^^^^^
-In `dcn.yaml <https://github.com/dbbs-lab/cerebellum/blob/master/configurations/mouse/dcn-io/dcn.yaml>`_ ,
+In `dcn.yaml <https://github.com/dbbs-lab/cerebellar-models/blob/master/configurations/mouse/dcn-io/dcn.yaml>`_ ,
 a new region called ``cerebellar_nuclei`` was added to the ``canonical circuit``.
 This region contains only one ``Layer`` Partition: ``dcn layer``.
-``dcn layer`` has a thickness of ``200 µm`` . Additionally, to ensure that ``cerebellar_nuclei`` are placed under
+``dcn layer`` has a thickness of :math:`200  \mu m` . Additionally, to ensure that ``cerebellar_nuclei`` are placed under
 the ``cerebellar_cortex``, the ``origin`` of the ``granular_layer`` was set to ``[0, 0, 200]`` (above DCN).
 
 Cell types
@@ -34,20 +34,20 @@ In DCN, two types of neurons are considered [#uusisaari_2008]_ [#geminiani_2019b
 
 No morphologies are currently available for DCN neurons, so they are modelled as point neurons.
 Densities were estimated from `Blue Brain Cell Atlas <https://portal.bluebrain.epfl.ch/resources/models/cell-atlas/>`_
-(version 2018 [#ero_2018]_), considering the ratio :math:`\frac{n_{GrC}}{n_{DCN}} = \frac{33 \times 10^6}{230 \times 10^3} ≈ 143`
+(version 2018 [#ero_2018]_), considering the ratio :math:`\frac{n_{GrC}}{n_{DCN}} = \frac{33 \times 10^6}{230 \times 10^3} \approx 143`
 between the total number of granule cells and the total number of neurons in the cerebellar nuclei.
 From this ratio, considering the total amount of GrC placed in the ``canonical circuit``, it is possible to estimate the
 number of DCN to be placed.
 Literature data reported that DCNp are around the 57% of the total number of neurons in the cerebellar nuclei,
 while DCNi around the 32% [#baumel_2009]_ [#batini_1992]_. Taking into account these percentages and dividing by the
-volume of the DCN layer (set to :math:`200 \times 200 \times 300` µm), the values reported in the following table
+volume of the DCN layer (set to :math:`200 \times 200 \times 300  \mu m`), the values reported in the following table
 were obtained.
 
 .. csv-table::
    :header-rows: 1
    :delim: ;
 
-   Cell name;Type;Radius (:math:`µm`);Density (:math:`µm^{-3}`)
+   Cell name;Type;Radius (:math:` \mu m`);Density (:math:` \mu m^{-3}`)
    DCNp ; Exc.; 9.5 [#baumel_2009]_; 9.92
    DCNi ; Inh.; 7.0 [#baumel_2009]_; 5.58
 
@@ -64,9 +64,9 @@ Connectivity
    :delim: ;
 
    #; Source Name; Source Branch; Target Name; Target Branch; Strategy; Specifics; References
-   19; PC; axon; DCNp; / ; :ref:`fix_out`;``outdegree`` =45; Geminiani et al. (2024) [#geminiani_2024]_
-   20; PC; axon; DCNi; / ; :ref:`fix_out`;``outdegree`` =12; Geminiani et al. (2024) [#geminiani_2024]_
-   21; mf; / ; DCNp ; / ; :ref:`fix_in`; ``indegree`` =48; Geminiani et al. (2024) [#geminiani_2024]_
+   19; PC; axon; DCNp; / ; :ref:`all_to_all`;``affinity`` =0.375; Geminiani et al. (2024) [#geminiani_2024]_
+   20; PC; axon; DCNi; / ; :ref:`all_to_all`;``affinity`` =0.18; Geminiani et al. (2024) [#geminiani_2024]_
+   21; mf; / ; DCNp ; / ; :ref:`all_to_all`; ``affinity`` =0.4; Geminiani et al. (2024) [#geminiani_2024]_
 
 
 NEST simulation
@@ -165,7 +165,7 @@ Awake state
 Simulation paradigms
 ++++++++++++++++++++
 
-The `dcn_nest.yaml <https://github.com/dbbs-lab/cerebellum/blob/master/configurations/mouse/dcn-io/dcn_nest.yaml>`_ are
+The `dcn_nest.yaml <https://github.com/dbbs-lab/cerebellar-models/blob/master/configurations/mouse/dcn-io/dcn_nest.yaml>`_ are
 including all the simulation paradigms described in the :doc:`NEST section <nest>`) but include the DCN cells in the
 circuit. In the following subsections, we will only report the firing rates and ISI of the DCN cells since they have
 no effect on the rest of the circuit

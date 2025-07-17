@@ -2,7 +2,7 @@ Circuit configurations
 ======================
 
 The ``configurations`` folder contains configuration files for cerebellar reconstruction and
-simulation with BSB v4.
+simulation with BSB.
 
 These configurations files are split in sub-folder according to their respective specie. Each
 sub-folder will also contain documentation to explain the parameters of the configuration files
