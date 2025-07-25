@@ -8,10 +8,13 @@ from typing import List, Tuple, Union
 
 import numpy as np
 from bsb import Scaffold
+from elephant.conversion import BinnedSpikeTrain
 from elephant.kernels import GaussianKernel, Kernel
+from elephant.spike_train_correlation import correlation_coefficient
 from elephant.statistics import instantaneous_rate, isi
 from matplotlib import gridspec as gs
 from matplotlib import pyplot as plt
+from mpl_toolkits.axes_grid1.axes_divider import make_axes_locatable
 from neo import SpikeTrain
 from neo import io as nio
 from quantities import ms
@@ -769,6 +772,64 @@ class SimResultsTable(TablePlot, SpikePlot):
         return {ct: line[1] for ct, line in zip(self.rows, self._values)}
 
 
+class SpikeCorrelation(SpikePlot):
+    """
+    Inter-spike interval histogram plot for each cell type.
+    For each neuron type, one mean inter-spike interval value is computed for each of its neuron.
+    """
+
+    def __init__(
+        self,
+        fig_size: Tuple[float, float],
+        scaffold: Scaffold,
+        simulation_name: str,
+        time_from: float,
+        time_to: float,
+        all_spikes,
+        nb_neurons: List,
+        populations: List,
+        bin_size: float = 5 * ms,
+        dict_colors: dict = None,
+        dict_abv=None,
+        **kwargs,
+    ):
+        super().__init__(
+            fig_size,
+            scaffold,
+            simulation_name,
+            time_from,
+            time_to,
+            all_spikes,
+            nb_neurons,
+            populations,
+            dict_colors,
+            **kwargs,
+        )
+        self.bin_size = bin_size
+        self.dict_abv = dict_abv or {}
+
+    def update(self):
+        super().update()
+        self.corrcoef = correlation_coefficient(
+            BinnedSpikeTrain(self.get_filt_spikes(), bin_size=self.bin_size),
+        )
+
+    def plot(self):
+        super().plot()
+        ax = self.get_ax()
+        im = ax.imshow(self.corrcoef)
+        ax.set_xticklabels(
+            [""] + [self.dict_abv.get(l, l) for l in self.populations],
+            rotation=90,
+        )
+        ax.set_yticklabels([""] + [self.dict_abv.get(l, l) for l in self.populations])
+        ax.set_xlabel("Target cell type", fontsize=20)
+        ax.set_ylabel("Source cell type", fontsize=20)
+        ax_divider = make_axes_locatable(ax)
+        cax1 = ax_divider.append_axes("right", size="5%", pad=0)
+        cb1 = self.figure.colorbar(im, cax=cax1)
+
+
 class BasicSimulationReport(SpikeSimulationReport):
     """
     Simulation report of the spike activity containing:
@@ -847,6 +908,17 @@ class BasicSimulationReport(SpikeSimulationReport):
             nb_neurons=self.nb_neurons,
             populations=self.populations,
         )
+        corr = SpikeCorrelation(
+            (10, 10.5),
+            scaffold=self.scaffold,
+            simulation_name=self.simulation_name,
+            time_from=self.time_from,
+            time_to=self.time_to,
+            all_spikes=self.all_spikes,
+            nb_neurons=self.nb_neurons,
+            populations=self.populations,
+            dict_abv=self.abbreviations,
+        )
         legend = Legend(
             (10, 2),
             3,
@@ -857,6 +929,7 @@ class BasicSimulationReport(SpikeSimulationReport):
         self.add_plot("firing_rates", firing_rates)
         self.add_plot("isis", isis)
         self.add_plot("freq", freq)
+        self.add_plot("corr", corr)
         self.add_plot("legend", legend)
         legend.remove_ct(self.cell_names, self.ignored_ct)
 
