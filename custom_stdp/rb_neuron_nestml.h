@@ -19,7 +19,7 @@
  *  You should have received a copy of the GNU General Public License
  *  along with NEST.  If not, see <http://www.gnu.org/licenses/>.
  *
- *  Generated from NESTML at time: 2024-10-11 08:49:25.010753
+ *  Generated from NESTML 8.1.0 at time: 2025-08-15 17:03:23.887933
 **/
 #ifndef RB_NEURON_NESTML
 #define RB_NEURON_NESTML
@@ -37,7 +37,7 @@
 #include <random>
 
 // Includes from nestkernel:
-#include "structural_plasticity_node.h"
+#include "archiving_node.h"
 #include "connection.h"
 #include "dict_util.h"
 #include "event.h"
@@ -47,6 +47,9 @@
 
 // Includes from sli:
 #include "dictdatum.h"
+
+// uncomment the next line to enable printing of detailed debug information
+// #define DEBUG
 
 namespace nest
 {
@@ -61,10 +64,14 @@ namespace rb_neuron_nestml_names
     const Name _spikes_buffer( "spikes_buffer" );
     const Name _kp( "kp" );
     const Name _base_rate( "base_rate" );
+    const Name _max_peak_rate( "max_peak_rate" );
     const Name _buffer_size( "buffer_size" );
     const Name _simulation_steps( "simulation_steps" );
     const Name _sdev( "sdev" );
     const Name _desired( "desired" );
+
+    const Name gsl_abs_error_tol("gsl_abs_error_tol");
+    const Name gsl_rel_error_tol("gsl_rel_error_tol");
 }
 }
 
@@ -86,6 +93,7 @@ namespace rb_neuron_nestml_names
   The following parameters can be set in the status dictionary.
 kp [real]  Gain
 base_rate [Hz]  Base firing rate
+max_peak_rate [Hz]  Maximum peak output firing rate
 buffer_size [ms]  Size of the sliding window
 simulation_steps [integer]  Number of simulation steps (simulation_time/resolution())
 sdev [real]  Parameter for the RBF
@@ -110,7 +118,7 @@ spikes_buffer [real]  Buffer for incoming spikes
 // Register the neuron model
 void register_rb_neuron_nestml( const std::string& name );
 
-class rb_neuron_nestml : public nest::StructuralPlasticityNode
+class rb_neuron_nestml : public nest::ArchivingNode
 {
 public:
   /**
@@ -266,6 +274,16 @@ public:
     P_.base_rate = __v;
   }
 
+  inline double get_max_peak_rate() const
+  {
+    return P_.max_peak_rate;
+  }
+
+  inline void set_max_peak_rate(const double __v)
+  {
+    P_.max_peak_rate = __v;
+  }
+
   inline double get_buffer_size() const
   {
     return P_.buffer_size;
@@ -320,15 +338,6 @@ public:
   {
     V_.res = __v;
   }
-  inline long get_window_counts() const
-  {
-    return V_.window_counts;
-  }
-
-  inline void set_window_counts(const long __v)
-  {
-    V_.window_counts = __v;
-  }
   inline double get___h() const
   {
     return V_.__h;
@@ -337,6 +346,15 @@ public:
   inline void set___h(const double __v)
   {
     V_.__h = __v;
+  }
+  inline long get_window_counts() const
+  {
+    return V_.window_counts;
+  }
+
+  inline void set_window_counts(const long __v)
+  {
+    V_.window_counts = __v;
   }
 
 
@@ -424,6 +442,8 @@ private:
     double kp;
     //!  Base firing rate
     double base_rate;
+    //!  Maximum peak output firing rate
+    double max_peak_rate;
     //!  Size of the sliding window
     double buffer_size;
     //!  Number of simulation steps (simulation_time/resolution())
@@ -504,9 +524,9 @@ enum StateVecVars {
   struct Variables_
   {
     double res;
+    double __h;
     //!  Number of ticks corresponding to the window size
     long window_counts;
-    double __h;
   };
 
   /**
@@ -581,6 +601,7 @@ enum StateVecVars {
   // -------------------------------------------------------------------------
   //   Getters/setters for inline expressions
   // -------------------------------------------------------------------------
+
   
 
   // -------------------------------------------------------------------------
@@ -722,6 +743,7 @@ inline void rb_neuron_nestml::get_status(DictionaryDatum &__d) const
   // parameters
   def< double >(__d, nest::rb_neuron_nestml_names::_kp, get_kp());
   def< double >(__d, nest::rb_neuron_nestml_names::_base_rate, get_base_rate());
+  def< double >(__d, nest::rb_neuron_nestml_names::_max_peak_rate, get_max_peak_rate());
   def< double >(__d, nest::rb_neuron_nestml_names::_buffer_size, get_buffer_size());
   def< long >(__d, nest::rb_neuron_nestml_names::_simulation_steps, get_simulation_steps());
   def< double >(__d, nest::rb_neuron_nestml_names::_sdev, get_sdev());
@@ -736,7 +758,7 @@ inline void rb_neuron_nestml::get_status(DictionaryDatum &__d) const
   def< double >(__d, nest::rb_neuron_nestml_names::_lambda_poisson, get_lambda_poisson());
   def< std::vector< double >  >(__d, nest::rb_neuron_nestml_names::_spikes_buffer, get_spikes_buffer());
 
-  StructuralPlasticityNode::get_status( __d );
+  ArchivingNode::get_status( __d );
 
   (*__d)[nest::names::recordables] = recordablesMap_.get_list();
 }
@@ -754,6 +776,12 @@ inline void rb_neuron_nestml::set_status(const DictionaryDatum &__d)
   nest::updateValueParam<double>(__d, nest::rb_neuron_nestml_names::_base_rate, tmp_base_rate, this);
   // Resize vectors
   if (tmp_base_rate != get_base_rate())
+  {
+  }
+  double tmp_max_peak_rate = get_max_peak_rate();
+  nest::updateValueParam<double>(__d, nest::rb_neuron_nestml_names::_max_peak_rate, tmp_max_peak_rate, this);
+  // Resize vectors
+  if (tmp_max_peak_rate != get_max_peak_rate())
   {
   }
   double tmp_buffer_size = get_buffer_size();
@@ -812,11 +840,12 @@ inline void rb_neuron_nestml::set_status(const DictionaryDatum &__d)
   // write them back to (P_, S_) before we are also sure that
   // the properties to be set in the parent class are internally
   // consistent.
-  StructuralPlasticityNode::set_status(__d);
+  ArchivingNode::set_status(__d);
 
   // if we get here, temporaries contain consistent set of properties
   set_kp(tmp_kp);
   set_base_rate(tmp_base_rate);
+  set_max_peak_rate(tmp_max_peak_rate);
   set_buffer_size(tmp_buffer_size);
   set_simulation_steps(tmp_simulation_steps);
   set_sdev(tmp_sdev);

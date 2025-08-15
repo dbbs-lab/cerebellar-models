@@ -1,4 +1,4 @@
-// #define DEBUG 1
+
 /*
  *  rb_neuron_nestml.cpp
  *
@@ -19,7 +19,7 @@
  *  You should have received a copy of the GNU General Public License
  *  along with NEST.  If not, see <http://www.gnu.org/licenses/>.
  *
- *  Generated from NESTML at time: 2024-10-11 08:49:25.010753
+ *  Generated from NESTML 8.1.0 at time: 2025-08-15 17:03:23.887933
 **/
 
 // C++ includes:
@@ -42,6 +42,9 @@
 #include "lockptrdatum.h"
 
 #include "rb_neuron_nestml.h"
+
+// uncomment the next line to enable printing of detailed debug information
+// #define DEBUG
 void
 register_rb_neuron_nestml( const std::string& name )
 {
@@ -132,7 +135,7 @@ rb_neuron_nestml::Buffers_::Buffers_(const Buffers_ &, rb_neuron_nestml &n):
 //   Default constructor for node
 // ---------------------------------------------------------------------------
 
-rb_neuron_nestml::rb_neuron_nestml():StructuralPlasticityNode(), P_(), S_(), B_(*this)
+rb_neuron_nestml::rb_neuron_nestml():ArchivingNode(), P_(), S_(), B_(*this)
 {
   init_state_internal_();
   recordablesMap_.create(*this);
@@ -144,12 +147,12 @@ rb_neuron_nestml::rb_neuron_nestml():StructuralPlasticityNode(), P_(), S_(), B_(
 // ---------------------------------------------------------------------------
 
 rb_neuron_nestml::rb_neuron_nestml(const rb_neuron_nestml& __n):
-  StructuralPlasticityNode(), P_(__n.P_), S_(__n.S_), B_(__n.B_, *this)
+  ArchivingNode(), P_(__n.P_), S_(__n.S_), B_(__n.B_, *this)
 {
-
   // copy parameter struct P_
   P_.kp = __n.P_.kp;
   P_.base_rate = __n.P_.base_rate;
+  P_.max_peak_rate = __n.P_.max_peak_rate;
   P_.buffer_size = __n.P_.buffer_size;
   P_.simulation_steps = __n.P_.simulation_steps;
   P_.sdev = __n.P_.sdev;
@@ -166,8 +169,8 @@ rb_neuron_nestml::rb_neuron_nestml(const rb_neuron_nestml& __n):
 
   // copy internals V_
   V_.res = __n.V_.res;
-  V_.window_counts = __n.V_.window_counts;
   V_.__h = __n.V_.__h;
+  V_.window_counts = __n.V_.window_counts;
   recordablesMap_.create(*this);
 }
 
@@ -193,13 +196,14 @@ void rb_neuron_nestml::calibrate_time( const nest::TimeConverter& tc )
 void rb_neuron_nestml::init_state_internal_()
 {
 #ifdef DEBUG
-  std::cout << "rb_neuron_nestml::init_state_internal_()" << std::endl;
+  std::cout << "[neuron " << this << "] rb_neuron_nestml::init_state_internal_()" << std::endl;
 #endif
 
-  const double __resolution = nest::Time::get_resolution().get_ms();  // do not remove, this is necessary for the resolution() function
+  const double __timestep = nest::Time::get_resolution().get_ms();  // do not remove, this is necessary for the timestep() function
   // initial values for parameters
   P_.kp = 1.0; // as real
   P_.base_rate = 0; // as Hz
+  P_.max_peak_rate = 300; // as Hz
   P_.buffer_size = 100; // as ms
   P_.simulation_steps = 1000; // as integer
   P_.sdev = 1.0; // as real
@@ -221,7 +225,7 @@ void rb_neuron_nestml::init_state_internal_()
 void rb_neuron_nestml::init_buffers_()
 {
 #ifdef DEBUG
-  std::cout << "rb_neuron_nestml::init_buffers_()" << std::endl;
+  std::cout << "[neuron " << this << "] rb_neuron_nestml::init_buffers_()" << std::endl;
 #endif
   // spike input buffers
   get_spike_inputs_().clear();
@@ -237,21 +241,25 @@ void rb_neuron_nestml::init_buffers_()
 
 void rb_neuron_nestml::recompute_internal_variables(bool exclude_timestep)
 {
-  const double __resolution = nest::Time::get_resolution().get_ms();  // do not remove, this is necessary for the resolution() function
+  const double __timestep = nest::Time::get_resolution().get_ms();  // do not remove, this is necessary for the timestep() function
 
   if (exclude_timestep)
   {    
-    V_.res = __resolution; // as ms
+    V_.res = nest::Time::get_resolution().get_ms(); // as ms
     V_.window_counts = nest::Time(nest::Time::ms((double) (P_.buffer_size))).get_steps(); // as integer
   }
   else {    
-    V_.res = __resolution; // as ms
-    V_.__h = __resolution; // as ms
+    V_.res = nest::Time::get_resolution().get_ms(); // as ms
+    V_.__h = nest::Time::get_resolution().get_ms(); // as ms
     V_.window_counts = nest::Time(nest::Time::ms((double) (P_.buffer_size))).get_steps(); // as integer
   }
 }
 void rb_neuron_nestml::pre_run_hook()
 {
+#ifdef DEBUG
+  std::cout << "[neuron " << this << "] rb_neuron_nestml::pre_run_hook()" << std::endl;
+#endif
+
   B_.logger_.init();
 
   // parameters might have changed -- recompute internals
@@ -270,15 +278,19 @@ void rb_neuron_nestml::pre_run_hook()
 // ---------------------------------------------------------------------------
 
 
-void rb_neuron_nestml::update(nest::Time const & origin,const long from, const long to)
+void rb_neuron_nestml::update(nest::Time const & origin, const long from, const long to)
 {
-  const double __resolution = nest::Time::get_resolution().get_ms();  // do not remove, this is necessary for the resolution() function
+  const double __timestep = nest::Time::get_resolution().get_ms();  // do not remove, this is necessary for the timestep() function
 
   for ( long lag = from ; lag < to ; ++lag )
   {
 
 
     auto get_t = [origin, lag](){ return nest::Time( nest::Time::step( origin.get_steps() + lag + 1) ).get_ms(); };
+
+#ifdef DEBUG
+    std::cout << "[neuron " << this << "] rb_neuron_nestml::update: handling post spike at t = " << get_t() << std::endl;
+#endif
     /**
      * buffer spikes from spiking input ports
     **/
@@ -296,42 +308,43 @@ void rb_neuron_nestml::update(nest::Time const & origin,const long from, const l
     **/
 
 
+
     /**
      * Begin NESTML generated code for the update block(s)
     **/
 
-    S_.tick = nest::Time(nest::Time::ms((double) (get_t()))).get_steps();
-    S_.spikes_buffer[S_.tick] = (0.001 * B_.spike_inputs_grid_sum_[SPIKES - MIN_SPIKE_RECEPTOR]);
-    long index = 0;
-    S_.spike_count_in = 0;
-    long i = 0;
-    for ( i = 0;
-                     i<V_.window_counts;
-         i += 1 )
-    {
-      index = S_.tick - i;
-      if ((index >= 0 && S_.spikes_buffer[index] != 0))
-      {  
-          S_.spike_count_in += S_.spikes_buffer[index];
-      }
-    }
-    S_.in_rate = (1000.0 * ((P_.kp * S_.spike_count_in) / P_.buffer_size));
-    S_.out_rate = P_.base_rate + 300 * std::exp((-pow(((P_.desired - S_.in_rate) / P_.sdev), 2))) * 1.0;
-    S_.lambda_poisson = S_.out_rate * __resolution * 0.001;
-    S_.spike_count_out = ([&]() -> int { nest::poisson_distribution::param_type poisson_params(S_.lambda_poisson); int sample = poisson_dev_( nest::get_vp_specific_rng( get_thread() ), poisson_params); return sample; })();
-    if (S_.spike_count_out > 0)
+  S_.tick = nest::Time(nest::Time::ms((double) (get_t()))).get_steps();
+  S_.spikes_buffer[S_.tick] = (0.001 * B_.spike_inputs_grid_sum_[SPIKES - MIN_SPIKE_RECEPTOR]);
+  long index = 0;
+  S_.spike_count_in = 0;
+  long i = 0;
+  for ( i = 0;
+                   i<V_.window_counts;
+       i += 1 )
+  {
+    index = S_.tick - i;
+    if ((index >= 0 && S_.spikes_buffer[index] != 0))
     {  
-
-        /**
-         * generated code for emit_spike() function
-        **/
-
-        set_spiketime(nest::Time::step(origin.get_steps() + lag + 1));
-        nest::SpikeEvent se;
-        nest::kernel().event_delivery_manager.send(*this, se, lag);
-
-
+      S_.spike_count_in += S_.spikes_buffer[index];
     }
+  }
+  S_.in_rate = (1000.0 * ((P_.kp * S_.spike_count_in) / P_.buffer_size));
+  S_.out_rate = P_.base_rate + P_.max_peak_rate * std::exp((-pow(((P_.desired - S_.in_rate) / P_.sdev), 2)));
+  S_.lambda_poisson = S_.out_rate * nest::Time::get_resolution().get_ms() * 0.001;
+  S_.spike_count_out = ([&]() -> int { nest::poisson_distribution::param_type poisson_params(S_.lambda_poisson); int sample = poisson_dev_( nest::get_vp_specific_rng( get_thread() ), poisson_params); return sample; })();
+  if (S_.spike_count_out > 0)
+  {  
+
+    // begin generated code for emit_spike() function
+
+    #ifdef DEBUG
+    std::cout << "Emitting a spike at t = " << nest::Time(nest::Time::step(origin.get_steps() + lag + 1)).get_ms() << "\n";
+    #endif
+    set_spiketime(nest::Time::step(origin.get_steps() + lag + 1));
+    nest::SpikeEvent se;
+    nest::kernel().event_delivery_manager.send(*this, se, lag);
+    // end generated code for emit_spike() function
+  }
 
     /**
      * Begin NESTML generated code for the onReceive block(s)
@@ -343,7 +356,6 @@ void rb_neuron_nestml::update(nest::Time const & origin,const long from, const l
      *
      * step 2: regardless of whether and how integrate_odes() was called, update variables due to convolutions. Set to the updated values at the end of the timestep.
     **/
-
 
 
     /**
@@ -359,6 +371,7 @@ void rb_neuron_nestml::update(nest::Time const & origin,const long from, const l
     /**
      * handle continuous input ports
     **/
+
     // voltage logging
     B_.logger_.record_data(origin.get_steps() + lag);
   }
@@ -374,6 +387,10 @@ void rb_neuron_nestml::handle(nest::DataLoggingRequest& e)
 
 void rb_neuron_nestml::handle(nest::SpikeEvent &e)
 {
+#ifdef DEBUG
+  std::cout << "[neuron " << this << "] rb_neuron_nestml::handle(SpikeEvent)" << std::endl;
+#endif
+
   assert(e.get_delay_steps() > 0);
   assert( e.get_rport() < B_.spike_inputs_.size() );
 
