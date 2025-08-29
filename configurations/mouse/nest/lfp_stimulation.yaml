@@ -1,0 +1,58 @@
+name: DBBS Mouse cerebellum NEST LFP recording simulation for in vitro state with multireceptor synaptic modeks
+packages:
+  - bsb-nest~=6.0
+components:
+  - cerebellar_models/nest_models/build_models.py
+simulations:
+  lfp_stimulation:
+    devices:
+      granule_multimeter:
+        device: multimeter
+        delay: 0.1
+        properties: ['I_syn_ampa', 'I_syn_nmda', 'I_syn_gaba']
+        units: ['pA', 'pA', 'pA']
+        targetting:
+          strategy: cylinder
+          radius: 15
+          origin:
+            - 150
+            - 100
+          axis: z
+          cell_models:
+            - granule_cell
+      lfp_stim:
+        delay: 0.1
+        device: poisson_generator
+        rate: 5000.
+        start: 1000.
+        stop: 1001.
+        targetting:
+          cell_models:
+            - mossy_fibers
+          strategy: cell_model
+        weight: 1.0
+    duration: 2000.0
+    modules:
+      - cerebmodule
+    resolution: 0.1
+    seed: 1234
+    simulator: nest
+    $import:
+      ref: basal_vitro_rec.yaml#/simulations/nest_basal_activity
+      values:
+        - cell_models
+        - connection_models
+        - devices
+$import:
+  ref: basal_vitro_rec.yaml#/
+  values:
+    - packages
+    - storage
+    - network
+    - regions
+    - partitions
+    - morphologies
+    - cell_types
+    - placement
+    - connectivity
+    - after_connectivity

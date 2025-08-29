@@ -56,7 +56,7 @@ See also
 aeif_cond_alpha, aeif_cond_exp, ht_neuron
 """
 
-neuron eglif_multisyn:
+model eglif_multisyn:
     state:
         V_m mV = -40.0 mV                   # Membrane potential in mV
         V_m_2 mV = 0.0 mV                   # Auxiliary variable for Mg_Block voltage dependency
