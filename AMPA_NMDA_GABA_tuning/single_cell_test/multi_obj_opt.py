@@ -14,7 +14,7 @@ def single_sim(cell_params, sim_params, E_rev, duration):
     nest.Install("cerebmodule")
     nest.resolution = 0.025
 
-    cell = nest.Create("eglif_multisyn", 1, params=cell_params)
+    cell = nest.Create("eglif_multirec_opt", 1, params=cell_params)
     input_spikes = nest.Create(
         "spike_generator", params={"spike_times": [sim_params["spike_time"]]}
     )
