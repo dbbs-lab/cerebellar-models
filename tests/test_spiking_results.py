@@ -668,7 +668,9 @@ class TestSpikePlots(
 
     def test_basic_simulation_report(self):
         report = BasicSimulationReport(self.scaffold, "basal_activity", "./")
-        plot_keys = np.array(["raster_psth", "table", "firing_rates", "isis", "freq", "legend"])
+        plot_keys = np.array(
+            ["raster_psth", "table", "firing_rates", "isis", "freq", "corr", "legend"]
+        )
         self.assertAll(np.array(list(report.plots.keys())) == plot_keys)
         filename = "test_report.pdf"
         report.print_report(filename, dpi=100)

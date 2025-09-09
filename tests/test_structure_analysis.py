@@ -255,7 +255,9 @@ class TestStructureReport(
         self.report = StructureReport(self.scaffold, LIST_CT_INFO)
 
     def test_structure_report(self):
-        plot_keys = np.array(["density_table", "connectivity_table", "placement_3d", "legend"])
+        plot_keys = np.array(
+            ["density_table", "placement_3d", "connectivity_table", "adjacency_matrix", "legend"]
+        )
         self.assertAll(np.array(list(self.report.plots.keys())) == plot_keys)
         filename = "test_report.pdf"
         self.report.print_report(filename, dpi=100)
