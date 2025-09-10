@@ -1,5 +1,6 @@
 import os
 import unittest
+from os.path import dirname, join
 
 import numpy as np
 from bsb import Configuration, Scaffold, parse_configuration_file
@@ -226,7 +227,9 @@ class TestStructureReport(
 ):
     def setUp(self):
         super().setUp()
-        self.cfg = parse_configuration_file("configurations/mouse/mouse_cerebellar_cortex.yaml")
+        self.cfg = parse_configuration_file(
+            join(dirname(dirname(__file__)), "configurations/mouse/mouse_cerebellar_cortex.yaml")
+        )
         self.cfg.placement["granular_layer_placement"] = {
             "strategy": "bsb.placement.RandomPlacement",
             "partitions": ["granular_layer"],
