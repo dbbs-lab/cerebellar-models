@@ -299,7 +299,11 @@ class CellPlacement3D(ScaffoldPlot):
         **kwargs,
     ):
         super().__init__(fig_size, scaffold, dict_colors=dict_colors, **kwargs)
-        self.ignored_ct = ignored_ct or ["mossy_fibers", "glomerulus", "ubc_glomerulus"]
+        self.ignored_ct = (
+            ignored_ct
+            if ignored_ct is not None
+            else ["mossy_fibers", "glomerulus", "ubc_glomerulus"]
+        )
         """List of cell type names to ignore in the plot."""
 
     def init_plot(self, **kwargs):
@@ -385,60 +389,76 @@ class CellPlacement3D(ScaffoldPlot):
 
 
 class AdjacencyMatrix(ScaffoldPlot):
+    """
+    Plot showing the cell-type adjacency matrix of a scaffold.
+    """
+
     def __init__(
         self,
         fig_size: Tuple[float, float],
         scaffold: Scaffold = None,
         dict_colors=None,
-        normalization=None,
         ignored_ct=None,
         dict_abv=None,
         **kwargs,
     ):
         super().__init__(fig_size, scaffold, dict_colors=dict_colors, **kwargs)
-        self.normalization = normalization
-        self.ignored_ct = ignored_ct or [
-            "mossy_fibers",
-            "glomerulus",
-            "unipolar_brush_cell",
-            "ubc_glomerulus",
-        ]
+        self.ignored_ct = (
+            ignored_ct
+            if ignored_ct is not None
+            else [
+                "mossy_fibers",
+                "glomerulus",
+                "unipolar_brush_cell",
+                "ubc_glomerulus",
+            ]
+        )
         """List of cell type names to ignore in the plot."""
         self.dict_abv = dict_abv or {}
         """Dictionary of abbreviations for cell types"""
+        self.adjacency_matrix = np.zeros((0, 0), dtype=np.uint32)
+        """Cell to cell adjacency matrix."""
+        self.grouped_matrix = np.zeros((0, 0), dtype=int)
+        """Cell type population to cell type population adjacency matrix."""
+
+    def _init_sizes(self):
+        self._cell_types = []
+        self._ct_first_id = []
+        current_id = 0
+        for name in self.scaffold.cell_types:
+            if name not in self.ignored_ct:
+                ct = self.scaffold.cell_types[name]
+                self._cell_types.append(name)
+                nb_cell = len(ct.get_placement_set())
+                self._ct_first_id.append(current_id)
+                current_id += nb_cell
+        self.adjacency_matrix = np.zeros((current_id, current_id), dtype=np.uint32)
+        self.grouped_matrix = np.zeros((len(self._cell_types), len(self._cell_types)), dtype=int)
+        return current_id
 
     def update(self):
         super().update()
-        self.ct_first_id = []
-        self.cell_types = []
-        current_id = 0
-        for name in [l.name for l in LIST_CT_INFO]:
-            if name in self.scaffold.cell_types and name not in self.ignored_ct:
-                ct = self.scaffold.cell_types[name]
-                self.cell_types.append(name)
-                nb_cell = len(ct.get_placement_set())
-                self.ct_first_id.append(current_id)
-                current_id += nb_cell
-        self.adjacency_matrix = np.zeros((current_id, current_id), dtype=np.uint32)
-        self.grouped_matrix = np.zeros((len(self.cell_types), len(self.cell_types)), dtype=int)
+        self._init_sizes()
         for ps in self.scaffold.get_connectivity_sets():
             # Get the ConnectivityIterator for the current connectivity strategy
             strat = self.scaffold.get_connectivity_set(ps.tag)
             if (
-                strat.pre_type_name not in self.cell_types
-                or strat.post_type_name not in self.cell_types
+                strat.pre_type_name not in self._cell_types
+                or strat.post_type_name not in self._cell_types
             ):
                 continue
             cs = strat.load_connections().as_scoped()
             pre_locs, post_locs = cs.all()
-            pre_id = self.cell_types.index(strat.pre_type_name)
-            post_id = self.cell_types.index(strat.post_type_name)
+            pre_id = self._cell_types.index(strat.pre_type_name)
+            post_id = self._cell_types.index(strat.post_type_name)
             self.grouped_matrix[pre_id, post_id] += len(pre_locs)
-            pre_id = self.ct_first_id[pre_id]
-            post_id = self.ct_first_id[post_id]
+            pre_id = self._ct_first_id[pre_id]
+            post_id = self._ct_first_id[post_id]
             self.adjacency_matrix[pre_id + pre_locs[:, 0], post_id + post_locs[:, 0]] += 1
+        self.normalize()
 
     def normalize(self):
+        """Normalization function for resulting the adjacency matrix."""
         pass
 
     def plot(self, log_scale=True, **kwargs):
@@ -454,14 +474,14 @@ class AdjacencyMatrix(ScaffoldPlot):
         ax.set_xlabel("Target cell type", fontsize=20)
         ax.set_ylabel("Source cell type", fontsize=20)
         im = ax.imshow(loc_mat, vmin=2.5, vmax=7.0)
-        ax.set_xticks(np.arange(len(self.cell_types)))
+        ax.set_xticks(np.arange(len(self._cell_types)))
         ax.set_xticklabels(
-            [self.dict_abv.get(l, l) for l in self.cell_types],
+            [self.dict_abv.get(l, l) for l in self._cell_types],
             rotation=90,
         )
-        ax.set_yticks(np.arange(len(self.cell_types)))
+        ax.set_yticks(np.arange(len(self._cell_types)))
         ax.set_yticklabels(
-            [self.dict_abv.get(l, l) for l in self.cell_types],
+            [self.dict_abv.get(l, l) for l in self._cell_types],
         )
         ax_divider = make_axes_locatable(ax)
         cax1 = ax_divider.append_axes("right", size="5%", pad=0)

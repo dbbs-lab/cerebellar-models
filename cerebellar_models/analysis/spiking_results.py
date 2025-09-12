@@ -163,7 +163,7 @@ class SpikeSimulationReport(BSBReport):
         """End time of the analysis. By default, this corresponds to the simulation duration."""
         self.dt = self.scaffold.simulations[simulation_name].resolution
         """Time step of the simulation in ms"""
-        self.ignored_ct = ignored_ct or ["glomerulus", "ubc_glomerulus"]
+        self.ignored_ct = ignored_ct if ignored_ct is not None else ["glomerulus", "ubc_glomerulus"]
         """List of ignored cell type names"""
         self.all_spikes: List[SpikeTrain] = None
         """List of SpikeTrain for each cell type"""
