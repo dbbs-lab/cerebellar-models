@@ -15,7 +15,7 @@
         "type": "Organization",
         "name": "European Commission"
     },
-    "description": "Developed by the Department of Brain and Behavioral Sciences at the University of Pavia, the Brain Scaffold Builder (BSB) is a component framework for neural modelling, which focuses on component declarations to piece together a brain model. The component declarations can be made in any supported configuration language, or using the library functions in Python. It offers parallel reconstruction and simulation of any network topology, placement and/or connectivity strategy.",
+    "description": "This repository provides the code, configuration and morphology data to reconstruct and simulate cerebellar cortex circuits using the Brain Scaffold Builder framework. These models are based on the iterative work of the Department of Brain and Behavioral Sciences (DBBS) of the university of Pavia.",
     "keywords": [
         "Cerebellum",
         "Mouse",
