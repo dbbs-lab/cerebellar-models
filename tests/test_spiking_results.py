@@ -18,6 +18,7 @@ from cerebellar_models.analysis.spiking_results import (
     ISIPlot,
     RasterPSTHPlot,
     SimResultsTable,
+    SpikeCorrelation,
     SpikePlot,
     SpikeSimulationReport,
     extract_isis,
@@ -423,6 +424,9 @@ class TestSpikePlots(
         self.assertEqual(len(plot.get_ax()[1].containers), 1)
         hist = plot.get_ax()[1].containers[0]
         self.assertEqual(len(hist), 30)
+        plot.clear()
+        self.assertEqual(len(plot.get_ax()[0].collections), 0)
+        self.assertEqual(len(plot.get_ax()[0].containers), 0)
 
     def test_raster_psth_empty(self):
         # Test that an empty plot does not throw error.
@@ -665,6 +669,37 @@ class TestSpikePlots(
         )
         with self.assertWarns(UserWarning):
             plot.plot()
+
+    def test_corr_matrix(self):
+        plot = SpikeCorrelation(
+            (10, 10.5),
+            scaffold=self.scaffold,
+            simulation_name="basal_activity",
+            time_from=None,
+            time_to=None,
+            all_spikes=self.simulationReport.all_spikes,
+            nb_neurons=self.simulationReport.nb_neurons,
+            populations=self.simulationReport.populations,
+            dict_abv=self.simulationReport.abbreviations,
+        )
+        plot.plot()
+        self.assertEqual(plot.corrcoef.shape, (6, 6))
+        self.assertAll(plot.corrcoef <= 1)
+        self.assertAll(plot.corrcoef >= -1)
+
+    def test_corr_matrix_empty(self):
+        plot = SpikeCorrelation(
+            (10, 10.5),
+            scaffold=self.scaffold,
+            simulation_name="basal_activity",
+            time_from=None,
+            time_to=None,
+            all_spikes=[],
+            nb_neurons=np.zeros(0, dtype=int),
+            populations=[],
+        )
+        plot.plot()
+        self.assertEqual(plot.corrcoef.shape, (0, 0))
 
     def test_basic_simulation_report(self):
         report = BasicSimulationReport(self.scaffold, "basal_activity", "./")

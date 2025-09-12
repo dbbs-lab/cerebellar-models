@@ -774,8 +774,9 @@ class SimResultsTable(TablePlot, SpikePlot):
 
 class SpikeCorrelation(SpikePlot):
     """
-    Inter-spike interval histogram plot for each cell type.
-    For each neuron type, one mean inter-spike interval value is computed for each of its neuron.
+    Spike cross-correlation matrix plot for each cell type.
+    Spike trains will be time binned before computing the pairwise
+    Pearson’s correlation coefficients.
     """
 
     def __init__(
@@ -806,12 +807,19 @@ class SpikeCorrelation(SpikePlot):
             **kwargs,
         )
         self.bin_size = bin_size
+        """Size of the time bins used to group spikes before computing correlation coefficients."""
         self.dict_abv = dict_abv or {}
+        """Dictionary of abbreviations for cell types"""
 
     def update(self):
         super().update()
-        self.corrcoef = correlation_coefficient(
-            BinnedSpikeTrain(self.get_filt_spikes(), bin_size=self.bin_size),
+        filt_spikes = self.get_filt_spikes()
+        self.corrcoef = (
+            correlation_coefficient(
+                BinnedSpikeTrain(filt_spikes, bin_size=self.bin_size),
+            )
+            if len(filt_spikes) > 0
+            else np.zeros((0, 0))
         )
 
     def plot(self):
@@ -827,7 +835,7 @@ class SpikeCorrelation(SpikePlot):
         ax.set_ylabel("Source cell type", fontsize=20)
         ax_divider = make_axes_locatable(ax)
         cax1 = ax_divider.append_axes("right", size="5%", pad=0)
-        cb1 = self.figure.colorbar(im, cax=cax1)
+        self.figure.colorbar(im, cax=cax1)
 
 
 class BasicSimulationReport(SpikeSimulationReport):
