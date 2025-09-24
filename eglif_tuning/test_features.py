@@ -31,27 +31,33 @@ def nest_protocol(cell_params, currents, start_stim, stop_stim, duration):
     return {I: nest_simulation(cell_params, I, start_stim, stop_stim, duration) for I in currents}
 
 
-if __name__ == '__main__':
+if __name__ == "__main__":
     PLOT = False
 
     ### 1. TEST FEATURES EXTRACTION FROM MULTICOMPARTIMENTAL NEURON EXPERIMENTS ###
-    feature_names = ['peak_time', 'time_to_first_spike', 'time_to_second_spike', 'mean_frequency']
-    threshold_GrC = -41.    # Example for GrC
-    data_folder = os.path.join(os.path.dirname(__file__), 'tofit_eglif/results_tofitEglif/GrC/')
-    neuron_features = multicomp_features(data_folder=data_folder, threshold=threshold_GrC,
-                                         features=feature_names, start_stim=100, end_stim=600)
-    print('Neuron experiments current steps: ', neuron_features['current'].values)
+    feature_names = ["peak_time", "time_to_first_spike", "time_to_second_spike", "mean_frequency"]
+    threshold_GrC = -41.0  # Example for GrC
+    data_folder = os.path.join(os.path.dirname(__file__), "tofit_eglif/results_tofitEglif/GrC/")
+    neuron_features = multicomp_features(
+        data_folder=data_folder,
+        threshold=threshold_GrC,
+        features=feature_names,
+        start_stim=100,
+        end_stim=600,
+    )
+    print("Neuron experiments current steps: ", neuron_features["current"].values)
 
     current_values = 10.0
-    selected_features = neuron_features[neuron_features['current']==current_values]
-    print('Test one feature: ', selected_features['time_to_first_spike'].values)
+    selected_features = neuron_features[neuron_features["current"] == current_values]
+    print("Test one feature: ", selected_features["time_to_first_spike"].values)
 
     if PLOT:
-        currents = neuron_features['current'].values
-        freqs = neuron_features['mean_frequency'].fillna(0).values
+        currents = neuron_features["current"].values
+        freqs = neuron_features["mean_frequency"].fillna(0).values
 
         x = np.linspace(0, max(currents), 100)
-        def line(x, m,q):
+
+        def line(x, m, q):
             return m * x + q
 
         plt.figure()
@@ -60,7 +66,7 @@ if __name__ == '__main__':
         plt.show()
 
     ### 2.  TEST FEATURES EXTRACTION FROM NEST EXPERIMENTS ###
-    currents = neuron_features['current'].values
+    currents = neuron_features["current"].values
     cell_params = {
         "t_ref": 1.5,
         "V_min": -150,
@@ -78,15 +84,20 @@ if __name__ == '__main__':
         "k_2": 0.041407868,
         "A1": 0.01,
         "A2": -0.94,
-    }   # Example for GrC
+    }  # Example for GrC
     nest_results = nest_protocol(cell_params, currents, start_stim=100, stop_stim=600, duration=700)
     spike_trains = []
     for I in currents:
         spike_trains.append(np.array(nest_results[I]))
 
-    nest_features = point_neuron_features(spike_trains=spike_trains, currents=currents,
-                                          features=feature_names, start_stim=100, end_stim=600)
+    nest_features = point_neuron_features(
+        spike_trains=spike_trains,
+        currents=currents,
+        features=feature_names,
+        start_stim=100,
+        end_stim=600,
+    )
 
-    print('Nest experiments current steps: ', nest_features['current'].values)
-    selected_features = nest_features[nest_features['current']==current_values]
-    print('Test one feature ', selected_features['time_to_first_spike'].values)
+    print("Nest experiments current steps: ", nest_features["current"].values)
+    selected_features = nest_features[nest_features["current"] == current_values]
+    print("Test one feature ", selected_features["time_to_first_spike"].values)

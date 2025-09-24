@@ -9,25 +9,28 @@ from scipy.stats import linregress
 
 
 def time_to_first_spike(spike_train, start_stim):
-    if len(spike_train)>0:
+    if len(spike_train) > 0:
         time_to_first_spike = spike_train[0] - start_stim
     else:
         time_to_first_spike = None
     return time_to_first_spike
 
+
 def time_to_second_spike(spike_train, start_stim):
-    if len(spike_train)>1:
+    if len(spike_train) > 1:
         time_to_second_spike = spike_train[1] - start_stim
     else:
         time_to_second_spike = None
     return time_to_second_spike
 
+
 def time_to_last_spike(spike_train, start_stim):
-    if len(spike_train)>0:
+    if len(spike_train) > 0:
         time_to_last_spike = spike_train[-1] - start_stim
     else:
         time_to_last_spike = None
     return time_to_last_spike
+
 
 def inv_first_isi(spike_train):
     all_isi_values_vec = np.diff(spike_train)
@@ -37,6 +40,7 @@ def inv_first_isi(spike_train):
         inv_first_ISI = None
     return inv_first_ISI
 
+
 def inv_second_isi(spike_train):
     all_isi_values_vec = np.diff(spike_train)
     if len(all_isi_values_vec) > 1:
@@ -44,6 +48,7 @@ def inv_second_isi(spike_train):
     else:
         inv_second_ISI = None
     return inv_second_ISI
+
 
 def inv_third_isi(spike_train):
     all_isi_values_vec = np.diff(spike_train)
@@ -53,6 +58,7 @@ def inv_third_isi(spike_train):
         inv_third_ISI = None
     return inv_third_ISI
 
+
 def inv_fourth_isi(spike_train):
     all_isi_values_vec = np.diff(spike_train)
     if len(all_isi_values_vec) > 3:
@@ -60,6 +66,7 @@ def inv_fourth_isi(spike_train):
     else:
         inv_fourth_ISI = None
     return inv_fourth_ISI
+
 
 def inv_fifth_isi(spike_train):
     all_isi_values_vec = np.diff(spike_train)
@@ -69,6 +76,7 @@ def inv_fifth_isi(spike_train):
         inv_fifth_ISI = None
     return inv_fifth_ISI
 
+
 def inv_last_isi(spike_train):
     all_isi_values_vec = np.diff(spike_train)
     if len(all_isi_values_vec) > 0:
@@ -76,6 +84,7 @@ def inv_last_isi(spike_train):
     else:
         inv_last_ISI = None
     return inv_last_ISI
+
 
 def ISI_log_slope(spike_train):
     ISI = np.diff(spike_train)
@@ -99,18 +108,23 @@ def ISI_log_slope(spike_train):
 
     return slope
 
+
 def ISI_CV(spike_train):
     ISI_values = np.diff(spike_train)
     ISI_mean = np.mean(ISI_values)
     ISI_CV = np.std(ISI_values, ddof=1) / ISI_mean
     return ISI_CV
 
-def adaptation_index(spike_train, stim_start, stim_end, offset=0, spike_skipf=0.1, max_spike_skip=2):
+
+def adaptation_index(
+    spike_train, stim_start, stim_end, offset=0, spike_skipf=0.1, max_spike_skip=2
+):
     if spike_skipf < 0 or spike_skipf >= 1:
         raise ValueError("spike_skipf should be in [0, 1).")
 
-    spike_time = spike_train[(spike_train >= stim_start - offset) &
-                             (spike_train <= stim_end - offset)]
+    spike_time = spike_train[
+        (spike_train >= stim_start - offset) & (spike_train <= stim_end - offset)
+    ]
 
     start_idx = min(max_spike_skip, round(len(spike_time) * spike_skipf))
     spike_time = spike_time[start_idx:]
@@ -126,14 +140,18 @@ def adaptation_index(spike_train, stim_start, stim_end, offset=0, spike_skipf=0.
     if not np.any(valid_idx):
         return np.nan
 
-    AI_values = (ISI_next[valid_idx] - ISI_prev[valid_idx]) / (ISI_next[valid_idx] + ISI_prev[valid_idx])
+    AI_values = (ISI_next[valid_idx] - ISI_prev[valid_idx]) / (
+        ISI_next[valid_idx] + ISI_prev[valid_idx]
+    )
 
     return np.mean(AI_values)
+
 
 def spike_count_stimint(spike_train, stim_start, stim_end):
     peaktimes_stimint = np.where((spike_train >= stim_start) & (spike_train <= stim_end))[0]
     spike_count_stimint = len(peaktimes_stimint)
     return spike_count_stimint
+
 
 def mean_frequency(spike_train, stim_start, stim_end):
     condition = (stim_start < spike_train) & (spike_train < stim_end)
@@ -151,21 +169,22 @@ def mean_frequency(spike_train, stim_start, stim_end):
     mean_frequency = 1000.0 * spikecount / duration  # Hz
     return mean_frequency
 
+
 FEATURE_FUNCS = {
-    'time_to_first_spike': time_to_first_spike,
-    'time_to_second_spike': time_to_second_spike,
-    'time_to_last_spike': time_to_last_spike,
-    'inv_first_ISI': inv_first_isi,
-    'inv_second_ISI': inv_second_isi,
-    'inv_third_ISI': inv_third_isi,
-    'inv_fourth_ISI': inv_fourth_isi,
-    'inv_fifth_ISI': inv_fifth_isi,
-    'inv_last_ISI': inv_last_isi,
-    'ISI_log_slope': ISI_log_slope,
-    'ISI_CV': ISI_CV,
-    'adaptation_index': adaptation_index,
-    'spike_count_stimint': spike_count_stimint,
-    'mean_frequency': mean_frequency
+    "time_to_first_spike": time_to_first_spike,
+    "time_to_second_spike": time_to_second_spike,
+    "time_to_last_spike": time_to_last_spike,
+    "inv_first_ISI": inv_first_isi,
+    "inv_second_ISI": inv_second_isi,
+    "inv_third_ISI": inv_third_isi,
+    "inv_fourth_ISI": inv_fourth_isi,
+    "inv_fifth_ISI": inv_fifth_isi,
+    "inv_last_ISI": inv_last_isi,
+    "ISI_log_slope": ISI_log_slope,
+    "ISI_CV": ISI_CV,
+    "adaptation_index": adaptation_index,
+    "spike_count_stimint": spike_count_stimint,
+    "mean_frequency": mean_frequency,
 }
 
 
@@ -173,10 +192,11 @@ def _check_features(features):
     features_ = []
     for feature in features:
         if feature not in FEATURE_FUNCS.keys():
-            print('Feature {} not available.'.format(feature))
+            print("Feature {} not available.".format(feature))
         else:
             features_.append(feature)
     return features_
+
 
 def _call_feature(func, spike_train, start_stim, end_stim):
     sig = inspect.signature(func)
@@ -190,17 +210,20 @@ def _call_feature(func, spike_train, start_stim, end_stim):
     return None
 
 
-def multicomp_features(data_folder: str, threshold: float,
-                       features: Optional[list[str]] = FEATURE_FUNCS.keys(),
-                       start_stim: Optional[float] = None,
-                       end_stim: Optional[float] = None) -> pd.DataFrame:
+def multicomp_features(
+    data_folder: str,
+    threshold: float,
+    features: Optional[list[str]] = FEATURE_FUNCS.keys(),
+    start_stim: Optional[float] = None,
+    end_stim: Optional[float] = None,
+) -> pd.DataFrame:
     if threshold is not None:
-        efel.api.set_setting('Threshold', threshold)
+        efel.api.set_setting("Threshold", threshold)
     else:
-        print('Threshold not set.')
+        print("Threshold not set.")
 
     features_ = _check_features(features)
-    data_files = [f for f in os.listdir(data_folder) if f.endswith('.txt')]
+    data_files = [f for f in os.listdir(data_folder) if f.endswith(".txt")]
 
     traces = []
     currents = np.empty(len(data_files), dtype=float)
@@ -218,14 +241,14 @@ def multicomp_features(data_folder: str, threshold: float,
             end_stim = time[-1]
 
         trace = {
-            'T': time,
-            'V': voltage,
-            'stim_start': [start_stim],
-            'stim_end': [end_stim],
+            "T": time,
+            "V": voltage,
+            "stim_start": [start_stim],
+            "stim_end": [end_stim],
         }
         traces.append(trace)
 
-        match = re.search(r'inj(-?\d+(?:\.\d+)?)', f)
+        match = re.search(r"inj(-?\d+(?:\.\d+)?)", f)
         if match:
             currents[idx] = float(match.group(1))
         else:
@@ -238,20 +261,23 @@ def multicomp_features(data_folder: str, threshold: float,
 
     df_list = []
     for curr, res in zip(currents, results):
-        row = {'current': curr}
+        row = {"current": curr}
         row.update(res)
         df_list.append(row)
 
     df = pd.DataFrame(df_list)
-    df = df.sort_values('current').reset_index(drop=True)
+    df = df.sort_values("current").reset_index(drop=True)
 
     return df
 
-def point_neuron_features(spike_trains: list[np.ndarray],
-                          currents: list[np.ndarray],
-                          features: Optional[list[str]] = FEATURE_FUNCS.keys(),
-                          start_stim: Optional[float] = None,
-                          end_stim: Optional[float] = None) -> pd.DataFrame:
+
+def point_neuron_features(
+    spike_trains: list[np.ndarray],
+    currents: list[np.ndarray],
+    features: Optional[list[str]] = FEATURE_FUNCS.keys(),
+    start_stim: Optional[float] = None,
+    end_stim: Optional[float] = None,
+) -> pd.DataFrame:
 
     features_ = _check_features(features)
     all_results = []
@@ -260,19 +286,10 @@ def point_neuron_features(spike_trains: list[np.ndarray],
         for feat in features_:
             func = FEATURE_FUNCS[feat]
             r[feat] = _call_feature(func, spike_train, start_stim, end_stim)
-        r['current'] = curr
+        r["current"] = curr
         all_results.append(r)
 
     df = pd.DataFrame(all_results)
-    df = df.sort_values('current').reset_index(drop=True)
+    df = df.sort_values("current").reset_index(drop=True)
 
     return df
-
-
-
-
-
-
-
-
-

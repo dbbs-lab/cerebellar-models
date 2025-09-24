@@ -1,4 +1,9 @@
-from cerebellar_models.optimization.optimizer import Optimizer, Constraint, _apply_constraints, ArchiveND
+from cerebellar_models.optimization.optimizer import (
+    Optimizer,
+    Constraint,
+    _apply_constraints,
+    ArchiveND,
+)
 import random, os, warnings, logging
 import numpy as np
 import pandas as pd
@@ -75,9 +80,9 @@ def _weighted_median(values, weights):
 
 
 def fit_fi_slope(df, threshold, selected_currents):
-    sub = df[df['current'].isin(selected_currents)].sort_values('current')
-    x = (sub['current'].values - threshold).astype(float)
-    y = sub['mean_frequency'].apply(_scalar).astype(float).values
+    sub = df[df["current"].isin(selected_currents)].sort_values("current")
+    x = (sub["current"].values - threshold).astype(float)
+    y = sub["mean_frequency"].apply(_scalar).astype(float).values
     m = (x > 0) & np.isfinite(y)
     x, y = x[m], y[m]
     if x.size == 0:
@@ -117,9 +122,9 @@ def evaluate_GrC(optimizer, ind, cell_params=None):
     nest_metrics = optimizer._extract_nest_features()
 
     # 1. Rheobase error
-    valid_thr = nest_metrics.loc[nest_metrics['spike_count_stimint'] > 0, 'current']
+    valid_thr = nest_metrics.loc[nest_metrics["spike_count_stimint"] > 0, "current"]
     nest_thr = valid_thr.min() if not valid_thr.empty else None
-    valid_thr_t = target_metrics.loc[target_metrics['spike_count_stimint'] > 0, 'current']
+    valid_thr_t = target_metrics.loc[target_metrics["spike_count_stimint"] > 0, "current"]
     targ_thr = valid_thr_t.min() if not valid_thr_t.empty else None
 
     if (nest_thr is None) or (targ_thr is None) or (not np.isfinite(targ_thr)):
@@ -129,10 +134,10 @@ def evaluate_GrC(optimizer, ind, cell_params=None):
         thr_loss = float(np.clip(rel / (1.0 + rel), 0.0, 1.0))
 
     # 2. Slope core
-    uniq_currents = np.sort(target_metrics['current'].unique())
+    uniq_currents = np.sort(target_metrics["current"].unique())
     dI = float(np.median(np.diff(uniq_currents))) if len(uniq_currents) > 1 else 0.0
     cut = (targ_thr if np.isfinite(targ_thr) else -np.inf) + dI
-    selected_currents = target_metrics.loc[target_metrics['current'] >= cut, 'current'].values
+    selected_currents = target_metrics.loc[target_metrics["current"] >= cut, "current"].values
 
     slope_targ = fit_fi_slope(target_metrics, targ_thr, selected_currents)
     slope_nest = fit_fi_slope(nest_metrics, targ_thr, selected_currents)
@@ -143,9 +148,9 @@ def evaluate_GrC(optimizer, ind, cell_params=None):
         slope_core = float(np.clip(r / (1.0 + r), 0.0, 1.0))
 
     # 3. Shape guardrail (+ tail slope pen)
-    nm_sel = nest_metrics[nest_metrics['current'].isin(selected_currents)].sort_values('current')
-    cur = nm_sel['current'].values
-    nf = nm_sel['mean_frequency'].apply(_scalar).astype(float).values
+    nm_sel = nest_metrics[nest_metrics["current"].isin(selected_currents)].sort_values("current")
+    cur = nm_sel["current"].values
+    nf = nm_sel["mean_frequency"].apply(_scalar).astype(float).values
     thr_ref = nest_thr if (nest_thr is not None and np.isfinite(nest_thr)) else targ_thr
     slope_own = fit_fi_slope(nest_metrics, thr_ref, selected_currents)
 
@@ -165,7 +170,15 @@ def evaluate_GrC(optimizer, ind, cell_params=None):
         if seg.size >= 2 and np.isfinite(seg).all():
             med = float(np.median(seg))
             last = float(seg[-1])
-            spiky_last = 1.0 if med <= 0 else float(np.clip(max(0.0, (last - med) / med) / (1.0 + max(0.0, (last - med) / med)), 0, 1))
+            spiky_last = (
+                1.0
+                if med <= 0
+                else float(
+                    np.clip(
+                        max(0.0, (last - med) / med) / (1.0 + max(0.0, (last - med) / med)), 0, 1
+                    )
+                )
+            )
             mu = float(np.mean(seg))
             sd = float(np.std(seg))
             cv_pen = 1.0 if mu <= 0 else float(np.clip(abs(sd / mu) / (1.0 + abs(sd / mu)), 0, 1))
@@ -175,18 +188,22 @@ def evaluate_GrC(optimizer, ind, cell_params=None):
         early_loss = 1.0
         try:
             i1 = float(np.min(selected_currents))
-            tm1 = target_metrics.loc[target_metrics['current'] == i1].iloc[0]
-            nm1 = nest_metrics.loc[nest_metrics['current'] == i1].iloc[0]
-            lat_t = float(_scalar(tm1['time_to_first_spike']))
-            lat_n = float(_scalar(nm1['time_to_first_spike']))
+            tm1 = target_metrics.loc[target_metrics["current"] == i1].iloc[0]
+            nm1 = nest_metrics.loc[nest_metrics["current"] == i1].iloc[0]
+            lat_t = float(_scalar(tm1["time_to_first_spike"]))
+            lat_n = float(_scalar(nm1["time_to_first_spike"]))
             if np.isfinite(lat_t) and lat_t > 0 and np.isfinite(lat_n):
                 rlat = abs(lat_n - lat_t) / max(lat_t, 1e-3)
                 lat_loss = rlat / (1.0 + rlat)
             else:
                 lat_loss = 1.0
-            inv1_t = float(_scalar(tm1['inv_first_ISI']))
-            inv1_n = float(_scalar(nm1['inv_first_ISI']))
-            sm1 = _smape([inv1_n], [inv1_t])[0] if np.isfinite(inv1_t) and np.isfinite(inv1_n) else 1.0
+            inv1_t = float(_scalar(tm1["inv_first_ISI"]))
+            inv1_n = float(_scalar(nm1["inv_first_ISI"]))
+            sm1 = (
+                _smape([inv1_n], [inv1_t])[0]
+                if np.isfinite(inv1_t) and np.isfinite(inv1_n)
+                else 1.0
+            )
             early_loss = float(np.clip(0.5 * lat_loss + 0.5 * sm1, 0.0, 1.0))
         except Exception:
             early_loss = 1.0
@@ -207,22 +224,36 @@ def evaluate_GrC(optimizer, ind, cell_params=None):
         except Exception:
             tail_slope_pen = 1.0
 
-    shape_loss = float(np.clip(max(shape_cvar, spiky_last, cv_pen, early_loss, tail_slope_pen), 0.0, 1.0))
+    shape_loss = float(
+        np.clip(max(shape_cvar, spiky_last, cv_pen, early_loss, tail_slope_pen), 0.0, 1.0)
+    )
 
     # 4. Gap loss
-    tm_sel = target_metrics[target_metrics['current'].isin(selected_currents)][['current', 'mean_frequency']].sort_values('current').copy()
-    tm_sel['tf'] = tm_sel['mean_frequency'].apply(_scalar).astype(float)
+    tm_sel = (
+        target_metrics[target_metrics["current"].isin(selected_currents)][
+            ["current", "mean_frequency"]
+        ]
+        .sort_values("current")
+        .copy()
+    )
+    tm_sel["tf"] = tm_sel["mean_frequency"].apply(_scalar).astype(float)
 
-    nm_join = nest_metrics[nest_metrics['current'].isin(selected_currents)][['current', 'mean_frequency']].sort_values('current').copy()
-    nm_join['nf'] = nm_join['mean_frequency'].apply(_scalar).astype(float)
+    nm_join = (
+        nest_metrics[nest_metrics["current"].isin(selected_currents)][["current", "mean_frequency"]]
+        .sort_values("current")
+        .copy()
+    )
+    nm_join["nf"] = nm_join["mean_frequency"].apply(_scalar).astype(float)
 
-    comp = pd.merge(nm_join[['current', 'nf']], tm_sel[['current', 'tf']], on='current', how='inner')
+    comp = pd.merge(
+        nm_join[["current", "nf"]], tm_sel[["current", "tf"]], on="current", how="inner"
+    )
     if comp.shape[0] == 0:
         gap_loss = 1.0
     else:
-        I = comp['current'].values.astype(float)
-        tf = comp['tf'].values.astype(float)
-        nf = comp['nf'].values.astype(float)
+        I = comp["current"].values.astype(float)
+        tf = comp["tf"].values.astype(float)
+        nf = comp["nf"].values.astype(float)
 
         tau_thr = max(2.0 * dI, 1e-9)
         tau_tail = max(2.0 * dI, 1e-9)
@@ -255,21 +286,31 @@ def evaluate_GrC(optimizer, ind, cell_params=None):
 
 if __name__ == "__main__":
     # Example for GrC
-    data_folder = os.path.join(os.path.dirname(__file__), 'tofit_eglif/results_tofitEglif/GrC/')
+    data_folder = os.path.join(os.path.dirname(__file__), "tofit_eglif/results_tofitEglif/GrC/")
     threshold_GrC = -41.0
     protocol = {
-        'start_stim': 100.0,
-        'end_stim': 600.0,
-        'duration': 700.0,
-        'threshold': threshold_GrC,
+        "start_stim": 100.0,
+        "end_stim": 600.0,
+        "duration": 700.0,
+        "threshold": threshold_GrC,
     }
     cell_params = {
-        "t_ref": 1.5, "V_min": -150, "C_m": 7, "V_th": -41, "V_reset": -70,
-        "E_L": -62, "I_e": -0.888, "V_m": -62.0, "tau_m": 24.15,
-        "k_adap": 0.022, "k_1": 0.311, "k_2": 0.041407868,
-        "A1": 0.01, "A2": -0.94,
+        "t_ref": 1.5,
+        "V_min": -150,
+        "C_m": 7,
+        "V_th": -41,
+        "V_reset": -70,
+        "E_L": -62,
+        "I_e": -0.888,
+        "V_m": -62.0,
+        "tau_m": 24.15,
+        "k_adap": 0.022,
+        "k_1": 0.311,
+        "k_2": 0.041407868,
+        "A1": 0.01,
+        "A2": -0.94,
     }
-    cell_params['k_2'] = 1.0 / cell_params['tau_m']  # oscillatory regime
+    cell_params["k_2"] = 1.0 / cell_params["tau_m"]  # oscillatory regime
 
     bounds = {
         "I_e": (-10.0, 10.0),
@@ -280,35 +321,33 @@ if __name__ == "__main__":
     }
 
     fitness = {
-        'rheobase_error': -1,
-        'slope_error': -1,
-        'shape_error': -1,
-        'gap_error': -1,
+        "rheobase_error": -1,
+        "slope_error": -1,
+        "shape_error": -1,
+        "gap_error": -1,
     }
 
     archive = ArchiveND(
-        eps_vec=[0.02, 0.05, 0.05, 0.05],
-        tau_vec=[0.08, 0.15, 0.20, 0.12],
-        cap=1000
+        eps_vec=[0.02, 0.05, 0.05, 0.05], tau_vec=[0.08, 0.15, 0.20, 0.12], cap=1000
     )
 
     optimizer = Optimizer(
         multicomp_data=data_folder,
         protocol=protocol,
-        nest_model='eglif_multirec_opt',
+        nest_model="eglif_multirec_opt",
         opt_params=list(bounds.keys()),
         model_params=cell_params,
         fitness=fitness,
         bounds=bounds,
         archive=archive,
-        knee_weights=[2.0, 1.0, 1.0, 1.0]
+        knee_weights=[2.0, 1.0, 1.0, 1.0],
     )
 
     param_positions = {name: i for i, name in enumerate(optimizer.opt_params)}
     constraint1 = Constraint(
         func=constrain_bounds,
         name="bounds",
-        ctx={"bounds": {param_positions[k]: v for k, v in bounds.items()}}
+        ctx={"bounds": {param_positions[k]: v for k, v in bounds.items()}},
     )
     constraint2 = Constraint(
         func=kadap_constrain,
@@ -316,8 +355,8 @@ if __name__ == "__main__":
         ctx={
             "idx_kadap": param_positions["k_adap"],
             "C_m": cell_params["C_m"],
-            "tau_m": cell_params["tau_m"]
-        }
+            "tau_m": cell_params["tau_m"],
+        },
     )
     optimizer.add_constraint(constraint1)
     optimizer.add_constraint(constraint2)
