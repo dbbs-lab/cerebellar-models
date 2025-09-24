@@ -50,7 +50,7 @@ problem = SynapseOptimization(
     duration=1201,
 )  # For -40 mV patch clamp
 problem.xl = np.array([0.0, 17.0, 0, 100, 0, 0, 0])
-problem.xu = np.array([5, 50.0, 100, 1000, 10, 10, 10])
+problem.xu = np.array([5, 50.0, 100, 800, 10, 10, 10])
 res = optimization(problem, n_gen=700)
 sol_idx, solution = select_solution(res.F, threshold=0.01)
 opt_params_dict = dict(zip(opt_param_names, res.X[sol_idx]))

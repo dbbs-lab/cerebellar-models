@@ -247,8 +247,7 @@ model eglif_multirec_opt:
             else:
                 V_m_2 = V_m
         else:
-            inline lambda real = lambda_0 * exp((V_m - V_th) / tau_V)
-            if random_uniform(0, 1) < - expm1(-lambda * resolution()):
+            if (V_m >= V_th):
                 r = RefractoryCounts
                 m = MgUnblockCounts
                 I_dep = A1
