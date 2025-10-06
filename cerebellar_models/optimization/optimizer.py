@@ -194,7 +194,6 @@ class Optimizer(object):
         self.MUTATION_PB = 0.4
         self.BEST_HISTORY_FILE = "best_history.pkl"
         self.print_evolution = False
-        self.STOP_THRESHOLD = 0.05  # [%]
         self._fit_names = list(self.fitness.keys())
         self._fit_hist = {name: [] for name in self._fit_names}
         self.knee_weights = np.array(
@@ -492,28 +491,34 @@ class Optimizer(object):
         init_kwargs = init_kwargs or {}
         eval_kwargs = eval_kwargs or {}
         weights = tuple(self.fitness.values())
-        if not hasattr(creator, "Fitness"):
-            creator.create("Fitness", base.Fitness, weights=weights)
-        if not hasattr(creator, "Individual"):
-            creator.create("Individual", list, fitness=creator.Fitness)
+        if hasattr(creator, "Fitness"):
+            old_len = len(getattr(creator.Fitness, "weights", []))
+            new_len = len(weights)
+            if old_len != new_len:
+                del creator.Fitness
+                if hasattr(creator, "Individual"):
+                    del creator.Individual
+        creator.create("Fitness", base.Fitness, weights=weights)
+        creator.create("Individual", list, fitness=creator.Fitness)
+
         toolbox = base.Toolbox()
-        toolbox.register("clone", _deap_clone)
         pool = self._set_parallel()
         toolbox.register("map", pool.map)
+        toolbox.register("clone", _deap_clone)
         toolbox.register("initialize_params", self.init_params_wrapper, self, **init_kwargs)
-        toolbox.register(
-            "individual", tools.initIterate, creator.Individual, toolbox.initialize_params
-        )
+        toolbox.register("individual", tools.initIterate, creator.Individual, toolbox.initialize_params)
         toolbox.register("population", tools.initRepeat, list, toolbox.individual)
         toolbox.register("evaluate", self.evaluate_wrapper, self, **eval_kwargs)
         toolbox.register("mate", self.constrained_mate)
         toolbox.register("mutate", self.constrained_mutate)
         toolbox.register("select", lambda pop, k: self.pareto_selectorND(pop, k))
+
         repair = Repair(self.constraints)
         toolbox.evaluate = EvaluateDecorator(repair, toolbox.evaluate)
         toolbox.mate = MateDecorator(repair, toolbox.mate)
         toolbox.mutate = MutateDecorator(repair, toolbox.mutate)
         return toolbox
+
 
     def optimize(self):
         toolbox = self.set_optimizer()
