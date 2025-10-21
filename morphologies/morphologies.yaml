@@ -2,71 +2,74 @@ morphologies:
   - file: ./morphologies/GranuleCell.swc
     parser:
       tags:
-        16:
+        6:
           - axon
           - axon_hillock
-        17:
+        7:
           - axon
           - axon_initial_segment
-        18:
+        8:
           - axon
           - ascending_axon
-        19:
+        9:
           - axon
           - parallel_fiber
   - file: ./morphologies/GolgiCell.swc
     parser:
       tags:
-        16:
+        6:
           - dendrites
           - basal_dendrites
-        17:
+        7:
           - dendrites
           - apical_dendrites
-        18:
+        8:
           - axon
           - axon_initial_segment
   - file: ./morphologies/PurkinjeCell.swc
     parser:
       tags:
-        16:
+        6:
           - axon
           - AIS
-        17:
+        7:
           - axon
           - AIS_K
-        18:
+        8:
           - axon
           - axonmyelin
-        19:
+        9:
           - axon
           - nodes
-        20:
+        10:
           - dendrites
           - basal
-        21:
+        11:
           - dendrites
           - pf_targets
           - sc_targets
-        22:
+        12:
           - dendrites
           - aa_targets
           - sc_targets
+        13:
+          - dendrites
+          - sodium_dendrites
   - file: ./morphologies/StellateCell.swc
     parser:
       tags:
-        16:
+        6:
           - dendrites
           - proximal_dendrites
-        17:
+        7:
           - dendrites
           - distal_dendrites
-        18:
+        8:
           - axon
           - axon_initial_segment
   - file: ./morphologies/BasketCell.swc
     parser:
       tags:
-        16:
+        6:
           - axon
           - axon_initial_segment
