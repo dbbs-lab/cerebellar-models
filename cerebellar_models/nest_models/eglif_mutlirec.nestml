@@ -202,7 +202,7 @@ model eglif_multirec:
         # default for GoC_GrC connection
 
         GABA_g_init nS = 0.162 nS                  # Initial condition for GABA rise
-        GABA_E_rev mV = -70 mV                     # Reversal potential for GABA synapse
+        GABA_E_rev mV = -65 mV                     # Reversal potential for GABA synapse
         GABA_A_r real = 4.54                       # Rise scaling factor for GABA synapse
         GABA_Tau_r ms = 0.376 ms                   # Rise time constant for GABA synapse
         GABA_A1 real = 10.6                        # Fast decay scaling factor for GABA synapse
