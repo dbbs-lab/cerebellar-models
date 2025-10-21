@@ -24,6 +24,7 @@ GranuleCellModel = define_model(
                 },
             },
             "GABA": {"mechanism": ("GABA", "granule"), "parameters": {"U": 0.35}},
+            "Iext": {"mechanism": "Iext", "parameters": {"amp": 0.00}},
         },
         "cable_types": {
             "soma": {

@@ -34,6 +34,7 @@ StellateCellModel = define_model(
                     "Erev": -65,
                 },
             },
+            "Iext": {"mechanism": "Iext", "parameters": {"amp": 0.00}},
         },
         "cable_types": {
             "soma": {

@@ -1,0 +1,183 @@
+packages:
+  - cerebellar-models~=0.8.0
+  - bsb~=6.0
+  - bsb-neuron~=6.0.7
+  - dbbs-catalogue~=6
+after_connectivity:
+  pre_syn_ais:
+    strategy: cerebellar_models.postprocessing.CastSynapticLocation
+    connections:
+      - golgi_to_golgi
+      - golgi_to_granule
+      - stellate_to_purkinje
+      - stellate_to_stellate
+      - basket_to_purkinje
+      - basket_to_basket
+    suffix_name: fromAIS
+simulations:
+  neuron_sim_cerebellum:
+    simulator: neuron
+    duration: 500
+    resolution: 0.025
+    temperature: 32
+    cell_models:
+      granule_cell:
+        model: cerebellar_models.neuron_models.granule_cell_models.GranuleCellModel
+        model_strategy: cerebellar_models.neuron_models.cell_adj.MorphoAdjGrCModel
+        parameters: []
+      golgi_cell:
+        model: cerebellar_models.neuron_models.golgi_cell_models.GolgiCellModel
+        model_strategy: cerebellar_models.neuron_models.cell_adj.MorphoAdjModel
+        parameters: []
+      purkinje_cell:
+        model: cerebellar_models.neuron_models.purkinje_cell_models.PurkinjeCellModel
+        model_strategy: cerebellar_models.neuron_models.cell_adj.MorphoAdjModel
+        amp: 0.02
+        parameters: []
+      stellate_cell:
+        model: cerebellar_models.neuron_models.stellate_cell_models.StellateCellModel
+        model_strategy: cerebellar_models.neuron_models.cell_adj.MorphoAdjModel
+        parameters: []
+      basket_cell:
+        model: cerebellar_models.neuron_models.basket_cell_models.BasketCellModel
+        model_strategy: cerebellar_models.neuron_models.cell_adj.MorphoAdjModel
+        parameters: []
+    connection_models:
+      ascending_axon_to_golgi:
+        synapses:
+          - synapse: AMPA_AA
+          - synapse: NMDA
+      parallel_fiber_to_golgi:
+        synapses:
+          - synapse: AMPA_PF
+      golgi_to_golgi_fromAIS:
+        synapses:
+          - synapse: GABA
+      golgi_to_granule_fromAIS:
+        synapses:
+          - synapse: GABA
+      ascending_axon_to_purkinje:
+        synapses:
+          - synapse: AMPA
+      parallel_fiber_to_purkinje:
+        synapses:
+          - synapse: AMPA
+      parallel_fiber_to_stellate:
+        synapses:
+          - synapse: AMPA
+          - synapse: NMDA
+      stellate_to_stellate_fromAIS:
+        synapses:
+          - synapse: GABA
+      stellate_to_purkinje_fromAIS:
+        synapses:
+          - synapse: GABA
+      parallel_fiber_to_basket:
+        synapses:
+          - synapse: AMPA
+          - synapse: NMDA
+      basket_to_basket_fromAIS:
+        synapses:
+          - synapse: GABA
+      basket_to_purkinje_fromAIS:
+        synapses:
+          - synapse: GABA
+      gap_goc:
+        synapses:
+          - synapse: gap
+        source: vgap
+    devices:
+      spike_generator_baseline:
+        device: >-
+          cerebellar_models.neuron_models.mossy_fibers_spike_generator.MossyFibersSpikeGenerator
+        start: 4
+        number: 20
+        interval: 125
+        noise: 1
+        delay: 1
+        weight: 0.1
+        seed: 100
+        targetting:
+          strategy: sphere_cell_types
+          only_local: 'False'
+          radius: 500
+          origin:
+            - 150.8612285
+            - 80.2743398
+            - 89.90502921
+          cell_types:
+            - mossy_fibers
+        synapses:
+          - AMPA
+          - NMDA
+      spike_generator_1:
+        device: >-
+          cerebellar_models.neuron_models.mossy_fibers_spike_generator.MossyFibersSpikeGenerator
+        start: 499
+        number: 3
+        interval: 10
+        noise: 0.5
+        delay: 1
+        weight: 0.1
+        seed: 101
+        targetting:
+          strategy: sphere_cell_types
+          only_local: 'False'
+          radius: 70
+          origin:
+            - 150.8612285
+            - 80.2743398
+            - 89.90502921
+          cell_types:
+            - mossy_fibers
+        synapses:
+          - AMPA
+          - NMDA
+      voltage_granule:
+        device: voltage_recorder
+        targetting:
+          strategy: cell_model
+          cell_models:
+            - granule_cell
+      voltage_golgi:
+        device: voltage_recorder
+        targetting:
+          strategy: cell_model
+          cell_models:
+            - golgi_cell
+      voltage_purkinje:
+        device: voltage_recorder
+        targetting:
+          strategy: cell_model
+          cell_models:
+            - purkinje_cell
+      voltage_stellate:
+        device: voltage_recorder
+        targetting:
+          strategy: cell_model
+          cell_models:
+            - stellate_cell
+      voltage_basket:
+        device: voltage_recorder
+        targetting:
+          strategy: cell_model
+          cell_models:
+            - basket_cell
+      synapses_granule:
+        device: synapse_recorder
+        synapse_types:
+          - AMPA
+          - NMDA
+        targetting:
+          strategy: by_id
+          ids:
+            granule_cell:
+              - 10598
+              - 22985
+              - 9326
+              - 10081
+              - 16825
+        locations:
+          strategy: branch
+          labels:
+            - dendrites

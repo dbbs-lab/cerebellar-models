@@ -56,6 +56,7 @@ GolgiCellModel = define_model(
             },
             "gap_s": {"mechanism": "gap_junction", "source": "vgap"},
             "gap": {"mechanism": ("gap_junction", "parallel"), "source": "vgap"},
+            "Iext": {"mechanism": "Iext", "parameters": {"amp": 0.00}},
         },
         "cable_types": {
             "soma": {
