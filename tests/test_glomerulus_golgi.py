@@ -34,7 +34,7 @@ class TestGlomerulusGolgi(
             morphologies=[
                 dict(
                     file=abspath(join(dirname(dirname(__file__)), "morphologies", "GolgiCell.swc")),
-                    parser=dict(tags={16: ["dendrites", "basal_dendrites"]}),
+                    parser=dict(tags={6: ["dendrites", "basal_dendrites"]}),
                 )
             ],
             cell_types=dict(
