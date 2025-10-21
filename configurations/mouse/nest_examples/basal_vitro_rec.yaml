@@ -24,6 +24,7 @@ simulations:
           tau_V: 1.0
           tau_m: 9.125
           # pf-BC AMPA
+          AMPA_E_rev: 0.0
           AMPA_g_init: 0.5986151464078818
           AMPA_Tau_r: 0.2885454465778898
           AMPA_Tau_d1: 0.361214360260991
@@ -32,6 +33,7 @@ simulations:
           AMPA_A1: 0.7686340271346837
           AMPA_A2: 1.3031463264578722
           # pf-BC NMDA
+          NMDA_E_rev: -3.7
           NMDA_g_init: 0.005421817538203816
           NMDA_Tau_r: 47.40777695927046
           NMDA_Tau_d1: 51.58825950692386
@@ -40,6 +42,7 @@ simulations:
           NMDA_A1: 3.7422751919354367
           NMDA_A2: 0.4980434420823697
           # BC-BC
+          GABA_E_rev: -65.0
           GABA_g_init: 1.1487687456539493
           GABA_Tau_r: 0.37383077569256745
           GABA_Tau_d1: 3.1073175264777047
@@ -69,6 +72,7 @@ simulations:
           tau_V: 0.09
           tau_m: 44
           # glom-GoC AMPA
+          AMPA_E_rev: 0.0
           AMPA_g_init: 1.115965180410803
           AMPA_Tau_r: 0.06828289728594421
           AMPA_Tau_d1: 1.7041177058103865
@@ -77,6 +81,7 @@ simulations:
           AMPA_A1: 7.63072301638014
           AMPA_A2: 2.5824424428033272
           # aa-GoC AMPA
+          AMPA2_E_rev: 0.0
           AMPA2_g_init: 0.3545867855750201
           AMPA2_Tau_r: 0.07998662076204388
           AMPA2_Tau_d1: 0.8822965880874376
@@ -85,6 +90,7 @@ simulations:
           AMPA2_A1: 12.993176835484471
           AMPA2_A2: 2.1378395883863957
           # aa-GoC & mf-GoC NMDA
+          NMDA_E_rev: -3.7
           NMDA_g_init: 0.06507491002133782
           NMDA_Tau_r: 7.492933042162157
           NMDA_Tau_d1: 49.78301745858933
@@ -93,6 +99,7 @@ simulations:
           NMDA_A1: 2.511748085213512
           NMDA_A2: 0.3665220416477684
           # pf-GoC AMPA
+          AMPA3_E_rev: 0.0
           AMPA3_g_init: 0.7261241439376229
           AMPA3_Tau_r: 0.06698111728388399
           AMPA3_Tau_d1: 0.8482199889588548
@@ -101,6 +108,7 @@ simulations:
           AMPA3_A1: 5.690348485137838
           AMPA3_A2: 0.6780028154381605
           # GoC-GoC GABA
+          GABA_E_rev: -65.0
           GABA_g_init: 1.8938290878206254
           GABA_Tau_r: 0.1846418908724778
           GABA_Tau_d1: 2.639679024851566
@@ -128,6 +136,7 @@ simulations:
           tau_V: 0.3
           tau_m: 24.15
           # mf-GrC AMPA
+          AMPA_E_rev: 0.0
           AMPA_g_init: 1.3254051705870171
           AMPA_Tau_r: 0.9966611702091053
           AMPA_Tau_d1: 0.38598738306536895
@@ -136,6 +145,7 @@ simulations:
           AMPA_A1: 1.4551614318130006
           AMPA_A2: 1.5956590886325035
           # mf-GrC NMDA
+          NMDA_E_rev: -3.7
           NMDA_g_init: 0.023436539864118
           NMDA_Tau_r: 21.192329383729344
           NMDA_Tau_d1: 14.860706054687927
@@ -144,6 +154,7 @@ simulations:
           NMDA_A1: 2.951290940616272
           NMDA_A2: 0.21348858259846124
           # GoC-GrC GABA
+          GABA_E_rev: -65.0
           GABA_g_init: 0.16167187460716928
           GABA_Tau_r: 0.37595979577132965
           GABA_Tau_d1: 27.292807790043216
@@ -173,6 +184,7 @@ simulations:
           tau_V: 2.0
           tau_m: 47
           # aa-PC & pf-PC AMPA
+          AMPA_E_rev: 0.0
           AMPA_g_init: 0.19294907221534321
           AMPA_Tau_r: 0.686334499921023
           AMPA_Tau_d1: 0.08637409507467056
@@ -208,6 +220,7 @@ simulations:
           tau_V: 1
           tau_m: 9.125
           # pf-SC AMPA
+          AMPA_E_rev: 0.0
           AMPA_g_init: 0.09324813802356961
           AMPA_Tau_r: 0.832811417468158
           AMPA_Tau_d1: 0.16858899559030588
@@ -216,6 +229,7 @@ simulations:
           AMPA_A1: 17.07322080857238
           AMPA_A2: 14.764149216255884
           # pf-SC NMDA
+          NMDA_E_rev: -3.7
           NMDA_g_init: 0.01514802993681726
           NMDA_Tau_r: 37.622573319469055
           NMDA_Tau_d1: 53.15105534517695
@@ -224,6 +238,7 @@ simulations:
           NMDA_A1: 2.854964381660505
           NMDA_A2: 0.35317007422511043
           # SC-SC
+          GABA_E_rev: -65.0
           GABA_g_init: 1.0230134014130856
           GABA_Tau_r: 0.31230551452717137
           GABA_Tau_d1: 2.9081700675470903
@@ -238,15 +253,15 @@ simulations:
           - model: static_synapse
             receptor_type: 4
             weight: 1.
-            delay: 2.0
+            delay: 0.1
           - model: static_synapse
             receptor_type: 2
             weight: 1.
-            delay: 2.0
+            delay: 0.1
       ascending_axon_to_purkinje:
         synapses:
           - model: static_synapse
-            delay: 2.0
+            delay: 0.1
             receptor_type: 1
             weight: 1.
       basket_to_basket:
@@ -254,31 +269,31 @@ simulations:
           - model: static_synapse
             receptor_type: 3
             weight: 1
-            delay: 4.0
+            delay: 0.1
       basket_to_purkinje:
         synapses:
           - model: static_synapse
             receptor_type: 3
             weight: 1.
-            delay: 4.0
+            delay: 0.1
       glomerulus_to_golgi:
         synapses:
           - model: static_synapse
             receptor_type: 1
             weight: 1.
-            delay: 1.0
+            delay: 0.1
           - model: static_synapse
             receptor_type: 2
             weight: 1.
-            delay: 1.0
+            delay: 0.1
       glomerulus_to_granule:
         synapses:
           - model: static_synapse
-            delay: 1.0
+            delay: 0.1
             receptor_type: 1
             weight: 1.
           - model: static_synapse
-            delay: 1.0
+            delay: 0.1
             receptor_type: 2
             weight: 1.
       golgi_to_glomerulus:
@@ -286,62 +301,62 @@ simulations:
           - model: static_synapse
             receptor_type: 3
             weight: 1.
-            delay: 2.0
+            delay: 0.1
       golgi_to_golgi:
         synapses:
           - model: static_synapse
             receptor_type: 3
             weight: 1
-            delay: 4.0
+            delay: 0.1
       mossy_fibers_to_glomerulus:
         synapses:
           - model: static_synapse
             weight: 1.0
-            delay: 1.0
+            delay: 0.1
       parallel_fiber_to_basket:
         synapses:
           - model: static_synapse
             receptor_type: 1
             weight: 1.
-            delay: 5.0
+            delay: 0.1
           - model: static_synapse
             receptor_type: 2
             weight: 1.
-            delay: 5.0
+            delay: 0.1
       parallel_fiber_to_golgi:
         synapses:
           - model: static_synapse
             receptor_type: 5
             weight: 1.
-            delay: 5.0
+            delay: 0.1
       parallel_fiber_to_purkinje:
         synapses:
           - model: static_synapse
             receptor_type: 1
             weight: 1.
-            delay: 5.0
+            delay: 0.1
       parallel_fiber_to_stellate:
         synapses:
           - model: static_synapse
             receptor_type: 1
             weight: 1.
-            delay: 5.0
+            delay: 0.1
           - model: static_synapse
             receptor_type: 2
             weight: 1.
-            delay: 5.0
+            delay: 0.1
       stellate_to_purkinje:
         synapses:
           - model: static_synapse
             receptor_type: 3
             weight: 1.
-            delay: 5.0
+            delay: 0.1
       stellate_to_stellate:
         synapses:
           - model: static_synapse
             receptor_type: 3
             weight: 1.
-            delay: 4.0
+            delay: 0.1
     devices:
       background_noise:
         delay: 0.1
