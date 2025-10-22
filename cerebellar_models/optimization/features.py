@@ -1,11 +1,11 @@
-import efel
-import os
-import numpy as np
-from typing import Optional
-import re
-import pandas as pd
 import inspect
-from scipy.stats import linregress
+import os
+import re
+from typing import Optional
+
+import efel
+import numpy as np
+import pandas as pd
 
 
 def time_to_first_spike(spike_train, start_stim):
@@ -170,7 +170,12 @@ def mean_frequency(spike_train, stim_start, stim_end):
     return mean_frequency
 
 
+def peak_time(spike_train):
+    return spike_train
+
+
 FEATURE_FUNCS = {
+    "peak_time": peak_time,
     "time_to_first_spike": time_to_first_spike,
     "time_to_second_spike": time_to_second_spike,
     "time_to_last_spike": time_to_last_spike,

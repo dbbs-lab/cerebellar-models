@@ -1,12 +1,14 @@
 import multiprocessing as mp
-from deap import base, creator, tools, algorithms
-from copy import deepcopy
-from cerebellar_models.optimization.utils import _suppress_output
-from cerebellar_models.optimization.features import *
-import random
-from deap.tools.emo import assignCrowdingDist
 import os
+import random
+from copy import deepcopy
+
 import numpy as np
+from deap import algorithms, base, creator, tools
+from deap.tools.emo import assignCrowdingDist
+
+from cerebellar_models.optimization.features import *
+from cerebellar_models.optimization.utils import _suppress_output
 
 try:
     from deap.base import clone as _deap_clone
@@ -45,7 +47,9 @@ def _worker_init():
             "NUMEXPR_NUM_THREADS": "1",
         }
     )
-    import numpy as _np, random as _rnd
+    import random as _rnd
+
+    import numpy as _np
 
     pid = os.getpid()
     _rnd.seed((pid * 69069) & 0xFFFFFFFF)
@@ -210,6 +214,7 @@ class Optimizer(object):
         return neuron_features
 
     def _nest_single_sim(self, current, params=None):
+
         with _suppress_output():
             import nest
 
@@ -227,6 +232,7 @@ class Optimizer(object):
             except:
                 pass
             nest.resolution = 0.1
+
         import nest
 
         cell_params = self.model_params if params is None else params
@@ -377,8 +383,9 @@ class Optimizer(object):
             self._fit_hist[name].append(float(means[i]))
 
     def plot_fitness_hystory(self, fname="fitness_hystory.png"):
-        import matplotlib.pyplot as plt
         from itertools import cycle
+
+        import matplotlib.pyplot as plt
 
         L = min(len(v) for v in self._fit_hist.values() if v)
         gens = np.arange(1, L + 1, dtype=int)
@@ -411,8 +418,8 @@ class Optimizer(object):
             pickle.dump(rec, f)
 
     def plot_fI_snapshot(self, snapshots, out_png=None, use_global=False, print_params=True):
-        import numpy as np
         import matplotlib.pyplot as plt
+        import numpy as np
 
         def _rate_for_plot(spike_times, t0, t1, T, use_global_flag):
             st = np.asarray(spike_times if spike_times is not None else [], dtype=float)
@@ -506,7 +513,9 @@ class Optimizer(object):
         toolbox.register("map", pool.map)
         toolbox.register("clone", _deap_clone)
         toolbox.register("initialize_params", self.init_params_wrapper, self, **init_kwargs)
-        toolbox.register("individual", tools.initIterate, creator.Individual, toolbox.initialize_params)
+        toolbox.register(
+            "individual", tools.initIterate, creator.Individual, toolbox.initialize_params
+        )
         toolbox.register("population", tools.initRepeat, list, toolbox.individual)
         toolbox.register("evaluate", self.evaluate_wrapper, self, **eval_kwargs)
         toolbox.register("mate", self.constrained_mate)
@@ -518,7 +527,6 @@ class Optimizer(object):
         toolbox.mate = MateDecorator(repair, toolbox.mate)
         toolbox.mutate = MutateDecorator(repair, toolbox.mutate)
         return toolbox
-
 
     def optimize(self):
         toolbox = self.set_optimizer()

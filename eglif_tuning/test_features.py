@@ -1,8 +1,7 @@
-import nest
-import os
-import numpy as np
-from cerebellar_models.optimization.features import *
 import matplotlib.pyplot as plt
+import nest
+
+from cerebellar_models.optimization.features import *
 
 
 def nest_protocol(cell_params, currents, start_stim, stop_stim, duration):
@@ -62,7 +61,6 @@ if __name__ == "__main__":
 
         plt.figure()
         plt.scatter(currents, freqs)
-        plt.plot(x, line(x, slope_multicomp, intercept_multicomp))
         plt.show()
 
     ### 2.  TEST FEATURES EXTRACTION FROM NEST EXPERIMENTS ###
@@ -84,7 +82,8 @@ if __name__ == "__main__":
         "k_2": 0.041407868,
         "A1": 0.01,
         "A2": -0.94,
-    }  # Example for GrC
+    }
+    # Example for GrC
     nest_results = nest_protocol(cell_params, currents, start_stim=100, stop_stim=600, duration=700)
     spike_trains = []
     for I in currents:
