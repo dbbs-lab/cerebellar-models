@@ -4,9 +4,10 @@ import matplotlib.pyplot as plt
 import quantities as pq
 from neo.core import SpikeTrain
 import elephant.statistics as es
-import yaml
+from mpl_toolkits.axes_grid1.inset_locator import inset_axes, mark_inset
 
-def run_sim_static_grc(params_grc, tot_spikes):
+# Specific for Glomerulus to Granule Cell synapse
+def sim_static_grc(params_grc, tot_spikes):
     nest.ResetKernel()
     nest.Install("cerebmodule")
 
@@ -15,12 +16,14 @@ def run_sim_static_grc(params_grc, tot_spikes):
 
     sp_times = np.arange(1, 2001, tot_spikes, dtype=float)
     glom_generator_1 = nest.Create("spike_generator", params={"spike_times": sp_times})
-    # glom_generator_2 = nest.Create("poisson_generator", params={"rate": 4, "start": 0, "stop": 1000})
 
-    nest.Connect(glom, grc, syn_spec={"synapse_model": "static_synapse", "weight": 1, "delay": 0.1, "receptor_type" : 1})
+
+    nest.Connect(glom, grc, syn_spec={"synapse_model": "static_synapse", "weight": 1, "delay": 0.1, "receptor_type": 1})
     nest.Connect(glom, grc, syn_spec={"synapse_model": "static_synapse", "weight": 1, "delay": 0.1, "receptor_type": 2})
-    #nest.Connect(glom, grc, syn_spec={"synapse_model": "static_synapse", "weight": 1, "delay": 1, "receptor_type": 3})
-    mult_grc = nest.Create( "multimeter", params={"interval": 0.1, "record_from": ["V_m", "I_syn_ampa", "I_syn_nmda", "I_syn_gaba", "I_syn"], "record_to": "memory"})
+    # nest.Connect(glom, grc, syn_spec={"synapse_model": "static_synapse", "weight": 1, "delay": 1, "receptor_type": 3})
+    mult_grc = nest.Create("multimeter", params={"interval": 0.1,
+                                                 "record_from": ["V_m", "I_syn_ampa", "I_syn_nmda", "I_syn_gaba",
+                                                                 "I_syn"], "record_to": "memory"})
     rec_grc = nest.Create("spike_recorder")
 
     nest.Connect(mult_grc, grc)
@@ -53,7 +56,9 @@ def run_sim_static_grc(params_grc, tot_spikes):
 
     return g_syn_ampa, g_syn_nmda, g_syn_gaba, times, I_syn_ampa, I_syn_nmda, I_syn_gaba, I_syn, V_m, rec_spikes, firing_rate
 
-def run_sim_stp_grc(params_grc, tot_spikes):
+
+# Specific for Glomerulus to Granule Cell synapse
+def sim_stp_grc(params_grc, tot_spikes):
     nest.ResetKernel()
     nest.Install("cerebmodule")
 
@@ -64,10 +69,14 @@ def run_sim_stp_grc(params_grc, tot_spikes):
     glom_generator_1 = nest.Create("spike_generator", params={"spike_times": sp_times})
     # glom_generator_2 = nest.Create("poisson_generator", params={"rate": 4, "start": 0, "stop": 1000})
 
-    nest.Connect(glom, grc, syn_spec={"synapse_model" : "tsodyks2_synapse" ,"weight": 2, "U": 0.43, "x": 1, "tau_rec": 8, "tau_fac": 5, "delay": 1, "receptor_type" : 1})
-    nest.Connect(glom, grc, syn_spec={"synapse_model": "tsodyks2_synapse", "weight": 2, "U": 0.43, "x": 1, "tau_rec": 8,"tau_fac": 5, "delay": 1, "receptor_type": 2})
+    nest.Connect(glom, grc, syn_spec={"synapse_model": "tsodyks2_synapse", "weight": 2, "U": 0.43, "x": 1, "tau_rec": 8,
+                                      "tau_fac": 5, "delay": 1, "receptor_type": 1})
+    nest.Connect(glom, grc, syn_spec={"synapse_model": "tsodyks2_synapse", "weight": 2, "U": 0.43, "x": 1, "tau_rec": 8,
+                                      "tau_fac": 5, "delay": 1, "receptor_type": 2})
 
-    mult_grc = nest.Create( "multimeter", params={"interval": 0.1, "record_from": ["V_m", "I_syn_ampa", "I_syn_nmda", "I_syn_gaba", "I_syn"], "record_to": "memory"})
+    mult_grc = nest.Create("multimeter", params={"interval": 0.1,
+                                                 "record_from": ["V_m", "I_syn_ampa", "I_syn_nmda", "I_syn_gaba",
+                                                                 "I_syn"], "record_to": "memory"})
     rec_grc = nest.Create("spike_recorder")
 
     nest.Connect(mult_grc, grc)
@@ -100,7 +109,9 @@ def run_sim_stp_grc(params_grc, tot_spikes):
 
     return g_syn_ampa, g_syn_nmda, g_syn_gaba, times, I_syn_ampa, I_syn_nmda, I_syn_gaba, I_syn, V_m, rec_spikes, firing_rate
 
-def run_sim_static(params_pre, params_post, tot_spikes):
+
+
+def sim_static(params_pre, params_post, weight, tot_spikes, aa_to_goc: bool, pf_to_goc: bool):
     nest.ResetKernel()
     nest.Install("cerebmodule")
 
@@ -110,11 +121,27 @@ def run_sim_static(params_pre, params_post, tot_spikes):
     sp_times = np.arange(1, 2001, tot_spikes, dtype=float)
     sp_generator = nest.Create("spike_generator", params={"spike_times": sp_times})
 
-    nest.Connect(pre, post, syn_spec={"synapse_model": "static_synapse", "weight": 1, "delay": 1, "receptor_type": 1})
-    nest.Connect(pre, post, syn_spec={"synapse_model": "static_synapse", "weight": 1, "delay": 1, "receptor_type": 2})
-    nest.Connect(pre, post, syn_spec={"synapse_model": "static_synapse", "weight": 1, "delay": 1, "receptor_type": 3})
+    if "AMPA_E_rev" in params_post:
+        nest.Connect(pre, post,
+                     syn_spec={"synapse_model": "static_synapse", "weight": weight, "delay": 0.1, "receptor_type": 1})
+    if "NMDA_E_rev" in params_post:
+        nest.Connect(pre, post,
+                     syn_spec={"synapse_model": "static_synapse", "weight": weight, "delay": 0.1, "receptor_type": 2})
+    if "GABA_E_rev" in params_post:
+        nest.Connect(pre, post,
+                     syn_spec={"synapse_model": "static_synapse", "weight": weight, "delay": 0.1, "receptor_type": 3})
+    if aa_to_goc:
+        nest.Connect(pre, post,
+                     syn_spec={"synapse_model": "static_synapse", "weight": weight, "delay": 0.1, "receptor_type": 4})
+    if pf_to_goc:
+        nest.Connect(pre, post,
+                     syn_spec={"synapse_model": "static_synapse", "weight": weight, "delay": 0.1, "receptor_type": 5})
 
-    mult = nest.Create("multimeter", params={"interval": 0.1,"record_from": ["V_m", "I_syn_ampa", "I_syn_nmda", "I_syn_gaba","I_syn"], "record_to": "memory"})
+    mult = nest.Create("multimeter", params={"interval": 0.1,
+                                             "record_from": ["V_m", "I_syn_ampa", "I_syn_ampa2", "I_syn_ampa3",
+                                                             "I_syn_nmda", "I_syn_gaba", "I_syn"],
+                                             "record_to": "memory"})
+
     rec = nest.Create("spike_recorder")
 
     nest.Connect(mult, post)
@@ -126,16 +153,37 @@ def run_sim_static(params_pre, params_post, tot_spikes):
     rec_spikes = rec.get()["events"]
     times = mult_events["times"]
     I_syn_ampa = mult_events["I_syn_ampa"]
+    I_syn_ampa2 = mult_events["I_syn_ampa2"]
+    I_sym_ampa3 = mult_events["I_sym_ampa3"]
     I_syn_nmda = mult_events["I_syn_nmda"]
     I_syn_gaba = mult_events["I_syn_gaba"]
     I_syn = mult_events["I_syn"]
     V_m = mult_events["V_m"]
-    g_syn_ampa = I_syn_ampa / (params_post["AMPA_E_rev"] - V_m)
+
+    if "AMPA_E_rev" in params_post:
+        g_syn_ampa = I_syn_ampa / (params_post["AMPA_E_rev"] - V_m)
+    else:
+        g_syn_ampa = 0
+
+    if "AMPA2_E_rev" in params_post:
+        g_syn_ampa2 = I_syn_ampa2 / (params_post["AMPA2_E_rev"] - V_m)
+    else:
+        g_syn_ampa2 = 0
+
+    if "AMPA3_E_rev" in params_post:
+        g_syn_ampa3 = I_sym_ampa3 / (params_post["AMPA3_E_rev"] - V_m)
+    else:
+        g_syn_ampa3 = 0
+
     if "NMDA_E_rev" in params_post:
         g_syn_nmda = I_syn_nmda / (params_post["NMDA_E_rev"] - V_m)
     else:
         g_syn_nmda = 0
-    g_syn_gaba = I_syn_gaba / (params_post["GABA_E_rev"] - V_m)
+
+    if "GABA_E_rev" in params_post:
+        g_syn_gaba = I_syn_gaba / (params_post["GABA_E_rev"] - V_m)
+    else:
+        g_syn_gaba = 0
 
     sp_times = rec.get()["events"]["times"]
     sp_times = sp_times[sp_times <= 2001]
@@ -145,9 +193,11 @@ def run_sim_static(params_pre, params_post, tot_spikes):
         st = SpikeTrain(sp_times * pq.ms, t_start=1 * pq.ms, t_stop=2001 * pq.ms)
         firing_rate = es.mean_firing_rate(st).rescale(pq.Hz)
 
-    return g_syn_ampa, g_syn_nmda, g_syn_gaba, times, I_syn_ampa, I_syn_nmda, I_syn_gaba, I_syn, V_m, rec_spikes, firing_rate
+    return g_syn_ampa, g_syn_ampa2, g_syn_ampa3, g_syn_nmda, g_syn_gaba, times, I_syn_ampa, I_syn_nmda, I_syn_gaba, I_syn, V_m, rec_spikes, firing_rate
 
-def run_sum_stp(params_pre, params_post, tot_spikes):
+
+
+def sim_stp(params_pre, params_post, params_syn, tot_spikes, aa_to_goc: bool, pf_to_goc: bool):
     nest.ResetKernel()
     nest.Install("cerebmodule")
 
@@ -157,11 +207,32 @@ def run_sum_stp(params_pre, params_post, tot_spikes):
     sp_times = np.arange(1, 2001, tot_spikes, dtype=float)
     sp_generator = nest.Create("spike_generator", params={"spike_times": sp_times})
 
-    nest.Connect(pre, post, syn_spec={"synapse_model": "tsodyks2_synapse", "weight": 2, "U": 0.43, "x": 1, "tau_rec": 8,"tau_fac": 5, "delay": 1, "receptor_type": 1})
-    nest.Connect(pre, post, syn_spec={"synapse_model": "tsodyks2_synapse", "weight": 2, "U": 0.43, "x": 1, "tau_rec": 8,"tau_fac": 5, "delay": 1, "receptor_type": 2})
-    nest.Connect(pre, post, syn_spec={"synapse_model": "tsodyks2_synapse", "weight": 2, "U": 0.43, "x": 1, "tau_rec": 8,"tau_fac": 5, "delay": 1, "receptor_type": 3})
+    if "AMPA_E_rev" in params_post:
+        nest.Connect(pre, post, syn_spec={"synapse_model": "tsodyks2_synapse", "weight": params_syn["weight"],
+                                          "U": params_syn["U"], "x": params_syn["x"], "tau_rec": params_syn["tau_rec"],
+                                          "tau_fac": params_syn["tau_fac"], "delay": 0.1, "receptor_type": 1})
+    if "NMDA_E_rev" in params_post:
+        nest.Connect(pre, post, syn_spec={"synapse_model": "tsodyks2_synapse", "weight": params_syn["weight"],
+                                          "U": params_syn["U"], "x": params_syn["x"], "tau_rec": params_syn["tau_rec"],
+                                          "tau_fac": params_syn["tau_fac"], "delay": 0.1, "receptor_type": 2})
+    if "GABA_E_rev" in params_post:
+        nest.Connect(pre, post, syn_spec={"synapse_model": "tsodyks2_synapse", "weight": params_syn["weight"],
+                                          "U": params_syn["U"], "x": params_syn["x"], "tau_rec": params_syn["tau_rec"],
+                                          "tau_fac": params_syn["tau_fac"], "delay": 0.1, "receptor_type": 3})
+    if aa_to_goc:
+        nest.Connect(pre, post, syn_spec={"synapse_model": "tsodyks2_synapse", "weight": params_syn["weight"],
+                                          "U": params_syn["U"], "x": params_syn["x"], "tau_rec": params_syn["tau_rec"],
+                                          "tau_fac": params_syn["tau_fac"], "delay": 0.1, "receptor_type": 4})
+    if pf_to_goc:
+        nest.Connect(pre, post, syn_spec={"synapse_model": "tsodyks2_synapse", "weight": params_syn["weight"],
+                                          "U": params_syn["U"], "x": params_syn["x"], "tau_rec": params_syn["tau_rec"],
+                                          "tau_fac": params_syn["tau_fac"], "delay": 0.1, "receptor_type": 5})
 
-    mult = nest.Create("multimeter", params={"interval": 0.1,"record_from": ["V_m", "I_syn_ampa", "I_syn_nmda", "I_syn_gaba", "I_syn"],"record_to": "memory"})
+    mult = nest.Create("multimeter", params={"interval": 0.1,
+                                             "record_from": ["V_m", "I_syn_ampa", "I_syn_ampa2", "I_syn_ampa3",
+                                                             "I_syn_nmda", "I_syn_gaba", "I_syn"],
+                                             "record_to": "memory"})
+
     rec = nest.Create("spike_recorder")
 
     nest.Connect(mult, post)
@@ -173,16 +244,37 @@ def run_sum_stp(params_pre, params_post, tot_spikes):
     rec_spikes = rec.get()["events"]
     times = mult_events["times"]
     I_syn_ampa = mult_events["I_syn_ampa"]
+    I_syn_ampa2 = mult_events["I_syn_ampa2"]
+    I_sym_ampa3 = mult_events["I_sym_ampa3"]
     I_syn_nmda = mult_events["I_syn_nmda"]
     I_syn_gaba = mult_events["I_syn_gaba"]
     I_syn = mult_events["I_syn"]
     V_m = mult_events["V_m"]
-    g_syn_ampa = I_syn_ampa / (params_post["AMPA_E_rev"] - V_m)
+
+    if "AMPA_E_rev" in params_post:
+        g_syn_ampa = I_syn_ampa / (params_post["AMPA_E_rev"] - V_m)
+    else:
+        g_syn_ampa = 0
+
+    if "AMPA2_E_rev" in params_post:
+        g_syn_ampa2 = I_syn_ampa2 / (params_post["AMPA2_E_rev"] - V_m)
+    else:
+        g_syn_ampa2 = 0
+
+    if "AMPA3_E_rev" in params_post:
+        g_syn_ampa3 = I_sym_ampa3 / (params_post["AMPA3_E_rev"] - V_m)
+    else:
+        g_syn_ampa3 = 0
+
     if "NMDA_E_rev" in params_post:
         g_syn_nmda = I_syn_nmda / (params_post["NMDA_E_rev"] - V_m)
     else:
         g_syn_nmda = 0
-    g_syn_gaba = I_syn_gaba / (params_post["GABA_E_rev"] - V_m)
+
+    if "GABA_E_rev" in params_post:
+        g_syn_gaba = I_syn_gaba / (params_post["GABA_E_rev"] - V_m)
+    else:
+        g_syn_gaba = 0
 
     sp_times = rec.get()["events"]["times"]
     sp_times = sp_times[sp_times <= 2001]
@@ -192,47 +284,21 @@ def run_sum_stp(params_pre, params_post, tot_spikes):
         st = SpikeTrain(sp_times * pq.ms, t_start=1 * pq.ms, t_stop=2001 * pq.ms)
         firing_rate = es.mean_firing_rate(st).rescale(pq.Hz)
 
-    return g_syn_ampa, g_syn_nmda, g_syn_gaba, times, I_syn_ampa, I_syn_nmda, I_syn_gaba, I_syn, V_m, rec_spikes, firing_rate
+    return g_syn_ampa, g_syn_ampa2, g_syn_ampa3, g_syn_nmda, g_syn_gaba, times, I_syn_ampa, I_syn_nmda, I_syn_gaba, I_syn, V_m, rec_spikes, firing_rate
 
 
-if __name__ == "__main__":
-
-    static_path = "../../../configurations/mouse/nest_examples/basal_vitro_rec.yaml"
-    stp_path = "../../../configurations/mouse/in-vitro/nest/connection_models/tsodyks2_synapse.yaml"
-
-    with open(static_path) as stream_s:
-        configuration = yaml.safe_load(stream_s)
-        configuration = configuration["simulations"]["nest_basal_activity"]["cell_models"]
-
-    with open(stp_path) as stream:
-        config_stp = yaml.safe_load(stream)
-        config_stp = config_stp["simulations"]["basal_activity"]["connection_models"]
-
-    cell_params = {}
-    stp_params = {}
-    static_params = {}
-    for name,parameters in configuration.items():
-        if "glomerulus" in name:
-            cell_params[name] = parameters["model"]
-        elif "mossy_fibers" in name:
-            cell_params[name] = parameters["model"]
-        else:
-            cell_params[name] = parameters["constants"]
-
-    # for name, parameters in configuration.simulations.nest_basal_activity.cell_models.items():
-
-    for name,parameters in config_stp.items():
-        stp_params[name] = parameters["synapse"]
-        del stp_params[name]["model"]
-
-    tot_spikes=[2000, 1000, 500, 200, 100, 20, 10, 5, 2]
-    freq=[0.5, 1, 2, 5, 10, 50, 100, 200, 500]
-    f_rates_static = []
-    f_rates_stp = []
-
+# Makes the specified simulations, plots and saves the plots into png images
+def run_and_plot(params_pre, params_post, params_syn, weight, tot_spikes, freq, aa_to_goc: bool, pf_to_goc: bool, f_rates_static, f_rates_stp):
     for i in range(len(tot_spikes)):
-        g_syn_ampa, g_syn_nmda, g_syn_gaba, times, I_syn_ampa, I_syn_nmda, I_syn_gaba, I_syn, V_m, spikes, fr_static = run_sim_static_grc(cell_params["granule_cell"], tot_spikes[i])
-        g_syn_ampa_p, g_syn_nmda_p, g_syn_gaba_p, times_p, I_syn_ampa_p, I_syn_nmda_p, I_syn_gaba_p, I_syn_p, V_m_p, spikes_p, fr_p = run_sim_stp_grc(cell_params["granule_cell"], tot_spikes[i])
+        if 'parrot_neuron' in params_pre:
+            g_syn_ampa, g_syn_nmda, g_syn_gaba, times, I_syn_ampa, I_syn_nmda, I_syn_gaba, I_syn, V_m, spikes, fr_static = sim_static_grc(params_post, tot_spikes[i])
+            g_syn_ampa_p, g_syn_nmda_p, g_syn_gaba_p, times_p, I_syn_ampa_p, I_syn_nmda_p, I_syn_gaba_p, I_syn_p, V_m_p, spikes_p, fr_p = sim_stp_grc(params_post, tot_spikes[i])
+        else:
+            g_syn_ampa, g_syn_ampa2, g_syn_ampa3, g_syn_nmda, g_syn_gaba, times, I_syn_ampa, I_syn_nmda, I_syn_gaba, I_syn, V_m, spikes, fr_static = sim_static(
+                params_pre, params_post, weight, tot_spikes[i], aa_to_goc, pf_to_goc)
+            g_syn_ampa_p, g_syn_ampa2_p, g_syn_ampa3_p, g_syn_nmda_p, g_syn_gaba_p, times_p, I_syn_ampa_p, I_syn_nmda_p, I_syn_gaba_p, I_syn_p, V_m_p, spikes_p, fr_p = sim_stp(
+                params_pre, params_post, params_syn, tot_spikes[i], aa_to_goc, pf_to_goc)
+
         fig, axs = plt.subplots(4,2)
         fig.set_size_inches(20,10)
         axs[0,0].plot(times, g_syn_ampa)
@@ -275,41 +341,28 @@ if __name__ == "__main__":
         f_rates_stp.append(fr_p)
 
 
-    fig = plt.figure()
-    plt.plot(freq, f_rates_static, marker='o')
-    plt.plot(freq, f_rates_stp, marker='o')
-    plt.legend(["f-static", "f-stp"])
+
+    fig, axs = plt.subplots()
+    axs.plot(freq, f_rates_static, marker='o')
+    axs.plot(freq, f_rates_stp, marker='o')
+    axs.legend(["f-static", "f-stp"], loc="lower right")
     # plt.xlim([0,10])
     # plt.ylim([0,25])
-    plt.title("f-f Curve Glom_to_Grc")
-    plt.xlabel("Frequency Input [Hz]")
-    plt.ylabel("Frequency Output [Hz]")
+    axs.set_title("f-f Curve Glom_to_Grc")
+    axs.set_xlabel("Frequency Input [Hz]")
+    axs.set_ylabel("Frequency Output [Hz]")
+    axins = inset_axes(axs, width="30%", height="40%", loc="upper left")
+    t_zoom_center = 5
+    t_zoom_width = 25
+
+    axins.plot(freq, f_rates_static, marker='o')
+    axins.plot(freq, f_rates_stp, marker='o')
+    axins.yaxis.tick_right()
+    axins.set_xlim(-3, 20)
+    axins.set_ylim(-0.5, 8)
+    mark_inset(axs, axins, loc1=3, loc2=4, fc="none", ec="0.1", alpha=0.5)
     plt.show()
     fig.savefig(f"imgs/static_vs_stp_f.png", dpi=300)
-
-
-
-# axins = inset_axes(axs[4], width="30%", height="40%", loc="center right", borderpad=2)
-# t_zoom_center = t_start + (t_end - t_start) / 2
-# t_zoom_width = 2.5
-# x1, x2 = t_zoom_center - t_zoom_width, t_zoom_center + t_zoom_width
-# axins.plot(times, Mg_block, "green")
-# axins.set_xlim(x1, x2)
-# axins.set_ylim(0.9 * mg_max, 1.02 * mg_max)
-# axins.set_xticks([])
-# axins.set_yticks([])
-# max_idx = np.argmax(Mg_block)
-# axins.text(
-#     times[max_idx],
-#     Mg_block[max_idx] + 0.002,
-#     f"t_Mgunblock = {t_Mgunblock:.2f} ms",
-#     fontsize=7,
-#     ha="center",
-#     va="bottom",
-#     color="black",
-# )
-#
-# mark_inset(axs[4], axins, loc1=3, loc2=1, fc="none", ec="0.1", alpha=0.5)
 
 
 
