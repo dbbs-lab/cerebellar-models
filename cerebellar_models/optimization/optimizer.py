@@ -230,13 +230,16 @@ class Optimizer(object):
             try:
                 nest.Install("cerebmodule")
             except:
-                pass
+                raise Exception("NEST module not installed.")
             nest.resolution = 0.1
 
         import nest
 
         cell_params = self.model_params if params is None else params
-        cell = nest.Create(self.nest_model, 1, params=cell_params)
+        try:
+            cell = nest.Create(self.nest_model, 1, params=cell_params)
+        except:
+            raise Exception("NEST model not found.")
         cell.V_m = cell_params["E_L"]
         gen = nest.Create("dc_generator")
         nest.SetStatus(
@@ -406,7 +409,7 @@ class Optimizer(object):
         import pickle
 
         path = getattr(
-            self, "BEST_HYSTORY_FILE", getattr(self, "BEST_HISTORY_FILE", "best_history.pkl")
+            self, "BEST_HISTORY_FILE", getattr(self, "BEST_HISTORY_FILE", "best_history.pkl")
         )
         mode = "wb" if reset or (not os.path.exists(path)) else "ab"
         rec = {
@@ -570,7 +573,6 @@ class Optimizer(object):
 
             pareto_front = tools.sortNondominated(pop, k=len(pop), first_front_only=True)[0]
             best_gen, knee_score = self.pick_knee(pareto_front)
-            self.log_best(gen + 1, toolbox.clone(best_gen), reset=(gen == 0))
 
             if knee_score < best_knee_score:
                 best_knee_score = knee_score
@@ -580,6 +582,7 @@ class Optimizer(object):
                 stale = 0
             else:
                 stale += 1
+            self.log_best(gen + 1, toolbox.clone(best_gen), reset=(gen == 0))
 
             if stale >= self.NO_IMPROVE_PATIENCE:
                 if self.print_evolution:
