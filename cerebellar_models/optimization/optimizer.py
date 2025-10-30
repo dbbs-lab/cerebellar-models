@@ -203,6 +203,7 @@ class Optimizer(object):
         self.knee_weights = np.array(
             knee_weights if knee_weights is not None else np.ones(len(fitness)), dtype=float
         )
+        self.output_path = None
 
     def _extract_multicomp_features(self):
         neuron_features = multicomp_features(
@@ -402,16 +403,21 @@ class Optimizer(object):
         plt.title("Population mean fitness per generation")
         plt.legend()
         plt.tight_layout()
-        plt.savefig(fname, dpi=100)
+        if self.output_path:
+            savefig_path = os.path.join(self.output_path, fname)
+            plt.savefig(savefig_path, dpi=100)
+        else:
+            plt.savefig(fname, dpi=100)
         plt.close()
 
     def log_best(self, gen, ind, reset=False):
         import pickle
-
-        path = getattr(
-            self, "BEST_HISTORY_FILE", getattr(self, "BEST_HISTORY_FILE", "best_history.pkl")
-        )
+        if getattr(self, "output_path", None):
+            path = os.path.join(self.output_path, "best_history.pkl")
+        else:
+            path = getattr(self, "BEST_HISTORY_FILE", "best_history.pkl")
         mode = "wb" if reset or (not os.path.exists(path)) else "ab"
+
         rec = {
             "gen": int(gen),
             "params": list(ind),
@@ -420,7 +426,7 @@ class Optimizer(object):
         with open(path, mode) as f:
             pickle.dump(rec, f)
 
-    def plot_fI_snapshot(self, snapshots, out_png=None, use_global=False, print_params=True):
+    def plot_fI_snapshot(self, snapshots, fname = "fI_snapshots.png",  use_global=False, print_params=True):
         import matplotlib.pyplot as plt
         import numpy as np
 
@@ -483,7 +489,11 @@ class Optimizer(object):
         plt.title(title)
         plt.legend()
         plt.tight_layout()
-        plt.savefig(out_png or getattr(self, "FI_SNAPSHOTS_FILE", "fI_snapshots.png"), dpi=300)
+        if self.output_path:
+            savefig_path = os.path.join(self.output_path, fname)
+            plt.savefig(savefig_path, dpi=300)
+        else:
+            plt.savefig( fname, dpi=300)
         plt.close()
 
         if print_params and (last_params is not None):

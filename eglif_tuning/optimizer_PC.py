@@ -144,6 +144,9 @@ if __name__ == "__main__":
     opt.evaluate_fn = evaluate_PC
     opt.print_evolution = True
     opt.N_GEN = 250
+    output_folder = 'PC_opt'
+    os.makedirs(output_folder, exist_ok=True)
+    optimizer.output_path = output_folder
     opt.set_optimizer()
 
     best, fit = opt.optimize()

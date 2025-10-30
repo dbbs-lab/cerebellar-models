@@ -10,6 +10,7 @@ from cerebellar_models.optimization.optimizer import (
     Optimizer,
     _apply_constraints,
 )
+import os
 
 # === WARNING SETTING ===
 warnings.filterwarnings("ignore")
@@ -149,6 +150,9 @@ if __name__ == "__main__":
     optimizer.init_params_fn = random_init
     optimizer.evaluate_fn = evaluate_GrC
     optimizer.print_evolution = True
+    output_folder = 'GrC_opt'
+    os.makedirs(output_folder, exist_ok=True)
+    optimizer.output_path = output_folder
     toolbox = optimizer.set_optimizer()
 
     best_individual, best_fitness = optimizer.optimize()
