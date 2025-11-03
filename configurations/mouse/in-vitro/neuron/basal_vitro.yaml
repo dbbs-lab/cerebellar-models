@@ -3,12 +3,17 @@ packages:
   - bsb~=6.0
   - bsb-neuron~=6.0.7
   - dbbs-catalogue~=6
+network:
+  chunk_size: [30, 20, 40]
+  x: 300
+  y: 200
+  z: 295
 after_connectivity:
   pre_syn_ais:
     strategy: cerebellar_models.postprocessing.CastSynapticLocation
     connections:
       - golgi_to_golgi
-      - golgi_to_granule
+      - golgi_to_glomerulus
       - stellate_to_purkinje
       - stellate_to_stellate
       - basket_to_purkinje
@@ -17,7 +22,7 @@ after_connectivity:
 simulations:
   neuron_sim_cerebellum:
     simulator: neuron
-    duration: 500
+    duration: 50
     resolution: 0.025
     temperature: 32
     cell_models:
@@ -46,50 +51,65 @@ simulations:
       ascending_axon_to_golgi:
         synapses:
           - synapse: AMPA_AA
+            delay: 0.1
           - synapse: NMDA
+            delay: 0.1
       parallel_fiber_to_golgi:
         synapses:
           - synapse: AMPA_PF
+            delay: 0.1
       golgi_to_golgi_fromAIS:
         synapses:
           - synapse: GABA
-      golgi_to_granule_fromAIS:
+            delay: 0.1
+      golgi_to_glomerulus_fromAIS:
         synapses:
           - synapse: GABA
+            delay: 0.1
       ascending_axon_to_purkinje:
         synapses:
           - synapse: AMPA
+            delay: 0.1
       parallel_fiber_to_purkinje:
         synapses:
           - synapse: AMPA
+            delay: 0.1
       parallel_fiber_to_stellate:
         synapses:
           - synapse: AMPA
+            delay: 0.1
           - synapse: NMDA
+            delay: 0.1
       stellate_to_stellate_fromAIS:
         synapses:
           - synapse: GABA
+            delay: 0.1
       stellate_to_purkinje_fromAIS:
         synapses:
           - synapse: GABA
+            delay: 0.1
       parallel_fiber_to_basket:
         synapses:
           - synapse: AMPA
+            delay: 0.1
           - synapse: NMDA
+            delay: 0.1
       basket_to_basket_fromAIS:
         synapses:
           - synapse: GABA
+            delay: 0.1
       basket_to_purkinje_fromAIS:
         synapses:
           - synapse: GABA
+            delay: 0.1
       gap_goc:
         synapses:
           - synapse: gap
+            delay: 0.1
         source: vgap
     devices:
       spike_generator_baseline:
-        device: >-
-          cerebellar_models.neuron_models.mossy_fibers_spike_generator.MossyFibersSpikeGenerator
+        device: cerebellar_models.neuron_models.mossy_fibers_spike_generator.MossyFibersSpikeGenerator
         start: 4
         number: 20
         interval: 125
@@ -111,8 +131,7 @@ simulations:
           - AMPA
           - NMDA
       spike_generator_1:
-        device: >-
-          cerebellar_models.neuron_models.mossy_fibers_spike_generator.MossyFibersSpikeGenerator
+        device: cerebellar_models.neuron_models.mossy_fibers_spike_generator.MossyFibersSpikeGenerator
         start: 499
         number: 3
         interval: 10
