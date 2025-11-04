@@ -1,19 +1,18 @@
+import random
+
+import numpy as np
 from bsb import config
 from bsb.config import types
-from bsb_neuron.device import NeuronDevice
-from bsb.simulation.results import SimulationRecorder
-from bsb.simulation.targetting import LocationTargetting
 from bsb.exceptions import *
 from bsb.reporting import report, warn
-import numpy as np
+from bsb.simulation.results import SimulationRecorder
+from bsb.simulation.targetting import LocationTargetting
+from bsb_neuron.device import NeuronDevice
 from patch import p
-import random
 
 
 @config.node
-class MossyFibersSpikeGenerator(
-    NeuronDevice, classmap_entry="mossy_fibers_spike_generator"
-):
+class MossyFibersSpikeGenerator(NeuronDevice, classmap_entry="mossy_fibers_spike_generator"):
     locations = config.attr(type=LocationTargetting, default={"strategy": "soma"})
     synapses = config.attr(type=types.list())
     seed = config.attr(type=int, default=123)
@@ -31,25 +30,19 @@ class MossyFibersSpikeGenerator(
         cs = self.scaffold.get_connectivity_set("glomerulus_to_granule")
         pre_glGr, post_gr = cs.load_connections().incoming().to(simdata.chunks).all()
         print("glom ", pre_glGr.shape, " to gr ", post_gr.shape)
-        uniquePre_glGr, uniquePre_count_glGr = np.unique(
-            pre_glGr[:, 0], axis=0, return_counts=True
-        )
+        uniquePre_glGr, uniquePre_count_glGr = np.unique(pre_glGr[:, 0], axis=0, return_counts=True)
         print("[glom_i] to gr", np.mean(uniquePre_count_glGr))
 
         cs = self.scaffold.get_connectivity_set("glomerulus_to_golgi")
         pre_glGo, post_go = cs.load_connections().incoming().to(simdata.chunks).all()
         print("glom ", pre_glGo.shape, " to go ", post_go.shape)
-        uniquePre_glGo, uniquePre_count_glGo = np.unique(
-            pre_glGo[:, 0], axis=0, return_counts=True
-        )
+        uniquePre_glGo, uniquePre_count_glGo = np.unique(pre_glGo[:, 0], axis=0, return_counts=True)
         print("[glom_i] to go", np.mean(uniquePre_count_glGo))
 
         cs = self.scaffold.get_connectivity_set("mossy_fibers_to_glomerulus")
         pre_mf, post_mfGl = cs.load_connections().all()
         print("mf ", pre_mf.shape, " to glom ", post_mfGl.shape)
-        uniquePost, uniquePost_count = np.unique(
-            post_mfGl[:, 0], axis=0, return_counts=True
-        )
+        uniquePost, uniquePost_count = np.unique(post_mfGl[:, 0], axis=0, return_counts=True)
         print("[glom_i] from ", np.mean(uniquePost_count))
 
         ########################################
@@ -81,16 +74,14 @@ class MossyFibersSpikeGenerator(
             for idx_post_mfGl_i in np.where(post_mfGl[:, 0] == uniquePost[idx_post_i])[
                 0
             ]:  # retreive mf connected to selected glom
-                for idx_pre_glGr_i in np.where(
-                    pre_glGr[:, 0] == uniquePre_glGr[idx_glGr_i]
-                )[
+                for idx_pre_glGr_i in np.where(pre_glGr[:, 0] == uniquePre_glGr[idx_glGr_i])[
                     0
                 ]:  # retreive gr connected to selected glom
                     pre_mfGr[j] = pre_mf[idx_post_mfGl_i]
                     post_mfGr[j] = post_gr[idx_pre_glGr_i]
                     j += 1
-        
-        print('size pre/post cs matrices', pre_mfGr.shape, ' ', post_mfGr.shape, ' j:', j) 
+
+        print("size pre/post cs matrices", pre_mfGr.shape, " ", post_mfGr.shape, " j:", j)
         ########################################
         ### interesect unique mfGl and glGo
         dtype = ", ".join([str(uniquePre_glGo.dtype)] * 1)
@@ -115,17 +106,13 @@ class MossyFibersSpikeGenerator(
         j = 0
         for i, idx_post_i in enumerate(idx_post):
             idx_glGo_i = idx_glGo[i]
-            for idx_post_mfGl_i in np.where(post_mfGl[:, 0] == uniquePost[idx_post_i])[
-                0
-            ]:
-                for idx_pre_glGo_i in np.where(
-                    pre_glGo[:, 0] == uniquePre_glGo[idx_glGo_i]
-                )[0]:
+            for idx_post_mfGl_i in np.where(post_mfGl[:, 0] == uniquePost[idx_post_i])[0]:
+                for idx_pre_glGo_i in np.where(pre_glGo[:, 0] == uniquePre_glGo[idx_glGo_i])[0]:
                     pre_mfGo[j] = pre_mf[idx_post_mfGl_i]
                     post_mfGo[j] = post_go[idx_pre_glGo_i]
                     j += 1
-        
-        print('size pre/post cs matrices', pre_mfGo.shape, ' ', post_mfGo.shape, ' j:', j)
+
+        print("size pre/post cs matrices", pre_mfGo.shape, " ", post_mfGo.shape, " j:", j)
         ########################################
         for post_cm, post_pop in simdata.populations.items():
             if post_cm.cell_type.name == "granule_cell":
@@ -134,43 +121,37 @@ class MossyFibersSpikeGenerator(
                 pop_go = post_pop
 
         # spike time patter
-        mf_ids = (
-            simulation.scaffold.cell_types.get("mossy_fibers")
-            .get_placement_set()
-            .load_ids()
-        )
+        mf_ids = simulation.scaffold.cell_types.get("mossy_fibers").get_placement_set().load_ids()
         rng = np.random.default_rng(seed=self.seed)
         pattern = (
             np.cumsum(
                 (1 - self.noise) * self.interval
-                + rng.exponential(
-                    self.noise * self.interval, [len(mf_ids), self.number]
-                ),
+                + rng.exponential(self.noise * self.interval, [len(mf_ids), self.number]),
                 axis=1,
             )
             - (1 - self.noise) * self.interval
             + self.start
         )
-        print('size pattern:', pattern.shape, ' first: ', pattern[0])
-        
+        print("size pattern:", pattern.shape, " first: ", pattern[0])
+
         syn_type_go = ["AMPA_MF", "NMDA"]
         for model, mf_ids in self.targetting.get_targets(
             adapter, simulation, simdata
         ).items():  # targetting done on mf id: pop is the list of id
             print("stim targetting ", model, " id mf ", mf_ids)
             orig_gr = (
-                simulation.cell_models.get("granule_cell")
-                .get_placement_set()
-                .load_positions()
+                simulation.cell_models.get("granule_cell").get_placement_set().load_positions()
             )  # all cell
             orig_go = (
-                simulation.cell_models.get("golgi_cell")
-                .get_placement_set()
-                .load_positions()
+                simulation.cell_models.get("golgi_cell").get_placement_set().load_positions()
             )  # all cell
             # Insert and stimulate synapses in granule cells # important adding syn even if not stimulated in KO model, [glu] is a syn param
             for i, gr_i in enumerate(post_mfGr):
-                for syn_type in self.synapses: #check if already there the syn (if 2 or more stimulator each one add a syn)
+                for (
+                    syn_type
+                ) in (
+                    self.synapses
+                ):  # check if already there the syn (if 2 or more stimulator each one add a syn)
                     for syn in pop_gr[gr_i[0]].get_location(gr_i[1:]).section.synapses:
                         if syn.synapse_name == syn_type:
                             break
@@ -207,8 +188,10 @@ class MossyFibersSpikeGenerator(
                         " pos ",
                         orig_go[pop_go[go_i[0]].id],
                     )
-                    for syn_type in syn_type_go: 
-                        for syn in pop_go[go_i[0]].get_location(go_i[1:]).section.synapses: #check if already there
+                    for syn_type in syn_type_go:
+                        for syn in (
+                            pop_go[go_i[0]].get_location(go_i[1:]).section.synapses
+                        ):  # check if already there
                             if syn.synapse_name == syn_type:
                                 break
                         else:

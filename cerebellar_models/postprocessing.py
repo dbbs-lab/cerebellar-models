@@ -1,5 +1,6 @@
-from bsb import AfterConnectivityHook,config,DatasetNotFoundError,ConnectivityError
 import numpy as np
+from bsb import AfterConnectivityHook, ConnectivityError, DatasetNotFoundError, config
+
 
 @config.node
 class CastSynapticLocation(AfterConnectivityHook):
@@ -36,9 +37,7 @@ class CastSynapticLocation(AfterConnectivityHook):
                 if b_i.contains_labels(["axon_initial_segment", "AIS"]):
                     print("branch with ais ", i_b)
                     idx_b.append(i_b)
-                    idx_loc.append(
-                        np.where(b_i.get_label_mask(["axon_initial_segment", "AIS"]))[0]
-                    )
+                    idx_loc.append(np.where(b_i.get_label_mask(["axon_initial_segment", "AIS"]))[0])
 
             if len(idx_b) > 0:
                 idx_0 = idx_b[0]  # first branch with ais
