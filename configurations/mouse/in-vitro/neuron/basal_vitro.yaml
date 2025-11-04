@@ -119,7 +119,7 @@ simulations:
         seed: 100
         targetting:
           strategy: sphere_cell_types
-          only_local: 'False'
+          only_local: false
           radius: 500
           origin:
             - 150.8612285
@@ -141,7 +141,7 @@ simulations:
         seed: 101
         targetting:
           strategy: sphere_cell_types
-          only_local: 'False'
+          only_local: false
           radius: 70
           origin:
             - 150.8612285
