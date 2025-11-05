@@ -8,19 +8,45 @@ network:
   z: 11400 # 456 * 25.
   chunk_size: 250
 files:
-  annotations: data/corrections_cereb/annotations_pu.nrrd
-  orientations: data/corrections_cereb/orientations.nrrd
-  thicknesses: data/corrections_cereb/all_depths.nrrd
-  boundaries: data/corrections_cereb/borders.nrrd
-  mossy_fiber_density: data/corrections_cereb/density_volumes/mossy_fiber_density.nrrd
-  glomerulus_density: data/corrections_cereb/density_volumes/glomerulus_density.nrrd
-  ubc_glomerulus_density: data/corrections_cereb/density_volumes/ubc_glomerulus_density.nrrd
-  granule_density: data/corrections_cereb/density_volumes/granule_density.nrrd
-  golgi_density: data/corrections_cereb/density_volumes/golgi_density.nrrd
-  unipolar_brush_density: data/corrections_cereb/density_volumes/unipolar_brushed_density.nrrd
-  purkinje_density: data/corrections_cereb/density_volumes/purkinje_density.nrrd
-  basket_density: data/corrections_cereb/density_volumes/basket_density.nrrd
-  stellate_density: data/corrections_cereb/density_volumes/stellate_density.nrrd
+  annotations:
+    type: nrrd
+    file: data/corrections_cereb/annotations_pu.nrrd
+  orientations:
+    type: nrrd
+    file: data/corrections_cereb/orientations.nrrd
+  thicknesses:
+    type: nrrd
+    file: data/corrections_cereb/all_depths.nrrd
+  boundaries:
+    type: nrrd
+    file: data/corrections_cereb/borders.nrrd
+  mossy_fiber_density:
+    type: nrrd
+    file: data/corrections_cereb/density_volumes/mossy_fiber_density.nrrd
+  glomerulus_density:
+    type: nrrd
+    file: data/corrections_cereb/density_volumes/glomerulus_density.nrrd
+  ubc_glomerulus_density:
+    type: nrrd
+    file: data/corrections_cereb/density_volumes/ubc_glomerulus_density.nrrd
+  granule_density:
+    type: nrrd
+    file: data/corrections_cereb/density_volumes/granule_density.nrrd
+  golgi_density:
+    type: nrrd
+    file: data/corrections_cereb/density_volumes/golgi_density.nrrd
+  unipolar_brush_density:
+    type: nrrd
+    file: data/corrections_cereb/density_volumes/unipolar_brushed_density.nrrd
+  purkinje_density:
+    type: nrrd
+    file: data/corrections_cereb/density_volumes/purkinje_density.nrrd
+  basket_density:
+    type: nrrd
+    file: data/corrections_cereb/density_volumes/basket_density.nrrd
+  stellate_density:
+    type: nrrd
+    file: data/corrections_cereb/density_volumes/stellate_density.nrrd
 morphologies:
   - file: ./morphologies/GranuleCell.swc
     parser:

@@ -3,6 +3,7 @@ from copy import deepcopy
 
 import numpy as np
 from bsb import AllenStructure, NrrdDependencyNode, config, pool_cache, types
+from bsb._util import rotation_matrix_from_vectors
 from bsb.config._attrs import cfgdict
 from scipy.spatial.transform import Rotation
 
@@ -76,6 +77,10 @@ class MorphologyBender:
         :rtype: numpy.ndarray
         """
         return self.partition.annotations.raw
+
+    @property
+    def default_vector(self):
+        return self.partition.mask_source.default_vector
 
     def orientation_field(self):
         """
@@ -496,7 +501,7 @@ class MorphologyBender:
                             [
                                 (child, old_rots.copy(), curr_scaling)
                                 for child in branch.children
-                                if NrrdDependencyNode.is_within(
+                                if self.is_within(
                                     self.partition.mask_source.voxel_of(child.points[0]),
                                     self.annotations,
                                 )
@@ -532,7 +537,7 @@ class MorphologyBender:
             u_morpho, u_index = np.unique(morpho_ids[filter_pos], return_inverse=True)
             u_morpho = morphology_list[u_morpho]
             # filter for positions inside the orientation and depth field.
-            if NrrdDependencyNode.is_within(uniq_vox, self.orientation_field()):
+            if self.is_within(uniq_vox, self.orientation_field()):
                 translation_vec = (uniq_vox + 0.5) * self.partition.voxel_size
                 for j, morpho in enumerate(u_morpho):
                     deformed_morpho = morpho.copy()
