@@ -1,3 +1,4 @@
+import json
 import os
 import unittest
 from collections.abc import Mapping
@@ -72,9 +73,9 @@ class TestCli(unittest.TestCase):
     def test_configure(self):
         folder = os.path.dirname(__file__)
         with open(
-            os.path.join(folder, "test_configurations/canonical_mouse_awake_io_nest.yaml"), "r"
+            os.path.join(folder, "test_configurations/canonical_mouse_awake_io_nest.json"), "r"
         ) as f:
-            config2 = yaml.safe_load(f)
+            config2 = json.loads(f.read())
         runner = CliRunner()
         result = runner.invoke(
             configure,

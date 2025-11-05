@@ -37,10 +37,10 @@ class GranuleGenerator(BenderGenerator, classmap_entry="granule_bender"):
     def process_scaling(self, point):
         # We calculate the scaling ratio so that the tip of the ascending axon's depth ratio within
         # the molecular layer is equal to the depth ratio of the soma within the granular layer.
-        curr_ann = self.partition.mask_source.voxel_data_of(point, self.annotations)
+        curr_ann = self.voxel_data_of(point, self.annotations)
         _, lay = self._ann_to_abv(curr_ann)
         if lay is not None:
-            distances = self.partition.mask_source.voxel_data_of(point, self.thicknesses())
+            distances = self.voxel_data_of(point, self.thicknesses())
             top_dist = distances[1]  # dist to gr/mol boundary
             if self.ratio_gr is None:
                 self.ratio_gr = top_dist / (top_dist + distances[2])  # ratio depth within gr.
@@ -89,7 +89,7 @@ class GranuleGenerator(BenderGenerator, classmap_entry="granule_bender"):
         ).any()
         if is_parallel_fiber and i == 0:
             # reset rotations
-            fix_dim_rot = self.partition.mask_source.voxel_rotation_of(
+            fix_dim_rot = self.voxel_rotation_of(
                 self.fix_orientation(branch, 0), branch.parent.points[-1]
             )
             # bring back the branch to its original orientation.
@@ -101,7 +101,7 @@ class GranuleGenerator(BenderGenerator, classmap_entry="granule_bender"):
         if is_parallel_fiber:
             target = branch.points[i]
             target_ = rotation.apply(target - source) + source
-            distances = self.partition.mask_source.voxel_data_of(target_, self.thicknesses())
+            distances = self.voxel_data_of(target_, self.thicknesses())
             if np.sum(distances[:1]) > 1e-6 and np.linalg.norm(source - target) > 1e-3:
                 ratio_mol = distances[0] / (distances[1] + distances[0])
                 if ratio_mol > self.ratio_gr + (1 - self.ratio_gr) / 3:  # go too deep
@@ -109,7 +109,7 @@ class GranuleGenerator(BenderGenerator, classmap_entry="granule_bender"):
                         np.asarray(
                             Rotation.from_matrix(
                                 rotation_matrix_from_vectors(
-                                    self.partition.mask_source.voxel_orient(
+                                    self.voxel_orient(
                                         self.fix_orientation(branch, i),
                                         target_,
                                     ),
@@ -126,9 +126,7 @@ class GranuleGenerator(BenderGenerator, classmap_entry="granule_bender"):
                     final_angle[ax] = np.sign(angle[ax]) * np.pi / 2 - angle[ax]
                     correction_angle = Rotation.from_euler("xyz", final_angle)
                     next_loc = (rotation * correction_angle).apply(target - source) + source
-                    distances = self.partition.mask_source.voxel_data_of(
-                        next_loc, self.thicknesses()
-                    )
+                    distances = self.voxel_data_of(next_loc, self.thicknesses())
                     if (
                         not self.is_target_wrong(source, next_loc)
                         and distances[0] / (distances[1] + distances[0]) < ratio_mol
@@ -177,8 +175,7 @@ class GolgiGenerator(BenderGenerator, classmap_entry="golgi_bender"):
                         (
                             id_den_mol
                             if (
-                                self.partition.mask_source.voxel_data_of(point, self.annotations)
-                                != 0
+                                self.voxel_data_of(point, self.annotations) != 0
                                 and "mo" in self.get_lay_abv(point)
                             )
                             else id_den_gr
@@ -203,8 +200,8 @@ class BasketGenerator(BenderGenerator, classmap_entry="basket_bender"):
             return "mo" not in current_abv
 
         # axon should get closer to Purkinje layer.
-        current_dist = self.partition.mask_source.voxel_data_of(new_target, self.thicknesses())
-        old_dist = self.partition.mask_source.voxel_data_of(source, self.thicknesses())
+        current_dist = self.voxel_data_of(new_target, self.thicknesses())
+        old_dist = self.voxel_data_of(source, self.thicknesses())
         if "mo" in current_abv:
             return current_dist[1] > 62.5 and old_dist[1] < current_dist[1]
         elif "gr" in current_abv:

@@ -3,47 +3,65 @@ simulations:
     simulator: nest
     connection_models:
       parallel_fiber_to_purkinje:
-        synapse:
-          weight: 0.14
+        synapses:
+          - model: static_synapse
+            weight: 0.14
+            delay: 5
+            receptor_type: 1
       ascending_axon_to_purkinje:
-        synapse:
-          weight: 0.41
+        synapses:
+          - model: static_synapse
+            weight: 0.41
+            delay: 2
+            receptor_type: 1
       parallel_fiber_to_stellate:
-        synapse:
-          weight: 0.08
+        synapses:
+          - model: static_synapse
+            weight: 0.08
+            delay: 5
+            receptor_type: 1
       parallel_fiber_to_basket:
-        synapse:
-          weight: 0.06
+        synapses:
+          - model: static_synapse
+            weight: 0.06
+            delay: 5
+            receptor_type: 1
       basket_to_purkinje:
-        synapse:
-          weight: 0.8
-      mossy_fibers_to_dcn_p:
-        synapse:
-          weight: 0.25
+        synapses:
+          - model: static_synapse
+            weight: 0.8
+            delay: 4
+            receptor_type: 2
       purkinje_to_dcn_p:
-        synapse:
-          weight: 0.35
+        synapses:
+          - model: static_synapse
+            weight: 0.35
+            delay: 4.
+            receptor_type: 2
       purkinje_to_dcn_i:
-        synapse:
-          weight: 0.02
+        synapses:
+          - model: static_synapse
+            weight: 0.02
+            delay: 4.
+            receptor_type: 2
       io_to_purkinje:
-        synapse:
-          weight: 1.6
-      io_to_mli_io_to_basket_cell:
-        synapse:
-          weight: 5
+        synapses:
+          - model: static_synapse
+            weight: 1.6
+            delay: 4
+            receptor_type: 3
       io_to_mli_io_to_stellate_cell:
-        synapse:
-          weight: 5
+        synapses:
+          - model: static_synapse
+            weight: 5
+            delay: 40
+            receptor_type: 3
       io_to_dcn_p:
-        synapse:
-          weight: 0.4
-      io_to_dcn_i:
-        synapse:
-          weight: 0.25
-      dcn_i_to_io:
-        synapse:
-          weight: 0.45
+        synapses:
+          - model: static_synapse
+            weight: 0.4
+            delay: 4
+            receptor_type: 1
 $import:
   ref: ../../../in-vitro/nest/connection_models/static_synapse.yaml#/
   values:

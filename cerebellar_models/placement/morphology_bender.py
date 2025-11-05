@@ -32,6 +32,13 @@ class RotationReminder:
 
 
 class MorphologyBender:
+
+    orientations_field: NrrdDependencyNode = config.ref(config.refs.vox_dset_ref)
+
+    depths_field: NrrdDependencyNode = config.ref(config.refs.vox_dset_ref)
+
+    boundaries_field: NrrdDependencyNode = config.ref(config.refs.vox_dset_ref)
+
     default_depth: cfgdict[str, float] = config.dict(
         required=False, type=float, default={"mo": 150.0, "gr": 150.0, "pu": 150}
     )
@@ -76,7 +83,7 @@ class MorphologyBender:
 
         :rtype: numpy.ndarray
         """
-        loc_orient = self.partition.datasets["orientations"].raw
+        loc_orient = self.orientations_field.load_object().raw
         loc_orient /= np.linalg.norm(loc_orient, axis=3)[..., np.newaxis]
         return loc_orient
 
@@ -131,7 +138,7 @@ class MorphologyBender:
 
         :rtype: numpy.ndarray
         """
-        return self.partition.datasets["thicknesses"].raw * self.partition.voxel_size
+        return self.depths_field.load_object().raw * self.depths_field.voxel_size
 
     @pool_cache
     def boundaries(self):
@@ -141,7 +148,7 @@ class MorphologyBender:
 
         :rtype: numpy.ndarray
         """
-        return self.partition.datasets["boundaries"].raw.reshape(self.annotations.shape + (3, 3, 3))
+        return self.boundaries_field.load_object().raw.reshape(self.annotations.shape + (3, 3, 3))
 
     def get_lay_abv(self, point):
         """
@@ -151,9 +158,67 @@ class MorphologyBender:
         :return: layer abbreviation
         :rtype: str
         """
-        return self.region_map.get(
-            self.partition.mask_source.voxel_data_of(point, self.annotations), "acronym"
-        )[-2:]
+        return self.region_map.get(self.voxel_data_of(point, self.annotations), "acronym")[-2:]
+
+    @staticmethod
+    def is_within(vox, dataset):
+        """
+        Check if a voxel location is within a dataset's dimension, based on its shape.
+        :param numpy.ndarray vox: 3D position of the voxel
+        :param numpy.ndarray dataset: array to test
+        :return: True if vox is within the dataset.
+        :rtype: bool
+        """
+        return (
+            len(dataset.shape) >= 3
+            and len(vox) >= 3
+            and np.all(vox >= 0)
+            and (vox[0] < dataset.shape[0])
+            and (vox[1] < dataset.shape[1])
+            and (vox[2] < dataset.shape[2])
+        )
+
+    def voxel_data_of(self, point, dataset):
+        """
+        Retrieve voxel information from a dataset.
+        :param numpy.ndarray point: floating point
+        :param numpy.ndarray dataset: 3D numpy dataset
+        :return: data stored at the point position.
+        """
+        loc_dataset = np.asarray(dataset)
+        vox = self.partition.mask_source.voxel_of(point)
+        if self.is_within(vox, loc_dataset):
+            return loc_dataset[vox[0], vox[1], vox[2]]
+        else:
+            raise ValueError(
+                f"Position is outside of the dataset.\n"
+                f"Shape: {loc_dataset.shape}, Resolution: {self.voxel_size}."
+            )
+
+    def voxel_orient(self, orientation_field, point):
+        """
+        Retrieve the orientation vector at a point location
+        :param numpy.ndarray orientation_field: brain orientation field
+        :param numpy.ndarray point: floating position
+        :return: 3D orientation vector.
+        :rtype: numpy.ndarray
+        """
+        loc_orient = self.voxel_data_of(point, orientation_field)
+        if np.all(np.linalg.norm(loc_orient) == 0) or np.isnan(loc_orient).any():
+            raise ValueError("No value for the provided location.")
+        return loc_orient
+
+    def voxel_rotation_of(self, orientation_field, point):
+        """
+        Retrieve the rotation to apply at a certain location to orient a point towards
+        the orientation field.
+        :param numpy.ndarray orientation_field: brain orientation field
+        :param numpy.ndarray point: floating position
+        :return: Rotation to apply to the point to match the orientation field.
+        :rtype: scipy.spatial.transform.Rotation
+        """
+        loc_orient = self.voxel_orient(orientation_field, point)
+        return Rotation.from_matrix(rotation_matrix_from_vectors(self.default_vector, -loc_orient))
 
     def _ann_to_abv(self, id_reg):
         """
@@ -243,9 +308,7 @@ class MorphologyBender:
         max_angle = np.pi / 2 if self.no_turn_back else np.pi
         target = branch.points[i]
         to_rotate = True
-        new_rotation = self.partition.mask_source.voxel_rotation_of(
-            self.fix_orientation(branch, i), source
-        )
+        new_rotation = self.voxel_rotation_of(self.fix_orientation(branch, i), source)
         diff_rotation = (new_rotation * old_rots.last_rotation.inv()).as_euler("xyz")
         diff_rotation[np.absolute(diff_rotation) < 1e-5] = 0
         scaled_diff_rotation = None
@@ -301,15 +364,11 @@ class MorphologyBender:
         :return: scaling factor at the current location
         :rtype: float
         """
-        curr_ann = self.partition.mask_source.voxel_data_of(point, self.annotations)
+        curr_ann = self.voxel_data_of(point, self.annotations)
         thick, lay = self._ann_to_abv(curr_ann)
         if lay is not None:
             return np.maximum(
-                np.sum(
-                    self.partition.mask_source.voxel_data_of(point, self.thicknesses())[
-                        thick : thick + 2
-                    ]
-                )
+                np.sum(self.voxel_data_of(point, self.thicknesses())[thick : thick + 2])
                 / self.default_depth[lay],
                 0.1,
             )
@@ -363,7 +422,7 @@ class MorphologyBender:
         stack_data = []
         for branch in morphology.roots:
             try:
-                rotation = self.partition.mask_source.voxel_rotation_of(
+                rotation = self.voxel_rotation_of(
                     self.fix_orientation(branch, 0),
                     branch.points[0],
                 )
@@ -372,9 +431,7 @@ class MorphologyBender:
                 axis_max = max(
                     enumerate(
                         np.absolute(
-                            self.partition.mask_source.voxel_data_of(
-                                branch.points[0], self.fix_orientation(branch, 0)
-                            )
+                            self.voxel_data_of(branch.points[0], self.fix_orientation(branch, 0))
                         )
                     ),
                     key=lambda x: x[1],
@@ -476,9 +533,7 @@ class MorphologyBender:
             u_morpho = morphology_list[u_morpho]
             # filter for positions inside the orientation and depth field.
             if NrrdDependencyNode.is_within(uniq_vox, self.orientation_field()):
-                translation_vec = (
-                    uniq_vox + 0.5
-                ) * self.partition.voxel_size + self.partition.mask_source.space_origin
+                translation_vec = (uniq_vox + 0.5) * self.partition.voxel_size
                 for j, morpho in enumerate(u_morpho):
                     deformed_morpho = morpho.copy()
                     deformed_morpho.translate(translation_vec)

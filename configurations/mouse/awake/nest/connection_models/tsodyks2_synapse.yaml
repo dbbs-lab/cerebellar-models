@@ -3,39 +3,73 @@ simulations:
     simulator: nest
     connection_models:
       parallel_fiber_to_purkinje:
-        synapse:
-          weight: 1.07
+        synapses:
+          - model: tsodyks2_synapse
+            weight: 1.07
+            U: 0.13
+            x: 1
+            tau_rec: 35.1
+            tau_fac: 54
+            delay: 5
+            receptor_type: 1
       ascending_axon_to_purkinje:
-        synapse:
-          weight: 3.15
+        synapses:
+          - model: tsodyks2_synapse
+            weight: 3.15
+            U: 0.13
+            x: 1
+            tau_rec: 35.1
+            tau_fac: 54
+            delay: 2
+            receptor_type: 1
       parallel_fiber_to_stellate:
-        synapse:
-          weight: 0.10
+        synapses:
+          - model: tsodyks2_synapse
+            weight: 0.10
+            U: 0.15
+            x: 1
+            tau_rec: 35.1
+            tau_fac: 10.8
+            delay: 5
+            receptor_type: 1
       parallel_fiber_to_basket:
-        synapse:
-          weight: 0.40
-          receptor_type: 1
+        synapses:
+          - model: tsodyks2_synapse
+            weight: 0.40
+            U: 0.15
+            x: 1
+            tau_rec: 35.1
+            tau_fac: 10.8
+            delay: 5
+            receptor_type: 1
       basket_to_purkinje:
-        synapse:
-          weight: 2.28
+        synapses:
+          - model: tsodyks2_synapse
+            weight: 2.28
+            U: 0.35
+            x: 1
+            tau_rec: 15
+            tau_fac: 4
+            delay: 4
+            receptor_type: 2
       mossy_fibers_to_dcn_p:
-        synapse:
-          model: static_synapse
-          weight: 0.25
-          delay: 4.
-          receptor_type: 1
+        synapses:
+          - model: static_synapse
+            weight: 0.25
+            delay: 4.
+            receptor_type: 1
       purkinje_to_dcn_p:
-        synapse:
-          model: static_synapse
-          weight: 0.35
-          delay: 4.
-          receptor_type: 2
+        synapses:
+          - model: static_synapse
+            weight: 0.35
+            delay: 4.
+            receptor_type: 2
       purkinje_to_dcn_i:
-        synapse:
-          model: static_synapse
-          weight: 0.02
-          delay: 4.
-          receptor_type: 2
+        synapses:
+          - model: static_synapse
+            weight: 0.02
+            delay: 4.
+            receptor_type: 2
       $import:
         ref: ../../../in-vitro/nest/connection_models/tsodyks2_synapse.yaml#/simulations/basal_activity/connection_models
         values:
