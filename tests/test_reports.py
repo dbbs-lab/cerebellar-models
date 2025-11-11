@@ -1,5 +1,6 @@
 import os
 import unittest
+from os.path import abspath, dirname, join
 
 import numpy as np
 from bsb import Configuration, Scaffold, parse_configuration_file
@@ -85,6 +86,12 @@ class TestReport(unittest.TestCase, NumpyTestCase, DictTestCase):
 
 
 class TestBSBReport(RandomStorageFixture, unittest.TestCase, NumpyTestCase, engine_name="hdf5"):
+    @classmethod
+    def setUpClass(cls):
+        super().setUpClass()
+        ROOT_FOLDER = abspath(dirname(dirname(__file__)))
+        os.chdir(ROOT_FOLDER)
+
     def setUp(self):
         super().setUp()
         self.cfg = parse_configuration_file("configurations/mouse/mouse_cerebellar_cortex.yaml")

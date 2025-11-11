@@ -2,6 +2,7 @@ import json
 import os
 import unittest
 from collections.abc import Mapping
+from os.path import abspath, dirname, join
 from unittest.mock import patch
 
 import yaml
@@ -24,6 +25,13 @@ def mock_print_panel(options, title="test"):
 
 
 class TestCli(unittest.TestCase):
+
+    @classmethod
+    def setUpClass(cls):
+        super().setUpClass()
+        ROOT_FOLDER = abspath(dirname(dirname(__file__)))
+        os.chdir(ROOT_FOLDER)
+
     @patch(
         "cerebellar_models.cli.print_panel",
         lambda options, title: mock_print_panel(options, title),

@@ -1,7 +1,7 @@
 import os
 import unittest
 from copy import deepcopy
-from os.path import join
+from os.path import abspath, dirname, join
 
 import numpy as np
 from bsb import Scaffold, parse_configuration_content
@@ -29,6 +29,8 @@ class MiniCerebCircuitFixture(RandomStorageFixture, engine_name="hdf5", setup_cl
     @classmethod
     def setUpClass(cls):
         super().setUpClass()
+        ROOT_FOLDER = abspath(dirname(dirname(__file__)))
+        os.chdir(ROOT_FOLDER)
         # one third of the canonical circuit
         nest_folder = "configurations/mouse/in-vitro/nest/"
         dict_cfg = {

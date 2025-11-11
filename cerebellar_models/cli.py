@@ -156,15 +156,14 @@ def _configure_species(species):
     return main_options[0].value
 
 
-def _choose_atlas(species_folder, species):
-    use_atlas = False
+def _choose_atlas(species_folder, species, use_atlas=False):
     if species == "mouse":
         atlas_options = [
             CerebOption(
                 "Use allen mouse cell atlas?",
                 "Use the atlas-based datasets to build your circuit.",
                 type_term=TypeTermElem.Boolean,
-                default_value=False,
+                default_value=use_atlas,
             ),
         ]
         print_panel(atlas_options, "Standard reconstruction or atlas-based")
@@ -223,11 +222,11 @@ def _update_cell_types(configuration, cell_types, config_cell_types, use_atlas: 
         config_ = config_cell_types[cell_type]
         current_origin = [0, 0, 0]
         for k, v in config_.items():  # update within the main components
-            if k == "network" and not use_atlas:
+            if k == "network":
                 for net_key, net_v in v.items():
                     if net_key in ["x", "y", "z"]:
                         configuration[k][net_key] = max(configuration[k][net_key], net_v)
-            if k == "partitions" and use_atlas:
+            elif k == "partitions" and use_atlas:
                 for partition_key, partition_v in v.items():
                     if partition_key.split("_layer")[0] == cell_type:  # take the cell type layer
                         configuration[k][partition_key] = {
@@ -511,6 +510,12 @@ def _write_config(configuration, output_folder, extension):
     help="Species to reconstruct the circuit from.",
 )
 @click.option(
+    "--use_atlas",
+    required=False,
+    is_flag=True,
+    help="Use the atlas-based reconstruction.",
+)
+@click.option(
     "--output_folder",
     type=EXISTING_DIR_PATH,
     required=False,
@@ -530,6 +535,7 @@ def _write_config(configuration, output_folder, extension):
 )
 def configure(
     species: str = None,
+    use_atlas: bool = None,
     output_folder: str = None,
     extension: str = None,
     microzones: bool = False,
@@ -549,7 +555,7 @@ def configure(
         print(f"Species chosen: {species}")
     species_folder = join(CONFIGURATION_FOLDER, species)
     # Step 2: atlas or canonical
-    configuration, use_atlas = _choose_atlas(species_folder, species)
+    configuration, use_atlas = _choose_atlas(species_folder, species, use_atlas)
     # Step 3: state and cell types choice
     config_cell_types = load_configs_in_folder(join(species_folder, "cell_types"))
     state, cell_types, microzones = _configure_cell_types(

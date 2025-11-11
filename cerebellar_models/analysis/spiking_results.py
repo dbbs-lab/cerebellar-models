@@ -207,10 +207,17 @@ class SpikeSimulationReport(BSBReport):
             if isinstance(plot, SpikePlot):
                 plot.time_from = value
 
-    @staticmethod
-    def extract_ct_device_name(cell_type: str):
+    def _extract_ct_device_name(self, device_name: str):
         """Extract the cell type name from its device name."""
-        return cell_type.split("_rec")[0]
+        if "_record" in device_name:
+            targetting = (
+                self.scaffold.simulations[self.simulation_name].devices[device_name].targetting
+            )
+            ct = targetting.cell_models[0].name
+            labels = targetting["labels"] if "labels" in targetting else set()
+            return ct, labels
+        else:
+            return device_name, set()
 
     def _extract_spikes_dict(self):
         """
@@ -233,16 +240,15 @@ class SpikeSimulationReport(BSBReport):
 
                 for st in spiketrains:
                     st.segment = None  # remove spiketrain segment to allow merging
-                    cell_type = self.extract_ct_device_name(st.annotations["device"])
-                    if cell_type not in self.cell_names:
-                        cell_type += "_cell"
+                    cell_type, labels = self._extract_ct_device_name(st.annotations["device"])
                     if cell_type in self.cell_names and cell_type not in self.ignored_ct:
-                        if cell_type not in cell_dict:
-                            cell_dict[cell_type] = current_id
+                        cell_type_label = ScaffoldPlot.get_labelled_ct_name(cell_type, labels)
+                        if cell_type_label not in cell_dict:
+                            cell_dict[cell_type_label] = current_id
                             current_id += 1
                             spikes_res.append([])
                         if "senders" in st.array_annotations:
-                            spikes_res[cell_dict[cell_type]].append(st)
+                            spikes_res[cell_dict[cell_type_label]].append(st)
         return spikes_res, cell_dict
 
     def load_spikes(self):
@@ -384,7 +390,11 @@ class RasterPSTHPlot(SpikePlot):
             cell_params = loc_params_raster.copy()
             if "s" not in cell_params and self.nb_neurons[i] > 0:
                 cell_params["s"] = 50.0 / self.nb_neurons[i]
-            color = self.dict_colors[ct][:3] if ct in self.dict_colors else [0.6, 0.6, 0.6]
+            color = (
+                self.labelled_dict_colors[ct][:3]
+                if ct in self.labelled_dict_colors
+                else [0.6, 0.6, 0.6]
+            )
             ax = self.get_ax(i)[0]
             if self.nb_neurons[i] > 0:
                 ax.scatter(
@@ -543,7 +553,7 @@ class FiringRatesPlot(Spike2Columns):
             ax.plot(
                 time_interval,
                 self.firing_rates[:, i],
-                color=self.dict_colors[ct][:3],
+                color=self.labelled_dict_colors[ct][:3],
                 **kwargs,
             )
             ax.set_xlabel("Time in ms")
@@ -560,7 +570,7 @@ class FiringRatesPlot(Spike2Columns):
             ax.text(
                 0.01,
                 0.95,
-                "FR: {:.2} $\pm$ {:.2}".format(
+                r"FR: {:.2} $\pm$ {:.2}".format(
                     np.mean(self.firing_rates[:, i]), np.std(self.firing_rates[:, i])
                 ),
                 ha="left",
@@ -639,7 +649,9 @@ class ISIPlot(Spike2Columns):
         for i, ct in enumerate(self.populations):
             ax2 = self.get_ax(i)
             if len(isis_dist[i]) > 0:
-                ax2.hist(isis_dist[i], self.nb_bins, color=self.dict_colors[ct][:3], **kwargs)
+                ax2.hist(
+                    isis_dist[i], self.nb_bins, color=self.labelled_dict_colors[ct][:3], **kwargs
+                )
             ax2.set_xlabel("ISIs bins in ms")
             ax2.set_yscale("log")
             ax2.set_title(f"Distribution of {ct} ISIs")
@@ -675,7 +687,7 @@ class FrequencyPlot(FiringRatesPlot):
         dict_plot.update(kwargs)
         for i, (fr, pw, ct) in enumerate(zip(self.frequencies, self.freq_powers, self.populations)):
             ax = self.get_ax(i)
-            ax.plot(fr[1:], pw[1:], color=self.dict_colors[ct], label=ct, **dict_plot)
+            ax.plot(fr[1:], pw[1:], color=self.labelled_dict_colors[ct], label=ct, **dict_plot)
             ax.set_xlim([0.0, max_freq])
             ax.set_xlabel("Frequency [Hz]")
             ax.set_ylabel("Power [dB]")
@@ -863,9 +875,9 @@ class BasicSimulationReport(SpikeSimulationReport):
         super().__init__(
             scaffold, simulation_name, folder_nio, time_from, time_to, ignored_ct, cell_types_info
         )
-
+        num_labelled_ct = len(self.populations)
         raster = RasterPSTHPlot(
-            (15, 3 * np.ceil(len(self.nb_neurons) / 2)),
+            (15, 3 * np.ceil(num_labelled_ct / 2)),
             scaffold=self.scaffold,
             simulation_name=self.simulation_name,
             time_from=self.time_from,
@@ -875,7 +887,7 @@ class BasicSimulationReport(SpikeSimulationReport):
             populations=self.populations,
         )
         table = SimResultsTable(
-            (5, 0.25 * (len(self.nb_neurons) + 1)),
+            (5, 0.22 * (num_labelled_ct + 1)),
             scaffold=self.scaffold,
             simulation_name=self.simulation_name,
             time_from=self.time_from,
@@ -886,7 +898,7 @@ class BasicSimulationReport(SpikeSimulationReport):
             dict_abv=self.abbreviations,
         )
         firing_rates = FiringRatesPlot(
-            (15, 2 * np.ceil(len(self.nb_neurons) / 2)),
+            (15, 2 * np.ceil(num_labelled_ct / 2)),
             scaffold=self.scaffold,
             simulation_name=self.simulation_name,
             time_from=self.time_from,
@@ -897,7 +909,7 @@ class BasicSimulationReport(SpikeSimulationReport):
             kernel=GaussianKernel(sigma=20 * ms),
         )
         isis = ISIPlot(
-            (15, 2 * np.ceil(len(self.nb_neurons) / 2)),
+            (15, 2 * np.ceil(num_labelled_ct / 2)),
             scaffold=self.scaffold,
             simulation_name=self.simulation_name,
             time_from=self.time_from,
@@ -907,7 +919,7 @@ class BasicSimulationReport(SpikeSimulationReport):
             populations=self.populations,
         )
         freq = FrequencyPlot(
-            (15, 2 * np.ceil(len(self.nb_neurons) / 2)),
+            (15, 2 * np.ceil(num_labelled_ct / 2)),
             scaffold=self.scaffold,
             simulation_name=self.simulation_name,
             time_from=self.time_from,
@@ -928,9 +940,10 @@ class BasicSimulationReport(SpikeSimulationReport):
             dict_abv=self.abbreviations,
         )
         legend = Legend(
-            (10, 2),
+            (10, 0.6 * num_labelled_ct / 3.0),
             3,
             dict_legend=dict(columnspacing=2.0, handletextpad=0.1, fontsize=20, loc="lower center"),
+            dict_abbreviations=self.labelled_abbreviations,
         )
         self.add_plot("raster_psth", raster)
         self.add_plot("table", table)
@@ -939,7 +952,8 @@ class BasicSimulationReport(SpikeSimulationReport):
         self.add_plot("freq", freq)
         self.add_plot("corr", corr)
         self.add_plot("legend", legend)
-        legend.remove_ct(self.cell_names, self.ignored_ct)
+        legend.dict_colors = raster.labelled_dict_colors.copy()
+        legend.remove_ct(self.labelled_cell_names, self.ignored_ct)
 
     def preprocessing(self):
         self.plots["table"].set_axis_off()

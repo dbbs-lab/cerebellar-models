@@ -1,5 +1,6 @@
+import os
 import unittest
-from os.path import dirname, join
+from os.path import abspath, dirname, join
 
 import numpy as np
 from bsb import Scaffold, parse_configuration_file
@@ -10,11 +11,16 @@ from scipy.stats import norm
 class TestDuplicateSynapses(
     RandomStorageFixture, NumpyTestCase, unittest.TestCase, engine_name="hdf5"
 ):
+    @classmethod
+    def setUpClass(cls):
+        super().setUpClass()
+        ROOT_FOLDER = abspath(dirname(dirname(__file__)))
+        os.chdir(ROOT_FOLDER)
 
     def setUp(self):
         super().setUp()
         self.cfg = parse_configuration_file(
-            join(dirname(__file__), "test_configurations/canonical_mouse_awake_io_nest.yaml")
+            join(dirname(__file__), "test_configurations/canonical_mouse_awake_io_nest.json")
         )
         del self.cfg.after_connectivity["print_structure_report"]
         self.scaffold = Scaffold(self.cfg, self.storage)
