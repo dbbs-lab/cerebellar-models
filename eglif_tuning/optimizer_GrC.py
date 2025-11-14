@@ -93,7 +93,7 @@ def evaluate_GrC(opt, ind, cell_params=None):
     rheo, thr = rheobase_loss(nest, targ)
     sel = currents_above_thr(targ, thr)
     slope = slope_loss(targ, nest, thr, sel)
-    gap = gap_loss(targ, nest, sel, weighted="inverse")
+    gap = gap_loss(targ, nest, sel, weighted="gaussian")
     return (rheo, slope, gap)
 
 
@@ -126,7 +126,7 @@ if __name__ == "__main__":
         fitness=fitness,
         bounds=bounds,
         archive=archive,
-        knee_weights=[2.0, 3.0, 1.0],
+        knee_weights=[2.0, 1.0, 3.0],
     )
 
     param_positions = {name: i for i, name in enumerate(optimizer.opt_params)}
@@ -146,7 +146,7 @@ if __name__ == "__main__":
     )
     optimizer.add_constraint(constraint1)
     optimizer.add_constraint(constraint2)
-    optimizer.N_GEN = 120
+    optimizer.N_GEN = 300
     optimizer.init_params_fn = random_init
     optimizer.evaluate_fn = evaluate_GrC
     optimizer.print_evolution = True

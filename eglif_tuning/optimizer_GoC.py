@@ -20,22 +20,23 @@ for name in ("deap", "matplotlib", "numexpr"):
 np.seterr(all="ignore")
 os.environ.setdefault("PYTHONWARNINGS", "ignore")
 
-
 cell_params = {
-    "A1": 157.622,
-    "A2": 172.622,
-    "C_m": 334,
-    "E_L": -59,
-    "I_e": 590.0,
-    "V_m": -59.0,
-    "V_min": -350,
-    "V_reset": -69,
-    "V_th": -43,
-    "k_1": 0.195,
-    "k_2": 0.041,
-    "k_adap": 1.491,
-    "t_ref": 0.5,
-    "tau_m": 47,
+    "t_ref": 2,
+    "C_m": 145,
+    "V_th": -55,
+    "V_reset": -75,
+    "E_L": -62,
+    "V_min": -150,
+    "V_m": -60.0,
+    "lambda_0": 0.15,
+    "tau_V": 0.09,
+    "tau_m": 44,
+    "I_e": 16.0,
+    "k_adap": 0.2,
+    "k_1": 0.03,
+    "k_2": 1.0 / 44.0,
+    "A1": 260.0,
+    "A2": 180.0,
 }
 
 protocol = {
@@ -46,22 +47,18 @@ protocol = {
 }
 
 bounds = {
-    "I_e": (0.01, 1500.0),
+    "I_e": (5.0, 50.0),
     "k_adap": (0.0, 0.50),
-    "k_2": (
-        1.0 / cell_params["tau_m"] - 1e-9,
-        2.0,
-    ),  # ensure oscillatory/damped oscillations regimes (k2>1/tau_m)
-    "A1": (0.01, 2000.0),
-    "A2": (0.01, 1500.0),
     "k_1": (0.0, 2.0),
+    "A1": (0.0, 500.0),
+    "A2": (0.0, 500.0),
 }
 
-data_folder = os.path.join(os.path.dirname(__file__), "tofit_eglif/results_tofitEglif/PC/")
+data_folder = os.path.join(os.path.dirname(__file__), "tofit_eglif/results_tofitEglif/GoC/")
 
 
 # EVALUATION function
-def evaluate_PC(opt, ind, cell_params=None):
+def evaluate_GoC(opt, ind, cell_params=None):
     params = dict(cell_params or opt.model_params)
     for i, p in enumerate(opt.opt_params):
         params[p] = float(ind[i])
@@ -75,9 +72,9 @@ def evaluate_PC(opt, ind, cell_params=None):
     rheo, thr = rheobase_loss(nest, targ)
     sel = currents_above_thr(targ, thr)
     slope = slope_loss(targ, nest, thr, sel)
-    gap = gap_loss(targ, nest, sel, weighted='gaussian')
-    pos_loss = post_first_spike_loss(targ, nest, protocol, thr=thr)
-    neg_loss =  post_rebound_loss(targ, nest, protocol, thr=thr, sign='neg', window=100.0)
+    gap = gap_loss(targ, nest, sel, weighted='high')
+    pause = post_first_spike_loss(targ, nest, protocol, thr=thr)
+    post_freq_neg = post_rebound_loss(targ, nest, protocol, thr=thr, sign='neg', window=100.0)
 
     return (
         float(pacemaking),
@@ -85,8 +82,8 @@ def evaluate_PC(opt, ind, cell_params=None):
         float(rheo),
         float(slope),
         float(gap),
-        float(pos_loss),
-        float(neg_loss),
+        float(pause),
+        float(post_freq_neg),
     )
 
 
@@ -100,8 +97,8 @@ if __name__ == "__main__":
             "rheobase_error",
             "slope_error",
             "gap_error",
-            "pos_lat_error",
-            "neg_lat_error",
+            "pause_error",
+            "rebound_freq_error",
         ]
     }
 
@@ -116,7 +113,7 @@ if __name__ == "__main__":
         fitness=fitness,
         bounds=bounds,
         archive=archive,
-        knee_weights=[2.0, 2.0, 2.0, 2.0, 1.0, 1.0, 1.0],
+        knee_weights=[4.0, 2.0, 2.0, 2.0, 4.0, 1.0, 1.0],
     )
 
     # --- Constraints ---
@@ -140,11 +137,15 @@ if __name__ == "__main__":
     )
 
     # --- Initialization & Evaluation ---
+    opt.POP_SIZE = 600
+    opt.NO_IMPROVE_PATIENCE = 10
+    opt.ETA_MUTATION = 10.
+    opt.ETA_CROSSOVER = 5.0
     opt.init_params_fn = random_init
-    opt.evaluate_fn = evaluate_PC
+    opt.evaluate_fn = evaluate_GoC
     opt.print_evolution = True
-    opt.N_GEN = 400
-    output_folder = 'PC_opt'
+    opt.N_GEN = 350
+    output_folder = 'GoC_opt'
     os.makedirs(output_folder, exist_ok=True)
     opt.output_path = output_folder
     opt.set_optimizer()

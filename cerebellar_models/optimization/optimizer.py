@@ -386,7 +386,7 @@ class Optimizer(object):
         for i, name in enumerate(self._fit_names):
             self._fit_hist[name].append(float(means[i]))
 
-    def plot_fitness_hystory(self, fname="fitness_hystory.png"):
+    def plot_fitness_history(self, fname="fitness_history.png"):
         from itertools import cycle
 
         import matplotlib.pyplot as plt
@@ -579,7 +579,7 @@ class Optimizer(object):
             pop = toolbox.select(pop + offspring, self.POP_SIZE)
             self.log_fitness_hystory(pop)
             if self.print_evolution:
-                self.plot_fitness_hystory()
+                self.plot_fitness_history()
 
             pareto_front = tools.sortNondominated(pop, k=len(pop), first_front_only=True)[0]
             best_gen, knee_score = self.pick_knee(pareto_front)
@@ -597,7 +597,7 @@ class Optimizer(object):
             if stale >= self.NO_IMPROVE_PATIENCE:
                 if self.print_evolution:
                     print("Add small jitter to top individuals to escape stagnation.")
-                pop = self.jitter(pop, toolbox)
+                pop = self.jitter(pop, toolbox, alpha=0.1)
                 stale = 0
             if (gen + 1) % 10 == 0:
                 genes = best_individual if best_individual is not None else best_gen

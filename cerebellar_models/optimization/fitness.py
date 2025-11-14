@@ -68,20 +68,20 @@ def extract_info(df, start, end):
         if spikes.size > 0:
             first_spike = spikes.min()
             n_spikes = len(spikes)
-            inv1 = inv_first_isi(spikes)
-            inv2 = inv_second_isi(spikes)
+            #inv1 = inv_first_isi(spikes)
+            #inv2 = inv_second_isi(spikes)
         else:
             first_spike = np.nan
             n_spikes = 0
-            inv1 = np.nan
-            inv2 = np.nan
+            #inv1 = np.nan
+            #inv2 = np.nan
 
         out.append({
             "current": curr,
             "first_spike": first_spike,
             "n_spikes": n_spikes,
-            "inv_first_isi": inv1,
-            "inv_second_isi": inv2
+            #"inv_first_isi": inv1,
+            #"inv_second_isi": inv2
         })
     return pd.DataFrame(out)
 
@@ -143,27 +143,35 @@ def gap_loss(targ, nest, sel, weighted=None):
         if comp.empty:
             return 1.0
 
+        smape_loss = _smape(comp["nf"], comp["tf"])
+
         if weighted:
             I = comp["current"].values
+
             if weighted == "gaussian":
                 Im, s = 0.5 * (I.min() + I.max()), 0.35 * (I.max() - I.min())
                 w = np.exp(-((I - Im) ** 2) / (2 * s**2))
+
             elif weighted == "inverse":
                 w = 1 / (I + 1e-10)
+
+            elif weighted == "high":
+                w = I / I.sum()
+
             else:
                 raise ValueError(f"Weight strategy {weighted} not implemented")
 
-            smape_loss = _smape(comp["nf"], comp["tf"])
             weighted_smape = np.sum(w * smape_loss) / np.sum(w)
             return np.clip(weighted_smape, 0, 1)
 
-        smape_loss = _smape(comp["nf"], comp["tf"])
         return np.clip(np.nanmean(smape_loss), 0, 1)
+
     except Exception:
         return 1.0
 
 
-def post_first_spike_loss(targ, nest, protocol, sign = 'pos',  missing_penalty=0.5):
+
+def post_first_spike_loss(targ, nest, protocol, thr=0., sign = 'pos',  missing_penalty=0.5):
     start, end = protocol["end_stim"], protocol["duration"]
 
     if getattr(targ, "empty", True) or getattr(nest, "empty", True):
@@ -177,11 +185,11 @@ def post_first_spike_loss(targ, nest, protocol, sign = 'pos',  missing_penalty=0
     nm = extract_info(nest[nest["current"].isin(common)], start, end)
 
     if sign == "pos":
-        tm_sub = tm[tm["current"] >= 0]
-        nm_sub = nm[nm["current"] >= 0]
+        tm_sub = tm[tm["current"] >= thr]
+        nm_sub = nm[nm["current"] >= thr]
     elif sign == "neg":
-        tm_sub = tm[tm["current"] < 0]
-        nm_sub = nm[nm["current"] < 0]
+        tm_sub = tm[tm["current"] < thr]
+        nm_sub = nm[nm["current"] < thr]
     else:
         raise ValueError("sign must be 'pos' or 'neg'")
 
@@ -205,9 +213,11 @@ def post_first_spike_loss(targ, nest, protocol, sign = 'pos',  missing_penalty=0
     return float(np.nanmean(losses)) if losses else float(missing_penalty)
 
 
-
-def post_frequency_loss(targ, nest, protocol, sign='pos', missing_penalty=0.5):
+def post_rebound_loss(targ, nest, protocol, window=50.0,
+                            thr=0., sign='pos', missing_penalty=0.5):
     start, end = protocol["end_stim"], protocol["duration"]
+    win_start = start
+    win_end = start + window
 
     if getattr(targ, "empty", True) or getattr(nest, "empty", True):
         return float(missing_penalty)
@@ -216,15 +226,15 @@ def post_frequency_loss(targ, nest, protocol, sign='pos', missing_penalty=0.5):
     if common.size == 0:
         return float(missing_penalty)
 
-    tm = extract_info(targ[targ["current"].isin(common)], start, end)
-    nm = extract_info(nest[nest["current"].isin(common)], start, end)
+    tm = extract_info(targ[targ["current"].isin(common)], win_start, win_end)
+    nm = extract_info(nest[nest["current"].isin(common)], win_start, win_end)
 
     if sign == "pos":
-        tm_sub = tm[tm["current"] >= 0]
-        nm_sub = nm[nm["current"] >= 0]
+        tm_sub = tm[tm["current"] >= thr]
+        nm_sub = nm[nm["current"] >= thr]
     elif sign == "neg":
-        tm_sub = tm[tm["current"] < 0]
-        nm_sub = nm[nm["current"] < 0]
+        tm_sub = tm[tm["current"] < thr]
+        nm_sub = nm[nm["current"] < thr]
     else:
         raise ValueError("sign must be 'pos' or 'neg'")
 
@@ -233,25 +243,27 @@ def post_frequency_loss(targ, nest, protocol, sign='pos', missing_penalty=0.5):
         t = tm_sub[tm_sub["current"] == c].iloc[0]
         n = nm_sub[nm_sub["current"] == c].iloc[0] if c in nm_sub["current"].values else None
 
-        if t["n_spikes"] == 0 or np.isnan(t["inv_first_isi"]) or np.isnan(t["inv_second_isi"]):
-            losses.append(1.0 if (n is not None and n["n_spikes"] > 0) else 0.0)
+        if t["n_spikes"] == 0:
+            if n is None or n["n_spikes"] == 0:
+                losses.append(0.0)
+            else:
+                losses.append(spike_penalty(n["n_spikes"]))
             continue
+
 
         if n is None or n["n_spikes"] == 0:
             losses.append(1.0)
             continue
 
-        mean_t = np.nanmean([x if x is not None else np.nan for x in [t["inv_first_isi"], t["inv_second_isi"]]])
-        mean_n = np.nanmean([x if x is not None else np.nan for x in [n["inv_first_isi"], n["inv_second_isi"]]])
-
-        if np.isnan(mean_t) or np.isnan(mean_n):
-            losses.append(float(missing_penalty))
-            continue
-
-        err = abs(mean_n - mean_t) / max(mean_t, 1e-9)
-        losses.append(np.clip(err / (1 + err), 0.0, 1.0))
+        diff = abs(n["n_spikes"] - t["n_spikes"])
+        norm_diff = diff / max(t["n_spikes"], 1)
+        loss = spike_penalty(norm_diff * 5)
+        losses.append(loss)
 
     return float(np.nanmean(losses)) if losses else float(missing_penalty)
+
+
+
 
 
 
