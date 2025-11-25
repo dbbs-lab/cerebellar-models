@@ -537,7 +537,7 @@ class MorphologyBender:
             u_morpho, u_index = np.unique(morpho_ids[filter_pos], return_inverse=True)
             u_morpho = morphology_list[u_morpho]
             # filter for positions inside the orientation and depth field.
-            if self.is_within(uniq_vox, self.orientation_field()):
+            if self.is_within(uniq_vox, self._fixed_orientation()):
                 translation_vec = (uniq_vox + 0.5) * self.partition.voxel_size
                 for j, morpho in enumerate(u_morpho):
                     deformed_morpho = morpho.copy()

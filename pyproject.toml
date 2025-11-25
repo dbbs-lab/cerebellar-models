@@ -4,14 +4,14 @@ build-backend = "flit_core.buildapi"
 
 [project]
 name = "cerebellar-models"
-authors = [{ name = "Dimitri RODARIE", email = "dimitri.rodarie@cref.it" }]
+authors = [{ name = "Dimitri RODARIE", email = "dimitri.rodarie@unipv.it" }]
 readme = "README.md"
 license = { file = "LICENSE" }
 classifiers = ["License :: OSI Approved :: GNU General Public License v3 or later (GPLv3+)"]
 requires-python = ">=3.10"
 dynamic = ["version", "description"]
 dependencies = [
-    "bsb[parallel,nest,neuron]~=6.0",
+    "bsb[parallel,nest,neuron]~=7.0",
     "nestml~=8.2",
     "click~=8.1",
     "survey~=5.4.2",
@@ -21,7 +21,7 @@ dependencies = [
 
 [project.optional-dependencies]
 test = [
-    "bsb-test~=6.0",
+    "bsb-test~=7.0",
     "coverage~=7.3",
 ]
 docs = [
