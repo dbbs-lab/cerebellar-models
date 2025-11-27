@@ -310,33 +310,52 @@ class MorphologyBender:
         :return: Euler angle of the rotation to apply at the source point
         :rtype: scipy.spatial.transform.Rotation
         """
-        max_angle = np.pi / 2 if self.no_turn_back else np.pi
         target = branch.points[i]
-        to_rotate = True
         new_rotation = self.voxel_rotation_of(self.fix_orientation(branch, i), source)
         diff_rotation = (new_rotation * old_rots.last_rotation.inv()).as_euler("xyz")
         diff_rotation[np.absolute(diff_rotation) < 1e-5] = 0
-        scaled_diff_rotation = None
-        inc = 1.0
         branch_labels = list(branch.labelsets[branch.labels[i]])
-        while to_rotate:
-            scaled_diff_rotation = diff_rotation * inc
-            if (np.absolute(scaled_diff_rotation) > max_angle).any():
-                if inc >= 1:
-                    diff_rotation -= np.sign(diff_rotation) * 1e-3
-                    inc = -1.0
-                    continue
-                else:
-                    raise ValueError("Hit a wall. Stopping")
-            if to_rotate := self.is_target_wrong(
-                source,
-                Rotation.from_euler("xyz", scaled_diff_rotation).apply(target - source) + source,
-                branch_labels,
-            ):
-                if np.linalg.norm(diff_rotation) == 0:
-                    diff_rotation = old_rots.old_diff_rotation.as_euler("xyz")
-                else:
-                    inc += inc / 4
+        inc = 1.0
+        if np.all(
+            (
+                self.partition.mask_source.voxel_of(target)
+                == self.partition.mask_source.voxel_of(source)
+            )
+            * (diff_rotation == 0)
+        ):
+            scaled_diff_rotation = diff_rotation
+        else:
+            max_angle = np.pi / 2 if self.no_turn_back else np.pi
+            was_wrong = False
+            to_rotate = True
+            old_voxel = None
+            while to_rotate:
+                scaled_diff_rotation = diff_rotation * inc
+                if (np.absolute(scaled_diff_rotation) > max_angle).any():
+                    if inc >= 1:
+                        diff_rotation -= np.sign(diff_rotation) * 1e-3
+                        inc = -1.0
+                        continue
+                    else:
+                        raise ValueError("Hit a wall. Stopping")
+                new_target = (
+                    Rotation.from_euler("xyz", scaled_diff_rotation).apply(target - source) + source
+                )
+                new_target_voxel = self.partition.mask_source.voxel_of(new_target)
+                same_voxel = np.all(new_target_voxel == old_voxel)
+                if (same_voxel and was_wrong) or (
+                    to_rotate := self.is_target_wrong(
+                        source,
+                        new_target,
+                        branch_labels,
+                    )
+                ):
+                    old_voxel = new_target_voxel
+                    was_wrong = True
+                    if np.linalg.norm(diff_rotation) == 0:
+                        diff_rotation = old_rots.old_diff_rotation.as_euler("xyz")
+                    else:
+                        inc += inc / 4
         scaled_diff_rotation = Rotation.from_euler("xyz", scaled_diff_rotation)
         if (
             np.linalg.norm(old_rots.rotation_to_correct.as_euler("xyz")) > 1e-5
