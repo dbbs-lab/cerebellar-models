@@ -1,5 +1,6 @@
 import os
 import unittest
+from os.path import abspath, dirname, join
 from unittest.mock import patch
 
 import numpy as np
@@ -137,6 +138,12 @@ class TestLegend(unittest.TestCase, NumpyTestCase):
 
 
 class TestScaffoldPlot(RandomStorageFixture, unittest.TestCase, NumpyTestCase, engine_name="hdf5"):
+    @classmethod
+    def setUpClass(cls):
+        super().setUpClass()
+        ROOT_FOLDER = abspath(dirname(dirname(__file__)))
+        os.chdir(ROOT_FOLDER)
+
     def setUp(self):
         super().setUp()
         self.cfg = parse_configuration_file("configurations/mouse/mouse_cerebellar_cortex.yaml")

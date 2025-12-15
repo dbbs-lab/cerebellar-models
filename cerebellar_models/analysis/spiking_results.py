@@ -8,10 +8,13 @@ from typing import List, Tuple, Union
 
 import numpy as np
 from bsb import Scaffold
+from elephant.conversion import BinnedSpikeTrain
 from elephant.kernels import GaussianKernel, Kernel
+from elephant.spike_train_correlation import correlation_coefficient
 from elephant.statistics import instantaneous_rate, isi
 from matplotlib import gridspec as gs
 from matplotlib import pyplot as plt
+from mpl_toolkits.axes_grid1.axes_divider import make_axes_locatable
 from neo import SpikeTrain
 from neo import io as nio
 from quantities import ms
@@ -160,7 +163,7 @@ class SpikeSimulationReport(BSBReport):
         """End time of the analysis. By default, this corresponds to the simulation duration."""
         self.dt = self.scaffold.simulations[simulation_name].resolution
         """Time step of the simulation in ms"""
-        self.ignored_ct = ignored_ct or ["glomerulus", "ubc_glomerulus"]
+        self.ignored_ct = ignored_ct if ignored_ct is not None else ["glomerulus", "ubc_glomerulus"]
         """List of ignored cell type names"""
         self.all_spikes: List[SpikeTrain] = None
         """List of SpikeTrain for each cell type"""
@@ -210,7 +213,7 @@ class SpikeSimulationReport(BSBReport):
             targetting = (
                 self.scaffold.simulations[self.simulation_name].devices[device_name].targetting
             )
-            ct = targetting.cell_models_references[0]
+            ct = targetting.cell_models[0].name
             labels = targetting["labels"] if "labels" in targetting else set()
             return ct, labels
         else:
@@ -244,7 +247,8 @@ class SpikeSimulationReport(BSBReport):
                             cell_dict[cell_type_label] = current_id
                             current_id += 1
                             spikes_res.append([])
-                        spikes_res[cell_dict[cell_type_label]].append(st)
+                        if "senders" in st.array_annotations:
+                            spikes_res[cell_dict[cell_type_label]].append(st)
         return spikes_res, cell_dict
 
     def load_spikes(self):
@@ -780,6 +784,74 @@ class SimResultsTable(TablePlot, SpikePlot):
         return {ct: line[1] for ct, line in zip(self.rows, self._values)}
 
 
+class SpikeCorrelation(SpikePlot):
+    """
+    Spike cross-correlation matrix plot for each cell type.
+    Spike trains will be time binned before computing the pairwise
+    Pearson’s correlation coefficients.
+    """
+
+    def __init__(
+        self,
+        fig_size: Tuple[float, float],
+        scaffold: Scaffold,
+        simulation_name: str,
+        time_from: float,
+        time_to: float,
+        all_spikes,
+        nb_neurons: List,
+        populations: List,
+        bin_size: float = 5 * ms,
+        dict_colors: dict = None,
+        dict_abv=None,
+        **kwargs,
+    ):
+        super().__init__(
+            fig_size,
+            scaffold,
+            simulation_name,
+            time_from,
+            time_to,
+            all_spikes,
+            nb_neurons,
+            populations,
+            dict_colors,
+            **kwargs,
+        )
+        self.bin_size = bin_size
+        """Size of the time bins used to group spikes before computing correlation coefficients."""
+        self.dict_abv = dict_abv or {}
+        """Dictionary of abbreviations for cell types"""
+
+    def update(self):
+        super().update()
+        filt_spikes = self.get_filt_spikes()
+        self.corrcoef = (
+            correlation_coefficient(
+                BinnedSpikeTrain(filt_spikes, bin_size=self.bin_size),
+            )
+            if len(filt_spikes) > 0
+            else np.zeros((0, 0))
+        )
+
+    def plot(self):
+        super().plot()
+        ax = self.get_ax()
+        im = ax.imshow(self.corrcoef)
+        ax.set_xticks(np.arange(len(self.populations)))
+        ax.set_xticklabels(
+            [self.dict_abv.get(l, l) for l in self.populations],
+            rotation=90,
+        )
+        ax.set_yticks(np.arange(len(self.populations)))
+        ax.set_yticklabels([self.dict_abv.get(l, l) for l in self.populations])
+        ax.set_xlabel("Target cell type", fontsize=20)
+        ax.set_ylabel("Source cell type", fontsize=20)
+        ax_divider = make_axes_locatable(ax)
+        cax1 = ax_divider.append_axes("right", size="5%", pad=0)
+        self.figure.colorbar(im, cax=cax1)
+
+
 class BasicSimulationReport(SpikeSimulationReport):
     """
     Simulation report of the spike activity containing:
@@ -799,7 +871,7 @@ class BasicSimulationReport(SpikeSimulationReport):
         folder_nio: str,
         time_from: float = 0,
         time_to: float = None,
-        ignored_ct: list[str] = [],
+        ignored_ct=None,
         cell_types_info: List[PlotTypeInfo] = None,
     ):
         super().__init__(
@@ -858,8 +930,19 @@ class BasicSimulationReport(SpikeSimulationReport):
             nb_neurons=self.nb_neurons,
             populations=self.populations,
         )
+        corr = SpikeCorrelation(
+            (10, 10.5),
+            scaffold=self.scaffold,
+            simulation_name=self.simulation_name,
+            time_from=self.time_from,
+            time_to=self.time_to,
+            all_spikes=self.all_spikes,
+            nb_neurons=self.nb_neurons,
+            populations=self.populations,
+            dict_abv=self.abbreviations,
+        )
         legend = Legend(
-            (10, 0.5 * num_labelled_ct / 3.0),
+            (10, 0.6 * num_labelled_ct / 3.0),
             3,
             dict_legend=dict(columnspacing=2.0, handletextpad=0.1, fontsize=20, loc="lower center"),
             dict_abbreviations=self.labelled_abbreviations,
@@ -869,6 +952,7 @@ class BasicSimulationReport(SpikeSimulationReport):
         self.add_plot("firing_rates", firing_rates)
         self.add_plot("isis", isis)
         self.add_plot("freq", freq)
+        self.add_plot("corr", corr)
         self.add_plot("legend", legend)
         legend.dict_colors = raster.labelled_dict_colors.copy()
         legend.remove_ct(self.labelled_cell_names, self.ignored_ct)

@@ -188,6 +188,21 @@ be plotted on top of each panel:
 - Gamma band: :math:`[30; 100]` Hz
 
 
+.. _corr_coef_plot:
+
+:class:`SpikeCorrelation <.analysis.spiking_results.SpikeCorrelation>`
+----------------------------------------------------------------------
+This class plots the pairwise
+:doc:`Pearson’s correlation coefficients <elephant:reference/_toctree/spike_train_correlation/elephant.spike_train_correlation.correlation_coefficient>`
+between each cell type.
+Spike trains of each neuron pairs will be time binned before computing the coefficient.
+On top of the constructor parameters of ``SpikePlot``:
+
+* ``bin_size``: Size of the time bins in ms.
+* ``dict_abv``: Dictionary that links each cell type name to an abbreviation
+  to display
+
+
 .. _basic_sim_report:
 
 :class:`BasicSimulationReport <.analysis.spiking_results.BasicSimulationReport>`
@@ -208,6 +223,8 @@ and produces a report containing 5
   :ref:`isis_distrib`)
 - A plot showing the frequency spectrum of each cell type (see section
   :ref:`frequency_plot`)
+- A plot showing the cross-correlation of the spiking activity between each cell type
+  (see section :ref:`corr_coef_plot`)
 
 All these plots are saved in a single pdf file.
 
