@@ -4,7 +4,7 @@ from os.path import abspath, dirname, join
 
 import numpy as np
 from bsb import Configuration, Scaffold, parse_configuration_file
-from bsb_test import NumpyTestCase, RandomStorageFixture
+from bsb_test import DictTestCase, NumpyTestCase, RandomStorageFixture
 from matplotlib import pyplot as plt
 
 from cerebellar_models.analysis.report import LIST_CT_INFO
@@ -15,7 +15,6 @@ from cerebellar_models.analysis.structure_analysis import (
     PlacementTable,
     StructureReport,
 )
-from tests.test_reports import DictTestCase
 
 
 class TestPlacementTable(
@@ -70,14 +69,16 @@ class TestPlacementTable(
         self.plot.is_updated = False
         self.plot.plot()
         self.assertAll(np.asarray(self.plot.table_values) == expected)
-        self.assertDict(self.plot.get_volumes(), {key: value for key, value in zip(keys, values)})
+        DictTestCase.assertDictEqual(
+            self, self.plot.get_volumes(), {key: value for key, value in zip(keys, values)}
+        )
         dict_counts = {key: 0.0 for key in keys}
         dict_counts["mossy_fibers"] = counts
-        self.assertDict(self.plot.get_counts(), dict_counts)
+        DictTestCase.assertDictEqual(self, self.plot.get_counts(), dict_counts)
         dict_densities = {
             key: value / volume for (key, value), volume in zip(dict_counts.items(), values)
         }
-        self.assertDict(self.plot.get_densities(), dict_densities)
+        DictTestCase.assertDictEqual(self, self.plot.get_densities(), dict_densities)
 
     def test_warn(self):
         scaffold = Scaffold(Configuration.default(), self.storage)
@@ -299,6 +300,12 @@ class TestCellPlacement3D(
 class TestStructureReport(
     RandomStorageFixture, NumpyTestCase, unittest.TestCase, engine_name="hdf5"
 ):
+    @classmethod
+    def setUpClass(cls):
+        super().setUpClass()
+        ROOT_FOLDER = abspath(dirname(dirname(__file__)))
+        os.chdir(ROOT_FOLDER)
+
     def setUp(self):
         super().setUp()
         self.cfg = parse_configuration_file("configurations/mouse/mouse_cerebellar_cortex.yaml")

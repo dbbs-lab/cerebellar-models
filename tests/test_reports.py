@@ -4,28 +4,11 @@ from os.path import abspath, dirname, join
 
 import numpy as np
 from bsb import Configuration, Scaffold, parse_configuration_file
-from bsb_test import NumpyTestCase, RandomStorageFixture
+from bsb_test import DictTestCase, NumpyTestCase, RandomStorageFixture
 from matplotlib import pyplot as plt
 
 from cerebellar_models.analysis.plots import Legend, ScaffoldPlot
 from cerebellar_models.analysis.report import LIST_CT_INFO, BSBReport, Report
-
-
-class DictTestCase:
-    def assertDict(self, tested: dict, expected: dict):
-        self.assertEqual(len(tested), len(expected))
-        sorting = np.argsort(list(tested.keys()))
-        self.assertTrue(
-            np.all(
-                np.array(list(tested.keys()))[sorting] == np.array(list(expected.keys()))[sorting]
-            )
-        )
-        self.assertTrue(
-            np.all(
-                np.array(list(tested.values()))[sorting]
-                == np.array(list(expected.values()))[sorting]
-            )
-        )
 
 
 class TestReport(unittest.TestCase, NumpyTestCase, DictTestCase):
@@ -46,22 +29,22 @@ class TestReport(unittest.TestCase, NumpyTestCase, DictTestCase):
         plot2 = Legend((7.5, 6.8), 2, None)
 
         report.set_color("blue", old_blue)
-        self.assertDict(report.colors, {"blue": old_blue})
-        self.assertDict(report.abbreviations, {"blue": "blue"})
+        DictTestCase.assertDictEqual(self, report.colors, {"blue": old_blue})
+        DictTestCase.assertDictEqual(self, report.abbreviations, {"blue": "blue"})
 
         report.add_plot("legend", plot)
-        self.assertDict(plot.dict_colors, {"blue": old_blue})
-        self.assertDict(report.plots, {"legend": plot})
+        DictTestCase.assertDictEqual(self, plot.dict_colors, {"blue": old_blue})
+        DictTestCase.assertDictEqual(self, report.plots, {"legend": plot})
         with self.assertWarns(UserWarning):
             report.add_plot("legend", plot2)
-        self.assertDict(report.plots, {"legend": plot})
+        DictTestCase.assertDictEqual(self, report.plots, {"legend": plot})
 
         report.set_color("blue", new_blue)
-        self.assertDict(report.colors, {"blue": new_blue})
-        self.assertDict(plot.dict_colors, {"blue": new_blue})
+        DictTestCase.assertDictEqual(self, report.colors, {"blue": new_blue})
+        DictTestCase.assertDictEqual(self, plot.dict_colors, {"blue": new_blue})
 
         report.set_plot_colors(plot2)
-        self.assertDict(plot2.dict_colors, {"blue": new_blue})
+        DictTestCase.assertDictEqual(self, plot2.dict_colors, {"blue": new_blue})
 
     def test_print_report(self):
         plot = Legend((7.5, 6.8), 2, None)
@@ -70,7 +53,7 @@ class TestReport(unittest.TestCase, NumpyTestCase, DictTestCase):
         self.assertFalse(plot.is_updated)
         report = Report(LIST_CT_INFO)
         report.add_plot("legend", plot)
-        self.assertDict({i.name: i.color for i in LIST_CT_INFO}, report.colors)
+        DictTestCase.assertDictEqual(self, {i.name: i.color for i in LIST_CT_INFO}, report.colors)
         report.save_plot("bla", filename, 100)
         self.assertFalse(filename in os.listdir())
         report.save_plot("legend", filename, 100)
