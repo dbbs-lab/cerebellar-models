@@ -45,6 +45,7 @@ intersphinx_mapping = {
     "bsb": ("https://bsb.readthedocs.io/en/latest", None),
     "bsb-core": ("https://bsb-core.readthedocs.io/en/latest", None),
     "neo": ("https://neo.readthedocs.io/en/latest/", None),
+    "elephant": ("https://elephant.readthedocs.io/en/latest/", None),
 }
 
 autoclass_content = "both"

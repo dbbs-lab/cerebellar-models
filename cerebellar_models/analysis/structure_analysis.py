@@ -5,8 +5,17 @@ Module for the plots and reports related to the structural analysis of BSB scaff
 from typing import List, Tuple, Union
 
 import numpy as np
-from bsb import AfterConnectivityHook, CellType, ConnectivitySet, Scaffold, config, warn
+from bsb import (
+    AfterConnectivityHook,
+    CellType,
+    ConnectivitySet,
+    Scaffold,
+    cell_types,
+    config,
+    warn,
+)
 from matplotlib import pyplot as plt
+from mpl_toolkits.axes_grid1.axes_divider import make_axes_locatable
 
 from cerebellar_models.analysis.plots import Legend, ScaffoldPlot
 from cerebellar_models.analysis.report import LIST_CT_INFO, BSBReport, PlotTypeInfo
@@ -290,7 +299,11 @@ class CellPlacement3D(ScaffoldPlot):
         **kwargs,
     ):
         super().__init__(fig_size, scaffold, dict_colors=dict_colors, **kwargs)
-        self.ignored_ct = ignored_ct or ["mossy_fibers", "glomerulus", "ubc_glomerulus"]
+        self.ignored_ct = (
+            ignored_ct
+            if ignored_ct is not None
+            else ["mossy_fibers", "glomerulus", "ubc_glomerulus"]
+        )
         """List of cell type names to ignore in the plot."""
 
     def init_plot(self, **kwargs):
@@ -375,6 +388,108 @@ class CellPlacement3D(ScaffoldPlot):
         ax.set_title("Placement results", fontsize=40)
 
 
+class AdjacencyMatrix(ScaffoldPlot):
+    """
+    Plot showing the cell-type adjacency matrix of a scaffold.
+    """
+
+    def __init__(
+        self,
+        fig_size: Tuple[float, float],
+        scaffold: Scaffold = None,
+        dict_colors=None,
+        ignored_ct=None,
+        dict_abv=None,
+        **kwargs,
+    ):
+        super().__init__(fig_size, scaffold, dict_colors=dict_colors, **kwargs)
+        self.ignored_ct = (
+            ignored_ct
+            if ignored_ct is not None
+            else [
+                "mossy_fibers",
+                "glomerulus",
+                "unipolar_brush_cell",
+                "ubc_glomerulus",
+            ]
+        )
+        """List of cell type names to ignore in the plot."""
+        self.dict_abv = dict_abv or {}
+        """Dictionary of abbreviations for cell types"""
+        self.adjacency_matrix = np.zeros((0, 0), dtype=np.uint32)
+        """Cell to cell adjacency matrix."""
+        self.grouped_matrix = np.zeros((0, 0), dtype=int)
+        """Cell type population to cell type population adjacency matrix."""
+
+    def _init_sizes(self):
+        self._cell_types = []
+        self._ct_first_id = []
+        current_id = 0
+        for name in self.scaffold.cell_types:
+            if name not in self.ignored_ct:
+                ct = self.scaffold.cell_types[name]
+                self._cell_types.append(name)
+                nb_cell = len(ct.get_placement_set())
+                self._ct_first_id.append(current_id)
+                current_id += nb_cell
+        self.adjacency_matrix = np.zeros((current_id, current_id), dtype=np.uint32)
+        self.grouped_matrix = np.zeros((len(self._cell_types), len(self._cell_types)), dtype=int)
+        return current_id
+
+    def update(self):
+        super().update()
+        self._init_sizes()
+        for ps in self.scaffold.get_connectivity_sets():
+            # Get the ConnectivityIterator for the current connectivity strategy
+            strat = self.scaffold.get_connectivity_set(ps.tag)
+            if (
+                strat.pre_type_name not in self._cell_types
+                or strat.post_type_name not in self._cell_types
+            ):
+                continue
+            cs = strat.load_connections().as_scoped()
+            pre_locs, post_locs = cs.all()
+            pre_id = self._cell_types.index(strat.pre_type_name)
+            post_id = self._cell_types.index(strat.post_type_name)
+            self.grouped_matrix[pre_id, post_id] += len(pre_locs)
+            pre_id = self._ct_first_id[pre_id]
+            post_id = self._ct_first_id[post_id]
+            self.adjacency_matrix[pre_id + pre_locs[:, 0], post_id + post_locs[:, 0]] += 1
+        self.normalize()
+
+    def normalize(self):
+        """Normalization function for resulting the adjacency matrix."""
+        pass
+
+    def plot(self, log_scale=True, **kwargs):
+        super().plot()
+        ax = self.get_ax()
+        loc_mat = np.asarray(self.grouped_matrix, dtype=float)
+        loc_mat[loc_mat == 0] = np.nan
+        title = "Adjacency matrix"
+        if log_scale:
+            loc_mat = np.log10(loc_mat)
+            title += " (log10)"
+        ax.set_title(title, fontsize=40)
+        ax.set_xlabel("Target cell type", fontsize=20)
+        ax.set_ylabel("Source cell type", fontsize=20)
+        kwargs_imshow = {"vmin": np.floor(np.nanmin(loc_mat)), "vmax": np.ceil(np.nanmax(loc_mat))}
+        kwargs_imshow.update(kwargs)
+        im = ax.imshow(loc_mat, **kwargs_imshow)
+        ax.set_xticks(np.arange(len(self._cell_types)))
+        ax.set_xticklabels(
+            [self.dict_abv.get(l, l) for l in self._cell_types],
+            rotation=90,
+        )
+        ax.set_yticks(np.arange(len(self._cell_types)))
+        ax.set_yticklabels(
+            [self.dict_abv.get(l, l) for l in self._cell_types],
+        )
+        ax_divider = make_axes_locatable(ax)
+        cax1 = ax_divider.append_axes("right", size="5%", pad=0)
+        self.figure.colorbar(im, cax=cax1)
+
+
 class StructureReport(BSBReport):
     """
     Report of the scaffold neural network structure containing:
@@ -401,17 +516,23 @@ class StructureReport(BSBReport):
         density_table = PlacementTable(
             (5, 0.22 * (num_labelled_ct + 1)),
             scaffold=self.scaffold,
-            dict_abv=self.abbreviations,
+            dict_abv=self.labelled_abbreviations,
         )
         connectivity_table = ConnectivityTable(
             (10, 0.22 * (len(self.scaffold.get_connectivity_sets()) + 1)),
             scaffold=self.scaffold,
-            dict_abv=self.abbreviations,
+            dict_abv=self.labelled_abbreviations,
         )
         plot3d = CellPlacement3D((10, 10), scaffold=self.scaffold)
+        adjacency_matrix = AdjacencyMatrix(
+            (10, 10.5),
+            scaffold=self.scaffold,
+            dict_abv=self.labelled_abbreviations,
+        )
         self.add_plot("density_table", density_table)
-        self.add_plot("connectivity_table", connectivity_table)
         self.add_plot("placement_3d", plot3d)
+        self.add_plot("connectivity_table", connectivity_table)
+        self.add_plot("adjacency_matrix", adjacency_matrix)
         self.add_plot("legend", legend)
         legend.dict_colors = plot3d.labelled_dict_colors.copy()
         legend.remove_ct(self.labelled_cell_names, to_ignore)
