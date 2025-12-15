@@ -1,19 +1,23 @@
 import copy
+import json
 import os
+from collections import OrderedDict
 from enum import Enum
 from os.path import abspath, dirname, join
 
 import click
 import numpy as np
+import yaml
 from bsb import (
     Configuration,
     ConfigurationError,
-    format_configuration_content,
+    get_configuration_parser,
     parse_configuration_file,
 )
 
 from cerebellar_models import __version__
 from cerebellar_models.utils import (
+    deep_order,
     deep_update,
     get_folders_in_folder,
     load_configs_in_folder,
@@ -300,7 +304,7 @@ def _configure_sim_params(config_simulations, simulation_names, micro_params: Mi
     for sim_name in simulation_names:
         sim_name = str(sim_name)
         simulator, simulation = sim_name.split("_", 1)
-        for k, v in config_simulations[simulator]["simulations"].items():
+        for v in config_simulations[simulator]["simulations"].values():
             if simulation in v["simulations"]:
                 for sim, params in v.items():
                     if sim == "simulations":
@@ -450,10 +454,20 @@ def _write_config(configuration, output_folder, extension):
     filename = os.path.join(output_folder, f"circuit.{extension}")
     try:
         configuration = Configuration.default(**configuration)  # Check that the configuration works
+        with open(
+            join(ROOT_FOLDER, "tests", "test_configurations", "canonical_mouse_awake_io_nest.json")
+        ) as f:
+            content = f.read()
+            template = json.loads(content, object_pairs_hook=OrderedDict)
+        configuration = deep_order(configuration.__tree__(), template)
     except ConfigurationError as e:  # pragma: no cover
         raise ValueError("A BSB error happened when loading your cerebellar circuit") from e
+    if extension == "yaml":
+        yaml.add_representer(
+            OrderedDict, representer=lambda dumper, data: dumper.represent_dict(data.items())
+        )
     with open(filename, "w") as outfile:
-        outfile.write(format_configuration_content(extension, configuration))
+        outfile.write(get_configuration_parser(extension).generate(configuration, pretty=True))
     print(f"Created the BSB configuration file: {filename}")
 
 

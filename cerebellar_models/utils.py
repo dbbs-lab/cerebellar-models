@@ -1,4 +1,5 @@
 import os
+from collections import OrderedDict
 from collections.abc import Mapping
 from glob import glob
 from os.path import basename, isdir, join, splitext
@@ -69,3 +70,19 @@ def deep_update(d: dict, u: Mapping):
         else:
             d[k] = v
     return d
+
+
+def deep_order(d: dict, u: OrderedDict):
+    """
+    Recursively sort a dictionary based on a OrderedDictionary u.
+    Keys from u not in d will be added at the end.
+    :return: sorted dictionary
+    :rtype: OrderedDict
+    """
+    new_d = OrderedDict([(k, d[k]) for k in u if k in d])
+    for k, v in u.items():
+        if isinstance(v, Mapping) and k in d:
+            new_d[k] = deep_order(new_d[k], v)
+    for k in set(d.keys()) - set(new_d.keys()):
+        new_d[k] = d[k]
+    return new_d
