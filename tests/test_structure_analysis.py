@@ -174,7 +174,6 @@ class TestConnectivityPlots(
         self.plot = ConnectivityTable(
             (5, 2.5), scaffold=self.scaffold, dict_abv={"mossy_fibers": "mf"}
         )
-        self.plot.set_scaffold(self.scaffold)
         with self.assertWarns(UserWarning):
             self.plot.plot()
         self.assertEqual(self.plot.get_synapse_counts(), {})

@@ -76,6 +76,7 @@ def deep_order(d: dict, u: OrderedDict):
     """
     Recursively sort a dictionary based on a OrderedDictionary u.
     Keys from u not in d will be added at the end.
+
     :return: sorted dictionary
     :rtype: OrderedDict
     """
