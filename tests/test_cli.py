@@ -25,7 +25,6 @@ def mock_print_panel(options, title="test"):
 
 
 class TestCli(unittest.TestCase):
-
     @classmethod
     def setUpClass(cls):
         super().setUpClass()
@@ -59,7 +58,7 @@ class TestCli(unittest.TestCase):
                 "--species",
                 "mouse",
                 "--output_folder",
-                os.path.abspath(__file__),
+                abspath(__file__),
                 "--extension",
                 "yaml",
             ],
@@ -79,10 +78,8 @@ class TestCli(unittest.TestCase):
         lambda options, title: mock_print_panel(options, title),
     )
     def test_configure(self):
-        folder = os.path.dirname(__file__)
-        with open(
-            os.path.join(folder, "test_configurations/canonical_mouse_awake_io_nest.json"), "r"
-        ) as f:
+        folder = dirname(__file__)
+        with open(join(folder, "test_configurations/canonical_mouse_awake_io_nest.json"), "r") as f:
             config2 = json.loads(f.read())
         runner = CliRunner()
         result = runner.invoke(

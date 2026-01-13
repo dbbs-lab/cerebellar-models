@@ -713,7 +713,7 @@ class TestSpikePlots(
         report.print_report(filename, dpi=100)
         # should be seven cell types
         self.assertEqual(len(report.plots["table"].table_values), 6)
-        # Raster PSTH plot should have two sub plots for each population
+        # Raster PSTH plot should have two sub-plots for each population
         self.assertEqual(len(report.plots["raster_psth"].get_ax()[0].collections), 1)
         self.assertEqual(len(report.plots["raster_psth"].get_ax()[1].containers), 1)
         # Firing rates plot should store firing_rates

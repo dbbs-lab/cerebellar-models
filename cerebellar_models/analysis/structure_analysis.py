@@ -473,7 +473,9 @@ class AdjacencyMatrix(ScaffoldPlot):
         ax.set_title(title, fontsize=40)
         ax.set_xlabel("Target cell type", fontsize=20)
         ax.set_ylabel("Source cell type", fontsize=20)
-        im = ax.imshow(loc_mat, vmin=2.5, vmax=7.0)
+        kwargs_imshow = {"vmin": np.floor(np.nanmin(loc_mat)), "vmax": np.ceil(np.nanmax(loc_mat))}
+        kwargs_imshow.update(kwargs)
+        im = ax.imshow(loc_mat, **kwargs_imshow)
         ax.set_xticks(np.arange(len(self._cell_types)))
         ax.set_xticklabels(
             [self.dict_abv.get(l, l) for l in self._cell_types],

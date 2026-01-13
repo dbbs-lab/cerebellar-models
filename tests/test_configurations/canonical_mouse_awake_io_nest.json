@@ -14,11 +14,10 @@
         "y": 200,
         "z": 595
     },
-    "packages": [
-        "cerebellar-models~=0.8.1",
-        "bsb~=7.0",
-        "bsb-nest~=7.0"
-    ],
+    "$import":  {
+        "ref": "../../configurations/mouse/in-vitro/nest/basal_vitro.yaml#/",
+        "values": ["packages"]
+    },
     "components": [
         {
             "module": "cerebellar_models/nest_models/build_models.py"

@@ -837,12 +837,18 @@ class SpikeCorrelation(SpikePlot):
     def plot(self):
         super().plot()
         ax = self.get_ax()
-        im = ax.imshow(self.corrcoef)
+        len_ = len(self.populations)
+        im = np.copy(self.corrcoef)
+        im[np.tri(len_) > 0] = np.nan
+        im = ax.imshow(im, interpolation="nearest")
+        ax.set_xticks(np.arange(len_))
         ax.set_xticklabels(
-            [""] + [self.dict_abv.get(l, l) for l in self.populations],
+            [self.dict_abv.get(l, l) for l in self.populations],
             rotation=90,
         )
-        ax.set_yticklabels([""] + [self.dict_abv.get(l, l) for l in self.populations])
+        ax.set_yticks(np.arange(len_))
+        ax.set_title("Pearson correlation coef. matrix", fontsize=40)
+        ax.set_yticklabels([self.dict_abv.get(l, l) for l in self.populations])
         ax.set_xlabel("Target cell type", fontsize=20)
         ax.set_ylabel("Source cell type", fontsize=20)
         ax_divider = make_axes_locatable(ax)
