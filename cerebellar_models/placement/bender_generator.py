@@ -61,10 +61,9 @@ class GranuleGenerator(BenderGenerator, classmap_entry="granule_bender"):
         self.nb_section_left -= 1
         return scaling  # ratio according to default axon length
 
-    def scale_morpho(self, branch, i, scaling):
+    def scale_morpho(self, branch, i, scaling, branch_labels):
         old_deriv = branch.points[i] - branch.points[i - 1]
-        fail_rescale, new_scaling = super().scale_morpho(branch, i, scaling)
-        self.has_rescale = False
+        fail_rescale, new_scaling = super().scale_morpho(branch, i, scaling, branch_labels)
         if not fail_rescale:
             if self.nb_section_left <= 0 and self.get_lay_abv(branch.points[i]) != "mo":
                 # If the last point does not land on molecular layer, add an ascending axon point.
@@ -75,13 +74,6 @@ class GranuleGenerator(BenderGenerator, classmap_entry="granule_bender"):
                 for child in branch.children:
                     child.translate(old_deriv)
         return fail_rescale, new_scaling
-
-    def delete_point(self, branch, i):
-        # Delete 2 points instead of 1
-        branch.delete_point(i - 1)
-        if self.has_rescale:
-            branch.delete_point(i - 1)
-            self.has_rescale = False
 
     def rotate_point(self, source, branch, i, old_rots):
         is_parallel_fiber = np.isin(

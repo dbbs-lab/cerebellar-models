@@ -399,7 +399,7 @@ class MorphologyBender:
         else:  # out of the annotations / depth / orientations fields.
             return 0.1
 
-    def scale_morpho(self, branch, i, scaling):
+    def scale_morpho(self, branch, i, scaling, branch_labels):
         """
         Scale a morphology's branch at a position i, if the new position remains within
         the frontiers of the region.
@@ -407,6 +407,7 @@ class MorphologyBender:
         :param bsb.morphologies.Branch branch: morphology's branch to scale
         :param int i: position in the branch
         :param float scaling: factor of scaling.
+        :param list[str] branch_labels: list of labels attached to the current segment.
         :return: False if the scaling could be performed, True else.
             Returns also the updated scaling
         :rtype: Tuple(bool, float)
@@ -422,10 +423,7 @@ class MorphologyBender:
         if 0 <= fixed_dimension <= 2:
             new_coord[fixed_dimension] = old_coord[fixed_dimension]
         # check that every voxel between the points remain within the region boundary
-        rescale = self.test_voxels_between(
-            self.partition.mask_source.voxel_of(branch.points[i - 1]),
-            self.partition.mask_source.voxel_of(new_coord),
-        )
+        rescale = self.is_target_wrong(branch.points[i - 1], new_coord, branch_labels)
         # if scaling resulted in an overshoot, set to old point coordinate
         branch.points[i] = np.copy(new_coord) if not rescale else np.copy(branch.points[i - 1])
         # translate all the points of the branch starting at i
@@ -495,8 +493,12 @@ class MorphologyBender:
                 i = 0
                 while i < len(branch.points):
                     branch_labels = branch.labelsets[branch.labels[i]]
+                    has_scale = False
                     if np.isin(list(branch_labels), self.rescale).any() and i > 0:
-                        fail_rescale, curr_scaling = self.scale_morpho(branch, i, curr_scaling)
+                        has_scale = True
+                        fail_rescale, curr_scaling = self.scale_morpho(
+                            branch, i, curr_scaling, branch_labels
+                        )
                         if fail_rescale:
                             self.delete_point(branch, i)
                             continue
@@ -508,6 +510,21 @@ class MorphologyBender:
                         except ValueError as _:
                             self.delete_point(branch, i)
                             continue
+                    elif (
+                        i > 0
+                        and not has_scale
+                        and self.is_target_wrong(
+                            last_point,
+                            branch.points[i],
+                            branch_labels,
+                        )
+                    ):
+                        # case when the next branch point was neither rotated nor scaled
+                        # hence it could land outside the region.
+                        # we delete the current point so that the last one land inside
+                        self.delete_point(branch, i)
+                        continue
+
                     last_point = branch.points[i]
                     last_index = i
                     i += 1
