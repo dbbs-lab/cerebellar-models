@@ -93,28 +93,11 @@ class MorphologyBender:
         return loc_orient
 
     @pool_cache
-    def _fixed_orientation(self):
-        return self.orientation_field()
-
-    @pool_cache
-    def _fixed_orientation_0(self):
+    def _fixed_orientation(self, fixed_dim=None):
         loc_orient = np.copy(self.orientation_field())
-        loc_orient[..., 0] = 0.0
-        loc_orient /= np.linalg.norm(loc_orient, axis=3)[..., np.newaxis]
-        return loc_orient
-
-    @pool_cache
-    def _fixed_orientation_1(self):
-        loc_orient = np.copy(self.orientation_field())
-        loc_orient[..., 1] = 0.0
-        loc_orient /= np.linalg.norm(loc_orient, axis=3)[..., np.newaxis]
-        return loc_orient
-
-    @pool_cache
-    def _fixed_orientation_2(self):
-        loc_orient = np.copy(self.orientation_field())
-        loc_orient[..., 2] = 0.0
-        loc_orient /= np.linalg.norm(loc_orient, axis=3)[..., np.newaxis]
+        if fixed_dim is not None:
+            loc_orient[..., fixed_dim] = 0.0
+            loc_orient /= np.linalg.norm(loc_orient, axis=3)[..., np.newaxis]
         return loc_orient
 
     def fixed_dimension(self, branch, i):
@@ -127,14 +110,7 @@ class MorphologyBender:
         return -1
 
     def fix_orientation(self, branch, i):
-        fixed_dim = self.fixed_dimension(branch, i)
-        if fixed_dim == 0:
-            return self._fixed_orientation_0()
-        elif fixed_dim == 1:
-            return self._fixed_orientation_1()
-        elif fixed_dim == 2:
-            return self._fixed_orientation_2()
-        return self._fixed_orientation()
+        return self._fixed_orientation(self.fixed_dimension(branch, i))
 
     @pool_cache
     def thicknesses(self):
@@ -316,6 +292,7 @@ class MorphologyBender:
         diff_rotation[np.absolute(diff_rotation) < 1e-5] = 0
         branch_labels = list(branch.labelsets[branch.labels[i]])
         inc = 1.0
+        max_angle = np.pi / 2 if self.no_turn_back else np.pi
         if np.all(
             (
                 self.partition.mask_source.voxel_of(target)
@@ -325,7 +302,6 @@ class MorphologyBender:
         ):
             scaled_diff_rotation = diff_rotation
         else:
-            max_angle = np.pi / 2 if self.no_turn_back else np.pi
             was_wrong = False
             to_rotate = True
             old_voxel = None
@@ -377,6 +353,9 @@ class MorphologyBender:
             * scaled_diff_rotation.inv()
             * Rotation.from_euler("xyz", diff_rotation)
         )
+        if (np.absolute(old_rots.rotation_to_correct.as_euler("xyz")) > max_angle).any():
+            # corrections pilled up to a point that we are going in the wrong direction aborting
+            raise ValueError("Hit a wall. Stopping")
         return scaled_diff_rotation
 
     def process_scaling(self, point):

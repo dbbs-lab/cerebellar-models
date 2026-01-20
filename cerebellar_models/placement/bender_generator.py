@@ -1,10 +1,7 @@
 import numpy as np
 from bsb import AllenStructure, MorphologyGenerator, TopologyError, config
-from bsb._util import rotation_matrix_from_vectors
-from scipy.spatial.transform import Rotation
 
 from cerebellar_models.placement.morphology_bender import MorphologyBender
-from cerebellar_models.placement.utils import signed_modulo
 
 
 @config.node
@@ -75,6 +72,25 @@ class GranuleGenerator(BenderGenerator, classmap_entry="granule_bender"):
                     child.translate(old_deriv)
         return fail_rescale, new_scaling
 
+    def is_target_wrong(self, source, new_target, branch_labels=None):
+        if super().is_target_wrong(source, new_target, branch_labels):
+            return True
+        # Check parallel fibers conditions
+        if branch_labels is not None and np.any(
+            ["parallel_fiber" in label for label in branch_labels]
+        ):
+            if "mo" not in self.get_lay_abv(new_target):  # fibers no more in molecular layer
+                return True
+            distances = self.voxel_data_of(new_target, self.thicknesses())
+            # check if fibers go too deep
+            return np.sum(distances[:2]) > 1e-6 and (
+                distances[0] / (distances[1] + distances[0])
+                > self.ratio_gr + (1 - self.ratio_gr) / 3
+                or distances[0] / (distances[1] + distances[0])
+                < self.ratio_gr - (1 - self.ratio_gr) / 3
+            )
+        return False
+
     def rotate_point(self, source, branch, i, old_rots):
         is_parallel_fiber = np.isin(
             list(branch.labelsets[branch.labels[i]]), ["parallel_fiber"]
@@ -90,40 +106,6 @@ class GranuleGenerator(BenderGenerator, classmap_entry="granule_bender"):
             old_rots.original_rotation = fix_dim_rot
             old_rots.last_rotation = fix_dim_rot
         rotation = super().rotate_point(source, branch, i, old_rots)
-        if is_parallel_fiber:
-            target = branch.points[i]
-            target_ = rotation.apply(target - source) + source
-            distances = self.voxel_data_of(target_, self.thicknesses())
-            if np.sum(distances[:1]) > 1e-6 and np.linalg.norm(source - target) > 1e-3:
-                ratio_mol = distances[0] / (distances[1] + distances[0])
-                if ratio_mol > self.ratio_gr + (1 - self.ratio_gr) / 3:  # go too deep
-                    angle = signed_modulo(
-                        np.asarray(
-                            Rotation.from_matrix(
-                                rotation_matrix_from_vectors(
-                                    self.voxel_orient(
-                                        self.fix_orientation(branch, i),
-                                        target_,
-                                    ),
-                                    target_ - source,
-                                )
-                            ).as_euler("xyz")
-                        ),
-                        2 * np.pi,
-                    )
-                    # bring back the fiber at 90 degree with respect to the orientation field.
-                    # works only on parallel fibers !
-                    final_angle = np.zeros(3)
-                    ax = self.fixed_dimension(branch, i)
-                    final_angle[ax] = np.sign(angle[ax]) * np.pi / 2 - angle[ax]
-                    correction_angle = Rotation.from_euler("xyz", final_angle)
-                    next_loc = (rotation * correction_angle).apply(target - source) + source
-                    distances = self.voxel_data_of(next_loc, self.thicknesses())
-                    if (
-                        not self.is_target_wrong(source, next_loc)
-                        and distances[0] / (distances[1] + distances[0]) < ratio_mol
-                    ):
-                        return rotation * correction_angle
         return rotation
 
     def deform_morphology(self, morphology):
