@@ -6,6 +6,8 @@ components:
 simulations:
   lfp_stimulation:
     devices:
+      background_noise:
+        rate: 0.
       granule_multimeter:
         device: multimeter
         delay: 0.1
@@ -13,7 +15,7 @@ simulations:
         units: ['pA', 'pA', 'pA']
         targetting:
           strategy: cylinder
-          radius: 15
+          radius: 30
           origin:
             - 150
             - 100
@@ -22,10 +24,8 @@ simulations:
             - granule_cell
       lfp_stim:
         delay: 0.1
-        device: poisson_generator
-        rate: 5000.
-        start: 1000.
-        stop: 1001.
+        device: spike_generator
+        spike_times : [1000.]
         targetting:
           cell_models:
             - mossy_fibers
@@ -38,13 +38,13 @@ simulations:
     seed: 1234
     simulator: nest
     $import:
-      ref: basal_vitro_rec.yaml#/simulations/nest_basal_activity
+      ref: basal_vitro_rec_tm_tuned.yaml#/simulations/nest_basal_activity
       values:
         - cell_models
         - connection_models
         - devices
 $import:
-  ref: basal_vitro_rec.yaml#/
+  ref: basal_vitro_rec_tm_tuned.yaml#/
   values:
     - packages
     - storage

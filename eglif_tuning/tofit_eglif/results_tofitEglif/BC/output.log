@@ -1,0 +1,52 @@
+dbbs lab
+time rest 99.975000, hold 200.000000
+V rest -69.991645, hold -79.983213
+I rest -0.008355, hold -0.016787
+------->>> Rin:  1184.9436942005
+- 01SS -
+Saving dataset in figures/BScell_test_07/BScell_01_SS_dbbs.pickle
+- 02currentsIO -
+inj current nA  -0.02
+spk prestim:  7
+spk stim:  0
+spk after 14
+-------------------
+inj current nA  -0.01
+spk prestim:  7
+spk stim:  0
+spk after 14
+-------------------
+inj current nA  0.0
+spk prestim:  7
+spk stim:  13
+spk after 12
+-------------------
+inj current nA  0.009999999999999998
+spk prestim:  7
+spk stim:  47
+spk after 7
+-------------------
+inj current nA  0.02
+spk prestim:  7
+spk stim:  63
+spk after 5
+-------------------
+inj current nA  0.030000000000000002
+spk prestim:  7
+spk stim:  76
+spk after 3
+-------------------
+inj current nA  0.039999999999999994
+spk prestim:  7
+spk stim:  86
+spk after 2
+-------------------
+inj current nA  0.05
+spk prestim:  7
+spk stim:  95
+spk after 2
+-------------------
+Traceback (most recent call last):
+  File "/home/dbenozzo/dbbs_lab/test_dend_connction/test_basket_dbbs.py", line 171, in <module>
+    stop
+NameError: name 'stop' is not defined

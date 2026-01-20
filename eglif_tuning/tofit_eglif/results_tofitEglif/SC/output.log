@@ -1,0 +1,52 @@
+dbbs lab
+time rest 99.975000, hold 200.000000
+V rest -69.988118, hold -79.984016
+I rest -0.011882, hold -0.015984
+------->>> Rin:  2437.0809823728364
+- 01SS -
+Saving dataset in figures/STcell/STcell_01_SS_dbbs.pickle
+- 02currentsIO -
+inj current nA  -0.02
+spk prestim:  4
+spk stim:  0
+spk after 20
+-------------------
+inj current nA  -0.01
+spk prestim:  4
+spk stim:  2
+spk after 19
+-------------------
+inj current nA  0.0
+spk prestim:  4
+spk stim:  9
+spk after 16
+-------------------
+inj current nA  0.009999999999999998
+spk prestim:  4
+spk stim:  18
+spk after 12
+-------------------
+inj current nA  0.02
+spk prestim:  4
+spk stim:  25
+spk after 9
+-------------------
+inj current nA  0.030000000000000002
+spk prestim:  4
+spk stim:  30
+spk after 7
+-------------------
+inj current nA  0.039999999999999994
+spk prestim:  4
+spk stim:  35
+spk after 5
+-------------------
+inj current nA  0.05
+spk prestim:  4
+spk stim:  39
+spk after 4
+-------------------
+Traceback (most recent call last):
+  File "/home/dbenozzo/dbbs_lab/test_dend_connction/test_stellate_dbbs.py", line 168, in <module>
+    stop
+NameError: name 'stop' is not defined

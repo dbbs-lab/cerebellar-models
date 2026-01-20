@@ -74,16 +74,17 @@ def evaluate_PC(opt, ind, cell_params=None):
     cv_err = cv_loss(targ, nest)
     rheo, thr = rheobase_loss(nest, targ)
     sel = currents_above_thr(targ, thr)
-    slope = slope_loss(targ, nest, thr, sel)
+    #slope = slope_loss(targ, nest, thr, sel)
+    curv = curvature_loss(targ, nest, sel, use_max_slope_penalty=True)
     gap = gap_loss(targ, nest, sel, weighted='gaussian')
     pos_loss = post_first_spike_loss(targ, nest, protocol, thr=thr)
-    neg_loss =  post_rebound_loss(targ, nest, protocol, thr=thr, sign='neg', window=100.0)
+    neg_loss = post_rebound_loss(targ, nest, protocol, thr=thr, sign='neg', window=70.0, scale = 2)
 
     return (
         float(pacemaking),
         float(cv_err),
         float(rheo),
-        float(slope),
+        float(curv),
         float(gap),
         float(pos_loss),
         float(neg_loss),
@@ -98,7 +99,7 @@ if __name__ == "__main__":
             "pacemaking_error",
             "cv_error",
             "rheobase_error",
-            "slope_error",
+            "curv_error",
             "gap_error",
             "pos_lat_error",
             "neg_lat_error",
@@ -116,7 +117,7 @@ if __name__ == "__main__":
         fitness=fitness,
         bounds=bounds,
         archive=archive,
-        knee_weights=[2.0, 2.0, 2.0, 2.0, 1.0, 1.0, 1.0],
+        knee_weights=[1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0],
     )
 
     # --- Constraints ---
@@ -143,7 +144,7 @@ if __name__ == "__main__":
     opt.init_params_fn = random_init
     opt.evaluate_fn = evaluate_PC
     opt.print_evolution = True
-    opt.N_GEN = 400
+    opt.N_GEN = 500
     output_folder = 'PC_opt'
     os.makedirs(output_folder, exist_ok=True)
     opt.output_path = output_folder

@@ -92,9 +92,10 @@ def evaluate_GrC(opt, ind, cell_params=None):
     # 1. Rheobase error
     rheo, thr = rheobase_loss(nest, targ)
     sel = currents_above_thr(targ, thr)
-    slope = slope_loss(targ, nest, thr, sel)
+    # slope = slope_loss(targ, nest, thr, sel)
+    curv = curvature_loss(targ, nest, sel, use_max_slope_penalty=True)
     gap = gap_loss(targ, nest, sel, weighted="gaussian")
-    return (rheo, slope, gap)
+    return (rheo, curv, gap)
 
 
 if __name__ == "__main__":
@@ -111,7 +112,7 @@ if __name__ == "__main__":
 
     fitness = {
         "rheobase_error": -1,
-        "slope_error": -1,
+        "curvature_error": -1,
         "gap_error": -1,
     }
 
@@ -126,7 +127,7 @@ if __name__ == "__main__":
         fitness=fitness,
         bounds=bounds,
         archive=archive,
-        knee_weights=[2.0, 1.0, 3.0],
+        knee_weights=[1.0, 1.0, 1.0],
     )
 
     param_positions = {name: i for i, name in enumerate(optimizer.opt_params)}

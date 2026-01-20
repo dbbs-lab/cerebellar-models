@@ -70,21 +70,22 @@ def evaluate_SC(opt, ind, cell_params=None):
     nest = opt._extract_nest_features()
 
     pacemaking = pacemaking_loss(targ, nest)
-    cv_err = cv_loss(targ, nest)
+    cv_err = cv_loss(targ, nest, regularity=True, alpha=0.1)
     rheo, thr = rheobase_loss(nest, targ)
     sel = currents_above_thr(targ, thr)
-    slope = slope_loss(targ, nest, thr, sel)
-    gap = gap_loss(targ, nest, sel) # weighted='gaussian')
-    pause = post_first_spike_loss(targ, nest, protocol, thr=thr)
-    post_freq_neg = post_rebound_loss(targ,nest, protocol,thr=thr, sign='neg', window=100.0)
+    gap = gap_loss(targ, nest, sel, weighted="gaussian")
+    curv = curvature_loss(targ, nest, sel, use_max_slope_penalty=True)
+    # pos_loss = post_first_spike_loss(targ, nest, protocol, thr)
+    neg_loss = post_rebound_loss(targ, nest, protocol, thr=thr, sign='neg', window=70.0, scale=3)
+
     return (
         float(pacemaking),
         float(cv_err),
         float(rheo),
-        float(slope),
+        float(curv),
         float(gap),
-        float(pause),
-        float(post_freq_neg),
+        #float(pos_loss),
+        float(neg_loss),
     )
 
 
@@ -96,14 +97,14 @@ if __name__ == "__main__":
             "pacemaking_error",
             "cv_error",
             "rheobase_error",
-            "slope_error",
+            "curvature_error",
             "gap_error",
-            "post_stim_pause_pos_error",
+            #"post_stim_pos_error",
             "post_stim_neg_error",
         ]
     }
 
-    archive = ArchiveND(eps_vec=[0.05] * 7, tau_vec=[0.15] * 7, cap=1000)
+    archive = ArchiveND(eps_vec=[0.05] * 6, tau_vec=[0.15] * 6, cap=1000)
 
     opt = Optimizer(
         multicomp_data=data_folder,
@@ -114,7 +115,7 @@ if __name__ == "__main__":
         fitness=fitness,
         bounds=bounds,
         archive=archive,
-        knee_weights=[2.0, 2.0, 2.0, 2.0, 3.0, 1.0, 1.0],
+        knee_weights=[1.0, 1.0, 1.0, 1.0, 1.0, 1.0]#  1.0],
     )
 
     # --- Constraints ---
@@ -145,10 +146,11 @@ if __name__ == "__main__":
     opt.init_params_fn = random_init
     opt.evaluate_fn = evaluate_SC
     opt.print_evolution = True
-    opt.N_GEN = 350
+    opt.N_GEN = 300
     output_folder = 'SC_opt'
     os.makedirs(output_folder, exist_ok=True)
     opt.output_path = output_folder
+    opt.return_pareto = True
     opt.set_optimizer()
 
     best, fit = opt.optimize()

@@ -1,0 +1,192 @@
+name: DBBS Mouse cerebellum NEST basal activity for in vitro state with multireceptor synaptic modeks
+packages:
+  - bsb-nest~=7.0
+components:
+  - cerebellar_models/nest_models/build_models.py
+simulations:
+  nest_basal_activity:
+    connection_models:
+      ascending_axon_to_golgi:
+        synapses:
+          - model: tsodyks2_synapse
+            U: 0.4
+            x: 1
+            tau_rec: 35.1
+            tau_fac: 54
+            weight: 1.
+            receptor_type: 4
+            delay: 0.1
+          - model: tsodyks2_synapse
+            U: 0.4
+            x: 1
+            tau_rec: 35.1
+            tau_fac: 54
+            weight: 1.
+            receptor_type: 2
+            delay: 0.1
+      ascending_axon_to_purkinje:
+        synapses:
+          - model: tsodyks2_synapse
+            U: 0.13
+            x: 1
+            tau_rec: 35.1
+            tau_fac: 54
+            delay: 0.1
+            receptor_type: 1
+            weight: 1.
+      basket_to_basket:
+        synapses:
+          - model: tsodyks2_synapse
+            U: 0.42
+            x: 1
+            tau_rec: 38.7
+            tau_fac: 4
+            receptor_type: 3
+            weight: 1
+            delay: 0.1
+      basket_to_purkinje:
+        synapses:
+          - model: tsodyks2_synapse
+            U: 0.35
+            x: 1
+            tau_rec: 15
+            tau_fac: 4
+            receptor_type: 3
+            weight: 1.
+            delay: 0.1
+      glomerulus_to_golgi:
+        synapses:
+          - model: tsodyks2_synapse
+            U: 0.43
+            x: 1
+            tau_rec: 8
+            tau_fac: 5
+            receptor_type: 1
+            weight: 1.
+            delay: 0.1
+          - model: tsodyks2_synapse
+            U: 0.43
+            x: 1
+            tau_rec: 8
+            tau_fac: 5
+            receptor_type: 2
+            weight: 1.
+            delay: 0.1
+      glomerulus_to_granule:
+        synapses:
+          - model: tsodyks2_synapse
+            U: 0.43
+            x: 1
+            tau_rec: 8
+            tau_fac: 5
+            delay: 0.1
+            receptor_type: 1
+            weight: 1.
+          - model: tsodyks2_synapse
+            U: 0.43
+            x: 1
+            tau_rec: 8
+            tau_fac: 5
+            delay: 0.1
+            receptor_type: 2
+            weight: 1.
+      golgi_to_glomerulus:
+        synapses:
+          - model: tsodyks2_synapse
+            U: 0.35
+            x: 1
+            tau_rec: 36
+            tau_fac: 58
+            receptor_type: 3
+            weight: 1.
+            delay: 0.1
+      parallel_fiber_to_basket:
+        synapses:
+          - model: tsodyks2_synapse
+            U: 0.15
+            x: 1
+            tau_rec: 35.1
+            tau_fac: 10.8
+            receptor_type: 1
+            weight: 1.
+            delay: 0.1
+          - model: tsodyks2_synapse
+            U: 0.15
+            x: 1
+            tau_rec: 35.1
+            tau_fac: 10.8
+            receptor_type: 2
+            weight: 1.
+            delay: 0.1
+      parallel_fiber_to_golgi:
+        synapses:
+          - model: tsodyks2_synapse
+            U: 0.4
+            x: 1
+            tau_rec: 35.1
+            tau_fac: 54
+            receptor_type: 5
+            weight: 1.
+            delay: 0.1
+      parallel_fiber_to_purkinje:
+        synapses:
+          - model: tsodyks2_synapse
+            U: 0.13
+            x: 1
+            tau_rec: 35.1
+            tau_fac: 54
+            receptor_type: 1
+            weight: 1.
+            delay: 0.1
+      parallel_fiber_to_stellate:
+        synapses:
+          - model: tsodyks2_synapse
+            U: 0.15
+            x: 1
+            tau_rec: 35.1
+            tau_fac: 10.8
+            receptor_type: 1
+            weight: 1.
+            delay: 0.1
+          - model: tsodyks2_synapse
+            U: 0.15
+            x: 1
+            tau_rec: 35.1
+            tau_fac: 10.8
+            receptor_type: 2
+            weight: 1.
+            delay: 0.1
+      stellate_to_purkinje:
+        synapses:
+          - model: tsodyks2_synapse
+            U: 0.35
+            x: 1
+            tau_rec: 15
+            tau_fac: 4
+            receptor_type: 3
+            weight: 1.
+            delay: 0.1
+      stellate_to_stellate:
+        synapses:
+          - model: tsodyks2_synapse
+            U: 0.42
+            x: 1
+            tau_rec: 38.7
+            tau_fac: 4
+            receptor_type: 3
+            weight: 1.
+            delay: 0.1
+$import:
+  ref: ./basal_vitro_rec.yaml#/
+  values:
+    - packages
+    - storage
+    - network
+    - regions
+    - partitions
+    - morphologies
+    - cell_types
+    - placement
+    - connectivity
+    - after_connectivity
+    - simulations

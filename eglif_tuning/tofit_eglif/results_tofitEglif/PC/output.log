@@ -1,0 +1,61 @@
+dbbs lab
+time rest 99.975000, hold 200.000000
+V rest -66.128396, hold -72.167763
+I rest -0.219977, hold -0.445013
+------->>> Rin:  26.83733601229502
+- 01SS -
+- 02currentsIO -
+inj current nA  -0.3
+spk prestim:  7
+spk stim:  0
+spk after 43
+-------------------
+inj current nA  -0.19999999999999998
+spk prestim:  7
+spk stim:  0
+spk after 43
+-------------------
+inj current nA  -0.09999999999999998
+spk prestim:  7
+spk stim:  0
+spk after 43
+-------------------
+inj current nA  5.551115123125783e-17
+spk prestim:  7
+spk stim:  16
+spk after 43
+-------------------
+inj current nA  0.10000000000000003
+spk prestim:  7
+spk stim:  38
+spk after 41
+-------------------
+inj current nA  0.2
+spk prestim:  7
+spk stim:  51
+spk after 41
+-------------------
+inj current nA  0.3000000000000001
+spk prestim:  7
+spk stim:  61
+spk after 40
+-------------------
+inj current nA  0.4000000000000001
+spk prestim:  7
+spk stim:  69
+spk after 39
+-------------------
+inj current nA  0.5
+spk prestim:  7
+spk stim:  76
+spk after 39
+-------------------
+inj current nA  0.6000000000000001
+spk prestim:  7
+spk stim:  83
+spk after 39
+-------------------
+Traceback (most recent call last):
+  File "/home/dbenozzo/dbbs_lab/test_dend_connction/test_purkinje_dbbs.py", line 174, in <module>
+    stop
+NameError: name 'stop' is not defined

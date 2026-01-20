@@ -204,6 +204,7 @@ class Optimizer(object):
             knee_weights if knee_weights is not None else np.ones(len(fitness)), dtype=float
         )
         self.output_path = None
+        self.return_pareto = False
 
     def _extract_multicomp_features(self):
         neuron_features = multicomp_features(
@@ -551,6 +552,7 @@ class Optimizer(object):
         best_individual, best_fitness, best_knee_score = None, np.inf, np.inf
         best_history = []
         snapshots = []
+        best_gen = []
         stale = 0
 
         for gen in range(self.N_GEN):
@@ -607,5 +609,15 @@ class Optimizer(object):
                 }
                 snapshots.append((gen + 1, cell_params_best))
                 self.plot_fI_snapshot(snapshots)
-
+            if (gen + 1) % 50 == 0 and self.return_pareto:
+                if self.output_path is not None:
+                    save_dir = os.path.join(self.output_path, "pareto_snapshots")
+                else:
+                    save_dir = "pareto_snapshots"
+                os.makedirs(save_dir, exist_ok=True)
+                pareto_front = tools.sortNondominated(pop, k=len(pop), first_front_only=True)[0]
+                genes = np.array([list(ind) for ind in pareto_front], dtype=float)
+                np.save(os.path.join(save_dir, f"pareto_genes_{gen+1}.npy"), genes)
+                fitns = np.array([ind.fitness.values for ind in pareto_front], dtype=float)
+                np.save(os.path.join(save_dir, f"pareto_fitness_{gen+1}.npy"), fitns)
         return best_individual, best_fitness

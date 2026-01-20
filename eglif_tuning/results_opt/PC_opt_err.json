@@ -1,0 +1,9 @@
+{
+    "Rheobase": 0.0,
+    "FI gap error": 0.040418731291379746,
+    "gap_error": 0.08122980885112556,
+    "cv_error": 0.06801366488031142,
+    "pacemaking_error": 0.050437994459726535,
+    "post_stim_pos_error": 0.05543574781186046,
+    "post_stim_neg_error": 0.12
+}

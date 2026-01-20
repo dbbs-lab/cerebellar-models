@@ -1,6 +1,6 @@
 name: DBBS Mouse cerebellum NEST basal activity for in vitro state with multireceptor synaptic modeks
 packages:
-  - bsb-nest~=6.0
+  - bsb-nest~=7.0
 components:
   - cerebellar_models/nest_models/build_models.py
 simulations:
@@ -8,21 +8,22 @@ simulations:
     cell_models:
       basket_cell:
         constants:
-          A1: 5.953
-          A2: 5.863
-          C_m: 14.6
-          E_L: -68
-          I_e: 3.711
-          V_m: -60.0
-          V_reset: -78
-          V_th: -53
-          k_1: 1.887
-          k_2: 1.096
-          k_adap: 2.025
-          lambda_0: 1.8
           t_ref: 1.59
-          tau_V: 1.0
+          C_m: 14.6
+          V_th: -53
+          V_reset: -78
+          E_L: -68
+          V_m:
+            distribution: uniform
+            max: -53
+            min: -68
           tau_m: 9.125
+          I_e: 5.043407259038052
+          k_adap: 0.17585099665700937
+          k_1: 0.1509723879307489
+          A1: 213.73301121613932
+          A2: 151.19435263704997
+          k_2: 0.11428245921171565
           # pf-BC AMPA
           AMPA_E_rev: 0.0
           AMPA_g_init: 0.5986151464078818
@@ -50,27 +51,28 @@ simulations:
           GABA_A_r: 6.80395085901533
           GABA_A1: 9.254883332147838
           GABA_A2: 6.738700331790382
-        model: eglif_multirec
+        model: eglif_multirec_opt
       glomerulus:
         model: parrot_neuron
       golgi_cell:
         constants:
-          A1: 259.988
-          A2: 178.01
-          C_m: 145
-          E_L: -62
-          I_e: 16.214
-          V_m: -60.0
-          V_min: -150
-          V_reset: -75
-          V_th: -55
-          k_1: 0.031
-          k_2: 0.023
-          k_adap: 0.217
-          lambda_0: 0.15
           t_ref: 2
-          tau_V: 0.09
+          C_m: 145
+          V_th: -55
+          V_reset: -75
+          E_L: -62
+          V_min: -150
+          V_m:
+            distribution: uniform
+            max: -55
+            min: -62
           tau_m: 44
+          k_2: 0.022727272727272728
+          I_e: 24.485214227491436
+          k_adap: 0.10973532752297317
+          k_1: 0.0683128131324206
+          A1: 345.4705973413434
+          A2: 94.19948918571492
           # glom-GoC AMPA
           AMPA_E_rev: 0.0
           AMPA_g_init: 1.115965180410803
@@ -116,25 +118,26 @@ simulations:
           GABA_A_r: 4.657518450694935
           GABA_A1: 8.885629800234906
           GABA_A2: 5.752371937918636
-        model: eglif_multirec
+        model: eglif_multirec_opt
       granule_cell:
         constants:
-          A1: 0.01
-          A2: -0.94
-          C_m: 7
-          E_L: -62
-          I_e: -0.888
-          V_m: -62.0
-          V_min: -150
-          V_reset: -70
-          V_th: -41
-          k_1: 0.311
-          k_2: 0.041407868
-          k_adap: 0.022
-          lambda_0: 1.0
           t_ref: 1.5
-          tau_V: 0.3
+          V_min: -150
+          C_m: 7
+          V_th: -41
+          V_reset: -70
+          E_L: -62
+          I_e: 4.914404288084161
+          V_m:
+            distribution: uniform
+            max: -41
+            min: -62
           tau_m: 24.15
+          k_adap: 0.06746499109544667
+          k_1: 0.16041441608311624
+          k_2: 0.041407867494824016
+          A1: 20.74311152075074
+          A2: 4.1951490212728775
           # mf-GrC AMPA
           AMPA_E_rev: 0.0
           AMPA_g_init: 1.3254051705870171
@@ -162,27 +165,28 @@ simulations:
           GABA_A_r: 4.540622636273912
           GABA_A1: 10.603535445257966
           GABA_A2: 3.144942430956719
-        model: eglif_multirec
+        model: eglif_multirec_opt
       mossy_fibers:
         model: parrot_neuron
       purkinje_cell:
         constants:
-          A1: 157.622
-          A2: 172.622
           C_m: 334
           E_L: -59
-          I_e: 590.0
-          V_m: -59.0
+          V_m:
+            distribution: uniform
+            max: -43
+            min: -59
           V_min: -350
           V_reset: -69
           V_th: -43
-          k_1: 0.195
-          k_2: 0.041
-          k_adap: 1.491
-          lambda_0: 0.5
           t_ref: 0.5
-          tau_V: 2.0
           tau_m: 47
+          A1: 1945.2104835367854
+          A2: 4.962674236410129
+          I_e: 158.59305781086863
+          k_1: 0.2882491796788571
+          k_2: 0.03495569814544013
+          k_adap: 0.4807699301937877
           # aa-PC & pf-PC AMPA
           AMPA_E_rev: 0.0
           AMPA_g_init: 0.19294907221534321
@@ -201,24 +205,25 @@ simulations:
           GABA_A1: 1.7476237681931543
           GABA_A2: 1.2018061113172258
           GABA_E_rev: -70.
-        model: eglif_multirec
+        model: eglif_multirec_opt
       stellate_cell:
         constants:
-          A1: 5.953
-          A2: 5.863
-          C_m: 14.6
-          E_L: -68
-          I_e: 3.711
-          V_m: -60.0
-          V_reset: -78
-          V_th: -53
-          k_1: 1.887
-          k_2: 1.096
-          k_adap: 2.025
-          lambda_0: 1.8
           t_ref: 1.59
-          tau_V: 1
+          C_m: 14.6
+          V_th: -53
+          V_reset: -78
+          E_L: -68
+          V_m:
+            distribution: uniform
+            max: -53
+            min: -68
           tau_m: 9.125
+          I_e: 11.148339491906636
+          k_adap: 0.17534246575342463
+          k_2: 0.11229818783162836
+          A1: 209.4867066866642
+          A2: 163.99782404683813
+          k_1: 0.15727774426530935
           # pf-SC AMPA
           AMPA_E_rev: 0.0
           AMPA_g_init: 0.09324813802356961
@@ -246,8 +251,14 @@ simulations:
           GABA_A_r: 3.8423880947398508
           GABA_A1: 6.293522738150232
           GABA_A2: 4.524929470710231
-        model: eglif_multirec
+        model: eglif_multirec_opt
     connection_models:
+      #gap_goc:
+      #  synapses:
+      #    - model: gap_junction
+      #      weight: 1
+      #  rule: one_to_one
+      #  make_symmetric: True
       ascending_axon_to_golgi:
         synapses:
           - model: static_synapse

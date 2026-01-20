@@ -21,6 +21,7 @@ np.seterr(all="ignore")
 os.environ.setdefault("PYTHONWARNINGS", "ignore")
 
 
+
 cell_params = {
     "t_ref": 1.59,
     "C_m": 14.6,
@@ -45,15 +46,15 @@ protocol = {
 }
 
 bounds = {
-    "I_e": (0.01, 100.0),
-    "k_adap": (0.0, 1.),
+    "I_e": (5.0, 50.0),
+    "k_adap": (0.0, 0.50),
+    "k_1": (0.0, 2.0),
+    "A1": (0.0, 500.0),
+    "A2": (0.0, 500.0),
     "k_2": (
         1.0 / cell_params["tau_m"] - 1e-9,
         2.0,
     ),  # ensure oscillatory/damped oscillations regimes (k2>1/tau_m)
-    "A1": (0.01, 500.0),
-    "A2": (0.01, 500.0),
-    "k_1": (0.0, 2.0),
 }
 
 data_folder = os.path.join(os.path.dirname(__file__), "tofit_eglif/results_tofitEglif/BC/")
@@ -70,22 +71,22 @@ def evaluate_BC(opt, ind, cell_params=None):
     nest = opt._extract_nest_features()
 
     pacemaking = pacemaking_loss(targ, nest)
-    cv_err = cv_loss(targ, nest)
+    cv_err = cv_loss(targ, nest, regularity=True, alpha=0.1)
     rheo, thr = rheobase_loss(nest, targ)
     sel = currents_above_thr(targ, thr)
-    slope = slope_loss(targ, nest, thr, sel)
-    gap = gap_loss(targ, nest, sel) # weighted='gaussian')
-    pause = post_first_spike_loss(targ, nest, protocol, thr=thr)
-    post_freq_neg = post_rebound_loss(targ, nest, protocol, thr=thr, sign='neg', window=100.0)
+    gap = gap_loss(targ, nest, sel, weighted="gaussian")
+    curv = curvature_loss(targ, nest, sel, use_max_slope_penalty=True)
+    pos_loss = post_first_spike_loss(targ, nest, protocol, thr)
+    neg_loss = poststim_autorhythm_loss(targ, nest, protocol, thr)
 
     return (
         float(pacemaking),
         float(cv_err),
         float(rheo),
-        float(slope),
         float(gap),
-        float(pause),
-        float(post_freq_neg),
+        float(curv),
+        float(pos_loss),
+        float(neg_loss),
     )
 
 
@@ -97,9 +98,9 @@ if __name__ == "__main__":
             "pacemaking_error",
             "cv_error",
             "rheobase_error",
-            "slope_mid_error",
-            "gap_mid_error",
-            "post_stim_pause_pos_error",
+            "gap_error",
+            "curvature_error",
+            "post_stim_pos_error",
             "post_stim_neg_error",
         ]
     }
@@ -115,7 +116,7 @@ if __name__ == "__main__":
         fitness=fitness,
         bounds=bounds,
         archive=archive,
-        knee_weights=[2.0, 2.0, 2.0, 2.0, 3.0, 1.0, 1.0],
+        knee_weights=[1.0, 1.0, 1.0, 1.0, 1.0 , 1.0, 1.0],
     )
 
     # --- Constraints ---
@@ -146,7 +147,7 @@ if __name__ == "__main__":
     opt.init_params_fn = random_init
     opt.evaluate_fn = evaluate_BC
     opt.print_evolution = True
-    opt.N_GEN = 350
+    opt.N_GEN = 500
     output_folder = 'BC_opt'
     os.makedirs(output_folder, exist_ok=True)
     opt.output_path = output_folder
