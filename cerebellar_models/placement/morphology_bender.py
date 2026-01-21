@@ -32,6 +32,14 @@ class RotationReminder:
         )
 
 
+def get_branch_labels(branch, index_branch):
+    return list(branch.labelsets[branch.labels[index_branch]])
+
+
+def has_label(branch_labels, label):
+    return np.any([label in l for l in branch_labels])
+
+
 class MorphologyBender:
 
     orientations_field: NrrdDependencyNode = config.ref(config.refs.vox_dset_ref)
@@ -100,17 +108,22 @@ class MorphologyBender:
             loc_orient /= np.linalg.norm(loc_orient, axis=3)[..., np.newaxis]
         return loc_orient
 
-    def fixed_dimension(self, branch, i):
+    def fixed_dimension(self, branch_labels):
         if type(self.fixed_dimensions) == int:
             return self.fixed_dimensions
-        labels = list(branch.labelsets[branch.labels[i]])
-        for l in labels:
+        for l in branch_labels:
             if l in self.fixed_dimensions:
                 return self.fixed_dimensions[l]
         return -1
 
-    def fix_orientation(self, branch, i):
-        return self._fixed_orientation(self.fixed_dimension(branch, i))
+    def fix_orientation(self, branch_labels):
+        """
+        Get orientation field with fixed dimension.
+
+        :param list[str] branch_labels: list of labels attached to the current segment.
+        :rtype: numpy.ndarray
+        """
+        return self._fixed_orientation(self.fixed_dimension(branch_labels))
 
     @pool_cache
     def thicknesses(self):
@@ -274,7 +287,24 @@ class MorphologyBender:
             child.translate(delta)
         branch.delete_point(i)
 
-    def rotate_point(self, source, branch, i, old_rots):
+    def _test_new_rotation(self, rotation, source, target, branch_labels, last_voxel=None):
+        """
+        Check effect of rotation on target
+
+        :param scipy.spatial.transform.Rotation rotation: rotation to apply
+        :param numpy.ndarray source: source point
+        :param numpy.ndarray target: target point
+        :param numpy.ndarray last_voxel: last voxel
+        """
+        new_target = Rotation.from_euler("xyz", rotation).apply(target - source) + source
+        new_voxel = self.partition.mask_source.voxel_of(new_target)
+        return (
+            np.all(new_voxel == last_voxel)
+            or self.is_target_wrong(source, new_target, branch_labels),
+            new_voxel,
+        )
+
+    def rotate_point(self, source, branch, i, branch_labels, old_rots):
         """
         Compute the rotation to apply at a source point so that it follows the change in the
         orientation field while making sure the target remains within the frontiers of the region.
@@ -282,15 +312,15 @@ class MorphologyBender:
         :param numpy.ndarray source: center of the rotation to apply
         :param bsb.morphologies.Branch branch: Branch on which the rotation should be applied
         :param int i: current index in branch
+        :param list[str] branch_labels: list of labels attached to the current segment.
         :param RotationReminder old_rots: Previous rotations applied to the previous points.
         :return: Euler angle of the rotation to apply at the source point
         :rtype: scipy.spatial.transform.Rotation
         """
         target = branch.points[i]
-        new_rotation = self.voxel_rotation_of(self.fix_orientation(branch, i), source)
+        new_rotation = self.voxel_rotation_of(self.fix_orientation(branch_labels), source)
         diff_rotation = (new_rotation * old_rots.last_rotation.inv()).as_euler("xyz")
         diff_rotation[np.absolute(diff_rotation) < 1e-5] = 0
-        branch_labels = list(branch.labelsets[branch.labels[i]])
         inc = 1.0
         max_angle = np.pi / 2 if self.no_turn_back else np.pi
         if np.all(
@@ -300,36 +330,38 @@ class MorphologyBender:
             )
             * (diff_rotation == 0)
         ):
+            # no changes of rotation and target lands in the same voxel
+            # we assume the source was correct so unless the branch_labels changed
             scaled_diff_rotation = diff_rotation
         else:
-            was_wrong = False
             to_rotate = True
-            old_voxel = None
+            old_voxel_pos = None
+            old_voxel_neg = None
+            skip_positive = False
+            skip_negative = False
             while to_rotate:
                 scaled_diff_rotation = diff_rotation * inc
-                if (np.absolute(scaled_diff_rotation) > max_angle).any():
-                    if inc >= 1:
-                        diff_rotation -= np.sign(diff_rotation) * 1e-3
-                        inc = -1.0
-                        continue
-                    else:
-                        raise ValueError("Hit a wall. Stopping")
-                new_target = (
-                    Rotation.from_euler("xyz", scaled_diff_rotation).apply(target - source) + source
-                )
-                new_target_voxel = self.partition.mask_source.voxel_of(new_target)
-                same_voxel = np.all(new_target_voxel == old_voxel)
-                if (same_voxel and was_wrong) or (
-                    to_rotate := self.is_target_wrong(
-                        source,
-                        new_target,
-                        branch_labels,
+                if skip_positive or (np.absolute(scaled_diff_rotation) > max_angle).any():
+                    skip_positive = True
+                else:
+                    # test positive rotation
+                    to_rotate, old_voxel_pos = self._test_new_rotation(
+                        scaled_diff_rotation, source, target, branch_labels, old_voxel_pos
                     )
-                ):
-                    old_voxel = new_target_voxel
-                    was_wrong = True
+                if to_rotate and inc > 1:
+                    scaled_diff_rotation = diff_rotation - scaled_diff_rotation
+                    if skip_negative or (np.absolute(scaled_diff_rotation) > max_angle).any():
+                        skip_negative = True
+                    else:
+                        # test positive rotation
+                        to_rotate, old_voxel_neg = self._test_new_rotation(
+                            scaled_diff_rotation, source, target, branch_labels, old_voxel_neg
+                        )
+                if to_rotate:
                     if np.linalg.norm(diff_rotation) == 0:
                         diff_rotation = old_rots.old_diff_rotation.as_euler("xyz")
+                    elif skip_positive and skip_negative:
+                        raise ValueError("Hit a wall. Stopping")
                     else:
                         inc += inc / 4
         scaled_diff_rotation = Rotation.from_euler("xyz", scaled_diff_rotation)
@@ -348,14 +380,15 @@ class MorphologyBender:
         old_rots.last_rotation = new_rotation
         if np.linalg.norm(diff_rotation) > 0:
             old_rots.old_diff_rotation = Rotation.from_euler("xyz", diff_rotation)
-        old_rots.rotation_to_correct = (
+        new_to_correct = (
             old_rots.rotation_to_correct
             * scaled_diff_rotation.inv()
             * Rotation.from_euler("xyz", diff_rotation)
         )
-        if (np.absolute(old_rots.rotation_to_correct.as_euler("xyz")) > max_angle).any():
+        if (np.absolute(new_to_correct.as_euler("xyz")) > max_angle).any():
             # corrections pilled up to a point that we are going in the wrong direction aborting
             raise ValueError("Hit a wall. Stopping")
+        old_rots.rotation_to_correct = new_to_correct
         return scaled_diff_rotation
 
     def process_scaling(self, point):
@@ -391,14 +424,13 @@ class MorphologyBender:
             Returns also the updated scaling
         :rtype: Tuple(bool, float)
         """
-
         # Update the scaling
         new_scaling = self.process_scaling(branch.points[i])
         if not np.isnan(new_scaling) and not np.isinf(new_scaling):
             scaling = new_scaling
         old_coord = np.copy(branch.points[i])
         new_coord = branch.points[i - 1] + (old_coord - branch.points[i - 1]) * scaling
-        fixed_dimension = self.fixed_dimension(branch, i)
+        fixed_dimension = self.fixed_dimension(branch_labels)
         if 0 <= fixed_dimension <= 2:
             new_coord[fixed_dimension] = old_coord[fixed_dimension]
         # check that every voxel between the points remain within the region boundary
@@ -423,8 +455,9 @@ class MorphologyBender:
         stack_data = []
         for branch in morphology.roots:
             try:
+                branch_labels = get_branch_labels(branch, 0)
                 rotation = self.voxel_rotation_of(
-                    self.fix_orientation(branch, 0),
+                    self.fix_orientation(branch_labels),
                     branch.points[0],
                 )
                 branch.root_rotate(rotation)
@@ -432,7 +465,9 @@ class MorphologyBender:
                 axis_max = max(
                     enumerate(
                         np.absolute(
-                            self.voxel_data_of(branch.points[0], self.fix_orientation(branch, 0))
+                            self.voxel_data_of(
+                                branch.points[0], self.fix_orientation(branch_labels)
+                            )
                         )
                     ),
                     key=lambda x: x[1],
@@ -471,7 +506,7 @@ class MorphologyBender:
                 last_index = 0
                 i = 0
                 while i < len(branch.points):
-                    branch_labels = branch.labelsets[branch.labels[i]]
+                    branch_labels = get_branch_labels(branch, i)
                     has_scale = False
                     if np.isin(list(branch_labels), self.rescale).any() and i > 0:
                         has_scale = True
@@ -483,7 +518,9 @@ class MorphologyBender:
                             continue
                     if np.isin(list(branch_labels), self.deform).any():
                         try:
-                            rotation = self.rotate_point(last_point, branch, i, old_rots)
+                            rotation = self.rotate_point(
+                                last_point, branch, i, branch_labels, old_rots
+                            )
                             branch.root_rotate(rotation, downstream_of=last_index)
                             old_rots.original_rotation = old_rots.original_rotation * rotation
                         except ValueError as _:

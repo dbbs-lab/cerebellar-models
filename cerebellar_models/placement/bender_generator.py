@@ -1,7 +1,10 @@
 import numpy as np
 from bsb import AllenStructure, MorphologyGenerator, TopologyError, config
 
-from cerebellar_models.placement.morphology_bender import MorphologyBender
+from cerebellar_models.placement.morphology_bender import (
+    MorphologyBender,
+    has_label,
+)
 
 
 @config.node
@@ -76,36 +79,31 @@ class GranuleGenerator(BenderGenerator, classmap_entry="granule_bender"):
         if super().is_target_wrong(source, new_target, branch_labels):
             return True
         # Check parallel fibers conditions
-        if branch_labels is not None and np.any(
-            ["parallel_fiber" in label for label in branch_labels]
-        ):
-            if "mo" not in self.get_lay_abv(new_target):  # fibers no more in molecular layer
+        if has_label(branch_labels, "parallel_fiber"):
+            if "mo" not in self.get_lay_abv(new_target):
+                # fibers no more in molecular layer
                 return True
             distances = self.voxel_data_of(new_target, self.thicknesses())
             # check if fibers go too deep
-            return np.sum(distances[:2]) > 1e-6 and (
-                distances[0] / (distances[1] + distances[0])
-                > self.ratio_gr + (1 - self.ratio_gr) / 3
-                or distances[0] / (distances[1] + distances[0])
-                < self.ratio_gr - (1 - self.ratio_gr) / 3
+            dist_check = np.sum(distances[:2]) > 1e-6
+            ratio_mol = distances[0] / ((distances[1] + distances[0]) if dist_check else 1.0)
+            return dist_check and (
+                ratio_mol > self.ratio_gr + 0.25 or ratio_mol < self.ratio_gr - 0.25
             )
         return False
 
-    def rotate_point(self, source, branch, i, old_rots):
-        is_parallel_fiber = np.isin(
-            list(branch.labelsets[branch.labels[i]]), ["parallel_fiber"]
-        ).any()
-        if is_parallel_fiber and i == 0:
+    def rotate_point(self, source, branch, i, branch_labels, old_rots):
+        if has_label(branch_labels, "parallel_fiber") and i == 0:
             # reset rotations
             fix_dim_rot = self.voxel_rotation_of(
-                self.fix_orientation(branch, 0), branch.parent.points[-1]
+                self.fix_orientation(branch_labels), branch.parent.points[-1]
             )
             # bring back the branch to its original orientation.
             branch.root_rotate(old_rots.original_rotation.inv())
             branch.root_rotate(fix_dim_rot)
             old_rots.original_rotation = fix_dim_rot
             old_rots.last_rotation = fix_dim_rot
-        rotation = super().rotate_point(source, branch, i, old_rots)
+        rotation = super().rotate_point(source, branch, i, branch_labels, old_rots)
         return rotation
 
     def deform_morphology(self, morphology):
@@ -170,7 +168,7 @@ class BasketGenerator(BenderGenerator, classmap_entry="basket_bender"):
 
         # dendrites should remain in molecular layer
         current_abv = self.get_lay_abv(new_target)
-        if branch_labels is not None and np.all(["axon" not in label for label in branch_labels]):
+        if not has_label(branch_labels, "axon"):
             return "mo" not in current_abv
 
         # axon should get closer to Purkinje layer.
@@ -192,6 +190,6 @@ class PurkinjeGenerator(BenderGenerator, classmap_entry="purkinje_bender"):
 
         # dendrites should remain in molecular and purkinje layer
         current_abv = self.get_lay_abv(new_target)
-        if branch_labels is not None and np.all(["axon" not in label for label in branch_labels]):
+        if not has_label(branch_labels, "axon"):
             return "mo" not in current_abv and "pu" not in current_abv
         return False
