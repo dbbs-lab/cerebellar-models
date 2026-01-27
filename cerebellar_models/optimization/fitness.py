@@ -4,7 +4,7 @@ Set of evaluation function for the optimization of NEST single cell parameters v
 
 import numpy as np
 import pandas as pd
-
+from cerebellar_models.optimization.features import inv_first_isi, inv_second_isi
 
 
 # -------   UTILS   -------

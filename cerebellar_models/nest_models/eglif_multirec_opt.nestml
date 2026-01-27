@@ -135,10 +135,11 @@ model eglif_multirec_opt:
         recordable inline I_syn_ampa2 pA = -(convolve(g_AMPA2_d1, AMPA2) * nS * (V_m - AMPA2_E_rev) + convolve(g_AMPA2_d2, AMPA2) * nS * (V_m - AMPA2_E_rev))
         recordable inline I_syn_ampa3 pA = -(convolve(g_AMPA3_d1, AMPA3) * nS * (V_m - AMPA3_E_rev) + convolve(g_AMPA3_d2, AMPA3) * nS * (V_m - AMPA3_E_rev))
         recordable inline I_syn pA =  I_syn_ampa + I_syn_nmda + I_syn_gaba + I_syn_ampa2 + I_syn_ampa3
+        recordable inline I_s pA = I_stim
 
         # Update membrane potential, adaptation and spike triggered currents
         # WARNING: SIGN BELOW IS INCORRECT FOR A LIF MODEL -> Should be V_m' = - (V_m - E_L) / tau_m + ...
-        V_m' = (V_m - E_L) / tau_m + (I_e + I_stim - I_adap + I_dep + I_syn) / C_m
+        V_m' = (V_m - E_L) / tau_m + (I_e + I_s - I_adap + I_dep + I_syn) / C_m
         I_dep' = - I_dep * k_1 / ms
         I_adap' = (V_m - E_L) * (k_adap * nS / ms) - I_adap * (k_2 / ms)
 

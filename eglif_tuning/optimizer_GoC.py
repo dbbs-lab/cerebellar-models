@@ -75,7 +75,7 @@ def evaluate_GoC(opt, ind, cell_params=None):
     curv = curvature_loss(targ, nest, sel, use_max_slope_penalty=True)
     gap = gap_loss(targ, nest, sel, weighted='gaussian')
     #pos_loss = post_first_spike_loss(targ, nest, protocol, thr)
-    neg_loss = post_rebound_loss(targ, nest, protocol, thr=thr, sign='neg', window=100.0, scale=3)
+    neg_loss = post_rebound_loss(targ, nest, protocol, thr=thr, sign='neg', window=100.0, scale=5)
 
     return (
         float(pacemaking),

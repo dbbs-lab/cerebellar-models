@@ -210,7 +210,7 @@ class SpikeSimulationReport(BSBReport):
             targetting = (
                 self.scaffold.simulations[self.simulation_name].devices[device_name].targetting
             )
-            ct = targetting.cell_models_references[0]
+            ct = targetting.cell_models[0].name
             labels = targetting["labels"] if "labels" in targetting else set()
             return ct, labels
         else:

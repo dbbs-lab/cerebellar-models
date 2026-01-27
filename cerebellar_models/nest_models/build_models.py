@@ -50,6 +50,13 @@ def _build_nest_models(
             target_platform="NEST",
             target_path=build_dir,
             module_name=module_name,
+            codegen_opts={
+                "gap_junctions": {
+                    "enable": True,
+                    "membrane_potential_variable": "V_m",
+                    "gap_current_port": "I_stim",
+                }
+            },
         )
 
 

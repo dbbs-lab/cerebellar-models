@@ -78,7 +78,7 @@ def evaluate_PC(opt, ind, cell_params=None):
     curv = curvature_loss(targ, nest, sel, use_max_slope_penalty=True)
     gap = gap_loss(targ, nest, sel, weighted='gaussian')
     pos_loss = post_first_spike_loss(targ, nest, protocol, thr=thr)
-    neg_loss = post_rebound_loss(targ, nest, protocol, thr=thr, sign='neg', window=70.0, scale = 2)
+    neg_loss = post_rebound_loss(targ, nest, protocol, thr=thr, sign='neg', window=50.0, scale = 3)
 
     return (
         float(pacemaking),
