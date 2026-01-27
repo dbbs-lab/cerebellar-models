@@ -1,10 +1,11 @@
 import json
 import os
 import pickle
+
 import numpy as np
+from utils import *
 
 from cerebellar_models.optimization.fitness import *
-from utils import *
 
 
 def gene_to_params(gene):
@@ -23,11 +24,11 @@ def gene_to_params(gene):
         "lambda_0": 0.15,
         "tau_V": 0.09,
         "tau_m": 44,
-        "k_2": 1./44.,
+        "k_2": 1.0 / 44.0,
         "I_e": float(gene[0]),
         "k_adap": float(gene[1]),
         "k_1": float(gene[2]),
-        #"k_2": float(gene[3]),
+        # "k_2": float(gene[3]),
         "A1": float(gene[3]),
         "A2": float(gene[4]),
     }
@@ -58,20 +59,26 @@ if __name__ == "__main__":
     path_fit = "neuron_opt/GoC_opt/pareto_snapshots/pareto_fitness_300.npy"
     path_hist = "neuron_opt/GoC_opt/best_history.pkl"
 
-    TOL_ABS = 0.05 # absolute tolerance for ALL stored objectives
+    TOL_ABS = 0.05  # absolute tolerance for ALL stored objectives
 
     genes = np.load(path_genes)
     fitness = np.load(path_fit)
     best_params, best_fitness_ref, last_rec = load_best_history(path_hist)
 
     if genes.ndim != 2 or fitness.ndim != 2:
-        raise ValueError(f"Expected 2D arrays. genes.ndim={genes.ndim}, fitness.ndim={fitness.ndim}")
+        raise ValueError(
+            f"Expected 2D arrays. genes.ndim={genes.ndim}, fitness.ndim={fitness.ndim}"
+        )
     if genes.shape[0] != fitness.shape[0]:
         raise ValueError(f"Mismatch N: genes {genes.shape}, fitness {fitness.shape}")
     if genes.shape[1] != best_params.size:
-        raise ValueError(f"Mismatch D: genes has D={genes.shape[1]} but best_params has {best_params.size}")
+        raise ValueError(
+            f"Mismatch D: genes has D={genes.shape[1]} but best_params has {best_params.size}"
+        )
     if fitness.shape[1] != best_fitness_ref.size:
-        raise ValueError(f"Mismatch M: fitness has M={fitness.shape[1]} but best_fitness has {best_fitness_ref.size}")
+        raise ValueError(
+            f"Mismatch M: fitness has M={fitness.shape[1]} but best_fitness has {best_fitness_ref.size}"
+        )
 
     print("Best (from best_history.pkl)")
     print("  params  :", best_params)
@@ -94,7 +101,6 @@ if __name__ == "__main__":
     print("\nAdmissible set")
     print("  Num admissible:", admissible_idxs.size)
 
-
     if admissible_idxs.size == 0:
         print("No admissible solutions -> fallback to best_history params.")
         best_gene = best_params
@@ -103,14 +109,12 @@ if __name__ == "__main__":
         post_stim_pause = np.empty(admissible_idxs.size, dtype=float)
 
         for j, idx in enumerate(admissible_idxs):
-            print('Processing gene: ', idx)
+            print("Processing gene: ", idx)
             gene = genes[idx]
             params = gene_to_params(gene)
 
             _, nest = extract_nest_features(
-                multicomp_features=targ,
-                cell_params=params,
-                protocol=protocol
+                multicomp_features=targ, cell_params=params, protocol=protocol
             )
 
             _, thr = rheobase_loss(nest, targ)
@@ -125,17 +129,20 @@ if __name__ == "__main__":
 
         stored = fitness[final_idx].astype(float).reshape(-1)
         print("Final gene stored fitness:", stored)
-        print("Max abs diff vs best_fitness_ref (stored):", float(np.max(np.abs(stored - best_fitness_ref))))
-        print("All within TOL_ABS (stored)?", bool(np.all(np.abs(stored - best_fitness_ref) <= TOL_ABS)))
-
+        print(
+            "Max abs diff vs best_fitness_ref (stored):",
+            float(np.max(np.abs(stored - best_fitness_ref))),
+        )
+        print(
+            "All within TOL_ABS (stored)?",
+            bool(np.all(np.abs(stored - best_fitness_ref) <= TOL_ABS)),
+        )
 
     cell_params_best = gene_to_params(best_gene)
     print("\nFinal best params:", cell_params_best)
 
     _, nest = extract_nest_features(
-        multicomp_features=targ,
-        cell_params=cell_params_best,
-        protocol=protocol
+        multicomp_features=targ, cell_params=cell_params_best, protocol=protocol
     )
 
     pacemaking = pacemaking_loss(targ, nest)
@@ -145,7 +152,7 @@ if __name__ == "__main__":
     curv = curvature_loss(targ, nest, sel, use_max_slope_penalty=True)
     gap = gap_loss(targ, nest, sel, weighted="gaussian")
     pos_loss = post_first_spike_loss(targ, nest, protocol, thr, mode="max")
-    neg_loss = post_rebound_loss(targ, nest, protocol, thr=thr, sign="neg", window=100.0, scale =5)
+    neg_loss = post_rebound_loss(targ, nest, protocol, thr=thr, sign="neg", window=100.0, scale=5)
 
     print(
         f"""Final errors:
@@ -168,7 +175,6 @@ if __name__ == "__main__":
         "pos_error": float(pos_loss),
         "neg_error": float(neg_loss),
     }
-
 
     results = nest_protocol(targ, cell_params_best, protocol, multimeter=True)
 

@@ -1,10 +1,11 @@
 import json
 import os
 import pickle
+
 import numpy as np
+from utils import *
 
 from cerebellar_models.optimization.fitness import *
-from utils import *
 
 
 def gene_to_params_SC(gene):
@@ -66,13 +67,19 @@ if __name__ == "__main__":
     best_params, best_fitness_ref, last_rec = load_best_history(path_hist)
 
     if genes.ndim != 2 or fitness.ndim != 2:
-        raise ValueError(f"Expected 2D arrays. genes.ndim={genes.ndim}, fitness.ndim={fitness.ndim}")
+        raise ValueError(
+            f"Expected 2D arrays. genes.ndim={genes.ndim}, fitness.ndim={fitness.ndim}"
+        )
     if genes.shape[0] != fitness.shape[0]:
         raise ValueError(f"Mismatch N: genes {genes.shape}, fitness {fitness.shape}")
     if genes.shape[1] != best_params.size:
-        raise ValueError(f"Mismatch D: genes has D={genes.shape[1]} but best_params has {best_params.size}")
+        raise ValueError(
+            f"Mismatch D: genes has D={genes.shape[1]} but best_params has {best_params.size}"
+        )
     if fitness.shape[1] != best_fitness_ref.size:
-        raise ValueError(f"Mismatch M: fitness has M={fitness.shape[1]} but best_fitness has {best_fitness_ref.size}")
+        raise ValueError(
+            f"Mismatch M: fitness has M={fitness.shape[1]} but best_fitness has {best_fitness_ref.size}"
+        )
 
     print("Best (from best_history.pkl)")
     print("  params  :", best_params)
@@ -114,9 +121,7 @@ if __name__ == "__main__":
             params = gene_to_params_SC(gene)
 
             _, nest = extract_nest_features(
-                multicomp_features=targ,
-                cell_params=params,
-                protocol=protocol
+                multicomp_features=targ, cell_params=params, protocol=protocol
             )
 
             _, thr = rheobase_loss(nest, targ)
@@ -131,8 +136,14 @@ if __name__ == "__main__":
 
         stored = fitness[final_idx].astype(float).reshape(-1)
         print("Final gene stored fitness:", stored)
-        print("Max abs diff vs best_fitness_ref (stored):", float(np.max(np.abs(stored - best_fitness_ref))))
-        print("All within TOL_ABS (stored)?", bool(np.all(np.abs(stored - best_fitness_ref) <= TOL_ABS)))
+        print(
+            "Max abs diff vs best_fitness_ref (stored):",
+            float(np.max(np.abs(stored - best_fitness_ref))),
+        )
+        print(
+            "All within TOL_ABS (stored)?",
+            bool(np.all(np.abs(stored - best_fitness_ref) <= TOL_ABS)),
+        )
 
     # -------------------------
     # 3) Final evaluation & saving (same format as GoC script)
@@ -141,9 +152,7 @@ if __name__ == "__main__":
     print("\nFinal best params:", cell_params_best)
 
     _, nest = extract_nest_features(
-        multicomp_features=targ,
-        cell_params=cell_params_best,
-        protocol=protocol
+        multicomp_features=targ, cell_params=cell_params_best, protocol=protocol
     )
 
     pacemaking = pacemaking_loss(targ, nest)

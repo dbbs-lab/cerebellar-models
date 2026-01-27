@@ -1,25 +1,5 @@
-import json
-import os
-import pickle
-import numpy as np
-import matplotlib.pyplot as plt
-
-from cerebellar_models.optimization.fitness import *
 from utils import *
-
-
-def load_best_record(pkl_path: str) -> dict:
-    records = []
-    with open(pkl_path, "rb") as f:
-        while True:
-            try:
-                records.append(pickle.load(f))
-            except EOFError:
-                break
-    if len(records) == 0:
-        raise RuntimeError(f"Empty best_history file: {pkl_path}")
-    return records[-1]
-
+from cerebellar_models.optimization.fitness import *
 
 def build_cell_params_BC(best_params):
     return {
@@ -37,7 +17,6 @@ def build_cell_params_BC(best_params):
         "A2": float(best_params[4]),
         "k_2": float(best_params[5]),
     }
-
 
 def compute_errors_BC(target_features, nest_features, protocol):
     rheobase_error, thr = rheobase_loss(nest_features, target_features)
@@ -59,15 +38,6 @@ def compute_errors_BC(target_features, nest_features, protocol):
         "Pacemaking after pos stim": float(pos_loss),
         "Rebound after neg stim": float(neg_loss),
     }
-
-
-def save_outputs(cell_name, cell_params_best, error_dict, out_dir="./results_opt"):
-    os.makedirs(out_dir, exist_ok=True)
-    with open(f"{out_dir}/{cell_name}_opt.json", "w") as f:
-        json.dump(cell_params_best, f, indent=4)
-    with open(f"{out_dir}/{cell_name}_opt_err.json", "w") as f:
-        json.dump(error_dict, f, indent=4)
-
 
 
 if __name__ == "__main__":
@@ -99,7 +69,7 @@ if __name__ == "__main__":
     error_dict = compute_errors_BC(target_features, nest_features, protocol)
     print(f"Final errors: {error_dict}")
 
-    # plots + traces
+
     output_fig_dir = f"./figures/{cell_name}"
     os.makedirs(output_fig_dir, exist_ok=True)
 
@@ -114,9 +84,5 @@ if __name__ == "__main__":
         output_dir=output_fig_dir,
     )
 
-    # error plot
     plot_error_bar(error_dict, cell_name, output_fig_dir)
-
-    # save JSON outputs (same format/paths as before)
     save_outputs(cell_name, cell_params_best, error_dict, out_dir="./results_opt")
-

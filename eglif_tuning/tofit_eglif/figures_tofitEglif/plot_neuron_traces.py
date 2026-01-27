@@ -1,10 +1,8 @@
 import os
 import re
-
 import matplotlib.pyplot as plt
-import numpy as np
 import matplotlib.ticker as mticker
-
+import numpy as np
 from cerebellar_models.optimization.features import multicomp_features
 
 
@@ -39,7 +37,6 @@ def style_vm_axis(ax):
 
 
 def style_I_axis(axI, show_xlabel=False):
-    # spines (keep right + bottom)
     axI.spines["top"].set_visible(False)
     axI.spines["left"].set_visible(False)
     axI.spines["right"].set_visible(True)
@@ -49,13 +46,12 @@ def style_I_axis(axI, show_xlabel=False):
     axI.spines["right"].set_color("#7a1f2b")
     axI.spines["bottom"].set_linewidth(1)
 
-    # right y ticks + label
     axI.yaxis.set_ticks_position("right")
     axI.yaxis.set_label_position("right")
-    axI.tick_params(axis="y", which="major", labelsize=5, colors="#7a1f2b", length=3, width=1, pad=2)
+    axI.tick_params(
+        axis="y", which="major", labelsize=5, colors="#7a1f2b", length=3, width=1, pad=2
+    )
     axI.set_ylabel("I [pA]", color="#7a1f2b", fontsize=6, labelpad=3)
-
-    # x ticks on every I axis
     axI.tick_params(axis="x", which="major", labelsize=9, length=3, width=1, pad=12)
     axI.tick_params(axis="x", which="minor", length=2, width=0.8, pad=12)
 
@@ -66,19 +62,14 @@ def style_I_axis(axI, show_xlabel=False):
 
 
 if __name__ == "__main__":
-    protocol = {
-        "start_stim": 200.0,
-        "end_stim": 700.0,
-        "duration": 2000.0}
-    cell_name = "GoC"
+    protocol = {"start_stim": 200.0, "end_stim": 700.0, "duration": 2000.0}
+    cell_name = "PC"
     data_folder = f"../results_tofitEglif/{cell_name}/"
-    threshold = -55.0
+    threshold = -43.0
 
-    # Extract spike features (optional markers)
     features = multicomp_features(data_folder, threshold=threshold)
     spikes_df = features[["peak_time", "current"]]
 
-    # Discover traces
     data_files = [f for f in os.listdir(data_folder) if f.endswith(".txt")]
     files_curr = [(parse_current_from_filename(f), f) for f in data_files]
     files_curr = [(c, f) for c, f in files_curr if np.isfinite(c)]
@@ -88,7 +79,6 @@ if __name__ == "__main__":
     if not unique_currents:
         raise RuntimeError(f"No valid .txt traces found in: {data_folder}")
 
-    # Preload traces + global limits
     traces = []
     global_vmax = -np.inf
     global_tmin, global_tmax = np.inf, -np.inf
@@ -105,58 +95,55 @@ if __name__ == "__main__":
 
     print(f"Global max Vm across all traces: {global_vmax:.6g} mV")
 
-    # Global scaling for current axis (common across panels)
     Imax = max(1.0, max(abs(float(c)) for c in unique_currents))
     Iylim = 1.10 * Imax
     Iticks = [-Imax, 0.0, Imax]
 
-    # common x tick locators (for every I axis)
+
     major_locator = mticker.MaxNLocator(nbins=5)
     minor_locator = mticker.AutoMinorLocator(2)
 
-    # --- Layout: Vm close to its I, bigger gap between experiments ---
     n = len(traces)
     fig_h = max(3.0, 2.65 * n)
     fig = plt.figure(figsize=(7.6, fig_h), constrained_layout=False)
 
-    # rows: Vm, I, spacer (repeat)
     height_ratios = []
     for k in range(n):
         height_ratios += [4.0, 1.6]
-        height_ratios += [0.55 if k < n - 1 else 0.15]  # spacer only between experiments
+        height_ratios += [0.55 if k < n - 1 else 0.15]
 
     gs = fig.add_gridspec(
         nrows=len(height_ratios),
         ncols=1,
         height_ratios=height_ratios,
-        hspace=0.10,  # small gap within an experiment
+        hspace=0.10,
     )
 
     row = 0
     for i, (curr, t, v) in enumerate(traces):
         axV = fig.add_subplot(gs[row, 0])
         axI = fig.add_subplot(gs[row + 1, 0], sharex=axV)
-        row += 3  # skip spacer row too
+        row += 3
 
         axV.set_facecolor("white")
         axI.set_facecolor("white")
 
-        # Stim shading ONLY on Vm axis
-        axV.axvspan(
-            protocol["start_stim"],
-            protocol["end_stim"],
-            facecolor="#ffe680",
-            alpha=0.18,
-            edgecolor="none",
-            zorder=0,
-        )
+        if curr != 0:
+            axV.axvspan(
+                protocol["start_stim"],
+                protocol["end_stim"],
+                facecolor="#ffe680",
+                alpha=0.18,
+                edgecolor="none",
+                zorder=0,
+            )
 
         # Vm trace + threshold
         axV.plot(t, v, color="0.35", linewidth=1.1, zorder=2)
         axV.axhline(y=threshold, color="0.6", linestyle="--", linewidth=0.9, zorder=1)
 
         axV.set_ylabel(r"$V_m$ [mV]", fontsize=11)
-        axV.set_ylim(-150, 25)
+        axV.set_ylim(-100, 25)
         axV.set_xlim(global_tmin, global_tmax)
         style_vm_axis(axV)
         axV.tick_params(axis="x", labelbottom=False)
@@ -172,7 +159,7 @@ if __name__ == "__main__":
         axI.xaxis.set_major_locator(major_locator)
         axI.xaxis.set_minor_locator(minor_locator)
 
-        show_xlabel = (i == n - 1)
+        show_xlabel = i == n - 1
         style_I_axis(axI, show_xlabel=show_xlabel)
 
         for lab in axI.get_xticklabels(which="both"):

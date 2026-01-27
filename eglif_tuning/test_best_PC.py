@@ -1,28 +1,7 @@
-import json
-import os
-import pickle
-import numpy as np
-import matplotlib.pyplot as plt
-
-from cerebellar_models.optimization.fitness import *
 from utils import *
-
-
-def load_best_record(pkl_path: str) -> dict:
-    records = []
-    with open(pkl_path, "rb") as f:
-        while True:
-            try:
-                records.append(pickle.load(f))
-            except EOFError:
-                break
-    if len(records) == 0:
-        raise RuntimeError(f"Empty best_history file: {pkl_path}")
-    return records[-1]
-
+from cerebellar_models.optimization.fitness import *
 
 def build_cell_params_PC(best_params):
-    # keep EXACT PC-specific fixed params and mapping you used
     return {
         "A1": float(best_params[3]),
         "A2": float(best_params[4]),
@@ -40,16 +19,6 @@ def build_cell_params_PC(best_params):
         "tau_m": 47,
     }
 
-
-def build_protocol_PC(cell_params_best):
-    return {
-        "start_stim": 200.0,
-        "end_stim": 700.0,
-        "duration": 2000.0,
-        "threshold": cell_params_best["V_th"],
-    }
-
-
 def compute_errors_PC(target_features, nest_features, protocol):
     rheobase_error, thr = rheobase_loss(nest_features, target_features)
     sel = currents_above_thr(target_features, thr)
@@ -59,7 +28,9 @@ def compute_errors_PC(target_features, nest_features, protocol):
     pacemaking_error = pacemaking_loss(target_features, nest_features)
     cv_error = cv_loss(target_features, nest_features)
     pos_loss = post_first_spike_loss(target_features, nest_features, protocol, thr=thr)
-    neg_loss = post_rebound_loss(target_features, nest_features, protocol, thr=thr, sign="neg", window=100.0)    # dati per ora a 50. window
+    neg_loss = post_rebound_loss(
+        target_features, nest_features, protocol, thr=thr, sign="neg", window=100.0
+    )  # dati per ora a 50. window
 
     return {
         "Rheobase": float(rheobase_error),
@@ -72,16 +43,6 @@ def compute_errors_PC(target_features, nest_features, protocol):
     }
 
 
-def save_outputs(cell_name, cell_params_best, error_dict, out_dir="./results_opt"):
-    os.makedirs(out_dir, exist_ok=True)
-    with open(f"{out_dir}/{cell_name}_opt.json", "w") as f:
-        json.dump(cell_params_best, f, indent=4)
-    with open(f"{out_dir}/{cell_name}_opt_err.json", "w") as f:
-        json.dump(error_dict, f, indent=4)
-
-
-
-
 if __name__ == "__main__":
     cell_name = "PC"
 
@@ -92,7 +53,12 @@ if __name__ == "__main__":
     cell_params_best = build_cell_params_PC(best_params)
     print(f"Best cell parameters for {cell_name}: {cell_params_best}")
 
-    protocol = build_protocol_PC(cell_params_best)
+    protocol = {
+        "start_stim": 200.0,
+        "end_stim": 700.0,
+        "duration": 2000.0,
+        "threshold": cell_params_best["V_th"],
+    }
     data_folder = f"tofit_eglif/results_tofitEglif/{cell_name}/"
 
     target_features = extract_multicomp_features(multicomp_data=data_folder, protocol=protocol)
@@ -105,7 +71,6 @@ if __name__ == "__main__":
     error_dict = compute_errors_PC(target_features, nest_features, protocol)
     print(f"Final errors: {error_dict}")
 
-    # traces + plots
     output_fig_dir = f"./figures/{cell_name}"
     os.makedirs(output_fig_dir, exist_ok=True)
 
@@ -120,8 +85,5 @@ if __name__ == "__main__":
         output_dir=output_fig_dir,
     )
 
-    # error plot
     plot_error_bar(error_dict, cell_name, output_fig_dir)
-
-    # save JSON outputs in the SAME format/paths as before
     save_outputs(cell_name, cell_params_best, error_dict, out_dir="./results_opt")

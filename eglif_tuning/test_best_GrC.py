@@ -1,20 +1,5 @@
-import json
-import pickle
 from utils import *
 from cerebellar_models.optimization.fitness import *
-
-
-def load_best_record(pkl_path: str) -> dict:
-    records = []
-    with open(pkl_path, "rb") as f:
-        while True:
-            try:
-                records.append(pickle.load(f))
-            except EOFError:
-                break
-    if len(records) == 0:
-        raise RuntimeError(f"Empty best_history file: {pkl_path}")
-    return records[-1]
 
 
 def build_cell_params_GrC(best_params):
@@ -36,17 +21,7 @@ def build_cell_params_GrC(best_params):
         "A2": float(best_params[4]),
     }
 
-
-def build_protocol_GrC(cell_params_best):
-    return {
-        "start_stim": 100.0,
-        "end_stim": 600.0,
-        "duration": 700.0,
-        "threshold": cell_params_best["V_th"],
-    }
-
-
-def compute_errors_GrC(target_features, nest_features, protocol):
+def compute_errors_GrC(target_features, nest_features):
     rheobase_error, thr = rheobase_loss(nest_features, target_features)
     sel = currents_above_thr(target_features, thr)
     curv_error = curvature_loss(target_features, nest_features, sel, use_max_slope_penalty=True)
@@ -57,16 +32,6 @@ def compute_errors_GrC(target_features, nest_features, protocol):
         "FI curvature": float(curv_error),
         "FI gap": float(gap_error),
     }
-
-
-def save_outputs(cell_name, cell_params_best, error_dict, out_dir="./results_opt"):
-    os.makedirs(out_dir, exist_ok=True)
-    with open(f"{out_dir}/{cell_name}_opt.json", "w") as f:
-        json.dump(cell_params_best, f, indent=4)
-    with open(f"{out_dir}/{cell_name}_opt_err.json", "w") as f:
-        json.dump(error_dict, f, indent=4)
-
-
 
 if __name__ == "__main__":
     cell_name = "GrC"
@@ -79,7 +44,13 @@ if __name__ == "__main__":
 
     print(f"Best cell parameters for {cell_name}: {cell_params_best}")
 
-    protocol = build_protocol_GrC(cell_params_best)
+    protocol = {
+        "start_stim": 100.0,
+        "end_stim": 600.0,
+        "duration": 700.0,
+        "threshold": cell_params_best["V_th"],
+    }
+
     data_folder = f"tofit_eglif/results_tofitEglif/{cell_name}/"
 
     target_features = extract_multicomp_features(multicomp_data=data_folder, protocol=protocol)
@@ -89,7 +60,7 @@ if __name__ == "__main__":
         protocol=protocol,
     )
 
-    error_dict = compute_errors_GrC(target_features, nest_features, protocol)
+    error_dict = compute_errors_GrC(target_features, nest_features)
     print(f"Final errors: {error_dict}")
 
     # traces + plots
