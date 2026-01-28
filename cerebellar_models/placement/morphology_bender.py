@@ -269,12 +269,6 @@ class MorphologyBender:
             self.partition.mask_source.voxel_of(new_target),
         )
 
-    def is_scaling_wrong(self, source, new_target, branch_labels=None):
-        return self.is_target_wrong(source, new_target, branch_labels)
-
-    def is_rotation_wrong(self, source, new_target, branch_labels=None):
-        return self.is_target_wrong(source, new_target, branch_labels)
-
     def delete_point(self, branch, i):
         """
         Delete a point in a morphology branch and translate the subsequent points and children
@@ -306,7 +300,7 @@ class MorphologyBender:
         new_voxel = self.partition.mask_source.voxel_of(new_target)
         return (
             np.all(new_voxel == last_voxel)
-            or self.is_rotation_wrong(source, new_target, branch_labels),
+            or self.is_target_wrong(source, new_target, branch_labels),
             new_voxel,
         )
 
@@ -374,7 +368,7 @@ class MorphologyBender:
         if (
             np.linalg.norm(old_rots.rotation_to_correct.as_euler("xyz")) > 1e-5
             and inc == 1.0
-            and not self.is_rotation_wrong(
+            and not self.is_target_wrong(
                 source,
                 (scaled_diff_rotation * old_rots.rotation_to_correct).apply(target - source)
                 + source,
@@ -444,7 +438,7 @@ class MorphologyBender:
         if 0 <= fixed_dimension <= 2:
             new_coord[fixed_dimension] = old_coord[fixed_dimension]
         # check that every voxel between the points remain within the region boundary
-        rescale = self.is_scaling_wrong(branch.points[i - 1], new_coord, branch_labels)
+        rescale = self.is_target_wrong(branch.points[i - 1], new_coord, branch_labels)
         # if scaling resulted in an overshoot, set to old point coordinate
         branch.points[i] = np.copy(new_coord) if not rescale else np.copy(branch.points[i - 1])
         # translate all the points of the branch starting at i

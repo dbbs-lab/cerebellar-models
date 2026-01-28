@@ -248,25 +248,13 @@ placement:
     partitions:
       - declive
     strategy: bsb.placement.RandomPlacement
-  sc_placement:
+  mli_placement:
     cell_types:
+      - basket_cell
       - stellate_cell
     distribute:
       morphologies:
-        strategy: cerebellar_models.placement.bender_generator.BenderGenerator
-        fixed_dimensions: 2
-        orientations_field: orientations
-        depths_field: thicknesses
-        boundaries_field: boundaries
-    partitions:
-      - declive
-    strategy: bsb.placement.RandomPlacement
-  bc_placement:
-    cell_types:
-      - basket_cell
-    distribute:
-      morphologies:
-        strategy: cerebellar_models.placement.bender_generator.BasketGenerator
+        strategy: cerebellar_models.placement.bender_generator.MLIGenerator
         fixed_dimensions: 2
         orientations_field: orientations
         depths_field: thicknesses

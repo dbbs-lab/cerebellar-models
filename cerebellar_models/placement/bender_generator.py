@@ -159,38 +159,19 @@ class GolgiGenerator(BenderGenerator, classmap_entry="golgi_bender"):
 
 
 @config.node
-class BasketGenerator(BenderGenerator, classmap_entry="basket_bender"):
+class MLIGenerator(BenderGenerator, classmap_entry="basket_bender"):
     """Specific bender for basket cell."""
-
-    max_ratio_distance_axon_pl = None
 
     def is_target_wrong(self, source, new_target, branch_labels=None):
         if super().is_target_wrong(source, new_target, branch_labels):
             return True
 
-        # dendrites should remain in molecular layer
-        return not has_label(branch_labels, "axon") and "mo" not in self.get_lay_abv(new_target)
-
-    def is_rotation_wrong(self, source, new_target, branch_labels=None):
-        if super().is_rotation_wrong(source, new_target, branch_labels):
-            return True
-
-        # axon should get closer to Purkinje layer.
-        elif has_label(branch_labels, "axon") and np.any(
-            self.partition.mask_source.voxel_of(new_target)
-            != self.partition.mask_source.voxel_of(source)
-        ):
-            ratio_mol = self.voxel_data_of(new_target, self.thicknesses())[1]
-            if "mol" not in self.get_lay_abv(new_target):
-                ratio_mol -= 25.0  # retrieve thickness of PL
-            ratio_mol /= self.local_layer_thickness(new_target)
-            return ratio_mol > self.max_ratio_distance_axon_pl
+        # dendrites should remain in molecular layer axon should not get into granular layer
+        if not has_label(branch_labels, "axon"):
+            return "mo" not in self.get_lay_abv(new_target)
+        return "gr" in self.get_lay_abv(new_target)
 
     def deform_morphology(self, morphology):
-        origin = morphology.points[0]
-        self.max_ratio_distance_axon_pl = self.voxel_data_of(origin, self.thicknesses())[
-            1
-        ] / self.local_layer_thickness(origin)
         return super().deform_morphology(morphology)
 
 
