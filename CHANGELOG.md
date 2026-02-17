@@ -1,3 +1,10 @@
+# v0.9.0 - 2025-12-16
+
+* feat: Bump to bsb 7 and add matrix plots by @drodarie in https://github.com/dbbs-lab/cerebellar-models/pull/67
+
+
+**Full Changelog**: https://github.com/dbbs-lab/cerebellar-models/compare/v0.8.0...v0.9.0
+
 # v0.8.1 - 2025-09-12
 
 * fix: codemeta file description of repository and add mailto field by @drodarie 

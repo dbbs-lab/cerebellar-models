@@ -1,24 +1,31 @@
 import os
 import unittest
+from os.path import abspath, dirname, join
 
 import numpy as np
 from bsb import Configuration, Scaffold, parse_configuration_file
-from bsb_test import NumpyTestCase, RandomStorageFixture
+from bsb_test import DictTestCase, NumpyTestCase, RandomStorageFixture
 from matplotlib import pyplot as plt
 
 from cerebellar_models.analysis.report import LIST_CT_INFO
 from cerebellar_models.analysis.structure_analysis import (
+    AdjacencyMatrix,
     CellPlacement3D,
     ConnectivityTable,
     PlacementTable,
     StructureReport,
 )
-from tests.test_reports import DictTestCase
 
 
 class TestPlacementTable(
     RandomStorageFixture, unittest.TestCase, NumpyTestCase, DictTestCase, engine_name="hdf5"
 ):
+    @classmethod
+    def setUpClass(cls):
+        super().setUpClass()
+        ROOT_FOLDER = abspath(dirname(dirname(__file__)))
+        os.chdir(ROOT_FOLDER)
+
     def setUp(self):
         super().setUp()
         self.cfg = parse_configuration_file("configurations/mouse/mouse_cerebellar_cortex.yaml")
@@ -62,14 +69,16 @@ class TestPlacementTable(
         self.plot.is_updated = False
         self.plot.plot()
         self.assertAll(np.asarray(self.plot.table_values) == expected)
-        self.assertDict(self.plot.get_volumes(), {key: value for key, value in zip(keys, values)})
+        DictTestCase.assertDictEqual(
+            self, self.plot.get_volumes(), {key: value for key, value in zip(keys, values)}
+        )
         dict_counts = {key: 0.0 for key in keys}
         dict_counts["mossy_fibers"] = counts
-        self.assertDict(self.plot.get_counts(), dict_counts)
+        DictTestCase.assertDictEqual(self, self.plot.get_counts(), dict_counts)
         dict_densities = {
             key: value / volume for (key, value), volume in zip(dict_counts.items(), values)
         }
-        self.assertDict(self.plot.get_densities(), dict_densities)
+        DictTestCase.assertDictEqual(self, self.plot.get_densities(), dict_densities)
 
     def test_warn(self):
         scaffold = Scaffold(Configuration.default(), self.storage)
@@ -81,9 +90,15 @@ class TestPlacementTable(
         self.assertEqual(self.plot.get_densities(), {})
 
 
-class TestConnectivityTable(
+class TestConnectivityPlots(
     RandomStorageFixture, unittest.TestCase, NumpyTestCase, engine_name="hdf5"
 ):
+    @classmethod
+    def setUpClass(cls):
+        super().setUpClass()
+        ROOT_FOLDER = abspath(dirname(dirname(__file__)))
+        os.chdir(ROOT_FOLDER)
+
     def setUp(self):
         super().setUp()
         self.cfg = parse_configuration_file("configurations/mouse/mouse_cerebellar_cortex.yaml")
@@ -102,9 +117,6 @@ class TestConnectivityTable(
             "y_length": 20,
         }
         self.scaffold = Scaffold(self.cfg, self.storage)
-        self.plot = ConnectivityTable(
-            (5, 2.5), scaffold=self.scaffold, dict_abv={"mossy_fibers": "mf"}
-        )
 
     def test_connectivity_table(self):
         self.scaffold.compile(
@@ -114,6 +126,9 @@ class TestConnectivityTable(
                 "mossy_fibers_to_glomerulus",
             ],
             skip_after_connectivity=True,
+        )
+        self.plot = ConnectivityTable(
+            (5, 2.5), scaffold=self.scaffold, dict_abv={"mossy_fibers": "mf"}
         )
         self.plot.plot()
         keys = np.array(["mf to glomerulus", "mf to mf"])
@@ -156,7 +171,9 @@ class TestConnectivityTable(
 
     def test_warn(self):
         # No connection sets in storage before compile
-        self.plot.set_scaffold(self.scaffold)
+        self.plot = ConnectivityTable(
+            (5, 2.5), scaffold=self.scaffold, dict_abv={"mossy_fibers": "mf"}
+        )
         with self.assertWarns(UserWarning):
             self.plot.plot()
         self.assertEqual(self.plot.get_synapse_counts(), {})
@@ -164,10 +181,68 @@ class TestConnectivityTable(
         self.assertEqual(self.plot.get_convergences(), {})
         self.assertEqual(self.plot.get_divergences(), {})
 
+    def test_adjacency_matrix(self):
+        self.scaffold.compile(
+            only=[
+                "granular_layer_innervation",
+                "granular_layer_placement",
+                "mossy_fibers_to_glomerulus",
+            ],
+            skip_after_connectivity=True,
+        )
+        report = StructureReport(self.scaffold, LIST_CT_INFO)
+        plot = AdjacencyMatrix(
+            (10, 10.5),
+            scaffold=self.scaffold,
+            ignored_ct=[],
+            dict_abv=report.labelled_abbreviations,
+        )
+        plot.plot()
+        counts = len(self.scaffold.get_placement_set("mossy_fibers")) + len(
+            self.scaffold.get_placement_set("glomerulus")
+        )
+        self.assertEqual(plot.adjacency_matrix.shape, (counts, counts))
+        self.assertEqual(plot.grouped_matrix.shape, (7, 7))
+        nb_syn = len(
+            self.scaffold.get_connectivity_set(
+                "mossy_fibers_to_glomerulus_mossy_fibers_to_glomerulus"
+            )
+        )
+        idx0, idx1 = (
+            plot._cell_types.index("mossy_fibers"),
+            plot._cell_types.index("glomerulus"),
+        )
+        self.assertEqual(plot.grouped_matrix[idx0, idx1], nb_syn)
+        self.assertEqual(
+            np.sum(
+                plot.adjacency_matrix[
+                    plot._ct_first_id[idx0] : plot._ct_first_id[idx0 + 1],
+                    plot._ct_first_id[idx1] : plot._ct_first_id[idx1 + 1],
+                ]
+            ),
+            nb_syn,
+        )
+        # test with empty matrix
+        plot = AdjacencyMatrix(
+            (10, 10.5),
+            scaffold=self.scaffold,
+            ignored_ct=["mossy_fibers"],
+            dict_abv={},
+        )
+        plot.plot()
+        self.assertAll(plot.adjacency_matrix == 0.0)
+        self.assertEqual(plot.grouped_matrix.shape, (6, 6))
+
 
 class TestCellPlacement3D(
     RandomStorageFixture, unittest.TestCase, NumpyTestCase, engine_name="hdf5"
 ):
+    @classmethod
+    def setUpClass(cls):
+        super().setUpClass()
+        ROOT_FOLDER = abspath(dirname(dirname(__file__)))
+        os.chdir(ROOT_FOLDER)
+
     def setUp(self):
         super().setUp()
         self.cfg = parse_configuration_file("configurations/mouse/mouse_cerebellar_cortex.yaml")
@@ -224,6 +299,12 @@ class TestCellPlacement3D(
 class TestStructureReport(
     RandomStorageFixture, NumpyTestCase, unittest.TestCase, engine_name="hdf5"
 ):
+    @classmethod
+    def setUpClass(cls):
+        super().setUpClass()
+        ROOT_FOLDER = abspath(dirname(dirname(__file__)))
+        os.chdir(ROOT_FOLDER)
+
     def setUp(self):
         super().setUp()
         self.cfg = parse_configuration_file("configurations/mouse/mouse_cerebellar_cortex.yaml")
@@ -255,7 +336,9 @@ class TestStructureReport(
         self.report = StructureReport(self.scaffold, LIST_CT_INFO)
 
     def test_structure_report(self):
-        plot_keys = np.array(["density_table", "connectivity_table", "placement_3d", "legend"])
+        plot_keys = np.array(
+            ["density_table", "placement_3d", "connectivity_table", "adjacency_matrix", "legend"]
+        )
         self.assertAll(np.array(list(self.report.plots.keys())) == plot_keys)
         filename = "test_report.pdf"
         self.report.print_report(filename, dpi=100)

@@ -1,6 +1,7 @@
 morphologies:
   - file: ./morphologies/GranuleCell.swc
     parser:
+      skip_boundary_labels: ["soma"]
       tags:
         6:
           - axon
@@ -16,6 +17,7 @@ morphologies:
           - parallel_fiber
   - file: ./morphologies/GolgiCell.swc
     parser:
+      skip_boundary_labels: ["soma"]
       tags:
         6:
           - dendrites
@@ -28,6 +30,7 @@ morphologies:
           - axon_initial_segment
   - file: ./morphologies/PurkinjeCell.swc
     parser:
+      skip_boundary_labels: ["soma"]
       tags:
         6:
           - axon
@@ -57,6 +60,7 @@ morphologies:
           - sodium_dendrites
   - file: ./morphologies/StellateCell.swc
     parser:
+      skip_boundary_labels: ["soma"]
       tags:
         6:
           - dendrites
@@ -69,6 +73,7 @@ morphologies:
           - axon_initial_segment
   - file: ./morphologies/BasketCell.swc
     parser:
+      skip_boundary_labels: ["soma"]
       tags:
         6:
           - axon
