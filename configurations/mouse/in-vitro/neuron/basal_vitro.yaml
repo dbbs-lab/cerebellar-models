@@ -1,7 +1,7 @@
 packages:
   - cerebellar-models~=0.8.0
-  - bsb~=6.0
-  - bsb-neuron~=6.0.7
+  - bsb~=7.0
+  - bsb-neuron~=7.0
   - dbbs-catalogue~=6
 network:
   chunk_size: [30, 20, 40]

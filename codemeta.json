@@ -11,134 +11,90 @@
     "version": "0.8.1",
     "releaseNotes": "https://github.com/dbbs-lab/cerebellar-models/releases/tag/v0.8.1",
     "funding": "785907 (Human Brain Project SGA2), 945539 (Human Brain Project SGA3), 101147319 (EBRAINS 2.0 Project) and 800858 (ICEI project), 101137289 (Virtual Brain Twin Project)",
-    "funder": {
-        "type": "Organization",
-        "name": "European Commission"
-    },
+    "funder": {"type": "Organization", "name": "European Commission"},
     "description": "This repository provides the code, configuration and morphology data to reconstruct and simulate cerebellar cortex circuits using the Brain Scaffold Builder framework. These models are based on the iterative work of the Department of Brain and Behavioral Sciences (DBBS) of the university of Pavia.",
-    "keywords": [
-        "Cerebellum",
-        "Mouse",
-        "NEST",
-        "BSB",
-        "modelling",
-        "simulation"
-    ],
+    "keywords": ["Cerebellum", "Mouse", "NEST", "BSB", "modelling", "simulation"],
     "author": [
         {
             "id": "https://orcid.org/0000-0003-2496-2311",
             "type": "Person",
-            "affiliation": {
-                "type": "Organization",
-                "name": "DBBS Unipv"
-            },
+            "affiliation": {"type": "Organization", "name": "DBBS Unipv"},
             "familyName": "Rodarie",
-            "givenName": "Dimitri"
+            "givenName": "Dimitri",
         },
         {
             "id": "https://orcid.org/0000-0003-2879-3893",
             "type": "Person",
-            "affiliation": {
-                "type": "Organization",
-                "name": "DBBS Unipv"
-            },
+            "affiliation": {"type": "Organization", "name": "DBBS Unipv"},
             "familyName": "Marchetti",
-            "givenName": "Filippo"
+            "givenName": "Filippo",
         },
         {
             "id": "https://orcid.org/0009-0004-6158-1707",
             "type": "Person",
-            "affiliation": {
-                "type": "Organization",
-                "name": "DBBS Unipv"
-            },
+            "affiliation": {"type": "Organization", "name": "DBBS Unipv"},
             "familyName": "De Grazia",
-            "givenName": "Marialaura"
+            "givenName": "Marialaura",
         },
         {
             "id": "https://search.kg.ebrains.eu/instances/2905ce6c-bc89-4c99-b8b0-0fa9a17d1897",
             "type": "Person",
-            "affiliation": {
-                "type": "Organization",
-                "name": "DBBS Unipv"
-            },
+            "affiliation": {"type": "Organization", "name": "DBBS Unipv"},
             "familyName": "De Schepper",
-            "givenName": "Robin"
+            "givenName": "Robin",
         },
         {
             "id": "https://orcid.org/0009-0007-9740-9070",
             "type": "Person",
-            "affiliation": {
-                "type": "Organization",
-                "name": "DBBS Unipv"
-            },
+            "affiliation": {"type": "Organization", "name": "DBBS Unipv"},
             "familyName": "Buttarazzi",
-            "givenName": "Emiliano"
+            "givenName": "Emiliano",
         },
         {
             "id": "https://orcid.org/0000-0003-0355-5880",
             "type": "Person",
-            "affiliation": {
-                "type": "Organization",
-                "name": "DBBS Unipv"
-            },
+            "affiliation": {"type": "Organization", "name": "DBBS Unipv"},
             "familyName": "Butt",
-            "givenName": "Abdul Haleem"
+            "givenName": "Abdul Haleem",
         },
         {
             "id": "https://orcid.org/0000-0002-3388-7168",
             "type": "Person",
-            "affiliation": {
-                "type": "Organization",
-                "name": "DBBS Unipv"
-            },
+            "affiliation": {"type": "Organization", "name": "DBBS Unipv"},
             "familyName": "Marta",
-            "givenName": "Alessio"
+            "givenName": "Alessio",
         },
         {
             "id": "https://search.kg.ebrains.eu/instances/a594cfe2-f53a-470f-b52e-697b8d5a8958",
             "type": "Person",
-            "affiliation": {
-                "type": "Organization",
-                "name": "DBBS Unipv"
-            },
+            "affiliation": {"type": "Organization", "name": "DBBS Unipv"},
             "familyName": "Geminiani",
-            "givenName": "Alice"
+            "givenName": "Alice",
         },
         {
             "id": "https://search.kg.ebrains.eu/instances/5ad4749a-6e5a-4512-86ff-b89834c1b87c",
             "type": "Person",
-            "affiliation": {
-                "type": "Organization",
-                "name": "DBBS Unipv"
-            },
+            "affiliation": {"type": "Organization", "name": "DBBS Unipv"},
             "familyName": "Casellato",
-            "givenName": "Claudia"
+            "givenName": "Claudia",
         },
         {
             "id": "https://search.kg.ebrains.eu/instances/762bd286-9d46-4ac5-889f-63b08d33c895",
             "type": "Person",
-            "affiliation": {
-                "type": "Organization",
-                "name": "DBBS Unipv"
-            },
+            "affiliation": {"type": "Organization", "name": "DBBS Unipv"},
             "familyName": "D'Angelo",
-            "givenName": "Egidio"
-        }
+            "givenName": "Egidio",
+        },
     ],
-    "operatingSystem": [
-        "Linux",
-        "Windows",
-        "macOS"
-    ],
+    "operatingSystem": ["Linux", "Windows", "macOS"],
     "programmingLanguage": ["Python"],
     "developmentStatus": "active",
     "softwareRequirements": ["Python (version 3.10+)"],
     "relatedLink": [
         "https://cerebellar-models.readthedocs.io/en/latest/",
-        "mailto:neurocomp_dbbs@unipv.it"
+        "mailto:neurocomp_dbbs@unipv.it",
     ],
     "applicationCategory": "neuroscience",
     "issueTracker": "https://github.com/dbbs-lab/cerebellar-models/issues",
-    "contIntegration": "https://github.com/dbbs-lab/cerebellar-models/actions"
+    "contIntegration": "https://github.com/dbbs-lab/cerebellar-models/actions",
 }
