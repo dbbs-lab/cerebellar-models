@@ -19,6 +19,10 @@ after_connectivity:
       - basket_to_purkinje
       - basket_to_basket
     suffix_name: fromAIS
+  skip_glomerulus:
+    strategy: "remove_intermediate"
+    cell_list:
+      - glomerulus
 simulations:
   neuron_sim_cerebellum:
     simulator: neuron

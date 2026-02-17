@@ -55,6 +55,7 @@ class MossyFibersSpikeGenerator(NeuronDevice, classmap_entry="mossy_fibers_spike
         )  # all cell
 
         syn_type_go = ["AMPA_MF", "NMDA"]
+        # Here we assume that connectivity mossy to GoC or GrC are already fused
         cs_mgr = self.scaffold.get_connectivity_set("mossy_fibers_to_granule_cell")
         mossy_list, granule_list = cs_mgr.load_connections().incoming().to(simdata.chunks).all()
         cs_mgc = self.scaffold.get_connectivity_set("mossy_fibers_to_golgi_cell")
