@@ -5,15 +5,15 @@ Deep cerebellar nuclei (DCN) are the primary output structures of the cerebellar
 They receive inhibitory input from Purkinje cells and excitatory input from mossy fibers and climbing fibers (from IO).
 DCN are composed by three distinct nuclei: dentate nucleus, fastigial nucleus and interposed nucleus.
 The default configuration with DCN is implemented in
-`dcn.yaml <https://github.com/dbbs-lab/cerebellum/blob/master/configurations/mouse/dcn-io/dcn.yaml>`_.
+`dcn.yaml <https://github.com/dbbs-lab/cerebellar-models/blob/master/configurations/mouse/dcn-io/dcn.yaml>`_.
 
 
 Configuration
 ^^^^^^^^^^^^^
-In `dcn.yaml <https://github.com/dbbs-lab/cerebellum/blob/master/configurations/mouse/dcn-io/dcn.yaml>`_ ,
+In `dcn.yaml <https://github.com/dbbs-lab/cerebellar-models/blob/master/configurations/mouse/dcn-io/dcn.yaml>`_ ,
 a new region called ``cerebellar_nuclei`` was added to the ``canonical circuit``.
 This region contains only one ``Layer`` Partition: ``dcn layer``.
-``dcn layer`` has a thickness of ``200 µm`` . Additionally, to ensure that ``cerebellar_nuclei`` are placed under
+``dcn layer`` has a thickness of :math:`200  \mu m` . Additionally, to ensure that ``cerebellar_nuclei`` are placed under
 the ``cerebellar_cortex``, the ``origin`` of the ``granular_layer`` was set to ``[0, 0, 200]`` (above DCN).
 
 Cell types
@@ -34,20 +34,20 @@ In DCN, two types of neurons are considered [#uusisaari_2008]_ [#geminiani_2019b
 
 No morphologies are currently available for DCN neurons, so they are modelled as point neurons.
 Densities were estimated from `Blue Brain Cell Atlas <https://portal.bluebrain.epfl.ch/resources/models/cell-atlas/>`_
-(version 2018 [#ero_2018]_), considering the ratio :math:`\frac{n_{GrC}}{n_{DCN}} = \frac{33 \times 10^6}{230 \times 10^3} ≈ 143`
+(version 2018 [#ero_2018]_), considering the ratio :math:`\frac{n_{GrC}}{n_{DCN}} = \frac{33 \times 10^6}{230 \times 10^3} \approx 143`
 between the total number of granule cells and the total number of neurons in the cerebellar nuclei.
 From this ratio, considering the total amount of GrC placed in the ``canonical circuit``, it is possible to estimate the
 number of DCN to be placed.
 Literature data reported that DCNp are around the 57% of the total number of neurons in the cerebellar nuclei,
 while DCNi around the 32% [#baumel_2009]_ [#batini_1992]_. Taking into account these percentages and dividing by the
-volume of the DCN layer (set to :math:`200 \times 200 \times 300` µm), the values reported in the following table
+volume of the DCN layer (set to :math:`200 \times 200 \times 300  \mu m`), the values reported in the following table
 were obtained.
 
 .. csv-table::
    :header-rows: 1
    :delim: ;
 
-   Cell name;Type;Radius (:math:`µm`);Density (:math:`µm^{-3}`)
+   Cell name;Type;Radius (:math:` \mu m`);Density (:math:` \mu m^{-3}`)
    DCNp ; Exc.; 9.5 [#baumel_2009]_; 9.92
    DCNi ; Inh.; 7.0 [#baumel_2009]_; 5.58
 
@@ -64,17 +64,23 @@ Connectivity
    :delim: ;
 
    #; Source Name; Source Branch; Target Name; Target Branch; Strategy; Specifics; References
-   19; PC; axon; DCNp; / ; :ref:`fix_out`;``outdegree`` =45; Geminiani et al. (2024) [#geminiani_2024]_
-   20; PC; axon; DCNi; / ; :ref:`fix_out`;``outdegree`` =12; Geminiani et al. (2024) [#geminiani_2024]_
-   21; mf; / ; DCNp ; / ; :ref:`fix_in`; ``indegree`` =48; Geminiani et al. (2024) [#geminiani_2024]_
+   19; PC; axon; DCNp; / ; :ref:`all_to_all`;``affinity`` =0.375; Geminiani et al. (2024) [#geminiani_2024]_
+   20; PC; axon; DCNi; / ; :ref:`all_to_all`;``affinity`` =0.18; Geminiani et al. (2024) [#geminiani_2024]_
+   21; mf; / ; DCNp ; / ; :ref:`all_to_all`; ``affinity`` =0.4; Geminiani et al. (2024) [#geminiani_2024]_
 
 
 NEST simulation
 ^^^^^^^^^^^^^^^
 
+As for the cerebellar cortex, we differentiate parameters for the ``in-vitro`` and ``awake`` states.
+
 Neuron parameters
 +++++++++++++++++
 DCN populations were represented as a EGLIF point neuron models (see :doc:`NEST section <nest>`).
+
+`In-vitro` state
+----------------
+
 Parameters sets for both DCNp and DCNi are taken from Geminiani et al (2019) [#geminiani_2019]_.
 The default LIF parameters are reported below:
 
@@ -93,21 +99,15 @@ Then, the following parameters are optimized according to the method described i
    :delim: ;
 
     Cell name;:math:`k_{adap}\ (nS \cdot ms^{-1})`;:math:`k_1\ (ms^{-1})`;:math:`k_2\ (ms^{-1})`;:math:`A_1\ (pA)`;:math:`A_2\ (pA)`;:math:`I_e\ (pA)`
-    DCNp; 0.408; 0.697; 0.047; 13.857; 3.477; 150
-    DCNi; 0.079; 0.041; 0.044; 176.358; 176.358; 10
+    DCNp; 0.408; 0.697; 0.047; 13.857; 3.477; 75.385
+    DCNi; 0.079; 0.041; 0.044; 176.358; 176.358; 2.384
 
 .. warning::
-   Compared to Geminiani et al (2019) [#geminiani_2019]_, only the endogenous currents :math:`I_e` of both DCN populations
-   were modified in this version. This adjustment was made to replicate the network's functional behavior,
-   which we were unable to achieve using the originally provided parameter sets. Specifically:
-
-   * :math:`I_e` (DCNp): 75.385 → 150 (pA);
-   * :math:`I_e` (DCNi): 2.384 → 10 (pA).
-
-
-.. warning::
-   It is not clear how the spiking parameters are obtained in the Geminiani et al. (2019) paper [#geminiani_2019]_.
-   The values were extracted from a BSB configuration provided by the authors.
+   It is not clear how the spiking parameters (i.e :math:`\lambda_0` and :math:`\tau_V` and initial :math:`V_m`)
+   are obtained in the Geminiani et al. (2019) paper [#geminiani_2019]_ .
+   These parameters were manually set to reproduce the F/I curves from the Figure 3 from
+   respectively Geminiani et al. (2019) paper [#geminiani_2019]_. The tonic firing rate of each population
+   was slightly changed so that each population firing rate in basal activity remains around ~10Hz [#moscato_2019]_.
 
 The postsynaptic receptors are defined as listed in Table 2 of Geminiani et al. (2019b) [#geminiani_2019b]_:
 
@@ -122,10 +122,23 @@ The postsynaptic receptors are defined as listed in Table 2 of Geminiani et al. 
    DCNi; 1; 0; 3.64; exc.
    DCNi; 2; -80; 1.14; inh.
 
+Awake state
+-----------
+
+The awake state is derived from the `in-vitro` state. Here, only the spiking parameters
+(i.e :math:`\lambda_0` and :math:`\tau_V`) were tuned for dcn_p to match the Geminiani et al. 2024 [#geminiani_2024]_.
+
 Synapse parameters
 ++++++++++++++++++
 DCN connections are represented as ``static synapses`` (see :doc:`NEST section <nest>`). The receptor ids correspond to
 the postsynaptic receptors used for the connections.
+
+.. warning::
+   The following reported values were manually adjusted through trial and error to ensure a reasonable excitation/inhibition ratio
+   in the DCN populations.
+
+`In-vitro` state
+----------------
 
 .. csv-table:: Presynaptic parameters for DCN connections
    :header-rows: 1
@@ -133,65 +146,84 @@ the postsynaptic receptors used for the connections.
 
     Source-Target;:math:`weight \ (nS)`;:math:`delay \ (ms)`; Receptor id
     mf-DCNp; 0.25; 4.0; 1
-    PC-DCNp; 3.0; 4.0; 2
-    PC-DCNi; 0.4 ; 4.0; 2
+    PC-DCNp; 0.8; 4.0; 2
+    PC-DCNi; 0.06 ; 4.0; 2
 
-.. warning::
-   The reported values were manually adjusted through trial and error to ensure a reasonable excitation/inhibition ratio
-   in the DCN populations.
+Awake state
+-----------
 
-   * :math:`weight` (mf-DCNp): 0.05 → 0.25 (nS);
-   * :math:`weight` (PC-DCNp): 0.4 → 3.0 (nS);
-   * :math:`weight` (PC-DCNi): 0.12 → 0.4 (nS);
+.. csv-table:: Presynaptic parameters for DCN connections in awake state
+   :header-rows: 1
+   :delim: ;
+
+    Source-Target;:math:`weight \ (nS)`;:math:`delay \ (ms)`; Receptor id
+    mf-DCNp; 0.25; 4.0; 1
+    PC-DCNp; 0.35; 4.0; 2
+    PC-DCNi; 0.02 ; 4.0; 2
 
 
 Simulation paradigms
 ++++++++++++++++++++
 
-The `dcn_nest.yaml <https://github.com/dbbs-lab/cerebellum/blob/master/configurations/mouse/dcn-io/dcn_nest.yaml>`_ are
+The `dcn_nest.yaml <https://github.com/dbbs-lab/cerebellar-models/blob/master/configurations/mouse/dcn-io/dcn_nest.yaml>`_ are
 including all the simulation paradigms described in the :doc:`NEST section <nest>`) but include the DCN cells in the
-circuit.
+circuit. In the following subsections, we will only report the firing rates and ISI of the DCN cells since they have
+no effect on the rest of the circuit
 
 Basal activity
-##############
+--------------
 For this simulation paradigm, the mean firing rates and mean ISI obtained for each neuron population are as
 follows (expressed in mean :math:`\pm` standard deviation):
+
+`In-vitro` state
+################
 
 .. csv-table:: Results of the canonical circuit with DCN in basal activity
    :header-rows: 1
    :delim: ;
 
     Cell name;Mean Firing rate (Hz); Mean ISI (ms)
-    Mossy cell; :math:`4.0 \pm 0.84`; :math:`252 \pm 71`
-    Granule cell; :math:`3.5 \pm 3.2`; :math:`500 \pm 520`
-    Golgi cell;:math:`12 \pm 4.6`; :math:`100 \pm 64`
-    Purkinje cell;:math:`49 \pm 2.9`; :math:`20 \pm 1.2`
-    Basket cell;:math:`30 \pm 15`; :math:`41 \pm 20`
-    Stellate cell;:math:`36 \pm 24`; :math:`64 \pm 100`
-    DCNp; :math:`23 \pm 11`; :math:`55 \pm 74`
-    DCNi; :math:`8.2 \pm 6.2`; :math:`82 \pm 15`
+    DCNp; :math:`11 \pm 7.0`; :math:`97 \pm 110`
+    DCNi; :math:`11 \pm 1.2`; :math:`90 \pm 11`
+
+Awake state
+###########
+
+.. csv-table:: Results of the canonical circuit with DCN in basal activity in awake state
+   :header-rows: 1
+   :delim: ;
+
+    Cell name;Mean Firing rate (Hz); Mean ISI (ms)
+    DCNp; :math:`45 \pm 7.0`; :math:`23 \pm 1.8`
+    DCNi; :math:`13 \pm 1.2`; :math:`81 \pm 4.1`
 
 Mossy fiber stimulus
-####################
+--------------------
 
 For this simulation paradigm, **during the stimulus**, the mean firing rates and mean ISI obtained for each
 neuron population are as follows (expressed in mean :math:`\pm` standard deviation):
+
+`In-vitro` state
+################
 
 .. csv-table:: Results of the canonical circuit with DCN during stimulus of the mossy
    :header-rows: 1
    :delim: ;
 
     Cell name;Mean Firing rate (Hz); Mean ISI (ms)
-    Mossy cell; :math:`48 \pm 74`; :math:`6.4 \pm 2.1`
-    Granule cell; :math:`22 \pm 48`; :math:`9.9 \pm 7.2`
-    Golgi cell;:math:`53 \pm 38`; :math:`11.0 \pm 4.7`
-    Purkinje cell;:math:`82 \pm 20`; :math:`12.0 \pm 2.9`
-    Basket cell;:math:`120 \pm 80`; :math:`7.6 \pm 4.0`
-    Stellate cell;:math:`150 \pm 110`; :math:`7.2 \pm 5.6`
-    DCNp; :math:`22 \pm 16`; :math:`27.0 \pm 5.3`
-    DCNi; :math:`5.8 \pm 9.1`; not enough spikes per neuron
+    DCNp; :math:`24 \pm 11`; :math:`30.0 \pm 4.2`
+    DCNi; :math:`9.4 \pm 10`; not enough spikes per neuron
 
-You will observe that the mf stimulus induces a burst-pause response in PC population and a pause-burst in DCNs.
+Awake state
+###########
+
+.. csv-table:: Results of the canonical circuit with DCN during stimulus of the mossy in awake state
+   :header-rows: 1
+   :delim: ;
+
+    Cell name;Mean Firing rate (Hz); Mean ISI (ms)
+    DCNp; :math:`57 \pm 16`; :math:`20 \pm 6.2`
+    DCNi; :math:`10 \pm 10`; not enough spikes per neuron
 
 References
 ^^^^^^^^^^
@@ -227,3 +259,7 @@ References
    Complex electroresponsive dynamics in olivocerebellar neurons represented with extended-generalized
    leaky integrate and fire models. Frontiers in Computational Neuroscience, 13, 35.
    https://doi.org/10.3389/fncom.2019.00035
+.. [#moscato_2019] Moscato, L., Montagna, I., De Propris, L., Tritto, S., Mapelli, L., & D’Angelo, E. (2019).
+   Long-lasting response changes in deep cerebellar nuclei in vivo correlate with low-frequency oscillations.
+   Frontiers in Cellular Neuroscience, 13, 433625.
+   https://doi.org/10.3389/fncel.2019.00084

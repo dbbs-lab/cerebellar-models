@@ -2,7 +2,7 @@ Spike analysis and report of simulation results
 ===============================================
 
 This section describes in details all the spiking analysis and plots
-available through the cerebellum reporting, based on the results of
+available through the cerebellar-models reporting, based on the results of
 BSB simulations.
 
 .. _sim_plot:
@@ -19,9 +19,8 @@ Constructor parameters:
   configuration.
 * ``time_from``: The starting time from which the analysis will be performed
 * ``time_to``: The end time at which the analysis will end.
-* ``all_spikes``: A Boolean numpy array of shape (N*M) storing spike events for
-  each time step. N corresponds to the number of time steps, M to the number of
-  neuron. Neurons are sorted by neuron type.
+* ``all_spikes``: List of :class:`SpikeTrain <neo.core.SpikeTrain>` for each cell
+  type.
 * ``nb_neurons``: A list containing the number of neuron spiking during the
   simulation for each cell type with the same order as ``all_spikes``.
 * ``populations``: The list of the cell type names producing spikes during the
@@ -57,9 +56,8 @@ Constructor parameters:
 This class will load the results from nio files produced by the BSB simulation
 and store them  in the following attributes:
 
-* ``all_spikes``: A Boolean numpy array of shape (N*M) storing spike events for
-  each time step. N corresponds to the number of time steps, M to the number of
-  neuron. Neurons are sorted by neuron type.
+* ``all_spikes``: List of :class:`SpikeTrain <neo.core.SpikeTrain>` for each cell
+  type.
 * ``nb_neurons``: A list containing the number of neuron spiking during the
   simulation for each cell type with the same order as ``all_spikes``.
 * ``populations``: The list of the cell type names producing spikes during the
@@ -97,7 +95,10 @@ spike over the simulation time interval, while its inter-spike interval
 corresponds to the mean of all mean inter-spike interval values computed
 for each of its neuron.
 
-Uses the same constructor parameters as ``SpikePlot``
+On top of the constructor parameters of ``SpikePlot``:
+
+* ``dict_abv``: Dictionary that links each cell type name to an abbreviation
+  to display
 
 
 .. _firing_rates:
@@ -130,13 +131,12 @@ Additionally, we define :math:`\sigma` the width of the kernel (in ms)
 
 Different kernel functions would have different smoothening properties.
 Here we are using a normalized version of the
-:doc:`triangle <scipy:reference/generated/scipy.signal.windows.triang>`
+:doc:`gaussian <scipy:reference/generated/scipy.signal.windows.gaussian>`
 function from scipy.
 
 To avoid the edge effects of the kernel convolution with the spike train
 (i.e. the time where the kernel can not fully overlap the spike train
-because of its width), we extract the computed :math:`\lambda _m (t)`
-values on the interval :math:`[time\_from + \sigma; time\_to - \sigma]`.
+because of its width), a compensation effect is calculated.
 
 The final displayed signal :math:`\lambda (t)` corresponds to the mean of
 the neurons' :math:`\lambda _m (t)` surrounded by its standard deviation
@@ -147,9 +147,6 @@ On top of the constructor parameters of ``SpikePlot``:
 
 * ``w_single``: Width of the kernel :math:`\sigma` expressed as number
   of time steps.
-* ``max_neuron_sampled``: Maximum number of neurons used to compute
-  the firing rate signal. It is used to limit the time it takes to
-  complete the kernel convolution operation.
 
 
 .. _isis_distrib:
@@ -188,6 +185,22 @@ be plotted on top of each panel:
 - Theta band: :math:`[4; 8]` Hz
 - Alpha band: :math:`[8; 12]` Hz
 - Beta band: :math:`[12; 30]` Hz
+- Gamma band: :math:`[30; 100]` Hz
+
+
+.. _corr_coef_plot:
+
+:class:`SpikeCorrelation <.analysis.spiking_results.SpikeCorrelation>`
+----------------------------------------------------------------------
+This class plots the pairwise
+:doc:`Pearson’s correlation coefficients <elephant:reference/_toctree/spike_train_correlation/elephant.spike_train_correlation.correlation_coefficient>`
+between each cell type.
+Spike trains of each neuron pairs will be time binned before computing the coefficient.
+On top of the constructor parameters of ``SpikePlot``:
+
+* ``bin_size``: Size of the time bins in ms.
+* ``dict_abv``: Dictionary that links each cell type name to an abbreviation
+  to display
 
 
 .. _basic_sim_report:
@@ -210,6 +223,8 @@ and produces a report containing 5
   :ref:`isis_distrib`)
 - A plot showing the frequency spectrum of each cell type (see section
   :ref:`frequency_plot`)
+- A plot showing the cross-correlation of the spiking activity between each cell type
+  (see section :ref:`corr_coef_plot`)
 
 All these plots are saved in a single pdf file.
 

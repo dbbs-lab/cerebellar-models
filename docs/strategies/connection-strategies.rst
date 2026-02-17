@@ -6,8 +6,8 @@ Connection strategies
 :class:`ConnectomeMossyGlomerulus <.connectome.to_glomerulus.ConnectomeMossyGlomerulus>`
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-The algorithm selects one mossy fiber within the :math:`x\_length \times y\_length \times z\_size` μm box surrounding
-each glomerulus. Here ``z_size`` is the size of the partition where the glomeruli are (i.e. no limit).
+The algorithm selects one mossy fiber within the :math:`x\_length \times y\_length \times z\_size` :math:`\mu m` box
+surrounding each glomerulus. Here ``z_size`` is the size of the partition where the glomeruli are (i.e. no limit).
 This selection is random and performed with a truncated exponential distribution.
 
 * ``x_length``: Length of the box along the x axis surrounding the glomerulus in which the mossy fiber can be connected.
@@ -32,7 +32,7 @@ exponential distribution based on the distance between the tip of each dendrite 
 .. code-block:: yaml
 
       glomerulus_to_golgi:
-        strategy: cerebellum.connectome.glomerulus_golgi.ConnectomeGlomerulusGolgi
+        strategy: cerebellar_models.connectome.glomerulus_golgi.ConnectomeGlomerulusGolgi
         presynaptic:
           cell_types:
             - glomerulus
@@ -70,7 +70,7 @@ glomerulus connected to one of the not yet selected mossy fibers is chosen.
 .. code-block:: yaml
 
       glomerulus_to_granule:
-        strategy: cerebellum.connectome.glomerulus_granule.ConnectomeGlomerulusGranule
+        strategy: cerebellar_models.connectome.glomerulus_granule.ConnectomeGlomerulusGranule
         presynaptic:
           cell_types:
             - glomerulus
@@ -116,7 +116,7 @@ cell is randomly selected. All ``postsynaptic targets`` that are connected to th
 .. code-block:: yaml
 
       golgi_to_granule:
-        strategy: cerebellum.connectome.golgi_glomerulus.ConnectomeGolgiGlomerulus
+        strategy: cerebellar_models.connectome.golgi_glomerulus.ConnectomeGolgiGlomerulus
         presynaptic:
           cell_types:
             - golgi_cell
@@ -141,8 +141,8 @@ cell is randomly selected. All ``postsynaptic targets`` that are connected to th
 
 .. _voxel_int:
 
-:doc:`VoxelIntersection <bsb:bsb/bsb.connectivity.detailed>`
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+:doc:`VoxelIntersection <bsb-core:bsb/bsb.connectivity.detailed>`
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 See bsb :doc:`documentation <bsb:connectivity/connection-strategies>`.
 
@@ -174,7 +174,7 @@ glomerulus.
 .. code-block:: yaml
 
     glomerulus_to_ubc:
-        strategy: cerebellum.connectome.glomerulus_ubc.ConnectomeGlomerulus_to_UBC
+        strategy: cerebellar_models.connectome.glomerulus_ubc.ConnectomeGlomerulus_to_UBC
         presynaptic:
           cell_types:
             - ubc_glomerulus
@@ -191,10 +191,10 @@ glomerulus.
 .. _io_mli:
 
 :class:`ConnectomeIO_MLI<.connectome.io_molecular.ConnectomeIO_MLI>`
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-The algorithm constists in a connection strategy to connect all the IO cells, via PC, to the molecular layer interneurons
-(MLI). Specifically, for each IO cell connected to a PC, the connection between this IO and MLI takes place in the subset
-of MLI connected to the shared PC.
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+The algorithm consists in a connection strategy to connect IO cells, via PC, to the molecular layer interneurons
+(MLI). Specifically, all the MLI connected to a PC will also receive input from the IO connected to that PC.
 
 * ``presynaptic``: Define the presynaptic objects to consider. In particular, the specific ``cell_types`` can be given;
 
@@ -209,7 +209,7 @@ of MLI connected to the shared PC.
 .. code-block:: yaml
 
       io_to_mli:
-        strategy: cerebellum.connectome.io_molecular.ConnectomeIO_MLI
+        strategy: cerebellar_models.connectome.io_molecular.ConnectomeIO_MLI
         presynaptic:
           cell_types:
             - io
@@ -226,23 +226,23 @@ of MLI connected to the shared PC.
 
 .. _fix_in:
 
-:doc:`FixedIndegree <bsb:bsb/bsb.connectivity>`
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-
-See bsb :doc:`documentation <bsb:connectivity/connection-strategies>`.
-
-.. _fix_out:
-
-:doc:`FixedOutdegree <bsb:bsb/bsb.connectivity>`
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+:doc:`FixedIndegree <bsb-core:bsb/bsb.connectivity>`
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 See bsb :doc:`documentation <bsb:connectivity/connection-strategies>`.
 
 .. _all_to_all:
 
-:doc:`AllToAll <bsb:bsb/bsb.connectivity>`
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+:doc:`AllToAll <bsb-core:bsb/bsb.connectivity>`
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 See bsb :doc:`documentation <bsb:connectivity/connection-strategies>`.
 
+
+:class:`DuplicateSynapses<.connectome.io_purkinje.DuplicateSynapses>`
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+BSB :class:`AfterConnectivityHook<bsb.postprocessing.AfterConnectivityHook>` to override the number of
+synapses per connection pair following a :doc:`scipy stats <scipy:reference/stats>` function,
+implemented as a random :class:`distribution <bsb.config._distributions.Distribution>`.
 

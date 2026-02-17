@@ -1,0 +1,41 @@
+packages:
+  - cerebellar-models~=0.9.0
+  - bsb~=7.0
+  - bsb-nest~=7.0
+components:
+  - cerebellar_models/nest_models/build_models.py
+simulations:
+  basal_activity:
+    simulator: nest
+    resolution: 0.1
+    duration: 5000
+    seed: 1234
+    cell_models:
+      mossy_fibers:
+        model: parrot_neuron
+      glomerulus:
+        model: parrot_neuron
+    devices:
+      background_noise:
+        device: poisson_generator
+        rate: 4
+        targetting:
+          strategy: cell_model
+          cell_models:
+            - mossy_fibers
+        weight: 1
+        delay: 0.1
+      mossy_fibers_record:
+        device: spike_recorder
+        delay: 0.1
+        targetting:
+          strategy: cell_model
+          cell_models:
+            - mossy_fibers
+      glomerulus_record:
+        device: spike_recorder
+        delay: 0.1
+        targetting:
+          strategy: cell_model
+          cell_models:
+            - glomerulus
