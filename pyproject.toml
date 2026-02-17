@@ -16,7 +16,8 @@ dependencies = [
     "click~=8.1",
     "survey~=5.4.2",
     "matplotlib~=3.9",
-    "elephant~=1.1"
+    "elephant~=1.1",
+    "dbbs-catalogue~=6"
 ]
 
 [project.optional-dependencies]
