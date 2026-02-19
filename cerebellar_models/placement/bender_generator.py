@@ -1,5 +1,6 @@
 import numpy as np
 from bsb import AllenStructure, MorphologyGenerator, TopologyError, config
+from bsb.voxels import voxel_rotation_of
 
 from cerebellar_models.placement.morphology_bender import (
     MorphologyBender,
@@ -95,8 +96,10 @@ class GranuleGenerator(BenderGenerator, classmap_entry="granule_bender"):
     def rotate_point(self, source, branch, i, branch_labels, old_rots):
         if has_label(branch_labels, "parallel_fiber") and i == 0:
             # reset rotations
-            fix_dim_rot = self.voxel_rotation_of(
-                self.fix_orientation(branch_labels), branch.parent.points[-1]
+            fix_dim_rot = voxel_rotation_of(
+                self.fix_orientation(branch_labels),
+                self.partition.mask_source.voxel_of(branch.parent.points[-1]),
+                self.default_vector,
             )
             # bring back the branch to its original orientation.
             branch.root_rotate(old_rots.original_rotation.inv())
@@ -159,8 +162,8 @@ class GolgiGenerator(BenderGenerator, classmap_entry="golgi_bender"):
 
 
 @config.node
-class MLIGenerator(BenderGenerator, classmap_entry="basket_bender"):
-    """Specific bender for basket cell."""
+class MLIGenerator(BenderGenerator, classmap_entry="mli_bender"):
+    """Specific bender for mli cell."""
 
     def is_target_wrong(self, source, new_target, branch_labels=None):
         if super().is_target_wrong(source, new_target, branch_labels):

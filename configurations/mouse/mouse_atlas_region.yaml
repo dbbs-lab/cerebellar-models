@@ -228,6 +228,8 @@ placement:
         orientations_field: orientations
         depths_field: thicknesses
         boundaries_field: boundaries
+        fixed_dimensions:
+          axon: 2
     partitions:
       - declive
     strategy: bsb.placement.RandomPlacement

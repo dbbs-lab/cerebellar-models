@@ -3,8 +3,8 @@ from copy import deepcopy
 
 import numpy as np
 from bsb import AllenStructure, NrrdDependencyNode, config, pool_cache, types
-from bsb._util import rotation_matrix_from_vectors
 from bsb.config._attrs import cfgdict
+from bsb.voxels import voxel_rotation_of
 from scipy.spatial.transform import Rotation
 
 from cerebellar_models.placement.utils import boundaries_index_of, bresenham_line
@@ -186,33 +186,8 @@ class MorphologyBender:
         else:
             raise ValueError(
                 f"Position is outside of the dataset.\n"
-                f"Shape: {loc_dataset.shape}, Resolution: {self.voxel_size}."
+                f"Shape: {loc_dataset.shape}, Resolution: {self.partition.mask_source.voxel_size}."
             )
-
-    def voxel_orient(self, orientation_field, point):
-        """
-        Retrieve the orientation vector at a point location
-        :param numpy.ndarray orientation_field: brain orientation field
-        :param numpy.ndarray point: floating position
-        :return: 3D orientation vector.
-        :rtype: numpy.ndarray
-        """
-        loc_orient = self.voxel_data_of(point, orientation_field)
-        if np.all(np.linalg.norm(loc_orient) == 0) or np.isnan(loc_orient).any():
-            raise ValueError("No value for the provided location.")
-        return loc_orient
-
-    def voxel_rotation_of(self, orientation_field, point):
-        """
-        Retrieve the rotation to apply at a certain location to orient a point towards
-        the orientation field.
-        :param numpy.ndarray orientation_field: brain orientation field
-        :param numpy.ndarray point: floating position
-        :return: Rotation to apply to the point to match the orientation field.
-        :rtype: scipy.spatial.transform.Rotation
-        """
-        loc_orient = self.voxel_orient(orientation_field, point)
-        return Rotation.from_matrix(rotation_matrix_from_vectors(self.default_vector, -loc_orient))
 
     def _ann_to_abv(self, id_reg):
         """
@@ -318,7 +293,11 @@ class MorphologyBender:
         :rtype: scipy.spatial.transform.Rotation
         """
         target = branch.points[i]
-        new_rotation = self.voxel_rotation_of(self.fix_orientation(branch_labels), source)
+        new_rotation = voxel_rotation_of(
+            self.fix_orientation(branch_labels),
+            self.partition.mask_source.voxel_of(source),
+            self.default_vector,
+        )
         diff_rotation = (new_rotation * old_rots.last_rotation.inv()).as_euler("xyz")
         diff_rotation[np.absolute(diff_rotation) < 1e-5] = 0
         inc = 1.0
@@ -460,9 +439,10 @@ class MorphologyBender:
         for branch in morphology.roots:
             try:
                 branch_labels = get_branch_labels(branch, 0)
-                rotation = self.voxel_rotation_of(
+                rotation = voxel_rotation_of(
                     self.fix_orientation(branch_labels),
-                    branch.points[0],
+                    self.partition.mask_source.voxel_of(branch.points[0]),
+                    self.default_vector,
                 )
                 branch.root_rotate(rotation)
                 curr_scaling = self.process_scaling(branch.points[0])

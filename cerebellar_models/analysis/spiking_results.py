@@ -752,9 +752,11 @@ class SimResultsTable(TablePlot, SpikePlot):
         for i in range(num_filter):
             spikes = loc_spikes[i]
 
-            all_fr = np.unique(spikes.array_annotations["senders"], return_counts=True)[1] / (
-                (self.time_to - self.time_from) / 1000.0
+            unique_counts = np.unique(spikes.array_annotations["senders"], return_counts=True)[1]
+            unique_counts = np.concatenate(
+                [unique_counts, np.zeros(self.nb_neurons[i] - len(unique_counts))]
             )
+            all_fr = unique_counts / ((self.time_to - self.time_from) / 1000.0)
             isi = extract_isis(spikes, self.dt)
 
             self._values.append([all_fr, isi])
