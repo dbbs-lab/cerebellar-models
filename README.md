@@ -3,6 +3,13 @@
 [![Code style: black](https://img.shields.io/badge/code%20style-black-000000.svg)](https://github.com/psf/black)
 [![codecov](https://codecov.io/gh/dbbs-lab/cerebellar-models/graph/badge.svg?token=KBEE3D83YQ)](https://codecov.io/gh/dbbs-lab/cerebellar-models)
 
+> [!WARNING]  
+> This fork contains customizations for usage of cerebellar-models in [near-nes/controller](https://github.com/near-nes/controller). Main changes: 
+> - removed all simulation configuration from circuit.yaml; 
+> - installed with --no-deps; 
+> - removed report generation.
+
+
 # DBBS Cerebellar models: Models of the cerebellum, using the BSB.
 This repository provides the code, configuration and morphology data to reconstruct and simulate 
 cerebellar cortex circuits using the [Brain Scaffold Builder](https://github.com/dbbs-lab/bsb) 
