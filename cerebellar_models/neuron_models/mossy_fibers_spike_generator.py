@@ -65,8 +65,8 @@ class MossyFibersSpikeGenerator(NeuronDevice, classmap_entry="mossy_fibers_spike
         ).items():  # targetting done on mf id: pop is the list of id
             print("stim targetting ", model, " id mf ", mf_ids)
 
-            find_mossy_gr = np.where(mossy_list[0] == mf_ids)[0]
-            find_mossy_go = np.where(mossy_list_go[0] == mf_ids)[0]
+            find_mossy_gr = [ mossy[0] in mf_ids for mossy in mossy_list]
+            find_mossy_go = [ mossy[0] in mf_ids for mossy in mossy_list_go]
             post_mfGr = granule_list[find_mossy_gr]
             post_mfGo = golgi_list[find_mossy_go]
 
