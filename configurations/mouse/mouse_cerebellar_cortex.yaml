@@ -372,10 +372,6 @@ after_connectivity:
   print_structure_report:
     strategy: cerebellar_models.analysis.structure_analysis.RunStructureReport
     output_filename: bsb_report_structure.pdf
-  skip_glomerolus:
-    strategy: "remove_intermediate"
-    cell_list:
-      - glomerulus
 $import:
   ref: ../../morphologies/morphologies.yaml#/
   values:
