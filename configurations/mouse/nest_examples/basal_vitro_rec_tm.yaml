@@ -1,181 +1,246 @@
-name: DBBS Mouse cerebellum NEST basal activity for in vitro state with multireceptor synaptic modeks
+name: DBBS Mouse cerebellum NEST basal activity for in vitro state with STP
 packages:
   - bsb-nest~=7.0
 components:
   - cerebellar_models/nest_models/build_models.py
 simulations:
-  nest_basal_activity:
-    connection_models:
+  basal_activity:
+     connection_models:
       ascending_axon_to_golgi:
         synapses:
-          - model: tsodyks2_synapse
-            U: 0.4
+          - model: tsodyks_synapse
+            u: 0
+            y: 0
             x: 1
-            tau_rec: 35.1
+            U: 0.4
             tau_fac: 54
-            weight: 1.
+            tau_rec: 35.1
+            tau_psc: 1.0
+            weight: 2.4665143809657017
+            delay: 1.
             receptor_type: 4
-            delay: 0.1
-          - model: tsodyks2_synapse
-            U: 0.4
+          - model: tsodyks_synapse
+            u: 0
+            y: 0
             x: 1
-            tau_rec: 35.1
+            U: 0.4
             tau_fac: 54
-            weight: 1.
+            tau_rec: 35.1
+            tau_psc: 1.0
+            weight: 2.466636912687036
+            delay: 1.
             receptor_type: 2
-            delay: 0.1
       ascending_axon_to_purkinje:
         synapses:
-          - model: tsodyks2_synapse
+          - model: tsodyks_synapse
             U: 0.13
-            x: 1
+            u: 0
+            y: 0
+            x: 1.0
             tau_rec: 35.1
-            tau_fac: 54
-            delay: 0.1
+            tau_fac: 54.0
+            tau_psc: 1.0
+            delay: 1.
             receptor_type: 1
-            weight: 1.
+            weight: 7.530924489651123
       basket_to_basket:
         synapses:
-          - model: tsodyks2_synapse
+          - model: tsodyks_synapse
+            u: 0
+            y: 0
+            x: 1.0
             U: 0.42
-            x: 1
             tau_rec: 38.7
             tau_fac: 4
+            tau_psc: 1
+            weight: 2.3868331562008374
+            delay: 1.
             receptor_type: 3
-            weight: 1
-            delay: 0.1
       basket_to_purkinje:
         synapses:
-          - model: tsodyks2_synapse
+          - model: tsodyks_synapse
             U: 0.35
-            x: 1
-            tau_rec: 15
-            tau_fac: 4
+            u: 0
+            y: 0
+            x: 1.0
+            tau_rec: 15.0
+            tau_fac: 4.0
+            tau_psc: 1.0
             receptor_type: 3
-            weight: 1.
-            delay: 0.1
+            weight: 2.857144592427945
+            delay: 1.
       glomerulus_to_golgi:
         synapses:
-          - model: tsodyks2_synapse
-            U: 0.43
+          - model: tsodyks_synapse
+            u: 0
+            y: 0
             x: 1
-            tau_rec: 8
+            U: 0.43
+            tau_rec: 8.0
+            tau_psc: 1.0
             tau_fac: 5
+            weight: 2.32558139536471
+            delay: 1.
             receptor_type: 1
-            weight: 1.
-            delay: 0.1
-          - model: tsodyks2_synapse
-            U: 0.43
+          - model: tsodyks_synapse
+            u: 0
+            y: 0
             x: 1
-            tau_rec: 8
+            U: 0.43
+            tau_rec: 8.0
+            tau_psc: 1.0
             tau_fac: 5
+            weight: 2.3255813953646753
+            delay: 1.
             receptor_type: 2
-            weight: 1.
-            delay: 0.1
       glomerulus_to_granule:
         synapses:
-          - model: tsodyks2_synapse
-            U: 0.43
+          - model: tsodyks_synapse
+            U: 0.416
+            u: 0.0
+            y: 0.0
             x: 1
-            tau_rec: 8
-            tau_fac: 5
-            delay: 0.1
+            tau_psc: 3.0
+            tau_rec: 35.1
+            tau_fac: 10.8
+            weight: 2.4075244494661643
+            delay: 1.
             receptor_type: 1
-            weight: 1.
-          - model: tsodyks2_synapse
-            U: 0.43
+          - model: tsodyks_synapse
+            U: 0.416
+            u: 0.0
+            y: 0.0
             x: 1
-            tau_rec: 8
-            tau_fac: 5
-            delay: 0.1
+            tau_psc: 3.0
+            tau_rec: 35.1
+            tau_fac: 10.8
+            weight: 2.407524449459579
+            delay: 1.
             receptor_type: 2
-            weight: 1.
       golgi_to_glomerulus:
         synapses:
-          - model: tsodyks2_synapse
+          - model: tsodyks_synapse
             U: 0.35
+            u: 0.0
+            y: 0.0
             x: 1
             tau_rec: 36
             tau_fac: 58
+            tau_psc: 1.0
+            weight: 2.802078416920204
+            delay: 1.
             receptor_type: 3
-            weight: 1.
-            delay: 0.1
       parallel_fiber_to_basket:
         synapses:
-          - model: tsodyks2_synapse
+          - model: tsodyks_synapse
+            u: 0.0
+            y: 0.0
+            x: 1.0
             U: 0.15
-            x: 1
             tau_rec: 35.1
             tau_fac: 10.8
+            tau_psc: 1
+            weight: 6.670129187071471
+            delay: 1.
             receptor_type: 1
-            weight: 1.
-            delay: 0.1
-          - model: tsodyks2_synapse
+          - model: tsodyks_synapse
+            u: 0.0
+            y: 0.0
+            x: 1.0
             U: 0.15
-            x: 1
             tau_rec: 35.1
             tau_fac: 10.8
+            tau_psc: 1
+            weight: 6.670117665698819
+            delay: 1.
             receptor_type: 2
-            weight: 1.
-            delay: 0.1
       parallel_fiber_to_golgi:
         synapses:
-          - model: tsodyks2_synapse
-            U: 0.4
+          - model: tsodyks_synapse
+            u: 0.0
+            y: 0.0
             x: 1
-            tau_rec: 35.1
+            U: 0.4
             tau_fac: 54
+            tau_rec: 35.1
+            tau_psc: 1.0
+            weight: 2.4665143809657013
+            delay: 1.
             receptor_type: 5
-            weight: 1.
-            delay: 0.1
       parallel_fiber_to_purkinje:
         synapses:
-          - model: tsodyks2_synapse
+          - model: tsodyks_synapse
             U: 0.13
-            x: 1
+            u: 0
+            y: 0
+            x: 1.0
             tau_rec: 35.1
-            tau_fac: 54
+            tau_fac: 54.0
+            tau_psc: 1.0
             receptor_type: 1
-            weight: 1.
-            delay: 0.1
+            weight: 7.530924489651123
+            delay: 1.
       parallel_fiber_to_stellate:
         synapses:
-          - model: tsodyks2_synapse
+          - model: tsodyks_synapse
+            u: 0.0
+            y: 0.0
+            x: 1.0
             U: 0.15
-            x: 1
             tau_rec: 35.1
             tau_fac: 10.8
+            tau_psc: 1
+            weight: 6.670129187071472
+            delay: 1.
             receptor_type: 1
-            weight: 1.
-            delay: 0.1
-          - model: tsodyks2_synapse
+          - model: tsodyks_synapse
+            u: 0.0
+            y: 0.0
+            x: 1.0
             U: 0.15
-            x: 1
             tau_rec: 35.1
             tau_fac: 10.8
+            tau_psc: 1
+            weight: 6.670112592299769
+            delay: 1.
             receptor_type: 2
-            weight: 1.
-            delay: 0.1
       stellate_to_purkinje:
         synapses:
-          - model: tsodyks2_synapse
+          - model: tsodyks_synapse
             U: 0.35
-            x: 1
-            tau_rec: 15
-            tau_fac: 4
+            u: 0
+            y: 0
+            x: 1.0
+            tau_rec: 15.0
+            tau_fac: 4.0
+            tau_psc: 1.0
             receptor_type: 3
-            weight: 1.
-            delay: 0.1
+            weight: 2.857144592427945
+            delay: 1.
       stellate_to_stellate:
         synapses:
-          - model: tsodyks2_synapse
+          - model: tsodyks_synapse
+            u: 0.0
+            x: 1.0
+            y: 0.0
             U: 0.42
-            x: 1
             tau_rec: 38.7
-            tau_fac: 4
+            tau_fac: 4.0
+            tau_psc: 1
+            weight: 2.386833156200837
+            delay: 1.
             receptor_type: 3
-            weight: 1.
-            delay: 0.1
+      golgi_to_golgi:
+        synapses:
+          - model: static_synapse
+            receptor_type: 3
+            weight: 1
+            delay: 1.
+      mossy_fibers_to_glomerulus:
+        synapses:
+          - model: static_synapse
+            weight: 1.0
+            delay: 1.
 $import:
   ref: ./basal_vitro_rec.yaml#/
   values:

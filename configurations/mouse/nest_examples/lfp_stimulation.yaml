@@ -1,6 +1,7 @@
-name: DBBS Mouse cerebellum NEST LFP recording simulation for in vitro state with multireceptor synaptic modeks
+name: DBBS Mouse cerebellum NEST LFP recording simulation for in vitro state with multireceptor synaptic models
+# Protocol : synchronous stimulus of 1 spike on all the mf after 1s of basal activity and recording from a cylinder of GrC
 packages:
-  - bsb-nest~=6.0
+  - bsb-nest~=7.0
 components:
   - cerebellar_models/nest_models/build_models.py
 simulations:
@@ -38,13 +39,13 @@ simulations:
     seed: 1234
     simulator: nest
     $import:
-      ref: basal_vitro_rec_tm_tuned.yaml#/simulations/nest_basal_activity
+      ref: basal_vitro_rec_tm.yaml#/simulations/nest_basal_activity
       values:
         - cell_models
         - connection_models
         - devices
 $import:
-  ref: basal_vitro_rec_tm_tuned.yaml#/
+  ref: basal_vitro_rec_tm.yaml#/
   values:
     - packages
     - storage

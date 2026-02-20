@@ -1,0 +1,40 @@
+name: DBBS Mouse cerebellum NEST basal activity for in vitro state with STP and GoC-gap
+# Enable GoC-gap in a basal activity in vitro protocol (install NESTML from github master to use it correctly)
+packages:
+  - bsb-nest~=7.0
+components:
+  - cerebellar_models/nest_models/build_models.py
+simulations:
+  basal_activity:
+     connection_models:
+      gap_goc:
+         synapses:
+           - model: gap_junction
+             weight: 1.
+         rule: one_to_one
+         make_symmetric: True
+     devices:
+       # If you want to look at the subthreshold synchronizing effect of gap junctions
+       golgi_multimeter:
+         device: multimeter
+         delay: 0.1
+         properties: ['V_m']
+         units: ['mV']
+         targetting:
+           cell_models:
+             - golgi_cell
+           strategy: cell_model
+$import:
+  ref: ./basal_vitro_rec_tm.yaml#/
+  values:
+    - packages
+    - storage
+    - network
+    - regions
+    - partitions
+    - morphologies
+    - cell_types
+    - placement
+    - connectivity
+    - after_connectivity
+    - simulations
