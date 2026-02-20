@@ -1,0 +1,194 @@
+name: DBBS Mouse cerebellum configuration v4.2
+packages:
+  - cerebellar-models~=0.8.0
+  - bsb~=7.0
+storage:
+  engine: hdf5
+  root: granular_layer.hdf5
+network:
+  chunk_size: [100, 100, 100]
+  x: 300
+  y: 200
+  z: 295
+regions:
+  cerebellar_cortex:
+    type: stack
+    children:
+      - granular_layer
+partitions:
+  granular_layer:
+    thickness: 130
+cell_types:
+  glomerulus:
+    spatial:
+      density: 0.0003
+      radius: 1.5
+    plotting:
+      display_name: Glomerulus
+  mossy_fibers:
+    spatial:
+      count_ratio: 0.05
+      radius: 1
+      relative_to: glomerulus
+  granule_cell:
+    spatial:
+      density: 0.0039
+      morphologies:
+        - GranuleCell
+      radius: 2.5
+    plotting:
+      display_name: Granule cell
+      opacity: 0.3
+  golgi_cell:
+    spatial:
+      density: 0.000009
+      morphologies:
+        - GolgiCell
+      radius: 8
+    plotting:
+      display_name: Golgi cell
+placement:
+  granular_layer_innervation:
+    strategy: bsb.placement.RandomPlacement
+    partitions:
+      - granular_layer
+    cell_types:
+      - mossy_fibers
+  granular_layer_placement:
+    strategy: bsb.placement.RandomPlacement
+    partitions:
+      - granular_layer
+    cell_types:
+      - granule_cell
+      - golgi_cell
+      - glomerulus
+connectivity:
+  mossy_fibers_to_glomerulus:
+    strategy: cerebellar_models.connectome.to_glomerulus.ConnectomeMossyGlomerulus
+    presynaptic:
+      cell_types:
+        - mossy_fibers
+    postsynaptic:
+      cell_types:
+        - glomerulus
+    x_length: 60
+    y_length: 20
+  glomerulus_to_granule:
+    strategy: cerebellar_models.connectome.glomerulus_granule.ConnectomeGlomerulusGranule
+    presynaptic:
+      cell_types:
+        - glomerulus
+    postsynaptic:
+      cell_types:
+        - granule_cell
+      morphology_labels:
+        - dendrites
+    pre_glom_strats:
+      - mossy_fibers_to_glomerulus
+    pre_cell_types:
+      - mossy_fibers
+    radius: 40
+    convergence: 4
+  glomerulus_to_golgi:
+    strategy: cerebellar_models.connectome.glomerulus_golgi.ConnectomeGlomerulusGolgi
+    presynaptic:
+      cell_types:
+        - glomerulus
+    postsynaptic:
+      cell_types:
+        - golgi_cell
+      morphology_labels:
+        - basal_dendrites
+    radius: 50
+  golgi_to_glomerulus:
+    strategy: cerebellar_models.connectome.golgi_glomerulus.ConnectomeGolgiGlomerulus
+    presynaptic:
+      cell_types:
+        - golgi_cell
+      morphology_labels:
+        - axon
+    postsynaptic:
+      cell_types:
+        - granule_cell
+    glom_post_strats:
+      - glomerulus_to_granule
+    glom_cell_types:
+      - glomerulus
+    radius: 150
+    divergence: 40
+  golgi_to_golgi:
+    strategy: bsb.connectivity.VoxelIntersection
+    presynaptic:
+      cell_types:
+        - golgi_cell
+      morphology_labels:
+        - axon
+    postsynaptic:
+      cell_types:
+        - golgi_cell
+      morphology_labels:
+        - basal_dendrites
+    affinity: 0.41
+    voxels_pre: 500
+    voxels_post: 500
+    contacts:
+      distribution: norm
+      loc: 160
+      scale: 5
+  gap_goc:
+    strategy: bsb.connectivity.VoxelIntersection
+    presynaptic:
+      cell_types:
+        - golgi_cell
+      morphology_labels:
+        - basal_dendrites
+    postsynaptic:
+      cell_types:
+        - golgi_cell
+      morphology_labels:
+        - basal_dendrites
+    affinity: 0.3
+    voxels_pre: 500
+    voxels_post: 500
+    contacts:
+      distribution: norm
+      loc: 3
+      scale: 1
+  ascending_axon_to_golgi:
+    strategy: bsb.connectivity.VoxelIntersection
+    presynaptic:
+      cell_types:
+        - granule_cell
+      morphology_labels:
+        - ascending_axon
+    postsynaptic:
+      cell_types:
+        - golgi_cell
+      morphology_labels:
+        - basal_dendrites
+    affinity: 0.05
+    voxels_pre: 500
+    voxels_post: 500
+  parallel_fiber_to_golgi:
+    strategy: bsb.connectivity.VoxelIntersection
+    presynaptic:
+      cell_types:
+        - granule_cell
+      morphology_labels:
+        - parallel_fiber
+    postsynaptic:
+      cell_types:
+        - golgi_cell
+      morphology_labels:
+        - apical_dendrites
+    affinity: 0.08
+    voxels_pre: 500
+    voxels_post: 500
+after_connectivity:
+  print_structure_report:
+    strategy: cerebellar_models.analysis.structure_analysis.RunStructureReport
+    output_filename: bsb_report_structure.pdf
+$import:
+  ref: ../../morphologies/morphologies.yaml#/
+  values:
+    - morphologies
