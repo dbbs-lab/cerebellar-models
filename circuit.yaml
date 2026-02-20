@@ -1,7 +1,7 @@
 name: DBBS Mouse cerebellum configuration v4.2
 storage:
   engine: hdf5
-  root: mouse_cerebellum.hdf5
+  root: mouse_cerebellum_microzones.hdf5
 network:
   chunk_size:
   - 100.0
@@ -738,7 +738,11 @@ connectivity:
       cell_types:
       - basket_cell
       - stellate_cell
-    pre_cell_pc: purkinje_cell_plus
+    pre_cell_pc:
+      cell_types:
+      - purkinje_cell
+      labels:
+      - plus
     presynaptic:
       cell_types:
       - io
@@ -755,7 +759,11 @@ connectivity:
       cell_types:
         - basket_cell
         - stellate_cell
-    pre_cell_pc: purkinje_cell_minus
+    pre_cell_pc:
+      cell_types:
+        - purkinje_cell
+      labels:
+        - minus
     presynaptic:
       cell_types:
         - io
@@ -841,8 +849,15 @@ connectivity:
       - minus
     strategy: bsb.connectivity.FixedIndegree
 after_connectivity:
-  duplicate_conn_io_pc:
-    conn_strategy: io_to_purkinje
+  duplicate_conn_io_pc_plus:
+    conn_strategy: io_to_purkinje_plus
+    contacts:
+      distribution: norm
+      loc: 500
+      scale: 5
+    strategy: cerebellar_models.connectome.io_purkinje.DuplicateSynapses
+  duplicate_conn_io_pc_minus:
+    conn_strategy: io_to_purkinje_minus
     contacts:
       distribution: norm
       loc: 500
