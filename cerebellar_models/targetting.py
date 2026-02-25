@@ -1,9 +1,12 @@
-from bsb import  FractionFilter, Targetting,config
-from bsb.simulation.targetting import CellTypeFilter
+from bsb import FractionFilter, Targetting, config
 from bsb.config import refs, types
+from bsb.simulation.targetting import CellTypeFilter
+
 
 @config.node
-class ByIdTargettingCellTypes(CellTypeFilter, FractionFilter, Targetting, classmap_entry="by_id_cell_types"):
+class ByIdTargettingCellTypes(
+    CellTypeFilter, FractionFilter, Targetting, classmap_entry="by_id_cell_types"
+):
     """
     Targets cell types by id.
     """
