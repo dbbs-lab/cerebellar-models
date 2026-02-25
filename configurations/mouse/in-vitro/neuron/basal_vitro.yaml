@@ -134,28 +134,25 @@ simulations:
         synapses:
           - AMPA
           - NMDA
-      spike_generator_1:
+      spike_gen_test:
         device: cerebellar_models.neuron_models.mossy_fibers_spike_generator.MossyFibersSpikeGenerator
-        start: 499
-        number: 3
-        interval: 10
-        noise: 0.5
+        start: 500
+        number: 10
+        weight: 0.01
+        noise: 1
         delay: 1
-        weight: 0.1
+        interval: 10
         seed: 101
         targetting:
-          strategy: sphere_cell_types
-          only_local: false
-          radius: 70
-          origin:
-            - 150.8612285
-            - 80.2743398
-            - 89.90502921
+          strategy: cerebellar_models.targetting.ByIdTargettingCellTypes
+          only_local: False
+          ids:
+            "mossy_fibers": [7, 11, 13, 18]
           cell_types:
             - mossy_fibers
         synapses:
-          - AMPA
-          - NMDA
+          - "AMPA"
+          - "NMDA"
       voltage_granule:
         device: voltage_recorder
         targetting:
