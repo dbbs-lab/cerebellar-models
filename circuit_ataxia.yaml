@@ -1,0 +1,1625 @@
+name: DBBS Mouse cerebellum configuration v4.2
+storage:
+  engine: hdf5
+  root: mouse_cerebellum_microzones_ataxia.hdf5
+network:
+  chunk_size:
+  - 100.0
+  - 100.0
+  - 100.0
+  x: 300.0
+  y: 200.0
+  z: 695.0
+components:
+- module: cerebellar_models/nest_models/build_models.py
+morphologies:
+- file: ./morphologies/GranuleCell.swc
+  parser:
+    skip_boundary_labels:
+    - soma
+    tags:
+      '16':
+      - axon
+      - axon_hillock
+      '17':
+      - axon
+      - axon_initial_segment
+      '18':
+      - axon
+      - ascending_axon
+      '19':
+      - axon
+      - parallel_fiber
+  pipeline:
+  - axis1: 1
+    axis2: 2
+    func: swap_axes
+- file: ./morphologies/GolgiCell.swc
+  parser:
+    skip_boundary_labels:
+    - soma
+    tags:
+      '16':
+      - dendrites
+      - basal_dendrites
+      '17':
+      - dendrites
+      - apical_dendrites
+      '18':
+      - axon
+      - axon_initial_segment
+  pipeline:
+  - axis1: 1
+    axis2: 2
+    func: swap_axes
+- name: PurkinjeCell1
+  file: ./morphologies/PurkinjeCell/Degeneration1/PurkinjeCell10%_dci_deg.swc
+  pipeline:
+    - func: swap_axes
+      axis1: 1
+      axis2: 2
+  parser:
+    tags:
+      16:
+        - axon
+        - AIS
+      17:
+        - axon
+        - AIS_K
+      18:
+        - axon
+        - axonmyelin
+      19:
+        - axon
+        - nodes
+      20:
+        - dendrites
+        - basal
+      21:
+        - dendrites
+        - pf_targets
+        - sc_targets
+      22:
+        - dendrites
+        - aa_targets
+        - sc_targets
+- name: PurkinjeCell2
+  file: ./morphologies/PurkinjeCell/Degeneration2/PurkinjeCell10%_dci_deg.swc
+  pipeline:
+    - func: swap_axes
+      axis1: 1
+      axis2: 2
+  parser:
+    tags:
+      16:
+        - axon
+        - AIS
+      17:
+        - axon
+        - AIS_K
+      18:
+        - axon
+        - axonmyelin
+      19:
+        - axon
+        - nodes
+      20:
+        - dendrites
+        - basal
+      21:
+        - dendrites
+        - pf_targets
+        - sc_targets
+      22:
+        - dendrites
+        - aa_targets
+        - sc_targets
+- name: PurkinjeCell3
+  file: ./morphologies/PurkinjeCell/Degeneration3/PurkinjeCell10%_dci_deg.swc
+  pipeline:
+    - func: swap_axes
+      axis1: 1
+      axis2: 2
+  parser:
+    tags:
+      16:
+        - axon
+        - AIS
+      17:
+        - axon
+        - AIS_K
+      18:
+        - axon
+        - axonmyelin
+      19:
+        - axon
+        - nodes
+      20:
+        - dendrites
+        - basal
+      21:
+        - dendrites
+        - pf_targets
+        - sc_targets
+      22:
+        - dendrites
+        - aa_targets
+        - sc_targets
+- name: PurkinjeCell4
+  file: ./morphologies/PurkinjeCell/Degeneration4/PurkinjeCell10%_dci_deg.swc
+  pipeline:
+    - func: swap_axes
+      axis1: 1
+      axis2: 2
+  parser:
+    tags:
+      16:
+        - axon
+        - AIS
+      17:
+        - axon
+        - AIS_K
+      18:
+        - axon
+        - axonmyelin
+      19:
+        - axon
+        - nodes
+      20:
+        - dendrites
+        - basal
+      21:
+        - dendrites
+        - pf_targets
+        - sc_targets
+      22:
+        - dendrites
+        - aa_targets
+        - sc_targets
+- name: PurkinjeCell5
+  file: ./morphologies/PurkinjeCell/Degeneration5/PurkinjeCell10%_dci_deg.swc
+  pipeline:
+    - func: swap_axes
+      axis1: 1
+      axis2: 2
+  parser:
+    tags:
+      16:
+        - axon
+        - AIS
+      17:
+        - axon
+        - AIS_K
+      18:
+        - axon
+        - axonmyelin
+      19:
+        - axon
+        - nodes
+      20:
+        - dendrites
+        - basal
+      21:
+        - dendrites
+        - pf_targets
+        - sc_targets
+      22:
+        - dendrites
+        - aa_targets
+        - sc_targets
+- name: PurkinjeCell6
+  file: ./morphologies/PurkinjeCell/Degeneration6/PurkinjeCell10%_dci_deg.swc
+  pipeline:
+    - func: swap_axes
+      axis1: 1
+      axis2: 2
+  parser:
+    tags:
+      16:
+        - axon
+        - AIS
+      17:
+        - axon
+        - AIS_K
+      18:
+        - axon
+        - axonmyelin
+      19:
+        - axon
+        - nodes
+      20:
+        - dendrites
+        - basal
+      21:
+        - dendrites
+        - pf_targets
+        - sc_targets
+      22:
+        - dendrites
+        - aa_targets
+        - sc_targets
+- file: ./morphologies/StellateCell.swc
+  parser:
+    skip_boundary_labels:
+    - soma
+    tags:
+      '16':
+      - dendrites
+      - proximal_dendrites
+      '17':
+      - dendrites
+      - distal_dendrites
+      '18':
+      - axon
+      - axon_initial_segment
+  pipeline:
+  - axis1: 1
+    axis2: 2
+    func: swap_axes
+- file: ./morphologies/BasketCell.swc
+  parser:
+    skip_boundary_labels:
+    - soma
+    tags:
+      '16':
+      - axon
+      - axon_initial_segment
+  pipeline:
+  - axis1: 1
+    axis2: 2
+    func: swap_axes
+regions:
+  cerebellar_cortex:
+    children:
+    - granular_layer
+    - purkinje_layer
+    - b_molecular_layer
+    - t_molecular_layer
+    type: stack
+  cerebellar_nuclei:
+    children:
+    - dcn_layer
+    type: group
+  inferior_olivary:
+    children:
+    - io_layer
+    type: group
+partitions:
+  granular_layer:
+    origin:
+    - 0.0
+    - 0.0
+    - 300.0
+    thickness: 130.0
+  purkinje_layer:
+    thickness: 15.0
+  b_molecular_layer:
+    thickness: 50.0
+  t_molecular_layer:
+    thickness: 100.0
+  dcn_layer:
+    origin:
+    - 0.0
+    - 0.0
+    - 100.0
+    thickness: 200.0
+  io_layer:
+    thickness: 100.0
+cell_types:
+  glomerulus:
+    plotting:
+      display_name: Glomerulus
+    spatial:
+      density: 0.0003
+      radius: 1.5
+  mossy_fibers:
+    spatial:
+      count_ratio: 0.05
+      radius: 1.0
+      relative_to: glomerulus
+  granule_cell:
+    plotting:
+      display_name: Granule cell
+      opacity: 0.3
+    spatial:
+      density: 0.0039
+      morphologies:
+      - GranuleCell
+      radius: 2.5
+  golgi_cell:
+    plotting:
+      display_name: Golgi cell
+    spatial:
+      density: 9.0e-06
+      morphologies:
+      - GolgiCell
+      radius: 8.0
+  purkinje_cell:
+    plotting:
+      display_name: Purkinje cell
+    spatial:
+      morphologies:
+      - PurkinjeCell1
+      - PurkinjeCell2
+      - PurkinjeCell3
+      - PurkinjeCell4
+      - PurkinjeCell5
+      - PurkinjeCell6
+      planar_density: 0.000583 # 50% original density
+      radius: 7.5
+  basket_cell:
+    plotting:
+      display_name: Basket cell
+    spatial:
+      density: 5.0e-05
+      morphologies:
+      - BasketCell
+      radius: 6.0
+  stellate_cell:
+    plotting:
+      display_name: Stellate cell
+    spatial:
+      density: 5.0e-05
+      morphologies:
+      - StellateCell
+      radius: 4.0
+  dcn_p:
+    plotting:
+      display_name: Deep Cerebellar Nuclei type p
+    spatial:
+      density: 9.92e-06
+      radius: 9.5
+  dcn_i:
+    plotting:
+      display_name: Deep Cerebellar Nuclei type i
+    spatial:
+      density: 5.58e-06
+      radius: 7.0
+  io:
+    plotting:
+      display_name: Inferior olivary cells
+    spatial:
+      count_ratio: 0.2
+      radius: 7.5
+      relative_to: purkinje_cell
+placement:
+  granular_layer_innervation:
+    cell_types:
+    - mossy_fibers
+    partitions:
+    - granular_layer
+    strategy: bsb.placement.RandomPlacement
+  granular_layer_placement:
+    cell_types:
+    - granule_cell
+    - golgi_cell
+    - glomerulus
+    partitions:
+    - granular_layer
+    strategy: bsb.placement.RandomPlacement
+  purkinje_layer_placement:
+    angle: 80.0
+    cell_types:
+    - purkinje_cell
+    partitions:
+    - purkinje_layer
+    spacing_x: 130.0
+    strategy: bsb.placement.ParallelArrayPlacement
+  basket_layer_placement:
+    cell_types:
+    - basket_cell
+    partitions:
+    - b_molecular_layer
+    strategy: bsb.placement.RandomPlacement
+  stellate_layer_placement:
+    cell_types:
+    - stellate_cell
+    partitions:
+    - t_molecular_layer
+    strategy: bsb.placement.RandomPlacement
+  dcn_p_layer_placement:
+    cell_types:
+    - dcn_p
+    partitions:
+    - dcn_layer
+    strategy: bsb.placement.RandomPlacement
+  dcn_i_layer_placement:
+    cell_types:
+    - dcn_i
+    partitions:
+    - dcn_layer
+    strategy: bsb.placement.RandomPlacement
+  io_layer_placement:
+    cell_types:
+    - io
+    partitions:
+    - io_layer
+    strategy: bsb.placement.RandomPlacement
+after_placement:
+  label_microzones:
+    cell_types:
+    - purkinje_cell
+    - dcn_p
+    - dcn_i
+    - io
+    labels:
+    - plus
+    - minus
+    strategy: cerebellar_models.placement.microzones.LabelCells
+    same_size: true
+connectivity:
+  mossy_fibers_to_glomerulus:
+    postsynaptic:
+      cell_types:
+      - glomerulus
+    presynaptic:
+      cell_types:
+      - mossy_fibers
+    strategy: cerebellar_models.connectome.to_glomerulus.ConnectomeMossyGlomerulus
+    x_length: 60.0
+    y_length: 20.0
+  glomerulus_to_granule:
+    convergence: 4.0
+    postsynaptic:
+      cell_types:
+      - granule_cell
+      morphology_labels:
+      - dendrites
+    pre_cell_types:
+    - mossy_fibers
+    pre_glom_strats:
+    - mossy_fibers_to_glomerulus
+    presynaptic:
+      cell_types:
+      - glomerulus
+    radius: 40
+    strategy: cerebellar_models.connectome.glomerulus_granule.ConnectomeGlomerulusGranule
+  glomerulus_to_golgi:
+    postsynaptic:
+      cell_types:
+      - golgi_cell
+      morphology_labels:
+      - basal_dendrites
+    presynaptic:
+      cell_types:
+      - glomerulus
+    radius: 50
+    strategy: cerebellar_models.connectome.glomerulus_golgi.ConnectomeGlomerulusGolgi
+  golgi_to_glomerulus:
+    divergence: 40.0
+    glom_cell_types:
+    - glomerulus
+    glom_post_strats:
+    - glomerulus_to_granule
+    postsynaptic:
+      cell_types:
+      - granule_cell
+    presynaptic:
+      cell_types:
+      - golgi_cell
+      morphology_labels:
+      - axon
+    radius: 150.0
+    strategy: cerebellar_models.connectome.golgi_glomerulus.ConnectomeGolgiGlomerulus
+  gap_goc:
+    affinity: 0.3
+    contacts:
+      distribution: norm
+      loc: 3
+      scale: 1
+    postsynaptic:
+      cell_types:
+      - golgi_cell
+      morphology_labels:
+      - basal_dendrites
+    presynaptic:
+      cell_types:
+      - golgi_cell
+      morphology_labels:
+      - basal_dendrites
+    strategy: bsb.connectivity.VoxelIntersection
+    voxels_post: 500
+    voxels_pre: 500
+  golgi_to_golgi:
+    affinity: 0.5
+    contacts:
+      distribution: norm
+      loc: 160
+      scale: 5
+    postsynaptic:
+      cell_types:
+      - golgi_cell
+      morphology_labels:
+      - basal_dendrites
+    presynaptic:
+      cell_types:
+      - golgi_cell
+      morphology_labels:
+      - axon
+    strategy: bsb.connectivity.VoxelIntersection
+    voxels_post: 500
+    voxels_pre: 500
+  ascending_axon_to_golgi:
+    affinity: 0.05
+    postsynaptic:
+      cell_types:
+      - golgi_cell
+      morphology_labels:
+      - basal_dendrites
+    presynaptic:
+      cell_types:
+      - granule_cell
+      morphology_labels:
+      - ascending_axon
+    strategy: bsb.connectivity.VoxelIntersection
+    voxels_post: 500
+    voxels_pre: 500
+  parallel_fiber_to_golgi:
+    affinity: 0.08
+    postsynaptic:
+      cell_types:
+      - golgi_cell
+      morphology_labels:
+      - apical_dendrites
+    presynaptic:
+      cell_types:
+      - granule_cell
+      morphology_labels:
+      - parallel_fiber
+    strategy: bsb.connectivity.VoxelIntersection
+    voxels_post: 500
+    voxels_pre: 500
+  ascending_axon_to_purkinje_plus:
+    affinity: 0.25
+    postsynaptic:
+      cell_types:
+      - purkinje_cell
+      morphology_labels:
+      - aa_targets
+      labels:
+      - plus
+    presynaptic:
+      cell_types:
+      - granule_cell
+      morphology_labels:
+      - ascending_axon
+    strategy: bsb.connectivity.VoxelIntersection
+    voxels_post: 25000
+    voxels_pre: 5000
+  ascending_axon_to_purkinje_minus:
+    affinity: 0.25
+    postsynaptic:
+      cell_types:
+        - purkinje_cell
+      morphology_labels:
+        - aa_targets
+      labels:
+        - minus
+    presynaptic:
+      cell_types:
+        - granule_cell
+      morphology_labels:
+        - ascending_axon
+    strategy: bsb.connectivity.VoxelIntersection
+    voxels_post: 25000
+    voxels_pre: 5000
+  parallel_fiber_to_purkinje_plus:
+    affinity: 0.215
+    postsynaptic:
+      cell_types:
+      - purkinje_cell
+      morphology_labels:
+      - pf_targets
+      labels:
+      - plus
+    presynaptic:
+      cell_types:
+      - granule_cell
+      morphology_labels:
+      - parallel_fiber
+    strategy: bsb.connectivity.VoxelIntersection
+    voxels_post: 25000
+    voxels_pre: 5000
+  parallel_fiber_to_purkinje_minus:
+    affinity: 0.215
+    postsynaptic:
+      cell_types:
+        - purkinje_cell
+      morphology_labels:
+        - pf_targets
+      labels:
+        - minus
+    presynaptic:
+      cell_types:
+        - granule_cell
+      morphology_labels:
+        - parallel_fiber
+    strategy: bsb.connectivity.VoxelIntersection
+    voxels_post: 25000
+    voxels_pre: 5000
+  parallel_fiber_to_basket:
+    affinity: 0.08
+    postsynaptic:
+      cell_types:
+      - basket_cell
+      morphology_labels:
+      - dendrites
+    presynaptic:
+      cell_types:
+      - granule_cell
+      morphology_labels:
+      - parallel_fiber
+    strategy: bsb.connectivity.VoxelIntersection
+    voxels_post: 500
+    voxels_pre: 500
+  parallel_fiber_to_stellate:
+    affinity: 0.08
+    postsynaptic:
+      cell_types:
+      - stellate_cell
+      morphology_labels:
+      - dendrites
+    presynaptic:
+      cell_types:
+      - granule_cell
+      morphology_labels:
+      - parallel_fiber
+    strategy: bsb.connectivity.VoxelIntersection
+    voxels_post: 500
+    voxels_pre: 500
+  basket_to_purkinje_plus:
+    postsynaptic:
+      cell_types:
+      - purkinje_cell
+      morphology_labels:
+      - soma
+      labels:
+      - plus
+    presynaptic:
+      cell_types:
+      - basket_cell
+      morphology_labels:
+      - axon
+    strategy: bsb.connectivity.VoxelIntersection
+    voxels_post: 5000
+    voxels_pre: 500
+  basket_to_purkinje_minus:
+    postsynaptic:
+      cell_types:
+        - purkinje_cell
+      morphology_labels:
+        - soma
+      labels:
+        - minus
+    presynaptic:
+      cell_types:
+        - basket_cell
+      morphology_labels:
+        - axon
+    strategy: bsb.connectivity.VoxelIntersection
+    voxels_post: 5000
+    voxels_pre: 500
+  stellate_to_purkinje_plus:
+    affinity: 0.13
+    contacts:
+      distribution: norm
+      loc: 10
+      scale: 0.3
+    postsynaptic:
+      cell_types:
+      - purkinje_cell
+      morphology_labels:
+      - sc_targets
+      labels:
+      - plus
+    presynaptic:
+      cell_types:
+      - stellate_cell
+      morphology_labels:
+      - axon
+    strategy: bsb.connectivity.VoxelIntersection
+    voxels_post: 25000
+    voxels_pre: 5000
+  stellate_to_purkinje_minus:
+    affinity: 0.13
+    contacts:
+      distribution: norm
+      loc: 10
+      scale: 0.3
+    postsynaptic:
+      cell_types:
+        - purkinje_cell
+      morphology_labels:
+        - sc_targets
+      labels:
+        - minus
+    presynaptic:
+      cell_types:
+        - stellate_cell
+      morphology_labels:
+        - axon
+    strategy: bsb.connectivity.VoxelIntersection
+    voxels_post: 25000
+    voxels_pre: 5000
+  basket_to_basket:
+    affinity: 0.5
+    contacts:
+      distribution: norm
+      loc: 100
+      scale: 4
+    postsynaptic:
+      cell_types:
+      - basket_cell
+      morphology_labels:
+      - dendrites
+    presynaptic:
+      cell_types:
+      - basket_cell
+      morphology_labels:
+      - axon
+    strategy: bsb.connectivity.VoxelIntersection
+    voxels_post: 500
+    voxels_pre: 500
+  stellate_to_stellate:
+    affinity: 0.3
+    contacts:
+      distribution: norm
+      loc: 100
+      scale: 4
+    postsynaptic:
+      cell_types:
+      - stellate_cell
+      morphology_labels:
+      - dendrites
+    presynaptic:
+      cell_types:
+      - stellate_cell
+      morphology_labels:
+      - axon
+    strategy: bsb.connectivity.VoxelIntersection
+    voxels_post: 500
+    voxels_pre: 500
+  purkinje_to_dcn_p_plus:
+    outdegree: 45
+    postsynaptic:
+      cell_types:
+      - dcn_p
+      labels:
+      - plus
+    presynaptic:
+      cell_types:
+      - purkinje_cell
+      labels:
+      - plus
+      morphology_labels:
+      - axon
+    strategy: bsb.connectivity.FixedOutdegree
+  purkinje_to_dcn_p_minus:
+    outdegree: 45
+    postsynaptic:
+      cell_types:
+      - dcn_p
+      labels:
+      - minus
+    presynaptic:
+      cell_types:
+      - purkinje_cell
+      labels:
+      - minus
+      morphology_labels:
+      - axon
+    strategy: bsb.connectivity.FixedOutdegree
+  purkinje_to_dcn_i_plus:
+    outdegree: 12
+    postsynaptic:
+      cell_types:
+      - dcn_i
+      labels:
+      - plus
+    presynaptic:
+      cell_types:
+      - purkinje_cell
+      labels:
+      - plus
+      morphology_labels:
+      - axon
+    strategy: bsb.connectivity.FixedOutdegree
+  purkinje_to_dcn_i_minus:
+    outdegree: 12
+    postsynaptic:
+      cell_types:
+      - dcn_i
+      labels:
+      - minus
+    presynaptic:
+      cell_types:
+      - purkinje_cell
+      labels:
+      - minus
+      morphology_labels:
+      - axon
+    strategy: bsb.connectivity.FixedOutdegree
+  mossy_fibers_to_dcn_p_plus:
+    indegree: 48
+    postsynaptic:
+      cell_types:
+      - dcn_p
+      labels:
+      - plus
+    presynaptic:
+      cell_types:
+      - mossy_fibers
+    strategy: bsb.connectivity.FixedIndegree
+  mossy_fibers_to_dcn_p_minus:
+    indegree: 48
+    postsynaptic:
+      cell_types:
+        - dcn_p
+      labels:
+        - minus
+    presynaptic:
+      cell_types:
+        - mossy_fibers
+    strategy: bsb.connectivity.FixedIndegree
+  io_to_purkinje_plus:
+    indegree: 1
+    postsynaptic:
+      cell_types:
+      - purkinje_cell
+      labels:
+      - plus
+    presynaptic:
+      cell_types:
+      - io
+      labels:
+      - plus
+    strategy: bsb.connectivity.FixedIndegree
+  io_to_purkinje_minus:
+    indegree: 1
+    postsynaptic:
+      cell_types:
+      - purkinje_cell
+      labels:
+      - minus
+    presynaptic:
+      cell_types:
+      - io
+      labels:
+      - minus
+    strategy: bsb.connectivity.FixedIndegree
+  io_to_mli_plus:
+    io_pc_connectivity:
+    - io_to_purkinje_plus
+    mli_pc_connectivity:
+    - basket_to_purkinje_plus
+    - stellate_to_purkinje_plus
+    postsynaptic:
+      cell_types:
+      - basket_cell
+      - stellate_cell
+    pre_cell_pc:
+      cell_types:
+      - purkinje_cell
+      labels:
+      - plus
+    presynaptic:
+      cell_types:
+      - io
+      labels:
+      - plus
+    strategy: cerebellar_models.connectome.io_molecular.ConnectomeIO_MLI
+  io_to_mli_minus:
+    io_pc_connectivity:
+      - io_to_purkinje_minus
+    mli_pc_connectivity:
+      - basket_to_purkinje_minus
+      - stellate_to_purkinje_minus
+    postsynaptic:
+      cell_types:
+        - basket_cell
+        - stellate_cell
+    pre_cell_pc:
+      cell_types:
+        - purkinje_cell
+      labels:
+        - minus
+    presynaptic:
+      cell_types:
+        - io
+      labels:
+        - minus
+    strategy: cerebellar_models.connectome.io_molecular.ConnectomeIO_MLI
+  io_to_dcn_p_plus:
+    outdegree: 30
+    postsynaptic:
+      cell_types:
+      - dcn_p
+      labels:
+      - plus
+    presynaptic:
+      cell_types:
+      - io
+      labels:
+      - plus
+    strategy: bsb.connectivity.FixedOutdegree
+  io_to_dcn_p_minus:
+    outdegree: 30
+    postsynaptic:
+      cell_types:
+      - dcn_p
+      labels:
+      - minus
+    presynaptic:
+      cell_types:
+      - io
+      labels:
+      - minus
+    strategy: bsb.connectivity.FixedOutdegree
+  io_to_dcn_i_plus:
+    outdegree: 16
+    postsynaptic:
+      cell_types:
+      - dcn_i
+      labels:
+      - plus
+    presynaptic:
+      cell_types:
+      - io
+      labels:
+      - plus
+    strategy: bsb.connectivity.FixedOutdegree
+  io_to_dcn_i_minus:
+    outdegree: 16
+    postsynaptic:
+      cell_types:
+      - dcn_i
+      labels:
+      - minus
+    presynaptic:
+      cell_types:
+      - io
+      labels:
+      - minus
+    strategy: bsb.connectivity.FixedOutdegree
+  dcn_i_to_io_plus:
+    indegree: 16
+    postsynaptic:
+      cell_types:
+      - io
+      labels:
+      - plus
+    presynaptic:
+      cell_types:
+      - dcn_i
+      labels:
+      - plus
+    strategy: bsb.connectivity.FixedIndegree
+  dcn_i_to_io_minus:
+    indegree: 16
+    postsynaptic:
+      cell_types:
+      - io
+      labels:
+      - minus
+    presynaptic:
+      cell_types:
+      - dcn_i
+      labels:
+      - minus
+    strategy: bsb.connectivity.FixedIndegree
+after_connectivity:
+  duplicate_conn_io_pc_plus:
+    conn_strategy: io_to_purkinje_plus
+    contacts:
+      distribution: norm
+      loc: 500
+      scale: 5
+    strategy: cerebellar_models.connectome.io_purkinje.DuplicateSynapses
+  duplicate_conn_io_pc_minus:
+    conn_strategy: io_to_purkinje_minus
+    contacts:
+      distribution: norm
+      loc: 500
+      scale: 5
+    strategy: cerebellar_models.connectome.io_purkinje.DuplicateSynapses
+  print_structure_report:
+    output_filename: bsb_report_structure.pdf
+    strategy: cerebellar_models.analysis.structure_analysis.RunStructureReport
+simulations:
+  basal_activity:
+    simulator: nest
+    modules:
+    - cerebmodule
+    - custom_stdp_module
+    duration: 2500.0
+    resolution: 0.1
+    seed: 1234
+    cell_models:
+      mossy_fibers:
+        model: parrot_neuron
+      glomerulus:
+        model: parrot_neuron
+      granule_cell:
+        constants:
+          A1: 0.01
+          A2: -0.94
+          C_m: 7
+          E_L: -62
+          E_rev1: 0
+          E_rev2: -80
+          I_e: -0.888
+          V_m: -62.0
+          V_min: -150
+          V_reset: -70
+          V_th: -41
+          k_1: 0.311
+          k_2: 0.041407868
+          k_adap: 0.022
+          lambda_0: 1.0
+          t_ref: 1.5
+          tau_V: 0.3
+          tau_m: 24.15
+          tau_syn1: 5.8
+          tau_syn2: 13.61
+        model: eglif_cond_alpha_multisyn
+      golgi_cell:
+        constants:
+          A1: 259.988
+          A2: 178.01
+          C_m: 145
+          E_L: -62
+          E_rev1: 0
+          E_rev2: -80
+          E_rev3: 0
+          I_e: 16.214
+          V_m: -60.0
+          V_min: -150
+          V_reset: -75
+          V_th: -55
+          k_1: 0.031
+          k_2: 0.023
+          k_adap: 0.217
+          lambda_0: 0.15
+          t_ref: 2
+          tau_V: 0.09
+          tau_m: 44
+          tau_syn1: 0.23
+          tau_syn2: 10
+          tau_syn3: 0.5
+        model: eglif_cond_alpha_multisyn
+      purkinje_cell:
+        constants:
+          A1: 157.622
+          A2: 172.622
+          C_m: 334
+          E_L: -59
+          E_rev1: 0
+          E_rev2: -80
+          E_rev3: 0
+          I_e: 700
+          V_m: -59.0
+          Vmin: -350
+          V_reset: -69
+          V_th: -43
+          k1: 0.195
+          k2: 0.041
+          kadap: 1.491
+          lambda_0: 4.0
+          t_ref: 0.5
+          tau_V: 3.5
+          tau_m: 47
+          tau_syn1: 1.1
+          tau_syn2: 2.8
+          tau_syn3: 0.4
+        model: eglif_pc_nestml
+      basket_cell:
+        constants:
+          A1: 5.953
+          A2: 5.863
+          C_m: 14.6
+          E_L: -68
+          E_rev1: 0
+          E_rev2: -80
+          E_rev3: 0
+          I_e: 3.711
+          V_m: -60.0
+          V_reset: -78
+          V_th: -53
+          k_1: 1.887
+          k_2: 1.096
+          k_adap: 2.025
+          lambda_0: 1.8
+          t_ref: 1.59
+          tau_V: 1.0
+          tau_m: 9.125
+          tau_syn1: 0.64
+          tau_syn2: 2
+          tau_syn3: 1.2
+        model: eglif_cond_alpha_multisyn
+      stellate_cell:
+        constants:
+          A1: 5.953
+          A2: 5.863
+          C_m: 14.6
+          E_L: -68
+          E_rev1: 0
+          E_rev2: -80
+          E_rev3: 0
+          I_e: 3.711
+          V_m: -60.0
+          V_reset: -78
+          V_th: -53
+          k_1: 1.887
+          k_2: 1.096
+          k_adap: 2.025
+          lambda_0: 1.8
+          t_ref: 1.59
+          tau_V: 1
+          tau_m: 9.125
+          tau_syn1: 0.64
+          tau_syn2: 2
+          tau_syn3: 1.2
+        model: eglif_cond_alpha_multisyn
+      dcn_p:
+        constants:
+          A1: 13.857
+          A2: 3.477
+          C_m: 142
+          E_L: -45
+          E_rev1: 0
+          E_rev2: -80
+          I_e: 75.385
+          V_m: -45
+          V_reset: -55
+          V_th: -36
+          k_1: 0.697
+          k_2: 0.047
+          k_adap: 0.408
+          lambda_0: 3.0
+          t_ref: 1.5
+          tau_V: 3.0
+          tau_m: 33
+          tau_syn1: 1.0
+          tau_syn2: 0.7
+        model: eglif_cond_alpha_multisyn
+      dcn_i:
+        constants:
+          A1: 176.358
+          A2: 176.358
+          C_m: 56
+          E_L: -40
+          E_rev1: 0
+          E_rev2: -80
+          I_e: 2.384
+          V_m: -40
+          V_reset: -55
+          V_th: -39
+          k_1: 0.041
+          k_2: 0.044
+          k_adap: 0.079
+          lambda_0: 0.9
+          t_ref: 3
+          tau_V: 1.0
+          tau_m: 56
+          tau_syn1: 3.64
+          tau_syn2: 1.14
+        model: eglif_cond_alpha_multisyn
+      io:
+        constants:
+          A1: 1810.923
+          A2: 1358.197
+          C_m: 189
+          E_L: -45
+          E_rev1: 0
+          E_rev2: -80
+          I_e: -18.101
+          V_m: -45
+          V_reset: -45
+          V_th: -35
+          k1: 0.191
+          k2: 0.091
+          kadap: 1.928
+          lambda_0: 1.2
+          t_ref: 1
+          tau_V: 0.8
+          tau_m: 11
+          tau_syn1: 1
+          tau_syn2: 60
+        model: eglif_io_nestml
+    connection_models:
+      mossy_fibers_to_glomerulus:
+        synapses:
+        - delay: 1.0
+          model: static_synapse
+          weight: 1.0
+      glomerulus_to_granule:
+        synapses:
+        - model: static_synapse
+          weight: 0.23
+          delay: 1
+          receptor_type: 1
+      glomerulus_to_golgi:
+        synapses:
+        - model: static_synapse
+          weight: 0.24
+          delay: 1
+          receptor_type: 1
+      golgi_to_glomerulus:
+        synapses:
+        - model: static_synapse
+          weight: 0.24
+          delay: 2
+          receptor_type: 2
+      golgi_to_golgi:
+        synapses:
+        - delay: 4.0
+          model: static_synapse
+          receptor_type: 2
+          weight: 0.007
+      ascending_axon_to_golgi:
+        synapses:
+        - model: static_synapse
+          weight: 0.82
+          delay: 2
+          receptor_type: 3
+      parallel_fiber_to_golgi:
+        synapses:
+        - model: static_synapse
+          weight: 0.05
+          delay: 5
+          receptor_type: 3
+      ascending_axon_to_purkinje_plus:
+        synapses:
+        - model: static_synapse
+          weight: 0.41
+          delay: 2
+          receptor_type: 1
+      ascending_axon_to_purkinje_minus:
+        synapses:
+          - model: static_synapse
+            weight: 0.41
+            delay: 2
+            receptor_type: 1
+      parallel_fiber_to_purkinje_plus:
+        synapses:
+        - model: stdp_synapse_sinexp
+          weight: 0.14
+          delay: 5
+          receptor_type: 1
+      parallel_fiber_to_purkinje_minus:
+        synapses:
+          - model: stdp_synapse_sinexp
+            weight: 0.14
+            delay: 5
+            receptor_type: 1
+      parallel_fiber_to_basket:
+        synapses:
+        - model: static_synapse
+          weight: 0.06
+          delay: 5
+          receptor_type: 1
+      parallel_fiber_to_stellate:
+        synapses:
+        - model: static_synapse
+          weight: 0.08
+          delay: 5
+          receptor_type: 1
+      basket_to_purkinje_plus:
+        synapses:
+        - model: static_synapse
+          weight: 0.8 #0.44
+          delay: 4
+          receptor_type: 2
+      basket_to_purkinje_minus:
+        synapses:
+          - model: static_synapse
+            weight: 0.8 #0.44
+            delay: 4
+            receptor_type: 2
+      stellate_to_purkinje_plus:
+        synapses:
+        - model: static_synapse
+          weight: 0.17 #1.64
+          delay: 5
+          receptor_type: 2
+      stellate_to_purkinje_minus:
+        synapses:
+          - model: static_synapse
+            weight: 0.17 #1.64
+            delay: 5
+            receptor_type: 2
+      basket_to_basket:
+        synapses:
+        - model: static_synapse
+          weight: 0.006
+          delay: 4
+          receptor_type: 2
+      stellate_to_stellate:
+        synapses:
+        - model: static_synapse
+          weight: 0.005
+          delay: 4
+          receptor_type: 2
+      purkinje_to_dcn_p_plus:
+        synapses:
+        - delay: 4.0
+          model: static_synapse
+          receptor_type: 2
+          weight: 0.35
+      purkinje_to_dcn_p_minus:
+        synapses:
+        - delay: 4.0
+          model: static_synapse
+          receptor_type: 2
+          weight: 0.35
+      purkinje_to_dcn_i_plus:
+        synapses:
+        - delay: 4.0
+          model: static_synapse
+          receptor_type: 2
+          weight: 0.02
+      purkinje_to_dcn_i_minus:
+        synapses:
+        - delay: 4.0
+          model: static_synapse
+          receptor_type: 2
+          weight: 0.02
+      mossy_fibers_to_dcn_p_plus:
+        synapses:
+        - delay: 4.0
+          model: static_synapse
+          receptor_type: 1
+          weight: 0.25
+      mossy_fibers_to_dcn_p_minus:
+        synapses:
+          - delay: 4.0
+            model: static_synapse
+            receptor_type: 1
+            weight: 0.25
+      io_to_purkinje_plus:
+        synapses:
+        - delay: 4.0
+          model: static_synapse
+          receptor_type: 5
+          weight: 800
+      io_to_purkinje_minus:
+        synapses:
+        - delay: 4.0
+          model: static_synapse
+          receptor_type: 5
+          weight: 800
+      io_to_mli_plus_io_to_basket_cell:
+        synapses:
+        - delay: 40.0
+          model: static_synapse
+          receptor_type: 3
+          weight: 5.0
+      io_to_mli_minus_io_to_basket_cell:
+        synapses:
+          - delay: 40.0
+            model: static_synapse
+            receptor_type: 3
+            weight: 5.0
+      io_to_mli_plus_io_to_stellate_cell:
+        synapses:
+        - delay: 40.0
+          model: static_synapse
+          receptor_type: 3
+          weight: 5.0
+      io_to_mli_minus_io_to_stellate_cell:
+        synapses:
+          - delay: 40.0
+            model: static_synapse
+            receptor_type: 3
+            weight: 5.0
+      io_to_dcn_p_plus:
+        synapses:
+        - delay: 4.0
+          model: static_synapse
+          receptor_type: 1
+          weight: 0.4
+      io_to_dcn_p_minus:
+        synapses:
+        - delay: 4.0
+          model: static_synapse
+          receptor_type: 1
+          weight: 0.4
+      io_to_dcn_i_plus:
+        synapses:
+        - delay: 5.0
+          model: static_synapse
+          receptor_type: 1
+          weight: 0.25
+      io_to_dcn_i_minus:
+        synapses:
+        - delay: 5.0
+          model: static_synapse
+          receptor_type: 1
+          weight: 0.25
+      dcn_i_to_io_plus:
+        synapses:
+        - delay: 25.0
+          model: static_synapse
+          receptor_type: 2
+          weight: 0.45
+      dcn_i_to_io_minus:
+        synapses:
+        - delay: 25.0
+          model: static_synapse
+          receptor_type: 2
+          weight: 0.45
+    devices:
+      background_noise:
+        delay: 0.1
+        device: poisson_generator
+        rate: 4.0
+        targetting:
+          cell_models:
+          - mossy_fibers
+          strategy: cell_model
+        weight: 1.0
+      mossy_fibers_record:
+        delay: 0.1
+        device: spike_recorder
+        targetting:
+          cell_models:
+          - mossy_fibers
+          strategy: cell_model
+      glomerulus_record:
+        delay: 0.1
+        device: spike_recorder
+        targetting:
+          cell_models:
+          - glomerulus
+          strategy: cell_model
+      granule_record:
+        delay: 0.1
+        device: spike_recorder
+        targetting:
+          cell_models:
+          - granule_cell
+          strategy: cell_model
+      golgi_record:
+        delay: 0.1
+        device: spike_recorder
+        targetting:
+          cell_models:
+          - golgi_cell
+          strategy: cell_model
+      purkinje_plus_record:
+        delay: 0.1
+        device: spike_recorder
+        targetting:
+          cell_models:
+          - purkinje_cell
+          labels:
+          - plus
+          strategy: by_label
+      purkinje_minus_record:
+        delay: 0.1
+        device: spike_recorder
+        targetting:
+          cell_models:
+          - purkinje_cell
+          labels:
+          - minus
+          strategy: by_label
+      basket_record:
+        delay: 0.1
+        device: spike_recorder
+        targetting:
+          cell_models:
+          - basket_cell
+          strategy: cell_model
+      stellate_record:
+        delay: 0.1
+        device: spike_recorder
+        targetting:
+          cell_models:
+          - stellate_cell
+          strategy: cell_model
+      dcn_p_plus_record:
+        delay: 0.1
+        device: spike_recorder
+        targetting:
+          cell_models:
+          - dcn_p
+          labels:
+          - plus
+          strategy: by_label
+      dcn_p_minus_record:
+        delay: 0.1
+        device: spike_recorder
+        targetting:
+          cell_models:
+          - dcn_p
+          labels:
+          - minus
+          strategy: by_label
+      dcn_i_plus_record:
+        delay: 0.1
+        device: spike_recorder
+        targetting:
+          cell_models:
+          - dcn_i
+          labels:
+          - plus
+          strategy: by_label
+      dcn_i_minus_record:
+        delay: 0.1
+        device: spike_recorder
+        targetting:
+          cell_models:
+          - dcn_i
+          labels:
+          - minus
+          strategy: by_label
+      io_plus_record:
+        delay: 0.1
+        device: spike_recorder
+        targetting:
+          cell_models:
+          - io
+          labels:
+          - plus
+          strategy: by_label
+      io_minus_record:
+        delay: 0.1
+        device: spike_recorder
+        targetting:
+          cell_models:
+          - io
+          labels:
+          - minus
+          strategy: by_label
+  mf_cf_stimulus:
+    devices:
+      mf_stimulus_1:
+        device: poisson_generator
+        rate: 40
+        start: 500
+        stop: 760
+        targetting:
+          strategy: cell_model
+          cell_models:
+            - mossy_fibers
+        weight: 1
+        delay: 0.1
+      mf_stimulus_2:
+        device: poisson_generator
+        rate: 40
+        start: 1500
+        stop: 1760
+        targetting:
+          strategy: cell_model
+          cell_models:
+            - mossy_fibers
+        weight: 1
+        delay: 0.1
+      cf_stimulus:
+        delay: 0.1
+        device: poisson_generator
+        rate: 500.0
+        receptor_type: 1
+        start: 750.0
+        stop: 760.0
+        targetting:
+          cell_models:
+          - io
+          strategy: cell_model
+        weight: 55.0
+    $import:
+      ref: "#/simulations/basal_activity"
+      values:
+        - simulator
+        - resolution
+        - duration
+        - modules
+        - seed
+        - cell_models
+        - connection_models
+        - devices
+packages:
+- cerebellar-models~=0.9.0
+- bsb~=7.0
+- bsb-nest~=7.0
