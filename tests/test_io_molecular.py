@@ -144,3 +144,73 @@ class TestIoMolecular(
             for from_, to_ in cs.load_connections().as_globals():
                 connected[from_[0], to_[0]] += 1
             self.assertAll(connected == len(all_pc))
+
+    def test_regression_68(self):
+        self.cfg.connectivity = {}
+        self.cfg.after_placement = dict(
+            label_cell=dict(
+                strategy="cerebellar_models.placement.microzones.LabelCells",
+                cell_types=["io", "pc"],
+                labels=["p", "m"],
+            ),
+        )
+
+        self.cfg.connectivity.add(
+            "mli_to_pc",
+            dict(
+                strategy="bsb.connectivity.AllToAll",
+                presynaptic=dict(cell_types=["mli", "mli2"]),
+                postsynaptic=dict(cell_types=["pc"]),
+            ),
+        )
+        self.cfg.connectivity.add(
+            "io_to_pc_p",
+            dict(
+                strategy="bsb.connectivity.AllToAll",
+                presynaptic=dict(cell_types=["io"], labels=["p"]),
+                postsynaptic=dict(cell_types=["pc"], labels=["p"]),
+            ),
+        )
+        self.cfg.connectivity.add(
+            "io_to_mli_p",
+            dict(
+                strategy="cerebellar_models.connectome.io_molecular.ConnectomeIO_MLI",
+                presynaptic=dict(cell_types=["io"], labels=["p"]),
+                postsynaptic=dict(cell_types=["mli", "mli2"]),
+                io_pc_connectivity=["io_to_pc_p"],
+                mli_pc_connectivity=["mli_to_pc"],
+                pre_cell_pc="pc",
+            ),
+        )
+        self.cfg.connectivity.add(
+            "io_to_pc_m",
+            dict(
+                strategy="bsb.connectivity.AllToAll",
+                presynaptic=dict(cell_types=["io"], labels=["m"]),
+                postsynaptic=dict(cell_types=["pc"], labels=["m"]),
+            ),
+        )
+        self.cfg.connectivity.add(
+            "io_to_mli_m",
+            dict(
+                strategy="cerebellar_models.connectome.io_molecular.ConnectomeIO_MLI",
+                presynaptic=dict(cell_types=["io"], labels=["m"]),
+                postsynaptic=dict(cell_types=["mli", "mli2"]),
+                io_pc_connectivity=["io_to_pc_m"],
+                mli_pc_connectivity=["mli_to_pc"],
+                pre_cell_pc="pc",
+            ),
+        )
+        self.network.compile(append=True, skip_placement=True)
+        ps_io = self.network.get_placement_set("io")
+        io_plus = ps_io.get_labelled(["p"])
+        io_minus = ps_io.get_labelled(["m"])
+        io_not_plus = set(ps_io.load_ids()) - set(io_plus)
+        self.assertEqual(io_not_plus, set(io_minus), "minus and plus set should not overlap")
+        io_mli_m = self.network.get_connectivity_set("io_to_mli_m_io_to_mli")
+        io_mli_p = self.network.get_connectivity_set("io_to_mli_p_io_to_mli")
+
+        io_m = io_mli_m.load_connections().all()[0][:, 0]
+        io_p = io_mli_p.load_connections().all()[0][:, 0]
+        self.assertAll(np.unique(io_m) == io_minus, "All io minus cells should be connected")
+        self.assertAll(np.unique(io_p) == io_plus, "All io minus cells should be connected")
