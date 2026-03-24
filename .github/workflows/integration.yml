@@ -32,15 +32,6 @@ jobs:
         # Install `libopenmpi` for MPI and libgsl for NEST
         sudo apt install openmpi-bin libopenmpi-dev libgsl-dev
 
-    - name: Cache pip
-      uses: actions/cache@v4
-      with:
-        path: ~/.cache/pip
-        key: ${{ runner.os }}-pip-${{ hashFiles('pyproject.toml') }}
-        restore-keys: |
-          ${{ runner.os }}-pip-
-          ${{ runner.os }}-
-
     - name: Install dependencies & self
       run: |
         pip install --upgrade pip
