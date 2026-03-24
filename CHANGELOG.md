@@ -1,3 +1,7 @@
+# v0.10.0 - 2025-03-24
+
+* feat: Add random microzones by @filimarc in https://github.com/dbbs-lab/cerebellar-models/pull/69
+
 # v0.9.0 - 2025-12-16
 
 * feat: Bump to bsb 7 and add matrix plots by @drodarie in https://github.com/dbbs-lab/cerebellar-models/pull/67

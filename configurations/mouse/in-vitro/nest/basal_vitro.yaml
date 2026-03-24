@@ -1,5 +1,5 @@
 packages:
-  - cerebellar-models~=0.9.0
+  - cerebellar-models~=0.10.0
   - bsb~=7.0
   - bsb-nest~=7.0
 components:
