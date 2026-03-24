@@ -3,7 +3,7 @@ cd $GITHUB_WORKSPACE/_nest_repo
 git checkout tags/v$1
 mkdir build
 cd build
-pip install cython~=3.0.0
+pip install cython~=3.0.0 cmake
 mkdir -p $2
 cmake .. \
   -DCMAKE_INSTALL_PREFIX=$2 \

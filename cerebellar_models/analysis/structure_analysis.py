@@ -99,7 +99,8 @@ class PlacementTable(TablePlot, ScaffoldPlot):
             ct = ps.cell_type
             volume = np.sum([p.volume() for place in ct.get_placement() for p in place.partitions])
             ct_name = self.extract_ct_name(ct)
-            for labels in ps.get_unique_labels():
+            u_labels = self.get_unique_labels(ps)
+            for labels in u_labels:
                 count = ps.get_labelled(labels).size
                 self.rows.append(self.get_labelled_ct_name(ct_name, labels))
                 self._values.append([count, volume])
@@ -351,7 +352,7 @@ class CellPlacement3D(ScaffoldPlot):
             if ct.name not in self.ignored_ct:
                 positions = ps.load_positions()
                 if len(positions) > 0:
-                    u_labels = ps.get_unique_labels()
+                    u_labels = self.get_unique_labels(ps)
                     if len(u_labels) > 1:
                         color = [
                             self.labelled_dict_colors.get(
@@ -505,10 +506,10 @@ class StructureReport(BSBReport):
         super().__init__(scaffold, cell_type_info)
         to_ignore = ["glomerulus", "ubc_glomerulus"]
         num_labelled_ct = sum(
-            len(ps.get_unique_labels()) for ps in self.scaffold.get_placement_sets()
+            len(ScaffoldPlot.get_unique_labels(ps)) for ps in self.scaffold.get_placement_sets()
         )
         legend = Legend(
-            (10, 0.6 * (num_labelled_ct - len(to_ignore)) / 3.0),
+            (10, 0.6 * max(num_labelled_ct - len(to_ignore), 1) / 3.0),
             3,
             dict_legend=dict(columnspacing=2.0, handletextpad=0.1, fontsize=20, loc="lower center"),
             dict_abbreviations=self.labelled_abbreviations,

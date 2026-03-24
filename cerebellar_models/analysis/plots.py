@@ -195,12 +195,23 @@ class ScaffoldPlot(Plot):
         extra = "_".join(labels)
         return ct_name + (extra if len(extra) == 0 else "_" + extra)
 
+    @staticmethod
+    def get_unique_labels(ps):
+        """
+        Get unique labels sets for a provided placement set
+        Provide the default placement set label sets if the placement set is empty.
+        """
+        u_labels = ps.get_unique_labels()
+        if not len(u_labels):
+            u_labels = [set()]
+        return u_labels
+
     @property
     def labelled_dict_colors(self):
         result = self.dict_colors.copy()
         for ps in self.scaffold.get_placement_sets():
             ct_name = ps.cell_type.name
-            u_labels = ps.get_unique_labels()
+            u_labels = self.get_unique_labels(ps)
             if len(u_labels) > 1:
                 color = np.array(result[ct_name])
                 del result[ct_name]
@@ -236,9 +247,10 @@ class Legend(Plot):
             patches.Patch(color=color[:3], label=label) for label, color in self.dict_colors.items()
         ]
         dict_plot = self.dict_legend.copy()
+        dict_plot["ncol"] = self.cols_legend
         dict_plot.update(kwargs)
         keys = [self.dict_abbreviations.get(k, k) for k in self.dict_colors.keys()]
-        self.get_ax().legend(patchs, keys, ncol=self.cols_legend, **dict_plot)
+        self.get_ax().legend(patchs, keys, **dict_plot)
 
     def remove_ct(self, to_keep: List[str], to_ignore: List[str] = None):
         """

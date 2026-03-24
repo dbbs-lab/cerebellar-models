@@ -79,3 +79,43 @@ class TestMicrozones(
         self.scaffold = Scaffold(self.cfg, self.storage)
         self.scaffold.compile()
         self._check_labels(axis=2)
+
+    def test_random_labels_same_size(self):
+        self.cfg.after_placement["label_cell"] = dict(
+            strategy="cerebellar_models.placement.microzones.LabelCells",
+            cell_types=["io"],
+            labels=self.labels,
+            same_size=True,
+        )
+        self.scaffold = Scaffold(self.cfg, self.storage)
+        self.scaffold.compile()
+        ps = self.scaffold.get_placement_set("io")
+        unique_labels = [
+            list(label)[0] for label in self.scaffold.get_placement_set("io").get_unique_labels()
+        ]
+        self.assertAll(np.isin(self.labels, unique_labels))
+        for label in unique_labels:
+            filt = ps.get_labelled([label])
+            self.assertEqual(filt.size, 8)
+
+    def test_random_labels(self):
+        self.cfg.cell_types["io"] = dict(spatial=dict(radius=2, count=1000))
+        self.cfg.after_placement["label_cell"] = dict(
+            strategy="cerebellar_models.placement.microzones.LabelCells",
+            cell_types=["io"],
+            labels=self.labels,
+        )
+        self.scaffold = Scaffold(self.cfg, self.storage)
+        self.scaffold.compile()
+        ps = self.scaffold.get_placement_set("io")
+        unique_labels = [
+            list(label)[0] for label in self.scaffold.get_placement_set("io").get_unique_labels()
+        ]
+        self.assertAll(np.isin(self.labels, unique_labels))
+        for label in unique_labels:
+            filt = ps.get_labelled([label])
+            self.assertLess(
+                np.abs(filt.size - len(ps) * 1 / len(unique_labels)) / np.sqrt(filt.size),
+                3.27,
+                "This test should fail only once in every 1000 trials",
+            )
