@@ -5,8 +5,7 @@ from bsb import AfterPlacementHook, config, refs, types
 @config.node
 class LabelCells(AfterPlacementHook):
     """
-    Subdivide cell populations into labelled subpopulations of
-    same cell counts randomly.
+    Subdivide cell populations into labelled subpopulations randomly.
     The number of labels defines the number of subpopulations
     """
 
