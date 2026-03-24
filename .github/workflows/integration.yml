@@ -58,6 +58,9 @@ jobs:
       run: .github/devops/install-nest.sh ${NEST_VERSION} ${{ github.workspace }}/simulators/nest
 
     - name: Run tests & coverage
+      timeout-minutes: 60
+      env:
+        BSB_QUIET: true
       run: |
         source ${{ github.workspace }}/simulators/nest/bin/nest_vars.sh
         coverage run -p -m unittest discover -v -s ./tests
