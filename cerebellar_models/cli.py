@@ -254,9 +254,10 @@ def _add_microzones(configuration, micro_params: MicrozonesParams):
     # add labelling strat
     configuration["after_placement"] = {
         "label_microzones": {
-            "strategy": "cerebellar_models.placement.microzones.LabelMicrozones",
+            "strategy": "cerebellar_models.placement.microzones.LabelCells",
             "cell_types": cells_found,
             "labels": micro_params.labels,
+            "same_size": True,
         }
     }
 

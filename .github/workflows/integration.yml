@@ -32,6 +32,11 @@ jobs:
         # Install `libopenmpi` for MPI and libgsl for NEST
         sudo apt install openmpi-bin libopenmpi-dev libgsl-dev
 
+    - name: Install dependencies & self
+      run: |
+        pip install --upgrade pip
+        pip install -e .[test]
+
     - name: Cache NEST
       id: cache-nest
       uses: actions/cache@v4
@@ -43,21 +48,10 @@ jobs:
       if: steps.cache-nest.outputs.cache-hit != 'true'
       run: .github/devops/install-nest.sh ${NEST_VERSION} ${{ github.workspace }}/simulators/nest
 
-    - name: Cache pip
-      uses: actions/cache@v4
-      with:
-        path: ~/.cache/pip
-        key: ${{ runner.os }}-pip-${{ hashFiles('pyproject.toml') }}
-        restore-keys: |
-          ${{ runner.os }}-pip-
-          ${{ runner.os }}-
-
-    - name: Install dependencies & self
-      run: |
-        pip install --upgrade pip
-        pip install -e .[test]
-
     - name: Run tests & coverage
+      timeout-minutes: 60
+      env:
+        BSB_QUIET: true
       run: |
         source ${{ github.workspace }}/simulators/nest/bin/nest_vars.sh
         coverage run -p -m unittest discover -v -s ./tests

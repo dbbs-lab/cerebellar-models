@@ -169,7 +169,7 @@ class BSBReport(Report):
         ct_names = []
         for ps in self.scaffold.get_placement_sets():
             ct_name = ps.cell_type.name
-            for labels in ps.get_unique_labels():
+            for labels in ScaffoldPlot.get_unique_labels(ps):
                 ct_names.append(ScaffoldPlot.get_labelled_ct_name(ct_name, labels))
         return ct_names
 
