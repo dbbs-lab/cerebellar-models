@@ -1,7 +1,7 @@
 name: DBBS Mouse cerebellum configuration v4.2
 storage:
   engine: hdf5
-  root: mouse_cerebellum_microzones_ataxia.hdf5
+  root: cerebellum_plastic_ataxia.hdf5
 network:
   chunk_size:
   - 100.0
@@ -345,7 +345,7 @@ cell_types:
       - PurkinjeCell4
       - PurkinjeCell5
       - PurkinjeCell6
-      planar_density: 0.000583 # 50% original density
+      planar_density: 0.000900 # 50% original density
       radius: 7.5
   basket_cell:
     plotting:
@@ -1282,13 +1282,13 @@ simulations:
             receptor_type: 1
       parallel_fiber_to_purkinje_plus:
         synapses:
-        - model: stdp_synapse_sinexp
+        - model: static_synapse
           weight: 0.14
           delay: 5
           receptor_type: 1
       parallel_fiber_to_purkinje_minus:
         synapses:
-          - model: stdp_synapse_sinexp
+          - model: static_synapse
             weight: 0.14
             delay: 5
             receptor_type: 1
