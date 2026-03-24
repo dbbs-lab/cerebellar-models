@@ -17,6 +17,7 @@ class LabelCells(AfterPlacementHook):
     """List of labels to assign to each subpopulation."""
 
     same_size: bool = config.attr(type=bool, default=False)
+    """Flag to split in ensembles of same size"""
 
     def split_indexes(self, ps):
         if self.same_size:
