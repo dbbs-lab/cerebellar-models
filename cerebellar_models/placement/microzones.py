@@ -27,7 +27,7 @@ class LabelCells(AfterPlacementHook):
             )
             return np.split(index_pos, split_indexes)[:-1]
         choice = np.random.choice(len(self.labels), len(ps))
-        return [np.where(choice==i)[0] for i in range(len(self.labels))]
+        return [np.where(choice == i)[0] for i in range(len(self.labels))]
 
     def postprocess(self):
         for cell_type in self.cell_types:
@@ -61,4 +61,3 @@ class LabelMicrozones(LabelCells):
             dtype=int,
         )
         return np.split(index_pos, split_indexes)[:-1]
-

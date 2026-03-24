@@ -82,10 +82,10 @@ class TestMicrozones(
 
     def test_random_labels_same_size(self):
         self.cfg.after_placement["label_cell"] = dict(
-                strategy="cerebellar_models.placement.microzones.LabelCells",
-                cell_types=["io"],
-                labels=self.labels,
-                same_size=True,
+            strategy="cerebellar_models.placement.microzones.LabelCells",
+            cell_types=["io"],
+            labels=self.labels,
+            same_size=True,
         )
         self.scaffold = Scaffold(self.cfg, self.storage)
         self.scaffold.compile()
@@ -101,9 +101,9 @@ class TestMicrozones(
     def test_random_labels(self):
         self.cfg.cell_types["io"] = dict(spatial=dict(radius=2, count=1000))
         self.cfg.after_placement["label_cell"] = dict(
-                strategy="cerebellar_models.placement.microzones.LabelCells",
-                cell_types=["io"],
-                labels=self.labels,
+            strategy="cerebellar_models.placement.microzones.LabelCells",
+            cell_types=["io"],
+            labels=self.labels,
         )
         self.scaffold = Scaffold(self.cfg, self.storage)
         self.scaffold.compile()
@@ -115,8 +115,7 @@ class TestMicrozones(
         for label in unique_labels:
             filt = ps.get_labelled([label])
             self.assertLess(
-                np.abs(filt.size - len(ps) * 1/len(unique_labels))
-                / np.sqrt(filt.size),
+                np.abs(filt.size - len(ps) * 1 / len(unique_labels)) / np.sqrt(filt.size),
                 3.27,
                 "This test should fail only once in every 1000 trials",
             )
