@@ -634,6 +634,14 @@ void eglif_cond_alpha_multisyn::handle(nest::SpikeEvent &e)
 
   double weight = e.get_weight();
   size_t nestml_buffer_idx = 0;
+
+  // Separate CS detection: Do not register CS
+  if (e.get_offset() != 0)
+  {
+    weight = 0.0;
+    // std::cout << "CS spike, W updated. weight: " << e.get_weight() << " --> " weight << std::endl;
+  }
+
   if ( weight >= 0.0 )
   {
     nestml_buffer_idx = std::get<0>(rport_to_nestml_buffer_idx[e.get_rport()]);
