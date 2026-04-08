@@ -65,15 +65,12 @@ class SpikePlot(ScaffoldPlot):
         return self.spiking_results.populations
 
     @property
-    def all_spikes(self):
-        return self.spiking_results.all_spikes
-
-    @property
     def nb_neurons(self):
         return self.spiking_results.nb_neurons
 
-    def get_filt_spikes(self):
-        return self.spiking_results.get_filt_spikes()
+    @property
+    def filt_spikes(self):
+        return self.spiking_results.filt_spikes
 
     @property
     def dt(self):
@@ -128,10 +125,6 @@ class SpikeSimulationReport(BSBReport):
                 plot.time_from = value
 
     @property
-    def all_spikes(self):
-        return self.spiking_results.all_spikes
-
-    @property
     def nb_neurons(self):
         return self.spiking_results.nb_neurons
 
@@ -151,14 +144,15 @@ class SpikeSimulationReport(BSBReport):
             if plot.is_plotted:
                 plot.clear()
 
-    def get_filt_spikes(self):
+    @property
+    def filt_spikes(self):
         """
         Filter the spike events for the time of the analysis.
 
         :return: Sliced List of SpikeTrain.
         :rtype: List[neo.core.SpikeTrain]
         """
-        return self.spiking_results.get_filt_spikes()
+        return self.spiking_results.filt_spikes
 
 
 class RasterPSTHPlot(SpikePlot):
@@ -238,7 +232,7 @@ class RasterPSTHPlot(SpikePlot):
         counts[1:] = np.cumsum(self.nb_neurons)
 
         bin_times = np.linspace(self.time_from, self.time_to, self.nb_bins)
-        loc_spikes = self.get_filt_spikes()
+        loc_spikes = self.filt_spikes
         for i, ct in enumerate(self.populations):
             times = loc_spikes[i].magnitude
             _, newIds = np.unique(loc_spikes[i].array_annotations["senders"], return_inverse=True)
@@ -428,7 +422,7 @@ class ISIPlot(Spike2Columns):
         num_filter = len(self.nb_neurons)
         counts = np.zeros(num_filter + 1)
         counts[1:] = np.cumsum(self.nb_neurons)
-        isis_dist = [extract_isis(self.all_spikes[i], self.dt) for i in range(num_filter)]
+        isis_dist = [extract_isis(self.filt_spikes[i], self.dt) for i in range(num_filter)]
         for i, ct in enumerate(self.populations):
             ax2 = self.get_ax(i)
             if len(isis_dist[i]) > 0:
@@ -515,7 +509,7 @@ class SimResultsTable(TablePlot, SpikePlot):
         num_filter = len(self.nb_neurons)
         counts = np.zeros(num_filter + 1)
         counts[1:] = np.cumsum(self.nb_neurons)
-        loc_spikes = self.get_filt_spikes()
+        loc_spikes = self.filt_spikes
         for i in range(num_filter):
             spikes = loc_spikes[i]
 

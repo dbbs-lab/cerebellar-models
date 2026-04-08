@@ -36,15 +36,18 @@ class SpikingResults:
         """Start time of the analysis"""
         self.time_to = time_to or self.scaffold.simulations[self.simulation_name].duration
         """End time of the analysis. By default, this corresponds to the simulation duration."""
-        self.dt = self.scaffold.simulations[simulation_name].resolution
+        self._dt = self.scaffold.simulations[simulation_name].resolution
         """Time step of the simulation in ms"""
         self.folder_nio = folder_nio
         """Folder containing the simulation results stored as nio files."""
         self.ignored_ct = ignored_ct if ignored_ct is not None else ["glomerulus", "ubc_glomerulus"]
         """List of ignored cell type names"""
         self._all_spikes = []
+        """List of SpikeTrain for each cell type"""
         self._nb_neurons = np.zeros(0, dtype=int)
+        """Number of neuron for each neuron type"""
         self._populations = []
+        """List of neuron type names"""
         self.load_spikes()
 
     @staticmethod
@@ -122,9 +125,17 @@ class SpikingResults:
         self._populations = list(cell_dict.keys())
 
     @property
-    def all_spikes(self) -> List[SpikeTrain]:
+    def filt_spikes(self) -> List[SpikeTrain]:
+        """
+        Filter the spike events for the time of the analysis.
+
+        :return: Sliced List of SpikeTrain.
+        :rtype: List[neo.core.SpikeTrain]
+        """
         return [
-            sp for sp, pop in zip(self._all_spikes, self._populations) if pop not in self.ignored_ct
+            sp.time_slice(self.time_from * ms, self.time_to * ms)
+            for sp, pop in zip(self._all_spikes, self._populations)
+            if pop not in self.ignored_ct
         ]
 
     @property
@@ -134,15 +145,6 @@ class SpikingResults:
     @property
     def populations(self) -> List[str]:
         return [pop for pop in self._populations if pop not in self.ignored_ct]
-
-    def get_filt_spikes(self):
-        """
-        Filter the spike events for the time of the analysis.
-
-        :return: Sliced List of SpikeTrain.
-        :rtype: List[neo.core.SpikeTrain]
-        """
-        return [st.time_slice(self.time_from * ms, self.time_to * ms) for st in self.all_spikes]
 
     def _check_times(self, start, stop):
         if stop < 0 or start < 0:
@@ -184,13 +186,17 @@ class SpikingResults:
     def scaffold(self):
         return self._scaffold
 
+    @property
+    def dt(self):
+        return self._dt
+
 
 def get_firing_rates(spiking_results, kernel=None):
     num_filter = len(spiking_results.nb_neurons)
     counts = np.zeros(num_filter + 1)
     counts[1:] = np.cumsum(spiking_results.nb_neurons)
 
-    loc_spikes = spiking_results.get_filt_spikes()
+    loc_spikes = spiking_results.filt_spikes
     duration = int((spiking_results.time_to - spiking_results.time_from) / spiking_results.dt)
     firing_rates = np.zeros((duration, num_filter))
     for i in range(num_filter):
@@ -246,7 +252,7 @@ def get_frequencies(spiking_results, firing_rates):
 
 
 def get_correlation_coefficients(spiking_results, bin_size):
-    filt_spikes = spiking_results.get_filt_spikes()
+    filt_spikes = spiking_results.filt_spikes
     return (
         correlation_coefficient(
             BinnedSpikeTrain(filt_spikes, bin_size=bin_size),

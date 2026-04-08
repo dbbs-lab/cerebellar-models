@@ -7,8 +7,8 @@ BSB simulations.
 
 .. _sim_plot:
 
-:class:`SpikePlot <.analysis.spiking_results.SpikePlot>`
---------------------------------------------------------
+:class:`SpikePlot <.analysis.spike_plots.SpikePlot>`
+----------------------------------------------------
 This abstract class provides an interface to plot spike-event based simulation
 results for the duration of the simulation. It extends from ``ScaffoldPlot``.
 
@@ -35,8 +35,8 @@ parameters from a ``SimulationReport`` (see :ref:`simulation_report`).
 
 .. _simulation_report:
 
-:class:`SpikeSimulationReport <.analysis.spiking_results.SpikeSimulationReport>`
---------------------------------------------------------------------------------
+:class:`SpikeSimulationReport <.analysis.spike_plots.SpikeSimulationReport>`
+----------------------------------------------------------------------------
 This abstract class provides an interface to create reports for
 spike-event based simulation results. It extends from ``BSBReport``.
 
@@ -73,8 +73,8 @@ The latter parameters will be automatically forwarded to the report's ``SpikePlo
 
 .. _raster_psth:
 
-:class:`RasterPSTHPlot <.analysis.spiking_results.RasterPSTHPlot>`
-------------------------------------------------------------------
+:class:`RasterPSTHPlot <.analysis.spike_plots.RasterPSTHPlot>`
+--------------------------------------------------------------
 This class extracts and plots a simulation spike times as a raster plot
 for the duration of the simulation, as well as the equivalent PSTH for each of
 the cell types of the simulation.
@@ -86,8 +86,8 @@ On top of the constructor parameters of ``SpikePlot``:
 
 .. _simulation_table:
 
-:class:`SimResultsTable <.analysis.spiking_results.SimResultsTable>`
---------------------------------------------------------------------
+:class:`SimResultsTable <.analysis.spike_plots.SimResultsTable>`
+----------------------------------------------------------------
 This class computes the mean firing rate and mean ISI of each cell type
 during the simulation time and plot it in a table.
 The firing rate value of a cell type corresponds to the mean number of
@@ -103,8 +103,8 @@ On top of the constructor parameters of ``SpikePlot``:
 
 .. _firing_rates:
 
-:class:`FiringRatesPlot <.analysis.spiking_results.FiringRatesPlot>`
---------------------------------------------------------------------
+:class:`FiringRatesPlot <.analysis.spike_plots.FiringRatesPlot>`
+----------------------------------------------------------------
 This class plots the mean instantaneous firing rate :math:`\lambda (t)`
 of each population, expressed according to time, for the duration of
 the simulation.
@@ -151,8 +151,8 @@ On top of the constructor parameters of ``SpikePlot``:
 
 .. _isis_distrib:
 
-:class:`ISIPlot <.analysis.spiking_results.ISIPlot>`
-----------------------------------------------------
+:class:`ISIPlot <.analysis.spike_plots.ISIPlot>`
+------------------------------------------------
 This class generates the Inter-spike interval (ISI) histogram plot for
 each cell type.
 
@@ -168,8 +168,8 @@ On top of the constructor parameters of ``SpikePlot``:
 
 .. _frequency_plot:
 
-:class:`FrequencyPlot <.analysis.spiking_results.FrequencyPlot>`
-----------------------------------------------------------------
+:class:`FrequencyPlot <.analysis.spike_plots.FrequencyPlot>`
+------------------------------------------------------------
 This class plots the frequency distribution analysis of the instantaneous
 firing rate signal for each cell type.
 The analysis performs a
@@ -190,8 +190,8 @@ be plotted on top of each panel:
 
 .. _corr_coef_plot:
 
-:class:`SpikeCorrelation <.analysis.spiking_results.SpikeCorrelation>`
-----------------------------------------------------------------------
+:class:`SpikeCorrelation <.analysis.spike_plots.SpikeCorrelation>`
+------------------------------------------------------------------
 This class plots the pairwise
 :doc:`Pearson’s correlation coefficients <elephant:reference/_toctree/spike_train_correlation/elephant.spike_train_correlation.correlation_coefficient>`
 between each cell type.
@@ -205,12 +205,12 @@ On top of the constructor parameters of ``SpikePlot``:
 
 .. _basic_sim_report:
 
-:class:`BasicSimulationReport <.analysis.spiking_results.BasicSimulationReport>`
---------------------------------------------------------------------------------
+:class:`BasicSimulationReport <.analysis.spike_plots.BasicSimulationReport>`
+----------------------------------------------------------------------------
 This class extends
-:class:`spike simulation report <.analysis.spiking_results.SpikeSimulationReport>`
+:class:`spike simulation report <.analysis.spike_plots.SpikeSimulationReport>`
 and produces a report containing 5
-:class:`SpikePlot <.analysis.spiking_results.SpikePlot>` (see section
+:class:`SpikePlot <.analysis.spike_plots.SpikePlot>` (see section
 :ref:`sim_plot`) with a legend:
 
 - A plot showing both the raster plot and Peristimulus Time Histogram (PSTH) for

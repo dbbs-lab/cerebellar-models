@@ -197,16 +197,18 @@ class TestSpikePlots(
             len(self.simulationReport.nb_neurons), len(self.simulationReport.populations)
         )
         self.assertEqual(
-            len(self.simulationReport.all_spikes), len(self.simulationReport.nb_neurons)
+            len(self.simulationReport.filt_spikes), len(self.simulationReport.nb_neurons)
         )
-        self.assertAll(np.array([len(st.magnitude) for st in self.simulationReport.all_spikes]) > 0)
+        self.assertAll(
+            np.array([len(st.magnitude) for st in self.simulationReport.filt_spikes]) > 0
+        )
         self.assertTrue("mossy_fibers" in self.simulationReport.populations)
         self.assertTrue("glomerulus" not in self.simulationReport.populations)
         with self.assertRaises(ValueError):
             SpikeSimulationReport(self.scaffold, "blabla", "./")
 
         empty_report = SpikeSimulationReport(self.scaffold, "basal_activity", "./cerebellar_models")
-        self.assertEqual(len(empty_report.all_spikes), 0)
+        self.assertEqual(len(empty_report.filt_spikes), 0)
         self.assertEqual(empty_report.nb_neurons.size, 0)
         self.assertEqual(empty_report.populations, [])
         with self.assertRaises(ValueError):
@@ -234,7 +236,7 @@ class TestSpikePlots(
             np.array(
                 [
                     np.all(s1 == s2)
-                    for s1, s2 in zip(self.simulationReport.all_spikes, plot.all_spikes)
+                    for s1, s2 in zip(self.simulationReport.filt_spikes, plot.filt_spikes)
                 ]
             )
         )
@@ -278,7 +280,7 @@ class TestSpikePlots(
         )
         self.assertEqual(scatter.get_alpha(), 1)
         self.assertTrue(scatter.get_rasterized())
-        mf_spikes = self.simulationReport.all_spikes[0]
+        mf_spikes = self.simulationReport.filt_spikes[0]
         mf_spike_times = (
             np.array(
                 (
@@ -301,7 +303,7 @@ class TestSpikePlots(
             nb_bins=31,
         )
         xlims = np.array([self.simulationReport.time_from, self.simulationReport.time_to])
-        mf_spikes = self.simulationReport.all_spikes[0]
+        mf_spikes = self.simulationReport.filt_spikes[0]
         mf_spike_times = (
             np.array(
                 (
@@ -348,7 +350,7 @@ class TestSpikePlots(
         plot.time_from = xlims[0]
         plot.time_to = xlims[1]
         plot.plot()
-        loc_mf_spikes = self.simulationReport.all_spikes[0].time_slice(xlims[0], xlims[1])
+        loc_mf_spikes = self.simulationReport.filt_spikes[0].time_slice(xlims[0], xlims[1])
         mf_spike_times = (
             np.array(
                 (
