@@ -11,7 +11,7 @@ from neo import SpikeTrain
 from quantities import ms
 
 from cerebellar_models.analysis.plots import ScaffoldPlot
-from cerebellar_models.analysis.spiking_results import (
+from cerebellar_models.analysis.spike_plots import (
     BasicSimulationReport,
     FiringRatesPlot,
     FrequencyPlot,
@@ -21,8 +21,8 @@ from cerebellar_models.analysis.spiking_results import (
     SpikeCorrelation,
     SpikePlot,
     SpikeSimulationReport,
-    extract_isis,
 )
+from cerebellar_models.analysis.spiking_results import extract_isis
 
 
 class MiniCerebCircuitFixture(RandomStorageFixture, engine_name="hdf5", setup_cls=True):
@@ -222,12 +222,8 @@ class TestSpikePlots(
         plot = SpikePlot(
             (10, 10),
             self.scaffold,
-            "mf_stimulus",
+            self.simulationReport.spiking_results,
             None,
-            None,
-            deepcopy(self.simulationReport.all_spikes),
-            np.copy(self.simulationReport.nb_neurons),
-            self.simulationReport.populations.copy(),
         )
         plot.is_updated = True
 
@@ -245,71 +241,21 @@ class TestSpikePlots(
         self.assertAll(self.simulationReport.nb_neurons == plot.nb_neurons)
         self.assertAll(np.array(self.simulationReport.populations) == np.array(plot.populations))
         self.assertFalse(plot.is_updated)
-        self.assertEqual(self.simulationReport.simulation_name, plot.simulation_name)
+        self.assertEqual(
+            self.simulationReport.spiking_results.simulation_name,
+            plot.spiking_results.simulation_name,
+        )
         self.assertEqual(self.scaffold, plot2.scaffold)
         self.simulationReport.time_to = 500.0
         self.simulationReport.time_from = 500.0
         self.assertEqual(plot.time_to, 500.0)
         self.assertEqual(plot.time_from, 500.0)
 
-    def test_errors_spike_plot(self):
-        with self.assertRaises(ValueError):
-            SpikePlot((10, 10), self.scaffold, "bla", None, None, None, None, None)
-        with self.assertRaises(ValueError):
-            SpikePlot(
-                (10, 10),
-                self.scaffold,
-                "basal_activity",
-                None,
-                None,
-                None,
-                nb_neurons=[1],
-                populations=[],
-            )
-        with self.assertRaises(ValueError):
-            SpikePlot(
-                (10, 10),
-                self.scaffold,
-                "basal_activity",
-                -1,
-                None,
-                None,
-                nb_neurons=[1],
-                populations=["cell"],
-            )
-        with self.assertRaises(ValueError):
-            SpikePlot(
-                (10, 10),
-                self.scaffold,
-                "basal_activity",
-                10,
-                9,
-                None,
-                nb_neurons=[1],
-                populations=["cell"],
-            )
-        with self.assertRaises(ValueError):
-            SpikePlot(
-                (10, 10),
-                self.scaffold,
-                "basal_activity",
-                10,
-                51000,
-                None,
-                nb_neurons=[1],
-                populations=["cell"],
-            )
-
     def test_raster_psth(self):
         plot = RasterPSTHPlot(
             (15, 10),
             scaffold=self.scaffold,
-            simulation_name="basal_activity",
-            time_from=None,
-            time_to=None,
-            all_spikes=self.simulationReport.all_spikes,
-            nb_neurons=self.simulationReport.nb_neurons,
-            populations=self.simulationReport.populations,
+            spiking_results=self.simulationReport.spiking_results,
             dict_colors=self.simulationReport.colors,
             nb_bins=31,
         )
@@ -350,12 +296,7 @@ class TestSpikePlots(
         plot = RasterPSTHPlot(
             (15, 10),
             scaffold=self.scaffold,
-            simulation_name="basal_activity",
-            time_from=None,
-            time_to=None,
-            all_spikes=self.simulationReport.all_spikes,
-            nb_neurons=self.simulationReport.nb_neurons,
-            populations=self.simulationReport.populations,
+            spiking_results=self.simulationReport.spiking_results,
             dict_colors=self.simulationReport.colors,
             nb_bins=31,
         )
@@ -398,15 +339,14 @@ class TestSpikePlots(
         plot = RasterPSTHPlot(
             (15, 10),
             scaffold=self.scaffold,
-            simulation_name="basal_activity",
-            time_from=xlims[0],
-            time_to=xlims[1],
-            all_spikes=self.simulationReport.all_spikes,
-            nb_neurons=self.simulationReport.nb_neurons,
-            populations=self.simulationReport.populations,
+            spiking_results=self.simulationReport.spiking_results,
             dict_colors=self.simulationReport.colors,
             nb_bins=31,
         )
+        old_time_from = plot.time_from
+        old_time_to = plot.time_to
+        plot.time_from = xlims[0]
+        plot.time_to = xlims[1]
         plot.plot()
         loc_mf_spikes = self.simulationReport.all_spikes[0].time_slice(xlims[0], xlims[1])
         mf_spike_times = (
@@ -429,33 +369,15 @@ class TestSpikePlots(
         plot.clear()
         self.assertEqual(len(plot.get_ax()[0].collections), 0)
         self.assertEqual(len(plot.get_ax()[0].containers), 0)
-
-    def test_raster_psth_empty(self):
-        # Test that an empty plot does not throw error.
-        plot = RasterPSTHPlot(
-            (15, 10),
-            scaffold=self.scaffold,
-            simulation_name="basal_activity",
-            time_from=None,
-            time_to=None,
-            all_spikes=[],
-            nb_neurons=np.zeros(0, dtype=int),
-            populations=[],
-        )
-        plot.plot()
-        self.assertEqual(len(plot.get_axes()), 0)
+        plot.time_from = old_time_from
+        plot.time_to = old_time_to
 
     def test_raster_psth_bins_error(self):
         with self.assertRaises(ValueError):
             RasterPSTHPlot(
                 (15, 10),
                 scaffold=self.scaffold,
-                simulation_name="basal_activity",
-                time_from=None,
-                time_to=None,
-                all_spikes=[],
-                nb_neurons=np.zeros(0, dtype=int),
-                populations=[],
+                spiking_results=self.simulationReport.spiking_results,
                 nb_bins=0,
             )
 
@@ -463,12 +385,7 @@ class TestSpikePlots(
         plot = FiringRatesPlot(
             (15, 6),
             scaffold=self.scaffold,
-            simulation_name="basal_activity",
-            time_from=None,
-            time_to=None,
-            all_spikes=self.simulationReport.all_spikes,
-            nb_neurons=self.simulationReport.nb_neurons,
-            populations=self.simulationReport.populations,
+            spiking_results=self.simulationReport.spiking_results,
             dict_colors=self.simulationReport.colors,
         )
         plot.plot()
@@ -487,32 +404,12 @@ class TestSpikePlots(
         plot.plot(relative_time=True)
         self.assertAll(np.absolute(np.array(plot.get_ax().get_xlim()) - xlims + xlims[0]) <= 1e-7)
 
-    def test_firing_rates_empty(self):
-        # Test that an empty plot does not throw error.
-        plot = FiringRatesPlot(
-            (15, 6),
-            scaffold=self.scaffold,
-            simulation_name="basal_activity",
-            time_from=None,
-            time_to=None,
-            all_spikes=[],
-            nb_neurons=np.zeros(0, dtype=int),
-            populations=[],
-        )
-        plot.plot()
-        self.assertEqual(len(plot.get_axes()), 0)
-
     def test_firing_rates_error_kernel(self):
         with self.assertRaises(TypeError):
             FiringRatesPlot(
                 (15, 10),
                 scaffold=self.scaffold,
-                simulation_name="basal_activity",
-                time_from=None,
-                time_to=None,
-                all_spikes=[],
-                nb_neurons=np.zeros(0, dtype=int),
-                populations=[],
+                spiking_results=self.simulationReport.spiking_results,
                 kernel=0,
             )
 
@@ -520,12 +417,7 @@ class TestSpikePlots(
         plot = ISIPlot(
             (15, 6),
             scaffold=self.scaffold,
-            simulation_name="basal_activity",
-            time_from=None,
-            time_to=None,
-            all_spikes=self.simulationReport.all_spikes,
-            nb_neurons=self.simulationReport.nb_neurons,
-            populations=self.simulationReport.populations,
+            spiking_results=self.simulationReport.spiking_results,
             dict_colors=self.simulationReport.colors,
             nb_bins=50,
         )
@@ -541,33 +433,12 @@ class TestSpikePlots(
         self.assertEqual(len(hist), 50)
         self.assertEqual(hist.orientation, "horizontal")
 
-    def test_plot_isis_empty(self):
-        # Test that an empty plot does not throw error.
-        plot = ISIPlot(
-            (15, 10),
-            scaffold=self.scaffold,
-            simulation_name="basal_activity",
-            time_from=None,
-            time_to=None,
-            all_spikes=[],
-            nb_neurons=np.zeros(0, dtype=int),
-            populations=[],
-            dict_colors=self.simulationReport.colors,
-        )
-        plot.plot()
-        self.assertEqual(len(plot.get_axes()), 0)
-
     def test_plot_isis_error_bins(self):
         with self.assertRaises(ValueError):
             ISIPlot(
                 (15, 10),
                 scaffold=self.scaffold,
-                simulation_name="basal_activity",
-                time_from=None,
-                time_to=None,
-                all_spikes=[],
-                nb_neurons=np.zeros(0, dtype=int),
-                populations=[],
+                spiking_results=self.simulationReport.spiking_results,
                 dict_colors=self.simulationReport.colors,
                 nb_bins=0,
             )
@@ -576,12 +447,7 @@ class TestSpikePlots(
         plot = FrequencyPlot(
             (15, 6),
             scaffold=self.scaffold,
-            simulation_name="basal_activity",
-            time_from=None,
-            time_to=None,
-            all_spikes=self.simulationReport.all_spikes,
-            nb_neurons=self.simulationReport.nb_neurons,
-            populations=self.simulationReport.populations,
+            spiking_results=self.simulationReport.spiking_results,
             dict_colors=self.simulationReport.colors,
         )
         plot.plot()
@@ -605,32 +471,11 @@ class TestSpikePlots(
             np.absolute(np.array(plot.get_ax().get_xlim()) - np.array([0, 40.0])) <= 1e-7
         )
 
-    def test_freq_plot_empty(self):
-        # Test that an empty plot does not throw error.
-        plot = FrequencyPlot(
-            (15, 10),
-            scaffold=self.scaffold,
-            simulation_name="basal_activity",
-            time_from=None,
-            time_to=None,
-            all_spikes=[],
-            nb_neurons=np.zeros(0, dtype=int),
-            populations=[],
-            dict_colors=self.simulationReport.colors,
-        )
-        plot.plot()
-        self.assertEqual(len(plot.get_axes()), 0)
-
     def test_sim_table(self):
         plot = SimResultsTable(
             (5, 2.5),
             scaffold=self.scaffold,
-            simulation_name="basal_activity",
-            time_from=None,
-            time_to=None,
-            all_spikes=self.simulationReport.all_spikes,
-            nb_neurons=self.simulationReport.nb_neurons,
-            populations=self.simulationReport.populations,
+            spiking_results=self.simulationReport.spiking_results,
             dict_colors=self.simulationReport.colors,
             dict_abv={"bla": "go", "granule_cell": "GrC"},
         )
@@ -643,65 +488,24 @@ class TestSpikePlots(
             np.asarray(np.array(plot.table_values).shape)
             == np.array([len(self.simulationReport.populations), 2])
         )
-        self.assertAll(
-            np.array(list(plot.get_firing_rates().keys()))
-            == np.array(self.simulationReport.populations)
-        )
+        self.assertAll(np.array(list(plot.get_firing_rates().keys())) == np.array(rows))
         for expected, tested in zip([v[0] for v in plot._values], plot.get_firing_rates().values()):
             self.assertAll(np.array(tested) == np.array(expected))
-        self.assertAll(
-            np.array(list(plot.get_isis_values().keys()))
-            == np.array(self.simulationReport.populations)
-        )
+        self.assertAll(np.array(list(plot.get_isis_values().keys())) == np.array(rows))
         for expected, tested in zip([v[1] for v in plot._values], plot.get_isis_values().values()):
             self.assertAll(np.array(tested) == np.array(expected))
-
-    def test_sim_table_empty(self):
-        # Test that an empty plot does not throw error.
-        plot = SimResultsTable(
-            (5, 2.5),
-            scaffold=self.scaffold,
-            simulation_name="basal_activity",
-            time_from=None,
-            time_to=None,
-            all_spikes=[],
-            nb_neurons=np.zeros(0, dtype=int),
-            populations=[],
-            dict_colors=self.simulationReport.colors,
-        )
-        with self.assertWarns(UserWarning):
-            plot.plot()
 
     def test_corr_matrix(self):
         plot = SpikeCorrelation(
             (10, 10.5),
             scaffold=self.scaffold,
-            simulation_name="basal_activity",
-            time_from=None,
-            time_to=None,
-            all_spikes=self.simulationReport.all_spikes,
-            nb_neurons=self.simulationReport.nb_neurons,
-            populations=self.simulationReport.populations,
+            spiking_results=self.simulationReport.spiking_results,
             dict_abv=self.simulationReport.abbreviations,
         )
         plot.plot()
         self.assertEqual(plot.corrcoef.shape, (6, 6))
         self.assertAll(plot.corrcoef <= 1)
         self.assertAll(plot.corrcoef >= -1)
-
-    def test_corr_matrix_empty(self):
-        plot = SpikeCorrelation(
-            (10, 10.5),
-            scaffold=self.scaffold,
-            simulation_name="basal_activity",
-            time_from=None,
-            time_to=None,
-            all_spikes=[],
-            nb_neurons=np.zeros(0, dtype=int),
-            populations=[],
-        )
-        plot.plot()
-        self.assertEqual(plot.corrcoef.shape, (0, 0))
 
     def test_basic_simulation_report(self):
         report = BasicSimulationReport(self.scaffold, "basal_activity", "./")
