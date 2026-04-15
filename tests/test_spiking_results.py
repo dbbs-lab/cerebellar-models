@@ -1,7 +1,7 @@
 import os
 import unittest
 from copy import deepcopy
-from os.path import join
+from os.path import abspath, dirname, join
 
 import numpy as np
 from bsb import Scaffold, parse_configuration_content
@@ -18,6 +18,7 @@ from cerebellar_models.analysis.spiking_results import (
     ISIPlot,
     RasterPSTHPlot,
     SimResultsTable,
+    SpikeCorrelation,
     SpikePlot,
     SpikeSimulationReport,
     extract_isis,
@@ -28,6 +29,8 @@ class MiniCerebCircuitFixture(RandomStorageFixture, engine_name="hdf5", setup_cl
     @classmethod
     def setUpClass(cls):
         super().setUpClass()
+        ROOT_FOLDER = abspath(dirname(dirname(__file__)))
+        os.chdir(ROOT_FOLDER)
         # one third of the canonical circuit
         nest_folder = "configurations/mouse/in-vitro/nest/"
         dict_cfg = {
@@ -423,6 +426,9 @@ class TestSpikePlots(
         self.assertEqual(len(plot.get_ax()[1].containers), 1)
         hist = plot.get_ax()[1].containers[0]
         self.assertEqual(len(hist), 30)
+        plot.clear()
+        self.assertEqual(len(plot.get_ax()[0].collections), 0)
+        self.assertEqual(len(plot.get_ax()[0].containers), 0)
 
     def test_raster_psth_empty(self):
         # Test that an empty plot does not throw error.
@@ -666,15 +672,48 @@ class TestSpikePlots(
         with self.assertWarns(UserWarning):
             plot.plot()
 
+    def test_corr_matrix(self):
+        plot = SpikeCorrelation(
+            (10, 10.5),
+            scaffold=self.scaffold,
+            simulation_name="basal_activity",
+            time_from=None,
+            time_to=None,
+            all_spikes=self.simulationReport.all_spikes,
+            nb_neurons=self.simulationReport.nb_neurons,
+            populations=self.simulationReport.populations,
+            dict_abv=self.simulationReport.abbreviations,
+        )
+        plot.plot()
+        self.assertEqual(plot.corrcoef.shape, (6, 6))
+        self.assertAll(plot.corrcoef <= 1)
+        self.assertAll(plot.corrcoef >= -1)
+
+    def test_corr_matrix_empty(self):
+        plot = SpikeCorrelation(
+            (10, 10.5),
+            scaffold=self.scaffold,
+            simulation_name="basal_activity",
+            time_from=None,
+            time_to=None,
+            all_spikes=[],
+            nb_neurons=np.zeros(0, dtype=int),
+            populations=[],
+        )
+        plot.plot()
+        self.assertEqual(plot.corrcoef.shape, (0, 0))
+
     def test_basic_simulation_report(self):
         report = BasicSimulationReport(self.scaffold, "basal_activity", "./")
-        plot_keys = np.array(["raster_psth", "table", "firing_rates", "isis", "freq", "legend"])
+        plot_keys = np.array(
+            ["raster_psth", "table", "firing_rates", "isis", "freq", "corr", "legend"]
+        )
         self.assertAll(np.array(list(report.plots.keys())) == plot_keys)
         filename = "test_report.pdf"
         report.print_report(filename, dpi=100)
         # should be seven cell types
         self.assertEqual(len(report.plots["table"].table_values), 6)
-        # Raster PSTH plot should have two sub plots for each population
+        # Raster PSTH plot should have two sub-plots for each population
         self.assertEqual(len(report.plots["raster_psth"].get_ax()[0].collections), 1)
         self.assertEqual(len(report.plots["raster_psth"].get_ax()[1].containers), 1)
         # Firing rates plot should store firing_rates

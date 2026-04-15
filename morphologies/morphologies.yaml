@@ -5,17 +5,18 @@ morphologies:
         axis1: 1
         axis2: 2
     parser:
+      skip_boundary_labels: ["soma"]
       tags:
-        16:
+        "16":
           - axon
           - axon_hillock
-        17:
+        "17":
           - axon
           - axon_initial_segment
-        18:
+        "18":
           - axon
           - ascending_axon
-        19:
+        "19":
           - axon
           - parallel_fiber
   - file: ./morphologies/GolgiCell.swc
@@ -24,14 +25,15 @@ morphologies:
         axis1: 1
         axis2: 2
     parser:
+      skip_boundary_labels: ["soma"]
       tags:
-        16:
+        "16":
           - dendrites
           - basal_dendrites
-        17:
+        "17":
           - dendrites
           - apical_dendrites
-        18:
+        "18":
           - axon
           - axon_initial_segment
   - file: ./morphologies/PurkinjeCell.swc
@@ -40,27 +42,28 @@ morphologies:
         axis1: 1
         axis2: 2
     parser:
+      skip_boundary_labels: ["soma"]
       tags:
-        16:
+        "16":
           - axon
           - AIS
-        17:
+        "17":
           - axon
           - AIS_K
-        18:
+        "18":
           - axon
           - axonmyelin
-        19:
+        "19":
           - axon
           - nodes
-        20:
+        "20":
           - dendrites
           - basal
-        21:
+        "21":
           - dendrites
           - pf_targets
           - sc_targets
-        22:
+        "22":
           - dendrites
           - aa_targets
           - sc_targets
@@ -70,14 +73,15 @@ morphologies:
         axis1: 1
         axis2: 2
     parser:
+      skip_boundary_labels: ["soma"]
       tags:
-        16:
+        "16":
           - dendrites
           - proximal_dendrites
-        17:
+        "17":
           - dendrites
           - distal_dendrites
-        18:
+        "18":
           - axon
           - axon_initial_segment
   - file: ./morphologies/BasketCell.swc
@@ -86,7 +90,8 @@ morphologies:
         axis1: 1
         axis2: 2
     parser:
+      skip_boundary_labels: ["soma"]
       tags:
-        16:
+        "16":
           - axon
           - axon_initial_segment

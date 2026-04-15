@@ -20,7 +20,7 @@ We will follow the structure of the BSB configuration files to present each of t
 the data they leverage.
 
 .. include:: ../../getting-started/biological-context.rst
-   :end-before: figure
+   :end-before: _fig-network
 
 .. Do not include the Figure to prevent double referencing
 

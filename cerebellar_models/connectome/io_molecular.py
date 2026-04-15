@@ -166,6 +166,7 @@ class ConnectomeIO_MLI(NotParallel, ConnectionStrategy):
                     ptr = ptr + ln
 
             # because we are using global indices we need to extract the global ps
+            pre_ps = self.scaffold.get_placement_set(pre_ps.cell_type)
             for i, post_ps in enumerate(post.placement):
                 post_ps = self.scaffold.get_placement_set(post_ps.cell_type)
                 current = (ps_locs == i)[:ptr]

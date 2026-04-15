@@ -36,6 +36,11 @@ class TestNestModuleLoading(unittest.TestCase):
 class TestSingleCellModels(
     RandomStorageFixture, NumpyTestCase, unittest.TestCase, engine_name="hdf5"
 ):
+    @classmethod
+    def setUpClass(cls):
+        super().setUpClass()
+        ROOT_FOLDER = abspath(dirname(dirname(__file__)))
+        os.chdir(ROOT_FOLDER)
 
     def setUp(self):
         super().setUp()

@@ -1,6 +1,8 @@
+import json
 import os
 import unittest
 from collections.abc import Mapping
+from os.path import abspath, dirname, join
 from unittest.mock import patch
 
 import yaml
@@ -23,6 +25,12 @@ def mock_print_panel(options, title="test"):
 
 
 class TestCli(unittest.TestCase):
+    @classmethod
+    def setUpClass(cls):
+        super().setUpClass()
+        ROOT_FOLDER = abspath(dirname(dirname(__file__)))
+        os.chdir(ROOT_FOLDER)
+
     @patch(
         "cerebellar_models.cli.print_panel",
         lambda options, title: mock_print_panel(options, title),
@@ -50,7 +58,7 @@ class TestCli(unittest.TestCase):
                 "--species",
                 "mouse",
                 "--output_folder",
-                os.path.abspath(__file__),
+                abspath(__file__),
                 "--extension",
                 "yaml",
             ],
@@ -70,11 +78,9 @@ class TestCli(unittest.TestCase):
         lambda options, title: mock_print_panel(options, title),
     )
     def test_configure(self):
-        folder = os.path.dirname(__file__)
-        with open(
-            os.path.join(folder, "test_configurations/canonical_mouse_awake_io_nest.yaml"), "r"
-        ) as f:
-            config2 = yaml.safe_load(f)
+        folder = dirname(__file__)
+        with open(join(folder, "test_configurations/canonical_mouse_awake_io_nest.json"), "r") as f:
+            config2 = json.loads(f.read())
         runner = CliRunner()
         result = runner.invoke(
             configure,
