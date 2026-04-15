@@ -54,9 +54,9 @@ if __name__ == "__main__":
     }
 
     # Static synapse for BC
-    pf_BC_ampa = {"weight": 1.0, "delay": 0.1, "receptor_type": 1}
-    pf_BC_nmda = {"weight": 1.0, "delay": 0.1, "receptor_type": 2}
-    BC_BC_gaba = {"weight": 1.0, "delay": 0.1, "receptor_type": 3}
+    pf_BC_ampa = {"weight": 0.29, "delay": 0.1, "receptor_type": 1}
+    pf_BC_nmda = {"weight": 0.29, "delay": 0.1, "receptor_type": 2}
+    BC_BC_gaba = {"weight": 0.016, "delay": 0.1, "receptor_type": 3}
 
     # TM parameters for BC synapses
     pf_BC_ampa_tm = {

@@ -76,11 +76,11 @@ if __name__ == "__main__":
     }
 
     # Static synapses to GoC
-    aa_to_GoC_ampa = {"weight": 1, "delay": 0.1, "receptor_type": 4}
-    aa_to_GoC_nmda = {"weight": 1, "delay": 0.1, "receptor_type": 2}
-    mf_to_GoC_ampa = {"weight": 1, "delay": 0.1, "receptor_type": 1}
-    mf_to_GoC_nmda = {"weight": 1, "delay": 0.1, "receptor_type": 2}
-    pf_to_GoC_ampa = {"weight": 1, "delay": 0.1, "receptor_type": 5}
+    aa_to_GoC_ampa = {"weight": 0.59, "delay": 0.1, "receptor_type": 4}
+    aa_to_GoC_nmda = {"weight": 0.59, "delay": 0.1, "receptor_type": 2}
+    mf_to_GoC_ampa = {"weight": 0.32, "delay": 0.1, "receptor_type": 1}
+    mf_to_GoC_nmda = {"weight": 0.32, "delay": 0.1, "receptor_type": 2}
+    pf_to_GoC_ampa = {"weight": 0.20, "delay": 0.1, "receptor_type": 5}
 
     # TM params for synapses to GoC
     aa_to_GoC_ampa_tm = {

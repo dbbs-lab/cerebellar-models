@@ -1,4 +1,4 @@
-name: DBBS Mouse cerebellum NEST basal activity for in vitro state with multireceptor synaptic modeks
+name: DBBS Mouse cerebellum NEST basal activity for in vitro state with multireceptor synaptic models
 packages:
   - bsb-nest~=7.0
 components:
@@ -253,43 +253,49 @@ simulations:
           GABA_A2: 4.524929470710231
         model: eglif_multirec_opt
     connection_models:
+      gap_goc:
+        synapses:
+          - model: gap_junction
+            weight:  14.3
+        rule: one_to_one
+        make_symmetric: True
       ascending_axon_to_golgi:
         synapses:
           - model: static_synapse
             receptor_type: 4
-            weight: 1.
+            weight: 0.59
             delay: 0.1
           - model: static_synapse
             receptor_type: 2
-            weight: 1.
+            weight: 0.59
             delay: 1. # ms (Presynaptic vesicles release timing)
       ascending_axon_to_purkinje:
         synapses:
           - model: static_synapse
             delay: 1.
             receptor_type: 1
-            weight: 1.
+            weight: 0.75
       basket_to_basket:
         synapses:
           - model: static_synapse
             receptor_type: 3
-            weight: 1
+            weight: 0.016
             delay: 1.
       basket_to_purkinje:
         synapses:
           - model: static_synapse
             receptor_type: 3
-            weight: 1.
+            weight: 0.47
             delay: 1.
       glomerulus_to_golgi:
         synapses:
           - model: static_synapse
             receptor_type: 1
-            weight: 1.
+            weight:  0.32
             delay: 1.
           - model: static_synapse
             receptor_type: 2
-            weight: 1.
+            weight:  0.32
             delay: 1.
       glomerulus_to_granule:
         synapses:
@@ -311,7 +317,7 @@ simulations:
         synapses:
           - model: static_synapse
             receptor_type: 3
-            weight: 1
+            weight:  0.04
             delay: 1.
       mossy_fibers_to_glomerulus:
         synapses:
@@ -322,45 +328,45 @@ simulations:
         synapses:
           - model: static_synapse
             receptor_type: 1
-            weight: 1.
+            weight: 0.29
             delay: 1.
           - model: static_synapse
             receptor_type: 2
-            weight: 1.
+            weight: 0.29
             delay: 1.
       parallel_fiber_to_golgi:
         synapses:
           - model: static_synapse
             receptor_type: 5
-            weight: 1.
+            weight: 0.20
             delay: 1.
       parallel_fiber_to_purkinje:
         synapses:
           - model: static_synapse
             receptor_type: 1
-            weight: 1.
+            weight: 1.24
             delay: 1.
       parallel_fiber_to_stellate:
         synapses:
           - model: static_synapse
             receptor_type: 1
-            weight: 1.
+            weight: 0.51
             delay: 1.
           - model: static_synapse
             receptor_type: 2
-            weight: 1.
+            weight: 0.51
             delay: 1.
       stellate_to_purkinje:
         synapses:
           - model: static_synapse
             receptor_type: 3
-            weight: 1.
+            weight: 0.14
             delay: 1.
       stellate_to_stellate:
         synapses:
           - model: static_synapse
             receptor_type: 3
-            weight: 1.
+            weight: 0.035
             delay: 1.
     devices:
       background_noise:
@@ -421,7 +427,7 @@ simulations:
           cell_models:
             - stellate_cell
           strategy: cell_model
-    duration: 5000.0
+    duration: 2000.0
     modules:
       - cerebmodule
     resolution: 0.1

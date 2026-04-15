@@ -1,5 +1,7 @@
 from utils import *
+
 from cerebellar_models.optimization.fitness import *
+
 
 def build_cell_params_PC(best_params):
     return {
@@ -18,6 +20,7 @@ def build_cell_params_PC(best_params):
         "t_ref": 0.5,
         "tau_m": 47,
     }
+
 
 def compute_errors_PC(target_features, nest_features, protocol):
     rheobase_error, thr = rheobase_loss(nest_features, target_features)

@@ -46,7 +46,7 @@ if __name__ == "__main__":
         "GABA_A1": 1.7476237681931543,
         "GABA_A2": 1.2018061113172258,
     }
-    syn_aa_PC_ampa = {"weight": 1.0, "delay": 0.1, "receptor_type": 1}
+    syn_aa_PC_ampa = {"weight": 0.75, "delay": 0.1, "receptor_type": 1}
     syn_aa_PC_ampa_tm = {
         "U": 0.13,
         "u": 0,
@@ -59,7 +59,7 @@ if __name__ == "__main__":
         "receptor_type": 1,
         "weight": 1.0,
     }
-    syn_BC_PC_gaba = {"weight": 1.0, "delay": 0.1, "receptor_type": 3}
+    syn_BC_PC_gaba = {"weight": 0.47, "delay": 0.1, "receptor_type": 3}
     syn_BC_PC_gaba_tm = {
         "U": 0.35,
         "u": 0,
@@ -72,7 +72,7 @@ if __name__ == "__main__":
         "weight": 1.0,
         "delay": 0.1,
     }
-    syn_pf_PC_ampa = {"weight": 1.0, "delay": 0.1, "receptor_type": 1}
+    syn_pf_PC_ampa = {"weight": 1.24, "delay": 0.1, "receptor_type": 1}
     syn_pf_PC_ampa_tm = {
         "U": 0.13,
         "u": 0,
@@ -85,7 +85,7 @@ if __name__ == "__main__":
         "weight": 1.0,
         "delay": 0.1,
     }
-    syn_SC_PC_gaba = {"weight": 1.0, "delay": 0.1, "receptor_type": 3}
+    syn_SC_PC_gaba = {"weight": 0.14, "delay": 0.1, "receptor_type": 3}
     syn_SC_PC_gaba_tm = {
         "U": 0.35,
         "u": 0,

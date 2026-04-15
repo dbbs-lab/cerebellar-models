@@ -1,7 +1,8 @@
+import multiprocessing as mp
 import os
 import random
 from copy import deepcopy
-import multiprocessing as mp
+
 import numpy as np
 from deap import algorithms, base, creator, tools
 from deap.tools.emo import assignCrowdingDist
@@ -15,6 +16,7 @@ except:
         from deap.tools import clone as _deap_clone
     except:
         _deap_clone = deepcopy
+
 
 def _clamp(x, lb, ub):
     if lb is not None and x < lb:
@@ -122,19 +124,19 @@ class MutateDecorator:
 
 class WeightsOptimizer(object):
     def __init__(
-            self,
-            opt_params: list,
-            model_params : dict,
-            fitness: dict,
-            bounds,
-            comm,
-            order_ct = None,
-            scaffold = None,
-            archive=None,
-            init_params_fn=None,
-            evaluate_fn=None,
-            constraints=None,
-            knee_weights=None,
+        self,
+        opt_params: list,
+        model_params: dict,
+        fitness: dict,
+        bounds,
+        comm,
+        order_ct=None,
+        scaffold=None,
+        archive=None,
+        init_params_fn=None,
+        evaluate_fn=None,
+        constraints=None,
+        knee_weights=None,
     ):
         self.comm = comm
         self.order_ct = order_ct
@@ -307,16 +309,12 @@ class WeightsOptimizer(object):
         for i, conn_name in enumerate(self.opt_params):
             w = float(ind[i])
             synapses = (
-                self.scaffold
-                .simulations[simulation_name]
-                .connection_models[conn_name]
-                .synapses
+                self.scaffold.simulations[simulation_name].connection_models[conn_name].synapses
             )
             for s in synapses:
                 s.weight = w
 
-
-    def run_simulation(self, simulation_name='basal_activity'):
+    def run_simulation(self, simulation_name="basal_activity"):
         return self.scaffold.run_simulation(simulation_name=simulation_name)
 
     def compute_metrics(self):
@@ -361,13 +359,13 @@ class WeightsOptimizer(object):
         batch = 0
         for i, ind in enumerate(pop):
             print(f"Send simulation {i}")
-            self.comm.send(True, dest=i % size+1)
-            self.comm.send([float(i) for i in ind], dest=i % size+1)
+            self.comm.send(True, dest=i % size + 1)
+            self.comm.send([float(i) for i in ind], dest=i % size + 1)
             if i % size == size - 1 or i == len(pop) - 1:
                 fits = self.comm.gather([], root=0)[1:]
                 for j, fit in enumerate(fits):
                     fit = np.nan_to_num(np.array(fit, dtype=float), nan=1.0, posinf=1.0, neginf=1.0)
-                    pop[batch*size + j].fitness.values = tuple(fit)
+                    pop[batch * size + j].fitness.values = tuple(fit)
                 batch += 1
         best_individual, best_fitness, best_knee_score = None, np.inf, np.inf
         best_history = []
@@ -394,13 +392,15 @@ class WeightsOptimizer(object):
             batch = 0
             for i, ind in enumerate(offspring):
                 print(f"Send simulation {i}")
-                self.comm.send(True, dest=i % size+1)
-                self.comm.send([float(i) for i in ind], dest=i % size+1)
+                self.comm.send(True, dest=i % size + 1)
+                self.comm.send([float(i) for i in ind], dest=i % size + 1)
                 if i % size == size - 1 or i == len(offspring) - 1:
                     fits = self.comm.gather([], root=0)[1:]
                     for j, fit in enumerate(fits):
-                        fit = np.nan_to_num(np.array(fit, dtype=float), nan=1.0, posinf=1.0, neginf=1.0)
-                        offspring[batch*size + j].fitness.values = tuple(fit)
+                        fit = np.nan_to_num(
+                            np.array(fit, dtype=float), nan=1.0, posinf=1.0, neginf=1.0
+                        )
+                        offspring[batch * size + j].fitness.values = tuple(fit)
                     batch += 1
 
             pop = toolbox.select(pop + offspring, self.POP_SIZE)

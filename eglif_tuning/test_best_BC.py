@@ -1,5 +1,7 @@
 from utils import *
+
 from cerebellar_models.optimization.fitness import *
+
 
 def build_cell_params_BC(best_params):
     return {
@@ -17,6 +19,7 @@ def build_cell_params_BC(best_params):
         "A2": float(best_params[4]),
         "k_2": float(best_params[5]),
     }
+
 
 def compute_errors_BC(target_features, nest_features, protocol):
     rheobase_error, thr = rheobase_loss(nest_features, target_features)
@@ -68,7 +71,6 @@ if __name__ == "__main__":
 
     error_dict = compute_errors_BC(target_features, nest_features, protocol)
     print(f"Final errors: {error_dict}")
-
 
     output_fig_dir = f"./figures/{cell_name}"
     os.makedirs(output_fig_dir, exist_ok=True)

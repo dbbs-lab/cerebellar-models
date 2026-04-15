@@ -1,4 +1,5 @@
 from utils import *
+
 from cerebellar_models.optimization.fitness import *
 
 
@@ -21,6 +22,7 @@ def build_cell_params_GrC(best_params):
         "A2": float(best_params[4]),
     }
 
+
 def compute_errors_GrC(target_features, nest_features):
     rheobase_error, thr = rheobase_loss(nest_features, target_features)
     sel = currents_above_thr(target_features, thr)
@@ -32,6 +34,7 @@ def compute_errors_GrC(target_features, nest_features):
         "FI curvature": float(curv_error),
         "FI gap": float(gap_error),
     }
+
 
 if __name__ == "__main__":
     cell_name = "GrC"

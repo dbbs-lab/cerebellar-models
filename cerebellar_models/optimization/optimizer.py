@@ -413,6 +413,7 @@ class Optimizer(object):
 
     def log_best(self, gen, ind, reset=False):
         import pickle
+
         if getattr(self, "output_path", None):
             path = os.path.join(self.output_path, "best_history.pkl")
         else:
@@ -427,7 +428,9 @@ class Optimizer(object):
         with open(path, mode) as f:
             pickle.dump(rec, f)
 
-    def plot_fI_snapshot(self, snapshots, fname = "fI_snapshots.png",  use_global=False, print_params=True):
+    def plot_fI_snapshot(
+        self, snapshots, fname="fI_snapshots.png", use_global=False, print_params=True
+    ):
         import matplotlib.pyplot as plt
         import numpy as np
 
@@ -494,7 +497,7 @@ class Optimizer(object):
             savefig_path = os.path.join(self.output_path, fname)
             plt.savefig(savefig_path, dpi=300)
         else:
-            plt.savefig( fname, dpi=300)
+            plt.savefig(fname, dpi=300)
         plt.close()
 
         if print_params and (last_params is not None):

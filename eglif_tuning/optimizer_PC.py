@@ -74,11 +74,11 @@ def evaluate_PC(opt, ind, cell_params=None):
     cv_err = cv_loss(targ, nest)
     rheo, thr = rheobase_loss(nest, targ)
     sel = currents_above_thr(targ, thr)
-    #slope = slope_loss(targ, nest, thr, sel)
+    # slope = slope_loss(targ, nest, thr, sel)
     curv = curvature_loss(targ, nest, sel, use_max_slope_penalty=True)
-    gap = gap_loss(targ, nest, sel, weighted='gaussian')
+    gap = gap_loss(targ, nest, sel, weighted="gaussian")
     pos_loss = post_first_spike_loss(targ, nest, protocol, thr=thr)
-    neg_loss = post_rebound_loss(targ, nest, protocol, thr=thr, sign='neg', window=50.0, scale = 3)
+    neg_loss = post_rebound_loss(targ, nest, protocol, thr=thr, sign="neg", window=50.0, scale=3)
 
     return (
         float(pacemaking),
@@ -145,7 +145,7 @@ if __name__ == "__main__":
     opt.evaluate_fn = evaluate_PC
     opt.print_evolution = True
     opt.N_GEN = 500
-    output_folder = 'PC_opt'
+    output_folder = "PC_opt"
     os.makedirs(output_folder, exist_ok=True)
     opt.output_path = output_folder
     opt.set_optimizer()

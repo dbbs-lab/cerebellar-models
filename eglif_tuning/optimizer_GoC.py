@@ -50,7 +50,7 @@ bounds = {
     "I_e": (5.0, 50.0),
     "k_adap": (0.0, 0.50),
     "k_1": (0.0, 2.0),
-    #"k_2": (1.0 / cell_params["tau_m"] - 1e-9,2.0),  # ensure oscillatory/damped oscillations regimes (k2>1/tau_m)
+    # "k_2": (1.0 / cell_params["tau_m"] - 1e-9,2.0),  # ensure oscillatory/damped oscillations regimes (k2>1/tau_m)
     "A1": (0.0, 500.0),
     "A2": (0.0, 500.0),
 }
@@ -73,9 +73,9 @@ def evaluate_GoC(opt, ind, cell_params=None):
     rheo, thr = rheobase_loss(nest, targ)
     sel = currents_above_thr(targ, thr)
     curv = curvature_loss(targ, nest, sel, use_max_slope_penalty=True)
-    gap = gap_loss(targ, nest, sel, weighted='gaussian')
-    #pos_loss = post_first_spike_loss(targ, nest, protocol, thr)
-    neg_loss = post_rebound_loss(targ, nest, protocol, thr=thr, sign='neg', window=100.0, scale=5)
+    gap = gap_loss(targ, nest, sel, weighted="gaussian")
+    # pos_loss = post_first_spike_loss(targ, nest, protocol, thr)
+    neg_loss = post_rebound_loss(targ, nest, protocol, thr=thr, sign="neg", window=100.0, scale=5)
 
     return (
         float(pacemaking),
@@ -83,7 +83,7 @@ def evaluate_GoC(opt, ind, cell_params=None):
         float(rheo),
         float(curv),
         float(gap),
-        #float(pos_loss),
+        # float(pos_loss),
         float(neg_loss),
     )
 
@@ -98,7 +98,7 @@ if __name__ == "__main__":
             "rheobase_error",
             "curvature_error",
             "gap_error",
-            #"pos_error",
+            # "pos_error",
             "neg_error",
         ]
     }
@@ -114,7 +114,7 @@ if __name__ == "__main__":
         fitness=fitness,
         bounds=bounds,
         archive=archive,
-        knee_weights=[1.0, 1.0, 1.0, 1.0, 1.0, 1.0] #1.0],
+        knee_weights=[1.0, 1.0, 1.0, 1.0, 1.0, 1.0],  # 1.0],
     )
 
     # --- Constraints ---
@@ -140,13 +140,13 @@ if __name__ == "__main__":
     # --- Initialization & Evaluation ---
     opt.POP_SIZE = 600
     opt.NO_IMPROVE_PATIENCE = 10
-    opt.ETA_MUTATION = 10.
+    opt.ETA_MUTATION = 10.0
     opt.ETA_CROSSOVER = 5.0
     opt.init_params_fn = random_init
     opt.evaluate_fn = evaluate_GoC
     opt.print_evolution = True
     opt.N_GEN = 300
-    output_folder = 'GoC_opt'
+    output_folder = "GoC_opt"
     os.makedirs(output_folder, exist_ok=True)
     opt.output_path = output_folder
     opt.return_pareto = True

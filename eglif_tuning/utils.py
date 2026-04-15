@@ -1,7 +1,9 @@
-import os
 import json
-import matplotlib.pyplot as plt
+import os
 import pickle
+
+import matplotlib.pyplot as plt
+
 from cerebellar_models.optimization.features import (
     multicomp_features,
     point_neuron_features,
@@ -10,14 +12,14 @@ from cerebellar_models.optimization.fitness import *
 from cerebellar_models.optimization.fitness import _scalar
 from cerebellar_models.optimization.utils import _suppress_output
 
-
 dict_colors = {
-    'BC': [1, 0.647, 0, 1.0],
-    'SC': [1, 0.84, 0, 1.0],
-    'PC': [0.275, 0.800, 0.275, 1.0],
-    'GoC': [0, 0.45, 0.7, 1.0],
-    'GrC': [0.7, 0.15, 0.15, 1.]
+    "BC": [1, 0.647, 0, 1.0],
+    "SC": [1, 0.84, 0, 1.0],
+    "PC": [0.275, 0.800, 0.275, 1.0],
+    "GoC": [0, 0.45, 0.7, 1.0],
+    "GrC": [0.7, 0.15, 0.15, 1.0],
 }
+
 
 def save_outputs(cell_name, cell_params_best, error_dict, out_dir="./results_opt"):
     os.makedirs(out_dir, exist_ok=True)
@@ -25,6 +27,7 @@ def save_outputs(cell_name, cell_params_best, error_dict, out_dir="./results_opt
         json.dump(cell_params_best, f, indent=4)
     with open(f"{out_dir}/{cell_name}_opt_err.json", "w") as f:
         json.dump(error_dict, f, indent=4)
+
 
 def load_best_record(pkl_path: str) -> dict:
     records = []
@@ -38,6 +41,7 @@ def load_best_record(pkl_path: str) -> dict:
         raise RuntimeError(f"Empty best_history file: {pkl_path}")
     return records[-1]
 
+
 def load_cell_params_from_json(cell_name: str, in_dir: str = "./results_opt") -> dict:
     path = os.path.join(in_dir, f"{cell_name}_opt.json")
     if not os.path.exists(path):
@@ -46,6 +50,7 @@ def load_cell_params_from_json(cell_name: str, in_dir: str = "./results_opt") ->
         params = json.load(f)
     return params
 
+
 def extract_multicomp_features(multicomp_data, protocol):
     return multicomp_features(
         multicomp_data,
@@ -53,6 +58,7 @@ def extract_multicomp_features(multicomp_data, protocol):
         start_stim=protocol["start_stim"],
         end_stim=protocol["end_stim"],
     )
+
 
 def nest_single_sim(
     current, cell_params, protocol, nest_model="eglif_multirec_opt", multimeter=False
@@ -104,11 +110,13 @@ def nest_single_sim(
         return {"spikes": spikes, "vm": (t, Vm)}
     return spikes
 
+
 def nest_protocol(multicomp_features, cell_params, protocol, multimeter=False):
     return {
         I: nest_single_sim(I, cell_params, protocol, multimeter=multimeter)
         for I in multicomp_features["current"].values
     }
+
 
 def extract_nest_features(multicomp_features, cell_params, protocol, multimeter=False):
     nest_results = nest_protocol(multicomp_features, cell_params, protocol, multimeter)
@@ -120,6 +128,7 @@ def extract_nest_features(multicomp_features, cell_params, protocol, multimeter=
         end_stim=protocol["end_stim"],
     )
     return nest_results, nest_features
+
 
 def plot_results(
     multicomp_feat, results, cell_params, start_stim, stop_stim, cell_name, output_dir="."
@@ -213,7 +222,7 @@ def plot_results(
         t, v = data["vm"]
         spikes = np.asarray(data["spikes"], dtype=float)
 
-        if Iamp!=0:
+        if Iamp != 0:
             axV.axvspan(
                 start_stim, stop_stim, facecolor="#ffe680", alpha=0.18, edgecolor="none", zorder=-10
             )
@@ -233,7 +242,7 @@ def plot_results(
         I = np.zeros_like(t, dtype=float)
         I[(t >= start_stim) & (t <= stop_stim)] = float(Iamp)
 
-        axI.plot(t, I, drawstyle="steps-post", linewidth=1., color="#7a1f2b")
+        axI.plot(t, I, drawstyle="steps-post", linewidth=1.0, color="#7a1f2b")
         axI.set_ylim(-Iylim, Iylim)
         axI.set_yticks(Iticks)
         axI.set_ylabel("I [pA]", color="#7a1f2b", fontsize=6, labelpad=3)
@@ -320,6 +329,7 @@ def plot_results(
     fig.savefig(f"{output_dir}/best_fi.png", dpi=700, bbox_inches="tight")
     fig.savefig(f"{output_dir}/best_fi.pdf", dpi=700, bbox_inches="tight")
     plt.close(fig)
+
 
 def plot_error_bar(error_dict, cell_name, out_fig_dir):
     os.makedirs(out_fig_dir, exist_ok=True)

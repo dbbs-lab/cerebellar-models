@@ -57,9 +57,9 @@ if __name__ == "__main__":
     }
 
     # Static synapses for SC
-    pf_SC_ampa = {"weight": 1, "delay": 0.1, "receptor_type": 1}
-    pf_SC_nmda = {"weight": 1, "delay": 0.1, "receptor_type": 2}
-    SC_SC_gaba = {"weight": 1, "delay": 0.1, "receptor_type": 3}
+    pf_SC_ampa = {"weight": 0.51, "delay": 0.1, "receptor_type": 1}
+    pf_SC_nmda = {"weight": 0.51, "delay": 0.1, "receptor_type": 2}
+    SC_SC_gaba = {"weight": 0.035, "delay": 0.1, "receptor_type": 3}
 
     # TM params for SC synapses
     pf_SC_ampa_tm = {

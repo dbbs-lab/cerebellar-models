@@ -46,7 +46,7 @@ protocol = {
 
 bounds = {
     "I_e": (0.01, 100.0),
-    "k_adap": (0.0, 1.),
+    "k_adap": (0.0, 1.0),
     "k_2": (
         1.0 / cell_params["tau_m"] - 1e-9,
         2.0,
@@ -76,7 +76,7 @@ def evaluate_SC(opt, ind, cell_params=None):
     gap = gap_loss(targ, nest, sel, weighted="gaussian")
     curv = curvature_loss(targ, nest, sel, use_max_slope_penalty=True)
     # pos_loss = post_first_spike_loss(targ, nest, protocol, thr)
-    neg_loss = post_rebound_loss(targ, nest, protocol, thr=thr, sign='neg', window=70.0, scale=3)
+    neg_loss = post_rebound_loss(targ, nest, protocol, thr=thr, sign="neg", window=70.0, scale=3)
 
     return (
         float(pacemaking),
@@ -84,7 +84,7 @@ def evaluate_SC(opt, ind, cell_params=None):
         float(rheo),
         float(curv),
         float(gap),
-        #float(pos_loss),
+        # float(pos_loss),
         float(neg_loss),
     )
 
@@ -99,7 +99,7 @@ if __name__ == "__main__":
             "rheobase_error",
             "curvature_error",
             "gap_error",
-            #"post_stim_pos_error",
+            # "post_stim_pos_error",
             "post_stim_neg_error",
         ]
     }
@@ -115,7 +115,7 @@ if __name__ == "__main__":
         fitness=fitness,
         bounds=bounds,
         archive=archive,
-        knee_weights=[1.0, 1.0, 1.0, 1.0, 1.0, 1.0]#  1.0],
+        knee_weights=[1.0, 1.0, 1.0, 1.0, 1.0, 1.0],  #  1.0],
     )
 
     # --- Constraints ---
@@ -141,13 +141,13 @@ if __name__ == "__main__":
     # --- Initialization & Evaluation ---
     opt.POP_SIZE = 600
     opt.NO_IMPROVE_PATIENCE = 10
-    opt.ETA_MUTATION = 10.
+    opt.ETA_MUTATION = 10.0
     opt.ETA_CROSSOVER = 5.0
     opt.init_params_fn = random_init
     opt.evaluate_fn = evaluate_SC
     opt.print_evolution = True
     opt.N_GEN = 300
-    output_folder = 'SC_opt'
+    output_folder = "SC_opt"
     os.makedirs(output_folder, exist_ok=True)
     opt.output_path = output_folder
     opt.return_pareto = True
@@ -157,4 +157,3 @@ if __name__ == "__main__":
     print("Optimization complete")
     print("Best individual:", best)
     print("Fitness:", fit)
-

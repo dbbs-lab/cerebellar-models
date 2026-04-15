@@ -1,8 +1,11 @@
 import json
 import os
+
 import numpy as np
 from utils import *
+
 from cerebellar_models.optimization.fitness import *
+
 
 def compute_errors(target_features, nest_features, protocol):
     rheobase_error, thr = rheobase_loss(nest_features, target_features)
@@ -26,6 +29,7 @@ def compute_errors(target_features, nest_features, protocol):
         "Pause after pos stim": float(pos_loss),
         "Rebound after neg stim": float(neg_loss),
     }
+
 
 if __name__ == "__main__":
     cell_name = "GoC"

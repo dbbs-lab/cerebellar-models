@@ -21,7 +21,6 @@ np.seterr(all="ignore")
 os.environ.setdefault("PYTHONWARNINGS", "ignore")
 
 
-
 cell_params = {
     "t_ref": 1.59,
     "C_m": 14.6,
@@ -116,7 +115,7 @@ if __name__ == "__main__":
         fitness=fitness,
         bounds=bounds,
         archive=archive,
-        knee_weights=[1.0, 1.0, 1.0, 1.0, 1.0 , 1.0, 1.0],
+        knee_weights=[1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0],
     )
 
     # --- Constraints ---
@@ -142,13 +141,13 @@ if __name__ == "__main__":
     # --- Initialization & Evaluation ---
     opt.POP_SIZE = 600
     opt.NO_IMPROVE_PATIENCE = 10
-    opt.ETA_MUTATION = 10.
+    opt.ETA_MUTATION = 10.0
     opt.ETA_CROSSOVER = 5.0
     opt.init_params_fn = random_init
     opt.evaluate_fn = evaluate_BC
     opt.print_evolution = True
     opt.N_GEN = 500
-    output_folder = 'BC_opt'
+    output_folder = "BC_opt"
     os.makedirs(output_folder, exist_ok=True)
     opt.output_path = output_folder
     opt.set_optimizer()
@@ -157,4 +156,3 @@ if __name__ == "__main__":
     print("Optimization complete")
     print("Best individual:", best)
     print("Fitness:", fit)
-

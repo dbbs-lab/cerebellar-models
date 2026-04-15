@@ -50,9 +50,9 @@ if __name__ == "__main__":
         "GABA_A2": 3.144942430956719,
     }
 
-    syn_mf_Grc_ampa = {"weight": 1.0, "delay": 0.1, "receptor_type": 1}
-    syn_mf_Grc_nmda = {"weight": 1.0, "delay": 0.1, "receptor_type": 2}
-    syn_GoC_GrC_gaba = {"weight": 1.0, "delay": 0.1, "receptor_type": 3}
+    syn_mf_Grc_ampa = {"weight": 1., "delay": 0.1, "receptor_type": 1}
+    syn_mf_Grc_nmda = {"weight": 1., "delay": 0.1, "receptor_type": 2}
+    syn_GoC_GrC_gaba = {"weight": 1., "delay": 0.1, "receptor_type": 3}
     syn_mf_Grc_ampa_tm = {
         "U": 0.416,
         "u": 0.0,

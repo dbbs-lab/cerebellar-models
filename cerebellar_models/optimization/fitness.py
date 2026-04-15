@@ -4,6 +4,7 @@ Set of evaluation function for the optimization of NEST single cell parameters v
 
 import numpy as np
 import pandas as pd
+
 from cerebellar_models.optimization.features import inv_first_isi, inv_second_isi
 
 
@@ -13,6 +14,7 @@ def _scalar(x):
         return x[0] if len(x) else np.nan
     return x
 
+
 def currents_above_thr(df, thr):
     """
     Select only experiments of current injection above a given threshold.
@@ -20,6 +22,7 @@ def currents_above_thr(df, thr):
     uniq = np.sort(df["current"].unique())
     dI = float(np.median(np.diff(uniq))) if len(uniq) > 1 else 0.0
     return df.loc[df["current"] >= (thr + dI), "current"].values
+
 
 def _weighted_median(values, weights):
     v = np.asarray(values, dtype=float)
@@ -34,6 +37,7 @@ def _weighted_median(values, weights):
     cutoff = 0.5 * cw[-1]
     return float(v[np.searchsorted(cw, cutoff)])
 
+
 def _fit_fi_slope(df, threshold, selected_currents):
     sub = df[df["current"].isin(selected_currents)].sort_values("current")
     x = (sub["current"].values - threshold).astype(float)
@@ -46,8 +50,10 @@ def _fit_fi_slope(df, threshold, selected_currents):
     w = np.sqrt(x)
     return _weighted_median(r, w)
 
+
 def spike_penalty(diff_spikes, scale=10):
     return min(1.0, float(diff_spikes) / float(scale))
+
 
 def _fi_curve(df, sel=None):
 
@@ -59,6 +65,7 @@ def _fi_curve(df, sel=None):
 
     m = np.isfinite(I) & np.isfinite(f)
     return I[m], f[m]
+
 
 def extract_info(df, start, end):
     out = []
@@ -78,13 +85,16 @@ def extract_info(df, start, end):
             second_spike = np.nan
             n_spikes = 0
 
-        out.append({
-            "current": curr,
-            "first_spike": first_spike,
-            "second_spike": second_spike,
-            "n_spikes": n_spikes
-        })
+        out.append(
+            {
+                "current": curr,
+                "first_spike": first_spike,
+                "second_spike": second_spike,
+                "n_spikes": n_spikes,
+            }
+        )
     return pd.DataFrame(out)
+
 
 # -------   LOSSES   -------
 def rheobase_loss(nest_df, targ_df):
@@ -175,7 +185,7 @@ def gap_loss(targ, nest, sel, weighted=None, missing_penalty=1.0):
             if weighted == "gaussian":
                 Im = 0.5 * (I.min() + I.max())
                 s = 0.35 * (I.max() - I.min() + 1e-9)
-                w = np.exp(-((I - Im) ** 2) / (2.0 * s ** 2))
+                w = np.exp(-((I - Im) ** 2) / (2.0 * s**2))
 
             elif weighted == "inverse":
                 w = 1.0 / (I + 1e-9)
@@ -204,7 +214,14 @@ def gap_loss(targ, nest, sel, weighted=None, missing_penalty=1.0):
         return float(missing_penalty)
 
 
-def curvature_loss( targ,nest,sel=None,missing_penalty=0.5,use_max_slope_penalty=False,max_slope_weight=0.5,):
+def curvature_loss(
+    targ,
+    nest,
+    sel=None,
+    missing_penalty=0.5,
+    use_max_slope_penalty=False,
+    max_slope_weight=0.5,
+):
     try:
         It, Ft = _fi_curve(targ, sel)
         In, Fn = _fi_curve(nest, sel)
@@ -258,7 +275,9 @@ def curvature_loss( targ,nest,sel=None,missing_penalty=0.5,use_max_slope_penalty
         return float(missing_penalty)
 
 
-def post_first_spike_loss(targ, nest, protocol, thr=0., sign = 'pos',  missing_penalty=0.5, mode='max'):
+def post_first_spike_loss(
+    targ, nest, protocol, thr=0.0, sign="pos", missing_penalty=0.5, mode="max"
+):
     start, end = protocol["end_stim"], protocol["duration"]
 
     if getattr(targ, "empty", True) or getattr(nest, "empty", True):
@@ -296,13 +315,14 @@ def post_first_spike_loss(targ, nest, protocol, thr=0., sign = 'pos',  missing_p
             else:
                 err = abs(n["first_spike"] - t["first_spike"]) / max(t["first_spike"], 1e-9)
                 losses.append(np.clip(err / (1 + err), 0.0, 1.0))
-    if mode=='max':
+    if mode == "max":
         return float(np.max(losses)) if losses else float(missing_penalty)
     return float(np.mean(losses)) if losses else float(missing_penalty)
 
 
-def poststim_autorhythm_loss(targ_post, nest_post, protocol, thr,
-                                 transient=300.0, missing_penalty=0.5):
+def poststim_autorhythm_loss(
+    targ_post, nest_post, protocol, thr, transient=300.0, missing_penalty=0.5
+):
     start = protocol["end_stim"] + transient
     end = protocol["duration"]
     window = max(end - start, 1e-9)
@@ -310,9 +330,7 @@ def poststim_autorhythm_loss(targ_post, nest_post, protocol, thr,
     if getattr(targ_post, "empty", True) or getattr(nest_post, "empty", True):
         return float(missing_penalty)
 
-    common = np.intersect1d(
-        targ_post["current"].unique(), nest_post["current"].unique()
-    )
+    common = np.intersect1d(targ_post["current"].unique(), nest_post["current"].unique())
     if common.size == 0:
         return float(missing_penalty)
     common = common[common < thr]
@@ -344,26 +362,21 @@ def poststim_autorhythm_loss(targ_post, nest_post, protocol, thr,
 
     return float(np.nanmean(losses))
 
-def post_rebound_loss(targ, nest, protocol, window=50.0,
-                      thr=0., sign='pos',
-                      missing_penalty=0.5,
-                      scale=10):
+
+def post_rebound_loss(
+    targ, nest, protocol, window=50.0, thr=0.0, sign="pos", missing_penalty=0.5, scale=10
+):
     win_start = protocol["end_stim"]
     win_end = win_start + window
     if getattr(targ, "empty", True) or getattr(nest, "empty", True):
         return float(missing_penalty)
 
-
-    common = np.intersect1d(targ["current"].unique(),
-                            nest["current"].unique())
+    common = np.intersect1d(targ["current"].unique(), nest["current"].unique())
     if common.size == 0:
         return float(missing_penalty)
 
-
-    tm = extract_info(targ[targ["current"].isin(common)],
-                      win_start, win_end)
-    nm = extract_info(nest[nest["current"].isin(common)],
-                      win_start, win_end)
+    tm = extract_info(targ[targ["current"].isin(common)], win_start, win_end)
+    nm = extract_info(nest[nest["current"].isin(common)], win_start, win_end)
 
     if sign == "pos":
         tm = tm[tm["current"] >= thr]
@@ -395,7 +408,3 @@ def post_rebound_loss(targ, nest, protocol, window=50.0,
         losses.append(spike_penalty(diff, scale))
 
     return float(np.nanmean(losses)) if losses else float(missing_penalty)
-
-
-
-

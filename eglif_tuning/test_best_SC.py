@@ -1,5 +1,7 @@
 from utils import *
+
 from cerebellar_models.optimization.fitness import *
+
 
 def compute_errors_SC(target_features, nest_features, protocol):
     rheobase_error, thr = rheobase_loss(nest_features, target_features)

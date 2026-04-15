@@ -1,5 +1,5 @@
 name: DBBS Mouse cerebellum NEST LFP recording simulation for in vitro state with multireceptor synaptic models
-# Protocol : synchronous stimulus of 1 spike on all the mf after 1s of basal activity and recording from a cylinder of GrC
+# Protocol : synchronous stimulus of 1 spike on all the mf after 1s of basal activity and recording from a sphere of GrC
 packages:
   - bsb-nest~=7.0
 components:
@@ -15,31 +15,33 @@ simulations:
         properties: ['I_syn_ampa', 'I_syn_nmda', 'I_syn_gaba']
         units: ['pA', 'pA', 'pA']
         targetting:
-          strategy: cylinder
-          radius: 30
+          strategy: sphere
+          radius: 10.
           origin:
-            - 150
             - 100
-          axis: z
+            - 100
+            - 65
           cell_models:
             - granule_cell
       lfp_stim:
         delay: 0.1
-        device: spike_generator
-        spike_times : [1000.]
+        device: external
+        nest_model: spike_generator
+        constants:
+          spike_times: [1000.]
         targetting:
           cell_models:
             - mossy_fibers
           strategy: cell_model
         weight: 1.0
-    duration: 2000.0
+    duration: 2500.0
     modules:
       - cerebmodule
     resolution: 0.1
     seed: 1234
     simulator: nest
     $import:
-      ref: basal_vitro_rec_tm.yaml#/simulations/nest_basal_activity
+      ref: basal_vitro_rec_tm.yaml#/simulations/basal_activity
       values:
         - cell_models
         - connection_models

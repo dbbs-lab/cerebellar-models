@@ -1,8 +1,10 @@
 import os
 import re
+
 import matplotlib.pyplot as plt
 import matplotlib.ticker as mticker
 import numpy as np
+
 from cerebellar_models.optimization.features import multicomp_features
 
 
@@ -98,7 +100,6 @@ if __name__ == "__main__":
     Imax = max(1.0, max(abs(float(c)) for c in unique_currents))
     Iylim = 1.10 * Imax
     Iticks = [-Imax, 0.0, Imax]
-
 
     major_locator = mticker.MaxNLocator(nbins=5)
     minor_locator = mticker.AutoMinorLocator(2)

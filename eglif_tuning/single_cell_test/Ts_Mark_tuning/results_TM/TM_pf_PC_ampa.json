@@ -6,7 +6,7 @@
     "tau_rec": 35.1,
     "tau_fac": 54.0,
     "tau_psc": 1.0,
-    "delay": 0.1,
     "receptor_type": 1,
-    "weight": 7.530924489651123
+    "weight": 9.338346367167391,
+    "delay": 0.1
 }
