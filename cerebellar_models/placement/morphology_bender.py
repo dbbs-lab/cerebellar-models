@@ -96,7 +96,7 @@ class MorphologyBender:
 
         :rtype: numpy.ndarray
         """
-        loc_orient = self.orientations_field.load_object().raw
+        loc_orient = np.asarray(self.orientations_field.load_object().raw, dtype=np.float32)
         loc_orient /= np.linalg.norm(loc_orient, axis=3)[..., np.newaxis]
         return loc_orient
 
@@ -132,7 +132,9 @@ class MorphologyBender:
 
         :rtype: numpy.ndarray
         """
-        return self.depths_field.load_object().raw * self.depths_field.voxel_size
+        return np.asarray(
+            self.depths_field.load_object().raw * self.depths_field.voxel_size, dtype=np.float32
+        )
 
     @pool_cache
     def boundaries(self):
