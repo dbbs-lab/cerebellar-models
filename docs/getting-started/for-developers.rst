@@ -32,4 +32,4 @@ in the ``cerebellar-models`` folder:
 .. code-block:: bash
 
    pip install -e .[tests]
-   python -m unittest discover -v -s ./test
+   python -m unittest discover -v -s ./tests
