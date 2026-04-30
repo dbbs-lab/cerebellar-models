@@ -218,6 +218,14 @@ def get_firing_rates(spiking_results, kernel=None):
     return firing_rates
 
 
+def get_spike_matrix(spikes, dt):
+    senders = spikes.array_annotations["senders"]
+    u_senders, inv = np.unique(senders, return_inverse=True)
+    mat = np.zeros((int((spikes.t_stop - spikes.t_start) / dt), len(u_senders)), dtype=bool)
+    mat[np.asarray(np.rint((spikes.times - spikes.t_start) / dt), dtype=int) - 1, inv] = True
+    return mat
+
+
 def extract_isis(spikes, dt):
     """
     Extract inter-spike intervals from a list of spike trains.
@@ -231,11 +239,8 @@ def extract_isis(spikes, dt):
     """
 
     isi_ = []
-    senders = spikes.array_annotations["senders"]
-    u_senders, inv = np.unique(senders, return_inverse=True)
-    mat = np.zeros((int((spikes.t_stop - spikes.t_start) / dt), len(u_senders)), dtype=bool)
-    mat[np.asarray(np.rint((spikes.times - spikes.t_start) / dt), dtype=int) - 1, inv] = True
-    for sender in range(len(u_senders)):
+    mat = get_spike_matrix(spikes, dt)
+    for sender in range(mat.shape[1]):
         isis = isi(np.where(mat[:, sender])[0] * dt * ms)
         if len(isis) > 0:
             isi_.append(np.mean(isis))
