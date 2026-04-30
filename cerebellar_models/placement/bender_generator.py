@@ -174,9 +174,6 @@ class MLIGenerator(BenderGenerator, classmap_entry="mli_bender"):
             return "mo" not in self.get_lay_abv(new_target)
         return "gr" in self.get_lay_abv(new_target)
 
-    def deform_morphology(self, morphology):
-        return super().deform_morphology(morphology)
-
 
 @config.node
 class PurkinjeGenerator(BenderGenerator, classmap_entry="purkinje_bender"):
