@@ -19,6 +19,10 @@ from cerebellar_models.analysis.plots import ScaffoldPlot
 
 
 class SpikingResults:
+    """
+    Class used to load the results of the NEST simulations
+    produced from a BSB scaffold.
+    """
 
     def __init__(
         self,

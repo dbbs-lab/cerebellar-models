@@ -602,6 +602,72 @@ class SpikeCorrelation(SpikePlot):
         self.figure.colorbar(im, cax=cax1)
 
 
+class SortedPSTH(SpikePlot):
+    def __init__(
+        self,
+        fig_size: Tuple[float, float],
+        scaffold: Scaffold,
+        spiking_results: SpikingResults,
+        nb_bins: int = 50,
+        sample_size: int = 100,
+        dict_colors: dict = None,
+        **kwargs,
+    ):
+        super().__init__(
+            fig_size,
+            scaffold,
+            spiking_results,
+            dict_colors,
+            **kwargs,
+        )
+        if nb_bins <= 0:
+            raise ValueError("nb_bins must be greater than 0.")
+        self.nb_bins = nb_bins
+        """Number of bins for the PSTH."""
+        self.sample_size = sample_size
+        """Maximum number of neurons to subsample for each population."""
+
+    def plot(self):
+        super().plot()
+
+        loc_spikes = self.filt_spikes
+        ax = self.get_ax()
+        bin_times = np.linspace(self.time_from, self.time_to, self.nb_bins + 1)
+        img = np.zeros((self.nb_bins, 0, 4))
+        max_delta_times = []
+        for i, ct in enumerate(self.populations):
+            u_neurons = np.unique(loc_spikes[i].array_annotations["senders"])
+            if u_neurons.size > self.sample_size:
+                u_neurons = u_neurons[np.random.choice(u_neurons.size, size=self.sample_size)]
+            loc_img = np.zeros((self.nb_bins, u_neurons.size, 4))
+            for j, neuron in enumerate(u_neurons):
+                filter_ = loc_spikes[i].array_annotations["senders"] == neuron
+                times = loc_spikes[i].magnitude[filter_]
+                # find bin with the largest positive change in spiking activity
+                counts = np.histogram(times, bins=bin_times)[0]
+                loc_img[:, j, :3] = np.array(
+                    self.labelled_dict_colors[ct][:3]
+                    if ct in self.labelled_dict_colors
+                    else [0.6, 0.6, 0.6]
+                )
+                loc_img[:, j, 3] += counts
+                max_delta_times.append(bin_times[np.argmax(np.diff(counts))])
+            img = np.concatenate([img, loc_img], axis=1)
+
+        # sorting
+        sorting = np.argsort(max_delta_times)
+        img = img[:, : len(max_delta_times)][:, sorting]
+        img[:, :, 3] /= np.max(img[:, :, 3], axis=0)
+        if np.sum(self.nb_neurons):
+            ax.imshow(np.moveaxis(img, 0, 1), interpolation="nearest", aspect="auto")
+        ax.set_yticks(np.arange(len(self.populations)))
+        ax.set_yticklabels(np.array(self.populations)[sorting])
+        ax.set_ylabel("Sorted Neuron id")
+        ax.set_xticks(np.arange(0, len(bin_times) - 1, 2))
+        ax.set_xticklabels(np.int16(np.round(bin_times[:-1:2])))
+        ax.set_xlabel("Time in ms")
+
+
 class BasicSimulationReport(SpikeSimulationReport):
     """
     Simulation report of the spike activity containing:
