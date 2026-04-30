@@ -18,6 +18,8 @@ from cerebellar_models.analysis.spike_plots import (
     ISIPlot,
     RasterPSTHPlot,
     SimResultsTable,
+    Spike2Columns,
+    SpikeCorrelation,
     SpikePlot,
     SpikeSimulationReport,
 )
@@ -50,6 +52,8 @@ __all__ = [
     "BasicSimulationReport",
     "FiringRatesPlot",
     "FrequencyPlot",
+    "Spike2Columns",
+    "SpikeCorrelation",
     "SpikePlot",
     "SpikeSimulationReport",
     "SpikingResults",
