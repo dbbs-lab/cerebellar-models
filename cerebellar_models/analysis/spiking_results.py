@@ -1,5 +1,6 @@
 """
-Module for the plots and reports related to the simulation analysis of BSB scaffold.
+Module for loading spiking results from BSB-NEST simulations and analysing them with
+Elephant.
 """
 
 from os import listdir
@@ -30,18 +31,22 @@ class SpikingResults:
         simulation_name,
         time_from: float,
         time_to: float,
-        folder_nio,
-        ignored_ct,
+        folder_nio: str,
+        ignored_ct: list[str],
     ):
+        """
+        :param scaffold: BSB scaffold
+        :param simulation_name: name of the simulation
+        :param time_from: start time of the analysis
+        :param time_to: end time of the analysis
+        :param folder_nio: folder where the Neo results are stored
+        :param ignored_ct: List of ignored cells names
+        """
         self._scaffold = scaffold
         self.simulation_name = simulation_name
-        """Name of the simulation as defined in the scaffold configuration."""
         self._time_from = time_from or 0
-        """Start time of the analysis"""
         self.time_to = time_to or self.scaffold.simulations[self.simulation_name].duration
-        """End time of the analysis. By default, this corresponds to the simulation duration."""
         self._dt = self.scaffold.simulations[simulation_name].resolution
-        """Time step of the simulation in ms"""
         self.folder_nio = folder_nio
         """Folder containing the simulation results stored as nio files."""
         self.ignored_ct = ignored_ct if ignored_ct is not None else ["glomerulus", "ubc_glomerulus"]
@@ -49,9 +54,7 @@ class SpikingResults:
         self._all_spikes = []
         """List of SpikeTrain for each cell type"""
         self._nb_neurons = np.zeros(0, dtype=int)
-        """Number of neuron for each neuron type"""
         self._populations = []
-        """List of neuron type names"""
         self.load_spikes()
 
     @staticmethod
@@ -63,7 +66,9 @@ class SpikingResults:
             raise ValueError(f"Simulation name {simulation_name} not in the scaffold simulations")
 
     def _extract_ct_device_name(self, device_name: str):
-        """Extract the cell type name from its device name."""
+        """
+        Extract the cell type name from its device name.
+        """
         if "_record" in device_name:
             targetting = (
                 self.scaffold.simulations[self.simulation_name].devices[device_name].targetting
@@ -133,7 +138,7 @@ class SpikingResults:
         """
         Filter the spike events for the time of the analysis.
 
-        :return: Sliced List of SpikeTrain.
+        :return: List of time-sliced SpikeTrain.
         :rtype: List[neo.core.SpikeTrain]
         """
         return [
@@ -144,10 +149,12 @@ class SpikingResults:
 
     @property
     def nb_neurons(self) -> np.ndarray:
+        """Number of neuron for each neuron type"""
         return self._nb_neurons[~np.isin(self._populations, self.ignored_ct)]
 
     @property
     def populations(self) -> List[str]:
+        """List of neuron type names"""
         return [pop for pop in self._populations if pop not in self.ignored_ct]
 
     def _check_times(self, start, stop):
@@ -161,6 +168,7 @@ class SpikingResults:
 
     @property
     def time_to(self):
+        """End time of the analysis. By default, this corresponds to the simulation duration."""
         return self._time_to
 
     @time_to.setter
@@ -170,6 +178,7 @@ class SpikingResults:
 
     @property
     def time_from(self):
+        """Start time of the analysis"""
         return self._time_from
 
     @time_from.setter
@@ -179,6 +188,7 @@ class SpikingResults:
 
     @property
     def simulation_name(self):
+        """Name of the simulation as defined in the scaffold configuration."""
         return self._simulation_name
 
     @simulation_name.setter
@@ -188,14 +198,26 @@ class SpikingResults:
 
     @property
     def scaffold(self):
+        """BSB Scaffold used as reference for simulation results."""
         return self._scaffold
 
     @property
     def dt(self):
+        """Time step of the simulation in ms"""
         return self._dt
 
 
-def get_firing_rates(spiking_results, kernel=None):
+def get_firing_rates(spiking_results: SpikingResults, kernel=None) -> np.ndarray:
+    """
+    Get the instantaneous firing rate for each cell type from SpikingResults
+    based on a time kernel.
+
+    :param SpikingResults spiking_results: simulation spike results
+    :param kernel: Elephant kernel to filter the spike trains
+    :return: numpy array storing instantaneous firing rates for each population, for each
+        time step.
+    :rtype: numpy.ndarray[float]
+    """
     num_filter = len(spiking_results.nb_neurons)
     counts = np.zeros(num_filter + 1)
     counts[1:] = np.cumsum(spiking_results.nb_neurons)
@@ -219,6 +241,16 @@ def get_firing_rates(spiking_results, kernel=None):
 
 
 def get_spike_matrix(spikes, dt):
+    """
+    Extract the 2D boolean matrix of the spiking activity for each neuron in the SpikeTrain object.
+    Neurons are sorted according to their NEST id.
+
+    :param neo.core.SpikeTrain spikes: population SpikeTrain object
+    :param float dt: time step
+    :return: numpy array 2D boolean matrix storing spike events for each neuron, for each time
+        step.
+    :rtype: numpy.ndarray[bool]
+    """
     senders = spikes.array_annotations["senders"]
     u_senders, inv = np.unique(senders, return_inverse=True)
     mat = np.zeros((int((spikes.t_stop - spikes.t_start) / dt), len(u_senders)), dtype=bool)
@@ -231,9 +263,8 @@ def extract_isis(spikes, dt):
     Extract inter-spike intervals from a list of spike trains.
     One mean inter-spike interval value is computed for each neuron.
 
-    :param neo.core.SpikeTrain spikes: population SpikeTrain
+    :param neo.core.SpikeTrain spikes: population SpikeTrain object
     :param float dt: time step
-
     :return: list of inter-spike intervals
     :rtype: List[float]
     """
@@ -248,6 +279,15 @@ def extract_isis(spikes, dt):
 
 
 def get_frequencies(spiking_results, firing_rates):
+    """
+    Get the Fast Fourier Transform on instantaneous firing rates signal.
+
+    :param SpikingResults spiking_results: simulation spike results
+    :param firing_rates: numpy array storing instantaneous firing rates for each
+        population, for each time step.
+    :return: Tuple of lists of frequencies and their corresponding FFT powers.
+    :rtype: Tuple[numpy.ndarray[float], numpy.ndarray[float]]
+    """
     frequencies = np.zeros((firing_rates.shape[1], firing_rates.shape[0] // 2))
     freq_powers = np.zeros((firing_rates.shape[1], firing_rates.shape[0] // 2))
     for i, fr in enumerate(firing_rates.T):
@@ -261,6 +301,17 @@ def get_frequencies(spiking_results, firing_rates):
 
 
 def get_correlation_coefficients(spiking_results, bin_size):
+    """
+    Get the spike cross-correlation matrix for each cell type.
+    Spike trains will be time binned before computing the pairwise
+    Pearson’s correlation coefficients.
+
+    :param SpikingResults spiking_results: simulation spike results
+    :param float bin_size: size of time bin
+    :return: numpy array 2D matrix storing the Pearson correlation coefficients
+        between each neuron population.
+    :rtype: numpy.ndarray[float]
+    """
     filt_spikes = spiking_results.filt_spikes
     return (
         correlation_coefficient(

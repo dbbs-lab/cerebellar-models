@@ -1,3 +1,7 @@
+"""
+Module for the plots and reports related to the simulation analysis of BSB scaffold.
+"""
+
 from typing import List, Tuple, Union
 
 import numpy as np
@@ -316,7 +320,6 @@ class Spike2Columns(SpikePlot):
 class FiringRatesPlot(Spike2Columns):
     """
     Instantaneous firing rate plot for each cell type based on a time kernel.
-    Each population firing rate signal is plotted surrounding by its standard deviation
     A firing rate signal is computed as the mean of the convolution of spike times
     for each neuron with the time kernel.
     """
@@ -337,10 +340,10 @@ class FiringRatesPlot(Spike2Columns):
             dict_colors,
             **kwargs,
         )
-        """Elephant kernel to filter the spike trains"""
         if kernel is not None and not isinstance(kernel, Kernel):
             raise TypeError("Kernel must be an instance of elephant Kernel or None")
         self.kernel = kernel or "auto"
+        """Elephant kernel to filter the spike trains"""
 
     def update(self):
         super().update()
