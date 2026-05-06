@@ -25,6 +25,55 @@
 #
 # Here, the synapse `i` is excitatory or inhibitory depending on the value of :math:`E_{rev,i}`.
 #
+# The receptor-specific synaptic currents are defined as:
+#
+# .. math::
+#    I_{AMPA} =
+#    -\left[
+#    g_{AMPA,1}(t)(V_m - E_{AMPA})
+#    + g_{AMPA,2}(t)(V_m - E_{AMPA})
+#    \right]
+#
+# .. math::
+#    I_{NMDA} =
+#    -\left[
+#    g_{NMDA,1}(t)(V_m - E_{NMDA})B_{Mg}(V_m)
+#    + g_{NMDA,2}(t)(V_m - E_{NMDA})B_{Mg}(V_m)
+#    \right]
+#
+# .. math::
+#    I_{GABA} =
+#    -\left[
+#    g_{GABA,1}(t)(V_m - E_{GABA})
+#    + g_{GABA,2}(t)(V_m - E_{GABA})
+#    \right]
+#
+# .. math::
+#    I_{AMPA2} =
+#    -\left[
+#    g_{AMPA2,1}(t)(V_m - E_{AMPA2})
+#    + g_{AMPA2,2}(t)(V_m - E_{AMPA2})
+#    \right]
+#
+# .. math::
+#    I_{AMPA3} =
+#    -\left[
+#    g_{AMPA3,1}(t)(V_m - E_{AMPA3})
+#    + g_{AMPA3,2}(t)(V_m - E_{AMPA3})
+#    \right]
+#
+# The total synaptic current is:
+#
+# .. math::
+#    I_{syn} =
+#    I_{AMPA} + I_{NMDA} + I_{GABA} + I_{AMPA2} + I_{AMPA3}
+#
+# The NMDA current is modulated by the voltage-dependent magnesium block:
+#
+# .. math::
+#    B_{Mg}(V_m) =
+#    \frac{1}{1 + \exp\left(\frac{v_{0,block} - V_{m,2}}{k_{block}}\right)}
+#
 # Neuron produces spikes stochastically according to a point process with the firing intensity:
 #
 # .. math::
@@ -53,7 +102,7 @@
 #
 # aeif_cond_alpha, aeif_cond_exp, ht_neuron
 #
-model eglif_multirec:
+model eglif_multirec_v2:
     state:
         V_m mV = -40.0 mV                   # Membrane potential in mV
         V_m_2 mV = 0.0 mV                   # Auxiliary variable for Mg_Block voltage dependency
@@ -210,6 +259,9 @@ model eglif_multirec:
         GABA_A2 real = 3.15                        # Slow decay scaling factor for GABA synapse
         GABA_Tau_d2 ms = 269 ms                    # Slow decay time constant for GABA synapse
 
+        # spike stochasticity parameter
+
+        stochastic_spiking real = 1.0              # 0 means deterministic spiking, >0 enables stochastic spiking
 
     internals:
         RefractoryCounts integer = steps(t_ref)                     # Refractory time in steps
@@ -242,11 +294,21 @@ model eglif_multirec:
                 V_m_2 = V_m
         else:
             inline lambda real = lambda_0 * exp((V_m - V_th) / tau_V)
-            if random_uniform(0, 1) < - expm1(-lambda * resolution()):
-                r = RefractoryCounts
-                m = MgUnblockCounts
-                I_dep = A1
-                I_adap += A2
-                V_m = V_reset
-                V_m_2 = V_Mg_Unblock
-                emit_spike()
+            if stochastic_spiking > 0:
+                if random_uniform(0, 1) < - expm1(-lambda * resolution()):
+                    r = RefractoryCounts
+                    m = MgUnblockCounts
+                    I_dep = A1
+                    I_adap += A2
+                    V_m = V_reset
+                    V_m_2 = V_Mg_Unblock
+                    emit_spike()
+            else:
+                if (V_m >= V_th):
+                    r = RefractoryCounts
+                    m = MgUnblockCounts
+                    I_dep = A1
+                    I_adap += A2
+                    V_m = V_reset
+                    V_m_2 = V_Mg_Unblock
+                    emit_spike()
