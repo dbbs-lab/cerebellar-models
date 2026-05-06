@@ -28,6 +28,7 @@ neuron = [
 ]
 
 test = [
+    "cerebellar-models[nest,neuron]",
     "bsb-test~=7.0",
     "coverage~=7.3",
 ]
@@ -36,7 +37,7 @@ docs = [
     "furo~=2024.0"
 ]
 dev = [
-    "cerebellar-models[test,docs,nest,neuron]",
+    "cerebellar-models[test,docs]",
     "pre-commit~=3.5",
     "black~=25.1.0",
     "isort~=6.0.0",
