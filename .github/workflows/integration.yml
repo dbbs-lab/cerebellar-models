@@ -54,7 +54,7 @@ jobs:
         BSB_QUIET: true
       run: |
         source ${{ github.workspace }}/simulators/nest/bin/nest_vars.sh
-        coverage run -p -m unittest discover -v -s ./tests
+        coverage run -p -m unittest discover -v -s ./tests -t .
 
     - name: Send coverage
       uses: codecov/codecov-action@v5.4.1

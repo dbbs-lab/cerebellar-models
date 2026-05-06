@@ -4,7 +4,7 @@ Elephant.
 """
 
 from os import listdir
-from os.path import isfile, join
+from os.path import abspath, isdir, isfile, join
 from typing import List, Tuple
 
 import numpy as np
@@ -43,19 +43,17 @@ class SpikingResults:
         :param ignored_ct: List of ignored cells names
         """
         self._scaffold = scaffold
+        self._folder_nio = None  # will be initialized last
         self.simulation_name = simulation_name
         self._time_from = time_from or 0
         self.time_to = time_to or self.scaffold.simulations[self.simulation_name].duration
         self._dt = self.scaffold.simulations[simulation_name].resolution
-        self.folder_nio = folder_nio
-        """Folder containing the simulation results stored as nio files."""
         self.ignored_ct = ignored_ct if ignored_ct is not None else ["glomerulus", "ubc_glomerulus"]
         """List of ignored cell type names"""
         self._all_spikes = []
-        """List of SpikeTrain for each cell type"""
         self._nb_neurons = np.zeros(0, dtype=int)
         self._populations = []
-        self.load_spikes()
+        self.folder_nio = folder_nio
 
     @staticmethod
     def _check_simulation(scaffold: Scaffold, simulation_name: str):
@@ -172,7 +170,7 @@ class SpikingResults:
         return self._time_to
 
     @time_to.setter
-    def time_to(self, value):
+    def time_to(self, value: float):
         self._check_times(self.time_from, value)
         self._time_to = value
 
@@ -182,7 +180,7 @@ class SpikingResults:
         return self._time_from
 
     @time_from.setter
-    def time_from(self, value):
+    def time_from(self, value: float):
         self._check_times(value, self.time_to)
         self._time_from = value
 
@@ -193,18 +191,42 @@ class SpikingResults:
 
     @simulation_name.setter
     def simulation_name(self, simulation_name: str):
-        self._check_simulation(self.scaffold, simulation_name)
         self._simulation_name = simulation_name
+        if self._scaffold is not None:
+            self._check_simulation(self.scaffold, simulation_name)
+            if self._folder_nio is not None:
+                self.load_spikes()
 
     @property
     def scaffold(self):
         """BSB Scaffold used as reference for simulation results."""
         return self._scaffold
 
+    @scaffold.setter
+    def scaffold(self, scaffold: Scaffold):
+        self._scaffold = scaffold
+        if self._simulation_name is not None:
+            self._check_simulation(self.scaffold, self.simulation_name)
+            if self._folder_nio is not None:
+                self.load_spikes()
+
     @property
     def dt(self):
         """Time step of the simulation in ms"""
         return self._dt
+
+    @property
+    def folder_nio(self):
+        return self._folder_nio
+
+    @folder_nio.setter
+    def folder_nio(self, value):
+        """Path to folder containing the simulation results stored as nio files."""
+        if not isdir(abspath(value)):
+            raise ValueError(f"The folder path to nio results cannot be reached: {abspath(value)}")
+        self._folder_nio = value
+        if self._scaffold is not None and self._simulation_name is not None:
+            self.load_spikes()
 
 
 def get_firing_rates(spiking_results: SpikingResults, kernel=None) -> np.ndarray:
@@ -260,7 +282,7 @@ def get_spike_matrix(spikes, dt):
 
 def extract_isis(spikes, dt):
     """
-    Extract inter-spike intervals from a list of spike trains.
+    Extract inter-spike intervals from a SpikeTrain object.
     One mean inter-spike interval value is computed for each neuron.
 
     :param neo.core.SpikeTrain spikes: population SpikeTrain object

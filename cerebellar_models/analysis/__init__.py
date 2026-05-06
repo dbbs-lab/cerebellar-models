@@ -20,7 +20,7 @@ from cerebellar_models.analysis.spike_plots import (
     SimResultsTable,
     SortedPSTH,
     Spike2Columns,
-    SpikeCorrelation,
+    SpikeCorrelationPlot,
     SpikePlot,
     SpikeSimulationReport,
 )
@@ -40,8 +40,6 @@ from cerebellar_models.analysis.structure_analysis import (
     TablePlot,
 )
 
-matplotlib.use("Agg")
-
 __all__ = [
     "Legend",
     "Plot",
@@ -55,7 +53,7 @@ __all__ = [
     "FrequencyPlot",
     "SortedPSTH",
     "Spike2Columns",
-    "SpikeCorrelation",
+    "SpikeCorrelationPlot",
     "SpikePlot",
     "SpikeSimulationReport",
     "SpikingResults",

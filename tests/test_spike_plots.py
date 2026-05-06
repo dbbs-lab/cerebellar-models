@@ -18,7 +18,7 @@ from cerebellar_models.analysis.spike_plots import (
     ISIPlot,
     RasterPSTHPlot,
     SimResultsTable,
-    SpikeCorrelation,
+    SpikeCorrelationPlot,
     SpikePlot,
     SpikeSimulationReport,
 )
@@ -223,7 +223,6 @@ class TestSpikePlots(
     def test_update_spike_report(self):
         plot = SpikePlot(
             (10, 10),
-            self.scaffold,
             self.simulationReport.spiking_results,
             None,
         )
@@ -256,7 +255,6 @@ class TestSpikePlots(
     def test_raster_psth(self):
         plot = RasterPSTHPlot(
             (15, 10),
-            scaffold=self.scaffold,
             spiking_results=self.simulationReport.spiking_results,
             dict_colors=self.simulationReport.colors,
             nb_bins=31,
@@ -297,7 +295,6 @@ class TestSpikePlots(
     def test_relative_time(self):
         plot = RasterPSTHPlot(
             (15, 10),
-            scaffold=self.scaffold,
             spiking_results=self.simulationReport.spiking_results,
             dict_colors=self.simulationReport.colors,
             nb_bins=31,
@@ -340,7 +337,6 @@ class TestSpikePlots(
         xlims = np.array([200.0, 800.0])
         plot = RasterPSTHPlot(
             (15, 10),
-            scaffold=self.scaffold,
             spiking_results=self.simulationReport.spiking_results,
             dict_colors=self.simulationReport.colors,
             nb_bins=31,
@@ -378,7 +374,6 @@ class TestSpikePlots(
         with self.assertRaises(ValueError):
             RasterPSTHPlot(
                 (15, 10),
-                scaffold=self.scaffold,
                 spiking_results=self.simulationReport.spiking_results,
                 nb_bins=0,
             )
@@ -386,7 +381,6 @@ class TestSpikePlots(
     def test_firing_rates(self):
         plot = FiringRatesPlot(
             (15, 6),
-            scaffold=self.scaffold,
             spiking_results=self.simulationReport.spiking_results,
             dict_colors=self.simulationReport.colors,
         )
@@ -410,7 +404,6 @@ class TestSpikePlots(
         with self.assertRaises(TypeError):
             FiringRatesPlot(
                 (15, 10),
-                scaffold=self.scaffold,
                 spiking_results=self.simulationReport.spiking_results,
                 kernel=0,
             )
@@ -418,7 +411,6 @@ class TestSpikePlots(
     def test_plot_isis(self):
         plot = ISIPlot(
             (15, 6),
-            scaffold=self.scaffold,
             spiking_results=self.simulationReport.spiking_results,
             dict_colors=self.simulationReport.colors,
             nb_bins=50,
@@ -439,7 +431,6 @@ class TestSpikePlots(
         with self.assertRaises(ValueError):
             ISIPlot(
                 (15, 10),
-                scaffold=self.scaffold,
                 spiking_results=self.simulationReport.spiking_results,
                 dict_colors=self.simulationReport.colors,
                 nb_bins=0,
@@ -448,7 +439,6 @@ class TestSpikePlots(
     def test_freq_plot(self):
         plot = FrequencyPlot(
             (15, 6),
-            scaffold=self.scaffold,
             spiking_results=self.simulationReport.spiking_results,
             dict_colors=self.simulationReport.colors,
         )
@@ -476,7 +466,6 @@ class TestSpikePlots(
     def test_sim_table(self):
         plot = SimResultsTable(
             (5, 2.5),
-            scaffold=self.scaffold,
             spiking_results=self.simulationReport.spiking_results,
             dict_colors=self.simulationReport.colors,
             dict_abv={"bla": "go", "granule_cell": "GrC"},
@@ -498,9 +487,8 @@ class TestSpikePlots(
             self.assertAll(np.array(tested) == np.array(expected))
 
     def test_corr_matrix(self):
-        plot = SpikeCorrelation(
+        plot = SpikeCorrelationPlot(
             (10, 10.5),
-            scaffold=self.scaffold,
             spiking_results=self.simulationReport.spiking_results,
             dict_abv=self.simulationReport.abbreviations,
         )

@@ -39,12 +39,11 @@ class SpikePlot(ScaffoldPlot):
     def __init__(
         self,
         fig_size: Tuple[float, float],
-        scaffold: Scaffold,
         spiking_results: SpikingResults,
         dict_colors: dict = None,
         **kwargs,
     ):
-        super().__init__(fig_size, scaffold, dict_colors=dict_colors, **kwargs)
+        super().__init__(fig_size, spiking_results.scaffold, dict_colors=dict_colors, **kwargs)
         self.spiking_results = spiking_results
         """Loaded spiking results."""
 
@@ -168,7 +167,6 @@ class RasterPSTHPlot(SpikePlot):
     def __init__(
         self,
         fig_size: Tuple[float, float],
-        scaffold: Scaffold,
         spiking_results: SpikingResults,
         nb_bins: int = 30,
         dict_colors: dict = None,
@@ -177,7 +175,6 @@ class RasterPSTHPlot(SpikePlot):
         self.spiking_results = spiking_results
         super().__init__(
             fig_size,
-            scaffold,
             spiking_results,
             dict_colors,
             **kwargs,
@@ -286,7 +283,6 @@ class Spike2Columns(SpikePlot):
     def __init__(
         self,
         fig_size: Tuple[float, float],
-        scaffold: Scaffold,
         spiking_results: SpikingResults,
         dict_colors: dict = None,
         **kwargs,
@@ -295,7 +291,6 @@ class Spike2Columns(SpikePlot):
         self.spiking_results = spiking_results
         super().__init__(
             fig_size,
-            scaffold,
             spiking_results,
             dict_colors,
             **kwargs,
@@ -327,7 +322,6 @@ class FiringRatesPlot(Spike2Columns):
     def __init__(
         self,
         fig_size: Tuple[float, float],
-        scaffold: Scaffold,
         spiking_results: SpikingResults,
         kernel=None,
         dict_colors: dict = None,
@@ -335,7 +329,6 @@ class FiringRatesPlot(Spike2Columns):
     ):
         super().__init__(
             fig_size,
-            scaffold,
             spiking_results,
             dict_colors,
             **kwargs,
@@ -402,7 +395,6 @@ class ISIPlot(Spike2Columns):
     def __init__(
         self,
         fig_size: Tuple[float, float],
-        scaffold: Scaffold,
         spiking_results: SpikingResults,
         nb_bins: int = 50,
         dict_colors: dict = None,
@@ -410,7 +402,6 @@ class ISIPlot(Spike2Columns):
     ):
         super().__init__(
             fig_size,
-            scaffold,
             spiking_results,
             dict_colors,
             **kwargs,
@@ -485,7 +476,6 @@ class SimResultsTable(TablePlot, SpikePlot):
     def __init__(
         self,
         fig_size: Tuple[float, float],
-        scaffold: Scaffold,
         spiking_results: SpikingResults,
         dict_colors: dict = None,
         dict_abv=None,
@@ -493,7 +483,6 @@ class SimResultsTable(TablePlot, SpikePlot):
     ):
         super().__init__(
             fig_size,
-            scaffold,
             spiking_results,
             dict_colors,
             **kwargs,
@@ -550,7 +539,7 @@ class SimResultsTable(TablePlot, SpikePlot):
         return {ct: line[1] for ct, line in zip(self.rows, self._values)}
 
 
-class SpikeCorrelation(SpikePlot):
+class SpikeCorrelationPlot(SpikePlot):
     """
     Spike cross-correlation matrix plot for each cell type.
     Spike trains will be time binned before computing the pairwise
@@ -560,7 +549,6 @@ class SpikeCorrelation(SpikePlot):
     def __init__(
         self,
         fig_size: Tuple[float, float],
-        scaffold: Scaffold,
         spiking_results: SpikingResults,
         bin_size: float = 5 * ms,
         dict_colors: dict = None,
@@ -569,7 +557,6 @@ class SpikeCorrelation(SpikePlot):
     ):
         super().__init__(
             fig_size,
-            scaffold,
             spiking_results,
             dict_colors,
             **kwargs,
@@ -609,7 +596,6 @@ class SortedPSTH(SpikePlot):
     def __init__(
         self,
         fig_size: Tuple[float, float],
-        scaffold: Scaffold,
         spiking_results: SpikingResults,
         nb_bins: int = 50,
         sample_size: int = 100,
@@ -618,7 +604,6 @@ class SortedPSTH(SpikePlot):
     ):
         super().__init__(
             fig_size,
-            scaffold,
             spiking_results,
             dict_colors,
             **kwargs,
@@ -699,34 +684,28 @@ class BasicSimulationReport(SpikeSimulationReport):
         num_labelled_ct = len(self.populations)
         raster = RasterPSTHPlot(
             (15, 3 * np.ceil(num_labelled_ct / 2)),
-            scaffold=self.scaffold,
             spiking_results=self.spiking_results,
         )
         table = SimResultsTable(
             (5, 0.22 * (num_labelled_ct + 1)),
-            scaffold=self.scaffold,
             spiking_results=self.spiking_results,
             dict_abv=self.abbreviations,
         )
         firing_rates = FiringRatesPlot(
             (15, 2 * np.ceil(num_labelled_ct / 2)),
-            scaffold=self.scaffold,
             spiking_results=self.spiking_results,
             kernel=GaussianKernel(sigma=20 * ms),
         )
         isis = ISIPlot(
             (15, 2 * np.ceil(num_labelled_ct / 2)),
-            scaffold=self.scaffold,
             spiking_results=self.spiking_results,
         )
         freq = FrequencyPlot(
             (15, 2 * np.ceil(num_labelled_ct / 2)),
-            scaffold=self.scaffold,
             spiking_results=self.spiking_results,
         )
-        corr = SpikeCorrelation(
+        corr = SpikeCorrelationPlot(
             (10, 10.5),
-            scaffold=self.scaffold,
             spiking_results=self.spiking_results,
         )
         legend = Legend(
