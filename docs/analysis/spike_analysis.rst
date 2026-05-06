@@ -1,113 +1,56 @@
-Spike analysis and report of simulation results
-===============================================
+Spike results extraction and analysis
+=====================================
 
-This section describes in details all the spiking analysis and plots
-available through the cerebellar-models reporting, based on the results of
-BSB simulations.
+This section describes the methods to extract spiking results from
+BSB NEST simulations and to analyze these results using the
+`Elephant <https://elephant.readthedocs.io/en/latest/>`_ library.
 
-.. _sim_plot:
+.. _spiking_results:
 
-:class:`SpikePlot <.analysis.spike_plots.SpikePlot>`
-----------------------------------------------------
-This abstract class provides an interface to plot spike-event based simulation
-results for the duration of the simulation. It extends from ``ScaffoldPlot``.
+:class:`SpikingResults <.analysis.spiking_results.SpikingResults>`
+------------------------------------------------------------------
+
+This class allows you to extract and manipulate spiking results coming from BSB-NEST simulations.
 
 Constructor parameters:
 
-* ``scaffold``: BSB scaffold object.
-* ``simulation_name``: Name of the simulation as defined in the scaffold
-  configuration.
-* ``time_from``: The starting time from which the analysis will be performed
-* ``time_to``: The end time at which the analysis will end.
-* ``all_spikes``: List of :class:`SpikeTrain <neo.core.SpikeTrain>` for each cell
-  type.
-* ``nb_neurons``: A list containing the number of neuron spiking during the
-  simulation for each cell type with the same order as ``all_spikes``.
-* ``populations``: The list of the cell type names producing spikes during the
-  simulation.
-
-It is advised to obtain the ``all_spikes``, ``nb_neurons``, and ``populations``
-parameters from a ``SimulationReport`` (see :ref:`simulation_report`).
+* :attr:`scaffold<.analysis.spiking_results.SpikingResults.scaffold>`: BSB scaffold object.
+* :attr:`simulation_name<.analysis.spiking_results.SpikingResults.simulation_name>`: Name of the
+  simulation as defined in the scaffold configuration.
+* :attr:`time_from<.analysis.spiking_results.SpikingResults.time_from>`: The starting time from which
+  the analysis will be performed
+* :attr:`time_to<.analysis.spiking_results.SpikingResults.time_to>`: The end time at which the analysis will end.
+* :attr:`folder_nio<.analysis.spiking_results.SpikingResults.folder_nio>`: Path to folder containing
+  the `.nio` files produced by the BSB-NEST simulation
+* :attr:`ignored_ct<.analysis.spiking_results.SpikingResults.ignored_ct>`: List of cell type names to
+  ignore from the nio files (results from these cells will not be returned).
 
 .. note::
    The ``time_from`` and ``time_to`` values can differ from the simulation start
    and end time, but they should remain within the simulation time interval.
 
-.. _simulation_report:
-
-:class:`SpikeSimulationReport <.analysis.spike_plots.SpikeSimulationReport>`
-----------------------------------------------------------------------------
-This abstract class provides an interface to create reports for
-spike-event based simulation results. It extends from ``BSBReport``.
-
-Constructor parameters:
-
-* ``scaffold``: Scaffold instance or path to the BSB Scaffold file to load
-* ``simulation_name``: Name of the simulation as defined in the scaffold
-  configuration.
-* ``folder_nio``: Folder containing the simulation results stored as nio files.
-* ``time_from``: The starting time from which the analysis will be performed
-* ``time_to``: The end time at which the analysis will end.
-* ``ignored_ct``: List of cell type names to ignore from the nio files
-  (results from these cells will not be displayed).
-* ``cell_type_info``: List of :class:`PlotTypeInfo <.analysis.report.PlotTypeInfo>`.
-  This gives for each element to plot, its name, abbreviation and color.
-
-This class will load the results from nio files produced by the BSB simulation
-and store them  in the following attributes:
-
-* ``all_spikes``: List of :class:`SpikeTrain <neo.core.SpikeTrain>` for each cell
-  type.
-* ``nb_neurons``: A list containing the number of neuron spiking during the
-  simulation for each cell type with the same order as ``all_spikes``.
-* ``populations``: The list of the cell type names producing spikes during the
-  simulation.
-
-The latter parameters will be automatically forwarded to the report's ``SpikePlots``
+The class will automatically load the spikes from the files for you. You can then use it to analyze your
+results.
 
 .. note::
-   The ``time_from`` and ``time_to`` values can differ from the simulation start
-   and end time, but they should remain within the simulation time interval.
-   Any modification to the ``time_from`` and ``time_to`` values will be automatically
-   forwarded to the report's ``SpikePlots``
 
-.. _raster_psth:
-
-:class:`RasterPSTHPlot <.analysis.spike_plots.RasterPSTHPlot>`
---------------------------------------------------------------
-This class extracts and plots a simulation spike times as a raster plot
-for the duration of the simulation, as well as the equivalent PSTH for each of
-the cell types of the simulation.
-
-On top of the constructor parameters of ``SpikePlot``:
-
-* ``nb_bins``: Numbers of bins for the PSTH plot part for each cell type.
+    Note that you can change **at any time** all the parameters used to filter the results.
 
 
-.. _simulation_table:
-
-:class:`SimResultsTable <.analysis.spike_plots.SimResultsTable>`
-----------------------------------------------------------------
-This class computes the mean firing rate and mean ISI of each cell type
-during the simulation time and plot it in a table.
-The firing rate value of a cell type corresponds to the mean number of
-spike over the simulation time interval, while its inter-spike interval
-corresponds to the mean of all mean inter-spike interval values computed
-for each of its neuron.
-
-On top of the constructor parameters of ``SpikePlot``:
-
-* ``dict_abv``: Dictionary that links each cell type name to an abbreviation
-  to display
-
+Methods to analyze the spiking results
+--------------------------------------
 
 .. _firing_rates:
 
-:class:`FiringRatesPlot <.analysis.spike_plots.FiringRatesPlot>`
-----------------------------------------------------------------
-This class plots the mean instantaneous firing rate :math:`\lambda (t)`
-of each population, expressed according to time, for the duration of
-the simulation.
+:func:`get_firing_rates<.analysis.spiking_results.get_firing_rates>`
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+Computes the instantaneous firing rate for each cell population.
+Parameters:
+
+* ``spiking_results``: SpikingResults instance.
+* ``kernel``: Size of time bin
+
 
 The instantaneous firing rate function of a single neuron :math:`m`,
 :math:`\lambda _m (t)` corresponds to the one described in Nawrot et al.
@@ -129,105 +72,72 @@ Additionally, we define :math:`\sigma` the width of the kernel (in ms)
 :math:`K` as:
 :math:`\sigma = \sqrt{ \displaystyle\int_{-\infty}^{+\infty} t^2 \cdot K(t) \,dt }`
 
-Different kernel functions would have different smoothening properties.
-Here we are using a normalized version of the
-:doc:`gaussian <scipy:reference/generated/scipy.signal.windows.gaussian>`
-function from scipy.
-
 To avoid the edge effects of the kernel convolution with the spike train
 (i.e. the time where the kernel can not fully overlap the spike train
 because of its width), a compensation effect is calculated.
 
-The final displayed signal :math:`\lambda (t)` corresponds to the mean of
-the neurons' :math:`\lambda _m (t)` surrounded by its standard deviation
-(clamped at 0). We also display the mean and std of :math:`\lambda (t)`
-as a text.
+Different kernel functions would have different smoothening properties.
+Here you can use any of the
+`Kernels <https://elephant.readthedocs.io/en/latest/reference/kernels.html>`_
+provided by Elephant. By default, if no kernel is provided, we use the
+optimized gaussian kernel of Elephant.
+See also the function
+:doc:`instantaneous_rate <elephant:reference/_toctree/statistics/elephant.statistics.instantaneous_rate>`
+for more information.
 
-On top of the constructor parameters of ``SpikePlot``:
+:func:`get_spike_matrix<.analysis.spiking_results.get_spike_matrix>`
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-* ``w_single``: Width of the kernel :math:`\sigma` expressed as number
-  of time steps.
+Extract the 2D boolean matrix of the spiking activity for each neuron of a SpikeTrain object.
+Each line corresponds to a neuron, while the columns correspond to a time step in the simulation.
+Matrix box is True if the neuron of this line spiked at the corresponding time step.
+Neurons are sorted according to their NEST id.
+Parameters:
 
+* ``spikes``: :class:`SpikeTrain <neo.core.SpikeTrain>` instance of a cell population.
+* ``dt``: Simulation time step.
 
 .. _isis_distrib:
 
-:class:`ISIPlot <.analysis.spike_plots.ISIPlot>`
-------------------------------------------------
-This class generates the Inter-spike interval (ISI) histogram plot for
-each cell type.
+:func:`extract_isis<.analysis.spiking_results.extract_isis>`
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+Extract the Inter Spike Intervals (ISI) from a SpikeTrain instance.
+Parameters:
+
+* ``spikes``: :class:`SpikeTrain <neo.core.SpikeTrain>` instance of a cell population.
+* ``dt``: Simulation time step.
 
 An ISI corresponds to the time (in ms) between two consecutive spikes.
-For each neuron type, the values extracted for the histogram corresponds
-to the mean ISI value of each of its neuron. Only the neurons spiking
-at least two times during the simulation interval will be used.
+The values extracted corresponds to the mean ISI value of each of its neuron.
+Only the neurons spiking at least two times during the SpikeTrain interval are used.
 
-On top of the constructor parameters of ``SpikePlot``:
+.. _fft_analysis:
 
-* ``nb_bins``: Numbers of bins for the ISI histogram for each cell type.
+:func:`get_frequencies<.analysis.spiking_results.get_frequencies>`
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-
-.. _frequency_plot:
-
-:class:`FrequencyPlot <.analysis.spike_plots.FrequencyPlot>`
-------------------------------------------------------------
-This class plots the frequency distribution analysis of the instantaneous
-firing rate signal for each cell type.
-The analysis performs a
+This function performs a
 :doc:`Fast Fourier Transform <scipy:reference/generated/scipy.fftpack.fftfreq>`
-on the instantaneous firing rate calculated as defined in :ref:`firing_rates`.
+on a instantaneous firing rate signal.
+Parameters:
 
-This class uses the same constructor parameters as in :ref:`firing_rates`.
+* ``spiking_results``: SpikingResults instance.
+* ``firing_rates``: instantaneous firing rates for each neuron population, for each time step,
+  corresponds to the output of the :ref:`firing_rates` function.
 
-Separators for the major bands of frequencies for neural activity can also
-be plotted on top of each panel:
+.. _pearson_coef:
 
-- Delta band: :math:`[0.5; 4]` Hz
-- Theta band: :math:`[4; 8]` Hz
-- Alpha band: :math:`[8; 12]` Hz
-- Beta band: :math:`[12; 30]` Hz
-- Gamma band: :math:`[30; 100]` Hz
+:func:`get_correlation_coefficients<.analysis.spiking_results.get_correlation_coefficients>`
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-
-.. _corr_coef_plot:
-
-:class:`SpikeCorrelation <.analysis.spike_plots.SpikeCorrelation>`
-------------------------------------------------------------------
-This class plots the pairwise
+This method returns the 2D matrix of the pairwise
 :doc:`Pearson’s correlation coefficients <elephant:reference/_toctree/spike_train_correlation/elephant.spike_train_correlation.correlation_coefficient>`
 between each cell type.
-Spike trains of each neuron pairs will be time binned before computing the coefficient.
-On top of the constructor parameters of ``SpikePlot``:
+Parameters:
 
-* ``bin_size``: Size of the time bins in ms.
-* ``dict_abv``: Dictionary that links each cell type name to an abbreviation
-  to display
-
-
-.. _basic_sim_report:
-
-:class:`BasicSimulationReport <.analysis.spike_plots.BasicSimulationReport>`
-----------------------------------------------------------------------------
-This class extends
-:class:`spike simulation report <.analysis.spike_plots.SpikeSimulationReport>`
-and produces a report containing 5
-:class:`SpikePlot <.analysis.spike_plots.SpikePlot>` (see section
-:ref:`sim_plot`) with a legend:
-
-- A plot showing both the raster plot and Peristimulus Time Histogram (PSTH) for
-  the duration of the simulation (see section :ref:`raster_psth`)
-- A table containing the mean firing rate and mean InterSpike Intervals (ISIs) for
-  each cell type (see section :ref:`simulation_table`).
-- A plot showing the mean firing rate according to time of each cell type
-  (see section :ref:`firing_rates`)
-- A plot showing the ISIs distribution of each cell type (see section
-  :ref:`isis_distrib`)
-- A plot showing the frequency spectrum of each cell type (see section
-  :ref:`frequency_plot`)
-- A plot showing the cross-correlation of the spiking activity between each cell type
-  (see section :ref:`corr_coef_plot`)
-
-All these plots are saved in a single pdf file.
-
+* ``spiking_results``: SpikingResults instance.
+* ``bin_size``: Size of time bin
 
 References
 ----------
