@@ -79,7 +79,7 @@ fibers only transmit spikes coming from other regions of the brain.
    We have not being able to reproduce all the results of the Geminiani et al. (2018 and 2019)
    [#geminiani_2018]_ [#geminiani_2019]_, so we advise you to be careful when using it.
 
-.. include-nestml:: ../../../cerebellar_models/nest_models/eglif_multirec_v2.nestml
+.. include-nestml:: ../../../cerebellar_models/nest_models/eglif_multirec.nestml
     :end-before: References
 
 Neuron parameters
