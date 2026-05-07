@@ -28,39 +28,48 @@
 # The receptor-specific synaptic currents are defined as:
 #
 # .. math::
+#
+#    \begin{cases}
+#
 #    I_{AMPA} =
 #    -\left[
 #    g_{AMPA,1}(t)(V_m - E_{AMPA})
 #    + g_{AMPA,2}(t)(V_m - E_{AMPA})
 #    \right]
 #
-# .. math::
+#    \\
+#
 #    I_{NMDA} =
 #    -\left[
 #    g_{NMDA,1}(t)(V_m - E_{NMDA})B_{Mg}(V_m)
 #    + g_{NMDA,2}(t)(V_m - E_{NMDA})B_{Mg}(V_m)
 #    \right]
 #
-# .. math::
+#    \\
+#
 #    I_{GABA} =
 #    -\left[
 #    g_{GABA,1}(t)(V_m - E_{GABA})
 #    + g_{GABA,2}(t)(V_m - E_{GABA})
 #    \right]
 #
-# .. math::
+#    \\
+#
 #    I_{AMPA2} =
 #    -\left[
 #    g_{AMPA2,1}(t)(V_m - E_{AMPA2})
 #    + g_{AMPA2,2}(t)(V_m - E_{AMPA2})
 #    \right]
 #
-# .. math::
+#    \\
+#
 #    I_{AMPA3} =
 #    -\left[
 #    g_{AMPA3,1}(t)(V_m - E_{AMPA3})
 #    + g_{AMPA3,2}(t)(V_m - E_{AMPA3})
 #    \right]
+#
+#    \end{cases}
 #
 # The total synaptic current is:
 #
