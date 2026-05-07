@@ -135,6 +135,21 @@ On top of the constructor parameters of ``SpikePlot``:
 * ``dict_abv``: Dictionary that links each cell type name to an abbreviation
   to display
 
+:class:`SortedPSTH <.analysis.spike_plots.SortedPSTH>`
+------------------------------------------------------
+
+This class plots the time-binned instantaneous firing rate for each cell population.
+Each population firing rate is obtained from a subsample of the neurons within the population,
+and are displayed in rows in the same panel.
+The populations are sorted based on the time at which the largest positive change of firing rate
+has been detected. This allows you to see how this event is progressing within the circuit during the
+simulation.
+
+On top of the constructor parameters of ``SpikePlot``:
+
+* ``nb_bins``: Number of bins for the PSTH.
+* ``sample_size``: Maximum number of neurons to subsample for each population
+
 
 .. _basic_sim_report:
 

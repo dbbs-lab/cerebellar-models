@@ -12,7 +12,8 @@ BSB NEST simulations and to analyze these results using the
 
 This class allows you to extract and manipulate spiking results coming from BSB-NEST simulations.
 
-Constructor parameters:
+Class parameters
+^^^^^^^^^^^^^^^^
 
 * :attr:`scaffold<.analysis.spiking_results.SpikingResults.scaffold>`: BSB scaffold object.
 * :attr:`simulation_name<.analysis.spiking_results.SpikingResults.simulation_name>`: Name of the
@@ -35,6 +36,16 @@ results.
 .. note::
 
     Note that you can change **at any time** all the parameters used to filter the results.
+
+Class properties
+^^^^^^^^^^^^^^^^
+The following properties are all lists providing different information for each neuron population
+(lists have the same size). They will be updated if the class parameters are modified.
+
+* :attr:`filt_spikes<.analysis.spiking_results.SpikingResults.filt_spikes>`: List of
+  :class:`SpikeTrain <neo.core.SpikeTrain>`, one for each population, filtered according to the class parameters.
+* :attr:`nb_neurons<.analysis.spiking_results.SpikingResults.nb_neurons>`: Number of neurons for each population.
+* :attr:`populations<.analysis.spiking_results.SpikingResults.populations>`: The name of each neuron population.
 
 
 Methods to analyze the spiking results
