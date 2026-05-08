@@ -508,30 +508,30 @@ simulations:
           k_adap: 0.06746499109544667
           t_ref: 1.5
           tau_m: 24.15
-          GABA_Tau_r: 0.8538854817657389
-          NMDA_Tau_d2: 121.08581080624421
-          NMDA_A_r: 3.2972228905396754
-          GABA_g_init: 0.16823655988394964
-          GABA_A2: 1.625483627327884
-          GABA_Tau_d2: 280.3499289731584
-          GABA_Tau_d1: 27.865464579839813
-          AMPA_Tau_r: 0.9966611702091053
-          NMDA_Tau_d1: 14.860706054687927
-          AMPA_g_init: 1.3254051705870171
-          NMDA_g_init: 0.023436539864118
-          NMDA_Tau_r: 21.192329383729344
-          GABA_A_r: 4.853874735550668
-          NMDA_A1: 2.951290940616272
-          AMPA_Tau_d1: 0.38598738306536895
-          AMPA_A_r: 6.973773179799838
-          NMDA_A2: 0.21348858259846124
-          AMPA_A1: 1.4551614318130006
           AMPA_E_rev: 0.0
+          GABA_Tau_d1: 27.865464579839813
+          GABA_A2: 1.625483627327884
+          AMPA_A1: 1.4551614318130006
+          AMPA_Tau_d1: 0.38598738306536895
+          NMDA_g_init: 0.023436539864118
+          AMPA_Tau_r: 0.9966611702091053
+          GABA_Tau_d2: 280.3499289731584
+          GABA_g_init: 0.16823655988394964
+          GABA_Tau_r: 0.8538854817657389
+          AMPA_A_r: 6.973773179799838
           AMPA_Tau_d2: 3.7021239405389736
+          NMDA_A2: 0.21348858259846124
+          NMDA_Tau_r: 21.192329383729344
           GABA_E_rev: -65.0
-          NMDA_E_rev: -3.7
           GABA_A1: 5.87057927996902
           AMPA_A2: 1.5956590886325035
+          GABA_A_r: 4.853874735550668
+          NMDA_E_rev: -3.7
+          NMDA_Tau_d2: 121.08581080624421
+          NMDA_A1: 2.951290940616272
+          AMPA_g_init: 1.3254051705870171
+          NMDA_Tau_d1: 14.860706054687927
+          NMDA_A_r: 3.2972228905396754
         model: eglif_multirec
       golgi_cell:
         constants:
@@ -552,46 +552,46 @@ simulations:
           k_adap: 0.10973532752297317
           t_ref: 2
           tau_m: 44
-          AMPA2_Tau_d1: 0.8620530319793709
-          AMPA3_A1: 5.690348485137838
-          AMPA2_A_r: 4.9918672119529655
-          AMPA3_A2: 0.6780028154381605
-          AMPA2_E_rev: 0.0
-          GABA_Tau_r: 0.1846418908724778
-          NMDA_Tau_d2: 784.4672149211721
-          NMDA_A_r: 1.3691425668447825
-          GABA_g_init: 1.8938290878206254
-          GABA_A2: 5.752371937918636
-          GABA_Tau_d2: 30.94312372047139
-          AMPA3_Tau_r: 0.06698111728388399
-          GABA_Tau_d1: 2.639679024851566
-          AMPA_Tau_r: 0.06828289728594421
-          AMPA2_A2: 1.239657495909673
-          NMDA_Tau_d1: 49.78301745858933
-          AMPA_g_init: 1.115965180410803
-          NMDA_g_init: 0.06507491002133782
-          NMDA_Tau_r: 7.492933042162157
-          GABA_A_r: 4.657518450694935
-          NMDA_A1: 2.511748085213512
-          AMPA_Tau_d1: 1.7041177058103865
-          AMPA_A_r: 1.886292737184908
-          NMDA_A2: 0.3665220416477684
-          AMPA3_g_init: 0.7261241439376229
-          AMPA_A1: 7.63072301638014
           AMPA_E_rev: 0.0
-          AMPA2_g_init: 0.30809559052972363
-          AMPA_Tau_d2: 7.020524126553463
-          AMPA3_E_rev: 0.0
-          AMPA2_Tau_d2: 2.018997472002967
-          AMPA2_Tau_r: 0.4458828693495311
-          GABA_E_rev: -65.0
-          AMPA3_A_r: 0.7566796251124199
+          AMPA3_Tau_r: 0.06698111728388399
+          AMPA2_A_r: 4.9918672119529655
+          GABA_Tau_d1: 2.639679024851566
+          GABA_A2: 5.752371937918636
           AMPA2_A1: 14.931011438400539
-          NMDA_E_rev: -3.7
-          AMPA3_Tau_d1: 0.8482199889588548
           AMPA3_Tau_d2: 1.9498307579186067
+          AMPA_A1: 7.63072301638014
+          AMPA2_A2: 1.239657495909673
+          AMPA_Tau_d1: 1.7041177058103865
+          AMPA3_A2: 0.6780028154381605
+          NMDA_g_init: 0.06507491002133782
+          AMPA_Tau_r: 0.06828289728594421
+          GABA_Tau_d2: 30.94312372047139
+          GABA_g_init: 1.8938290878206254
+          AMPA3_A_r: 0.7566796251124199
+          GABA_Tau_r: 0.1846418908724778
+          AMPA_A_r: 1.886292737184908
+          AMPA_Tau_d2: 7.020524126553463
+          AMPA2_Tau_r: 0.4458828693495311
+          AMPA3_Tau_d1: 0.8482199889588548
+          AMPA2_E_rev: 0.0
+          AMPA2_g_init: 0.30809559052972363
+          NMDA_A2: 0.3665220416477684
+          NMDA_Tau_r: 7.492933042162157
+          GABA_E_rev: -65.0
           GABA_A1: 8.885629800234906
+          AMPA3_g_init: 0.7261241439376229
           AMPA_A2: 2.5824424428033272
+          GABA_A_r: 4.657518450694935
+          AMPA3_E_rev: 0.0
+          NMDA_E_rev: -3.7
+          NMDA_Tau_d2: 784.4672149211721
+          NMDA_A1: 2.511748085213512
+          AMPA_g_init: 1.115965180410803
+          AMPA3_A1: 5.690348485137838
+          AMPA2_Tau_d1: 0.8620530319793709
+          NMDA_Tau_d1: 49.78301745858933
+          AMPA2_Tau_d2: 2.018997472002967
+          NMDA_A_r: 1.3691425668447825
         model: eglif_multirec
       purkinje_cell:
         constants:
@@ -612,22 +612,22 @@ simulations:
           k_adap: 0.4807699301937877
           t_ref: 0.5
           tau_m: 47
+          AMPA_Tau_r: 0.686334499921023
+          GABA_Tau_d2: 28.744462070299914
+          GABA_g_init: 2.0879285694406864
+          AMPA_E_rev: 0.0
           GABA_E_rev: -70.0
+          GABA_A1: 1.7476237681931543
           AMPA_g_init: 0.19294907221534321
           GABA_A_r: 7.382885340300089
           GABA_Tau_r: 0.7622223660610657
-          AMPA_E_rev: 0.0
-          AMPA_Tau_d2: 0.10086052627970157
-          GABA_A2: 1.2018061113172258
-          GABA_g_init: 2.0879285694406864
-          AMPA_Tau_d1: 0.08637409507467056
-          GABA_Tau_d2: 28.744462070299914
           GABA_Tau_d1: 2.814505586125079
+          GABA_A2: 1.2018061113172258
+          AMPA_Tau_d2: 0.10086052627970157
           AMPA_A_r: 0.7097862389833014
-          AMPA_Tau_r: 0.686334499921023
-          GABA_A1: 1.7476237681931543
           AMPA_A1: 4.011865516012454
           AMPA_A2: 3.988541673612559
+          AMPA_Tau_d1: 0.08637409507467056
         model: eglif_multirec
       basket_cell:
         constants:
@@ -647,30 +647,30 @@ simulations:
           k_adap: 0.17585099665700937
           t_ref: 1.59
           tau_m: 9.125
-          GABA_Tau_r: 0.37383077569256745
-          NMDA_Tau_d2: 788.8390002033279
-          NMDA_A_r: 5.7952629972709815
-          GABA_g_init: 1.1487687456539493
-          GABA_A2: 6.738700331790382
-          GABA_Tau_d2: 29.20898014832495
-          GABA_Tau_d1: 3.1073175264777047
-          AMPA_Tau_r: 0.2885454465778898
-          NMDA_Tau_d1: 51.055226059944026
-          AMPA_g_init: 0.5986151464078818
-          NMDA_g_init: 0.004650912311371714
-          NMDA_Tau_r: 46.471276254526956
-          GABA_A_r: 6.80395085901533
-          NMDA_A1: 4.238593649202411
-          AMPA_Tau_d1: 0.361214360260991
-          AMPA_A_r: 2.537866943371753
-          NMDA_A2: 0.5653990900028785
-          AMPA_A1: 0.7686340271346837
           AMPA_E_rev: 0.0
+          GABA_Tau_d1: 3.1073175264777047
+          GABA_A2: 6.738700331790382
+          AMPA_A1: 0.7686340271346837
+          AMPA_Tau_d1: 0.361214360260991
+          NMDA_g_init: 0.004650912311371714
+          AMPA_Tau_r: 0.2885454465778898
+          GABA_Tau_d2: 29.20898014832495
+          GABA_g_init: 1.1487687456539493
+          GABA_Tau_r: 0.37383077569256745
+          AMPA_A_r: 2.537866943371753
           AMPA_Tau_d2: 1.1702221289816273
+          NMDA_A2: 0.5653990900028785
+          NMDA_Tau_r: 46.471276254526956
           GABA_E_rev: -65.0
-          NMDA_E_rev: -3.7
           GABA_A1: 9.254883332147838
           AMPA_A2: 1.3031463264578722
+          GABA_A_r: 6.80395085901533
+          NMDA_E_rev: -3.7
+          NMDA_Tau_d2: 788.8390002033279
+          NMDA_A1: 4.238593649202411
+          AMPA_g_init: 0.5986151464078818
+          NMDA_Tau_d1: 51.055226059944026
+          NMDA_A_r: 5.7952629972709815
         model: eglif_multirec
       stellate_cell:
         constants:
@@ -690,30 +690,30 @@ simulations:
           k_adap: 0.17534246575342463
           t_ref: 1.59
           tau_m: 9.125
-          GABA_Tau_r: 0.31230551452717137
-          NMDA_Tau_d2: 892.4760819720726
-          NMDA_A_r: 4.743977499613861
-          GABA_g_init: 1.0230134014130856
-          GABA_A2: 4.524929470710231
-          GABA_Tau_d2: 29.3943338444682
-          GABA_Tau_d1: 2.9081700675470903
-          AMPA_Tau_r: 0.832811417468158
-          NMDA_Tau_d1: 53.15105534517695
-          AMPA_g_init: 0.09324813802356961
-          NMDA_g_init: 0.01514802993681726
-          NMDA_Tau_r: 37.622573319469055
-          GABA_A_r: 3.8423880947398508
-          NMDA_A1: 2.854964381660505
-          AMPA_Tau_d1: 0.16858899559030588
-          AMPA_A_r: 4.881100222623705
-          NMDA_A2: 0.35317007422511043
-          AMPA_A1: 17.07322080857238
           AMPA_E_rev: 0.0
+          GABA_Tau_d1: 2.9081700675470903
+          GABA_A2: 4.524929470710231
+          AMPA_A1: 17.07322080857238
+          AMPA_Tau_d1: 0.16858899559030588
+          NMDA_g_init: 0.01514802993681726
+          AMPA_Tau_r: 0.832811417468158
+          GABA_Tau_d2: 29.3943338444682
+          GABA_g_init: 1.0230134014130856
+          GABA_Tau_r: 0.31230551452717137
+          AMPA_A_r: 4.881100222623705
           AMPA_Tau_d2: 1.1220894106498769
+          NMDA_A2: 0.35317007422511043
+          NMDA_Tau_r: 37.622573319469055
           GABA_E_rev: -65.0
-          NMDA_E_rev: -3.7
           GABA_A1: 6.293522738150232
           AMPA_A2: 14.764149216255884
+          GABA_A_r: 3.8423880947398508
+          NMDA_E_rev: -3.7
+          NMDA_Tau_d2: 892.4760819720726
+          NMDA_A1: 2.854964381660505
+          AMPA_g_init: 0.09324813802356961
+          NMDA_Tau_d1: 53.15105534517695
+          NMDA_A_r: 4.743977499613861
         model: eglif_multirec
     connection_models:
       mossy_fibers_to_glomerulus:
@@ -723,30 +723,65 @@ simulations:
           weight: 1.0
       glomerulus_to_granule:
         synapses:
-        - delay: 1.0
-          model: static_synapse
+        - U: 0.416
+          delay: 1.0
+          model: tsodyks_synapse
           receptor_type: 1
-          weight: 1.0
-        - delay: 1.0
-          model: static_synapse
+          tau_fac: 10.8
+          tau_psc: 3.0
+          tau_rec: 35.1
+          u: 0.0
+          weight: 2.4075244494661643
+          x: 1
+          y: 0.0
+        - U: 0.416
+          delay: 1.0
+          model: tsodyks_synapse
           receptor_type: 2
-          weight: 1.0
+          tau_fac: 10.8
+          tau_psc: 3.0
+          tau_rec: 35.1
+          u: 0.0
+          weight: 2.407524449459579
+          x: 1
+          y: 0.0
       glomerulus_to_golgi:
         synapses:
-        - delay: 1.0
-          model: static_synapse
+        - U: 0.43
+          delay: 1.0
+          model: tsodyks_synapse
           receptor_type: 1
-          weight: 0.32
-        - delay: 1.0
-          model: static_synapse
+          tau_fac: 5
+          tau_psc: 1.0
+          tau_rec: 8.0
+          u: 0
+          weight: 0.7441860465167072
+          x: 1
+          y: 0
+        - U: 0.43
+          delay: 1.0
+          model: tsodyks_synapse
           receptor_type: 2
-          weight: 0.32
+          tau_fac: 5
+          tau_psc: 1.0
+          tau_rec: 8.0
+          u: 0
+          weight: 0.7441860465167072
+          x: 1
+          y: 0
       golgi_to_glomerulus:
         synapses:
-        - delay: 1.0
-          model: static_synapse
+        - U: 0.35
+          delay: 1.0
+          model: tsodyks_synapse
           receptor_type: 3
-          weight: 1.0
+          tau_fac: 58
+          tau_psc: 1.0
+          tau_rec: 36
+          u: 0.0
+          weight: 2.802078416920204
+          x: 1
+          y: 0.0
       golgi_to_golgi:
         synapses:
         - delay: 1.0
@@ -755,76 +790,167 @@ simulations:
           weight: 0.04
       ascending_axon_to_golgi:
         synapses:
-        - delay: 0.1
-          model: static_synapse
+        - U: 0.4
+          delay: 1.0
+          model: tsodyks_synapse
           receptor_type: 4
-          weight: 0.59
-        - delay: 1.0
-          model: static_synapse
+          tau_fac: 54
+          tau_psc: 1.0
+          tau_rec: 35.1
+          u: 0
+          weight: 1.4552434847697648
+          x: 1
+          y: 0
+        - U: 0.4
+          delay: 1.0
+          model: tsodyks_synapse
           receptor_type: 2
-          weight: 0.59
+          tau_fac: 54
+          tau_psc: 1.0
+          tau_rec: 35.1
+          u: 0
+          weight: 1.4552434847697648
+          x: 1
+          y: 0
       parallel_fiber_to_golgi:
         synapses:
-        - delay: 1.0
-          model: static_synapse
+        - U: 0.4
+          delay: 1.0
+          model: tsodyks_synapse
           receptor_type: 5
-          weight: 0.2
+          tau_fac: 54
+          tau_psc: 1.0
+          tau_rec: 35.1
+          u: 0.0
+          weight: 0.4933028761931403
+          x: 1
+          y: 0.0
       ascending_axon_to_purkinje:
         synapses:
-        - delay: 1.0
-          model: static_synapse
+        - U: 0.13
+          delay: 1.0
+          model: tsodyks_synapse
           receptor_type: 1
-          weight: 0.75
+          tau_fac: 54.0
+          tau_psc: 1.0
+          tau_rec: 35.1
+          u: 0
+          weight: 5.648193367238341
+          x: 1.0
+          y: 0
       parallel_fiber_to_purkinje:
         synapses:
-        - delay: 1.0
-          model: static_synapse
+        - U: 0.13
+          delay: 1.0
+          model: tsodyks_synapse
           receptor_type: 1
-          weight: 1.24
+          tau_fac: 54.0
+          tau_psc: 1.0
+          tau_rec: 35.1
+          u: 0
+          weight: 9.338346367167391
+          x: 1.0
+          y: 0
       parallel_fiber_to_basket:
         synapses:
-        - delay: 1.0
-          model: static_synapse
+        - U: 0.15
+          delay: 1.0
+          model: tsodyks_synapse
           receptor_type: 1
-          weight: 0.29
-        - delay: 1.0
-          model: static_synapse
+          tau_fac: 10.8
+          tau_psc: 1
+          tau_rec: 35.1
+          u: 0.0
+          weight: 1.9343374642507274
+          x: 1.0
+          y: 0.0
+        - U: 0.15
+          delay: 1.0
+          model: tsodyks_synapse
           receptor_type: 2
-          weight: 0.29
+          tau_fac: 10.8
+          tau_psc: 1
+          tau_rec: 35.1
+          u: 0.0
+          weight: 1.9343374642507274
+          x: 1.0
+          y: 0.0
       parallel_fiber_to_stellate:
         synapses:
-        - delay: 1.0
-          model: static_synapse
+        - U: 0.15
+          delay: 1.0
+          model: tsodyks_synapse
           receptor_type: 1
-          weight: 0.51
-        - delay: 1.0
-          model: static_synapse
+          tau_fac: 10.8
+          tau_psc: 1
+          tau_rec: 35.1
+          u: 0.0
+          weight: 3.4017574220728912
+          x: 1.0
+          y: 0.0
+        - U: 0.15
+          delay: 1.0
+          model: tsodyks_synapse
           receptor_type: 2
-          weight: 0.51
+          tau_fac: 10.8
+          tau_psc: 1
+          tau_rec: 35.1
+          u: 0.0
+          weight: 3.4017574220728912
+          x: 1.0
+          y: 0.0
       basket_to_purkinje:
         synapses:
-        - delay: 1.0
-          model: static_synapse
+        - U: 0.35
+          delay: 1.0
+          model: tsodyks_synapse
           receptor_type: 3
-          weight: 0.47
+          tau_fac: 4.0
+          tau_psc: 1.0
+          tau_rec: 15.0
+          u: 0
+          weight: 1.3428579584411318
+          x: 1.0
+          y: 0
       stellate_to_purkinje:
         synapses:
-        - delay: 1.0
-          model: static_synapse
+        - U: 0.35
+          delay: 1.0
+          model: tsodyks_synapse
           receptor_type: 3
-          weight: 0.14
+          tau_fac: 4.0
+          tau_psc: 1.0
+          tau_rec: 15.0
+          u: 0
+          weight: 0.4000002429399117
+          x: 1.0
+          y: 0
       basket_to_basket:
         synapses:
-        - delay: 1.0
-          model: static_synapse
+        - U: 0.42
+          delay: 1.0
+          model: tsodyks_synapse
           receptor_type: 3
-          weight: 0.016
+          tau_fac: 4
+          tau_psc: 1
+          tau_rec: 38.7
+          u: 0
+          weight: 0.038189330499213414
+          x: 1.0
+          y: 0
       stellate_to_stellate:
         synapses:
-        - delay: 1.0
-          model: static_synapse
+        - U: 0.42
+          delay: 1.0
+          model: tsodyks_synapse
           receptor_type: 3
-          weight: 0.035
+          tau_fac: 4.0
+          tau_psc: 1
+          tau_rec: 38.7
+          u: 0.0
+          weight: 0.08353916046702924
+          x: 1.0
+          y: 0.0
       gap_goc:
         make_symmetric: true
         rule: one_to_one
@@ -1125,32 +1251,67 @@ simulations:
     connection_models:
       ascending_axon_to_golgi:
         synapses:
-        - delay: 0.1
-          model: static_synapse
+        - U: 0.4
+          delay: 1.0
+          model: tsodyks_synapse
           receptor_type: 4
-          weight: 0.59
-        - delay: 1.0
-          model: static_synapse
+          tau_fac: 54
+          tau_psc: 1.0
+          tau_rec: 35.1
+          u: 0
+          weight: 1.4552434847697648
+          x: 1
+          y: 0
+        - U: 0.4
+          delay: 1.0
+          model: tsodyks_synapse
           receptor_type: 2
-          weight: 0.59
+          tau_fac: 54
+          tau_psc: 1.0
+          tau_rec: 35.1
+          u: 0
+          weight: 1.4552434847697648
+          x: 1
+          y: 0
       ascending_axon_to_purkinje:
         synapses:
-        - delay: 1.0
-          model: static_synapse
+        - U: 0.13
+          delay: 1.0
+          model: tsodyks_synapse
           receptor_type: 1
-          weight: 0.75
+          tau_fac: 54.0
+          tau_psc: 1.0
+          tau_rec: 35.1
+          u: 0
+          weight: 5.648193367238341
+          x: 1.0
+          y: 0
       basket_to_basket:
         synapses:
-        - delay: 1.0
-          model: static_synapse
+        - U: 0.42
+          delay: 1.0
+          model: tsodyks_synapse
           receptor_type: 3
-          weight: 0.016
+          tau_fac: 4
+          tau_psc: 1
+          tau_rec: 38.7
+          u: 0
+          weight: 0.038189330499213414
+          x: 1.0
+          y: 0
       basket_to_purkinje:
         synapses:
-        - delay: 1.0
-          model: static_synapse
+        - U: 0.35
+          delay: 1.0
+          model: tsodyks_synapse
           receptor_type: 3
-          weight: 0.47
+          tau_fac: 4.0
+          tau_psc: 1.0
+          tau_rec: 15.0
+          u: 0
+          weight: 1.3428579584411318
+          x: 1.0
+          y: 0
       gap_goc:
         make_symmetric: true
         rule: one_to_one
@@ -1159,30 +1320,65 @@ simulations:
           weight: 14.3
       glomerulus_to_golgi:
         synapses:
-        - delay: 1.0
-          model: static_synapse
+        - U: 0.43
+          delay: 1.0
+          model: tsodyks_synapse
           receptor_type: 1
-          weight: 0.32
-        - delay: 1.0
-          model: static_synapse
+          tau_fac: 5
+          tau_psc: 1.0
+          tau_rec: 8.0
+          u: 0
+          weight: 0.7441860465167072
+          x: 1
+          y: 0
+        - U: 0.43
+          delay: 1.0
+          model: tsodyks_synapse
           receptor_type: 2
-          weight: 0.32
+          tau_fac: 5
+          tau_psc: 1.0
+          tau_rec: 8.0
+          u: 0
+          weight: 0.7441860465167072
+          x: 1
+          y: 0
       glomerulus_to_granule:
         synapses:
-        - delay: 1.0
-          model: static_synapse
+        - U: 0.416
+          delay: 1.0
+          model: tsodyks_synapse
           receptor_type: 1
-          weight: 1.0
-        - delay: 1.0
-          model: static_synapse
+          tau_fac: 10.8
+          tau_psc: 3.0
+          tau_rec: 35.1
+          u: 0.0
+          weight: 2.4075244494661643
+          x: 1
+          y: 0.0
+        - U: 0.416
+          delay: 1.0
+          model: tsodyks_synapse
           receptor_type: 2
-          weight: 1.0
+          tau_fac: 10.8
+          tau_psc: 3.0
+          tau_rec: 35.1
+          u: 0.0
+          weight: 2.407524449459579
+          x: 1
+          y: 0.0
       golgi_to_glomerulus:
         synapses:
-        - delay: 1.0
-          model: static_synapse
+        - U: 0.35
+          delay: 1.0
+          model: tsodyks_synapse
           receptor_type: 3
-          weight: 1.0
+          tau_fac: 58
+          tau_psc: 1.0
+          tau_rec: 36
+          u: 0.0
+          weight: 2.802078416920204
+          x: 1
+          y: 0.0
       golgi_to_golgi:
         synapses:
         - delay: 1.0
@@ -1196,48 +1392,104 @@ simulations:
           weight: 1.0
       parallel_fiber_to_basket:
         synapses:
-        - delay: 1.0
-          model: static_synapse
+        - U: 0.15
+          delay: 1.0
+          model: tsodyks_synapse
           receptor_type: 1
-          weight: 0.29
-        - delay: 1.0
-          model: static_synapse
+          tau_fac: 10.8
+          tau_psc: 1
+          tau_rec: 35.1
+          u: 0.0
+          weight: 1.9343374642507274
+          x: 1.0
+          y: 0.0
+        - U: 0.15
+          delay: 1.0
+          model: tsodyks_synapse
           receptor_type: 2
-          weight: 0.29
+          tau_fac: 10.8
+          tau_psc: 1
+          tau_rec: 35.1
+          u: 0.0
+          weight: 1.9343374642507274
+          x: 1.0
+          y: 0.0
       parallel_fiber_to_golgi:
         synapses:
-        - delay: 1.0
-          model: static_synapse
+        - U: 0.4
+          delay: 1.0
+          model: tsodyks_synapse
           receptor_type: 5
-          weight: 0.2
+          tau_fac: 54
+          tau_psc: 1.0
+          tau_rec: 35.1
+          u: 0.0
+          weight: 0.4933028761931403
+          x: 1
+          y: 0.0
       parallel_fiber_to_purkinje:
         synapses:
-        - delay: 1.0
-          model: static_synapse
+        - U: 0.13
+          delay: 1.0
+          model: tsodyks_synapse
           receptor_type: 1
-          weight: 1.24
+          tau_fac: 54.0
+          tau_psc: 1.0
+          tau_rec: 35.1
+          u: 0
+          weight: 9.338346367167391
+          x: 1.0
+          y: 0
       parallel_fiber_to_stellate:
         synapses:
-        - delay: 1.0
-          model: static_synapse
+        - U: 0.15
+          delay: 1.0
+          model: tsodyks_synapse
           receptor_type: 1
-          weight: 0.51
-        - delay: 1.0
-          model: static_synapse
+          tau_fac: 10.8
+          tau_psc: 1
+          tau_rec: 35.1
+          u: 0.0
+          weight: 3.4017574220728912
+          x: 1.0
+          y: 0.0
+        - U: 0.15
+          delay: 1.0
+          model: tsodyks_synapse
           receptor_type: 2
-          weight: 0.51
+          tau_fac: 10.8
+          tau_psc: 1
+          tau_rec: 35.1
+          u: 0.0
+          weight: 3.4017574220728912
+          x: 1.0
+          y: 0.0
       stellate_to_purkinje:
         synapses:
-        - delay: 1.0
-          model: static_synapse
+        - U: 0.35
+          delay: 1.0
+          model: tsodyks_synapse
           receptor_type: 3
-          weight: 0.14
+          tau_fac: 4.0
+          tau_psc: 1.0
+          tau_rec: 15.0
+          u: 0
+          weight: 0.4000002429399117
+          x: 1.0
+          y: 0
       stellate_to_stellate:
         synapses:
-        - delay: 1.0
-          model: static_synapse
+        - U: 0.42
+          delay: 1.0
+          model: tsodyks_synapse
           receptor_type: 3
-          weight: 0.035
+          tau_fac: 4.0
+          tau_psc: 1
+          tau_rec: 38.7
+          u: 0.0
+          weight: 0.08353916046702924
+          x: 1.0
+          y: 0.0
     devices:
       background_noise:
         delay: 0.1

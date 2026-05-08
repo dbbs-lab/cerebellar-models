@@ -269,9 +269,9 @@ model eglif_multirec:
         GABA_Tau_d2 ms = 269 ms                    # Slow decay time constant for GABA synapse
 
         # spike stochasticity parameter
-
-        stochastic_spiking real = 1.0              # 0 means deterministic spiking, >0 enables stochastic spiking
-
+        
+        stochastic_spiking boolean = false         # true: stochastic threshold spiking; false: deterministic threshold spiking
+        
     internals:
         RefractoryCounts integer = steps(t_ref)                     # Refractory time in steps
         MgUnblockCounts integer = steps(min(t_Mg_Unblock, t_ref))   # Mg block activation time in steps
@@ -303,7 +303,7 @@ model eglif_multirec:
                 V_m_2 = V_m
         else:
             inline lambda real = lambda_0 * exp((V_m - V_th) / tau_V)
-            if stochastic_spiking > 0:
+            if stochastic_spiking:
                 if random_uniform(0, 1) < - expm1(-lambda * resolution()):
                     r = RefractoryCounts
                     m = MgUnblockCounts
