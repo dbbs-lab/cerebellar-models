@@ -18,6 +18,7 @@ from cerebellar_models.analysis.spike_plots import (
     ISIPlot,
     RasterPSTHPlot,
     SimResultsTable,
+    SortedPSTH,
     SpikeCorrelationPlot,
     SpikePlot,
     SpikeSimulationReport,
@@ -496,6 +497,76 @@ class TestSpikePlots(
         self.assertEqual(plot.corrcoef.shape, (6, 6))
         self.assertAll(plot.corrcoef <= 1)
         self.assertAll(plot.corrcoef >= -1)
+
+    def test_sorted_psth_defaults(self):
+        plot = SortedPSTH(
+            (10, 6),
+            spiking_results=self.simulationReport.spiking_results,
+            dict_colors=self.simulationReport.colors,
+        )
+        self.assertEqual(plot.nb_bins, 50)
+        self.assertEqual(plot.sample_size, 100)
+
+    def test_sorted_psth_bins_error(self):
+        with self.assertRaises(ValueError):
+            SortedPSTH(
+                (10, 6),
+                spiking_results=self.simulationReport.spiking_results,
+                nb_bins=0,
+            )
+
+    def test_sorted_psth(self):
+        nb_bins = 20
+        plot = SortedPSTH(
+            (10, 6),
+            spiking_results=self.simulationReport.spiking_results,
+            dict_colors=self.simulationReport.colors,
+            nb_bins=nb_bins,
+            sample_size=1,
+        )
+        self.assertEqual(plot.nb_bins, nb_bins)
+        self.assertEqual(plot.sample_size, 1)
+        plot.plot()
+        ax = plot.get_ax()
+        self.assertEqual(ax.get_xlabel(), "Time in ms")
+        self.assertEqual(ax.get_ylabel(), "Sorted Neuron id")
+        # Exactly one image should have been drawn by imshow
+        self.assertEqual(len(ax.images), 1)
+        # With sample_size=1 and every population spiking, the image has one
+        # row per population and nb_bins columns over the RGBA channels.
+        img = np.asarray(ax.images[0].get_array())
+        self.assertEqual(img.shape, (len(plot.populations), nb_bins, 4))
+        # alpha channel is normalized to its max along the time axis
+        self.assertAll(np.nanmax(img[..., 3], axis=1) <= 1 + 1e-7)
+        # y-ticks: one per population
+        self.assertAll(np.array(ax.get_yticks()) == np.arange(len(plot.populations)))
+        self.assertEqual(len(ax.get_yticklabels()), len(plot.populations))
+        # the y-tick labels are the populations re-ordered by argsort(max_delta_times)
+        self.assertEqual(
+            sorted(t.get_text() for t in ax.get_yticklabels()),
+            sorted(plot.populations),
+        )
+        # x-ticks: every other bin edge over [0, nb_bins)
+        self.assertAll(np.array(ax.get_xticks()) == np.arange(0, nb_bins, 2))
+
+    def test_sorted_psth_missing_color(self):
+        plot = SortedPSTH(
+            (10, 6),
+            spiking_results=self.simulationReport.spiking_results,
+            dict_colors=self.simulationReport.colors,
+            nb_bins=10,
+            sample_size=1,
+        )
+        # remove one population's color so it falls back to the default gray
+        del plot.dict_colors["mossy_fibers"]
+        plot.plot()
+        img = np.asarray(plot.get_ax().images[0].get_array())
+        # The first time-bin RGB values per row encode the cell-type color.
+        # Exactly one row (the mossy_fibers neuron) should fall back to gray
+        # [0.6, 0.6, 0.6] — every other row must still carry its cell-type color.
+        rgb_per_row = img[:, 0, :3]
+        is_gray = np.all(np.absolute(rgb_per_row - 0.6) <= 1e-7, axis=-1)
+        self.assertEqual(int(np.count_nonzero(is_gray)), 1)
 
     def test_basic_simulation_report(self):
         report = BasicSimulationReport(self.scaffold, "basal_activity", "./")
