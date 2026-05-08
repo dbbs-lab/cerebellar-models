@@ -14,3 +14,4 @@ report
 .ipynb_checkpoints
 *.nio
 CLAUDE.md
+dist

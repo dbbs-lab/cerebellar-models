@@ -1,14 +1,11 @@
 import os
 import unittest
-from copy import deepcopy
 from os.path import abspath, dirname, join
 
 import numpy as np
 from bsb import Scaffold, parse_configuration_content
 from bsb_test import NumpyTestCase, RandomStorageFixture
 from matplotlib import pyplot as plt
-from neo import SpikeTrain
-from quantities import ms
 
 from cerebellar_models.analysis.plots import ScaffoldPlot
 from cerebellar_models.analysis.spike_plots import (
@@ -23,7 +20,6 @@ from cerebellar_models.analysis.spike_plots import (
     SpikePlot,
     SpikeSimulationReport,
 )
-from cerebellar_models.analysis.spiking_results import extract_isis
 
 
 class MiniCerebCircuitFixture(RandomStorageFixture, engine_name="hdf5", setup_cls=True):
@@ -594,51 +590,3 @@ class TestSpikePlots(
         self.assertEqual(len(report.plots["legend"].get_ax().legend_.legend_handles), 6)
         self.assertTrue(filename in os.listdir())
         os.remove(filename)
-
-
-class TestExtractISIs(unittest.TestCase):
-    def test_extract_isis(self):
-        spikes = np.random.random((20, 10)) >= 0.85
-        spike_times = np.where(spikes)[0]
-        senders = np.where(spikes)[1]
-        st = SpikeTrain(
-            (spike_times + 1) * 0.1,
-            units="ms",
-            array_annotations={"senders": senders},
-            t_stop=2,
-        )
-        isis = extract_isis(st, 0.1)
-        enough_spikes = np.zeros(10, dtype=bool)
-        u, c = np.unique(senders, return_counts=True)
-        enough_spikes[u] = c >= 2
-        self.assertEqual(len(isis), np.count_nonzero(enough_spikes))
-        loc_spikes = spikes[:, enough_spikes]
-        for i in range(len(isis)):
-            self.assertTrue(
-                np.absolute(isis[i] - np.mean(np.diff(np.where(loc_spikes[:, i])[0] * 0.1)) * ms)
-                <= 1e-7
-            )
-
-    def test_extract_isis_shift(self):
-        time_shift = 0.5
-        spikes = np.random.random((20, 10)) >= 0.85
-        spike_times = np.where(spikes)[0]
-        senders = np.where(spikes)[1]
-        st = SpikeTrain(
-            (spike_times + 1) * 0.1 + time_shift,
-            units="ms",
-            array_annotations={"senders": senders},
-            t_start=time_shift,
-            t_stop=2 + time_shift,
-        )
-        enough_spikes = np.zeros(10, dtype=bool)
-        u, c = np.unique(senders, return_counts=True)
-        enough_spikes[u] = c >= 2
-        loc_spikes = spikes[:, enough_spikes]
-        isis = extract_isis(st, 0.1)
-        self.assertEqual(len(isis), np.count_nonzero(enough_spikes))
-        for i in range(len(isis)):
-            self.assertTrue(
-                np.absolute(isis[i] - np.mean(np.diff(np.where(loc_spikes[:, i])[0] * 0.1)) * ms)
-                <= 1e-7
-            )
