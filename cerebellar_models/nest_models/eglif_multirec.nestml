@@ -277,11 +277,11 @@ model eglif_multirec:
         MgUnblockCounts integer = steps(min(t_Mg_Unblock, t_ref))   # Mg block activation time in steps
 
     input:
-        AMPA <- spike
-        NMDA <- spike
-        GABA <- spike
-        AMPA2 <- spike
-        AMPA3 <- spike
+        AMPA <- spike # receptor 1
+        NMDA <- spike # receptor 2
+        GABA <- spike # receptor 3
+        AMPA2 <- spike # receptor 4
+        AMPA3 <- spike # receptor 5
         I_stim pA <- continuous                     # External stimulation current
 
     output:
