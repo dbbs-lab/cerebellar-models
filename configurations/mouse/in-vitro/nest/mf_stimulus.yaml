@@ -1,0 +1,33 @@
+simulations:
+  mf_stimulus:
+    simulator: nest
+    resolution: 0.1
+    duration: 2000
+    seed: 1234
+    devices:
+      mf_stimulus:
+        device: poisson_generator
+        rate: 150
+        start: 1200
+        stop: 1260
+        targetting:
+          strategy: sphere
+          radius: 90
+          origin:
+            - 150
+            - 65
+            - 100
+          cell_models:
+            - mossy_fibers
+        weight: 1
+        delay: 0.1
+    $import:
+      ref: ./basal_vitro.yaml#/simulations/basal_activity
+      values:
+        - cell_models
+        - devices
+$import:
+  ref: ./basal_vitro.yaml#/
+  values:
+    - packages
+    - components
