@@ -312,32 +312,45 @@ def _configure_sim_params(config_simulations, simulation_names, micro_params: Mi
                         dict_sim[sim][simulation] = params[simulation]
                     else:
                         dict_sim[sim] = params
-        simulation_options = [
-            CerebOption(
-                "Cell models",
-                f"Select the model of neuron for the simulation {sim_name} from the following list:",
-                list(config_simulations[simulator]["cell_models"].keys()),
-                # default_value="eglif_cond_alpha_multisyn"
-            ),
-            CerebOption(
-                "Connection models",
-                f"Select the model of synapse for the simulation {sim_name} from the following list:",
-                list(config_simulations[simulator]["connection_models"].keys()),
-                default_value="tsodyks2_synapse",
-            ),
-        ]
+
+        # Step 1: select cell model
+        cell_model_option = CerebOption(
+            "Cell models",
+            f"Select the model of neuron for the simulation {sim_name} from the following list:",
+            list(config_simulations[simulator]["cell_models"].keys()),
+        )
         print_panel(
-            simulation_options,
-            f"Select the neuron and synapse model to use during the simulation {sim_name}.",
+            [cell_model_option],
+            f"Select the neuron model to use during the simulation {sim_name}.",
         )
-        deep_update(
-            dict_sim, config_simulations[simulator]["cell_models"][simulation_options[0].value]
+        cell_model_config = copy.deepcopy(
+            config_simulations[simulator]["cell_models"][cell_model_option.value]
         )
-        deep_update(
-            dict_sim,
-            config_simulations[simulator]["connection_models"][simulation_options[1].value],
+
+        # Step 2: select synapse model from options embedded in the cell model config
+        sim_section = cell_model_config["simulations"][simulation]
+        conn_model_keys = [k for k in sim_section if k.endswith("_connection_models")]
+        default_conn = next((k for k in conn_model_keys if "tsodyks" in k), conn_model_keys[0])
+        conn_model_option = CerebOption(
+            "Connection models",
+            f"Select the model of synapse for the simulation {sim_name} from the following list:",
+            conn_model_keys,
+            default_value=default_conn,
         )
-        choices[sim_name] = [c.value for c in simulation_options]
+        print_panel(
+            [conn_model_option],
+            f"Select the synapse model to use during the simulation {sim_name}.",
+        )
+
+        # Rename chosen *_connection_models key → connection_models, drop the rest
+        chosen = conn_model_option.value
+        sim_section["connection_models"] = sim_section.pop(chosen)
+        for k in conn_model_keys:
+            if k != chosen and k in sim_section:
+                del sim_section[k]
+
+        deep_update(dict_sim, cell_model_config)
+        choices[sim_name] = [cell_model_option.value, conn_model_option.value]
         # Add simulator to simulation name so that we avoid duplicates
         dict_sim["simulations"][sim_name] = dict_sim["simulations"][simulation]
         del dict_sim["simulations"][simulation]
@@ -541,9 +554,6 @@ def configure(
     config_simulations = {
         simulator: {
             "cell_models": load_configs_in_folder(join(state_folder, simulator, "cell_models")),
-            "connection_models": load_configs_in_folder(
-                join(state_folder, simulator, "connection_models")
-            ),
             "simulations": load_configs_in_folder(join(state_folder, simulator), recursive=False),
         }
         for simulator in get_folders_in_folder(state_folder)

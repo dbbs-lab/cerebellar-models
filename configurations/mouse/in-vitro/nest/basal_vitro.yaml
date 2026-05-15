@@ -39,3 +39,38 @@ simulations:
           strategy: cell_model
           cell_models:
             - glomerulus
+      basket_record:
+        delay: 0.1
+        device: spike_recorder
+        targetting:
+          cell_models:
+            - basket_cell
+          strategy: cell_model
+      golgi_record:
+        delay: 0.1
+        device: spike_recorder
+        targetting:
+          cell_models:
+            - golgi_cell
+          strategy: cell_model
+      granule_record:
+        delay: 0.1
+        device: spike_recorder
+        targetting:
+          cell_models:
+            - granule_cell
+          strategy: cell_model
+      purkinje_record:
+        delay: 0.1
+        device: spike_recorder
+        targetting:
+          cell_models:
+            - purkinje_cell
+          strategy: cell_model
+      stellate_record:
+        delay: 0.1
+        device: spike_recorder
+        targetting:
+          cell_models:
+            - stellate_cell
+          strategy: cell_model

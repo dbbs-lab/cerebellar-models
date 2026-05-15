@@ -247,65 +247,364 @@ simulations:
           GABA_A1: 6.293522738150232
           GABA_A2: 4.524929470710231
         model: eglif_multirec
-    devices:
-      background_noise:
-        delay: 0.1
-        device: poisson_generator
-        rate: 4.
-        targetting:
-          cell_models:
-            - mossy_fibers
-          strategy: cell_model
-        weight: 1.0
-      basket_record:
-        delay: 0.1
-        device: spike_recorder
-        targetting:
-          cell_models:
-            - basket_cell
-          strategy: cell_model
-      glomerulus_record:
-        delay: 0.1
-        device: spike_recorder
-        targetting:
-          cell_models:
-            - glomerulus
-          strategy: cell_model
-      golgi_record:
-        delay: 0.1
-        device: spike_recorder
-        targetting:
-          cell_models:
-            - golgi_cell
-          strategy: cell_model
-      granule_record:
-        delay: 0.1
-        device: spike_recorder
-        targetting:
-          cell_models:
-            - granule_cell
-          strategy: cell_model
-      mossy_fibers_record:
-        delay: 0.1
-        device: spike_recorder
-        targetting:
-          cell_models:
-            - mossy_fibers
-          strategy: cell_model
-      purkinje_record:
-        delay: 0.1
-        device: spike_recorder
-        targetting:
-          cell_models:
-            - purkinje_cell
-          strategy: cell_model
-      stellate_record:
-        delay: 0.1
-        device: spike_recorder
-        targetting:
-          cell_models:
-            - stellate_cell
-          strategy: cell_model
     modules:
       - cerebmodule
     simulator: nest
+    static_synapse_connection_models:
+      gap_goc:
+        synapses:
+          - model: gap_junction
+            weight: 14.3
+        rule: one_to_one
+        make_symmetric: True
+      ascending_axon_to_golgi:
+        synapses:
+          - model: static_synapse
+            receptor_type: 4
+            weight: 0.59
+            delay: 0.1
+          - model: static_synapse
+            receptor_type: 2
+            weight: 0.59
+            delay: 1.
+      ascending_axon_to_purkinje:
+        synapses:
+          - model: static_synapse
+            delay: 1.
+            receptor_type: 1
+            weight: 0.75
+      basket_to_basket:
+        synapses:
+          - model: static_synapse
+            receptor_type: 3
+            weight: 0.016
+            delay: 1.
+      basket_to_purkinje:
+        synapses:
+          - model: static_synapse
+            receptor_type: 3
+            weight: 0.47
+            delay: 1.
+      glomerulus_to_golgi:
+        synapses:
+          - model: static_synapse
+            receptor_type: 1
+            weight: 0.32
+            delay: 1.
+          - model: static_synapse
+            receptor_type: 2
+            weight: 0.32
+            delay: 1.
+      glomerulus_to_granule:
+        synapses:
+          - model: static_synapse
+            delay: 1.
+            receptor_type: 1
+            weight: 1.
+          - model: static_synapse
+            delay: 1.
+            receptor_type: 2
+            weight: 1.
+      golgi_to_glomerulus:
+        synapses:
+          - model: static_synapse
+            receptor_type: 3
+            weight: 1.
+            delay: 1.
+      golgi_to_golgi:
+        synapses:
+          - model: static_synapse
+            receptor_type: 3
+            weight: 0.04
+            delay: 1.
+      mossy_fibers_to_glomerulus:
+        synapses:
+          - model: static_synapse
+            weight: 1.0
+            delay: 1.
+      parallel_fiber_to_basket:
+        synapses:
+          - model: static_synapse
+            receptor_type: 1
+            weight: 0.29
+            delay: 1.
+          - model: static_synapse
+            receptor_type: 2
+            weight: 0.29
+            delay: 1.
+      parallel_fiber_to_golgi:
+        synapses:
+          - model: static_synapse
+            receptor_type: 5
+            weight: 0.20
+            delay: 1.
+      parallel_fiber_to_purkinje:
+        synapses:
+          - model: static_synapse
+            receptor_type: 1
+            weight: 1.24
+            delay: 1.
+      parallel_fiber_to_stellate:
+        synapses:
+          - model: static_synapse
+            receptor_type: 1
+            weight: 0.51
+            delay: 1.
+          - model: static_synapse
+            receptor_type: 2
+            weight: 0.51
+            delay: 1.
+      stellate_to_purkinje:
+        synapses:
+          - model: static_synapse
+            receptor_type: 3
+            weight: 0.14
+            delay: 1.
+      stellate_to_stellate:
+        synapses:
+          - model: static_synapse
+            receptor_type: 3
+            weight: 0.035
+            delay: 1.
+    tsodyks_synapse_connection_models:
+      gap_goc:
+        synapses:
+          - model: gap_junction
+            weight: 14.3
+        rule: one_to_one
+        make_symmetric: True
+      ascending_axon_to_golgi:
+        synapses:
+          - model: tsodyks_synapse
+            u: 0
+            y: 0
+            x: 1
+            U: 0.4
+            tau_fac: 54
+            tau_rec: 35.1
+            tau_psc: 1.0
+            weight: 1.4552434847697648
+            delay: 1.
+            receptor_type: 4
+          - model: tsodyks_synapse
+            u: 0
+            y: 0
+            x: 1
+            U: 0.4
+            tau_fac: 54
+            tau_rec: 35.1
+            tau_psc: 1.0
+            weight: 1.4552434847697648
+            delay: 1.
+            receptor_type: 2
+      ascending_axon_to_purkinje:
+        synapses:
+          - model: tsodyks_synapse
+            U: 0.13
+            u: 0
+            y: 0
+            x: 1.0
+            tau_rec: 35.1
+            tau_fac: 54.0
+            tau_psc: 1.0
+            delay: 1.
+            receptor_type: 1
+            weight: 5.648193367238341
+      basket_to_basket:
+        synapses:
+          - model: tsodyks_synapse
+            u: 0
+            y: 0
+            x: 1.0
+            U: 0.42
+            tau_rec: 38.7
+            tau_fac: 4
+            tau_psc: 1
+            weight: 0.038189330499213414
+            delay: 1.
+            receptor_type: 3
+      basket_to_purkinje:
+        synapses:
+          - model: tsodyks_synapse
+            U: 0.35
+            u: 0
+            y: 0
+            x: 1.0
+            tau_rec: 15.0
+            tau_fac: 4.0
+            tau_psc: 1.0
+            receptor_type: 3
+            weight: 1.3428579584411318
+            delay: 1.
+      glomerulus_to_golgi:
+        synapses:
+          - model: tsodyks_synapse
+            u: 0
+            y: 0
+            x: 1
+            U: 0.43
+            tau_rec: 8.0
+            tau_psc: 1.0
+            tau_fac: 5
+            weight: 0.7441860465167072
+            delay: 1.
+            receptor_type: 1
+          - model: tsodyks_synapse
+            u: 0
+            y: 0
+            x: 1
+            U: 0.43
+            tau_rec: 8.0
+            tau_psc: 1.0
+            tau_fac: 5
+            weight: 0.7441860465167072
+            delay: 1.
+            receptor_type: 2
+      glomerulus_to_granule:
+        synapses:
+          - model: tsodyks_synapse
+            U: 0.416
+            u: 0.0
+            y: 0.0
+            x: 1
+            tau_psc: 3.0
+            tau_rec: 35.1
+            tau_fac: 10.8
+            weight: 2.4075244494661643
+            delay: 1.
+            receptor_type: 1
+          - model: tsodyks_synapse
+            U: 0.416
+            u: 0.0
+            y: 0.0
+            x: 1
+            tau_psc: 3.0
+            tau_rec: 35.1
+            tau_fac: 10.8
+            weight: 2.407524449459579
+            delay: 1.
+            receptor_type: 2
+      golgi_to_glomerulus:
+        synapses:
+          - model: tsodyks_synapse
+            U: 0.35
+            u: 0.0
+            y: 0.0
+            x: 1
+            tau_rec: 36
+            tau_fac: 58
+            tau_psc: 1.0
+            weight: 2.802078416920204
+            delay: 1.
+            receptor_type: 3
+      golgi_to_golgi:
+        synapses:
+          - model: static_synapse
+            receptor_type: 3
+            weight: 0.04
+            delay: 1.
+      mossy_fibers_to_glomerulus:
+        synapses:
+          - model: static_synapse
+            weight: 1.0
+            delay: 1.
+      parallel_fiber_to_basket:
+        synapses:
+          - model: tsodyks_synapse
+            u: 0.0
+            y: 0.0
+            x: 1.0
+            U: 0.15
+            tau_rec: 35.1
+            tau_fac: 10.8
+            tau_psc: 1
+            weight: 1.9343374642507274
+            delay: 1.
+            receptor_type: 1
+          - model: tsodyks_synapse
+            u: 0.0
+            y: 0.0
+            x: 1.0
+            U: 0.15
+            tau_rec: 35.1
+            tau_fac: 10.8
+            tau_psc: 1
+            weight: 1.9343374642507274
+            delay: 1.
+            receptor_type: 2
+      parallel_fiber_to_golgi:
+        synapses:
+          - model: tsodyks_synapse
+            u: 0.0
+            y: 0.0
+            x: 1
+            U: 0.4
+            tau_fac: 54
+            tau_rec: 35.1
+            tau_psc: 1.0
+            weight: 0.4933028761931403
+            delay: 1.
+            receptor_type: 5
+      parallel_fiber_to_purkinje:
+        synapses:
+          - model: tsodyks_synapse
+            U: 0.13
+            u: 0
+            y: 0
+            x: 1.0
+            tau_rec: 35.1
+            tau_fac: 54.0
+            tau_psc: 1.0
+            receptor_type: 1
+            weight: 9.338346367167391
+            delay: 1.
+      parallel_fiber_to_stellate:
+        synapses:
+          - model: tsodyks_synapse
+            u: 0.0
+            y: 0.0
+            x: 1.0
+            U: 0.15
+            tau_rec: 35.1
+            tau_fac: 10.8
+            tau_psc: 1
+            weight: 3.4017574220728912
+            delay: 1.
+            receptor_type: 1
+          - model: tsodyks_synapse
+            u: 0.0
+            y: 0.0
+            x: 1.0
+            U: 0.15
+            tau_rec: 35.1
+            tau_fac: 10.8
+            tau_psc: 1
+            weight: 3.4017574220728912
+            delay: 1.
+            receptor_type: 2
+      stellate_to_purkinje:
+        synapses:
+          - model: tsodyks_synapse
+            U: 0.35
+            u: 0
+            y: 0
+            x: 1.0
+            tau_rec: 15.0
+            tau_fac: 4.0
+            tau_psc: 1.0
+            receptor_type: 3
+            weight: 0.4000002429399117
+            delay: 1.
+      stellate_to_stellate:
+        synapses:
+          - model: tsodyks_synapse
+            u: 0.0
+            x: 1.0
+            y: 0.0
+            U: 0.42
+            tau_rec: 38.7
+            tau_fac: 4.0
+            tau_psc: 1
+            weight: 0.08353916046702924
+            delay: 1.
+            receptor_type: 3
