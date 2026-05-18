@@ -3,7 +3,7 @@ Unipolar Brush Cells
 
 Unipolar Brush cells (UBC) are excitatory interneurons located in the granular layer that acts as relay cells for
 glomerulus [#mugnaini_2011]_. The default configuration for UBCs is implemented in
-`ubc.yaml <https://github.com/dbbs-lab/cerebellar-models/blob/master/configurations/mouse/ubc/ubc.yaml>`_.
+`ubc.yaml <https://github.com/dbbs-lab/cerebellar-models/blob/master/configurations/mouse/cell_types/ubc.yaml>`_.
 
 Cellular density
 ^^^^^^^^^^^^^^^^
@@ -61,121 +61,6 @@ the numbers reported in :numref:`fig-network` and overrides the table :ref:`tabl
    17; glom & ubc_glon ; /; UBC ; /; :ref:`glom_ubc`; Mugnaini et al. (2011) [#mugnaini_2011]_
    18; Golgi ; axon; UBC ; /; :ref:`goc_glom`; Mugnaini et al. (2011) [#mugnaini_2011]_
 
-NEST simulation
-^^^^^^^^^^^^^^^
-
-As for the cerebellar cortex, we differentiate parameters for the ``in-vitro`` and ``awake`` states.
-For UBC, however, we only have parameters for the `in-vitro` state.
-
-Neuron parameters
-+++++++++++++++++
-
-The UBC neurons were represented as a EGLIF point neuron models (see :doc:`NEST section <nest>`).
-
-The following LIF parameters for the UBC cells were extracted from Locatelli et al. (2013) [#locatelli_2013]_,
-Subramaniyam et al. (2014) [#subramaniyam_2014]_ and Russo et al. (2007):
-
-.. csv-table:: UBC LIF neuron parameters
-   :header-rows: 1
-   :delim: ;
-
-   :math:`C_m\ (pF)`;:math:`\tau_m\ (ms)`;:math:`E_L\ (mV)`;:math:`t_{ref}\ (ms)`;:math:`V_{reset}\ (mV)`;:math:`V_{th}\ (mV)`
-   16.5; 13.2;-66.7;1.67;-76,7;-55.8
-
-EGLIF parameters were optimized to match results of Locatelli et al. (2013) [#locatelli_2013]_ using the
-Geminiani et al. (2018) [#geminiani_2018]_ method:
-
-.. csv-table:: UBC EGLIF neuron parameters
-   :header-rows: 1
-   :delim: ;
-
-    :math:`k_{adap}\ (nS \cdot ms^{-1})`;:math:`k_1\ (ms^{-1})`;:math:`k_2\ (ms^{-1})`;:math:`A_1\ (pA)`;:math:`A_2\ (pA)`;:math:`I_e\ (pA)`
-    1.17; 0.14; 0.76; 0.0001; 0.0001; 1.0
-
-.. warning::
-   It is not clear how the spiking parameters (i.e :math:`\lambda_0` and :math:`\tau_V`) are obtained in the Geminiani et
-   al. (2018) paper [#geminiani_2018]_. The values were extracted from a BSB configuration provided by the authors.
-
-The postsynaptic receptors are defined according to the following table:
-
-.. _ubc-table-receptor:
-.. csv-table:: UBC Postsynaptic receptor parameters
-   :header-rows: 1
-   :delim: ;
-
-   Receptor id; :math:`E_{rev,i}\ (mV)`; :math:`\tau_{syn,i}\ (ms)`; Type
-   1; 0; 0.2; exc.
-   2; -80; 2.0; inh.
-   3; 0; 1.2; exc.
-
-Synapse parameters
-++++++++++++++++++
-
-UBC connections are represented as ``static synapses`` (see :doc:`NEST section <nest>`).
-The receptor id corresponds to the postsynaptic receptor used for the connection (see table :ref:`ubc-table-receptor`).
-However, it is currently unclear how these parameters were optimized, or which features were targeted:
-
-.. csv-table:: Presynaptic parameters
-   :header-rows: 1
-   :delim: ;
-
-    Source-Target;:math:`weight \ (nS)`;:math:`delay \ (ms)`; Receptor id
-    UBC-ubc_glom;1;1;1
-    glom-GrC;0.23;1;1
-    glom-GoC;0.24;1;1
-    GoC-GrC;0.24;2;2
-
-Simulation paradigms
-++++++++++++++++++++
-
-The `ubc_nest.yaml <https://github.com/dbbs-lab/cerebellar-models/blob/master/configurations/mouse/ubc/ubc_nest.yaml>`_ are
-including all the simulation paradigms described in the :doc:`NEST section <nest>`) but include the UBC cells in the
-circuit.
-
-Basal activity
-##############
-
-For this simulation, the mean firing rates and mean ISI obtained for each neuron population are as
-follows (expressed in mean :math:`\pm` standard deviation):
-
-`In-vitro` state
-----------------
-
-.. csv-table:: Results of the canonical circuit with UBC in basal activity
-   :header-rows: 1
-   :delim: ;
-
-    Cell name;Mean Firing rate (Hz); Mean ISI (ms)
-    Mossy cell; :math:`4.1 \pm 0.93`; :math:`240 \pm 61`
-    Granule cell; :math:`2.9 \pm 2.1`; :math:`480 \pm 440`
-    Unipolar brush cell; :math:`0.21 \pm 0`; :math:`1100 pm 91`
-    Golgi cell;:math:`7.4 \pm 4.2`; :math:`220 \pm 270`
-    Purkinje cell;:math:`46 \pm 0.89`; :math:`22 \pm 0.42`
-    Basket cell;:math:`19 \pm 8.4`; :math:`70 \pm 47`
-    Stellate cell;:math:`24 \pm 13`; :math:`80 \pm 130`
-
-Mossy fiber stimulus
-####################
-
-For this simulation, **during the stimulus**, the mean firing rates and mean ISI obtained for each
-neuron population are as follows (expressed in mean :math:`\pm` standard deviation):
-
-`In-vitro` state
-----------------
-
-.. csv-table:: Results of the canonical circuit with UBC during stimulus of the mossy
-   :header-rows: 1
-   :delim: ;
-
-    Cell name;Mean Firing rate (Hz); Mean ISI (ms)
-    Mossy cell; :math:`43 \pm 68`; :math:`6.8 \pm 3.5`
-    Granule cell; :math:`20 \pm 3.7`; :math:`9.7 \pm 5.0`
-    Unipolar brush cell; :math:`16 \pm 7.9`; not enough spikes per neuron
-    Golgi cell;:math:`32 \pm 16`; :math:`7.2 \pm 3.5`
-    Purkinje cell;:math:`55 \pm 10`; :math:`17 \pm 5.5`
-    Basket cell;:math:`42 \pm 35`; :math:`14 \pm 5.5`
-    Stellate cell;:math:`37 \pm 35`; :math:`14 \pm 6.0`
-
 References
 ^^^^^^^^^^
 
@@ -197,16 +82,3 @@ References
    "Synaptic and cellular properties of the feedforward inhibitory circuit within the input layer of the cerebellar cortex."
    Journal of Neuroscience, 28(36), 8955-8967.
    https://doi.org/10.1523/JNEUROSCI.5469-07.2008
-.. [#locatelli_2013] Locatelli, F., Bottà, L., Prestori, F., Masetto, S., & D’Angelo, E. (2013).
-   "Late-onset bursts evoked by mossy fibre bundle stimulation in unipolar brush cells: Evidence for the involvement
-   of H- and TRP-currents."
-   The Journal of Physiology, 591(4), 899–918.
-   https://doi.org/10.1113/jphysiol.2012.242180
-.. [#subramaniyam_2014] Subramaniyam, S., Solinas, S., Perin, P., Locatelli, F., Masetto, S., & D’Angelo, E. (2014).
-   "Computational modeling predicts the ionic mechanism of late-onset responses in unipolar brush cells."
-   Frontiers in Cellular Neuroscience, 8.
-   https://doi.org/10.3389/fncel.2014.00237
-.. [#geminiani_2018] Geminiani, A., Casellato, C., Locatelli, F., Prestori, F., Pedrocchi, A., & D'Angelo, E. (2018).
-   "Complex dynamics in simplified neuronal models: reproducing Golgi cell electroresponsiveness."
-   Frontiers in neuroinformatics, 12, 88.
-   https://doi.org/10.3389/fninf.2018.00088
