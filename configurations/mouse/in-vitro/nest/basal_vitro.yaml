@@ -74,3 +74,38 @@ simulations:
           cell_models:
             - stellate_cell
           strategy: cell_model
+      ubc_glomerulus_record:
+        device: spike_recorder
+        delay: 0.1
+        targetting:
+          strategy: cell_model
+          cell_models:
+            - glomerulus
+      unipolar_brush_record:
+        device: spike_recorder
+        delay: 0.1
+        targetting:
+          strategy: cell_model
+          cell_models:
+            - unipolar_brush_cell
+      dcn_p_record:
+        device: spike_recorder
+        delay: 0.1
+        targetting:
+          strategy: cell_model
+          cell_models:
+            - dcn_p
+      dcn_i_record:
+        device: spike_recorder
+        delay: 0.1
+        targetting:
+          strategy: cell_model
+          cell_models:
+            - dcn_i
+      io_record:
+        device: spike_recorder
+        delay: 0.1
+        targetting:
+          strategy: cell_model
+          cell_models:
+            - io

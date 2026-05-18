@@ -1,5 +1,5 @@
 # eglif_multirec - Conductance based extended generalized leaky integrate and fire neuron model
-# ########################################################################################################
+# #############################################################################################
 #
 # Description
 # +++++++++++
@@ -101,15 +101,17 @@
 # ++++++++++
 #
 # .. start-references
+#
 # .. [#geminiani_2018] Geminiani, A., Casellato, C., Locatelli, F., Prestori, F., Pedrocchi, A.,
 #    & D'Angelo, E. (2018). Complex dynamics in simplified neuronal models:
 #    reproducing Golgi cell electroresponsiveness. Frontiers in neuroinformatics, 12, 88.
 #    https://doi.org/10.3389/fninf.2018.00088
 #
+#
 # See also
 # ++++++++
 #
-# aeif_cond_alpha, aeif_cond_exp, ht_neuron
+# eglif_cond_alpha_multisyn, ht_neuron
 #
 model eglif_multirec:
     state:
@@ -195,17 +197,20 @@ model eglif_multirec:
         I_adap' = (V_m - E_L) * (k_adap * nS / ms) - I_adap * (k_2 / ms)
 
     parameters:
-
         C_m pF = 281.0 pF                           # Membrane Capacitance
         tau_m ms = 30.0 ms                          # Membrane time constant
         E_L mV = -70.6 mV                           # Leak reversal Potential (aka resting potential)
         t_ref ms = 0.0 ms                           # Refractory period
         I_e pA = 0 pA                               # Constant endogenous current
-        V_min mV = -150.0 mV                        # Minimal membrane potential value
-        V_th mV = -50.4 mV                          # Spike Threshold
-        lambda_0 real = 0.001 / ms                  # Escape rate parameter
         tau_V mV = 0.5 mV                           # Escape rate parameter
         V_reset mV = -60.0 mV                       # Reset potential
+        V_min mV = -150.0 mV                        # Minimal membrane potential value
+
+        # spike stochasticity parameters
+        stochastic_spiking boolean = false          # true: stochastic threshold spiking; false: deterministic threshold spiking
+        V_th mV = -50.4 mV                          # Spike Threshold
+        lambda_0 real = 0.001 / ms                  # Escape rate parameter
+
         k_1 real = pow(144.0, -1) / ms              # Decay rate
         k_2 real = pow(80.5, -1) / ms               # Adaptation constant
         k_adap real = 4 * nS / ms                   # Adaptation constant
@@ -213,7 +218,6 @@ model eglif_multirec:
         A2 pA = 100.0 pA                            # Current update constant
 
         # default for mf_Grc connection
-
         AMPA_g_init nS = 1.34 nS                    # Initial condition for AMPA rise
         AMPA_E_rev mV = 0.0 mV                      # Reversal potential for AMPA synapse
         AMPA_A_r real = 6.97                        # Rise scaling factor for AMPA synapse
@@ -242,7 +246,6 @@ model eglif_multirec:
         AMPA3_Tau_d2 ms = 3.70 ms
 
         # default for mf_Grc connection
-
         NMDA_g_init nS = 0.0234 nS                  # Initial condition for NMDA rise
         NMDA_E_rev mV = -3.7 mV                     # Reversal potential for NMDA synapse
         NMDA_A_r real = 3.30                        # Rise scaling factor for NMDA synapse
@@ -258,7 +261,6 @@ model eglif_multirec:
 
 
         # default for GoC_GrC connection
-
         GABA_g_init nS = 0.162 nS                  # Initial condition for GABA rise
         GABA_E_rev mV = -65 mV                     # Reversal potential for GABA synapse
         GABA_A_r real = 4.54                       # Rise scaling factor for GABA synapse
@@ -268,10 +270,6 @@ model eglif_multirec:
         GABA_A2 real = 3.15                        # Slow decay scaling factor for GABA synapse
         GABA_Tau_d2 ms = 269 ms                    # Slow decay time constant for GABA synapse
 
-        # spike stochasticity parameter
-        
-        stochastic_spiking boolean = false         # true: stochastic threshold spiking; false: deterministic threshold spiking
-        
     internals:
         RefractoryCounts integer = steps(t_ref)                     # Refractory time in steps
         MgUnblockCounts integer = steps(min(t_Mg_Unblock, t_ref))   # Mg block activation time in steps
@@ -302,22 +300,18 @@ model eglif_multirec:
             else:
                 V_m_2 = V_m
         else:
-            inline lambda real = lambda_0 * exp((V_m - V_th) / tau_V)
+            inline is_spiking boolean = false
             if stochastic_spiking:
+                inline lambda real = lambda_0 * exp((V_m - V_th) / tau_V)
                 if random_uniform(0, 1) < - expm1(-lambda * resolution()):
-                    r = RefractoryCounts
-                    m = MgUnblockCounts
-                    I_dep = A1
-                    I_adap += A2
-                    V_m = V_reset
-                    V_m_2 = V_Mg_Unblock
-                    emit_spike()
-            else:
-                if (V_m >= V_th):
-                    r = RefractoryCounts
-                    m = MgUnblockCounts
-                    I_dep = A1
-                    I_adap += A2
-                    V_m = V_reset
-                    V_m_2 = V_Mg_Unblock
-                    emit_spike()
+                    is_spiking = true
+            elif (V_m >= V_th):
+                is_spiking = true
+            if is_spiking:
+                r = RefractoryCounts
+                m = MgUnblockCounts
+                I_dep = A1
+                I_adap += A2
+                V_m = V_reset
+                V_m_2 = V_Mg_Unblock
+                emit_spike()

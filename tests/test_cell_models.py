@@ -47,6 +47,7 @@ class TestSingleCellModels(
         conf_cell_vitro = (
             "../configurations/mouse/in-vitro/nest/cell_models/eglif_cond_alpha_multisyn.yaml"
         )
+        conf_basal_exp = "../configurations/mouse/in-vitro/nest/basal_vitro.yaml"
         conf_cell_awake = (
             "../configurations/mouse/awake/nest/cell_models/eglif_cond_alpha_multisyn.yaml"
         )
@@ -100,7 +101,7 @@ class TestSingleCellModels(
                     "modules": ["cerebmodule"],
                     "cell_models": {
                         "$import": {
-                            "ref": conf_cell_vitro + "#/simulations/basal_activity/cell_models",
+                            "ref": conf_cell_vitro + "#/cell_models",
                             "values": [
                                 "granule_cell",
                                 "golgi_cell",
@@ -112,36 +113,31 @@ class TestSingleCellModels(
                         },
                         "purkinje_awake_cell": {
                             "$import": {
-                                "ref": conf_cell_awake
-                                + "#/simulations/basal_activity/cell_models/purkinje_cell",
+                                "ref": conf_cell_awake + "#/cell_models/purkinje_cell",
                                 "values": ["constants", "model"],
                             }
                         },
                         "dcn_p_cell": {
                             "$import": {
-                                "ref": conf_cell_vitro
-                                + "#/simulations/basal_activity/cell_models/dcn_p",
+                                "ref": conf_cell_vitro + "#/cell_models/dcn_p",
                                 "values": ["constants", "model"],
                             }
                         },
                         "dcn_p_awake_cell": {
                             "$import": {
-                                "ref": conf_cell_awake
-                                + "#/simulations/basal_activity/cell_models/dcn_p",
+                                "ref": conf_cell_awake + "#/cell_models/dcn_p",
                                 "values": ["constants", "model"],
                             }
                         },
                         "dcn_i_cell": {
                             "$import": {
-                                "ref": conf_cell_vitro
-                                + "#/simulations/basal_activity/cell_models/dcn_i",
+                                "ref": conf_cell_vitro + "#/cell_models/dcn_i",
                                 "values": ["constants", "model"],
                             }
                         },
                         "dcn_i_awake_cell": {
                             "$import": {
-                                "ref": conf_cell_awake
-                                + "#/simulations/basal_activity/cell_models/dcn_i",
+                                "ref": conf_cell_awake + "#/cell_models/dcn_i",
                                 "values": ["constants", "model"],
                             }
                         },
@@ -149,7 +145,7 @@ class TestSingleCellModels(
                     "connection_models": {},
                     "devices": {
                         "$import": {
-                            "ref": conf_cell_vitro + "#/simulations/basal_activity/devices",
+                            "ref": conf_basal_exp + "#/simulations/basal_activity/devices",
                             "values": [
                                 "granule_record",
                                 "golgi_record",

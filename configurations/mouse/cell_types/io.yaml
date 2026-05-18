@@ -6,13 +6,9 @@ regions:
     children:
       - io_layer
 partitions:
-  granular_layer:
-    origin: [0,0,300]
-  dcn_layer:
-    origin: [0,0,100]
-    thickness: 200
   io_layer:
     thickness: 100
+    origin: [0, 0, -300]
 cell_types:
   io:
     spatial:

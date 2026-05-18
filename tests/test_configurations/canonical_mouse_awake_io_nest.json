@@ -199,11 +199,6 @@
     },
     "partitions": {
         "granular_layer": {
-            "origin": [
-                0,
-                0,
-                300
-            ],
             "thickness": 130
         },
         "purkinje_layer": {
@@ -219,11 +214,16 @@
             "origin": [
                 0,
                 0,
-                100
+                -200
             ],
             "thickness": 200
         },
         "io_layer": {
+            "origin": [
+                0,
+                0,
+                -300
+            ],
             "thickness": 100
         }
     },

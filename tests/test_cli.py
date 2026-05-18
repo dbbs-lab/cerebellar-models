@@ -5,7 +5,7 @@ from collections.abc import Mapping
 from os.path import abspath, dirname, join
 from unittest.mock import patch
 
-import yaml
+from bsb import parse_configuration_file
 from click.testing import CliRunner
 
 from cerebellar_models.cli import configure
@@ -79,8 +79,9 @@ class TestCli(unittest.TestCase):
     )
     def test_configure(self):
         folder = dirname(__file__)
-        with open(join(folder, "test_configurations/canonical_mouse_awake_io_nest.json"), "r") as f:
-            config2 = json.loads(f.read())
+        config2 = parse_configuration_file(
+            join(folder, "test_configurations/canonical_mouse_awake_io_nest.json")
+        ).__tree__()
         runner = CliRunner()
         result = runner.invoke(
             configure,
@@ -95,8 +96,7 @@ class TestCli(unittest.TestCase):
             ],
         )
         self.assertEqual(result.exit_code, 0)
-        with open("./circuit.yaml", "r") as f:
-            config = yaml.safe_load(f)
+        config = parse_configuration_file("./circuit.yaml").__tree__()
 
         self.assertTrue(deep_equal(config, config2))
         os.remove("./circuit.yaml")
@@ -104,8 +104,7 @@ class TestCli(unittest.TestCase):
         # Test default parameters
         result = runner.invoke(configure, ["--microzones"])
         self.assertEqual(result.exit_code, 0)
-        with open("./circuit.yaml", "r") as f:
-            config = yaml.safe_load(f)
+        config = parse_configuration_file("./circuit.yaml").__tree__()
 
         self.assertTrue(deep_equal(config, config2))
         os.remove("./circuit.yaml")
