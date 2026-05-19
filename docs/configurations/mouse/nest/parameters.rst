@@ -148,9 +148,10 @@ interval ``[1000, 1250] ms``, while a US of ``500 Hz`` arrives as a burst on ``i
 
 Simulation results
 ^^^^^^^^^^^^^^^^^^
-Simulation results depends on"which cells types were included in the `canonical circuit`,
-on the state, the simulation paradigm and models used for the neuron and the synapses  parameters.
-The results for the `eglif_cond_alpha_multisyn` with `static synapses` are available in :doc:`this page <simulation-results>`
+Simulation results depend on which cells types are included in the ``canonical circuit``,
+the state, the simulation paradigm, and the neuron and synapse models used.
+The results for the ``eglif_cond_alpha_multisyn`` with ``static_synapse`` are available in
+:doc:`this page <simulation-results>`.
 
 References
 ^^^^^^^^^^

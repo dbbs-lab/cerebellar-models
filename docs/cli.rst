@@ -36,10 +36,10 @@ selected by pressing the right arrow and validated with the enter key.
 
 * ``--species``: Species to build the configuration from.
 * ``--output_folder``: Path to the output folder where the configuration will be stored.
-* ``--path``: File Extension for the configuration. Can be either ``json`` or ``yaml``.
+* ``--extension``: File extension for the configuration. Can be either ``json`` or ``yaml``.
 * ``--microzones``: Flag to split your circuit into 2 separated microzones (not set by default).
 
 .. note::
-    If you select a ``NEST`` simulation  using the CLI, the output configuration
-    will also contain an extra simulation based on the associated stimulation protocol
+    When selecting a ``NEST`` simulation via the CLI, the output configuration will also
+    contain an additional simulation based on the associated stimulation protocol
     (see :ref:`NEST paradigms <nest-paradigms>`).
