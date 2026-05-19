@@ -19,6 +19,7 @@ Sciences <https://dbbs.dip.unipv.it/en>`_ of the University of Pavia.
    getting-started/biological-context.rst
    getting-started/content
    getting-started/getting-started
+   getting-started/bsb-import
    getting-started/for-developers
 
 .. toctree::
