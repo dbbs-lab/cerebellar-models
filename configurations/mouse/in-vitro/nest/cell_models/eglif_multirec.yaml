@@ -48,8 +48,6 @@ cell_models:
       GABA_A1: 9.254883332147838
       GABA_A2: 6.738700331790382
     model: eglif_multirec
-  glomerulus:
-    model: parrot_neuron
   golgi_cell:
     constants:
       t_ref: 2
@@ -162,8 +160,6 @@ cell_models:
       GABA_A1: 5.87057927996902
       GABA_A2: 1.625483627327884
     model: eglif_multirec
-  mossy_fibers:
-    model: parrot_neuron
   purkinje_cell:
     constants:
       C_m: 334

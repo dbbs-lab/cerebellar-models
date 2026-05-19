@@ -10,9 +10,9 @@ from click.testing import CliRunner
 
 from cerebellar_models.cli import (
     CerebOption,
-    MicrozonesParams,
     TypeTermElem,
     _filter_simulations_devices,
+    _get_compatible_models,
     _update_cell_types,
     configure,
 )
@@ -88,6 +88,47 @@ class TestUpdateCellTypes(unittest.TestCase):
         result = _update_cell_types(config, ["extra"], cell_type_configs)
         self.assertEqual(result["network"]["x"], 400)  # max(400, 200)
         self.assertEqual(result["network"]["z"], 495)  # max(100, 495)
+
+
+class TestGetCompatibleModels(unittest.TestCase):
+    @staticmethod
+    def _make_models(*cell_type_lists):
+        """Build a {model_name: config} dict where each model covers the given cell types."""
+        return {
+            f"model_{i}": {"cell_models": {ct: {} for ct in ct_list}}
+            for i, ct_list in enumerate(cell_type_lists)
+        }
+
+    def test_all_models_compatible_when_no_extra_cell_types(self):
+        models = self._make_models(
+            ["granule_cell", "purkinje_cell"],
+            ["granule_cell", "purkinje_cell"],
+        )
+        result = _get_compatible_models(models, ["granule_cell", "purkinje_cell"])
+        self.assertCountEqual(result, ["model_0", "model_1"])
+
+    def test_filters_model_missing_extra_cell_type(self):
+        models = self._make_models(
+            ["granule_cell", "purkinje_cell", "dcn_p"],  # compatible
+            ["granule_cell", "purkinje_cell"],  # missing dcn_p → filtered out
+        )
+        result = _get_compatible_models(models, ["granule_cell", "purkinje_cell", "dcn_p"])
+        self.assertEqual(result, ["model_0"])
+
+    def test_cell_types_not_in_any_model_are_ignored(self):
+        """Cell types absent from all models (e.g. mossy_fibers as parrot) don't affect filtering."""
+        models = self._make_models(
+            ["granule_cell"],
+            ["granule_cell"],
+        )
+        # mossy_fibers not in any model → not required, both models remain
+        result = _get_compatible_models(models, ["granule_cell", "mossy_fibers"])
+        self.assertCountEqual(result, ["model_0", "model_1"])
+
+    def test_empty_circuit_cell_types_returns_all_models(self):
+        models = self._make_models(["granule_cell"], ["granule_cell", "dcn_p"])
+        result = _get_compatible_models(models, [])
+        self.assertCountEqual(result, ["model_0", "model_1"])
 
 
 class TestFilterSimulationsDevices(unittest.TestCase):

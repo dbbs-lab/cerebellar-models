@@ -316,7 +316,30 @@ def _configure_simulations(config_simulations):
     return simulator_options[0].value
 
 
-def _configure_sim_params(config_simulations, simulation_names, micro_params: MicrozonesParams):
+def _get_compatible_models(all_models: dict, circuit_cell_types: list) -> list:
+    """Return model names whose cell_models section covers all parametrized circuit cell types.
+
+    A cell type is considered "parametrized" if it appears in the cell_models section of at least
+    one available model. Models that do not cover all such cell types present in the circuit are
+    excluded from the returned list.
+    """
+    parametrized_ct = set().union(
+        *(set(cfg.get("cell_models", {}).keys()) for cfg in all_models.values())
+    )
+    required_ct = set(circuit_cell_types) & parametrized_ct
+    return [
+        name
+        for name, cfg in all_models.items()
+        if required_ct <= set(cfg.get("cell_models", {}).keys())
+    ]
+
+
+def _configure_sim_params(
+    config_simulations,
+    simulation_names,
+    micro_params: MicrozonesParams,
+    circuit_cell_types: list,
+):
     dict_sim = {"simulations": {}}
     choices = {}
     for sim_name in simulation_names:
@@ -330,11 +353,16 @@ def _configure_sim_params(config_simulations, simulation_names, micro_params: Mi
                     else:
                         dict_sim[sim] = params
 
-        # Step 1: select cell model
+        # Step 1: select cell model — only offer models compatible with the circuit cell types.
+        compatible_models = _get_compatible_models(
+            config_simulations[simulator]["cell_models"],
+            set(circuit_cell_types)
+            - set(dict_sim["simulations"][simulation]["cell_models"].keys()),
+        )
         cell_model_option = CerebOption(
             "Cell models",
             f"Select the model of neuron for the simulation {sim_name} from the following list:",
-            list(config_simulations[simulator]["cell_models"].keys()),
+            compatible_models,
             default_value="eglif_cond_alpha_multisyn",
         )
         print_panel(
@@ -586,7 +614,10 @@ def configure(
 
     # Step 4: Simulation models choice
     dict_sim, sim_choices = _configure_sim_params(
-        config_simulations, simulation_names, micro_params
+        config_simulations,
+        simulation_names,
+        micro_params,
+        list(configuration["cell_types"].keys()),
     )
     deep_update(configuration, dict_sim)
 
