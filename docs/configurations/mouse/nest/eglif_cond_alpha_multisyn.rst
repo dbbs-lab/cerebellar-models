@@ -62,7 +62,7 @@ we do not have the data to fit our model to. However, we changed for the followi
   Geminiani et al. 2024 [#geminiani_2024]_.
 
 References
-##########
+++++++++++
 
 .. include-nestml:: ../../../../cerebellar_models/nest_models/eglif_cond_alpha_multisyn.nestml
     :start-after: start-references

@@ -1,4 +1,4 @@
-Nest Simulation Results
+NEST Simulation Results
 ~~~~~~~~~~~~~~~~~~~~~~~
 
 We present here the results of the `canonical circuit` simulations with the different protocol presented in :doc:`nest`

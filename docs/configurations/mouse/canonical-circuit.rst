@@ -211,7 +211,7 @@ Extensions to the canonical model
 The ``canonical circuit`` serves as a template for cerebellar cortex reconstructions.
 Extensions can be combined to the model to include specific details and perform various simulations.
 
-See the :doc:`Extra cell types section <extra-cell-types>` to see the additional cell types available
+See the :doc:`Extra cell types section <extra_cell_types/extra-cell-types>` to see the additional cell types available
 as extensions of the canonical circuit.
 
 See also the different simulation parameters and paradigm available for :doc:`nest/nest` and :doc:`neuron`.

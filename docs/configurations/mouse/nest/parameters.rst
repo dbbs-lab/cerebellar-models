@@ -1,5 +1,5 @@
-NEST parameters
-~~~~~~~~~~~~~~~
+NEST models and simulation paradigms
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 States
 ^^^^^^
@@ -59,9 +59,11 @@ This model is based on the work of Geminiani et al. [#geminiani_2018]_ [#geminia
 Details about the model are available in :doc:`this page <eglif_cond_alpha_multisyn>`.
 
 
-.. Mari's model
-.. include-nestml:: ../../../../cerebellar_models/nest_models/eglif_multirec.nestml
-    :end-before: References
+De Grazia EGLIF
+###############
+
+This model is based on the work of De Grazia et al. [#degrazia_2026]_.
+Details about the model are available in :doc:`this page <eglif_cond_alpha_multisyn>`.
 
 Synapse models
 ^^^^^^^^^^^^^^
@@ -220,6 +222,10 @@ References
     :start-after: start-references
     :end-before: See also
 
+.. include-nestml:: ../../../../cerebellar_models/nest_models/eglif_multirec.nestml
+    :start-after: start-references
+    :end-before: See also
+
 .. [#geminiani_2019] Geminiani, A., Casellato, C., D’Angelo, E., & Pedrocchi, A. (2019).
    Complex electroresponsive dynamics in olivocerebellar neurons represented with extended-generalized
    leaky integrate and fire models. Frontiers in Computational Neuroscience, 13, 35.
@@ -239,12 +245,12 @@ References
 .. [#tsodyks_1997] Tsodyks MV,  Markram H (1997). The neural code between neocortical
    pyramidal neurons depends on neurotransmitter release probability.
    PNAS, 94(2):719-23.
-   DOI: https://doi.org/10.1073/pnas.94.2.719
+   https://doi.org/10.1073/pnas.94.2.719
 .. [#fuhrman_2002] Fuhrman, G, Segev I, Markram H, Tsodyks MV (2002). Coding of
    temporal information by activity-dependent synapses. Journal of
    Neurophysiology, 87(1):140-8.
-   DOI: https://doi.org/10.1152/jn.00258.2001
+   https://doi.org/10.1152/jn.00258.2001
 .. [#masoli_2022] Masoli, S., Rizza, M. F., Tognolina, M., Prestori, F., & D’Angelo, E. (2022).
    Computational models of neurotransmission at cerebellar synapses unveil the impact on network computation. 
    Frontiers in Computational Neuroscience, 16, 1006989.
-   DOI:  https://doi.org/10.3389/fncom.2022.1006989
+   https://doi.org/10.3389/fncom.2022.1006989

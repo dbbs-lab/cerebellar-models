@@ -5,7 +5,7 @@
 # +++++++++++
 #
 # eglif_multirec is the generalized leaky integrate and fire neuron according to
-# Geminiani et al. (2018) [#geminiani_2018]_, with specific post-synaptic conductances
+# De Grazia et al. (2026) [#degrazia_2026]_, with specific post-synaptic conductances
 # for AMPA, NMDA and GABA receptors.
 #
 # The membrane potential is given by the following differential equation:
@@ -102,10 +102,10 @@
 #
 # .. start-references
 #
-# .. [#geminiani_2018] Geminiani, A., Casellato, C., Locatelli, F., Prestori, F., Pedrocchi, A.,
-#    & D'Angelo, E. (2018). Complex dynamics in simplified neuronal models:
-#    reproducing Golgi cell electroresponsiveness. Frontiers in neuroinformatics, 12, 88.
-#    https://doi.org/10.3389/fninf.2018.00088
+# .. [#degrazia_2026] De Grazia, M., Benozzo, D., Rodarie, D., Marchetti, F., D'Angelo, E., & Casellato, C. (2026).
+#    A biologically-grounded cerebellar spiking network model with realistic synaptic transmission captures complex
+#    circuit dynamics. bioRxiv, 2026-05.
+#    https://doi.org/10.64898/2026.05.12.724100
 #
 #
 # See also

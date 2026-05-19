@@ -6,7 +6,7 @@ NEST Installation
 To reproduce the experiments presented below, you should install the NEST simulator (see
 instructions :doc:`here </getting-started/installation>`).
 
-Nest modules are automatically compiled with BSB as ``components`` and deployed as ``cerebmodule``
+NEST modules are automatically compiled with BSB as ``components`` and deployed as ``cerebmodule``
 through the provided configurations:
 
 .. code-block:: yaml
@@ -25,8 +25,8 @@ python script.
 
 .. toctree::
     :maxdepth: 2
-    :caption: NEST simulations
 
     parameters
-    eglif_cond_alpha_multisyn
+    Geminiani EGLIF (2018) <eglif_cond_alpha_multisyn>
+    De Grazia EGLIF (2026) <eglif_multirec>
     simulation-results
