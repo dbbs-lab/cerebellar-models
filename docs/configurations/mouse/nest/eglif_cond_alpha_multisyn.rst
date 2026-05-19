@@ -61,6 +61,79 @@ we do not have the data to fit our model to. However, we changed for the followi
 - The spiking parameters (i.e :math:`\lambda_0` and :math:`\tau_V`) were tuned for DCNp to match the
   Geminiani et al. 2024 [#geminiani_2024]_.
 
+Synaptic parameters
++++++++++++++++++++
+
+Static Synapse
+--------------
+
+`In-vitro` state
+^^^^^^^^^^^^^^^^
+
+The synaptic parameters used for the `canonical circuit` corresponds to the one listed in Table B of
+supplementary document 1 in Geminiani et al. (2024) [#geminiani_2024]_. The receptor id corresponds
+to the postsynaptic receptor used for the connection.
+However, we made the following adjustments to obtain results close to the paper and literature:
+
+- In our experiments, we decreased the weights for the pf-SC, pf-BC so that the activity of MLI lies around
+  ~15 Hz for both BC and SC [#kim_2021]_. Then aa-PC, pf-PC were decreased to maintain the PC in a stable
+  low activity ~50Hz [#telgkamp_2002]_.
+- Synaptic parameter values of DCNp, DCNi and IO were manually adjusted through trial and error to ensure a
+  reasonable excitation/inhibition activity ratio.
+- Finally, the SC-PC was scaled to take into account the increase of synapses from the connectivity rule.
+
+.. warning::
+   It is currently unclear from the paper, how the synaptic parameters were optimized, or which features were targeted.
+
+Awake state
+^^^^^^^^^^^
+
+The parameters for the awake state are the same as the `in-vitro` state, except for the connections
+GrC(pf)-PC, GrC(aa)-PC, GrC(pf)-SC, GrC(pf)-BC, BC-PC for which we adapted the weights to match the Table 1
+from Geminiani et al. 2024 [#geminiani_2024]_.
+
+
+Tsodyks Markram Synapse
+-----------------------
+
+Circuits based on the Geminiani et al. model [#geminiani_2018]_ leverage the
+`tsodyks2_synapse <https://nest-simulator.readthedocs.io/en/latest/models/tsodyks2_synapse.html>`_
+version of the model.
+
+For each synapse of the `canonical circuit`, the initial value of ``u`` was set to ``U`` and ``x`` to ``1.0``.
+
+`In-vitro` state
+^^^^^^^^^^^^^^^^
+
+The synaptic parameters used for the canonical circuit correspond to those
+listed in the table below, obtained from Masoli et al. (2022) [#masoli_2022]_ .
+The receptor ID corresponds to the postsynaptic receptor used for the connection.
+The weights have been rescaled under the assumption
+that the first peak of the postsynaptic conductance (:math:`g_{syn_0}`) for the
+Tsodyks–Markram synapse must have the same amplitude as the ones obtained with a static_synapse model.
+
+:math:`weight_{tsodyks} = \dfrac{{weight_{static}}^2}{g_{syn_0}}`
+
+.. Note::
+   The connections mf-glom and GoC-GoC are both considered static since, for these two connections,
+   we do not have Tsodyks-Markram parameters.
+   Moreover, for the pf-SC connection, the weight was adjusted manually to keep the firing rate
+   within the desired range.
+
+
+Awake state
+^^^^^^^^^^^
+
+The parameters for the awake state are the same as the in-vitro state, except for the following connections:
+GrC(pf)-PC, GrC(aa)-PC, GrC(pf)-SC, GrC(pf)-BC, BC-PC for which we adapted the weights to match the Table 1
+from Geminiani et al. 2024 [#geminiani_2024]_.
+
+.. Note::
+   For the simulations using Tsodyks-Markram synapse, the mean firing rates and mean interspike intervals (ISI)
+   obtained for each neuron population from both in-vitro and awake states are expected to be the same,
+   as the ones obtained with static synapses.
+   For pf-SC connection weight was adjusted manually to keep the firing rate in the desired range.
+
 References
 ++++++++++
 
@@ -97,3 +170,11 @@ References
    Depression of inhibitory synaptic transmission between Purkinje cells and neurons of the cerebellar nuclei.
    Journal of Neuroscience, 22(19), 8447-8457.
    https://doi.org/10.1523/JNEUROSCI.22-19-08447.2002.
+.. [#kim_2021] Kim, J., & Augustine, G. J. (2021).
+   Molecular layer interneurons: key elements of cerebellar network computation and behavior.
+   Neuroscience, 462, 22-35.
+   https://doi.org/10.1016/j.neuroscience.2020.10.008
+.. [#masoli_2022] Masoli, S., Rizza, M. F., Tognolina, M., Prestori, F., & D’Angelo, E. (2022).
+   Computational models of neurotransmission at cerebellar synapses unveil the impact on network computation.
+   Frontiers in Computational Neuroscience, 16, 1006989.
+   https://doi.org/10.3389/fncom.2022.1006989

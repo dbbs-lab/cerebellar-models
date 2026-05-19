@@ -8,6 +8,27 @@ Neuron parameters
 ----------------
 [TODO]
 
+Synaptic parameters
++++++++++++++++++++
+
+Static Synapse
+--------------
+
+`In-vitro` state
+^^^^^^^^^^^^^^^^
+[TODO]
+
+Tsodyks Markram Synapse
+-----------------------
+
+Circuits based on the De Grazia et al. model [#degrazia_2026]_ leverage the
+`tsodyks_synapse <https://nest-simulator.readthedocs.io/en/latest/models/tsodyks_synapse.html>`_
+version of the model.
+
+`In-vitro` state
+^^^^^^^^^^^^^^^^
+[TODO]
+
 References
 ++++++++++
 

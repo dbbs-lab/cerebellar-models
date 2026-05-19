@@ -58,7 +58,6 @@ Geminiani EGLIF
 This model is based on the work of Geminiani et al. [#geminiani_2018]_ [#geminiani_2019]_ [#geminiani_2024]_.
 Details about the model are available in :doc:`this page <eglif_cond_alpha_multisyn>`.
 
-
 De Grazia EGLIF
 ###############
 
@@ -68,92 +67,30 @@ Details about the model are available in :doc:`this page <eglif_cond_alpha_multi
 Synapse models
 ^^^^^^^^^^^^^^
 
-Static synapses
-###############
-
-Description
-+++++++++++
+Static synapse
+##############
 
 By default, NEST `static synapses <https://nest-simulator.readthedocs.io/en/latest/models/static_synapse.html>`_
 are used to connect the different neurons together. This model only transmit spikes as weights to
 postsynaptic neurons after a provided delay.
 
-
-Synapse parameters
-++++++++++++++++++
-
-`In-vitro` state
-----------------
-
-The synaptic parameters used for the `canonical circuit` corresponds to the one listed in Table B of
-supplementary document 1 in Geminiani et al. (2024) [#geminiani_2024]_. The receptor id corresponds
-to the postsynaptic receptor used for the connection.
-However, we made the following adjustments to obtain results close to the paper and literature:
-
-- In our experiments, we decreased the weights for the pf-SC, pf-BC so that the activity of MLI lies around
-  ~15 Hz for both BC and SC [#kim_2021]_. Then aa-PC, pf-PC were decreased to maintain the PC in a stable
-  low activity ~50Hz [#telgkamp_2002]_.
-- Synaptic parameter values of DCNp, DCNi and IO were manually adjusted through trial and error to ensure a
-  reasonable excitation/inhibition activity ratio.
-- Finally, the SC-PC was scaled to take into account the increase of synapses from the connectivity rule.
-
-.. warning::
-   It is currently unclear from the paper, how the synaptic parameters were optimized, or which features were targeted.
-
-Awake state
------------
-
-The parameters for the awake state are the same as the `in-vitro` state, except for the connections
-GrC(pf)-PC, GrC(aa)-PC, GrC(pf)-SC, GrC(pf)-BC, BC-PC for which we adapted the weights to match the Table 1
-from Geminiani et al. 2024 [#geminiani_2024]_.
-
 Tsodyks Markram Synapse
 #######################
 
-Description
-+++++++++++
-
-The `Tsodyks-Markram synapse <https://nest-simulator.readthedocs.io/en/latest/models/tsodyks2_synapse.html>`_ synapse
-model implements synaptic short-term depression and short-term facilitation according to
+The Tsodyks-Markram synapse model implements synaptic short-term depression and short-term facilitation according to
 Tsodyks et al. [#tsodyks_1997]_ and Fuhrman et al. [#fuhrman_2002]_.
 This connection model merely scales the synaptic weight, based on the spike history parameters of the kinetic model.
 
+Two versions of this model are available on NEST:
+
+- `tsodyks_synapse <https://nest-simulator.readthedocs.io/en/latest/models/tsodyks_synapse.html>`_
+- `tsodyks2_synapse <https://nest-simulator.readthedocs.io/en/latest/models/tsodyks2_synapse.html>`_
+
 Synapse parameters
-++++++++++++++++++
+##################
 
-For each synapse of the `canonical circuit`, the initial value of ``u`` was set to ``0`` and ``x`` to ``1.0``.
-
-`In-vitro` state
-----------------
-
-The synaptic parameters used for the canonical circuit correspond to those 
-listed in the table below, obtained from Masoli et al. (2022) [#masoli_2022]_ .
-The receptor ID corresponds to the postsynaptic receptor used for the connection.
-The weights have been rescaled under the assumption
-that the first peak of the postsynaptic conductance (:math:`g_{syn_0}`) for the
-Tsodyks–Markram synapse must have the same amplitude as the ones obtained with a static_synapse model.
-
-:math:`weight_{tsodyks} = \dfrac{{weight_{static}}^2}{g_{syn_0}}`
-
-.. Note::
-   The connections mf-glom and GoC-GoC are both considered static since, for these two connections,
-   we do not have Tsodyks-Markram parameters.
-   Moreover, for the pf-SC connection, the weight was adjusted manually to keep the firing rate
-   within the desired range.
-
-
-Awake state
------------
-
-The parameters for the awake state are the same as the in-vitro state, except for the following connections:
-GrC(pf)-PC, GrC(aa)-PC, GrC(pf)-SC, GrC(pf)-BC, BC-PC for which we adapted the weights to match the Table 1
-from Geminiani et al. 2024 [#geminiani_2024]_.
-
-.. Note:: 
-   For the simulations using Tsodyks-Markram synapse, the mean firing rates and mean interspike intervals (ISI)
-   obtained for each neuron population from both in-vitro and awake states are expected to be the same,
-   as the ones obtained with static synapses.
-   For pf-SC connection weight was adjusted manually to keep the firing rate in the desired range.
+Synaptic parameters depend on the neuron model chosen for the simulation. Find more information on these
+parameters in the neuron model associated pages.
 
 .. _nest-paradigms:
 
@@ -234,14 +171,6 @@ References
    D’Angelo, E. (2024). Mesoscale simulations predict the role of synergistic cerebellar plasticity
    during classical eyeblink conditioning. PLOS Computational Biology, 20(4), e1011277.
    https://doi.org/10.1371/journal.pcbi.1011277
-.. [#telgkamp_2002] Telgkamp, P., & Raman, I. M. (2002).
-   Depression of inhibitory synaptic transmission between Purkinje cells and neurons of the cerebellar nuclei.
-   Journal of Neuroscience, 22(19), 8447-8457.
-   https://doi.org/10.1523/JNEUROSCI.22-19-08447.2002.
-.. [#kim_2021] Kim, J., & Augustine, G. J. (2021).
-   Molecular layer interneurons: key elements of cerebellar network computation and behavior.
-   Neuroscience, 462, 22-35.
-   https://doi.org/10.1016/j.neuroscience.2020.10.008
 .. [#tsodyks_1997] Tsodyks MV,  Markram H (1997). The neural code between neocortical
    pyramidal neurons depends on neurotransmitter release probability.
    PNAS, 94(2):719-23.
@@ -250,7 +179,3 @@ References
    temporal information by activity-dependent synapses. Journal of
    Neurophysiology, 87(1):140-8.
    https://doi.org/10.1152/jn.00258.2001
-.. [#masoli_2022] Masoli, S., Rizza, M. F., Tognolina, M., Prestori, F., & D’Angelo, E. (2022).
-   Computational models of neurotransmission at cerebellar synapses unveil the impact on network computation. 
-   Frontiers in Computational Neuroscience, 16, 1006989.
-   https://doi.org/10.3389/fncom.2022.1006989
