@@ -36,6 +36,14 @@ cerebellar_models.analysis.structure_analysis module
    :undoc-members:
    :show-inheritance:
 
+cerebellar_models.analysis.spike_plots module
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+.. automodule:: cerebellar_models.analysis.spike_plots
+   :members:
+   :undoc-members:
+   :show-inheritance:
+
 cerebellar_models.analysis.spiking_results module
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 

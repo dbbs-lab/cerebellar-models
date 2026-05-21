@@ -11,15 +11,25 @@ from cerebellar_models.analysis.report import (
     PlotTypeInfo,
     Report,
 )
-from cerebellar_models.analysis.spiking_results import (
+from cerebellar_models.analysis.spike_plots import (
     BasicSimulationReport,
     FiringRatesPlot,
     FrequencyPlot,
     ISIPlot,
     RasterPSTHPlot,
     SimResultsTable,
+    SortedPSTH,
+    Spike2Columns,
+    SpikeCorrelationPlot,
     SpikePlot,
     SpikeSimulationReport,
+)
+from cerebellar_models.analysis.spiking_results import (
+    SpikingResults,
+    extract_isis,
+    get_correlation_coefficients,
+    get_firing_rates,
+    get_frequencies,
 )
 from cerebellar_models.analysis.structure_analysis import (
     CellPlacement3D,
@@ -29,8 +39,6 @@ from cerebellar_models.analysis.structure_analysis import (
     StructureReport,
     TablePlot,
 )
-
-matplotlib.use("Agg")
 
 __all__ = [
     "Legend",
@@ -43,8 +51,12 @@ __all__ = [
     "BasicSimulationReport",
     "FiringRatesPlot",
     "FrequencyPlot",
+    "SortedPSTH",
+    "Spike2Columns",
+    "SpikeCorrelationPlot",
     "SpikePlot",
     "SpikeSimulationReport",
+    "SpikingResults",
     "SimResultsTable",
     "ISIPlot",
     "RasterPSTHPlot",
@@ -54,4 +66,8 @@ __all__ = [
     "CellPlacement3D",
     "StructureReport",
     "RunStructureReport",
+    "extract_isis",
+    "get_correlation_coefficients",
+    "get_firing_rates",
+    "get_frequencies",
 ]

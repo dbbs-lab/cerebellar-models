@@ -13,3 +13,5 @@ report
 *.coverage*
 .ipynb_checkpoints
 *.nio
+CLAUDE.md
+dist
