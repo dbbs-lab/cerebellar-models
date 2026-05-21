@@ -22,13 +22,22 @@ You can install the ``cerebellar-models`` package trough `pip`:
 
     pip install cerebellar-models
 
-or alternatively, you can install it from sources:
+To include simulation support for NEST and/or NEURON:
+
+.. code-block:: bash
+
+    pip install cerebellar-models[nest]  # For NEST
+    pip install cerebellar-models[neuron]  # For NEURON
+
+Alternatively, you can install it from sources:
 
 .. code-block:: bash
 
     git clone git@github.com:dbbs-lab/cerebellar-models
     cd cerebellar-models
     pip install -e .
+    # do not forget to add the optional simulator supports required.
+    pip install -e .[nest]  # for NEST
 
 If you wish to contribute to the cerebellar-models repository, please also install
 the :doc:`developers' packages <for-developers>`.
