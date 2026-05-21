@@ -1,13 +1,8 @@
-Introduction
-============
+Introduction to plotting
+========================
 
-``cerebellar-models`` provides a set of tools to analyze the structure and the results of simulations
-of the BSB reconstructions. The results of these analysis can be plotted with ``matplotlib``
-and exported into files.
-
-The code related to the analysis can be found in the ``cerebellar_models/analysis`` folder. It revolves
-around the :class:`Plot <.analysis.plots.Plot>` and  classes that provide an interface to both
-``matplotlib`` and ``bsb``:
+The plotting revolves around the :class:`Plot <.analysis.plots.Plot>` and  classes that provide
+an interface to both ``matplotlib`` and ``bsb``:
 
 
 :class:`Plot <.analysis.plots.Plot>`

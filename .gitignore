@@ -4,7 +4,7 @@ __pycache__
 *.hdf5
 *.pdf
 *.ipynb
-#*.png
+*.png
 .python-version
 build
 report
@@ -13,4 +13,6 @@ report
 *.coverage*
 .ipynb_checkpoints
 *.nio
-/results/
+CLAUDE.md
+dist
+results

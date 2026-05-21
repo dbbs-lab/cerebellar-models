@@ -1,3 +1,7 @@
+# v0.11.0 - 2025-05-21
+
+* feat: split analysis from reporting by @drodarie in https://github.com/dbbs-lab/cerebellar-models/pull/74
+
 # v0.10.0 - 2025-03-24
 
 * feat: Add random microzones by @filimarc in https://github.com/dbbs-lab/cerebellar-models/pull/69
