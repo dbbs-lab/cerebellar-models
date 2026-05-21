@@ -97,7 +97,7 @@ class SpikeSimulationReport(BSBReport):
     ):
         super().__init__(scaffold, cell_types_info)
         self.spiking_results = SpikingResults(
-            scaffold=scaffold,
+            scaffold=self.scaffold,
             simulation_name=simulation_name,
             time_from=time_from,
             time_to=time_to,
