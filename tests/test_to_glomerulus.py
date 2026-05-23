@@ -15,6 +15,72 @@ from bsb_test import (
 )
 
 
+def _test_fallback_to_closest_presyn(self, conn_name, strategy, extra_params):
+    """
+    Shared helper: place one glomerulus (test_cell) and two pre cells whose positions are
+    ALL outside the geometric ROI.  After compiling, every glomerulus must be connected and
+    the connected pre cell must be the closest one (fallback branch).
+
+    The chunk size is pinned to 100 so all three positions sit in chunk (0,0,0) and are
+    therefore loaded together during connect(), ensuring presyn_pos is never empty.
+    """
+    chunk_size = 100.0
+    glom_pos = np.array([[50.0, 50.0, 50.0]])
+    # Both pre cells are at x-distance 40 and 45 from the glomerulus.
+    # With the small ROIs used by the callers (x_length=5 or radius=5) they are
+    # intentionally outside the selection region, triggering the fallback.
+    pre_close = np.array([90.0, 50.0, 50.0])
+    pre_far = np.array([95.0, 50.0, 50.0])
+
+    # Pin chunk size and override the single glomerulus position.
+    self.cfg.network.chunk_size = chunk_size
+    self.cfg.cell_types["test_cell"].spatial.count = 1
+    self.cfg.placement.ch4_c25.positions = MPI.bcast(glom_pos)
+
+    # Add a separate pre cell type with fixed positions.
+    self.cfg.cell_types.add("pre_cell", dict(spatial=dict(radius=2.5, count=2)))
+    self.cfg.placement.add(
+        "place_pre",
+        dict(
+            strategy="bsb.placement.strategy.FixedPositions",
+            partitions=[],
+            cell_types=["pre_cell"],
+        ),
+    )
+    self.cfg.placement["place_pre"].positions = MPI.bcast(np.vstack([pre_close, pre_far]))
+
+    # Add the connectivity rule under test.
+    self.cfg.connectivity.add(
+        conn_name,
+        dict(
+            strategy=strategy,
+            presynaptic=dict(cell_types=["pre_cell"]),
+            postsynaptic=dict(cell_types=["test_cell"]),
+            **extra_params,
+        ),
+    )
+    self.network = Scaffold(self.cfg, self.storage)
+    self.network.compile(clear=True)
+
+    cs = self.network.get_connectivity_set(conn_name)
+    pre_positions = self.network.get_placement_set("pre_cell").load_positions()
+
+    # Every glomerulus must receive a connection via the fallback.
+    self.assertEqual(len(cs), 1, "Glomerulus must be connected even when no pre cell is in the ROI")
+
+    for from_, to_ in cs.load_connections().as_globals():
+        connected_pre_pos = pre_positions[from_[0]]
+        # The fallback must select the geometrically closest pre cell.
+        expected_closest = pre_positions[
+            np.argmin(np.linalg.norm(pre_positions - glom_pos[0], axis=1))
+        ]
+        self.assertClose(
+            connected_pre_pos,
+            expected_closest,
+            "Closest presynaptic cell must be selected as the fallback target",
+        )
+
+
 def _test_distance_to_glomerulus(self, nb_trials=50):
     # Override positions
     self.chunk_size = 100.0
@@ -95,6 +161,16 @@ class TestConnectomeMossyGlomerulus(
     def test_distance(self):
         _test_distance_to_glomerulus(self)
 
+    def test_fallback_to_closest_when_no_presyn_in_roi(self):
+        """When no mossy fiber is within the x/y box, the closest one is connected."""
+        _test_fallback_to_closest_presyn(
+            self,
+            conn_name="mf_to_glom",
+            strategy="cerebellar_models.connectome.to_glomerulus.ConnectomeMossyGlomerulus",
+            # x_length=5: both pre cells are at x-distance 40 and 45 → outside the box.
+            extra_params={"x_length": 5, "y_length": 5},
+        )
+
 
 class TestConnectomeUBCGlomerulus(
     RandomStorageFixture,
@@ -136,3 +212,13 @@ class TestConnectomeUBCGlomerulus(
 
     def test_distance(self):
         _test_distance_to_glomerulus(self)
+
+    def test_fallback_to_closest_when_no_presyn_in_roi(self):
+        """When no UBC is within the sphere, the closest one is connected."""
+        _test_fallback_to_closest_presyn(
+            self,
+            conn_name="ubc_to_glom",
+            strategy="cerebellar_models.connectome.to_glomerulus.ConnectomeUBCGlomerulus",
+            # radius=5: both pre cells are at distance 40 and 45 → outside the sphere.
+            extra_params={"radius": 5},
+        )
