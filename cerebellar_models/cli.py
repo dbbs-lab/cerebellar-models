@@ -534,6 +534,38 @@ def _write_config(configuration, output_folder, extension):
     print(f"Created the BSB configuration file: {filename}")
 
 
+@app.command(help="Force re-compilation of the NESTML neuron models for NEST.")
+@click.option(
+    "--model_dir",
+    type=click.Path(exists=True, file_okay=False, resolve_path=True),
+    default=None,
+    help="Directory containing the .nestml files (defaults to the package nest_models folder).",
+)
+@click.option(
+    "--build_dir",
+    type=click.Path(file_okay=False, resolve_path=True),
+    default=None,
+    help="Directory where the NEST module will be compiled (defaults to the user cache dir).",
+)
+def build_nestml(model_dir=None, build_dir=None, module_name=None):
+    """
+    Force re-compilation of the NESTML neuron models.
+
+    Deletes any previously cached build and re-runs PyNESTML code generation and
+    installation, equivalent to calling _build_nest_models(redo=True).
+    """
+    from cerebellar_models.nest_models.build_models import _build_nest_models
+
+    kwargs = {"redo": True}
+    if model_dir is not None:
+        kwargs["model_dir"] = model_dir
+    if build_dir is not None:
+        kwargs["build_dir"] = build_dir
+    print("Building NESTML models...")
+    _build_nest_models(**kwargs)
+    print("NESTML models built successfully.")
+
+
 @app.command(help="Create a BSB configuration file for your cerebellum circuit.")
 @click.option(
     "--species",

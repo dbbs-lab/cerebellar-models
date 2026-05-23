@@ -1,9 +1,10 @@
 import json
 import os
+import sys
 import unittest
 from collections.abc import Mapping
 from os.path import abspath, dirname, join
-from unittest.mock import patch
+from unittest.mock import MagicMock, patch
 
 from bsb import parse_configuration_file
 from click.testing import CliRunner
@@ -14,6 +15,7 @@ from cerebellar_models.cli import (
     _filter_simulations_devices,
     _get_compatible_models,
     _update_cell_types,
+    build_nestml,
     configure,
 )
 
@@ -283,3 +285,51 @@ class TestCli(unittest.TestCase):
         config = parse_configuration_file("./circuit.json").__tree__()
         self.assertIn("cell_types", config)
         os.remove("./circuit.json")
+
+
+class TestBuildNestml(unittest.TestCase):
+    """Tests for the ``build-nestml`` CLI command."""
+
+    def setUp(self):
+        # Inject a mock for build_models so tests don't require NEST/NESTML to be installed.
+        self.mock_build = MagicMock()
+        mock_module = MagicMock()
+        mock_module._build_nest_models = self.mock_build
+        sys.modules["cerebellar_models.nest_models.build_models"] = mock_module
+
+    def tearDown(self):
+        sys.modules.pop("cerebellar_models.nest_models.build_models", None)
+
+    def test_default_call_passes_redo_true(self):
+        """Running without any option calls _build_nest_models(redo=True)."""
+        runner = CliRunner()
+        result = runner.invoke(build_nestml)
+        self.assertEqual(result.exit_code, 0)
+        self.mock_build.assert_called_once_with(redo=True)
+
+    def test_build_dir_option_forwarded(self):
+        """--build_dir is forwarded as a keyword argument."""
+        runner = CliRunner()
+        result = runner.invoke(build_nestml, ["--build_dir", "/tmp"])
+        self.assertEqual(result.exit_code, 0)
+        call_kwargs = self.mock_build.call_args.kwargs
+        self.assertTrue(call_kwargs["redo"])
+        self.assertEqual(call_kwargs["build_dir"], "/tmp")
+
+    def test_model_dir_option_forwarded(self):
+        """--model_dir is resolved to an absolute path and forwarded."""
+        runner = CliRunner()
+        with runner.isolated_filesystem():
+            os.makedirs("models")
+            result = runner.invoke(build_nestml, ["--model_dir", "models"])
+            self.assertEqual(result.exit_code, 0)
+            call_kwargs = self.mock_build.call_args.kwargs
+            self.assertTrue(call_kwargs["redo"])
+            self.assertTrue(call_kwargs["model_dir"].endswith("models"))
+
+    def test_invalid_model_dir_exits_with_error(self):
+        """A non-existent --model_dir causes Click to exit with code 2."""
+        runner = CliRunner()
+        result = runner.invoke(build_nestml, ["--model_dir", "/nonexistent/path"])
+        self.assertEqual(result.exit_code, 2)
+        self.assertIn("Error", result.output)
