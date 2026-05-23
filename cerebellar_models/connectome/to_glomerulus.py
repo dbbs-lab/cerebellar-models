@@ -58,7 +58,7 @@ class ConnectomeGlomerulus(InvertedRoI, ConnectionStrategy):
         self,
         presyn_pos,
         glom_pos,
-    ):  # pragma: no cover
+    ):  # pragma: nocover
         """
         Order presynaptic cell ids based on their respective distance to glomerulus
 

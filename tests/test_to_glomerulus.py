@@ -7,7 +7,6 @@ import unittest
 import numpy as np
 from bsb import Scaffold
 from bsb_test import (
-    MPI,
     FixedPosConfigFixture,
     NetworkFixture,
     NumpyTestCase,
@@ -35,7 +34,7 @@ def _test_fallback_to_closest_presyn(self, conn_name, strategy, extra_params):
     # Pin chunk size and override the single glomerulus position.
     self.cfg.network.chunk_size = chunk_size
     self.cfg.cell_types["test_cell"].spatial.count = 1
-    self.cfg.placement.ch4_c25.positions = MPI.bcast(glom_pos)
+    self.cfg.placement.ch4_c25.positions = glom_pos
 
     # Add a separate pre cell type with fixed positions.
     self.cfg.cell_types.add("pre_cell", dict(spatial=dict(radius=2.5, count=2)))
@@ -47,7 +46,7 @@ def _test_fallback_to_closest_presyn(self, conn_name, strategy, extra_params):
             cell_types=["pre_cell"],
         ),
     )
-    self.cfg.placement["place_pre"].positions = MPI.bcast(np.vstack([pre_close, pre_far]))
+    self.cfg.placement["place_pre"].positions = np.vstack([pre_close, pre_far])
 
     # Add the connectivity rule under test.
     self.cfg.connectivity.add(
@@ -89,7 +88,7 @@ def _test_distance_to_glomerulus(self, nb_trials=50):
     pos_3 = np.array([0.5, 1.0, 0.5]) * self.chunk_size  # too far away
     self.cfg.network.chunk_size = self.chunk_size
     self.cfg.cell_types["test_cell"].spatial.count = 3
-    self.cfg.placement.ch4_c25.positions = MPI.bcast(np.vstack((pos_1, pos_2, pos_3)))
+    self.cfg.placement.ch4_c25.positions = np.vstack((pos_1, pos_2, pos_3))
     self.network = Scaffold(self.cfg, self.storage)
 
     sources = np.full(nb_trials, -1)
