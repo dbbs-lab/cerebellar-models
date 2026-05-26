@@ -93,24 +93,6 @@ class ConnectomeMossyGlomerulus(ConnectomeGlomerulus):
         dist = np.linalg.norm(diff[ids_to_keep], axis=1)
         return ids_to_keep[np.argsort(dist)]
 
-    def get_region_of_interest(self, chunk):
-        # Chunk here is a postsynaptic chunk because of InvertedRoI
-        # We look for chunks containing mossy fibers that are within a rectangle of size
-        # x_length * y_length centered on the postsynaptic chunk containing the glomerulus.
-        chunks = set(
-            itertools.chain.from_iterable(
-                ct.get_placement_set().get_all_chunks() for ct in self.presynaptic.cell_types
-            )
-        )
-        selected_chunks = []
-        for c in chunks:
-            x_dist = np.fabs(chunk[0] - c[0]) * chunk.dimensions[0]
-            y_dist = np.fabs(chunk[1] - c[1]) * chunk.dimensions[1]
-
-            if (x_dist < self.x_length / 2) and (y_dist < self.y_length / 2):
-                selected_chunks.append(Chunk([c[0], c[1], c[2]], chunk.dimensions))
-        return selected_chunks
-
 
 @config.node
 class ConnectomeUBCGlomerulus(ConnectomeGlomerulus, PresynDistStrat):
