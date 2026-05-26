@@ -37,11 +37,10 @@ or stochastically through the boolean parameter ``stochastic_spiking`` (default:
 
 `In-vitro` state
 ----------------
-The automatic tuning procedure was applied to the phenomenological parameters of the E-GLIF model
+The automatic tuning procedure was applied to the parameters of the E-GLIF model
 (:math:`A_1`, :math:`A_2`, :math:`k_1`, :math:`k_2`, :math:`I_e`, :math:`k_{adap}`), yielding the cell-specific
-values. Conversely, the remaining biophysical
-parameters had been previously defined in accordance with the electrophysiological properties of each
-neuronal population.
+values. The rest of the biophysical parameters were defined in accordance with the electrophysiological studies for each
+neuronal population [#geminiani_2019]_.
 
 For each cell type, the goal was to preserve the main electrophysiological features of the
 corresponding multicompartmental reference model within the reduced point-neuron description.
@@ -54,11 +53,11 @@ multi-objective minimization problem that captured the :math:`f-I` relationship 
 relevant dynamical features such as:
 
 * Rheobase
-* Pacemaking activity
+* Tonic firing rate
 * Coefficient of Variation (CV)
 * :math:`f-I` response
 * :math:`f-I` curve
-* Post-inhibitory pauses (depending on the electrophysiological profile of each cell type)
+* Post-inhibitory pauses (depending on the cell type)
 * Rebound responses
 
 See Table 1 for details in [#degrazia_2026]_.
@@ -72,12 +71,8 @@ Since NSGA-II returns a Pareto set of non-dominated solutions, the final paramet
 type was selected using an achievement scalarizing function, identifying a balanced trade-off among
 the different objectives [#degrazia_2026]_.
 
-The resulting parameters for all optimezed cells are summarized in Table 2 and fitness errors are reported in Table 3 of the reference
-paper [#degrazia_2026]_.
-
-`Awake state
-----------------
-[TODO]
+The resulting parameters for all optimized cells are summarized in Table 2 and fitness errors are reported in
+Table 3 of the reference paper [#degrazia_2026]_.
 
 Synaptic parameters
 +++++++++++++++++++
@@ -85,7 +80,7 @@ Synaptic parameters
 Static Synapse
 --------------
 
-In-vitro` state
+`In-vitro` state
 ^^^^^^^^^^^^^^^^
 
 For the static synapse configuration, synaptic transmission integrates receptor-specific kinetics
@@ -108,32 +103,26 @@ For the mathematical details underlying AMPA, NMDA, GABA synaptic kernels, see E
 The optimization was targeted against reference synaptic conductance traces extracted from
 multicompartmental NEURON simulations under voltage-clamp protocols. The resulting time
 constants and scaling factors for each connection and postsynaptic cell type are illustrated
-in **Figure 5** of the reference paper [#degrazia_2026]_.
+in Figure 5 of the reference paper [#degrazia_2026]_.
 
 Furthermore, to compensate for the loss of dendritic attenuation inherent to the reduction from
 spatially extended structures to point-neuron representations, a network-level weight calibration
-was performed. The final effective static synaptic weights optimized for each pathway are summarized in **Table 4** of [#degrazia_2026]_.
-
-`Awake` state
-^^^^^^^^^^^^^^^^
-[TODO]
+was performed. The final effective static synaptic weights optimized for each pathway are summarized in Table 4 of [#degrazia_2026]_.
 
 Tsodyks Markram Synapse
 -----------------------
 
+Short-term plasticity (STP) is incorporated into the network using the Tsodyks-Markram
+formalism, with parameters assigned according to each specific connection type.
 Circuits based on the De Grazia et al. model [#degrazia_2026]_ leverage the
 `tsodyks_synapse <https://nest-simulator.readthedocs.io/en/latest/models/tsodyks_synapse.html>`_
 version of the model.
 
 `In-vitro` state
 ^^^^^^^^^^^^^^^^
-Short-term plasticity (STP) is incorporated into the network using the Tsodyks-Markram
-formalism, with parameters assigned according to each specific connection type [#degrazia_2026]_.
 
-The connection-specific phenomenological parameters regulating these dynamic synapses, namely
-the utilization of synaptic resources (:math:`U`), the time constant for facilitation
-(:math:`\tau_{fac}`), the time constant for recovery (:math:`\tau_{rec}`), and the time constant
-for postsynaptic currents (:math:`\tau_{psc}`), which are defined in accordance with **S1 Table** of the reference paper [#degrazia_2026]_.
+The connection-specific parameters regulating these dynamic synapses
+are defined in accordance with S1 Table of the reference paper [#degrazia_2026]_.
 
 To preserve consistency between static and plastic network simulations, an automated
 synaptic weight rescaling procedure was applied. A rescaling factor relative to the corresponding
@@ -142,10 +131,7 @@ the synaptic conductance curve matches that of the static model under low-freque
 where STP effects are assumed to be negligible [#degrazia_2026]_.
 
 The final calibrated effective STP synaptic weights resulting from this connection-specific
-rescaling are reported in **Table 4** of the reference paper [#degrazia_2026]_.
-
-`Awake` state
-^^^^^^^^^^^^^^^^
+rescaling are reported in Table 4 of the reference paper [#degrazia_2026]_.
 
 
 References
@@ -154,3 +140,8 @@ References
 .. include-nestml:: ../../../../cerebellar_models/nest_models/eglif_multirec.nestml
     :start-after: start-references
     :end-before: See also
+
+.. [#geminiani_2019] Geminiani, A., Casellato, C., D’Angelo, E., & Pedrocchi, A. (2019).
+   Complex electroresponsive dynamics in olivocerebellar neurons represented with extended-generalized
+   leaky integrate and fire models. Frontiers in Computational Neuroscience, 13, 35.
+   https://doi.org/10.3389/fncom.2019.00035

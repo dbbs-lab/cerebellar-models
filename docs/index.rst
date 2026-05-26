@@ -29,7 +29,7 @@ Sciences <https://dbbs.dip.unipv.it/en>`_ of the University of Pavia.
    cli.rst
 
 .. toctree::
-   :maxdepth: 2
+   :maxdepth: 3
    :caption: BSB Configurations
 
    configurations/configurations
