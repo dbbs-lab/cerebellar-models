@@ -536,7 +536,7 @@
             "voxels_pre": 500
         },
         "golgi_to_golgi": {
-            "affinity": 0.5,
+            "affinity": 0.41,
             "contacts": {
                 "distribution": "norm",
                 "loc": 160,
@@ -719,7 +719,7 @@
             "affinity": 0.1,
             "contacts": {
                 "distribution": "norm",
-                "loc": 10,
+                "loc": 4,
                 "scale": 0.3
             },
             "postsynaptic": {

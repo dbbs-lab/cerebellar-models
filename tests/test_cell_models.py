@@ -357,7 +357,10 @@ class TestSingleCellModels(
                 f_points[i] = f_tonic
                 i_points[i] = protocol[cell_type]["amplitudes"][i]
             slope, slope_std, offset, offset_std = self._fit_lin(i_points[1:], f_points[1:])
-            self.assertTrue(abs(slope - predicted[cell_type]["slope"]) <= 2 * slope_std)
+            self.assertTrue(
+                abs(slope - predicted[cell_type]["slope"]) <= 2 * slope_std,
+                f"{cell_type} slope: {slope}, predicted {predicted[cell_type]['slope']}",
+            )
 
     def test_fi_curve_degrazia(self):
         conf_cell_vitro = "../configurations/mouse/in-vitro/nest/cell_models/eglif_multirec.yaml"

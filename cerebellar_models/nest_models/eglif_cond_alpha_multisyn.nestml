@@ -78,7 +78,7 @@ model eglif_cond_alpha_multisyn:
 
         # Update membrane potential, adaptation and spike triggered currents
         # WARNING: SIGN BELOW IS INCORRECT FOR A LIF MODEL -> Should be V_m' = - (V_m - E_L) / tau_m + ...
-        V_m' = (V_m - E_L) / tau_m + (I_e + I_stim + I_gap - I_adap + I_dep + I_syn) / C_m
+        V_m' = (V_m - E_L) / tau_m + (I_e + I_stim - I_adap + I_dep + I_syn) / C_m
         I_dep' = - I_dep * k_1 / ms
         I_adap' = (V_m - E_L) * (k_adap * nS / ms) - I_adap * (k_2 / ms)
 
@@ -119,7 +119,6 @@ model eglif_cond_alpha_multisyn:
         syn3_spike <- spike
         syn4_spike <- spike
         I_stim pA <- continuous         # External stimulation current
-        I_gap pA <- continuous         # Gap junction current
 
     output:
         spike

@@ -53,7 +53,7 @@ def _build_nest_models(
                 "gap_junctions": {
                     "enable": True,
                     "membrane_potential_variable": "V_m",
-                    "gap_current_port": "I_gap",
+                    "gap_current_port": "I_stim",
                 }
             },
         )
