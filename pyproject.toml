@@ -68,6 +68,14 @@ known_third_party = ["nest"]
 [project.entry-points."bsb.components"]
 my_components = "cerebellar_models:classmap"
 
+[tool.coverage.run]
+branch = true
+source = ["cerebellar_models"]
+
+[tool.coverage.report]
+exclude_lines = [ "if typing.TYPE_CHECKING:", "pragma: nocover" ]
+show_missing = true
+
 [tool.bumpversion]
 current_version = "0.11.0"
 parse = "(?P<major>\\d+)\\.(?P<minor>\\d+)\\.(?P<patch>\\d+)"

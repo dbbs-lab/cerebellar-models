@@ -139,7 +139,7 @@ class Plot(abc.ABC):
             self.update()
         self.is_plotted = True
 
-    def show(self):  # pragma:nocover
+    def show(self):  # pragma: nocover
         """
         Show the figure.
         The figure will be plotted if needed.
