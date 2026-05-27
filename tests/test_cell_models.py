@@ -403,11 +403,11 @@ class TestSingleCellModels(
         }
         # values from De Grazia 2026
         predicted = {
-            "golgi": {"autorhythm": 12.48},
-            "granule": {"autorhythm": 0.0},
-            "purkinje": {"autorhythm": 35.74},
-            "basket": {"autorhythm": 14.64},
-            "stellate": {"autorhythm": 21.87},
+            "golgi": {"autorhythm": 12.48, "start": 200, "end": 700.0},
+            "granule": {"autorhythm": 0.0, "start": 100, "end": 600.0},
+            "purkinje": {"autorhythm": 35.74, "start": 200, "end": 700.0},
+            "basket": {"autorhythm": 14.64, "start": 500, "end": 1500.0},
+            "stellate": {"autorhythm": 21.87, "start": 200, "end": 700.0},
         }
         cfg = parse_configuration_content(
             config_dict, parser="json", path=os.path.realpath(__file__)
@@ -419,10 +419,18 @@ class TestSingleCellModels(
         for cell_type in predicted:
             spike_dict = cell_dict[cell_type]
             # Test autorhythm
-            # since there is no stochasticity, we can compute the firing as inverse of mean ISI
-            f_tonic, std_tonic = self._compute_firing_rate(spike_dict.values(), start=200, stop=700)
+            # since there is no stochasticity, we can take the results of the first cell.
+            prediction = predicted[cell_type]
+            if len(spike_dict) == 0:
+                f_tonic = 0.0
+            else:
+                spike_times = np.array(list(spike_dict.values())[0])
+                spike_times = spike_times[
+                    (spike_times > prediction["start"]) * (spike_times < prediction["end"])
+                ]
+                duration = spike_times[-1] - prediction["start"]
+                f_tonic = len(spike_times) / duration * 1000.0
             self.assertTrue(
-                abs(predicted[cell_type]["autorhythm"] - f_tonic)
-                <= 0.2 * predicted[cell_type]["autorhythm"],
-                f"{cell_type}: {f_tonic} Hz",
+                abs(prediction["autorhythm"] - f_tonic) <= 0.5,
+                f"{cell_type}: {f_tonic} Hz, predicted {prediction['autorhythm']}",
             )

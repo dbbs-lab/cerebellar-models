@@ -88,12 +88,12 @@ model eglif_cond_alpha_multisyn:
         E_L mV = -70.6 mV                   # Leak reversal Potential (aka resting potential)
         t_ref ms = 0.0 ms                   # Refractory period
         I_e pA = 0 pA                       # Constant endogenous current
-        tau_V mV = 0.5 mV                   # Escape rate parameter
         V_reset mV = -60.0 mV               # Reset potential
         V_min mV = -150.0 mV                # Minimal membrane potential value
 
         V_th mV = -50.4 mV                  # Spike Threshold
         lambda_0 real = 0.001 / ms          # Escape rate parameter
+        tau_V mV = 0.5 mV                   # Escape rate parameter
 
         k_1 real = pow(144.0, -1) / ms      # Decay rate
         k_2 real = pow(80.5, -1) / ms       # Adaptation constant
