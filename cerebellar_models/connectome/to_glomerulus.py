@@ -43,23 +43,22 @@ class ConnectomeGlomerulus(InvertedRoI, ConnectionStrategy):
                 post_locs = np.full((n_glom, 3), -1, dtype=int)
 
                 # We connect each glomerulus to a presynaptic cell.
-                to_keep = 0
                 for j, glomerulus in enumerate(glomeruli_pos):
                     pre_ids = self.pre_selection(presyn_pos, glomerulus)
                     if len(pre_ids) > 0:
-                        roll = int(np.floor(len(pre_ids) * norm_exp_dist()[0]))
-                        pre_locs[to_keep, 0] = pre_ids[roll]
-                        post_locs[to_keep, 0] = j
-                        to_keep += 1
-
-                self.connect_cells(pre_ps, post_ps, pre_locs[:to_keep], post_locs[:to_keep])
+                        pre_locs[j, 0] = pre_ids[int(np.floor(len(pre_ids) * norm_exp_dist()[0]))]
+                    else:
+                        # if there is no presyn within the box use the closest one
+                        pre_locs[j, 0] = np.argmin(np.linalg.norm(presyn_pos - glomerulus, axis=1))
+                    post_locs[j, 0] = j
+                self.connect_cells(pre_ps, post_ps, pre_locs, post_locs)
 
     @abc.abstractmethod
     def pre_selection(
         self,
         presyn_pos,
         glom_pos,
-    ):  # pragma: no cover
+    ):  # pragma: nocover
         """
         Order presynaptic cell ids based on their respective distance to glomerulus
 
@@ -93,24 +92,6 @@ class ConnectomeMossyGlomerulus(ConnectomeGlomerulus):
         ids_to_keep = np.where((diff[:, 0] <= self.x_length) * (diff[:, 1] <= self.y_length))[0]
         dist = np.linalg.norm(diff[ids_to_keep], axis=1)
         return ids_to_keep[np.argsort(dist)]
-
-    def get_region_of_interest(self, chunk):
-        # Chunk here is a postsynaptic chunk because of InvertedRoI
-        # We look for chunks containing mossy fibers that are within a rectangle of size
-        # x_length * y_length centered on the postsynaptic chunk containing the glomerulus.
-        chunks = set(
-            itertools.chain.from_iterable(
-                ct.get_placement_set().get_all_chunks() for ct in self.presynaptic.cell_types
-            )
-        )
-        selected_chunks = []
-        for c in chunks:
-            x_dist = np.fabs(chunk[0] - c[0]) * chunk.dimensions[0]
-            y_dist = np.fabs(chunk[1] - c[1]) * chunk.dimensions[1]
-
-            if (x_dist < self.x_length / 2) and (y_dist < self.y_length / 2):
-                selected_chunks.append(Chunk([c[0], c[1], c[2]], chunk.dimensions))
-        return selected_chunks
 
 
 @config.node

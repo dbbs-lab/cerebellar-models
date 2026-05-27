@@ -71,7 +71,7 @@ class CerebOption:
         self.type = type_term
         """Type of the option"""
 
-    def get_widget(self):  # pragma: no cover
+    def get_widget(self):  # pragma: nocover
         """
         Return the survey widget for this option
         """
@@ -107,7 +107,7 @@ class MicrozonesParams:
         """Duplicated connections obtained from the cell type labelling"""
 
 
-def print_panel(options, title="Configure your cerebellum circuit."):  # pragma: no cover
+def print_panel(options, title="Configure your cerebellum circuit."):  # pragma: nocover
     """
     Print a survey form based on a list of options.
     The result of the form will be saved in its options.
@@ -131,7 +131,7 @@ def print_panel(options, title="Configure your cerebellum circuit."):  # pragma:
 
 @click.group(help="Cerebellar models CLI")
 @click.version_option(__version__)
-def app():  # pragma: no cover
+def app():  # pragma: nocover
     """The main CLI entry point"""
     pass
 
@@ -461,7 +461,7 @@ def _write_config(configuration, output_folder, extension):
             content = f.read()
             template = json.loads(content, object_pairs_hook=OrderedDict)
         configuration = deep_order(configuration.__tree__(), template)
-    except ConfigurationError as e:  # pragma: no cover
+    except ConfigurationError as e:  # pragma: nocover
         raise ValueError("A BSB error happened when loading your cerebellar circuit") from e
     if extension == "yaml":
         yaml.add_representer(
@@ -611,11 +611,11 @@ def configure(
                 )
                 deep_update(configuration["simulations"][simulation_name]["devices"], default_stim)
                 sim_choices[simulation_name] = sim_choices[sim_name]
-            else:  # pragma: no cover
+            else:  # pragma: nocover
                 raise ValueError(
                     f"Only nest configurations are implemented. Provided simulator: {simulator}"
                 )
-    else:  # pragma: no cover
+    else:  # pragma: nocover
         raise ValueError(f"Only mouse configuration are implemented. Provided species: {species}")
 
     # Step 7: Recap choices
