@@ -1,9 +1,20 @@
 NEST Simulation Results
 ~~~~~~~~~~~~~~~~~~~~~~~
 
-We present here the results of the `canonical circuit` simulations with the different protocol presented in :doc:`nest`
-(in-vitro and awake states).
-Neurons are here represented as `eglif_cond_alpha_multisyn` and are connected with `static synapses`.
+We present here the results of the `canonical circuit` simulations with the different protocol presented in :doc:`nest`.
+Results vary according to the species, the state, and the neuron and synapse models used for the simulations.
+:numref:`fig-sim-results` shows a direct comparison of the mean firing rates for the different neuron and synapse models combination in the
+*in-vitro* state:
+
+.. _fig-sim-results:
+.. figure:: /images/fr_comparison.png
+   :align: center
+   :alt: NEST-Simulation-Comparison
+
+   Comparison of the firing rates of the different neuron population based on the neuron and synapse models used
+
+We present below the results of the canonical circuits with neurons
+represented as `eglif_cond_alpha_multisyn` and are connected with `static synapses` (for in-vitro and awake states).
 
 Basal activity
 ##############
