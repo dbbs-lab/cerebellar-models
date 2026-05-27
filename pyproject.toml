@@ -12,7 +12,6 @@ requires-python = ">=3.10"
 dynamic = ["version", "description"]
 dependencies = [
     "bsb[parallel]~=7.0",
-    "nestml~=8.3.0-rc2",
     "click~=8.1",
     "survey~=5.4.2",
     "matplotlib~=3.9",
@@ -22,7 +21,7 @@ dependencies = [
 [project.optional-dependencies]
 nest = [
     "bsb[nest]~=7.0",
-    "nestml~=8.2",
+    "nestml~=8.3.0-rc2",
 ]
 neuron = [
     "bsb[neuron]~=7.0",
