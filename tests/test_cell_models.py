@@ -431,6 +431,6 @@ class TestSingleCellModels(
                 duration = spike_times[-1] - prediction["start"]
                 f_tonic = len(spike_times) / duration * 1000.0
             self.assertTrue(
-                abs(prediction["autorhythm"] - f_tonic) <= 0.5,
+                abs(prediction["autorhythm"] - f_tonic) <= 0.01,
                 f"{cell_type}: {f_tonic} Hz, predicted {prediction['autorhythm']}",
             )
