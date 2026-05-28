@@ -18,7 +18,6 @@ def _build_nest_models(
 ):
     """
     Build all the nestml models within the provided model directory and deploy them.
-
     :param str model_dir: Directory containing the nestml files to compile
     :param str build_dir: Directory where the nest models will be compiled
     :param str module_name: Name of the nest module produced as outcome.
@@ -50,6 +49,13 @@ def _build_nest_models(
             target_platform="NEST",
             target_path=build_dir,
             module_name=module_name,
+            codegen_opts={
+                "gap_junctions": {
+                    "enable": True,
+                    "membrane_potential_variable": "V_m",
+                    "gap_current_port": "I_stim",
+                }
+            },
         )
 
 

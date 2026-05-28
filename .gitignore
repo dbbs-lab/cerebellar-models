@@ -10,9 +10,10 @@ build
 report
 .idea/
 /docs/_build/
-*.coverage*
+*coverage*
 .ipynb_checkpoints
 *.nio
 CLAUDE.md
 dist
 data
+results

@@ -6,7 +6,7 @@ network:
   x: 13200  # 528 * 25.
   y: 8000 # 320 * 25.
   z: 11400 # 456 * 25.
-  chunk_size: 250
+  chunk_size: 200
 files:
   annotations:
     type: nrrd

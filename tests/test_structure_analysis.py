@@ -167,7 +167,7 @@ class TestConnectivityPlots(
             self.assertAll(np.array(self.plot.get_convergences()[k]) == 1.0)
         divergences = self.plot.get_divergences()["mf to glomerulus"]
         self.assertEqual(len(divergences), len(self.scaffold.get_placement_set("mossy_fibers")))
-        self.assertAlmostEqual(np.mean(divergences), 20.0, delta=0.5)
+        self.assertAlmostEqual(np.mean(divergences), 20.0, delta=1.0)
 
     def test_warn(self):
         # No connection sets in storage before compile

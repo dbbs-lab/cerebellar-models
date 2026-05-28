@@ -130,14 +130,14 @@ class Report:
         if plot_name in self.plots:
             self.plots[plot_name].save_figure(output_name, dpi, pad, **kwargs)
 
-    def show_plot(self, plot_name):  # pragma:nocover
+    def show_plot(self, plot_name):  # pragma: nocover
         """
         Show one of the report's plots.
         """
         if plot_name in self.plots:
             self.plots[plot_name].show()
 
-    def show(self):  # pragma:nocover
+    def show(self):  # pragma: nocover
         """
         Show all report's plots one by one.
         """

@@ -1,19 +1,167 @@
-simulations:
-  basal_activity:
-    simulator: nest
-    modules:
-      - cerebmodule
-    cell_models:
-      purkinje_cell:
-        constants:
-          lambda_0: 4.
-          tau_V: 3.5
-          I_e: 700
-      dcn_p:
-        constants:
-          lambda_0: 3.0
-          tau_V: 3.0
+simulator: nest
+modules:
+  - cerebmodule
+cell_models:
+  purkinje_cell:
+    constants:
+      lambda_0: 4.
+      tau_V: 3.5
+      I_e: 700
+  dcn_p:
+    constants:
+      lambda_0: 3.0
+      tau_V: 3.0
+static_synapse_connection_models:
+  parallel_fiber_to_purkinje:
+    synapses:
+      - model: static_synapse
+        weight: 0.14
+        delay: 5
+        receptor_type: 1
+  ascending_axon_to_purkinje:
+    synapses:
+      - model: static_synapse
+        weight: 0.41
+        delay: 2
+        receptor_type: 1
+  parallel_fiber_to_stellate:
+    synapses:
+      - model: static_synapse
+        weight: 0.08
+        delay: 5
+        receptor_type: 1
+  parallel_fiber_to_basket:
+    synapses:
+      - model: static_synapse
+        weight: 0.06
+        delay: 5
+        receptor_type: 1
+  basket_to_purkinje:
+    synapses:
+      - model: static_synapse
+        weight: 0.8
+        delay: 4
+        receptor_type: 2
+  purkinje_to_dcn_p:
+    synapses:
+      - model: static_synapse
+        weight: 0.35
+        delay: 4.
+        receptor_type: 2
+  purkinje_to_dcn_i:
+    synapses:
+      - model: static_synapse
+        weight: 0.02
+        delay: 4.
+        receptor_type: 2
+  io_to_purkinje:
+    synapses:
+      - model: static_synapse
+        weight: 1.6
+        delay: 4
+        receptor_type: 3
+  io_to_mli_io_to_stellate_cell:
+    synapses:
+      - model: static_synapse
+        weight: 5
+        delay: 40
+        receptor_type: 3
+  io_to_dcn_p:
+    synapses:
+      - model: static_synapse
+        weight: 0.4
+        delay: 4
+        receptor_type: 1
+tsodyks2_synapse_connection_models:
+  parallel_fiber_to_purkinje:
+    synapses:
+      - model: tsodyks2_synapse
+        weight: 1.07
+        U: 0.13
+        x: 1
+        tau_rec: 35.1
+        tau_fac: 54
+        delay: 5
+        receptor_type: 1
+  ascending_axon_to_purkinje:
+    synapses:
+      - model: tsodyks2_synapse
+        weight: 3.15
+        U: 0.13
+        x: 1
+        tau_rec: 35.1
+        tau_fac: 54
+        delay: 2
+        receptor_type: 1
+  parallel_fiber_to_stellate:
+    synapses:
+      - model: tsodyks2_synapse
+        weight: 0.10
+        U: 0.15
+        x: 1
+        tau_rec: 35.1
+        tau_fac: 10.8
+        delay: 5
+        receptor_type: 1
+  parallel_fiber_to_basket:
+    synapses:
+      - model: tsodyks2_synapse
+        weight: 0.40
+        U: 0.15
+        x: 1
+        tau_rec: 35.1
+        tau_fac: 10.8
+        delay: 5
+        receptor_type: 1
+  basket_to_purkinje:
+    synapses:
+      - model: tsodyks2_synapse
+        weight: 2.28
+        U: 0.35
+        x: 1
+        tau_rec: 15
+        tau_fac: 4
+        delay: 4
+        receptor_type: 2
+  mossy_fibers_to_dcn_p:
+    synapses:
+      - model: static_synapse
+        weight: 0.25
+        delay: 4.
+        receptor_type: 1
+  purkinje_to_dcn_p:
+    synapses:
+      - model: static_synapse
+        weight: 0.35
+        delay: 4.
+        receptor_type: 2
+  purkinje_to_dcn_i:
+    synapses:
+      - model: static_synapse
+        weight: 0.02
+        delay: 4.
+        receptor_type: 2
+  io_to_purkinje:
+    synapses:
+      - model: static_synapse
+        weight: 1.6
+        delay: 4
+        receptor_type: 3
+  io_to_mli_io_to_stellate_cell:
+    synapses:
+      - model: static_synapse
+        weight: 5
+        delay: 40
+        receptor_type: 3
+  io_to_dcn_p:
+    synapses:
+      - model: static_synapse
+        weight: 0.4
+        delay: 4
+        receptor_type: 1
 $import:
   ref: ../../../in-vitro/nest/cell_models/eglif_cond_alpha_multisyn.yaml#/
   values:
-    - simulations
+    - cell_models
+    - static_synapse_connection_models
+    - tsodyks2_synapse_connection_models

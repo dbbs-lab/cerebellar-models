@@ -44,12 +44,7 @@ class TestSingleCellModels(
 
     def setUp(self):
         super().setUp()
-        conf_cell_vitro = (
-            "../configurations/mouse/in-vitro/nest/cell_models/eglif_cond_alpha_multisyn.yaml"
-        )
-        conf_cell_awake = (
-            "../configurations/mouse/awake/nest/cell_models/eglif_cond_alpha_multisyn.yaml"
-        )
+        self.conf_basal_exp = "../configurations/mouse/in-vitro/nest/basal_vitro.yaml"
         self.configuration_dict = {
             "name": "test",
             "storage": {"engine": "hdf5"},
@@ -90,112 +85,6 @@ class TestSingleCellModels(
                 }
             },
             "connectivity": {},
-            "after_connectivity": {},
-            "simulations": {
-                "test": {
-                    "simulator": "nest",
-                    "duration": 21001,
-                    "resolution": 0.1,
-                    "seed": 1234,
-                    "modules": ["cerebmodule"],
-                    "cell_models": {
-                        "$import": {
-                            "ref": conf_cell_vitro + "#/simulations/basal_activity/cell_models",
-                            "values": [
-                                "granule_cell",
-                                "golgi_cell",
-                                "purkinje_cell",
-                                "basket_cell",
-                                "stellate_cell",
-                                "unipolar_brush_cell",
-                            ],
-                        },
-                        "purkinje_awake_cell": {
-                            "$import": {
-                                "ref": conf_cell_awake
-                                + "#/simulations/basal_activity/cell_models/purkinje_cell",
-                                "values": ["constants", "model"],
-                            }
-                        },
-                        "dcn_p_cell": {
-                            "$import": {
-                                "ref": conf_cell_vitro
-                                + "#/simulations/basal_activity/cell_models/dcn_p",
-                                "values": ["constants", "model"],
-                            }
-                        },
-                        "dcn_p_awake_cell": {
-                            "$import": {
-                                "ref": conf_cell_awake
-                                + "#/simulations/basal_activity/cell_models/dcn_p",
-                                "values": ["constants", "model"],
-                            }
-                        },
-                        "dcn_i_cell": {
-                            "$import": {
-                                "ref": conf_cell_vitro
-                                + "#/simulations/basal_activity/cell_models/dcn_i",
-                                "values": ["constants", "model"],
-                            }
-                        },
-                        "dcn_i_awake_cell": {
-                            "$import": {
-                                "ref": conf_cell_awake
-                                + "#/simulations/basal_activity/cell_models/dcn_i",
-                                "values": ["constants", "model"],
-                            }
-                        },
-                    },
-                    "connection_models": {},
-                    "devices": {
-                        "$import": {
-                            "ref": conf_cell_vitro + "#/simulations/basal_activity/devices",
-                            "values": [
-                                "granule_record",
-                                "golgi_record",
-                                "purkinje_record",
-                                "basket_record",
-                                "stellate_record",
-                                "unipolar_brush_record",
-                            ],
-                        },
-                        "purkinje_awake_record": {
-                            "device": "spike_recorder",
-                            "delay": 0.1,
-                            "targetting": {
-                                "strategy": "cell_model",
-                                "cell_models": ["purkinje_awake_cell"],
-                            },
-                        },
-                        "dcn_p_record": {
-                            "device": "spike_recorder",
-                            "delay": 0.1,
-                            "targetting": {"strategy": "cell_model", "cell_models": ["dcn_p_cell"]},
-                        },
-                        "dcn_p_awake_record": {
-                            "device": "spike_recorder",
-                            "delay": 0.1,
-                            "targetting": {
-                                "strategy": "cell_model",
-                                "cell_models": ["dcn_p_awake_cell"],
-                            },
-                        },
-                        "dcn_i_record": {
-                            "device": "spike_recorder",
-                            "delay": 0.1,
-                            "targetting": {"strategy": "cell_model", "cell_models": ["dcn_i_cell"]},
-                        },
-                        "dcn_i_awake_record": {
-                            "device": "spike_recorder",
-                            "delay": 0.1,
-                            "targetting": {
-                                "strategy": "cell_model",
-                                "cell_models": ["dcn_i_awake_cell"],
-                            },
-                        },
-                    },
-                }
-            },
         }
 
     @staticmethod
@@ -245,7 +134,114 @@ class TestSingleCellModels(
         f_tonic = (1.0 / isis / 0.001) if len(isis) > 0 else 0.0  # in Hz
         return np.mean(f_tonic), np.std(f_tonic)
 
-    def test_fi_curves(self):
+    def test_fi_curves_geminiani(self):
+        conf_cell_vitro = (
+            "../configurations/mouse/in-vitro/nest/cell_models/eglif_cond_alpha_multisyn.yaml"
+        )
+        conf_cell_awake = (
+            "../configurations/mouse/awake/nest/cell_models/eglif_cond_alpha_multisyn.yaml"
+        )
+        config_dict = self.configuration_dict.copy()
+        config_dict["simulations"] = {
+            "test": {
+                "simulator": "nest",
+                "duration": 21001,
+                "resolution": 0.1,
+                "seed": 1234,
+                "modules": ["cerebmodule"],
+                "cell_models": {
+                    "$import": {
+                        "ref": conf_cell_vitro + "#/cell_models",
+                        "values": [
+                            "granule_cell",
+                            "golgi_cell",
+                            "purkinje_cell",
+                            "basket_cell",
+                            "stellate_cell",
+                            "unipolar_brush_cell",
+                        ],
+                    },
+                    "purkinje_awake_cell": {
+                        "$import": {
+                            "ref": conf_cell_awake + "#/cell_models/purkinje_cell",
+                            "values": ["constants", "model"],
+                        }
+                    },
+                    "dcn_p_cell": {
+                        "$import": {
+                            "ref": conf_cell_vitro + "#/cell_models/dcn_p",
+                            "values": ["constants", "model"],
+                        }
+                    },
+                    "dcn_p_awake_cell": {
+                        "$import": {
+                            "ref": conf_cell_awake + "#/cell_models/dcn_p",
+                            "values": ["constants", "model"],
+                        }
+                    },
+                    "dcn_i_cell": {
+                        "$import": {
+                            "ref": conf_cell_vitro + "#/cell_models/dcn_i",
+                            "values": ["constants", "model"],
+                        }
+                    },
+                    "dcn_i_awake_cell": {
+                        "$import": {
+                            "ref": conf_cell_awake + "#/cell_models/dcn_i",
+                            "values": ["constants", "model"],
+                        }
+                    },
+                },
+                "connection_models": {},
+                "devices": {
+                    "$import": {
+                        "ref": self.conf_basal_exp + "#/simulations/basal_activity/devices",
+                        "values": [
+                            "granule_record",
+                            "golgi_record",
+                            "purkinje_record",
+                            "basket_record",
+                            "stellate_record",
+                            "unipolar_brush_record",
+                        ],
+                    },
+                    "purkinje_awake_record": {
+                        "device": "spike_recorder",
+                        "delay": 0.1,
+                        "targetting": {
+                            "strategy": "cell_model",
+                            "cell_models": ["purkinje_awake_cell"],
+                        },
+                    },
+                    "dcn_p_record": {
+                        "device": "spike_recorder",
+                        "delay": 0.1,
+                        "targetting": {"strategy": "cell_model", "cell_models": ["dcn_p_cell"]},
+                    },
+                    "dcn_p_awake_record": {
+                        "device": "spike_recorder",
+                        "delay": 0.1,
+                        "targetting": {
+                            "strategy": "cell_model",
+                            "cell_models": ["dcn_p_awake_cell"],
+                        },
+                    },
+                    "dcn_i_record": {
+                        "device": "spike_recorder",
+                        "delay": 0.1,
+                        "targetting": {"strategy": "cell_model", "cell_models": ["dcn_i_cell"]},
+                    },
+                    "dcn_i_awake_record": {
+                        "device": "spike_recorder",
+                        "delay": 0.1,
+                        "targetting": {
+                            "strategy": "cell_model",
+                            "cell_models": ["dcn_i_awake_cell"],
+                        },
+                    },
+                },
+            }
+        }
         protocol = {
             "golgi": {
                 "amplitudes": [100, 200, 300, 400, 500, 600],
@@ -321,9 +317,7 @@ class TestSingleCellModels(
         }
         for cell_type in predicted:
             for i, stim in enumerate(protocol[cell_type]["amplitudes"]):
-                self.configuration_dict["simulations"]["test"]["devices"][
-                    f"stimulus_{cell_type}_{i}"
-                ] = {
+                config_dict["simulations"]["test"]["devices"][f"stimulus_{cell_type}_{i}"] = {
                     "device": "dc_generator",
                     "amplitude": stim,
                     "start": protocol[cell_type]["starts"][i] * 1e3,
@@ -332,10 +326,10 @@ class TestSingleCellModels(
                     "weight": 1.0,
                     "delay": 0.1,
                 }
-        self.cfg = parse_configuration_content(
-            self.configuration_dict, parser="json", path=os.path.realpath(__file__)
+        cfg = parse_configuration_content(
+            config_dict, parser="json", path=os.path.realpath(__file__)
         )
-        network = Scaffold(self.cfg, self.storage)
+        network = Scaffold(cfg, self.storage)
         network.compile()
         results = network.run_simulation("test")
         cell_dict = self._load_spike_data(results)
@@ -363,4 +357,83 @@ class TestSingleCellModels(
                 f_points[i] = f_tonic
                 i_points[i] = protocol[cell_type]["amplitudes"][i]
             slope, slope_std, offset, offset_std = self._fit_lin(i_points[1:], f_points[1:])
-            self.assertTrue(abs(slope - predicted[cell_type]["slope"]) <= 2 * slope_std)
+            self.assertTrue(
+                abs(slope - predicted[cell_type]["slope"]) <= 2 * slope_std,
+                f"{cell_type} slope: {slope}, predicted {predicted[cell_type]['slope']}",
+            )
+
+    def test_fi_curve_degrazia(self):
+        conf_cell_vitro = "../configurations/mouse/in-vitro/nest/cell_models/eglif_multirec.yaml"
+        config_dict = self.configuration_dict.copy()
+        config_dict["simulations"] = {
+            "test": {
+                "simulator": "nest",
+                "duration": 2000.1,
+                "resolution": 0.1,
+                "seed": 1234,
+                "modules": ["cerebmodule"],
+                "cell_models": {
+                    "granule_cell": {"constants": {"V_m": -62}},
+                    "golgi_cell": {"constants": {"V_m": -62}},
+                    "purkinje_cell": {"constants": {"V_m": -59}},
+                    "basket_cell": {"constants": {"V_m": -68}},
+                    "stellate_cell": {"constants": {"V_m": -68}},
+                    "$import": {
+                        "ref": conf_cell_vitro + "#/cell_models",
+                        "values": [
+                            "granule_cell",
+                            "golgi_cell",
+                            "purkinje_cell",
+                            "basket_cell",
+                            "stellate_cell",
+                        ],
+                    },
+                },
+                "connection_models": {},
+                "devices": {
+                    "$import": {
+                        "ref": self.conf_basal_exp + "#/simulations/basal_activity/devices",
+                        "values": [
+                            "granule_record",
+                            "golgi_record",
+                            "purkinje_record",
+                            "basket_record",
+                            "stellate_record",
+                        ],
+                    },
+                },
+            }
+        }
+        # values from De Grazia 2026
+        predicted = {
+            "golgi": {"autorhythm": 12.48, "start": 200, "end": 700.0},
+            "granule": {"autorhythm": 0.0, "start": 100, "end": 600.0},
+            "purkinje": {"autorhythm": 35.74, "start": 200, "end": 700.0},
+            "basket": {"autorhythm": 14.64, "start": 500, "end": 1500.0},
+            "stellate": {"autorhythm": 21.87, "start": 200, "end": 700.0},
+        }
+        cfg = parse_configuration_content(
+            config_dict, parser="json", path=os.path.realpath(__file__)
+        )
+        network = Scaffold(cfg, self.storage)
+        network.compile()
+        results = network.run_simulation("test")
+        cell_dict = self._load_spike_data(results)
+        for cell_type in predicted:
+            spike_dict = cell_dict[cell_type]
+            # Test autorhythm
+            # since there is no stochasticity, we can take the results of the first cell.
+            prediction = predicted[cell_type]
+            if len(spike_dict) == 0:
+                f_tonic = 0.0
+            else:
+                spike_times = np.array(list(spike_dict.values())[0])
+                spike_times = spike_times[
+                    (spike_times > prediction["start"]) * (spike_times < prediction["end"])
+                ]
+                duration = spike_times[-1] - prediction["start"]
+                f_tonic = len(spike_times) / duration * 1000.0
+            self.assertTrue(
+                abs(prediction["autorhythm"] - f_tonic) <= 0.01,
+                f"{cell_type}: {f_tonic} Hz, predicted {prediction['autorhythm']}",
+            )

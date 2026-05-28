@@ -2,8 +2,6 @@
 Analysis and plotting tools for cerebellar cortex reconstructions.
 """
 
-import matplotlib
-
 from cerebellar_models.analysis.plots import Legend, Plot, ScaffoldPlot
 from cerebellar_models.analysis.report import (
     LIST_CT_INFO,

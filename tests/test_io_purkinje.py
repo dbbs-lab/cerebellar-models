@@ -50,11 +50,13 @@ class TestDuplicateSynapses(
         u_new_conns = np.unique(np.concatenate(np.moveaxis(new_conns, 0, 1), axis=-1), axis=0)
         self.assertAll(u_conns == u_new_conns)
         distrib_params = self.cfg.after_connectivity["duplicate_conn_io_pc"].contacts.parameters
-        # apply central limit theorem to compare to N(0,1). Threshold rejection is 0.001
+        # Apply central limit theorem: S = sum of n i.i.d. draws X_i ~ N(loc, scale^2).
+        # E[S] = n*loc, Std[S] = scale*sqrt(n)  =>  z = (S - n*loc) / (scale * sqrt(n))
+        # Threshold 3.89 gives rejection probability 0.0001 (fails once in 10000 trials).
         self.assertLess(
             np.abs(new_conns.shape[0] - origin_conns.shape[0] * distrib_params["loc"])
             / distrib_params["scale"]
-            / np.sqrt(new_conns.shape[0]),
-            3.27,
-            "This test should fail only once in every 1000 trials",
+            / np.sqrt(origin_conns.shape[0]),
+            3.89,
+            "This test should fail only once in every 10000 trials",
         )

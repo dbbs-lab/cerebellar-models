@@ -36,10 +36,39 @@ selected by pressing the right arrow and validated with the enter key.
 
 * ``--species``: Species to build the configuration from.
 * ``--output_folder``: Path to the output folder where the configuration will be stored.
-* ``--path``: File Extension for the configuration. Can be either ``json`` or ``yaml``.
+* ``--extension``: File extension for the configuration. Can be either ``json`` or ``yaml``.
 * ``--microzones``: Flag to split your circuit into 2 separated microzones (not set by default).
 
 .. note::
-    If you select a ``NEST`` simulation  using the CLI, the output configuration
-    will also contain an extra simulation based on the associated stimulation protocol
+    When selecting a ``NEST`` simulation via the CLI, the output configuration will also
+    contain an additional simulation based on the associated stimulation protocol
     (see :ref:`NEST paradigms <nest-paradigms>`).
+
+
+Re-compile NESTML neuron models
+================================
+
+.. code-block:: bash
+
+  cerebellar-models build-nestml [--model_dir <path>] [--build_dir <path>] [--module_name <name>]
+
+This command forces a full re-compilation of the NESTML neuron models used by the NEST
+simulator. It is equivalent to calling ``_build_nest_models(redo=True)`` programmatically:
+the existing build cache is cleared and PyNESTML re-generates the C++ source code and
+reinstalls the NEST module ``cerebmodule``.
+
+Running this command is useful when:
+
+* you have updated or added a ``.nestml`` model file and want to force the rebuild without
+  clearing the cache manually;
+* the cached module has become stale after a NEST or PyNESTML upgrade.
+
+.. note::
+    This command requires a working NEST and PyNESTML installation
+    (install with ``pip install cerebellar-models[nest]``).
+
+* ``--model_dir``: Directory that contains the ``.nestml`` source files.
+  Defaults to the ``nest_models`` folder inside the installed package.
+* ``--build_dir``: Directory where the compiled NEST module will be written.
+  Defaults to the user-level cache directory managed by the package
+  (``appdirs.user_cache_dir("cerebellar_models")``).

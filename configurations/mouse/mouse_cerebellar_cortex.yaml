@@ -1,6 +1,6 @@
 name: DBBS Mouse cerebellum configuration v4.2
 packages:
-  - cerebellar-models~=0.11.0
+  - cerebellar-models~=0.12.0
   - bsb~=7.0
 storage:
   engine: hdf5
@@ -181,7 +181,7 @@ connectivity:
         - golgi_cell
       morphology_labels:
         - basal_dendrites
-    affinity: 0.5
+    affinity: 0.41
     voxels_pre: 500
     voxels_post: 500
     contacts:
@@ -314,7 +314,7 @@ connectivity:
     voxels_post: 500
     contacts:
       distribution: norm
-      loc: 10
+      loc: 4
       scale: 0.3
   basket_to_purkinje:
     strategy: bsb.connectivity.VoxelIntersection

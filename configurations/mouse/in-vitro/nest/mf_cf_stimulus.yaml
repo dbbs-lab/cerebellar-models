@@ -1,0 +1,40 @@
+simulations:
+  mf_cf_stimulus:
+    simulator: nest
+    resolution: 0.1
+    duration: 2000
+    seed: 1234
+    devices:
+      mf_stimulus:
+        device: poisson_generator
+        rate: 40
+        start: 1200
+        stop: 1260
+        targetting:
+          strategy: cell_model
+          cell_models:
+            - mossy_fibers
+        weight: 1
+        delay: 0.1
+      cf_stimulus:
+        device: poisson_generator
+        rate: 500
+        start: 1250
+        stop: 1260
+        targetting:
+          strategy: cell_model
+          cell_models:
+            - io
+        receptor_type: 1
+        weight: 55
+        delay: 0.1
+    $import:
+      ref: ./basal_vitro.yaml#/simulations/basal_activity
+      values:
+        - cell_models
+        - devices
+$import:
+  ref: ./basal_vitro.yaml#/
+  values:
+    - packages
+    - components

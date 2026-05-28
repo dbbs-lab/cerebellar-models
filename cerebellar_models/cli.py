@@ -71,7 +71,7 @@ class CerebOption:
         self.type = type_term
         """Type of the option"""
 
-    def get_widget(self):  # pragma: no cover
+    def get_widget(self):  # pragma: nocover
         """
         Return the survey widget for this option
         """
@@ -107,7 +107,7 @@ class MicrozonesParams:
         """Duplicated connections obtained from the cell type labelling"""
 
 
-def print_panel(options, title="Configure your cerebellum circuit."):  # pragma: no cover
+def print_panel(options, title="Configure your cerebellum circuit."):  # pragma: nocover
     """
     Print a survey form based on a list of options.
     The result of the form will be saved in its options.
@@ -131,7 +131,7 @@ def print_panel(options, title="Configure your cerebellum circuit."):  # pragma:
 
 @click.group(help="Cerebellar models CLI")
 @click.version_option(__version__)
-def app():  # pragma: no cover
+def app():  # pragma: nocover
     """The main CLI entry point"""
     pass
 
@@ -304,6 +304,23 @@ def _add_microzones(configuration, micro_params: MicrozonesParams):
     return configuration
 
 
+def _filter_simulations_devices(simulations, cell_types):
+    to_remove = []
+    for sim_file, file_simulation in simulations.items():
+        for sim_name, simulation in file_simulation["simulations"].items():
+            for device_name, device in simulation["devices"].items():
+                if (
+                    "record" not in device_name and "cell_models" in device["targetting"]
+                ):  # is a stimulus
+                    targeted_cell_types = device["targetting"]["cell_models"]
+                    if np.any(~np.isin(targeted_cell_types, cell_types)):
+                        to_remove.append([sim_file, sim_name])
+
+    for r in to_remove:
+        del simulations[r[0]]["simulations"][r[1]]
+    return simulations
+
+
 def _configure_simulations(config_simulations):
     simulation_names = list(
         set(
@@ -330,7 +347,30 @@ def _configure_simulations(config_simulations):
     return simulator_options[0].value
 
 
-def _configure_sim_params(config_simulations, simulation_names, micro_params: MicrozonesParams):
+def _get_compatible_models(all_models: dict, circuit_cell_types: list) -> list:
+    """Return model names whose cell_models section covers all parametrized circuit cell types.
+
+    A cell type is considered "parametrized" if it appears in the cell_models section of at least
+    one available model. Models that do not cover all such cell types present in the circuit are
+    excluded from the returned list.
+    """
+    parametrized_ct = set().union(
+        *(set(cfg.get("cell_models", {}).keys()) for cfg in all_models.values())
+    )
+    required_ct = set(circuit_cell_types) & parametrized_ct
+    return [
+        name
+        for name, cfg in all_models.items()
+        if required_ct <= set(cfg.get("cell_models", {}).keys())
+    ]
+
+
+def _configure_sim_params(
+    config_simulations,
+    simulation_names,
+    micro_params: MicrozonesParams,
+    circuit_cell_types: list,
+):
     dict_sim = {"simulations": {}}
     choices = {}
     for sim_name in simulation_names:
@@ -343,32 +383,54 @@ def _configure_sim_params(config_simulations, simulation_names, micro_params: Mi
                         dict_sim[sim][simulation] = params[simulation]
                     else:
                         dict_sim[sim] = params
-        simulation_options = [
-            CerebOption(
-                "Cell models",
-                f"Select the model of neuron for the simulation {sim_name} from the following list:",
-                list(config_simulations[simulator]["cell_models"].keys()),
-                # default_value="eglif_cond_alpha_multisyn"
-            ),
-            CerebOption(
-                "Connection models",
-                f"Select the model of synapse for the simulation {sim_name} from the following list:",
-                list(config_simulations[simulator]["connection_models"].keys()),
-                default_value="tsodyks2_synapse",
-            ),
-        ]
+
+        # Step 1: select cell model — only offer models compatible with the circuit cell types.
+        compatible_models = _get_compatible_models(
+            config_simulations[simulator]["cell_models"],
+            set(circuit_cell_types)
+            - set(dict_sim["simulations"][simulation]["cell_models"].keys()),
+        )
+        cell_model_option = CerebOption(
+            "Cell models",
+            f"Select the model of neuron for the simulation {sim_name} from the following list:",
+            compatible_models,
+            default_value="eglif_cond_alpha_multisyn",
+        )
         print_panel(
-            simulation_options,
-            f"Select the neuron and synapse model to use during the simulation {sim_name}.",
+            [cell_model_option],
+            f"Select the neuron model to use during the simulation {sim_name}.",
         )
-        deep_update(
-            dict_sim, config_simulations[simulator]["cell_models"][simulation_options[0].value]
+        cell_model_config = copy.deepcopy(
+            config_simulations[simulator]["cell_models"][cell_model_option.value]
         )
-        deep_update(
-            dict_sim,
-            config_simulations[simulator]["connection_models"][simulation_options[1].value],
+
+        # Step 2: select synapse model from options embedded in the cell model config
+        conn_model_keys = [
+            k.split("_connection_models")[0]
+            for k in cell_model_config
+            if k.endswith("_connection_models")
+        ]
+        conn_model_option = CerebOption(
+            "Connection models",
+            f"Select the model of synapse for the simulation {sim_name} from the following list:",
+            conn_model_keys,
+            default_value=next((k for k in conn_model_keys if "tsodyks" in k), conn_model_keys[0]),
         )
-        choices[sim_name] = [c.value for c in simulation_options]
+        print_panel(
+            [conn_model_option],
+            f"Select the synapse model to use during the simulation {sim_name}.",
+        )
+
+        # Rename chosen *_connection_models key → connection_models, drop the rest
+        chosen = conn_model_option.value + "_connection_models"
+        cell_model_config["connection_models"] = cell_model_config.pop(chosen)
+        for k in conn_model_keys:
+            k = k + "_connection_models"
+            if k != chosen and k in cell_model_config:
+                del cell_model_config[k]
+
+        deep_update(dict_sim["simulations"][simulation], cell_model_config)
+        choices[sim_name] = [cell_model_option.value, conn_model_option.value]
         # Add simulator to simulation name so that we avoid duplicates
         dict_sim["simulations"][sim_name] = dict_sim["simulations"][simulation]
         del dict_sim["simulations"][simulation]
@@ -492,7 +554,7 @@ def _write_config(configuration, output_folder, extension):
             content = f.read()
             template = json.loads(content, object_pairs_hook=OrderedDict)
         configuration = deep_order(configuration.__tree__(), template)
-    except ConfigurationError as e:  # pragma: no cover
+    except ConfigurationError as e:  # pragma: nocover
         raise ValueError("A BSB error happened when loading your cerebellar circuit") from e
     if extension == "yaml":
         yaml.add_representer(
@@ -501,6 +563,38 @@ def _write_config(configuration, output_folder, extension):
     with open(filename, "w") as outfile:
         outfile.write(get_configuration_parser(extension).generate(configuration, pretty=True))
     print(f"Created the BSB configuration file: {filename}")
+
+
+@app.command(help="Force re-compilation of the NESTML neuron models for NEST.")
+@click.option(
+    "--model_dir",
+    type=click.Path(exists=True, file_okay=False, resolve_path=True),
+    default=None,
+    help="Directory containing the .nestml files (defaults to the package nest_models folder).",
+)
+@click.option(
+    "--build_dir",
+    type=click.Path(file_okay=False, resolve_path=True),
+    default=None,
+    help="Directory where the NEST module will be compiled (defaults to the user cache dir).",
+)
+def build_nestml(model_dir=None, build_dir=None, module_name=None):
+    """
+    Force re-compilation of the NESTML neuron models.
+
+    Deletes any previously cached build and re-runs PyNESTML code generation and
+    installation, equivalent to calling _build_nest_models(redo=True).
+    """
+    from cerebellar_models.nest_models.build_models import _build_nest_models
+
+    kwargs = {"redo": True}
+    if model_dir is not None:
+        kwargs["model_dir"] = model_dir
+    if build_dir is not None:
+        kwargs["build_dir"] = build_dir
+    print("Building NESTML models...")
+    _build_nest_models(**kwargs)
+    print("NESTML models built successfully.")
 
 
 @app.command(help="Create a BSB configuration file for your cerebellum circuit.")
@@ -576,10 +670,10 @@ def configure(
     config_simulations = {
         simulator: {
             "cell_models": load_configs_in_folder(join(state_folder, simulator, "cell_models")),
-            "connection_models": load_configs_in_folder(
-                join(state_folder, simulator, "connection_models")
+            "simulations": _filter_simulations_devices(
+                load_configs_in_folder(join(state_folder, simulator), recursive=False),
+                list(configuration["cell_types"].keys()),
             ),
-            "simulations": load_configs_in_folder(join(state_folder, simulator), recursive=False),
         }
         for simulator in get_folders_in_folder(state_folder)
     }
@@ -587,73 +681,17 @@ def configure(
 
     # Step 5: Simulation models choice
     dict_sim, sim_choices = _configure_sim_params(
-        config_simulations, simulation_names, micro_params
+        config_simulations,
+        simulation_names,
+        micro_params,
+        list(configuration["cell_types"].keys()),
     )
     deep_update(configuration, dict_sim)
 
     # Step 6: remove unnecessary cells and connections
     configuration = _clear_unnecessary_params(configuration)
 
-    # Step 7: Add stimulus simulation
-    if species == "mouse":
-        sim_names = list(configuration["simulations"].keys())
-        for sim_name in sim_names:
-            simulator, _ = sim_name.split("_", 1)
-            if simulator == "nest":
-                default_stim = {
-                    "mf_stimulus": {
-                        "device": "poisson_generator",
-                        "rate": 150,
-                        "start": 1200,
-                        "stop": 1260,
-                        "targetting": {
-                            "strategy": "sphere",
-                            "radius": 90,
-                            "origin": [150, 65, 100],
-                            "cell_models": ["mossy_fibers"],
-                        },
-                        "weight": 1,
-                        "delay": 0.1,
-                    }
-                }
-                simulation_name = "nest_mf_stimulus"
-                if "io" in cell_types:
-                    default_stim["mf_stimulus"] = {
-                        "device": "poisson_generator",
-                        "rate": 40,
-                        "start": 1000,
-                        "stop": 1260,
-                        "targetting": {"strategy": "cell_model", "cell_models": ["mossy_fibers"]},
-                        "weight": 1,
-                        "delay": 0.1,
-                    }
-                    default_stim["cf_stimulus"] = {
-                        "device": "poisson_generator",
-                        "rate": 500,
-                        "start": 1250,
-                        "stop": 1260,
-                        "targetting": {"strategy": "cell_model", "cell_models": ["io"]},
-                        "receptor_type": 1,
-                        "weight": 55 if state == "vitro" else 100.0,
-                        "delay": 0.1,
-                    }
-                    simulation_name = "nest_mf_cf_stimulus"
-                elif "dcn" in cell_types:
-                    default_stim["mf_stimulus"]["targetting"]["origin"][2] = 300
-
-                configuration["simulations"][simulation_name] = copy.deepcopy(
-                    configuration["simulations"][sim_name]
-                )
-                deep_update(configuration["simulations"][simulation_name]["devices"], default_stim)
-                sim_choices[simulation_name] = sim_choices[sim_name]
-            else:  # pragma: no cover
-                raise ValueError(
-                    f"Only nest configurations are implemented. Provided simulator: {simulator}"
-                )
-    else:  # pragma: no cover
-        raise ValueError(f"Only mouse configuration are implemented. Provided species: {species}")
-
-    # Step 8: Recap choices
+    # Step 7: Recap choices
     print("\n\nYour choices are:")
     print(f"Species: {species}")
     print(f"Using atlas: {use_atlas}")
