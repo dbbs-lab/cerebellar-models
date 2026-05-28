@@ -21,7 +21,7 @@ dependencies = [
 [project.optional-dependencies]
 nest = [
     "bsb[nest]~=7.0",
-    "nestml~=8.2",
+    "nestml~=8.3.0-rc2",
 ]
 neuron = [
     "bsb[neuron]~=7.0",

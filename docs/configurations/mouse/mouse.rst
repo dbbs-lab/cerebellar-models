@@ -6,4 +6,6 @@ Mouse
     :caption: Configurations
 
     canonical-circuit
-    extensions
+    extra_cell_types/extra-cell-types
+    nest/nest
+    neuron

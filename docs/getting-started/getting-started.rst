@@ -21,7 +21,7 @@ A modular configuration file to reconstruct cerebellar cortex circuit
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 Configuration files will vary according to the specificities of each model, including the
-specie, the sub-regions of interest, or the subject disease.
+species, the sub-regions of interest, or the subject disease.
 
 To help with the reproducibility of the different results from the `DBBS` we are here decomposing
 the configuration files used in our models in sub-configurations that can be assembled and/or switch
@@ -31,7 +31,7 @@ features to the circuit (e.g. adding a new cell type to the circuit).
 For each configuration file, we also associate a full description of its parameters, including their
 provenance and rationale behind them.
 
-We have split our configuration based on the species studied. For each specie, we also produced a
+We have split our configuration based on the species studied. For each species, we also produced a
 default model or ``canonical circuit`` that will be used as a base for their alternatives. The other
 sub-configurations (that can be used to override or extend the default one) are called
 ``extensions``.
@@ -53,7 +53,7 @@ Assuming you are in the ``cerebellar-models`` folder, run the following command 
     bsb compile configurations/mouse/mouse_cerebellar_cortex.yaml -v4 --clear
 
 This command will produce a microcircuit of the mouse cerebellar cortex and store it in the
-``cerebellum.hdf5`` file. This process might take a while depending on your machine.
+``mouse_cerebellum.hdf5`` file. This process might take a while depending on your machine.
 This command will also automatically produce a separated pdf report on the structure of the microcircuit
 obtained: `bsb_report_structure.pdf` (see also the :doc:`analysis section <../analysis/structural>`).
 

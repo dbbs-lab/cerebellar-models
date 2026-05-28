@@ -57,13 +57,12 @@ class MiniCerebCircuitFixture(RandomStorageFixture, engine_name="hdf5", setup_cl
                             "duration",
                             "seed",
                             "cell_models",
-                            "devices",
                         ],
                     },
                     "cell_models": {
                         "$import": {
                             "ref": join(nest_folder, "cell_models/eglif_cond_alpha_multisyn.yaml")
-                            + "#/simulations/basal_activity/cell_models",
+                            + "#/cell_models",
                             "values": [
                                 "granule_cell",
                                 "golgi_cell",
@@ -75,8 +74,8 @@ class MiniCerebCircuitFixture(RandomStorageFixture, engine_name="hdf5", setup_cl
                     },
                     "connection_models": {
                         "$import": {
-                            "ref": join(nest_folder, "connection_models/static_synapse.yaml")
-                            + "#/simulations/basal_activity/connection_models",
+                            "ref": join(nest_folder, "cell_models/eglif_cond_alpha_multisyn.yaml")
+                            + "#/static_synapse_connection_models",
                             "values": [
                                 "mossy_fibers_to_glomerulus",
                                 "glomerulus_to_granule",
@@ -98,9 +97,12 @@ class MiniCerebCircuitFixture(RandomStorageFixture, engine_name="hdf5", setup_cl
                     },
                     "devices": {
                         "$import": {
-                            "ref": join(nest_folder, "cell_models/eglif_cond_alpha_multisyn.yaml")
+                            "ref": join(nest_folder, "basal_vitro.yaml")
                             + "#/simulations/basal_activity/devices",
                             "values": [
+                                "background_noise",
+                                "mossy_fibers_record",
+                                "glomerulus_record",
                                 "granule_record",
                                 "golgi_record",
                                 "purkinje_record",

@@ -1,0 +1,12 @@
+simulations:
+  mf_cf_stimulus:
+    devices:
+      cf_stimulus:
+        weight: 100.
+
+$import:
+  ref: ../../in-vitro/nest/mf_cf_stimulus.yaml#/
+  values:
+    - packages
+    - simulations
+    - components
