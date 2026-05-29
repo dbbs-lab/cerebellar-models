@@ -72,14 +72,14 @@ class TestUpdateCellTypes(unittest.TestCase):
         """A cell type config key absent from the base config is assigned directly."""
         config = {"cell_types": {"granule_cell": {}}}
         cell_type_configs = {"extra": {"new_section": {"key": "value"}}}
-        result = _update_cell_types(config, ["extra"], cell_type_configs)
+        result = _update_cell_types(config, ["extra"], cell_type_configs, use_atlas=False)
         self.assertIn("new_section", result)
         self.assertEqual(result["new_section"], {"key": "value"})
 
     def test_deep_updates_existing_key(self):
         config = {"cell_types": {"granule_cell": {}}}
         cell_type_configs = {"extra": {"cell_types": {"dcn_p": {"radius": 9.5}}}}
-        result = _update_cell_types(config, ["extra"], cell_type_configs)
+        result = _update_cell_types(config, ["extra"], cell_type_configs, use_atlas=False)
         self.assertIn("dcn_p", result["cell_types"])
         self.assertIn("granule_cell", result["cell_types"])
 
@@ -87,7 +87,7 @@ class TestUpdateCellTypes(unittest.TestCase):
         """Network x/y/z values are maxed across multiple cell type configs."""
         config = {"network": {"x": 400, "y": 400, "z": 100}}
         cell_type_configs = {"extra": {"network": {"x": 200, "z": 495}}}
-        result = _update_cell_types(config, ["extra"], cell_type_configs)
+        result = _update_cell_types(config, ["extra"], cell_type_configs, use_atlas=False)
         self.assertEqual(result["network"]["x"], 400)  # max(400, 200)
         self.assertEqual(result["network"]["z"], 495)  # max(100, 495)
 

@@ -334,7 +334,7 @@ class MorphologyBender:
                     if skip_negative or (np.absolute(scaled_diff_rotation) > max_angle).any():
                         skip_negative = True
                     else:
-                        # test positive rotation
+                        # test negative rotation
                         to_rotate, old_voxel_neg = self._test_new_rotation(
                             scaled_diff_rotation, source, target, branch_labels, old_voxel_neg
                         )
