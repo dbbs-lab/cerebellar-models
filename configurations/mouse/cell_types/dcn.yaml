@@ -6,10 +6,9 @@ regions:
     children:
       - dcn_layer
 partitions:
-  granular_layer:
-    origin: [0, 0, 200]
   dcn_layer:
     thickness: 200
+    origin: [0, 0, -200]
 cell_types:
   dcn_p:
     spatial:

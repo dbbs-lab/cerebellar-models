@@ -1,0 +1,56 @@
+simulations:
+  lfp_stimulus:
+    simulator: nest
+    resolution: 0.1
+    duration: 2500
+    seed: 1234
+    devices:
+      granule_multimeter:
+        device: multimeter
+        delay: 0.1
+        properties: [ 'I_syn_ampa', 'I_syn_nmda', 'I_syn_gaba' ]
+        units: [ 'pA', 'pA', 'pA' ]
+        targetting:
+          strategy: sphere
+          radius: 10.
+          origin:
+            - 100
+            - 100
+            - 65
+          cell_models:
+            - granule_cell
+      lfp_stim:
+        delay: 0.1
+        device: external
+        nest_model: spike_generator
+        constants:
+          spike_times: [ 1000. ]
+        targetting:
+          cell_models:
+            - mossy_fibers
+          strategy: cell_model
+        weight: 1.0
+      $import:
+        ref: ./basal_vitro.yaml#/simulations/basal_activity/devices
+        values:
+          - mossy_fibers_record
+          - glomerulus_record
+          - granule_record
+          - golgi_record
+          - unipolar_brush_record
+          - ubc_glomerulus_record
+          - purkinje_record
+          - basket_record
+          - stellate_record
+          - dcn_p_record
+          - dcn_i_record
+          - io_record
+    $import:
+      ref: ./basal_vitro.yaml#/simulations/basal_activity
+      values:
+        - cell_models
+$import:
+  ref: ./basal_vitro.yaml#/
+  values:
+    - packages
+    - components

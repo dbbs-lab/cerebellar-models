@@ -130,14 +130,14 @@ class Report:
         if plot_name in self.plots:
             self.plots[plot_name].save_figure(output_name, dpi, pad, **kwargs)
 
-    def show_plot(self, plot_name):  # pragma:nocover
+    def show_plot(self, plot_name):  # pragma: nocover
         """
         Show one of the report's plots.
         """
         if plot_name in self.plots:
             self.plots[plot_name].show()
 
-    def show(self):  # pragma:nocover
+    def show(self):  # pragma: nocover
         """
         Show all report's plots one by one.
         """
@@ -169,7 +169,7 @@ class BSBReport(Report):
         ct_names = []
         for ps in self.scaffold.get_placement_sets():
             ct_name = ps.cell_type.name
-            for labels in ps.get_unique_labels():
+            for labels in ScaffoldPlot.get_unique_labels(ps):
                 ct_names.append(ScaffoldPlot.get_labelled_ct_name(ct_name, labels))
         return ct_names
 
