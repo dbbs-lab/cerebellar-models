@@ -29,7 +29,7 @@
 #include "eglif_io_nestml.h"
 #include "eglif_pc_nestml.h"
 #include "eglif_mli.h"
-#include "eglif_dcnp.h"
+// #include "eglif_dcnp.h"
 #include "stdp_synapse_sinexp.h"
 //#include "stdp_synapse_cosexp.h"
 #include "stdp_synapse_alpha.h"
@@ -64,7 +64,7 @@ void custom_stdp_module::initialize()
     nest::register_eglif_pc_nestml("eglif_pc_nestml");
   
     nest::register_eglif_mli("eglif_mli");
-    nest::register_eglif_dcnp("eglif_dcnp");
+    // nest::register_eglif_dcnp("eglif_dcnp");
     nest::register_stdp_synapse_sinexp( "stdp_synapse_sinexp" );
    
     nest::register_stdp_synapse_alpha( "stdp_synapse_alpha" );

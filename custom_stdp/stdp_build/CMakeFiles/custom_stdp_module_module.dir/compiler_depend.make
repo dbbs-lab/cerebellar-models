@@ -16,8 +16,8 @@ CMakeFiles/custom_stdp_module_module.dir/basic_neuron_nestml.o: ../basic_neuron_
   /usr/include/x86_64-linux-gnu/gnu/stubs-64.h \
   /usr/include/x86_64-linux-gnu/c++/11/bits/cpu_defines.h \
   /usr/include/c++/11/pstl/pstl_config.h \
-  /home/emiliano/Documenti/other_env/other_e/include/nest/numerics.h \
-  /home/emiliano/Documenti/other_env/other_e/include/nest/config.h \
+  /home/emiliano/Documenti/better_env/benv/include/nest/numerics.h \
+  /home/emiliano/Documenti/better_env/benv/include/nest/config.h \
   /usr/include/c++/11/cassert \
   /usr/include/assert.h \
   /usr/include/c++/11/cmath \
@@ -102,8 +102,8 @@ CMakeFiles/custom_stdp_module_module.dir/basic_neuron_nestml.o: ../basic_neuron_
   /usr/include/c++/11/tr1/poly_hermite.tcc \
   /usr/include/c++/11/tr1/poly_laguerre.tcc \
   /usr/include/c++/11/tr1/riemann_zeta.tcc \
-  /home/emiliano/Documenti/other_env/other_e/include/nest/exceptions.h \
-  /home/emiliano/Documenti/other_env/other_e/include/nest/nest_time.h \
+  /home/emiliano/Documenti/better_env/benv/include/nest/exceptions.h \
+  /home/emiliano/Documenti/better_env/benv/include/nest/nest_time.h \
   /usr/include/c++/11/cfloat \
   /usr/lib/gcc/x86_64-linux-gnu/11/include/float.h \
   /usr/include/c++/11/cstdlib \
@@ -220,8 +220,8 @@ CMakeFiles/custom_stdp_module_module.dir/basic_neuron_nestml.o: ../basic_neuron_
   /usr/include/c++/11/bits/ostream.tcc \
   /usr/include/c++/11/istream \
   /usr/include/c++/11/bits/istream.tcc \
-  /home/emiliano/Documenti/other_env/other_e/include/nest/numerics.h \
-  /home/emiliano/Documenti/other_env/other_e/include/nest/nest_types.h \
+  /home/emiliano/Documenti/better_env/benv/include/nest/numerics.h \
+  /home/emiliano/Documenti/better_env/benv/include/nest/nest_types.h \
   /usr/include/c++/11/climits \
   /usr/lib/gcc/x86_64-linux-gnu/11/include/limits.h \
   /usr/lib/gcc/x86_64-linux-gnu/11/include/syslimits.h \
@@ -233,7 +233,7 @@ CMakeFiles/custom_stdp_module_module.dir/basic_neuron_nestml.o: ../basic_neuron_
   /usr/include/x86_64-linux-gnu/bits/xopen_lim.h \
   /usr/include/x86_64-linux-gnu/bits/uio_lim.h \
   /usr/include/c++/11/cstddef \
-  /home/emiliano/Documenti/other_env/other_e/include/nest/name.h \
+  /home/emiliano/Documenti/better_env/benv/include/nest/name.h \
   /usr/include/c++/11/deque \
   /usr/include/c++/11/bits/stl_uninitialized.h \
   /usr/include/c++/11/bits/stl_deque.h \
@@ -251,17 +251,17 @@ CMakeFiles/custom_stdp_module_module.dir/basic_neuron_nestml.o: ../basic_neuron_
   /usr/include/c++/11/bits/invoke.h \
   /usr/include/c++/11/bits/stl_multimap.h \
   /usr/include/c++/11/bits/erase_if.h \
-  /home/emiliano/Documenti/other_env/other_e/include/nest/sliexceptions.h \
+  /home/emiliano/Documenti/better_env/benv/include/nest/sliexceptions.h \
   /usr/include/c++/11/vector \
   /usr/include/c++/11/bits/stl_vector.h \
   /usr/include/c++/11/bits/stl_bvector.h \
   /usr/include/c++/11/bits/vector.tcc \
-  /home/emiliano/Documenti/other_env/other_e/include/nest/kernel_manager.h \
-  /home/emiliano/Documenti/other_env/other_e/include/nest/connection_manager.h \
-  /home/emiliano/Documenti/other_env/other_e/include/nest/manager_interface.h \
-  /home/emiliano/Documenti/other_env/other_e/include/nest/dictdatum.h \
-  /home/emiliano/Documenti/other_env/other_e/include/nest/dict.h \
-  /home/emiliano/Documenti/other_env/other_e/include/nest/token.h \
+  /home/emiliano/Documenti/better_env/benv/include/nest/kernel_manager.h \
+  /home/emiliano/Documenti/better_env/benv/include/nest/connection_manager.h \
+  /home/emiliano/Documenti/better_env/benv/include/nest/manager_interface.h \
+  /home/emiliano/Documenti/better_env/benv/include/nest/dictdatum.h \
+  /home/emiliano/Documenti/better_env/benv/include/nest/dict.h \
+  /home/emiliano/Documenti/better_env/benv/include/nest/token.h \
   /usr/include/c++/11/iomanip \
   /usr/include/c++/11/locale \
   /usr/include/c++/11/bits/locale_facets_nonio.h \
@@ -276,20 +276,20 @@ CMakeFiles/custom_stdp_module_module.dir/basic_neuron_nestml.o: ../basic_neuron_
   /usr/include/c++/11/bits/quoted_string.h \
   /usr/include/c++/11/sstream \
   /usr/include/c++/11/bits/sstream.tcc \
-  /home/emiliano/Documenti/other_env/other_e/include/nest/datum.h \
-  /home/emiliano/Documenti/other_env/other_e/include/nest/slitype.h \
-  /home/emiliano/Documenti/other_env/other_e/include/nest/slifunction.h \
-  /home/emiliano/Documenti/other_env/other_e/include/nest/interpret.h \
+  /home/emiliano/Documenti/better_env/benv/include/nest/datum.h \
+  /home/emiliano/Documenti/better_env/benv/include/nest/slitype.h \
+  /home/emiliano/Documenti/better_env/benv/include/nest/slifunction.h \
+  /home/emiliano/Documenti/better_env/benv/include/nest/interpret.h \
   /usr/include/c++/11/list \
   /usr/include/c++/11/bits/stl_list.h \
   /usr/include/c++/11/bits/allocated_ptr.h \
   /usr/include/c++/11/bits/list.tcc \
-  /home/emiliano/Documenti/other_env/other_e/include/nest/sliactions.h \
-  /home/emiliano/Documenti/other_env/other_e/include/nest/slibuiltins.h \
-  /home/emiliano/Documenti/other_env/other_e/include/nest/slimodule.h \
-  /home/emiliano/Documenti/other_env/other_e/include/nest/tokenstack.h \
-  /home/emiliano/Documenti/other_env/other_e/include/nest/tarrayobj.h \
-  /home/emiliano/Documenti/other_env/other_e/include/nest/tokenarray.h \
+  /home/emiliano/Documenti/better_env/benv/include/nest/sliactions.h \
+  /home/emiliano/Documenti/better_env/benv/include/nest/slibuiltins.h \
+  /home/emiliano/Documenti/better_env/benv/include/nest/slimodule.h \
+  /home/emiliano/Documenti/better_env/benv/include/nest/tokenstack.h \
+  /home/emiliano/Documenti/better_env/benv/include/nest/tarrayobj.h \
+  /home/emiliano/Documenti/better_env/benv/include/nest/tokenarray.h \
   /usr/include/c++/11/algorithm \
   /usr/include/c++/11/bits/stl_algo.h \
   /usr/include/c++/11/bits/algorithmfwd.h \
@@ -306,8 +306,8 @@ CMakeFiles/custom_stdp_module_module.dir/basic_neuron_nestml.o: ../basic_neuron_
   /usr/include/c++/11/bits/enable_special_members.h \
   /usr/include/c++/11/bits/unordered_map.h \
   /usr/include/c++/11/pstl/execution_defs.h \
-  /home/emiliano/Documenti/other_env/other_e/include/nest/lockptrdatum.h \
-  /home/emiliano/Documenti/other_env/other_e/include/nest/lockptr.h \
+  /home/emiliano/Documenti/better_env/benv/include/nest/lockptrdatum.h \
+  /home/emiliano/Documenti/better_env/benv/include/nest/lockptr.h \
   /usr/include/c++/11/memory \
   /usr/include/c++/11/bits/stl_raw_storage_iter.h \
   /usr/include/c++/11/bits/align.h \
@@ -320,49 +320,49 @@ CMakeFiles/custom_stdp_module_module.dir/basic_neuron_nestml.o: ../basic_neuron_
   /usr/include/c++/11/bits/atomic_lockfree_defines.h \
   /usr/include/c++/11/backward/auto_ptr.h \
   /usr/include/c++/11/pstl/glue_memory_defs.h \
-  /home/emiliano/Documenti/other_env/other_e/include/nest/stopwatch.h \
+  /home/emiliano/Documenti/better_env/benv/include/nest/stopwatch.h \
   /usr/include/x86_64-linux-gnu/sys/time.h \
-  /home/emiliano/Documenti/other_env/other_e/include/nest/conn_builder.h \
+  /home/emiliano/Documenti/better_env/benv/include/nest/conn_builder.h \
   /usr/include/c++/11/set \
   /usr/include/c++/11/bits/stl_set.h \
   /usr/include/c++/11/bits/stl_multiset.h \
-  /home/emiliano/Documenti/other_env/other_e/include/nest/conn_parameter.h \
-  /home/emiliano/Documenti/other_env/other_e/include/nest/exceptions.h \
-  /home/emiliano/Documenti/other_env/other_e/include/nest/nest_datums.h \
-  /home/emiliano/Documenti/other_env/other_e/include/nest/connection_id.h \
-  /home/emiliano/Documenti/other_env/other_e/include/nest/arraydatum.h \
-  /home/emiliano/Documenti/other_env/other_e/include/nest/aggregatedatum.h \
-  /home/emiliano/Documenti/other_env/other_e/include/nest/allocator.h \
-  /home/emiliano/Documenti/other_env/other_e/include/nest/dictutils.h \
-  /home/emiliano/Documenti/other_env/other_e/include/nest/doubledatum.h \
-  /home/emiliano/Documenti/other_env/other_e/include/nest/numericdatum.h \
-  /home/emiliano/Documenti/other_env/other_e/include/nest/genericdatum.h \
-  /home/emiliano/Documenti/other_env/other_e/include/nest/integerdatum.h \
-  /home/emiliano/Documenti/other_env/other_e/include/nest/namedatum.h \
-  /home/emiliano/Documenti/other_env/other_e/include/nest/tokenutils.h \
-  /home/emiliano/Documenti/other_env/other_e/include/nest/nestmodule.h \
-  /home/emiliano/Documenti/other_env/other_e/include/nest/event.h \
+  /home/emiliano/Documenti/better_env/benv/include/nest/conn_parameter.h \
+  /home/emiliano/Documenti/better_env/benv/include/nest/exceptions.h \
+  /home/emiliano/Documenti/better_env/benv/include/nest/nest_datums.h \
+  /home/emiliano/Documenti/better_env/benv/include/nest/connection_id.h \
+  /home/emiliano/Documenti/better_env/benv/include/nest/arraydatum.h \
+  /home/emiliano/Documenti/better_env/benv/include/nest/aggregatedatum.h \
+  /home/emiliano/Documenti/better_env/benv/include/nest/allocator.h \
+  /home/emiliano/Documenti/better_env/benv/include/nest/dictutils.h \
+  /home/emiliano/Documenti/better_env/benv/include/nest/doubledatum.h \
+  /home/emiliano/Documenti/better_env/benv/include/nest/numericdatum.h \
+  /home/emiliano/Documenti/better_env/benv/include/nest/genericdatum.h \
+  /home/emiliano/Documenti/better_env/benv/include/nest/integerdatum.h \
+  /home/emiliano/Documenti/better_env/benv/include/nest/namedatum.h \
+  /home/emiliano/Documenti/better_env/benv/include/nest/tokenutils.h \
+  /home/emiliano/Documenti/better_env/benv/include/nest/nestmodule.h \
+  /home/emiliano/Documenti/better_env/benv/include/nest/event.h \
   /usr/include/c++/11/cstring \
   /usr/include/string.h \
   /usr/include/strings.h \
   /usr/include/x86_64-linux-gnu/bits/strings_fortified.h \
   /usr/include/x86_64-linux-gnu/bits/string_fortified.h \
-  /home/emiliano/Documenti/other_env/other_e/include/nest/spike_data.h \
-  /home/emiliano/Documenti/other_env/other_e/include/nest/target.h \
-  /home/emiliano/Documenti/other_env/other_e/include/nest/static_assert.h \
-  /home/emiliano/Documenti/other_env/other_e/include/nest/vp_manager.h \
+  /home/emiliano/Documenti/better_env/benv/include/nest/spike_data.h \
+  /home/emiliano/Documenti/better_env/benv/include/nest/target.h \
+  /home/emiliano/Documenti/better_env/benv/include/nest/static_assert.h \
+  /home/emiliano/Documenti/better_env/benv/include/nest/vp_manager.h \
   /usr/lib/gcc/x86_64-linux-gnu/11/include/omp.h \
-  /home/emiliano/Documenti/other_env/other_e/include/nest/generic_factory.h \
-  /home/emiliano/Documenti/other_env/other_e/include/nest/ntree.h \
+  /home/emiliano/Documenti/better_env/benv/include/nest/generic_factory.h \
+  /home/emiliano/Documenti/better_env/benv/include/nest/ntree.h \
   /usr/include/c++/11/bitset \
   /usr/include/c++/11/iterator \
   /usr/include/c++/11/bits/stream_iterator.h \
-  /home/emiliano/Documenti/other_env/other_e/include/nest/position.h \
-  /home/emiliano/Documenti/other_env/other_e/include/nest/compose.hpp \
-  /home/emiliano/Documenti/other_env/other_e/include/nest/parameter.h \
-  /home/emiliano/Documenti/other_env/other_e/include/nest/nest_names.h \
-  /home/emiliano/Documenti/other_env/other_e/include/nest/node_collection.h \
-  /home/emiliano/Documenti/other_env/other_e/include/nest/random_generators.h \
+  /home/emiliano/Documenti/better_env/benv/include/nest/position.h \
+  /home/emiliano/Documenti/better_env/benv/include/nest/compose.hpp \
+  /home/emiliano/Documenti/better_env/benv/include/nest/parameter.h \
+  /home/emiliano/Documenti/better_env/benv/include/nest/nest_names.h \
+  /home/emiliano/Documenti/better_env/benv/include/nest/node_collection.h \
+  /home/emiliano/Documenti/better_env/benv/include/nest/random_generators.h \
   /usr/include/c++/11/random \
   /usr/include/c++/11/bits/random.h \
   /usr/include/x86_64-linux-gnu/c++/11/bits/opt_random.h \
@@ -370,7 +370,7 @@ CMakeFiles/custom_stdp_module_module.dir/basic_neuron_nestml.o: ../basic_neuron_
   /usr/include/c++/11/numeric \
   /usr/include/c++/11/bits/stl_numeric.h \
   /usr/include/c++/11/pstl/glue_numeric_defs.h \
-  /home/emiliano/Documenti/other_env/other_e/include/nest/randutils.hpp \
+  /home/emiliano/Documenti/better_env/benv/include/nest/randutils.hpp \
   /usr/include/c++/11/chrono \
   /usr/include/c++/11/ratio \
   /usr/include/c++/11/bits/parse_numbers.h \
@@ -386,11 +386,11 @@ CMakeFiles/custom_stdp_module_module.dir/basic_neuron_nestml.o: ../basic_neuron_
   /usr/include/x86_64-linux-gnu/bits/unistd.h \
   /usr/include/x86_64-linux-gnu/bits/unistd_ext.h \
   /usr/include/linux/close_range.h \
-  /home/emiliano/Documenti/other_env/other_e/include/nest/sharedptrdatum.h \
-  /home/emiliano/Documenti/other_env/other_e/include/nest/connector_base.h \
-  /home/emiliano/Documenti/other_env/other_e/include/nest/sort.h \
-  /home/emiliano/Documenti/other_env/other_e/include/nest/block_vector.h \
-  /home/emiliano/Documenti/other_env/other_e/include/nest/iterator_pair.h \
+  /home/emiliano/Documenti/better_env/benv/include/nest/sharedptrdatum.h \
+  /home/emiliano/Documenti/better_env/benv/include/nest/connector_base.h \
+  /home/emiliano/Documenti/better_env/benv/include/nest/sort.h \
+  /home/emiliano/Documenti/better_env/benv/include/nest/block_vector.h \
+  /home/emiliano/Documenti/better_env/benv/include/nest/iterator_pair.h \
   /usr/include/boost/iterator/iterator_adaptor.hpp \
   /usr/include/boost/static_assert.hpp \
   /usr/include/boost/config.hpp \
@@ -616,7 +616,7 @@ CMakeFiles/custom_stdp_module_module.dir/basic_neuron_nestml.o: ../basic_neuron_
   /usr/include/boost/utility/swap.hpp \
   /usr/include/boost/core/swap.hpp \
   /usr/include/boost/core/enable_if.hpp \
-  /home/emiliano/Documenti/other_env/other_e/include/nest/source.h \
+  /home/emiliano/Documenti/better_env/benv/include/nest/source.h \
   /usr/include/boost/sort/spreadsort/spreadsort.hpp \
   /usr/include/boost/type_traits.hpp \
   /usr/include/boost/type_traits/aligned_storage.hpp \
@@ -753,24 +753,24 @@ CMakeFiles/custom_stdp_module_module.dir/basic_neuron_nestml.o: ../basic_neuron_
   /usr/include/boost/sort/spreadsort/detail/float_sort.hpp \
   /usr/include/boost/sort/spreadsort/string_sort.hpp \
   /usr/include/boost/sort/spreadsort/detail/string_sort.hpp \
-  /home/emiliano/Documenti/other_env/other_e/include/nest/vector_util.h \
-  /home/emiliano/Documenti/other_env/other_e/include/nest/common_synapse_properties.h \
-  /home/emiliano/Documenti/other_env/other_e/include/nest/connector_model.h \
-  /home/emiliano/Documenti/other_env/other_e/include/nest/enum_bitfield.h \
-  /home/emiliano/Documenti/other_env/other_e/include/nest/secondary_event.h \
-  /home/emiliano/Documenti/other_env/other_e/include/nest/node.h \
-  /home/emiliano/Documenti/other_env/other_e/include/nest/deprecation_warning.h \
-  /home/emiliano/Documenti/other_env/other_e/include/nest/histentry.h \
-  /home/emiliano/Documenti/other_env/other_e/include/nest/connection_label.h \
-  /home/emiliano/Documenti/other_env/other_e/include/nest/nest.h \
-  /home/emiliano/Documenti/other_env/other_e/include/nest/logging.h \
-  /home/emiliano/Documenti/other_env/other_e/include/nest/spikecounter.h \
-  /home/emiliano/Documenti/other_env/other_e/include/nest/nest_timeconverter.h \
-  /home/emiliano/Documenti/other_env/other_e/include/nest/per_thread_bool_indicator.h \
+  /home/emiliano/Documenti/better_env/benv/include/nest/vector_util.h \
+  /home/emiliano/Documenti/better_env/benv/include/nest/common_synapse_properties.h \
+  /home/emiliano/Documenti/better_env/benv/include/nest/connector_model.h \
+  /home/emiliano/Documenti/better_env/benv/include/nest/enum_bitfield.h \
+  /home/emiliano/Documenti/better_env/benv/include/nest/secondary_event.h \
+  /home/emiliano/Documenti/better_env/benv/include/nest/node.h \
+  /home/emiliano/Documenti/better_env/benv/include/nest/deprecation_warning.h \
+  /home/emiliano/Documenti/better_env/benv/include/nest/histentry.h \
+  /home/emiliano/Documenti/better_env/benv/include/nest/connection_label.h \
+  /home/emiliano/Documenti/better_env/benv/include/nest/nest.h \
+  /home/emiliano/Documenti/better_env/benv/include/nest/logging.h \
+  /home/emiliano/Documenti/better_env/benv/include/nest/spikecounter.h \
+  /home/emiliano/Documenti/better_env/benv/include/nest/nest_timeconverter.h \
+  /home/emiliano/Documenti/better_env/benv/include/nest/per_thread_bool_indicator.h \
   /usr/include/c++/11/atomic \
-  /home/emiliano/Documenti/other_env/other_e/include/nest/send_buffer_position.h \
-  /home/emiliano/Documenti/other_env/other_e/include/nest/source_table.h \
-  /home/emiliano/Documenti/other_env/other_e/include/nest/mpi_manager.h \
+  /home/emiliano/Documenti/better_env/benv/include/nest/send_buffer_position.h \
+  /home/emiliano/Documenti/better_env/benv/include/nest/source_table.h \
+  /home/emiliano/Documenti/better_env/benv/include/nest/mpi_manager.h \
   /usr/lib/x86_64-linux-gnu/openmpi/include/mpi.h \
   /usr/lib/x86_64-linux-gnu/openmpi/include/mpi_portable_platform.h \
   /usr/lib/x86_64-linux-gnu/openmpi/include/openmpi/ompi/mpi/cxx/mpicxx.h \
@@ -804,88 +804,88 @@ CMakeFiles/custom_stdp_module_module.dir/basic_neuron_nestml.o: ../basic_neuron_
   /usr/lib/x86_64-linux-gnu/openmpi/include/openmpi/ompi/mpi/cxx/info_inln.h \
   /usr/lib/x86_64-linux-gnu/openmpi/include/openmpi/ompi/mpi/cxx/win_inln.h \
   /usr/lib/x86_64-linux-gnu/openmpi/include/openmpi/ompi/mpi/cxx/file_inln.h \
-  /home/emiliano/Documenti/other_env/other_e/include/nest/target_data.h \
-  /home/emiliano/Documenti/other_env/other_e/include/nest/source_table_position.h \
-  /home/emiliano/Documenti/other_env/other_e/include/nest/target_table.h \
-  /home/emiliano/Documenti/other_env/other_e/include/nest/target_table_devices.h \
-  /home/emiliano/Documenti/other_env/other_e/include/nest/event_delivery_manager.h \
-  /home/emiliano/Documenti/other_env/other_e/include/nest/buffer_resize_log.h \
-  /home/emiliano/Documenti/other_env/other_e/include/nest/io_manager.h \
-  /home/emiliano/Documenti/other_env/other_e/include/nest/recording_backend.h \
-  /home/emiliano/Documenti/other_env/other_e/include/nest/stimulation_backend.h \
-  /home/emiliano/Documenti/other_env/other_e/include/nest/stimulation_device.h \
-  /home/emiliano/Documenti/other_env/other_e/include/nest/device.h \
-  /home/emiliano/Documenti/other_env/other_e/include/nest/device_node.h \
-  /home/emiliano/Documenti/other_env/other_e/include/nest/logging_manager.h \
-  /home/emiliano/Documenti/other_env/other_e/include/nest/model_manager.h \
-  /home/emiliano/Documenti/other_env/other_e/include/nest/genericmodel.h \
-  /home/emiliano/Documenti/other_env/other_e/include/nest/model.h \
-  /home/emiliano/Documenti/other_env/other_e/include/nest/modelrange_manager.h \
-  /home/emiliano/Documenti/other_env/other_e/include/nest/modelrange.h \
-  /home/emiliano/Documenti/other_env/other_e/include/nest/module_manager.h \
+  /home/emiliano/Documenti/better_env/benv/include/nest/target_data.h \
+  /home/emiliano/Documenti/better_env/benv/include/nest/source_table_position.h \
+  /home/emiliano/Documenti/better_env/benv/include/nest/target_table.h \
+  /home/emiliano/Documenti/better_env/benv/include/nest/target_table_devices.h \
+  /home/emiliano/Documenti/better_env/benv/include/nest/event_delivery_manager.h \
+  /home/emiliano/Documenti/better_env/benv/include/nest/buffer_resize_log.h \
+  /home/emiliano/Documenti/better_env/benv/include/nest/io_manager.h \
+  /home/emiliano/Documenti/better_env/benv/include/nest/recording_backend.h \
+  /home/emiliano/Documenti/better_env/benv/include/nest/stimulation_backend.h \
+  /home/emiliano/Documenti/better_env/benv/include/nest/stimulation_device.h \
+  /home/emiliano/Documenti/better_env/benv/include/nest/device.h \
+  /home/emiliano/Documenti/better_env/benv/include/nest/device_node.h \
+  /home/emiliano/Documenti/better_env/benv/include/nest/logging_manager.h \
+  /home/emiliano/Documenti/better_env/benv/include/nest/model_manager.h \
+  /home/emiliano/Documenti/better_env/benv/include/nest/genericmodel.h \
+  /home/emiliano/Documenti/better_env/benv/include/nest/model.h \
+  /home/emiliano/Documenti/better_env/benv/include/nest/modelrange_manager.h \
+  /home/emiliano/Documenti/better_env/benv/include/nest/modelrange.h \
+  /home/emiliano/Documenti/better_env/benv/include/nest/module_manager.h \
   /usr/include/ltdl.h \
   /usr/include/libltdl/lt_system.h \
   /usr/include/c++/11/stdlib.h \
   /usr/include/libltdl/lt_error.h \
   /usr/include/libltdl/lt_dlloader.h \
-  /home/emiliano/Documenti/other_env/other_e/include/nest/music_manager.h \
-  /home/emiliano/Documenti/other_env/other_e/include/nest/node_manager.h \
-  /home/emiliano/Documenti/other_env/other_e/include/nest/sparse_node_array.h \
-  /home/emiliano/Documenti/other_env/other_e/include/nest/random_manager.h \
-  /home/emiliano/Documenti/other_env/other_e/include/nest/simulation_manager.h \
-  /home/emiliano/Documenti/other_env/other_e/include/nest/sp_manager.h \
-  /home/emiliano/Documenti/other_env/other_e/include/nest/growth_curve_factory.h \
-  /home/emiliano/Documenti/other_env/other_e/include/nest/growth_curve.h \
+  /home/emiliano/Documenti/better_env/benv/include/nest/music_manager.h \
+  /home/emiliano/Documenti/better_env/benv/include/nest/node_manager.h \
+  /home/emiliano/Documenti/better_env/benv/include/nest/sparse_node_array.h \
+  /home/emiliano/Documenti/better_env/benv/include/nest/random_manager.h \
+  /home/emiliano/Documenti/better_env/benv/include/nest/simulation_manager.h \
+  /home/emiliano/Documenti/better_env/benv/include/nest/sp_manager.h \
+  /home/emiliano/Documenti/better_env/benv/include/nest/growth_curve_factory.h \
+  /home/emiliano/Documenti/better_env/benv/include/nest/growth_curve.h \
   /usr/include/c++/11/fstream \
   /usr/include/x86_64-linux-gnu/c++/11/bits/basic_file.h \
   /usr/include/x86_64-linux-gnu/c++/11/bits/c++io.h \
   /usr/include/c++/11/bits/fstream.tcc \
-  /home/emiliano/Documenti/other_env/other_e/include/nest/nest_impl.h \
-  /home/emiliano/Documenti/other_env/other_e/include/nest/connector_model_impl.h \
-  /home/emiliano/Documenti/other_env/other_e/include/nest/delay_checker.h \
-  /home/emiliano/Documenti/other_env/other_e/include/nest/kernel_manager.h \
-  /home/emiliano/Documenti/other_env/other_e/include/nest/secondary_event_impl.h \
-  /home/emiliano/Documenti/other_env/other_e/include/nest/genericmodel_impl.h \
-  /home/emiliano/Documenti/other_env/other_e/include/nest/model_manager_impl.h \
-  /home/emiliano/Documenti/other_env/other_e/include/nest/string_utils.h \
-  /home/emiliano/Documenti/other_env/other_e/include/nest/target_identifier.h \
-  /home/emiliano/Documenti/other_env/other_e/include/nest/universal_data_logger_impl.h \
-  /home/emiliano/Documenti/other_env/other_e/include/nest/universal_data_logger.h \
-  /home/emiliano/Documenti/other_env/other_e/include/nest/recordables_map.h \
-  /home/emiliano/Documenti/other_env/other_e/include/nest/event_delivery_manager_impl.h \
-  /home/emiliano/Documenti/other_env/other_e/include/nest/connection_manager_impl.h \
-  /home/emiliano/Documenti/other_env/other_e/include/nest/conn_builder_factory.h \
-  /home/emiliano/Documenti/other_env/other_e/include/nest/target_table_devices_impl.h \
-  /home/emiliano/Documenti/other_env/other_e/include/nest/vp_manager_impl.h \
-  /home/emiliano/Documenti/other_env/other_e/include/nest/mpi_manager_impl.h \
-  /home/emiliano/Documenti/other_env/other_e/include/nest/dict.h \
-  /home/emiliano/Documenti/other_env/other_e/include/nest/dictutils.h \
-  /home/emiliano/Documenti/other_env/other_e/include/nest/doubledatum.h \
-  /home/emiliano/Documenti/other_env/other_e/include/nest/integerdatum.h \
-  /home/emiliano/Documenti/other_env/other_e/include/nest/lockptrdatum.h \
+  /home/emiliano/Documenti/better_env/benv/include/nest/nest_impl.h \
+  /home/emiliano/Documenti/better_env/benv/include/nest/connector_model_impl.h \
+  /home/emiliano/Documenti/better_env/benv/include/nest/delay_checker.h \
+  /home/emiliano/Documenti/better_env/benv/include/nest/kernel_manager.h \
+  /home/emiliano/Documenti/better_env/benv/include/nest/secondary_event_impl.h \
+  /home/emiliano/Documenti/better_env/benv/include/nest/genericmodel_impl.h \
+  /home/emiliano/Documenti/better_env/benv/include/nest/model_manager_impl.h \
+  /home/emiliano/Documenti/better_env/benv/include/nest/string_utils.h \
+  /home/emiliano/Documenti/better_env/benv/include/nest/target_identifier.h \
+  /home/emiliano/Documenti/better_env/benv/include/nest/universal_data_logger_impl.h \
+  /home/emiliano/Documenti/better_env/benv/include/nest/universal_data_logger.h \
+  /home/emiliano/Documenti/better_env/benv/include/nest/recordables_map.h \
+  /home/emiliano/Documenti/better_env/benv/include/nest/event_delivery_manager_impl.h \
+  /home/emiliano/Documenti/better_env/benv/include/nest/connection_manager_impl.h \
+  /home/emiliano/Documenti/better_env/benv/include/nest/conn_builder_factory.h \
+  /home/emiliano/Documenti/better_env/benv/include/nest/target_table_devices_impl.h \
+  /home/emiliano/Documenti/better_env/benv/include/nest/vp_manager_impl.h \
+  /home/emiliano/Documenti/better_env/benv/include/nest/mpi_manager_impl.h \
+  /home/emiliano/Documenti/better_env/benv/include/nest/dict.h \
+  /home/emiliano/Documenti/better_env/benv/include/nest/dictutils.h \
+  /home/emiliano/Documenti/better_env/benv/include/nest/doubledatum.h \
+  /home/emiliano/Documenti/better_env/benv/include/nest/integerdatum.h \
+  /home/emiliano/Documenti/better_env/benv/include/nest/lockptrdatum.h \
   ../basic_neuron_nestml.h \
-  /home/emiliano/Documenti/other_env/other_e/include/nest/config.h \
-  /home/emiliano/Documenti/other_env/other_e/include/nest/structural_plasticity_node.h \
-  /home/emiliano/Documenti/other_env/other_e/include/nest/synaptic_element.h \
-  /home/emiliano/Documenti/other_env/other_e/include/nest/connection.h \
-  /home/emiliano/Documenti/other_env/other_e/include/nest/connector_base_impl.h \
-  /home/emiliano/Documenti/other_env/other_e/include/nest/weight_recorder.h \
-  /home/emiliano/Documenti/other_env/other_e/include/nest/recording_device.h \
-  /home/emiliano/Documenti/other_env/other_e/include/nest/syn_id_delay.h \
-  /home/emiliano/Documenti/other_env/other_e/include/nest/dict_util.h \
-  /home/emiliano/Documenti/other_env/other_e/include/nest/event.h \
-  /home/emiliano/Documenti/other_env/other_e/include/nest/nest_types.h \
-  /home/emiliano/Documenti/other_env/other_e/include/nest/ring_buffer.h \
-  /home/emiliano/Documenti/other_env/other_e/include/nest/universal_data_logger.h \
-  /home/emiliano/Documenti/other_env/other_e/include/nest/dictdatum.h \
-  /home/emiliano/Documenti/other_env/other_e/include/nest/nest_time.h
+  /home/emiliano/Documenti/better_env/benv/include/nest/config.h \
+  /home/emiliano/Documenti/better_env/benv/include/nest/structural_plasticity_node.h \
+  /home/emiliano/Documenti/better_env/benv/include/nest/synaptic_element.h \
+  /home/emiliano/Documenti/better_env/benv/include/nest/connection.h \
+  /home/emiliano/Documenti/better_env/benv/include/nest/connector_base_impl.h \
+  /home/emiliano/Documenti/better_env/benv/include/nest/weight_recorder.h \
+  /home/emiliano/Documenti/better_env/benv/include/nest/recording_device.h \
+  /home/emiliano/Documenti/better_env/benv/include/nest/syn_id_delay.h \
+  /home/emiliano/Documenti/better_env/benv/include/nest/dict_util.h \
+  /home/emiliano/Documenti/better_env/benv/include/nest/event.h \
+  /home/emiliano/Documenti/better_env/benv/include/nest/nest_types.h \
+  /home/emiliano/Documenti/better_env/benv/include/nest/ring_buffer.h \
+  /home/emiliano/Documenti/better_env/benv/include/nest/universal_data_logger.h \
+  /home/emiliano/Documenti/better_env/benv/include/nest/dictdatum.h \
+  /home/emiliano/Documenti/better_env/benv/include/nest/nest_time.h
 
 CMakeFiles/custom_stdp_module_module.dir/custom_stdp_module.o: ../custom_stdp_module.cpp \
   /usr/include/stdc-predef.h \
-  /home/emiliano/Documenti/other_env/other_e/include/nest/nest_extension_interface.h \
-  /home/emiliano/Documenti/other_env/other_e/include/nest/config.h \
-  /home/emiliano/Documenti/other_env/other_e/include/nest/connection_manager_impl.h \
-  /home/emiliano/Documenti/other_env/other_e/include/nest/connection_manager.h \
+  /home/emiliano/Documenti/better_env/benv/include/nest/nest_extension_interface.h \
+  /home/emiliano/Documenti/better_env/benv/include/nest/config.h \
+  /home/emiliano/Documenti/better_env/benv/include/nest/connection_manager_impl.h \
+  /home/emiliano/Documenti/better_env/benv/include/nest/connection_manager.h \
   /usr/include/c++/11/string \
   /usr/include/x86_64-linux-gnu/c++/11/bits/c++config.h \
   /usr/include/x86_64-linux-gnu/c++/11/bits/os_defines.h \
@@ -1041,8 +1041,8 @@ CMakeFiles/custom_stdp_module_module.dir/custom_stdp_module.o: ../custom_stdp_mo
   /usr/include/x86_64-linux-gnu/bits/types/error_t.h \
   /usr/include/c++/11/bits/charconv.h \
   /usr/include/c++/11/bits/basic_string.tcc \
-  /home/emiliano/Documenti/other_env/other_e/include/nest/manager_interface.h \
-  /home/emiliano/Documenti/other_env/other_e/include/nest/nest_types.h \
+  /home/emiliano/Documenti/better_env/benv/include/nest/manager_interface.h \
+  /home/emiliano/Documenti/better_env/benv/include/nest/nest_types.h \
   /usr/include/c++/11/cfloat \
   /usr/lib/gcc/x86_64-linux-gnu/11/include/float.h \
   /usr/include/c++/11/climits \
@@ -1057,8 +1057,8 @@ CMakeFiles/custom_stdp_module_module.dir/custom_stdp_module.o: ../custom_stdp_mo
   /usr/include/x86_64-linux-gnu/bits/uio_lim.h \
   /usr/include/c++/11/cstddef \
   /usr/include/c++/11/limits \
-  /home/emiliano/Documenti/other_env/other_e/include/nest/dictdatum.h \
-  /home/emiliano/Documenti/other_env/other_e/include/nest/dict.h \
+  /home/emiliano/Documenti/better_env/benv/include/nest/dictdatum.h \
+  /home/emiliano/Documenti/better_env/benv/include/nest/dict.h \
   /usr/include/c++/11/map \
   /usr/include/c++/11/bits/stl_tree.h \
   /usr/include/c++/11/ext/aligned_buffer.h \
@@ -1072,7 +1072,7 @@ CMakeFiles/custom_stdp_module_module.dir/custom_stdp_module.o: ../custom_stdp_mo
   /usr/include/c++/11/bits/invoke.h \
   /usr/include/c++/11/bits/stl_multimap.h \
   /usr/include/c++/11/bits/erase_if.h \
-  /home/emiliano/Documenti/other_env/other_e/include/nest/name.h \
+  /home/emiliano/Documenti/better_env/benv/include/nest/name.h \
   /usr/include/c++/11/cassert \
   /usr/include/assert.h \
   /usr/include/c++/11/deque \
@@ -1108,12 +1108,12 @@ CMakeFiles/custom_stdp_module_module.dir/custom_stdp_module.o: ../custom_stdp_mo
   /usr/include/c++/11/bits/ostream.tcc \
   /usr/include/c++/11/istream \
   /usr/include/c++/11/bits/istream.tcc \
-  /home/emiliano/Documenti/other_env/other_e/include/nest/sliexceptions.h \
+  /home/emiliano/Documenti/better_env/benv/include/nest/sliexceptions.h \
   /usr/include/c++/11/vector \
   /usr/include/c++/11/bits/stl_vector.h \
   /usr/include/c++/11/bits/stl_bvector.h \
   /usr/include/c++/11/bits/vector.tcc \
-  /home/emiliano/Documenti/other_env/other_e/include/nest/token.h \
+  /home/emiliano/Documenti/better_env/benv/include/nest/token.h \
   /usr/include/c++/11/iomanip \
   /usr/include/c++/11/locale \
   /usr/include/c++/11/bits/locale_facets_nonio.h \
@@ -1128,20 +1128,20 @@ CMakeFiles/custom_stdp_module_module.dir/custom_stdp_module.o: ../custom_stdp_mo
   /usr/include/c++/11/bits/quoted_string.h \
   /usr/include/c++/11/sstream \
   /usr/include/c++/11/bits/sstream.tcc \
-  /home/emiliano/Documenti/other_env/other_e/include/nest/datum.h \
-  /home/emiliano/Documenti/other_env/other_e/include/nest/slitype.h \
-  /home/emiliano/Documenti/other_env/other_e/include/nest/slifunction.h \
-  /home/emiliano/Documenti/other_env/other_e/include/nest/interpret.h \
+  /home/emiliano/Documenti/better_env/benv/include/nest/datum.h \
+  /home/emiliano/Documenti/better_env/benv/include/nest/slitype.h \
+  /home/emiliano/Documenti/better_env/benv/include/nest/slifunction.h \
+  /home/emiliano/Documenti/better_env/benv/include/nest/interpret.h \
   /usr/include/c++/11/list \
   /usr/include/c++/11/bits/stl_list.h \
   /usr/include/c++/11/bits/allocated_ptr.h \
   /usr/include/c++/11/bits/list.tcc \
-  /home/emiliano/Documenti/other_env/other_e/include/nest/sliactions.h \
-  /home/emiliano/Documenti/other_env/other_e/include/nest/slibuiltins.h \
-  /home/emiliano/Documenti/other_env/other_e/include/nest/slimodule.h \
-  /home/emiliano/Documenti/other_env/other_e/include/nest/tokenstack.h \
-  /home/emiliano/Documenti/other_env/other_e/include/nest/tarrayobj.h \
-  /home/emiliano/Documenti/other_env/other_e/include/nest/tokenarray.h \
+  /home/emiliano/Documenti/better_env/benv/include/nest/sliactions.h \
+  /home/emiliano/Documenti/better_env/benv/include/nest/slibuiltins.h \
+  /home/emiliano/Documenti/better_env/benv/include/nest/slimodule.h \
+  /home/emiliano/Documenti/better_env/benv/include/nest/tokenstack.h \
+  /home/emiliano/Documenti/better_env/benv/include/nest/tarrayobj.h \
+  /home/emiliano/Documenti/better_env/benv/include/nest/tokenarray.h \
   /usr/include/c++/11/algorithm \
   /usr/include/c++/11/bits/stl_algo.h \
   /usr/include/c++/11/bits/algorithmfwd.h \
@@ -1158,8 +1158,8 @@ CMakeFiles/custom_stdp_module_module.dir/custom_stdp_module.o: ../custom_stdp_mo
   /usr/include/c++/11/bits/enable_special_members.h \
   /usr/include/c++/11/bits/unordered_map.h \
   /usr/include/c++/11/pstl/execution_defs.h \
-  /home/emiliano/Documenti/other_env/other_e/include/nest/lockptrdatum.h \
-  /home/emiliano/Documenti/other_env/other_e/include/nest/lockptr.h \
+  /home/emiliano/Documenti/better_env/benv/include/nest/lockptrdatum.h \
+  /home/emiliano/Documenti/better_env/benv/include/nest/lockptr.h \
   /usr/include/c++/11/memory \
   /usr/include/c++/11/bits/stl_raw_storage_iter.h \
   /usr/include/c++/11/bits/align.h \
@@ -1172,15 +1172,15 @@ CMakeFiles/custom_stdp_module_module.dir/custom_stdp_module.o: ../custom_stdp_mo
   /usr/include/c++/11/bits/atomic_lockfree_defines.h \
   /usr/include/c++/11/backward/auto_ptr.h \
   /usr/include/c++/11/pstl/glue_memory_defs.h \
-  /home/emiliano/Documenti/other_env/other_e/include/nest/stopwatch.h \
+  /home/emiliano/Documenti/better_env/benv/include/nest/stopwatch.h \
   /usr/include/x86_64-linux-gnu/sys/time.h \
-  /home/emiliano/Documenti/other_env/other_e/include/nest/conn_builder.h \
+  /home/emiliano/Documenti/better_env/benv/include/nest/conn_builder.h \
   /usr/include/c++/11/set \
   /usr/include/c++/11/bits/stl_set.h \
   /usr/include/c++/11/bits/stl_multiset.h \
-  /home/emiliano/Documenti/other_env/other_e/include/nest/conn_parameter.h \
-  /home/emiliano/Documenti/other_env/other_e/include/nest/exceptions.h \
-  /home/emiliano/Documenti/other_env/other_e/include/nest/nest_time.h \
+  /home/emiliano/Documenti/better_env/benv/include/nest/conn_parameter.h \
+  /home/emiliano/Documenti/better_env/benv/include/nest/exceptions.h \
+  /home/emiliano/Documenti/better_env/benv/include/nest/nest_time.h \
   /usr/include/c++/11/cmath \
   /usr/include/math.h \
   /usr/include/x86_64-linux-gnu/bits/math-vector.h \
@@ -1205,42 +1205,42 @@ CMakeFiles/custom_stdp_module_module.dir/custom_stdp_module.o: ../custom_stdp_mo
   /usr/include/c++/11/tr1/poly_hermite.tcc \
   /usr/include/c++/11/tr1/poly_laguerre.tcc \
   /usr/include/c++/11/tr1/riemann_zeta.tcc \
-  /home/emiliano/Documenti/other_env/other_e/include/nest/numerics.h \
-  /home/emiliano/Documenti/other_env/other_e/include/nest/nest_datums.h \
-  /home/emiliano/Documenti/other_env/other_e/include/nest/connection_id.h \
-  /home/emiliano/Documenti/other_env/other_e/include/nest/arraydatum.h \
-  /home/emiliano/Documenti/other_env/other_e/include/nest/aggregatedatum.h \
-  /home/emiliano/Documenti/other_env/other_e/include/nest/allocator.h \
-  /home/emiliano/Documenti/other_env/other_e/include/nest/dictutils.h \
-  /home/emiliano/Documenti/other_env/other_e/include/nest/doubledatum.h \
-  /home/emiliano/Documenti/other_env/other_e/include/nest/numericdatum.h \
-  /home/emiliano/Documenti/other_env/other_e/include/nest/genericdatum.h \
-  /home/emiliano/Documenti/other_env/other_e/include/nest/integerdatum.h \
-  /home/emiliano/Documenti/other_env/other_e/include/nest/namedatum.h \
-  /home/emiliano/Documenti/other_env/other_e/include/nest/tokenutils.h \
-  /home/emiliano/Documenti/other_env/other_e/include/nest/nestmodule.h \
-  /home/emiliano/Documenti/other_env/other_e/include/nest/event.h \
+  /home/emiliano/Documenti/better_env/benv/include/nest/numerics.h \
+  /home/emiliano/Documenti/better_env/benv/include/nest/nest_datums.h \
+  /home/emiliano/Documenti/better_env/benv/include/nest/connection_id.h \
+  /home/emiliano/Documenti/better_env/benv/include/nest/arraydatum.h \
+  /home/emiliano/Documenti/better_env/benv/include/nest/aggregatedatum.h \
+  /home/emiliano/Documenti/better_env/benv/include/nest/allocator.h \
+  /home/emiliano/Documenti/better_env/benv/include/nest/dictutils.h \
+  /home/emiliano/Documenti/better_env/benv/include/nest/doubledatum.h \
+  /home/emiliano/Documenti/better_env/benv/include/nest/numericdatum.h \
+  /home/emiliano/Documenti/better_env/benv/include/nest/genericdatum.h \
+  /home/emiliano/Documenti/better_env/benv/include/nest/integerdatum.h \
+  /home/emiliano/Documenti/better_env/benv/include/nest/namedatum.h \
+  /home/emiliano/Documenti/better_env/benv/include/nest/tokenutils.h \
+  /home/emiliano/Documenti/better_env/benv/include/nest/nestmodule.h \
+  /home/emiliano/Documenti/better_env/benv/include/nest/event.h \
   /usr/include/c++/11/cstring \
   /usr/include/string.h \
   /usr/include/strings.h \
   /usr/include/x86_64-linux-gnu/bits/strings_fortified.h \
   /usr/include/x86_64-linux-gnu/bits/string_fortified.h \
-  /home/emiliano/Documenti/other_env/other_e/include/nest/spike_data.h \
-  /home/emiliano/Documenti/other_env/other_e/include/nest/target.h \
-  /home/emiliano/Documenti/other_env/other_e/include/nest/static_assert.h \
-  /home/emiliano/Documenti/other_env/other_e/include/nest/vp_manager.h \
+  /home/emiliano/Documenti/better_env/benv/include/nest/spike_data.h \
+  /home/emiliano/Documenti/better_env/benv/include/nest/target.h \
+  /home/emiliano/Documenti/better_env/benv/include/nest/static_assert.h \
+  /home/emiliano/Documenti/better_env/benv/include/nest/vp_manager.h \
   /usr/lib/gcc/x86_64-linux-gnu/11/include/omp.h \
-  /home/emiliano/Documenti/other_env/other_e/include/nest/generic_factory.h \
-  /home/emiliano/Documenti/other_env/other_e/include/nest/ntree.h \
+  /home/emiliano/Documenti/better_env/benv/include/nest/generic_factory.h \
+  /home/emiliano/Documenti/better_env/benv/include/nest/ntree.h \
   /usr/include/c++/11/bitset \
   /usr/include/c++/11/iterator \
   /usr/include/c++/11/bits/stream_iterator.h \
-  /home/emiliano/Documenti/other_env/other_e/include/nest/position.h \
-  /home/emiliano/Documenti/other_env/other_e/include/nest/compose.hpp \
-  /home/emiliano/Documenti/other_env/other_e/include/nest/parameter.h \
-  /home/emiliano/Documenti/other_env/other_e/include/nest/nest_names.h \
-  /home/emiliano/Documenti/other_env/other_e/include/nest/node_collection.h \
-  /home/emiliano/Documenti/other_env/other_e/include/nest/random_generators.h \
+  /home/emiliano/Documenti/better_env/benv/include/nest/position.h \
+  /home/emiliano/Documenti/better_env/benv/include/nest/compose.hpp \
+  /home/emiliano/Documenti/better_env/benv/include/nest/parameter.h \
+  /home/emiliano/Documenti/better_env/benv/include/nest/nest_names.h \
+  /home/emiliano/Documenti/better_env/benv/include/nest/node_collection.h \
+  /home/emiliano/Documenti/better_env/benv/include/nest/random_generators.h \
   /usr/include/c++/11/random \
   /usr/include/c++/11/bits/random.h \
   /usr/include/x86_64-linux-gnu/c++/11/bits/opt_random.h \
@@ -1248,7 +1248,7 @@ CMakeFiles/custom_stdp_module_module.dir/custom_stdp_module.o: ../custom_stdp_mo
   /usr/include/c++/11/numeric \
   /usr/include/c++/11/bits/stl_numeric.h \
   /usr/include/c++/11/pstl/glue_numeric_defs.h \
-  /home/emiliano/Documenti/other_env/other_e/include/nest/randutils.hpp \
+  /home/emiliano/Documenti/better_env/benv/include/nest/randutils.hpp \
   /usr/include/c++/11/chrono \
   /usr/include/c++/11/ratio \
   /usr/include/c++/11/bits/parse_numbers.h \
@@ -1264,11 +1264,11 @@ CMakeFiles/custom_stdp_module_module.dir/custom_stdp_module.o: ../custom_stdp_mo
   /usr/include/x86_64-linux-gnu/bits/unistd.h \
   /usr/include/x86_64-linux-gnu/bits/unistd_ext.h \
   /usr/include/linux/close_range.h \
-  /home/emiliano/Documenti/other_env/other_e/include/nest/sharedptrdatum.h \
-  /home/emiliano/Documenti/other_env/other_e/include/nest/connector_base.h \
-  /home/emiliano/Documenti/other_env/other_e/include/nest/sort.h \
-  /home/emiliano/Documenti/other_env/other_e/include/nest/block_vector.h \
-  /home/emiliano/Documenti/other_env/other_e/include/nest/iterator_pair.h \
+  /home/emiliano/Documenti/better_env/benv/include/nest/sharedptrdatum.h \
+  /home/emiliano/Documenti/better_env/benv/include/nest/connector_base.h \
+  /home/emiliano/Documenti/better_env/benv/include/nest/sort.h \
+  /home/emiliano/Documenti/better_env/benv/include/nest/block_vector.h \
+  /home/emiliano/Documenti/better_env/benv/include/nest/iterator_pair.h \
   /usr/include/boost/iterator/iterator_adaptor.hpp \
   /usr/include/boost/static_assert.hpp \
   /usr/include/boost/config.hpp \
@@ -1494,7 +1494,7 @@ CMakeFiles/custom_stdp_module_module.dir/custom_stdp_module.o: ../custom_stdp_mo
   /usr/include/boost/utility/swap.hpp \
   /usr/include/boost/core/swap.hpp \
   /usr/include/boost/core/enable_if.hpp \
-  /home/emiliano/Documenti/other_env/other_e/include/nest/source.h \
+  /home/emiliano/Documenti/better_env/benv/include/nest/source.h \
   /usr/include/boost/sort/spreadsort/spreadsort.hpp \
   /usr/include/boost/type_traits.hpp \
   /usr/include/boost/type_traits/aligned_storage.hpp \
@@ -1631,24 +1631,24 @@ CMakeFiles/custom_stdp_module_module.dir/custom_stdp_module.o: ../custom_stdp_mo
   /usr/include/boost/sort/spreadsort/detail/float_sort.hpp \
   /usr/include/boost/sort/spreadsort/string_sort.hpp \
   /usr/include/boost/sort/spreadsort/detail/string_sort.hpp \
-  /home/emiliano/Documenti/other_env/other_e/include/nest/vector_util.h \
-  /home/emiliano/Documenti/other_env/other_e/include/nest/common_synapse_properties.h \
-  /home/emiliano/Documenti/other_env/other_e/include/nest/connector_model.h \
-  /home/emiliano/Documenti/other_env/other_e/include/nest/enum_bitfield.h \
-  /home/emiliano/Documenti/other_env/other_e/include/nest/secondary_event.h \
-  /home/emiliano/Documenti/other_env/other_e/include/nest/node.h \
-  /home/emiliano/Documenti/other_env/other_e/include/nest/deprecation_warning.h \
-  /home/emiliano/Documenti/other_env/other_e/include/nest/histentry.h \
-  /home/emiliano/Documenti/other_env/other_e/include/nest/connection_label.h \
-  /home/emiliano/Documenti/other_env/other_e/include/nest/nest.h \
-  /home/emiliano/Documenti/other_env/other_e/include/nest/logging.h \
-  /home/emiliano/Documenti/other_env/other_e/include/nest/spikecounter.h \
-  /home/emiliano/Documenti/other_env/other_e/include/nest/nest_timeconverter.h \
-  /home/emiliano/Documenti/other_env/other_e/include/nest/per_thread_bool_indicator.h \
+  /home/emiliano/Documenti/better_env/benv/include/nest/vector_util.h \
+  /home/emiliano/Documenti/better_env/benv/include/nest/common_synapse_properties.h \
+  /home/emiliano/Documenti/better_env/benv/include/nest/connector_model.h \
+  /home/emiliano/Documenti/better_env/benv/include/nest/enum_bitfield.h \
+  /home/emiliano/Documenti/better_env/benv/include/nest/secondary_event.h \
+  /home/emiliano/Documenti/better_env/benv/include/nest/node.h \
+  /home/emiliano/Documenti/better_env/benv/include/nest/deprecation_warning.h \
+  /home/emiliano/Documenti/better_env/benv/include/nest/histentry.h \
+  /home/emiliano/Documenti/better_env/benv/include/nest/connection_label.h \
+  /home/emiliano/Documenti/better_env/benv/include/nest/nest.h \
+  /home/emiliano/Documenti/better_env/benv/include/nest/logging.h \
+  /home/emiliano/Documenti/better_env/benv/include/nest/spikecounter.h \
+  /home/emiliano/Documenti/better_env/benv/include/nest/nest_timeconverter.h \
+  /home/emiliano/Documenti/better_env/benv/include/nest/per_thread_bool_indicator.h \
   /usr/include/c++/11/atomic \
-  /home/emiliano/Documenti/other_env/other_e/include/nest/send_buffer_position.h \
-  /home/emiliano/Documenti/other_env/other_e/include/nest/source_table.h \
-  /home/emiliano/Documenti/other_env/other_e/include/nest/mpi_manager.h \
+  /home/emiliano/Documenti/better_env/benv/include/nest/send_buffer_position.h \
+  /home/emiliano/Documenti/better_env/benv/include/nest/source_table.h \
+  /home/emiliano/Documenti/better_env/benv/include/nest/mpi_manager.h \
   /usr/lib/x86_64-linux-gnu/openmpi/include/mpi.h \
   /usr/lib/x86_64-linux-gnu/openmpi/include/mpi_portable_platform.h \
   /usr/lib/x86_64-linux-gnu/openmpi/include/openmpi/ompi/mpi/cxx/mpicxx.h \
@@ -1682,59 +1682,59 @@ CMakeFiles/custom_stdp_module_module.dir/custom_stdp_module.o: ../custom_stdp_mo
   /usr/lib/x86_64-linux-gnu/openmpi/include/openmpi/ompi/mpi/cxx/info_inln.h \
   /usr/lib/x86_64-linux-gnu/openmpi/include/openmpi/ompi/mpi/cxx/win_inln.h \
   /usr/lib/x86_64-linux-gnu/openmpi/include/openmpi/ompi/mpi/cxx/file_inln.h \
-  /home/emiliano/Documenti/other_env/other_e/include/nest/target_data.h \
-  /home/emiliano/Documenti/other_env/other_e/include/nest/source_table_position.h \
-  /home/emiliano/Documenti/other_env/other_e/include/nest/target_table.h \
-  /home/emiliano/Documenti/other_env/other_e/include/nest/target_table_devices.h \
-  /home/emiliano/Documenti/other_env/other_e/include/nest/conn_builder_factory.h \
-  /home/emiliano/Documenti/other_env/other_e/include/nest/kernel_manager.h \
-  /home/emiliano/Documenti/other_env/other_e/include/nest/event_delivery_manager.h \
-  /home/emiliano/Documenti/other_env/other_e/include/nest/buffer_resize_log.h \
-  /home/emiliano/Documenti/other_env/other_e/include/nest/io_manager.h \
-  /home/emiliano/Documenti/other_env/other_e/include/nest/recording_backend.h \
-  /home/emiliano/Documenti/other_env/other_e/include/nest/stimulation_backend.h \
-  /home/emiliano/Documenti/other_env/other_e/include/nest/stimulation_device.h \
-  /home/emiliano/Documenti/other_env/other_e/include/nest/device.h \
-  /home/emiliano/Documenti/other_env/other_e/include/nest/device_node.h \
-  /home/emiliano/Documenti/other_env/other_e/include/nest/logging_manager.h \
-  /home/emiliano/Documenti/other_env/other_e/include/nest/model_manager.h \
-  /home/emiliano/Documenti/other_env/other_e/include/nest/genericmodel.h \
-  /home/emiliano/Documenti/other_env/other_e/include/nest/model.h \
-  /home/emiliano/Documenti/other_env/other_e/include/nest/modelrange_manager.h \
-  /home/emiliano/Documenti/other_env/other_e/include/nest/modelrange.h \
-  /home/emiliano/Documenti/other_env/other_e/include/nest/module_manager.h \
+  /home/emiliano/Documenti/better_env/benv/include/nest/target_data.h \
+  /home/emiliano/Documenti/better_env/benv/include/nest/source_table_position.h \
+  /home/emiliano/Documenti/better_env/benv/include/nest/target_table.h \
+  /home/emiliano/Documenti/better_env/benv/include/nest/target_table_devices.h \
+  /home/emiliano/Documenti/better_env/benv/include/nest/conn_builder_factory.h \
+  /home/emiliano/Documenti/better_env/benv/include/nest/kernel_manager.h \
+  /home/emiliano/Documenti/better_env/benv/include/nest/event_delivery_manager.h \
+  /home/emiliano/Documenti/better_env/benv/include/nest/buffer_resize_log.h \
+  /home/emiliano/Documenti/better_env/benv/include/nest/io_manager.h \
+  /home/emiliano/Documenti/better_env/benv/include/nest/recording_backend.h \
+  /home/emiliano/Documenti/better_env/benv/include/nest/stimulation_backend.h \
+  /home/emiliano/Documenti/better_env/benv/include/nest/stimulation_device.h \
+  /home/emiliano/Documenti/better_env/benv/include/nest/device.h \
+  /home/emiliano/Documenti/better_env/benv/include/nest/device_node.h \
+  /home/emiliano/Documenti/better_env/benv/include/nest/logging_manager.h \
+  /home/emiliano/Documenti/better_env/benv/include/nest/model_manager.h \
+  /home/emiliano/Documenti/better_env/benv/include/nest/genericmodel.h \
+  /home/emiliano/Documenti/better_env/benv/include/nest/model.h \
+  /home/emiliano/Documenti/better_env/benv/include/nest/modelrange_manager.h \
+  /home/emiliano/Documenti/better_env/benv/include/nest/modelrange.h \
+  /home/emiliano/Documenti/better_env/benv/include/nest/module_manager.h \
   /usr/include/ltdl.h \
   /usr/include/libltdl/lt_system.h \
   /usr/include/c++/11/stdlib.h \
   /usr/include/libltdl/lt_error.h \
   /usr/include/libltdl/lt_dlloader.h \
-  /home/emiliano/Documenti/other_env/other_e/include/nest/music_manager.h \
-  /home/emiliano/Documenti/other_env/other_e/include/nest/node_manager.h \
-  /home/emiliano/Documenti/other_env/other_e/include/nest/sparse_node_array.h \
-  /home/emiliano/Documenti/other_env/other_e/include/nest/random_manager.h \
-  /home/emiliano/Documenti/other_env/other_e/include/nest/simulation_manager.h \
-  /home/emiliano/Documenti/other_env/other_e/include/nest/sp_manager.h \
-  /home/emiliano/Documenti/other_env/other_e/include/nest/growth_curve_factory.h \
-  /home/emiliano/Documenti/other_env/other_e/include/nest/growth_curve.h \
+  /home/emiliano/Documenti/better_env/benv/include/nest/music_manager.h \
+  /home/emiliano/Documenti/better_env/benv/include/nest/node_manager.h \
+  /home/emiliano/Documenti/better_env/benv/include/nest/sparse_node_array.h \
+  /home/emiliano/Documenti/better_env/benv/include/nest/random_manager.h \
+  /home/emiliano/Documenti/better_env/benv/include/nest/simulation_manager.h \
+  /home/emiliano/Documenti/better_env/benv/include/nest/sp_manager.h \
+  /home/emiliano/Documenti/better_env/benv/include/nest/growth_curve_factory.h \
+  /home/emiliano/Documenti/better_env/benv/include/nest/growth_curve.h \
   /usr/include/c++/11/fstream \
   /usr/include/x86_64-linux-gnu/c++/11/bits/basic_file.h \
   /usr/include/x86_64-linux-gnu/c++/11/bits/c++io.h \
   /usr/include/c++/11/bits/fstream.tcc \
-  /home/emiliano/Documenti/other_env/other_e/include/nest/target_table_devices_impl.h \
-  /home/emiliano/Documenti/other_env/other_e/include/nest/vp_manager_impl.h \
-  /home/emiliano/Documenti/other_env/other_e/include/nest/mpi_manager_impl.h \
-  /home/emiliano/Documenti/other_env/other_e/include/nest/connector_model_impl.h \
-  /home/emiliano/Documenti/other_env/other_e/include/nest/delay_checker.h \
-  /home/emiliano/Documenti/other_env/other_e/include/nest/secondary_event_impl.h \
-  /home/emiliano/Documenti/other_env/other_e/include/nest/genericmodel_impl.h \
-  /home/emiliano/Documenti/other_env/other_e/include/nest/io_manager_impl.h \
-  /home/emiliano/Documenti/other_env/other_e/include/nest/model_manager_impl.h \
-  /home/emiliano/Documenti/other_env/other_e/include/nest/string_utils.h \
-  /home/emiliano/Documenti/other_env/other_e/include/nest/target_identifier.h \
-  /home/emiliano/Documenti/other_env/other_e/include/nest/nest_impl.h \
-  /home/emiliano/Documenti/other_env/other_e/include/nest/sp_manager_impl.h \
+  /home/emiliano/Documenti/better_env/benv/include/nest/target_table_devices_impl.h \
+  /home/emiliano/Documenti/better_env/benv/include/nest/vp_manager_impl.h \
+  /home/emiliano/Documenti/better_env/benv/include/nest/mpi_manager_impl.h \
+  /home/emiliano/Documenti/better_env/benv/include/nest/connector_model_impl.h \
+  /home/emiliano/Documenti/better_env/benv/include/nest/delay_checker.h \
+  /home/emiliano/Documenti/better_env/benv/include/nest/secondary_event_impl.h \
+  /home/emiliano/Documenti/better_env/benv/include/nest/genericmodel_impl.h \
+  /home/emiliano/Documenti/better_env/benv/include/nest/io_manager_impl.h \
+  /home/emiliano/Documenti/better_env/benv/include/nest/model_manager_impl.h \
+  /home/emiliano/Documenti/better_env/benv/include/nest/string_utils.h \
+  /home/emiliano/Documenti/better_env/benv/include/nest/target_identifier.h \
+  /home/emiliano/Documenti/better_env/benv/include/nest/nest_impl.h \
+  /home/emiliano/Documenti/better_env/benv/include/nest/sp_manager_impl.h \
   ../eglif_io_nestml.h \
-  /home/emiliano/Documenti/other_env/other_e/include/nest/config.h \
+  /home/emiliano/Documenti/better_env/benv/include/nest/config.h \
   /usr/include/gsl/gsl_errno.h \
   /usr/include/gsl/gsl_types.h \
   /usr/include/gsl/gsl_matrix.h \
@@ -1787,36 +1787,36 @@ CMakeFiles/custom_stdp_module_module.dir/custom_stdp_module.o: ../custom_stdp_mo
   /usr/include/gsl/gsl_vector_char.h \
   /usr/include/gsl/gsl_block_char.h \
   /usr/include/gsl/gsl_odeiv.h \
-  /home/emiliano/Documenti/other_env/other_e/include/nest/archiving_node.h \
-  /home/emiliano/Documenti/other_env/other_e/include/nest/structural_plasticity_node.h \
-  /home/emiliano/Documenti/other_env/other_e/include/nest/synaptic_element.h \
+  /home/emiliano/Documenti/better_env/benv/include/nest/archiving_node.h \
+  /home/emiliano/Documenti/better_env/benv/include/nest/structural_plasticity_node.h \
+  /home/emiliano/Documenti/better_env/benv/include/nest/synaptic_element.h \
   ../extended_post_history_archiving_node.h \
   ../extended_hist_entry.h \
-  /home/emiliano/Documenti/other_env/other_e/include/nest/structural_plasticity_node.h \
-  /home/emiliano/Documenti/other_env/other_e/include/nest/nest_time.h \
-  /home/emiliano/Documenti/other_env/other_e/include/nest/nest_types.h \
-  /home/emiliano/Documenti/other_env/other_e/include/nest/node.h \
-  /home/emiliano/Documenti/other_env/other_e/include/nest/kernel_manager.h \
-  /home/emiliano/Documenti/other_env/other_e/include/nest/dictdatum.h \
-  /home/emiliano/Documenti/other_env/other_e/include/nest/nest_datums.h \
-  /home/emiliano/Documenti/other_env/other_e/include/nest/connection.h \
-  /home/emiliano/Documenti/other_env/other_e/include/nest/connector_base_impl.h \
-  /home/emiliano/Documenti/other_env/other_e/include/nest/weight_recorder.h \
-  /home/emiliano/Documenti/other_env/other_e/include/nest/recording_device.h \
-  /home/emiliano/Documenti/other_env/other_e/include/nest/syn_id_delay.h \
-  /home/emiliano/Documenti/other_env/other_e/include/nest/dict_util.h \
-  /home/emiliano/Documenti/other_env/other_e/include/nest/event.h \
-  /home/emiliano/Documenti/other_env/other_e/include/nest/ring_buffer.h \
-  /home/emiliano/Documenti/other_env/other_e/include/nest/universal_data_logger.h \
-  /home/emiliano/Documenti/other_env/other_e/include/nest/recordables_map.h \
+  /home/emiliano/Documenti/better_env/benv/include/nest/structural_plasticity_node.h \
+  /home/emiliano/Documenti/better_env/benv/include/nest/nest_time.h \
+  /home/emiliano/Documenti/better_env/benv/include/nest/nest_types.h \
+  /home/emiliano/Documenti/better_env/benv/include/nest/node.h \
+  /home/emiliano/Documenti/better_env/benv/include/nest/kernel_manager.h \
+  /home/emiliano/Documenti/better_env/benv/include/nest/dictdatum.h \
+  /home/emiliano/Documenti/better_env/benv/include/nest/nest_datums.h \
+  /home/emiliano/Documenti/better_env/benv/include/nest/connection.h \
+  /home/emiliano/Documenti/better_env/benv/include/nest/connector_base_impl.h \
+  /home/emiliano/Documenti/better_env/benv/include/nest/weight_recorder.h \
+  /home/emiliano/Documenti/better_env/benv/include/nest/recording_device.h \
+  /home/emiliano/Documenti/better_env/benv/include/nest/syn_id_delay.h \
+  /home/emiliano/Documenti/better_env/benv/include/nest/dict_util.h \
+  /home/emiliano/Documenti/better_env/benv/include/nest/event.h \
+  /home/emiliano/Documenti/better_env/benv/include/nest/ring_buffer.h \
+  /home/emiliano/Documenti/better_env/benv/include/nest/universal_data_logger.h \
+  /home/emiliano/Documenti/better_env/benv/include/nest/recordables_map.h \
   ../eglif_pc_nestml.h \
   ../eglif_mli.h \
   ../eglif_dcnp.h \
   ../stdp_synapse_sinexp.h \
-  /home/emiliano/Documenti/other_env/other_e/include/nest/common_synapse_properties.h \
-  /home/emiliano/Documenti/other_env/other_e/include/nest/connector_model.h \
-  /home/emiliano/Documenti/other_env/other_e/include/nest/dictutils.h \
-  /home/emiliano/Documenti/other_env/other_e/include/nest/histentry.h \
+  /home/emiliano/Documenti/better_env/benv/include/nest/common_synapse_properties.h \
+  /home/emiliano/Documenti/better_env/benv/include/nest/connector_model.h \
+  /home/emiliano/Documenti/better_env/benv/include/nest/dictutils.h \
+  /home/emiliano/Documenti/better_env/benv/include/nest/histentry.h \
   ../stdp_synapse_alpha.h \
   ../tracking_neuron_nestml.h \
   ../custom_stdp_module.h \
@@ -1842,8 +1842,8 @@ CMakeFiles/custom_stdp_module_module.dir/diff_neuron_nestml.o: ../diff_neuron_ne
   /usr/include/x86_64-linux-gnu/gnu/stubs-64.h \
   /usr/include/x86_64-linux-gnu/c++/11/bits/cpu_defines.h \
   /usr/include/c++/11/pstl/pstl_config.h \
-  /home/emiliano/Documenti/other_env/other_e/include/nest/numerics.h \
-  /home/emiliano/Documenti/other_env/other_e/include/nest/config.h \
+  /home/emiliano/Documenti/better_env/benv/include/nest/numerics.h \
+  /home/emiliano/Documenti/better_env/benv/include/nest/config.h \
   /usr/include/c++/11/cassert \
   /usr/include/assert.h \
   /usr/include/c++/11/cmath \
@@ -1928,8 +1928,8 @@ CMakeFiles/custom_stdp_module_module.dir/diff_neuron_nestml.o: ../diff_neuron_ne
   /usr/include/c++/11/tr1/poly_hermite.tcc \
   /usr/include/c++/11/tr1/poly_laguerre.tcc \
   /usr/include/c++/11/tr1/riemann_zeta.tcc \
-  /home/emiliano/Documenti/other_env/other_e/include/nest/exceptions.h \
-  /home/emiliano/Documenti/other_env/other_e/include/nest/nest_time.h \
+  /home/emiliano/Documenti/better_env/benv/include/nest/exceptions.h \
+  /home/emiliano/Documenti/better_env/benv/include/nest/nest_time.h \
   /usr/include/c++/11/cfloat \
   /usr/lib/gcc/x86_64-linux-gnu/11/include/float.h \
   /usr/include/c++/11/cstdlib \
@@ -2046,8 +2046,8 @@ CMakeFiles/custom_stdp_module_module.dir/diff_neuron_nestml.o: ../diff_neuron_ne
   /usr/include/c++/11/bits/ostream.tcc \
   /usr/include/c++/11/istream \
   /usr/include/c++/11/bits/istream.tcc \
-  /home/emiliano/Documenti/other_env/other_e/include/nest/numerics.h \
-  /home/emiliano/Documenti/other_env/other_e/include/nest/nest_types.h \
+  /home/emiliano/Documenti/better_env/benv/include/nest/numerics.h \
+  /home/emiliano/Documenti/better_env/benv/include/nest/nest_types.h \
   /usr/include/c++/11/climits \
   /usr/lib/gcc/x86_64-linux-gnu/11/include/limits.h \
   /usr/lib/gcc/x86_64-linux-gnu/11/include/syslimits.h \
@@ -2059,7 +2059,7 @@ CMakeFiles/custom_stdp_module_module.dir/diff_neuron_nestml.o: ../diff_neuron_ne
   /usr/include/x86_64-linux-gnu/bits/xopen_lim.h \
   /usr/include/x86_64-linux-gnu/bits/uio_lim.h \
   /usr/include/c++/11/cstddef \
-  /home/emiliano/Documenti/other_env/other_e/include/nest/name.h \
+  /home/emiliano/Documenti/better_env/benv/include/nest/name.h \
   /usr/include/c++/11/deque \
   /usr/include/c++/11/bits/stl_uninitialized.h \
   /usr/include/c++/11/bits/stl_deque.h \
@@ -2077,17 +2077,17 @@ CMakeFiles/custom_stdp_module_module.dir/diff_neuron_nestml.o: ../diff_neuron_ne
   /usr/include/c++/11/bits/invoke.h \
   /usr/include/c++/11/bits/stl_multimap.h \
   /usr/include/c++/11/bits/erase_if.h \
-  /home/emiliano/Documenti/other_env/other_e/include/nest/sliexceptions.h \
+  /home/emiliano/Documenti/better_env/benv/include/nest/sliexceptions.h \
   /usr/include/c++/11/vector \
   /usr/include/c++/11/bits/stl_vector.h \
   /usr/include/c++/11/bits/stl_bvector.h \
   /usr/include/c++/11/bits/vector.tcc \
-  /home/emiliano/Documenti/other_env/other_e/include/nest/kernel_manager.h \
-  /home/emiliano/Documenti/other_env/other_e/include/nest/connection_manager.h \
-  /home/emiliano/Documenti/other_env/other_e/include/nest/manager_interface.h \
-  /home/emiliano/Documenti/other_env/other_e/include/nest/dictdatum.h \
-  /home/emiliano/Documenti/other_env/other_e/include/nest/dict.h \
-  /home/emiliano/Documenti/other_env/other_e/include/nest/token.h \
+  /home/emiliano/Documenti/better_env/benv/include/nest/kernel_manager.h \
+  /home/emiliano/Documenti/better_env/benv/include/nest/connection_manager.h \
+  /home/emiliano/Documenti/better_env/benv/include/nest/manager_interface.h \
+  /home/emiliano/Documenti/better_env/benv/include/nest/dictdatum.h \
+  /home/emiliano/Documenti/better_env/benv/include/nest/dict.h \
+  /home/emiliano/Documenti/better_env/benv/include/nest/token.h \
   /usr/include/c++/11/iomanip \
   /usr/include/c++/11/locale \
   /usr/include/c++/11/bits/locale_facets_nonio.h \
@@ -2102,20 +2102,20 @@ CMakeFiles/custom_stdp_module_module.dir/diff_neuron_nestml.o: ../diff_neuron_ne
   /usr/include/c++/11/bits/quoted_string.h \
   /usr/include/c++/11/sstream \
   /usr/include/c++/11/bits/sstream.tcc \
-  /home/emiliano/Documenti/other_env/other_e/include/nest/datum.h \
-  /home/emiliano/Documenti/other_env/other_e/include/nest/slitype.h \
-  /home/emiliano/Documenti/other_env/other_e/include/nest/slifunction.h \
-  /home/emiliano/Documenti/other_env/other_e/include/nest/interpret.h \
+  /home/emiliano/Documenti/better_env/benv/include/nest/datum.h \
+  /home/emiliano/Documenti/better_env/benv/include/nest/slitype.h \
+  /home/emiliano/Documenti/better_env/benv/include/nest/slifunction.h \
+  /home/emiliano/Documenti/better_env/benv/include/nest/interpret.h \
   /usr/include/c++/11/list \
   /usr/include/c++/11/bits/stl_list.h \
   /usr/include/c++/11/bits/allocated_ptr.h \
   /usr/include/c++/11/bits/list.tcc \
-  /home/emiliano/Documenti/other_env/other_e/include/nest/sliactions.h \
-  /home/emiliano/Documenti/other_env/other_e/include/nest/slibuiltins.h \
-  /home/emiliano/Documenti/other_env/other_e/include/nest/slimodule.h \
-  /home/emiliano/Documenti/other_env/other_e/include/nest/tokenstack.h \
-  /home/emiliano/Documenti/other_env/other_e/include/nest/tarrayobj.h \
-  /home/emiliano/Documenti/other_env/other_e/include/nest/tokenarray.h \
+  /home/emiliano/Documenti/better_env/benv/include/nest/sliactions.h \
+  /home/emiliano/Documenti/better_env/benv/include/nest/slibuiltins.h \
+  /home/emiliano/Documenti/better_env/benv/include/nest/slimodule.h \
+  /home/emiliano/Documenti/better_env/benv/include/nest/tokenstack.h \
+  /home/emiliano/Documenti/better_env/benv/include/nest/tarrayobj.h \
+  /home/emiliano/Documenti/better_env/benv/include/nest/tokenarray.h \
   /usr/include/c++/11/algorithm \
   /usr/include/c++/11/bits/stl_algo.h \
   /usr/include/c++/11/bits/algorithmfwd.h \
@@ -2132,8 +2132,8 @@ CMakeFiles/custom_stdp_module_module.dir/diff_neuron_nestml.o: ../diff_neuron_ne
   /usr/include/c++/11/bits/enable_special_members.h \
   /usr/include/c++/11/bits/unordered_map.h \
   /usr/include/c++/11/pstl/execution_defs.h \
-  /home/emiliano/Documenti/other_env/other_e/include/nest/lockptrdatum.h \
-  /home/emiliano/Documenti/other_env/other_e/include/nest/lockptr.h \
+  /home/emiliano/Documenti/better_env/benv/include/nest/lockptrdatum.h \
+  /home/emiliano/Documenti/better_env/benv/include/nest/lockptr.h \
   /usr/include/c++/11/memory \
   /usr/include/c++/11/bits/stl_raw_storage_iter.h \
   /usr/include/c++/11/bits/align.h \
@@ -2146,49 +2146,49 @@ CMakeFiles/custom_stdp_module_module.dir/diff_neuron_nestml.o: ../diff_neuron_ne
   /usr/include/c++/11/bits/atomic_lockfree_defines.h \
   /usr/include/c++/11/backward/auto_ptr.h \
   /usr/include/c++/11/pstl/glue_memory_defs.h \
-  /home/emiliano/Documenti/other_env/other_e/include/nest/stopwatch.h \
+  /home/emiliano/Documenti/better_env/benv/include/nest/stopwatch.h \
   /usr/include/x86_64-linux-gnu/sys/time.h \
-  /home/emiliano/Documenti/other_env/other_e/include/nest/conn_builder.h \
+  /home/emiliano/Documenti/better_env/benv/include/nest/conn_builder.h \
   /usr/include/c++/11/set \
   /usr/include/c++/11/bits/stl_set.h \
   /usr/include/c++/11/bits/stl_multiset.h \
-  /home/emiliano/Documenti/other_env/other_e/include/nest/conn_parameter.h \
-  /home/emiliano/Documenti/other_env/other_e/include/nest/exceptions.h \
-  /home/emiliano/Documenti/other_env/other_e/include/nest/nest_datums.h \
-  /home/emiliano/Documenti/other_env/other_e/include/nest/connection_id.h \
-  /home/emiliano/Documenti/other_env/other_e/include/nest/arraydatum.h \
-  /home/emiliano/Documenti/other_env/other_e/include/nest/aggregatedatum.h \
-  /home/emiliano/Documenti/other_env/other_e/include/nest/allocator.h \
-  /home/emiliano/Documenti/other_env/other_e/include/nest/dictutils.h \
-  /home/emiliano/Documenti/other_env/other_e/include/nest/doubledatum.h \
-  /home/emiliano/Documenti/other_env/other_e/include/nest/numericdatum.h \
-  /home/emiliano/Documenti/other_env/other_e/include/nest/genericdatum.h \
-  /home/emiliano/Documenti/other_env/other_e/include/nest/integerdatum.h \
-  /home/emiliano/Documenti/other_env/other_e/include/nest/namedatum.h \
-  /home/emiliano/Documenti/other_env/other_e/include/nest/tokenutils.h \
-  /home/emiliano/Documenti/other_env/other_e/include/nest/nestmodule.h \
-  /home/emiliano/Documenti/other_env/other_e/include/nest/event.h \
+  /home/emiliano/Documenti/better_env/benv/include/nest/conn_parameter.h \
+  /home/emiliano/Documenti/better_env/benv/include/nest/exceptions.h \
+  /home/emiliano/Documenti/better_env/benv/include/nest/nest_datums.h \
+  /home/emiliano/Documenti/better_env/benv/include/nest/connection_id.h \
+  /home/emiliano/Documenti/better_env/benv/include/nest/arraydatum.h \
+  /home/emiliano/Documenti/better_env/benv/include/nest/aggregatedatum.h \
+  /home/emiliano/Documenti/better_env/benv/include/nest/allocator.h \
+  /home/emiliano/Documenti/better_env/benv/include/nest/dictutils.h \
+  /home/emiliano/Documenti/better_env/benv/include/nest/doubledatum.h \
+  /home/emiliano/Documenti/better_env/benv/include/nest/numericdatum.h \
+  /home/emiliano/Documenti/better_env/benv/include/nest/genericdatum.h \
+  /home/emiliano/Documenti/better_env/benv/include/nest/integerdatum.h \
+  /home/emiliano/Documenti/better_env/benv/include/nest/namedatum.h \
+  /home/emiliano/Documenti/better_env/benv/include/nest/tokenutils.h \
+  /home/emiliano/Documenti/better_env/benv/include/nest/nestmodule.h \
+  /home/emiliano/Documenti/better_env/benv/include/nest/event.h \
   /usr/include/c++/11/cstring \
   /usr/include/string.h \
   /usr/include/strings.h \
   /usr/include/x86_64-linux-gnu/bits/strings_fortified.h \
   /usr/include/x86_64-linux-gnu/bits/string_fortified.h \
-  /home/emiliano/Documenti/other_env/other_e/include/nest/spike_data.h \
-  /home/emiliano/Documenti/other_env/other_e/include/nest/target.h \
-  /home/emiliano/Documenti/other_env/other_e/include/nest/static_assert.h \
-  /home/emiliano/Documenti/other_env/other_e/include/nest/vp_manager.h \
+  /home/emiliano/Documenti/better_env/benv/include/nest/spike_data.h \
+  /home/emiliano/Documenti/better_env/benv/include/nest/target.h \
+  /home/emiliano/Documenti/better_env/benv/include/nest/static_assert.h \
+  /home/emiliano/Documenti/better_env/benv/include/nest/vp_manager.h \
   /usr/lib/gcc/x86_64-linux-gnu/11/include/omp.h \
-  /home/emiliano/Documenti/other_env/other_e/include/nest/generic_factory.h \
-  /home/emiliano/Documenti/other_env/other_e/include/nest/ntree.h \
+  /home/emiliano/Documenti/better_env/benv/include/nest/generic_factory.h \
+  /home/emiliano/Documenti/better_env/benv/include/nest/ntree.h \
   /usr/include/c++/11/bitset \
   /usr/include/c++/11/iterator \
   /usr/include/c++/11/bits/stream_iterator.h \
-  /home/emiliano/Documenti/other_env/other_e/include/nest/position.h \
-  /home/emiliano/Documenti/other_env/other_e/include/nest/compose.hpp \
-  /home/emiliano/Documenti/other_env/other_e/include/nest/parameter.h \
-  /home/emiliano/Documenti/other_env/other_e/include/nest/nest_names.h \
-  /home/emiliano/Documenti/other_env/other_e/include/nest/node_collection.h \
-  /home/emiliano/Documenti/other_env/other_e/include/nest/random_generators.h \
+  /home/emiliano/Documenti/better_env/benv/include/nest/position.h \
+  /home/emiliano/Documenti/better_env/benv/include/nest/compose.hpp \
+  /home/emiliano/Documenti/better_env/benv/include/nest/parameter.h \
+  /home/emiliano/Documenti/better_env/benv/include/nest/nest_names.h \
+  /home/emiliano/Documenti/better_env/benv/include/nest/node_collection.h \
+  /home/emiliano/Documenti/better_env/benv/include/nest/random_generators.h \
   /usr/include/c++/11/random \
   /usr/include/c++/11/bits/random.h \
   /usr/include/x86_64-linux-gnu/c++/11/bits/opt_random.h \
@@ -2196,7 +2196,7 @@ CMakeFiles/custom_stdp_module_module.dir/diff_neuron_nestml.o: ../diff_neuron_ne
   /usr/include/c++/11/numeric \
   /usr/include/c++/11/bits/stl_numeric.h \
   /usr/include/c++/11/pstl/glue_numeric_defs.h \
-  /home/emiliano/Documenti/other_env/other_e/include/nest/randutils.hpp \
+  /home/emiliano/Documenti/better_env/benv/include/nest/randutils.hpp \
   /usr/include/c++/11/chrono \
   /usr/include/c++/11/ratio \
   /usr/include/c++/11/bits/parse_numbers.h \
@@ -2212,11 +2212,11 @@ CMakeFiles/custom_stdp_module_module.dir/diff_neuron_nestml.o: ../diff_neuron_ne
   /usr/include/x86_64-linux-gnu/bits/unistd.h \
   /usr/include/x86_64-linux-gnu/bits/unistd_ext.h \
   /usr/include/linux/close_range.h \
-  /home/emiliano/Documenti/other_env/other_e/include/nest/sharedptrdatum.h \
-  /home/emiliano/Documenti/other_env/other_e/include/nest/connector_base.h \
-  /home/emiliano/Documenti/other_env/other_e/include/nest/sort.h \
-  /home/emiliano/Documenti/other_env/other_e/include/nest/block_vector.h \
-  /home/emiliano/Documenti/other_env/other_e/include/nest/iterator_pair.h \
+  /home/emiliano/Documenti/better_env/benv/include/nest/sharedptrdatum.h \
+  /home/emiliano/Documenti/better_env/benv/include/nest/connector_base.h \
+  /home/emiliano/Documenti/better_env/benv/include/nest/sort.h \
+  /home/emiliano/Documenti/better_env/benv/include/nest/block_vector.h \
+  /home/emiliano/Documenti/better_env/benv/include/nest/iterator_pair.h \
   /usr/include/boost/iterator/iterator_adaptor.hpp \
   /usr/include/boost/static_assert.hpp \
   /usr/include/boost/config.hpp \
@@ -2442,7 +2442,7 @@ CMakeFiles/custom_stdp_module_module.dir/diff_neuron_nestml.o: ../diff_neuron_ne
   /usr/include/boost/utility/swap.hpp \
   /usr/include/boost/core/swap.hpp \
   /usr/include/boost/core/enable_if.hpp \
-  /home/emiliano/Documenti/other_env/other_e/include/nest/source.h \
+  /home/emiliano/Documenti/better_env/benv/include/nest/source.h \
   /usr/include/boost/sort/spreadsort/spreadsort.hpp \
   /usr/include/boost/type_traits.hpp \
   /usr/include/boost/type_traits/aligned_storage.hpp \
@@ -2579,24 +2579,24 @@ CMakeFiles/custom_stdp_module_module.dir/diff_neuron_nestml.o: ../diff_neuron_ne
   /usr/include/boost/sort/spreadsort/detail/float_sort.hpp \
   /usr/include/boost/sort/spreadsort/string_sort.hpp \
   /usr/include/boost/sort/spreadsort/detail/string_sort.hpp \
-  /home/emiliano/Documenti/other_env/other_e/include/nest/vector_util.h \
-  /home/emiliano/Documenti/other_env/other_e/include/nest/common_synapse_properties.h \
-  /home/emiliano/Documenti/other_env/other_e/include/nest/connector_model.h \
-  /home/emiliano/Documenti/other_env/other_e/include/nest/enum_bitfield.h \
-  /home/emiliano/Documenti/other_env/other_e/include/nest/secondary_event.h \
-  /home/emiliano/Documenti/other_env/other_e/include/nest/node.h \
-  /home/emiliano/Documenti/other_env/other_e/include/nest/deprecation_warning.h \
-  /home/emiliano/Documenti/other_env/other_e/include/nest/histentry.h \
-  /home/emiliano/Documenti/other_env/other_e/include/nest/connection_label.h \
-  /home/emiliano/Documenti/other_env/other_e/include/nest/nest.h \
-  /home/emiliano/Documenti/other_env/other_e/include/nest/logging.h \
-  /home/emiliano/Documenti/other_env/other_e/include/nest/spikecounter.h \
-  /home/emiliano/Documenti/other_env/other_e/include/nest/nest_timeconverter.h \
-  /home/emiliano/Documenti/other_env/other_e/include/nest/per_thread_bool_indicator.h \
+  /home/emiliano/Documenti/better_env/benv/include/nest/vector_util.h \
+  /home/emiliano/Documenti/better_env/benv/include/nest/common_synapse_properties.h \
+  /home/emiliano/Documenti/better_env/benv/include/nest/connector_model.h \
+  /home/emiliano/Documenti/better_env/benv/include/nest/enum_bitfield.h \
+  /home/emiliano/Documenti/better_env/benv/include/nest/secondary_event.h \
+  /home/emiliano/Documenti/better_env/benv/include/nest/node.h \
+  /home/emiliano/Documenti/better_env/benv/include/nest/deprecation_warning.h \
+  /home/emiliano/Documenti/better_env/benv/include/nest/histentry.h \
+  /home/emiliano/Documenti/better_env/benv/include/nest/connection_label.h \
+  /home/emiliano/Documenti/better_env/benv/include/nest/nest.h \
+  /home/emiliano/Documenti/better_env/benv/include/nest/logging.h \
+  /home/emiliano/Documenti/better_env/benv/include/nest/spikecounter.h \
+  /home/emiliano/Documenti/better_env/benv/include/nest/nest_timeconverter.h \
+  /home/emiliano/Documenti/better_env/benv/include/nest/per_thread_bool_indicator.h \
   /usr/include/c++/11/atomic \
-  /home/emiliano/Documenti/other_env/other_e/include/nest/send_buffer_position.h \
-  /home/emiliano/Documenti/other_env/other_e/include/nest/source_table.h \
-  /home/emiliano/Documenti/other_env/other_e/include/nest/mpi_manager.h \
+  /home/emiliano/Documenti/better_env/benv/include/nest/send_buffer_position.h \
+  /home/emiliano/Documenti/better_env/benv/include/nest/source_table.h \
+  /home/emiliano/Documenti/better_env/benv/include/nest/mpi_manager.h \
   /usr/lib/x86_64-linux-gnu/openmpi/include/mpi.h \
   /usr/lib/x86_64-linux-gnu/openmpi/include/mpi_portable_platform.h \
   /usr/lib/x86_64-linux-gnu/openmpi/include/openmpi/ompi/mpi/cxx/mpicxx.h \
@@ -2630,81 +2630,81 @@ CMakeFiles/custom_stdp_module_module.dir/diff_neuron_nestml.o: ../diff_neuron_ne
   /usr/lib/x86_64-linux-gnu/openmpi/include/openmpi/ompi/mpi/cxx/info_inln.h \
   /usr/lib/x86_64-linux-gnu/openmpi/include/openmpi/ompi/mpi/cxx/win_inln.h \
   /usr/lib/x86_64-linux-gnu/openmpi/include/openmpi/ompi/mpi/cxx/file_inln.h \
-  /home/emiliano/Documenti/other_env/other_e/include/nest/target_data.h \
-  /home/emiliano/Documenti/other_env/other_e/include/nest/source_table_position.h \
-  /home/emiliano/Documenti/other_env/other_e/include/nest/target_table.h \
-  /home/emiliano/Documenti/other_env/other_e/include/nest/target_table_devices.h \
-  /home/emiliano/Documenti/other_env/other_e/include/nest/event_delivery_manager.h \
-  /home/emiliano/Documenti/other_env/other_e/include/nest/buffer_resize_log.h \
-  /home/emiliano/Documenti/other_env/other_e/include/nest/io_manager.h \
-  /home/emiliano/Documenti/other_env/other_e/include/nest/recording_backend.h \
-  /home/emiliano/Documenti/other_env/other_e/include/nest/stimulation_backend.h \
-  /home/emiliano/Documenti/other_env/other_e/include/nest/stimulation_device.h \
-  /home/emiliano/Documenti/other_env/other_e/include/nest/device.h \
-  /home/emiliano/Documenti/other_env/other_e/include/nest/device_node.h \
-  /home/emiliano/Documenti/other_env/other_e/include/nest/logging_manager.h \
-  /home/emiliano/Documenti/other_env/other_e/include/nest/model_manager.h \
-  /home/emiliano/Documenti/other_env/other_e/include/nest/genericmodel.h \
-  /home/emiliano/Documenti/other_env/other_e/include/nest/model.h \
-  /home/emiliano/Documenti/other_env/other_e/include/nest/modelrange_manager.h \
-  /home/emiliano/Documenti/other_env/other_e/include/nest/modelrange.h \
-  /home/emiliano/Documenti/other_env/other_e/include/nest/module_manager.h \
+  /home/emiliano/Documenti/better_env/benv/include/nest/target_data.h \
+  /home/emiliano/Documenti/better_env/benv/include/nest/source_table_position.h \
+  /home/emiliano/Documenti/better_env/benv/include/nest/target_table.h \
+  /home/emiliano/Documenti/better_env/benv/include/nest/target_table_devices.h \
+  /home/emiliano/Documenti/better_env/benv/include/nest/event_delivery_manager.h \
+  /home/emiliano/Documenti/better_env/benv/include/nest/buffer_resize_log.h \
+  /home/emiliano/Documenti/better_env/benv/include/nest/io_manager.h \
+  /home/emiliano/Documenti/better_env/benv/include/nest/recording_backend.h \
+  /home/emiliano/Documenti/better_env/benv/include/nest/stimulation_backend.h \
+  /home/emiliano/Documenti/better_env/benv/include/nest/stimulation_device.h \
+  /home/emiliano/Documenti/better_env/benv/include/nest/device.h \
+  /home/emiliano/Documenti/better_env/benv/include/nest/device_node.h \
+  /home/emiliano/Documenti/better_env/benv/include/nest/logging_manager.h \
+  /home/emiliano/Documenti/better_env/benv/include/nest/model_manager.h \
+  /home/emiliano/Documenti/better_env/benv/include/nest/genericmodel.h \
+  /home/emiliano/Documenti/better_env/benv/include/nest/model.h \
+  /home/emiliano/Documenti/better_env/benv/include/nest/modelrange_manager.h \
+  /home/emiliano/Documenti/better_env/benv/include/nest/modelrange.h \
+  /home/emiliano/Documenti/better_env/benv/include/nest/module_manager.h \
   /usr/include/ltdl.h \
   /usr/include/libltdl/lt_system.h \
   /usr/include/c++/11/stdlib.h \
   /usr/include/libltdl/lt_error.h \
   /usr/include/libltdl/lt_dlloader.h \
-  /home/emiliano/Documenti/other_env/other_e/include/nest/music_manager.h \
-  /home/emiliano/Documenti/other_env/other_e/include/nest/node_manager.h \
-  /home/emiliano/Documenti/other_env/other_e/include/nest/sparse_node_array.h \
-  /home/emiliano/Documenti/other_env/other_e/include/nest/random_manager.h \
-  /home/emiliano/Documenti/other_env/other_e/include/nest/simulation_manager.h \
-  /home/emiliano/Documenti/other_env/other_e/include/nest/sp_manager.h \
-  /home/emiliano/Documenti/other_env/other_e/include/nest/growth_curve_factory.h \
-  /home/emiliano/Documenti/other_env/other_e/include/nest/growth_curve.h \
+  /home/emiliano/Documenti/better_env/benv/include/nest/music_manager.h \
+  /home/emiliano/Documenti/better_env/benv/include/nest/node_manager.h \
+  /home/emiliano/Documenti/better_env/benv/include/nest/sparse_node_array.h \
+  /home/emiliano/Documenti/better_env/benv/include/nest/random_manager.h \
+  /home/emiliano/Documenti/better_env/benv/include/nest/simulation_manager.h \
+  /home/emiliano/Documenti/better_env/benv/include/nest/sp_manager.h \
+  /home/emiliano/Documenti/better_env/benv/include/nest/growth_curve_factory.h \
+  /home/emiliano/Documenti/better_env/benv/include/nest/growth_curve.h \
   /usr/include/c++/11/fstream \
   /usr/include/x86_64-linux-gnu/c++/11/bits/basic_file.h \
   /usr/include/x86_64-linux-gnu/c++/11/bits/c++io.h \
   /usr/include/c++/11/bits/fstream.tcc \
-  /home/emiliano/Documenti/other_env/other_e/include/nest/nest_impl.h \
-  /home/emiliano/Documenti/other_env/other_e/include/nest/connector_model_impl.h \
-  /home/emiliano/Documenti/other_env/other_e/include/nest/delay_checker.h \
-  /home/emiliano/Documenti/other_env/other_e/include/nest/kernel_manager.h \
-  /home/emiliano/Documenti/other_env/other_e/include/nest/secondary_event_impl.h \
-  /home/emiliano/Documenti/other_env/other_e/include/nest/genericmodel_impl.h \
-  /home/emiliano/Documenti/other_env/other_e/include/nest/model_manager_impl.h \
-  /home/emiliano/Documenti/other_env/other_e/include/nest/string_utils.h \
-  /home/emiliano/Documenti/other_env/other_e/include/nest/target_identifier.h \
-  /home/emiliano/Documenti/other_env/other_e/include/nest/universal_data_logger_impl.h \
-  /home/emiliano/Documenti/other_env/other_e/include/nest/universal_data_logger.h \
-  /home/emiliano/Documenti/other_env/other_e/include/nest/recordables_map.h \
-  /home/emiliano/Documenti/other_env/other_e/include/nest/event_delivery_manager_impl.h \
-  /home/emiliano/Documenti/other_env/other_e/include/nest/connection_manager_impl.h \
-  /home/emiliano/Documenti/other_env/other_e/include/nest/conn_builder_factory.h \
-  /home/emiliano/Documenti/other_env/other_e/include/nest/target_table_devices_impl.h \
-  /home/emiliano/Documenti/other_env/other_e/include/nest/vp_manager_impl.h \
-  /home/emiliano/Documenti/other_env/other_e/include/nest/mpi_manager_impl.h \
-  /home/emiliano/Documenti/other_env/other_e/include/nest/dict.h \
-  /home/emiliano/Documenti/other_env/other_e/include/nest/dictutils.h \
-  /home/emiliano/Documenti/other_env/other_e/include/nest/doubledatum.h \
-  /home/emiliano/Documenti/other_env/other_e/include/nest/integerdatum.h \
-  /home/emiliano/Documenti/other_env/other_e/include/nest/lockptrdatum.h \
+  /home/emiliano/Documenti/better_env/benv/include/nest/nest_impl.h \
+  /home/emiliano/Documenti/better_env/benv/include/nest/connector_model_impl.h \
+  /home/emiliano/Documenti/better_env/benv/include/nest/delay_checker.h \
+  /home/emiliano/Documenti/better_env/benv/include/nest/kernel_manager.h \
+  /home/emiliano/Documenti/better_env/benv/include/nest/secondary_event_impl.h \
+  /home/emiliano/Documenti/better_env/benv/include/nest/genericmodel_impl.h \
+  /home/emiliano/Documenti/better_env/benv/include/nest/model_manager_impl.h \
+  /home/emiliano/Documenti/better_env/benv/include/nest/string_utils.h \
+  /home/emiliano/Documenti/better_env/benv/include/nest/target_identifier.h \
+  /home/emiliano/Documenti/better_env/benv/include/nest/universal_data_logger_impl.h \
+  /home/emiliano/Documenti/better_env/benv/include/nest/universal_data_logger.h \
+  /home/emiliano/Documenti/better_env/benv/include/nest/recordables_map.h \
+  /home/emiliano/Documenti/better_env/benv/include/nest/event_delivery_manager_impl.h \
+  /home/emiliano/Documenti/better_env/benv/include/nest/connection_manager_impl.h \
+  /home/emiliano/Documenti/better_env/benv/include/nest/conn_builder_factory.h \
+  /home/emiliano/Documenti/better_env/benv/include/nest/target_table_devices_impl.h \
+  /home/emiliano/Documenti/better_env/benv/include/nest/vp_manager_impl.h \
+  /home/emiliano/Documenti/better_env/benv/include/nest/mpi_manager_impl.h \
+  /home/emiliano/Documenti/better_env/benv/include/nest/dict.h \
+  /home/emiliano/Documenti/better_env/benv/include/nest/dictutils.h \
+  /home/emiliano/Documenti/better_env/benv/include/nest/doubledatum.h \
+  /home/emiliano/Documenti/better_env/benv/include/nest/integerdatum.h \
+  /home/emiliano/Documenti/better_env/benv/include/nest/lockptrdatum.h \
   ../diff_neuron_nestml.h \
-  /home/emiliano/Documenti/other_env/other_e/include/nest/config.h \
-  /home/emiliano/Documenti/other_env/other_e/include/nest/structural_plasticity_node.h \
-  /home/emiliano/Documenti/other_env/other_e/include/nest/synaptic_element.h \
-  /home/emiliano/Documenti/other_env/other_e/include/nest/connection.h \
-  /home/emiliano/Documenti/other_env/other_e/include/nest/connector_base_impl.h \
-  /home/emiliano/Documenti/other_env/other_e/include/nest/weight_recorder.h \
-  /home/emiliano/Documenti/other_env/other_e/include/nest/recording_device.h \
-  /home/emiliano/Documenti/other_env/other_e/include/nest/syn_id_delay.h \
-  /home/emiliano/Documenti/other_env/other_e/include/nest/dict_util.h \
-  /home/emiliano/Documenti/other_env/other_e/include/nest/event.h \
-  /home/emiliano/Documenti/other_env/other_e/include/nest/nest_types.h \
-  /home/emiliano/Documenti/other_env/other_e/include/nest/ring_buffer.h \
-  /home/emiliano/Documenti/other_env/other_e/include/nest/universal_data_logger.h \
-  /home/emiliano/Documenti/other_env/other_e/include/nest/dictdatum.h \
-  /home/emiliano/Documenti/other_env/other_e/include/nest/nest_time.h
+  /home/emiliano/Documenti/better_env/benv/include/nest/config.h \
+  /home/emiliano/Documenti/better_env/benv/include/nest/structural_plasticity_node.h \
+  /home/emiliano/Documenti/better_env/benv/include/nest/synaptic_element.h \
+  /home/emiliano/Documenti/better_env/benv/include/nest/connection.h \
+  /home/emiliano/Documenti/better_env/benv/include/nest/connector_base_impl.h \
+  /home/emiliano/Documenti/better_env/benv/include/nest/weight_recorder.h \
+  /home/emiliano/Documenti/better_env/benv/include/nest/recording_device.h \
+  /home/emiliano/Documenti/better_env/benv/include/nest/syn_id_delay.h \
+  /home/emiliano/Documenti/better_env/benv/include/nest/dict_util.h \
+  /home/emiliano/Documenti/better_env/benv/include/nest/event.h \
+  /home/emiliano/Documenti/better_env/benv/include/nest/nest_types.h \
+  /home/emiliano/Documenti/better_env/benv/include/nest/ring_buffer.h \
+  /home/emiliano/Documenti/better_env/benv/include/nest/universal_data_logger.h \
+  /home/emiliano/Documenti/better_env/benv/include/nest/dictdatum.h \
+  /home/emiliano/Documenti/better_env/benv/include/nest/nest_time.h
 
 CMakeFiles/custom_stdp_module_module.dir/eglif_cond_alpha_multisyn.o: ../eglif_cond_alpha_multisyn.cpp \
   /usr/include/stdc-predef.h \
@@ -2721,8 +2721,8 @@ CMakeFiles/custom_stdp_module_module.dir/eglif_cond_alpha_multisyn.o: ../eglif_c
   /usr/include/x86_64-linux-gnu/gnu/stubs-64.h \
   /usr/include/x86_64-linux-gnu/c++/11/bits/cpu_defines.h \
   /usr/include/c++/11/pstl/pstl_config.h \
-  /home/emiliano/Documenti/other_env/other_e/include/nest/numerics.h \
-  /home/emiliano/Documenti/other_env/other_e/include/nest/config.h \
+  /home/emiliano/Documenti/better_env/benv/include/nest/numerics.h \
+  /home/emiliano/Documenti/better_env/benv/include/nest/config.h \
   /usr/include/c++/11/cassert \
   /usr/include/assert.h \
   /usr/include/c++/11/cmath \
@@ -2807,8 +2807,8 @@ CMakeFiles/custom_stdp_module_module.dir/eglif_cond_alpha_multisyn.o: ../eglif_c
   /usr/include/c++/11/tr1/poly_hermite.tcc \
   /usr/include/c++/11/tr1/poly_laguerre.tcc \
   /usr/include/c++/11/tr1/riemann_zeta.tcc \
-  /home/emiliano/Documenti/other_env/other_e/include/nest/exceptions.h \
-  /home/emiliano/Documenti/other_env/other_e/include/nest/nest_time.h \
+  /home/emiliano/Documenti/better_env/benv/include/nest/exceptions.h \
+  /home/emiliano/Documenti/better_env/benv/include/nest/nest_time.h \
   /usr/include/c++/11/cfloat \
   /usr/lib/gcc/x86_64-linux-gnu/11/include/float.h \
   /usr/include/c++/11/cstdlib \
@@ -2925,8 +2925,8 @@ CMakeFiles/custom_stdp_module_module.dir/eglif_cond_alpha_multisyn.o: ../eglif_c
   /usr/include/c++/11/bits/ostream.tcc \
   /usr/include/c++/11/istream \
   /usr/include/c++/11/bits/istream.tcc \
-  /home/emiliano/Documenti/other_env/other_e/include/nest/numerics.h \
-  /home/emiliano/Documenti/other_env/other_e/include/nest/nest_types.h \
+  /home/emiliano/Documenti/better_env/benv/include/nest/numerics.h \
+  /home/emiliano/Documenti/better_env/benv/include/nest/nest_types.h \
   /usr/include/c++/11/climits \
   /usr/lib/gcc/x86_64-linux-gnu/11/include/limits.h \
   /usr/lib/gcc/x86_64-linux-gnu/11/include/syslimits.h \
@@ -2938,7 +2938,7 @@ CMakeFiles/custom_stdp_module_module.dir/eglif_cond_alpha_multisyn.o: ../eglif_c
   /usr/include/x86_64-linux-gnu/bits/xopen_lim.h \
   /usr/include/x86_64-linux-gnu/bits/uio_lim.h \
   /usr/include/c++/11/cstddef \
-  /home/emiliano/Documenti/other_env/other_e/include/nest/name.h \
+  /home/emiliano/Documenti/better_env/benv/include/nest/name.h \
   /usr/include/c++/11/deque \
   /usr/include/c++/11/bits/stl_uninitialized.h \
   /usr/include/c++/11/bits/stl_deque.h \
@@ -2956,17 +2956,17 @@ CMakeFiles/custom_stdp_module_module.dir/eglif_cond_alpha_multisyn.o: ../eglif_c
   /usr/include/c++/11/bits/invoke.h \
   /usr/include/c++/11/bits/stl_multimap.h \
   /usr/include/c++/11/bits/erase_if.h \
-  /home/emiliano/Documenti/other_env/other_e/include/nest/sliexceptions.h \
+  /home/emiliano/Documenti/better_env/benv/include/nest/sliexceptions.h \
   /usr/include/c++/11/vector \
   /usr/include/c++/11/bits/stl_vector.h \
   /usr/include/c++/11/bits/stl_bvector.h \
   /usr/include/c++/11/bits/vector.tcc \
-  /home/emiliano/Documenti/other_env/other_e/include/nest/kernel_manager.h \
-  /home/emiliano/Documenti/other_env/other_e/include/nest/connection_manager.h \
-  /home/emiliano/Documenti/other_env/other_e/include/nest/manager_interface.h \
-  /home/emiliano/Documenti/other_env/other_e/include/nest/dictdatum.h \
-  /home/emiliano/Documenti/other_env/other_e/include/nest/dict.h \
-  /home/emiliano/Documenti/other_env/other_e/include/nest/token.h \
+  /home/emiliano/Documenti/better_env/benv/include/nest/kernel_manager.h \
+  /home/emiliano/Documenti/better_env/benv/include/nest/connection_manager.h \
+  /home/emiliano/Documenti/better_env/benv/include/nest/manager_interface.h \
+  /home/emiliano/Documenti/better_env/benv/include/nest/dictdatum.h \
+  /home/emiliano/Documenti/better_env/benv/include/nest/dict.h \
+  /home/emiliano/Documenti/better_env/benv/include/nest/token.h \
   /usr/include/c++/11/iomanip \
   /usr/include/c++/11/locale \
   /usr/include/c++/11/bits/locale_facets_nonio.h \
@@ -2981,20 +2981,20 @@ CMakeFiles/custom_stdp_module_module.dir/eglif_cond_alpha_multisyn.o: ../eglif_c
   /usr/include/c++/11/bits/quoted_string.h \
   /usr/include/c++/11/sstream \
   /usr/include/c++/11/bits/sstream.tcc \
-  /home/emiliano/Documenti/other_env/other_e/include/nest/datum.h \
-  /home/emiliano/Documenti/other_env/other_e/include/nest/slitype.h \
-  /home/emiliano/Documenti/other_env/other_e/include/nest/slifunction.h \
-  /home/emiliano/Documenti/other_env/other_e/include/nest/interpret.h \
+  /home/emiliano/Documenti/better_env/benv/include/nest/datum.h \
+  /home/emiliano/Documenti/better_env/benv/include/nest/slitype.h \
+  /home/emiliano/Documenti/better_env/benv/include/nest/slifunction.h \
+  /home/emiliano/Documenti/better_env/benv/include/nest/interpret.h \
   /usr/include/c++/11/list \
   /usr/include/c++/11/bits/stl_list.h \
   /usr/include/c++/11/bits/allocated_ptr.h \
   /usr/include/c++/11/bits/list.tcc \
-  /home/emiliano/Documenti/other_env/other_e/include/nest/sliactions.h \
-  /home/emiliano/Documenti/other_env/other_e/include/nest/slibuiltins.h \
-  /home/emiliano/Documenti/other_env/other_e/include/nest/slimodule.h \
-  /home/emiliano/Documenti/other_env/other_e/include/nest/tokenstack.h \
-  /home/emiliano/Documenti/other_env/other_e/include/nest/tarrayobj.h \
-  /home/emiliano/Documenti/other_env/other_e/include/nest/tokenarray.h \
+  /home/emiliano/Documenti/better_env/benv/include/nest/sliactions.h \
+  /home/emiliano/Documenti/better_env/benv/include/nest/slibuiltins.h \
+  /home/emiliano/Documenti/better_env/benv/include/nest/slimodule.h \
+  /home/emiliano/Documenti/better_env/benv/include/nest/tokenstack.h \
+  /home/emiliano/Documenti/better_env/benv/include/nest/tarrayobj.h \
+  /home/emiliano/Documenti/better_env/benv/include/nest/tokenarray.h \
   /usr/include/c++/11/algorithm \
   /usr/include/c++/11/bits/stl_algo.h \
   /usr/include/c++/11/bits/algorithmfwd.h \
@@ -3011,8 +3011,8 @@ CMakeFiles/custom_stdp_module_module.dir/eglif_cond_alpha_multisyn.o: ../eglif_c
   /usr/include/c++/11/bits/enable_special_members.h \
   /usr/include/c++/11/bits/unordered_map.h \
   /usr/include/c++/11/pstl/execution_defs.h \
-  /home/emiliano/Documenti/other_env/other_e/include/nest/lockptrdatum.h \
-  /home/emiliano/Documenti/other_env/other_e/include/nest/lockptr.h \
+  /home/emiliano/Documenti/better_env/benv/include/nest/lockptrdatum.h \
+  /home/emiliano/Documenti/better_env/benv/include/nest/lockptr.h \
   /usr/include/c++/11/memory \
   /usr/include/c++/11/bits/stl_raw_storage_iter.h \
   /usr/include/c++/11/bits/align.h \
@@ -3025,49 +3025,49 @@ CMakeFiles/custom_stdp_module_module.dir/eglif_cond_alpha_multisyn.o: ../eglif_c
   /usr/include/c++/11/bits/atomic_lockfree_defines.h \
   /usr/include/c++/11/backward/auto_ptr.h \
   /usr/include/c++/11/pstl/glue_memory_defs.h \
-  /home/emiliano/Documenti/other_env/other_e/include/nest/stopwatch.h \
+  /home/emiliano/Documenti/better_env/benv/include/nest/stopwatch.h \
   /usr/include/x86_64-linux-gnu/sys/time.h \
-  /home/emiliano/Documenti/other_env/other_e/include/nest/conn_builder.h \
+  /home/emiliano/Documenti/better_env/benv/include/nest/conn_builder.h \
   /usr/include/c++/11/set \
   /usr/include/c++/11/bits/stl_set.h \
   /usr/include/c++/11/bits/stl_multiset.h \
-  /home/emiliano/Documenti/other_env/other_e/include/nest/conn_parameter.h \
-  /home/emiliano/Documenti/other_env/other_e/include/nest/exceptions.h \
-  /home/emiliano/Documenti/other_env/other_e/include/nest/nest_datums.h \
-  /home/emiliano/Documenti/other_env/other_e/include/nest/connection_id.h \
-  /home/emiliano/Documenti/other_env/other_e/include/nest/arraydatum.h \
-  /home/emiliano/Documenti/other_env/other_e/include/nest/aggregatedatum.h \
-  /home/emiliano/Documenti/other_env/other_e/include/nest/allocator.h \
-  /home/emiliano/Documenti/other_env/other_e/include/nest/dictutils.h \
-  /home/emiliano/Documenti/other_env/other_e/include/nest/doubledatum.h \
-  /home/emiliano/Documenti/other_env/other_e/include/nest/numericdatum.h \
-  /home/emiliano/Documenti/other_env/other_e/include/nest/genericdatum.h \
-  /home/emiliano/Documenti/other_env/other_e/include/nest/integerdatum.h \
-  /home/emiliano/Documenti/other_env/other_e/include/nest/namedatum.h \
-  /home/emiliano/Documenti/other_env/other_e/include/nest/tokenutils.h \
-  /home/emiliano/Documenti/other_env/other_e/include/nest/nestmodule.h \
-  /home/emiliano/Documenti/other_env/other_e/include/nest/event.h \
+  /home/emiliano/Documenti/better_env/benv/include/nest/conn_parameter.h \
+  /home/emiliano/Documenti/better_env/benv/include/nest/exceptions.h \
+  /home/emiliano/Documenti/better_env/benv/include/nest/nest_datums.h \
+  /home/emiliano/Documenti/better_env/benv/include/nest/connection_id.h \
+  /home/emiliano/Documenti/better_env/benv/include/nest/arraydatum.h \
+  /home/emiliano/Documenti/better_env/benv/include/nest/aggregatedatum.h \
+  /home/emiliano/Documenti/better_env/benv/include/nest/allocator.h \
+  /home/emiliano/Documenti/better_env/benv/include/nest/dictutils.h \
+  /home/emiliano/Documenti/better_env/benv/include/nest/doubledatum.h \
+  /home/emiliano/Documenti/better_env/benv/include/nest/numericdatum.h \
+  /home/emiliano/Documenti/better_env/benv/include/nest/genericdatum.h \
+  /home/emiliano/Documenti/better_env/benv/include/nest/integerdatum.h \
+  /home/emiliano/Documenti/better_env/benv/include/nest/namedatum.h \
+  /home/emiliano/Documenti/better_env/benv/include/nest/tokenutils.h \
+  /home/emiliano/Documenti/better_env/benv/include/nest/nestmodule.h \
+  /home/emiliano/Documenti/better_env/benv/include/nest/event.h \
   /usr/include/c++/11/cstring \
   /usr/include/string.h \
   /usr/include/strings.h \
   /usr/include/x86_64-linux-gnu/bits/strings_fortified.h \
   /usr/include/x86_64-linux-gnu/bits/string_fortified.h \
-  /home/emiliano/Documenti/other_env/other_e/include/nest/spike_data.h \
-  /home/emiliano/Documenti/other_env/other_e/include/nest/target.h \
-  /home/emiliano/Documenti/other_env/other_e/include/nest/static_assert.h \
-  /home/emiliano/Documenti/other_env/other_e/include/nest/vp_manager.h \
+  /home/emiliano/Documenti/better_env/benv/include/nest/spike_data.h \
+  /home/emiliano/Documenti/better_env/benv/include/nest/target.h \
+  /home/emiliano/Documenti/better_env/benv/include/nest/static_assert.h \
+  /home/emiliano/Documenti/better_env/benv/include/nest/vp_manager.h \
   /usr/lib/gcc/x86_64-linux-gnu/11/include/omp.h \
-  /home/emiliano/Documenti/other_env/other_e/include/nest/generic_factory.h \
-  /home/emiliano/Documenti/other_env/other_e/include/nest/ntree.h \
+  /home/emiliano/Documenti/better_env/benv/include/nest/generic_factory.h \
+  /home/emiliano/Documenti/better_env/benv/include/nest/ntree.h \
   /usr/include/c++/11/bitset \
   /usr/include/c++/11/iterator \
   /usr/include/c++/11/bits/stream_iterator.h \
-  /home/emiliano/Documenti/other_env/other_e/include/nest/position.h \
-  /home/emiliano/Documenti/other_env/other_e/include/nest/compose.hpp \
-  /home/emiliano/Documenti/other_env/other_e/include/nest/parameter.h \
-  /home/emiliano/Documenti/other_env/other_e/include/nest/nest_names.h \
-  /home/emiliano/Documenti/other_env/other_e/include/nest/node_collection.h \
-  /home/emiliano/Documenti/other_env/other_e/include/nest/random_generators.h \
+  /home/emiliano/Documenti/better_env/benv/include/nest/position.h \
+  /home/emiliano/Documenti/better_env/benv/include/nest/compose.hpp \
+  /home/emiliano/Documenti/better_env/benv/include/nest/parameter.h \
+  /home/emiliano/Documenti/better_env/benv/include/nest/nest_names.h \
+  /home/emiliano/Documenti/better_env/benv/include/nest/node_collection.h \
+  /home/emiliano/Documenti/better_env/benv/include/nest/random_generators.h \
   /usr/include/c++/11/random \
   /usr/include/c++/11/bits/random.h \
   /usr/include/x86_64-linux-gnu/c++/11/bits/opt_random.h \
@@ -3075,7 +3075,7 @@ CMakeFiles/custom_stdp_module_module.dir/eglif_cond_alpha_multisyn.o: ../eglif_c
   /usr/include/c++/11/numeric \
   /usr/include/c++/11/bits/stl_numeric.h \
   /usr/include/c++/11/pstl/glue_numeric_defs.h \
-  /home/emiliano/Documenti/other_env/other_e/include/nest/randutils.hpp \
+  /home/emiliano/Documenti/better_env/benv/include/nest/randutils.hpp \
   /usr/include/c++/11/chrono \
   /usr/include/c++/11/ratio \
   /usr/include/c++/11/bits/parse_numbers.h \
@@ -3091,11 +3091,11 @@ CMakeFiles/custom_stdp_module_module.dir/eglif_cond_alpha_multisyn.o: ../eglif_c
   /usr/include/x86_64-linux-gnu/bits/unistd.h \
   /usr/include/x86_64-linux-gnu/bits/unistd_ext.h \
   /usr/include/linux/close_range.h \
-  /home/emiliano/Documenti/other_env/other_e/include/nest/sharedptrdatum.h \
-  /home/emiliano/Documenti/other_env/other_e/include/nest/connector_base.h \
-  /home/emiliano/Documenti/other_env/other_e/include/nest/sort.h \
-  /home/emiliano/Documenti/other_env/other_e/include/nest/block_vector.h \
-  /home/emiliano/Documenti/other_env/other_e/include/nest/iterator_pair.h \
+  /home/emiliano/Documenti/better_env/benv/include/nest/sharedptrdatum.h \
+  /home/emiliano/Documenti/better_env/benv/include/nest/connector_base.h \
+  /home/emiliano/Documenti/better_env/benv/include/nest/sort.h \
+  /home/emiliano/Documenti/better_env/benv/include/nest/block_vector.h \
+  /home/emiliano/Documenti/better_env/benv/include/nest/iterator_pair.h \
   /usr/include/boost/iterator/iterator_adaptor.hpp \
   /usr/include/boost/static_assert.hpp \
   /usr/include/boost/config.hpp \
@@ -3321,7 +3321,7 @@ CMakeFiles/custom_stdp_module_module.dir/eglif_cond_alpha_multisyn.o: ../eglif_c
   /usr/include/boost/utility/swap.hpp \
   /usr/include/boost/core/swap.hpp \
   /usr/include/boost/core/enable_if.hpp \
-  /home/emiliano/Documenti/other_env/other_e/include/nest/source.h \
+  /home/emiliano/Documenti/better_env/benv/include/nest/source.h \
   /usr/include/boost/sort/spreadsort/spreadsort.hpp \
   /usr/include/boost/type_traits.hpp \
   /usr/include/boost/type_traits/aligned_storage.hpp \
@@ -3458,24 +3458,24 @@ CMakeFiles/custom_stdp_module_module.dir/eglif_cond_alpha_multisyn.o: ../eglif_c
   /usr/include/boost/sort/spreadsort/detail/float_sort.hpp \
   /usr/include/boost/sort/spreadsort/string_sort.hpp \
   /usr/include/boost/sort/spreadsort/detail/string_sort.hpp \
-  /home/emiliano/Documenti/other_env/other_e/include/nest/vector_util.h \
-  /home/emiliano/Documenti/other_env/other_e/include/nest/common_synapse_properties.h \
-  /home/emiliano/Documenti/other_env/other_e/include/nest/connector_model.h \
-  /home/emiliano/Documenti/other_env/other_e/include/nest/enum_bitfield.h \
-  /home/emiliano/Documenti/other_env/other_e/include/nest/secondary_event.h \
-  /home/emiliano/Documenti/other_env/other_e/include/nest/node.h \
-  /home/emiliano/Documenti/other_env/other_e/include/nest/deprecation_warning.h \
-  /home/emiliano/Documenti/other_env/other_e/include/nest/histentry.h \
-  /home/emiliano/Documenti/other_env/other_e/include/nest/connection_label.h \
-  /home/emiliano/Documenti/other_env/other_e/include/nest/nest.h \
-  /home/emiliano/Documenti/other_env/other_e/include/nest/logging.h \
-  /home/emiliano/Documenti/other_env/other_e/include/nest/spikecounter.h \
-  /home/emiliano/Documenti/other_env/other_e/include/nest/nest_timeconverter.h \
-  /home/emiliano/Documenti/other_env/other_e/include/nest/per_thread_bool_indicator.h \
+  /home/emiliano/Documenti/better_env/benv/include/nest/vector_util.h \
+  /home/emiliano/Documenti/better_env/benv/include/nest/common_synapse_properties.h \
+  /home/emiliano/Documenti/better_env/benv/include/nest/connector_model.h \
+  /home/emiliano/Documenti/better_env/benv/include/nest/enum_bitfield.h \
+  /home/emiliano/Documenti/better_env/benv/include/nest/secondary_event.h \
+  /home/emiliano/Documenti/better_env/benv/include/nest/node.h \
+  /home/emiliano/Documenti/better_env/benv/include/nest/deprecation_warning.h \
+  /home/emiliano/Documenti/better_env/benv/include/nest/histentry.h \
+  /home/emiliano/Documenti/better_env/benv/include/nest/connection_label.h \
+  /home/emiliano/Documenti/better_env/benv/include/nest/nest.h \
+  /home/emiliano/Documenti/better_env/benv/include/nest/logging.h \
+  /home/emiliano/Documenti/better_env/benv/include/nest/spikecounter.h \
+  /home/emiliano/Documenti/better_env/benv/include/nest/nest_timeconverter.h \
+  /home/emiliano/Documenti/better_env/benv/include/nest/per_thread_bool_indicator.h \
   /usr/include/c++/11/atomic \
-  /home/emiliano/Documenti/other_env/other_e/include/nest/send_buffer_position.h \
-  /home/emiliano/Documenti/other_env/other_e/include/nest/source_table.h \
-  /home/emiliano/Documenti/other_env/other_e/include/nest/mpi_manager.h \
+  /home/emiliano/Documenti/better_env/benv/include/nest/send_buffer_position.h \
+  /home/emiliano/Documenti/better_env/benv/include/nest/source_table.h \
+  /home/emiliano/Documenti/better_env/benv/include/nest/mpi_manager.h \
   /usr/lib/x86_64-linux-gnu/openmpi/include/mpi.h \
   /usr/lib/x86_64-linux-gnu/openmpi/include/mpi_portable_platform.h \
   /usr/lib/x86_64-linux-gnu/openmpi/include/openmpi/ompi/mpi/cxx/mpicxx.h \
@@ -3509,67 +3509,67 @@ CMakeFiles/custom_stdp_module_module.dir/eglif_cond_alpha_multisyn.o: ../eglif_c
   /usr/lib/x86_64-linux-gnu/openmpi/include/openmpi/ompi/mpi/cxx/info_inln.h \
   /usr/lib/x86_64-linux-gnu/openmpi/include/openmpi/ompi/mpi/cxx/win_inln.h \
   /usr/lib/x86_64-linux-gnu/openmpi/include/openmpi/ompi/mpi/cxx/file_inln.h \
-  /home/emiliano/Documenti/other_env/other_e/include/nest/target_data.h \
-  /home/emiliano/Documenti/other_env/other_e/include/nest/source_table_position.h \
-  /home/emiliano/Documenti/other_env/other_e/include/nest/target_table.h \
-  /home/emiliano/Documenti/other_env/other_e/include/nest/target_table_devices.h \
-  /home/emiliano/Documenti/other_env/other_e/include/nest/event_delivery_manager.h \
-  /home/emiliano/Documenti/other_env/other_e/include/nest/buffer_resize_log.h \
-  /home/emiliano/Documenti/other_env/other_e/include/nest/io_manager.h \
-  /home/emiliano/Documenti/other_env/other_e/include/nest/recording_backend.h \
-  /home/emiliano/Documenti/other_env/other_e/include/nest/stimulation_backend.h \
-  /home/emiliano/Documenti/other_env/other_e/include/nest/stimulation_device.h \
-  /home/emiliano/Documenti/other_env/other_e/include/nest/device.h \
-  /home/emiliano/Documenti/other_env/other_e/include/nest/device_node.h \
-  /home/emiliano/Documenti/other_env/other_e/include/nest/logging_manager.h \
-  /home/emiliano/Documenti/other_env/other_e/include/nest/model_manager.h \
-  /home/emiliano/Documenti/other_env/other_e/include/nest/genericmodel.h \
-  /home/emiliano/Documenti/other_env/other_e/include/nest/model.h \
-  /home/emiliano/Documenti/other_env/other_e/include/nest/modelrange_manager.h \
-  /home/emiliano/Documenti/other_env/other_e/include/nest/modelrange.h \
-  /home/emiliano/Documenti/other_env/other_e/include/nest/module_manager.h \
+  /home/emiliano/Documenti/better_env/benv/include/nest/target_data.h \
+  /home/emiliano/Documenti/better_env/benv/include/nest/source_table_position.h \
+  /home/emiliano/Documenti/better_env/benv/include/nest/target_table.h \
+  /home/emiliano/Documenti/better_env/benv/include/nest/target_table_devices.h \
+  /home/emiliano/Documenti/better_env/benv/include/nest/event_delivery_manager.h \
+  /home/emiliano/Documenti/better_env/benv/include/nest/buffer_resize_log.h \
+  /home/emiliano/Documenti/better_env/benv/include/nest/io_manager.h \
+  /home/emiliano/Documenti/better_env/benv/include/nest/recording_backend.h \
+  /home/emiliano/Documenti/better_env/benv/include/nest/stimulation_backend.h \
+  /home/emiliano/Documenti/better_env/benv/include/nest/stimulation_device.h \
+  /home/emiliano/Documenti/better_env/benv/include/nest/device.h \
+  /home/emiliano/Documenti/better_env/benv/include/nest/device_node.h \
+  /home/emiliano/Documenti/better_env/benv/include/nest/logging_manager.h \
+  /home/emiliano/Documenti/better_env/benv/include/nest/model_manager.h \
+  /home/emiliano/Documenti/better_env/benv/include/nest/genericmodel.h \
+  /home/emiliano/Documenti/better_env/benv/include/nest/model.h \
+  /home/emiliano/Documenti/better_env/benv/include/nest/modelrange_manager.h \
+  /home/emiliano/Documenti/better_env/benv/include/nest/modelrange.h \
+  /home/emiliano/Documenti/better_env/benv/include/nest/module_manager.h \
   /usr/include/ltdl.h \
   /usr/include/libltdl/lt_system.h \
   /usr/include/c++/11/stdlib.h \
   /usr/include/libltdl/lt_error.h \
   /usr/include/libltdl/lt_dlloader.h \
-  /home/emiliano/Documenti/other_env/other_e/include/nest/music_manager.h \
-  /home/emiliano/Documenti/other_env/other_e/include/nest/node_manager.h \
-  /home/emiliano/Documenti/other_env/other_e/include/nest/sparse_node_array.h \
-  /home/emiliano/Documenti/other_env/other_e/include/nest/random_manager.h \
-  /home/emiliano/Documenti/other_env/other_e/include/nest/simulation_manager.h \
-  /home/emiliano/Documenti/other_env/other_e/include/nest/sp_manager.h \
-  /home/emiliano/Documenti/other_env/other_e/include/nest/growth_curve_factory.h \
-  /home/emiliano/Documenti/other_env/other_e/include/nest/growth_curve.h \
+  /home/emiliano/Documenti/better_env/benv/include/nest/music_manager.h \
+  /home/emiliano/Documenti/better_env/benv/include/nest/node_manager.h \
+  /home/emiliano/Documenti/better_env/benv/include/nest/sparse_node_array.h \
+  /home/emiliano/Documenti/better_env/benv/include/nest/random_manager.h \
+  /home/emiliano/Documenti/better_env/benv/include/nest/simulation_manager.h \
+  /home/emiliano/Documenti/better_env/benv/include/nest/sp_manager.h \
+  /home/emiliano/Documenti/better_env/benv/include/nest/growth_curve_factory.h \
+  /home/emiliano/Documenti/better_env/benv/include/nest/growth_curve.h \
   /usr/include/c++/11/fstream \
   /usr/include/x86_64-linux-gnu/c++/11/bits/basic_file.h \
   /usr/include/x86_64-linux-gnu/c++/11/bits/c++io.h \
   /usr/include/c++/11/bits/fstream.tcc \
-  /home/emiliano/Documenti/other_env/other_e/include/nest/nest_impl.h \
-  /home/emiliano/Documenti/other_env/other_e/include/nest/connector_model_impl.h \
-  /home/emiliano/Documenti/other_env/other_e/include/nest/delay_checker.h \
-  /home/emiliano/Documenti/other_env/other_e/include/nest/kernel_manager.h \
-  /home/emiliano/Documenti/other_env/other_e/include/nest/secondary_event_impl.h \
-  /home/emiliano/Documenti/other_env/other_e/include/nest/genericmodel_impl.h \
-  /home/emiliano/Documenti/other_env/other_e/include/nest/model_manager_impl.h \
-  /home/emiliano/Documenti/other_env/other_e/include/nest/string_utils.h \
-  /home/emiliano/Documenti/other_env/other_e/include/nest/target_identifier.h \
-  /home/emiliano/Documenti/other_env/other_e/include/nest/universal_data_logger_impl.h \
-  /home/emiliano/Documenti/other_env/other_e/include/nest/universal_data_logger.h \
-  /home/emiliano/Documenti/other_env/other_e/include/nest/recordables_map.h \
-  /home/emiliano/Documenti/other_env/other_e/include/nest/event_delivery_manager_impl.h \
-  /home/emiliano/Documenti/other_env/other_e/include/nest/connection_manager_impl.h \
-  /home/emiliano/Documenti/other_env/other_e/include/nest/conn_builder_factory.h \
-  /home/emiliano/Documenti/other_env/other_e/include/nest/target_table_devices_impl.h \
-  /home/emiliano/Documenti/other_env/other_e/include/nest/vp_manager_impl.h \
-  /home/emiliano/Documenti/other_env/other_e/include/nest/mpi_manager_impl.h \
-  /home/emiliano/Documenti/other_env/other_e/include/nest/dict.h \
-  /home/emiliano/Documenti/other_env/other_e/include/nest/dictutils.h \
-  /home/emiliano/Documenti/other_env/other_e/include/nest/doubledatum.h \
-  /home/emiliano/Documenti/other_env/other_e/include/nest/integerdatum.h \
-  /home/emiliano/Documenti/other_env/other_e/include/nest/lockptrdatum.h \
+  /home/emiliano/Documenti/better_env/benv/include/nest/nest_impl.h \
+  /home/emiliano/Documenti/better_env/benv/include/nest/connector_model_impl.h \
+  /home/emiliano/Documenti/better_env/benv/include/nest/delay_checker.h \
+  /home/emiliano/Documenti/better_env/benv/include/nest/kernel_manager.h \
+  /home/emiliano/Documenti/better_env/benv/include/nest/secondary_event_impl.h \
+  /home/emiliano/Documenti/better_env/benv/include/nest/genericmodel_impl.h \
+  /home/emiliano/Documenti/better_env/benv/include/nest/model_manager_impl.h \
+  /home/emiliano/Documenti/better_env/benv/include/nest/string_utils.h \
+  /home/emiliano/Documenti/better_env/benv/include/nest/target_identifier.h \
+  /home/emiliano/Documenti/better_env/benv/include/nest/universal_data_logger_impl.h \
+  /home/emiliano/Documenti/better_env/benv/include/nest/universal_data_logger.h \
+  /home/emiliano/Documenti/better_env/benv/include/nest/recordables_map.h \
+  /home/emiliano/Documenti/better_env/benv/include/nest/event_delivery_manager_impl.h \
+  /home/emiliano/Documenti/better_env/benv/include/nest/connection_manager_impl.h \
+  /home/emiliano/Documenti/better_env/benv/include/nest/conn_builder_factory.h \
+  /home/emiliano/Documenti/better_env/benv/include/nest/target_table_devices_impl.h \
+  /home/emiliano/Documenti/better_env/benv/include/nest/vp_manager_impl.h \
+  /home/emiliano/Documenti/better_env/benv/include/nest/mpi_manager_impl.h \
+  /home/emiliano/Documenti/better_env/benv/include/nest/dict.h \
+  /home/emiliano/Documenti/better_env/benv/include/nest/dictutils.h \
+  /home/emiliano/Documenti/better_env/benv/include/nest/doubledatum.h \
+  /home/emiliano/Documenti/better_env/benv/include/nest/integerdatum.h \
+  /home/emiliano/Documenti/better_env/benv/include/nest/lockptrdatum.h \
   ../eglif_cond_alpha_multisyn.h \
-  /home/emiliano/Documenti/other_env/other_e/include/nest/config.h \
+  /home/emiliano/Documenti/better_env/benv/include/nest/config.h \
   /usr/include/gsl/gsl_errno.h \
   /usr/include/gsl/gsl_types.h \
   /usr/include/gsl/gsl_matrix.h \
@@ -3622,21 +3622,21 @@ CMakeFiles/custom_stdp_module_module.dir/eglif_cond_alpha_multisyn.o: ../eglif_c
   /usr/include/gsl/gsl_vector_char.h \
   /usr/include/gsl/gsl_block_char.h \
   /usr/include/gsl/gsl_odeiv.h \
-  /home/emiliano/Documenti/other_env/other_e/include/nest/archiving_node.h \
-  /home/emiliano/Documenti/other_env/other_e/include/nest/structural_plasticity_node.h \
-  /home/emiliano/Documenti/other_env/other_e/include/nest/synaptic_element.h \
-  /home/emiliano/Documenti/other_env/other_e/include/nest/connection.h \
-  /home/emiliano/Documenti/other_env/other_e/include/nest/connector_base_impl.h \
-  /home/emiliano/Documenti/other_env/other_e/include/nest/weight_recorder.h \
-  /home/emiliano/Documenti/other_env/other_e/include/nest/recording_device.h \
-  /home/emiliano/Documenti/other_env/other_e/include/nest/syn_id_delay.h \
-  /home/emiliano/Documenti/other_env/other_e/include/nest/dict_util.h \
-  /home/emiliano/Documenti/other_env/other_e/include/nest/event.h \
-  /home/emiliano/Documenti/other_env/other_e/include/nest/nest_types.h \
-  /home/emiliano/Documenti/other_env/other_e/include/nest/ring_buffer.h \
-  /home/emiliano/Documenti/other_env/other_e/include/nest/universal_data_logger.h \
-  /home/emiliano/Documenti/other_env/other_e/include/nest/dictdatum.h \
-  /home/emiliano/Documenti/other_env/other_e/include/nest/nest_time.h
+  /home/emiliano/Documenti/better_env/benv/include/nest/archiving_node.h \
+  /home/emiliano/Documenti/better_env/benv/include/nest/structural_plasticity_node.h \
+  /home/emiliano/Documenti/better_env/benv/include/nest/synaptic_element.h \
+  /home/emiliano/Documenti/better_env/benv/include/nest/connection.h \
+  /home/emiliano/Documenti/better_env/benv/include/nest/connector_base_impl.h \
+  /home/emiliano/Documenti/better_env/benv/include/nest/weight_recorder.h \
+  /home/emiliano/Documenti/better_env/benv/include/nest/recording_device.h \
+  /home/emiliano/Documenti/better_env/benv/include/nest/syn_id_delay.h \
+  /home/emiliano/Documenti/better_env/benv/include/nest/dict_util.h \
+  /home/emiliano/Documenti/better_env/benv/include/nest/event.h \
+  /home/emiliano/Documenti/better_env/benv/include/nest/nest_types.h \
+  /home/emiliano/Documenti/better_env/benv/include/nest/ring_buffer.h \
+  /home/emiliano/Documenti/better_env/benv/include/nest/universal_data_logger.h \
+  /home/emiliano/Documenti/better_env/benv/include/nest/dictdatum.h \
+  /home/emiliano/Documenti/better_env/benv/include/nest/nest_time.h
 
 CMakeFiles/custom_stdp_module_module.dir/eglif_dcnp.o: ../eglif_dcnp.cpp \
   /usr/include/stdc-predef.h \
@@ -3653,8 +3653,8 @@ CMakeFiles/custom_stdp_module_module.dir/eglif_dcnp.o: ../eglif_dcnp.cpp \
   /usr/include/x86_64-linux-gnu/gnu/stubs-64.h \
   /usr/include/x86_64-linux-gnu/c++/11/bits/cpu_defines.h \
   /usr/include/c++/11/pstl/pstl_config.h \
-  /home/emiliano/Documenti/other_env/other_e/include/nest/numerics.h \
-  /home/emiliano/Documenti/other_env/other_e/include/nest/config.h \
+  /home/emiliano/Documenti/better_env/benv/include/nest/numerics.h \
+  /home/emiliano/Documenti/better_env/benv/include/nest/config.h \
   /usr/include/c++/11/cassert \
   /usr/include/assert.h \
   /usr/include/c++/11/cmath \
@@ -3739,8 +3739,8 @@ CMakeFiles/custom_stdp_module_module.dir/eglif_dcnp.o: ../eglif_dcnp.cpp \
   /usr/include/c++/11/tr1/poly_hermite.tcc \
   /usr/include/c++/11/tr1/poly_laguerre.tcc \
   /usr/include/c++/11/tr1/riemann_zeta.tcc \
-  /home/emiliano/Documenti/other_env/other_e/include/nest/exceptions.h \
-  /home/emiliano/Documenti/other_env/other_e/include/nest/nest_time.h \
+  /home/emiliano/Documenti/better_env/benv/include/nest/exceptions.h \
+  /home/emiliano/Documenti/better_env/benv/include/nest/nest_time.h \
   /usr/include/c++/11/cfloat \
   /usr/lib/gcc/x86_64-linux-gnu/11/include/float.h \
   /usr/include/c++/11/cstdlib \
@@ -3857,8 +3857,8 @@ CMakeFiles/custom_stdp_module_module.dir/eglif_dcnp.o: ../eglif_dcnp.cpp \
   /usr/include/c++/11/bits/ostream.tcc \
   /usr/include/c++/11/istream \
   /usr/include/c++/11/bits/istream.tcc \
-  /home/emiliano/Documenti/other_env/other_e/include/nest/numerics.h \
-  /home/emiliano/Documenti/other_env/other_e/include/nest/nest_types.h \
+  /home/emiliano/Documenti/better_env/benv/include/nest/numerics.h \
+  /home/emiliano/Documenti/better_env/benv/include/nest/nest_types.h \
   /usr/include/c++/11/climits \
   /usr/lib/gcc/x86_64-linux-gnu/11/include/limits.h \
   /usr/lib/gcc/x86_64-linux-gnu/11/include/syslimits.h \
@@ -3870,7 +3870,7 @@ CMakeFiles/custom_stdp_module_module.dir/eglif_dcnp.o: ../eglif_dcnp.cpp \
   /usr/include/x86_64-linux-gnu/bits/xopen_lim.h \
   /usr/include/x86_64-linux-gnu/bits/uio_lim.h \
   /usr/include/c++/11/cstddef \
-  /home/emiliano/Documenti/other_env/other_e/include/nest/name.h \
+  /home/emiliano/Documenti/better_env/benv/include/nest/name.h \
   /usr/include/c++/11/deque \
   /usr/include/c++/11/bits/stl_uninitialized.h \
   /usr/include/c++/11/bits/stl_deque.h \
@@ -3888,17 +3888,17 @@ CMakeFiles/custom_stdp_module_module.dir/eglif_dcnp.o: ../eglif_dcnp.cpp \
   /usr/include/c++/11/bits/invoke.h \
   /usr/include/c++/11/bits/stl_multimap.h \
   /usr/include/c++/11/bits/erase_if.h \
-  /home/emiliano/Documenti/other_env/other_e/include/nest/sliexceptions.h \
+  /home/emiliano/Documenti/better_env/benv/include/nest/sliexceptions.h \
   /usr/include/c++/11/vector \
   /usr/include/c++/11/bits/stl_vector.h \
   /usr/include/c++/11/bits/stl_bvector.h \
   /usr/include/c++/11/bits/vector.tcc \
-  /home/emiliano/Documenti/other_env/other_e/include/nest/kernel_manager.h \
-  /home/emiliano/Documenti/other_env/other_e/include/nest/connection_manager.h \
-  /home/emiliano/Documenti/other_env/other_e/include/nest/manager_interface.h \
-  /home/emiliano/Documenti/other_env/other_e/include/nest/dictdatum.h \
-  /home/emiliano/Documenti/other_env/other_e/include/nest/dict.h \
-  /home/emiliano/Documenti/other_env/other_e/include/nest/token.h \
+  /home/emiliano/Documenti/better_env/benv/include/nest/kernel_manager.h \
+  /home/emiliano/Documenti/better_env/benv/include/nest/connection_manager.h \
+  /home/emiliano/Documenti/better_env/benv/include/nest/manager_interface.h \
+  /home/emiliano/Documenti/better_env/benv/include/nest/dictdatum.h \
+  /home/emiliano/Documenti/better_env/benv/include/nest/dict.h \
+  /home/emiliano/Documenti/better_env/benv/include/nest/token.h \
   /usr/include/c++/11/iomanip \
   /usr/include/c++/11/locale \
   /usr/include/c++/11/bits/locale_facets_nonio.h \
@@ -3913,20 +3913,20 @@ CMakeFiles/custom_stdp_module_module.dir/eglif_dcnp.o: ../eglif_dcnp.cpp \
   /usr/include/c++/11/bits/quoted_string.h \
   /usr/include/c++/11/sstream \
   /usr/include/c++/11/bits/sstream.tcc \
-  /home/emiliano/Documenti/other_env/other_e/include/nest/datum.h \
-  /home/emiliano/Documenti/other_env/other_e/include/nest/slitype.h \
-  /home/emiliano/Documenti/other_env/other_e/include/nest/slifunction.h \
-  /home/emiliano/Documenti/other_env/other_e/include/nest/interpret.h \
+  /home/emiliano/Documenti/better_env/benv/include/nest/datum.h \
+  /home/emiliano/Documenti/better_env/benv/include/nest/slitype.h \
+  /home/emiliano/Documenti/better_env/benv/include/nest/slifunction.h \
+  /home/emiliano/Documenti/better_env/benv/include/nest/interpret.h \
   /usr/include/c++/11/list \
   /usr/include/c++/11/bits/stl_list.h \
   /usr/include/c++/11/bits/allocated_ptr.h \
   /usr/include/c++/11/bits/list.tcc \
-  /home/emiliano/Documenti/other_env/other_e/include/nest/sliactions.h \
-  /home/emiliano/Documenti/other_env/other_e/include/nest/slibuiltins.h \
-  /home/emiliano/Documenti/other_env/other_e/include/nest/slimodule.h \
-  /home/emiliano/Documenti/other_env/other_e/include/nest/tokenstack.h \
-  /home/emiliano/Documenti/other_env/other_e/include/nest/tarrayobj.h \
-  /home/emiliano/Documenti/other_env/other_e/include/nest/tokenarray.h \
+  /home/emiliano/Documenti/better_env/benv/include/nest/sliactions.h \
+  /home/emiliano/Documenti/better_env/benv/include/nest/slibuiltins.h \
+  /home/emiliano/Documenti/better_env/benv/include/nest/slimodule.h \
+  /home/emiliano/Documenti/better_env/benv/include/nest/tokenstack.h \
+  /home/emiliano/Documenti/better_env/benv/include/nest/tarrayobj.h \
+  /home/emiliano/Documenti/better_env/benv/include/nest/tokenarray.h \
   /usr/include/c++/11/algorithm \
   /usr/include/c++/11/bits/stl_algo.h \
   /usr/include/c++/11/bits/algorithmfwd.h \
@@ -3943,8 +3943,8 @@ CMakeFiles/custom_stdp_module_module.dir/eglif_dcnp.o: ../eglif_dcnp.cpp \
   /usr/include/c++/11/bits/enable_special_members.h \
   /usr/include/c++/11/bits/unordered_map.h \
   /usr/include/c++/11/pstl/execution_defs.h \
-  /home/emiliano/Documenti/other_env/other_e/include/nest/lockptrdatum.h \
-  /home/emiliano/Documenti/other_env/other_e/include/nest/lockptr.h \
+  /home/emiliano/Documenti/better_env/benv/include/nest/lockptrdatum.h \
+  /home/emiliano/Documenti/better_env/benv/include/nest/lockptr.h \
   /usr/include/c++/11/memory \
   /usr/include/c++/11/bits/stl_raw_storage_iter.h \
   /usr/include/c++/11/bits/align.h \
@@ -3957,49 +3957,49 @@ CMakeFiles/custom_stdp_module_module.dir/eglif_dcnp.o: ../eglif_dcnp.cpp \
   /usr/include/c++/11/bits/atomic_lockfree_defines.h \
   /usr/include/c++/11/backward/auto_ptr.h \
   /usr/include/c++/11/pstl/glue_memory_defs.h \
-  /home/emiliano/Documenti/other_env/other_e/include/nest/stopwatch.h \
+  /home/emiliano/Documenti/better_env/benv/include/nest/stopwatch.h \
   /usr/include/x86_64-linux-gnu/sys/time.h \
-  /home/emiliano/Documenti/other_env/other_e/include/nest/conn_builder.h \
+  /home/emiliano/Documenti/better_env/benv/include/nest/conn_builder.h \
   /usr/include/c++/11/set \
   /usr/include/c++/11/bits/stl_set.h \
   /usr/include/c++/11/bits/stl_multiset.h \
-  /home/emiliano/Documenti/other_env/other_e/include/nest/conn_parameter.h \
-  /home/emiliano/Documenti/other_env/other_e/include/nest/exceptions.h \
-  /home/emiliano/Documenti/other_env/other_e/include/nest/nest_datums.h \
-  /home/emiliano/Documenti/other_env/other_e/include/nest/connection_id.h \
-  /home/emiliano/Documenti/other_env/other_e/include/nest/arraydatum.h \
-  /home/emiliano/Documenti/other_env/other_e/include/nest/aggregatedatum.h \
-  /home/emiliano/Documenti/other_env/other_e/include/nest/allocator.h \
-  /home/emiliano/Documenti/other_env/other_e/include/nest/dictutils.h \
-  /home/emiliano/Documenti/other_env/other_e/include/nest/doubledatum.h \
-  /home/emiliano/Documenti/other_env/other_e/include/nest/numericdatum.h \
-  /home/emiliano/Documenti/other_env/other_e/include/nest/genericdatum.h \
-  /home/emiliano/Documenti/other_env/other_e/include/nest/integerdatum.h \
-  /home/emiliano/Documenti/other_env/other_e/include/nest/namedatum.h \
-  /home/emiliano/Documenti/other_env/other_e/include/nest/tokenutils.h \
-  /home/emiliano/Documenti/other_env/other_e/include/nest/nestmodule.h \
-  /home/emiliano/Documenti/other_env/other_e/include/nest/event.h \
+  /home/emiliano/Documenti/better_env/benv/include/nest/conn_parameter.h \
+  /home/emiliano/Documenti/better_env/benv/include/nest/exceptions.h \
+  /home/emiliano/Documenti/better_env/benv/include/nest/nest_datums.h \
+  /home/emiliano/Documenti/better_env/benv/include/nest/connection_id.h \
+  /home/emiliano/Documenti/better_env/benv/include/nest/arraydatum.h \
+  /home/emiliano/Documenti/better_env/benv/include/nest/aggregatedatum.h \
+  /home/emiliano/Documenti/better_env/benv/include/nest/allocator.h \
+  /home/emiliano/Documenti/better_env/benv/include/nest/dictutils.h \
+  /home/emiliano/Documenti/better_env/benv/include/nest/doubledatum.h \
+  /home/emiliano/Documenti/better_env/benv/include/nest/numericdatum.h \
+  /home/emiliano/Documenti/better_env/benv/include/nest/genericdatum.h \
+  /home/emiliano/Documenti/better_env/benv/include/nest/integerdatum.h \
+  /home/emiliano/Documenti/better_env/benv/include/nest/namedatum.h \
+  /home/emiliano/Documenti/better_env/benv/include/nest/tokenutils.h \
+  /home/emiliano/Documenti/better_env/benv/include/nest/nestmodule.h \
+  /home/emiliano/Documenti/better_env/benv/include/nest/event.h \
   /usr/include/c++/11/cstring \
   /usr/include/string.h \
   /usr/include/strings.h \
   /usr/include/x86_64-linux-gnu/bits/strings_fortified.h \
   /usr/include/x86_64-linux-gnu/bits/string_fortified.h \
-  /home/emiliano/Documenti/other_env/other_e/include/nest/spike_data.h \
-  /home/emiliano/Documenti/other_env/other_e/include/nest/target.h \
-  /home/emiliano/Documenti/other_env/other_e/include/nest/static_assert.h \
-  /home/emiliano/Documenti/other_env/other_e/include/nest/vp_manager.h \
+  /home/emiliano/Documenti/better_env/benv/include/nest/spike_data.h \
+  /home/emiliano/Documenti/better_env/benv/include/nest/target.h \
+  /home/emiliano/Documenti/better_env/benv/include/nest/static_assert.h \
+  /home/emiliano/Documenti/better_env/benv/include/nest/vp_manager.h \
   /usr/lib/gcc/x86_64-linux-gnu/11/include/omp.h \
-  /home/emiliano/Documenti/other_env/other_e/include/nest/generic_factory.h \
-  /home/emiliano/Documenti/other_env/other_e/include/nest/ntree.h \
+  /home/emiliano/Documenti/better_env/benv/include/nest/generic_factory.h \
+  /home/emiliano/Documenti/better_env/benv/include/nest/ntree.h \
   /usr/include/c++/11/bitset \
   /usr/include/c++/11/iterator \
   /usr/include/c++/11/bits/stream_iterator.h \
-  /home/emiliano/Documenti/other_env/other_e/include/nest/position.h \
-  /home/emiliano/Documenti/other_env/other_e/include/nest/compose.hpp \
-  /home/emiliano/Documenti/other_env/other_e/include/nest/parameter.h \
-  /home/emiliano/Documenti/other_env/other_e/include/nest/nest_names.h \
-  /home/emiliano/Documenti/other_env/other_e/include/nest/node_collection.h \
-  /home/emiliano/Documenti/other_env/other_e/include/nest/random_generators.h \
+  /home/emiliano/Documenti/better_env/benv/include/nest/position.h \
+  /home/emiliano/Documenti/better_env/benv/include/nest/compose.hpp \
+  /home/emiliano/Documenti/better_env/benv/include/nest/parameter.h \
+  /home/emiliano/Documenti/better_env/benv/include/nest/nest_names.h \
+  /home/emiliano/Documenti/better_env/benv/include/nest/node_collection.h \
+  /home/emiliano/Documenti/better_env/benv/include/nest/random_generators.h \
   /usr/include/c++/11/random \
   /usr/include/c++/11/bits/random.h \
   /usr/include/x86_64-linux-gnu/c++/11/bits/opt_random.h \
@@ -4007,7 +4007,7 @@ CMakeFiles/custom_stdp_module_module.dir/eglif_dcnp.o: ../eglif_dcnp.cpp \
   /usr/include/c++/11/numeric \
   /usr/include/c++/11/bits/stl_numeric.h \
   /usr/include/c++/11/pstl/glue_numeric_defs.h \
-  /home/emiliano/Documenti/other_env/other_e/include/nest/randutils.hpp \
+  /home/emiliano/Documenti/better_env/benv/include/nest/randutils.hpp \
   /usr/include/c++/11/chrono \
   /usr/include/c++/11/ratio \
   /usr/include/c++/11/bits/parse_numbers.h \
@@ -4023,11 +4023,11 @@ CMakeFiles/custom_stdp_module_module.dir/eglif_dcnp.o: ../eglif_dcnp.cpp \
   /usr/include/x86_64-linux-gnu/bits/unistd.h \
   /usr/include/x86_64-linux-gnu/bits/unistd_ext.h \
   /usr/include/linux/close_range.h \
-  /home/emiliano/Documenti/other_env/other_e/include/nest/sharedptrdatum.h \
-  /home/emiliano/Documenti/other_env/other_e/include/nest/connector_base.h \
-  /home/emiliano/Documenti/other_env/other_e/include/nest/sort.h \
-  /home/emiliano/Documenti/other_env/other_e/include/nest/block_vector.h \
-  /home/emiliano/Documenti/other_env/other_e/include/nest/iterator_pair.h \
+  /home/emiliano/Documenti/better_env/benv/include/nest/sharedptrdatum.h \
+  /home/emiliano/Documenti/better_env/benv/include/nest/connector_base.h \
+  /home/emiliano/Documenti/better_env/benv/include/nest/sort.h \
+  /home/emiliano/Documenti/better_env/benv/include/nest/block_vector.h \
+  /home/emiliano/Documenti/better_env/benv/include/nest/iterator_pair.h \
   /usr/include/boost/iterator/iterator_adaptor.hpp \
   /usr/include/boost/static_assert.hpp \
   /usr/include/boost/config.hpp \
@@ -4253,7 +4253,7 @@ CMakeFiles/custom_stdp_module_module.dir/eglif_dcnp.o: ../eglif_dcnp.cpp \
   /usr/include/boost/utility/swap.hpp \
   /usr/include/boost/core/swap.hpp \
   /usr/include/boost/core/enable_if.hpp \
-  /home/emiliano/Documenti/other_env/other_e/include/nest/source.h \
+  /home/emiliano/Documenti/better_env/benv/include/nest/source.h \
   /usr/include/boost/sort/spreadsort/spreadsort.hpp \
   /usr/include/boost/type_traits.hpp \
   /usr/include/boost/type_traits/aligned_storage.hpp \
@@ -4390,24 +4390,24 @@ CMakeFiles/custom_stdp_module_module.dir/eglif_dcnp.o: ../eglif_dcnp.cpp \
   /usr/include/boost/sort/spreadsort/detail/float_sort.hpp \
   /usr/include/boost/sort/spreadsort/string_sort.hpp \
   /usr/include/boost/sort/spreadsort/detail/string_sort.hpp \
-  /home/emiliano/Documenti/other_env/other_e/include/nest/vector_util.h \
-  /home/emiliano/Documenti/other_env/other_e/include/nest/common_synapse_properties.h \
-  /home/emiliano/Documenti/other_env/other_e/include/nest/connector_model.h \
-  /home/emiliano/Documenti/other_env/other_e/include/nest/enum_bitfield.h \
-  /home/emiliano/Documenti/other_env/other_e/include/nest/secondary_event.h \
-  /home/emiliano/Documenti/other_env/other_e/include/nest/node.h \
-  /home/emiliano/Documenti/other_env/other_e/include/nest/deprecation_warning.h \
-  /home/emiliano/Documenti/other_env/other_e/include/nest/histentry.h \
-  /home/emiliano/Documenti/other_env/other_e/include/nest/connection_label.h \
-  /home/emiliano/Documenti/other_env/other_e/include/nest/nest.h \
-  /home/emiliano/Documenti/other_env/other_e/include/nest/logging.h \
-  /home/emiliano/Documenti/other_env/other_e/include/nest/spikecounter.h \
-  /home/emiliano/Documenti/other_env/other_e/include/nest/nest_timeconverter.h \
-  /home/emiliano/Documenti/other_env/other_e/include/nest/per_thread_bool_indicator.h \
+  /home/emiliano/Documenti/better_env/benv/include/nest/vector_util.h \
+  /home/emiliano/Documenti/better_env/benv/include/nest/common_synapse_properties.h \
+  /home/emiliano/Documenti/better_env/benv/include/nest/connector_model.h \
+  /home/emiliano/Documenti/better_env/benv/include/nest/enum_bitfield.h \
+  /home/emiliano/Documenti/better_env/benv/include/nest/secondary_event.h \
+  /home/emiliano/Documenti/better_env/benv/include/nest/node.h \
+  /home/emiliano/Documenti/better_env/benv/include/nest/deprecation_warning.h \
+  /home/emiliano/Documenti/better_env/benv/include/nest/histentry.h \
+  /home/emiliano/Documenti/better_env/benv/include/nest/connection_label.h \
+  /home/emiliano/Documenti/better_env/benv/include/nest/nest.h \
+  /home/emiliano/Documenti/better_env/benv/include/nest/logging.h \
+  /home/emiliano/Documenti/better_env/benv/include/nest/spikecounter.h \
+  /home/emiliano/Documenti/better_env/benv/include/nest/nest_timeconverter.h \
+  /home/emiliano/Documenti/better_env/benv/include/nest/per_thread_bool_indicator.h \
   /usr/include/c++/11/atomic \
-  /home/emiliano/Documenti/other_env/other_e/include/nest/send_buffer_position.h \
-  /home/emiliano/Documenti/other_env/other_e/include/nest/source_table.h \
-  /home/emiliano/Documenti/other_env/other_e/include/nest/mpi_manager.h \
+  /home/emiliano/Documenti/better_env/benv/include/nest/send_buffer_position.h \
+  /home/emiliano/Documenti/better_env/benv/include/nest/source_table.h \
+  /home/emiliano/Documenti/better_env/benv/include/nest/mpi_manager.h \
   /usr/lib/x86_64-linux-gnu/openmpi/include/mpi.h \
   /usr/lib/x86_64-linux-gnu/openmpi/include/mpi_portable_platform.h \
   /usr/lib/x86_64-linux-gnu/openmpi/include/openmpi/ompi/mpi/cxx/mpicxx.h \
@@ -4441,67 +4441,67 @@ CMakeFiles/custom_stdp_module_module.dir/eglif_dcnp.o: ../eglif_dcnp.cpp \
   /usr/lib/x86_64-linux-gnu/openmpi/include/openmpi/ompi/mpi/cxx/info_inln.h \
   /usr/lib/x86_64-linux-gnu/openmpi/include/openmpi/ompi/mpi/cxx/win_inln.h \
   /usr/lib/x86_64-linux-gnu/openmpi/include/openmpi/ompi/mpi/cxx/file_inln.h \
-  /home/emiliano/Documenti/other_env/other_e/include/nest/target_data.h \
-  /home/emiliano/Documenti/other_env/other_e/include/nest/source_table_position.h \
-  /home/emiliano/Documenti/other_env/other_e/include/nest/target_table.h \
-  /home/emiliano/Documenti/other_env/other_e/include/nest/target_table_devices.h \
-  /home/emiliano/Documenti/other_env/other_e/include/nest/event_delivery_manager.h \
-  /home/emiliano/Documenti/other_env/other_e/include/nest/buffer_resize_log.h \
-  /home/emiliano/Documenti/other_env/other_e/include/nest/io_manager.h \
-  /home/emiliano/Documenti/other_env/other_e/include/nest/recording_backend.h \
-  /home/emiliano/Documenti/other_env/other_e/include/nest/stimulation_backend.h \
-  /home/emiliano/Documenti/other_env/other_e/include/nest/stimulation_device.h \
-  /home/emiliano/Documenti/other_env/other_e/include/nest/device.h \
-  /home/emiliano/Documenti/other_env/other_e/include/nest/device_node.h \
-  /home/emiliano/Documenti/other_env/other_e/include/nest/logging_manager.h \
-  /home/emiliano/Documenti/other_env/other_e/include/nest/model_manager.h \
-  /home/emiliano/Documenti/other_env/other_e/include/nest/genericmodel.h \
-  /home/emiliano/Documenti/other_env/other_e/include/nest/model.h \
-  /home/emiliano/Documenti/other_env/other_e/include/nest/modelrange_manager.h \
-  /home/emiliano/Documenti/other_env/other_e/include/nest/modelrange.h \
-  /home/emiliano/Documenti/other_env/other_e/include/nest/module_manager.h \
+  /home/emiliano/Documenti/better_env/benv/include/nest/target_data.h \
+  /home/emiliano/Documenti/better_env/benv/include/nest/source_table_position.h \
+  /home/emiliano/Documenti/better_env/benv/include/nest/target_table.h \
+  /home/emiliano/Documenti/better_env/benv/include/nest/target_table_devices.h \
+  /home/emiliano/Documenti/better_env/benv/include/nest/event_delivery_manager.h \
+  /home/emiliano/Documenti/better_env/benv/include/nest/buffer_resize_log.h \
+  /home/emiliano/Documenti/better_env/benv/include/nest/io_manager.h \
+  /home/emiliano/Documenti/better_env/benv/include/nest/recording_backend.h \
+  /home/emiliano/Documenti/better_env/benv/include/nest/stimulation_backend.h \
+  /home/emiliano/Documenti/better_env/benv/include/nest/stimulation_device.h \
+  /home/emiliano/Documenti/better_env/benv/include/nest/device.h \
+  /home/emiliano/Documenti/better_env/benv/include/nest/device_node.h \
+  /home/emiliano/Documenti/better_env/benv/include/nest/logging_manager.h \
+  /home/emiliano/Documenti/better_env/benv/include/nest/model_manager.h \
+  /home/emiliano/Documenti/better_env/benv/include/nest/genericmodel.h \
+  /home/emiliano/Documenti/better_env/benv/include/nest/model.h \
+  /home/emiliano/Documenti/better_env/benv/include/nest/modelrange_manager.h \
+  /home/emiliano/Documenti/better_env/benv/include/nest/modelrange.h \
+  /home/emiliano/Documenti/better_env/benv/include/nest/module_manager.h \
   /usr/include/ltdl.h \
   /usr/include/libltdl/lt_system.h \
   /usr/include/c++/11/stdlib.h \
   /usr/include/libltdl/lt_error.h \
   /usr/include/libltdl/lt_dlloader.h \
-  /home/emiliano/Documenti/other_env/other_e/include/nest/music_manager.h \
-  /home/emiliano/Documenti/other_env/other_e/include/nest/node_manager.h \
-  /home/emiliano/Documenti/other_env/other_e/include/nest/sparse_node_array.h \
-  /home/emiliano/Documenti/other_env/other_e/include/nest/random_manager.h \
-  /home/emiliano/Documenti/other_env/other_e/include/nest/simulation_manager.h \
-  /home/emiliano/Documenti/other_env/other_e/include/nest/sp_manager.h \
-  /home/emiliano/Documenti/other_env/other_e/include/nest/growth_curve_factory.h \
-  /home/emiliano/Documenti/other_env/other_e/include/nest/growth_curve.h \
+  /home/emiliano/Documenti/better_env/benv/include/nest/music_manager.h \
+  /home/emiliano/Documenti/better_env/benv/include/nest/node_manager.h \
+  /home/emiliano/Documenti/better_env/benv/include/nest/sparse_node_array.h \
+  /home/emiliano/Documenti/better_env/benv/include/nest/random_manager.h \
+  /home/emiliano/Documenti/better_env/benv/include/nest/simulation_manager.h \
+  /home/emiliano/Documenti/better_env/benv/include/nest/sp_manager.h \
+  /home/emiliano/Documenti/better_env/benv/include/nest/growth_curve_factory.h \
+  /home/emiliano/Documenti/better_env/benv/include/nest/growth_curve.h \
   /usr/include/c++/11/fstream \
   /usr/include/x86_64-linux-gnu/c++/11/bits/basic_file.h \
   /usr/include/x86_64-linux-gnu/c++/11/bits/c++io.h \
   /usr/include/c++/11/bits/fstream.tcc \
-  /home/emiliano/Documenti/other_env/other_e/include/nest/nest_impl.h \
-  /home/emiliano/Documenti/other_env/other_e/include/nest/connector_model_impl.h \
-  /home/emiliano/Documenti/other_env/other_e/include/nest/delay_checker.h \
-  /home/emiliano/Documenti/other_env/other_e/include/nest/kernel_manager.h \
-  /home/emiliano/Documenti/other_env/other_e/include/nest/secondary_event_impl.h \
-  /home/emiliano/Documenti/other_env/other_e/include/nest/genericmodel_impl.h \
-  /home/emiliano/Documenti/other_env/other_e/include/nest/model_manager_impl.h \
-  /home/emiliano/Documenti/other_env/other_e/include/nest/string_utils.h \
-  /home/emiliano/Documenti/other_env/other_e/include/nest/target_identifier.h \
-  /home/emiliano/Documenti/other_env/other_e/include/nest/universal_data_logger_impl.h \
-  /home/emiliano/Documenti/other_env/other_e/include/nest/universal_data_logger.h \
-  /home/emiliano/Documenti/other_env/other_e/include/nest/recordables_map.h \
-  /home/emiliano/Documenti/other_env/other_e/include/nest/event_delivery_manager_impl.h \
-  /home/emiliano/Documenti/other_env/other_e/include/nest/connection_manager_impl.h \
-  /home/emiliano/Documenti/other_env/other_e/include/nest/conn_builder_factory.h \
-  /home/emiliano/Documenti/other_env/other_e/include/nest/target_table_devices_impl.h \
-  /home/emiliano/Documenti/other_env/other_e/include/nest/vp_manager_impl.h \
-  /home/emiliano/Documenti/other_env/other_e/include/nest/mpi_manager_impl.h \
-  /home/emiliano/Documenti/other_env/other_e/include/nest/dict.h \
-  /home/emiliano/Documenti/other_env/other_e/include/nest/dictutils.h \
-  /home/emiliano/Documenti/other_env/other_e/include/nest/doubledatum.h \
-  /home/emiliano/Documenti/other_env/other_e/include/nest/integerdatum.h \
-  /home/emiliano/Documenti/other_env/other_e/include/nest/lockptrdatum.h \
+  /home/emiliano/Documenti/better_env/benv/include/nest/nest_impl.h \
+  /home/emiliano/Documenti/better_env/benv/include/nest/connector_model_impl.h \
+  /home/emiliano/Documenti/better_env/benv/include/nest/delay_checker.h \
+  /home/emiliano/Documenti/better_env/benv/include/nest/kernel_manager.h \
+  /home/emiliano/Documenti/better_env/benv/include/nest/secondary_event_impl.h \
+  /home/emiliano/Documenti/better_env/benv/include/nest/genericmodel_impl.h \
+  /home/emiliano/Documenti/better_env/benv/include/nest/model_manager_impl.h \
+  /home/emiliano/Documenti/better_env/benv/include/nest/string_utils.h \
+  /home/emiliano/Documenti/better_env/benv/include/nest/target_identifier.h \
+  /home/emiliano/Documenti/better_env/benv/include/nest/universal_data_logger_impl.h \
+  /home/emiliano/Documenti/better_env/benv/include/nest/universal_data_logger.h \
+  /home/emiliano/Documenti/better_env/benv/include/nest/recordables_map.h \
+  /home/emiliano/Documenti/better_env/benv/include/nest/event_delivery_manager_impl.h \
+  /home/emiliano/Documenti/better_env/benv/include/nest/connection_manager_impl.h \
+  /home/emiliano/Documenti/better_env/benv/include/nest/conn_builder_factory.h \
+  /home/emiliano/Documenti/better_env/benv/include/nest/target_table_devices_impl.h \
+  /home/emiliano/Documenti/better_env/benv/include/nest/vp_manager_impl.h \
+  /home/emiliano/Documenti/better_env/benv/include/nest/mpi_manager_impl.h \
+  /home/emiliano/Documenti/better_env/benv/include/nest/dict.h \
+  /home/emiliano/Documenti/better_env/benv/include/nest/dictutils.h \
+  /home/emiliano/Documenti/better_env/benv/include/nest/doubledatum.h \
+  /home/emiliano/Documenti/better_env/benv/include/nest/integerdatum.h \
+  /home/emiliano/Documenti/better_env/benv/include/nest/lockptrdatum.h \
   ../eglif_dcnp.h \
-  /home/emiliano/Documenti/other_env/other_e/include/nest/config.h \
+  /home/emiliano/Documenti/better_env/benv/include/nest/config.h \
   /usr/include/gsl/gsl_errno.h \
   /usr/include/gsl/gsl_types.h \
   /usr/include/gsl/gsl_matrix.h \
@@ -4554,26 +4554,26 @@ CMakeFiles/custom_stdp_module_module.dir/eglif_dcnp.o: ../eglif_dcnp.cpp \
   /usr/include/gsl/gsl_vector_char.h \
   /usr/include/gsl/gsl_block_char.h \
   /usr/include/gsl/gsl_odeiv.h \
-  /home/emiliano/Documenti/other_env/other_e/include/nest/archiving_node.h \
-  /home/emiliano/Documenti/other_env/other_e/include/nest/structural_plasticity_node.h \
-  /home/emiliano/Documenti/other_env/other_e/include/nest/synaptic_element.h \
+  /home/emiliano/Documenti/better_env/benv/include/nest/archiving_node.h \
+  /home/emiliano/Documenti/better_env/benv/include/nest/structural_plasticity_node.h \
+  /home/emiliano/Documenti/better_env/benv/include/nest/synaptic_element.h \
   ../extended_post_history_archiving_node.h \
   ../extended_hist_entry.h \
-  /home/emiliano/Documenti/other_env/other_e/include/nest/structural_plasticity_node.h \
-  /home/emiliano/Documenti/other_env/other_e/include/nest/nest_time.h \
-  /home/emiliano/Documenti/other_env/other_e/include/nest/nest_types.h \
-  /home/emiliano/Documenti/other_env/other_e/include/nest/node.h \
-  /home/emiliano/Documenti/other_env/other_e/include/nest/dictdatum.h \
-  /home/emiliano/Documenti/other_env/other_e/include/nest/nest_datums.h \
-  /home/emiliano/Documenti/other_env/other_e/include/nest/connection.h \
-  /home/emiliano/Documenti/other_env/other_e/include/nest/connector_base_impl.h \
-  /home/emiliano/Documenti/other_env/other_e/include/nest/weight_recorder.h \
-  /home/emiliano/Documenti/other_env/other_e/include/nest/recording_device.h \
-  /home/emiliano/Documenti/other_env/other_e/include/nest/syn_id_delay.h \
-  /home/emiliano/Documenti/other_env/other_e/include/nest/dict_util.h \
-  /home/emiliano/Documenti/other_env/other_e/include/nest/event.h \
-  /home/emiliano/Documenti/other_env/other_e/include/nest/ring_buffer.h \
-  /home/emiliano/Documenti/other_env/other_e/include/nest/universal_data_logger.h
+  /home/emiliano/Documenti/better_env/benv/include/nest/structural_plasticity_node.h \
+  /home/emiliano/Documenti/better_env/benv/include/nest/nest_time.h \
+  /home/emiliano/Documenti/better_env/benv/include/nest/nest_types.h \
+  /home/emiliano/Documenti/better_env/benv/include/nest/node.h \
+  /home/emiliano/Documenti/better_env/benv/include/nest/dictdatum.h \
+  /home/emiliano/Documenti/better_env/benv/include/nest/nest_datums.h \
+  /home/emiliano/Documenti/better_env/benv/include/nest/connection.h \
+  /home/emiliano/Documenti/better_env/benv/include/nest/connector_base_impl.h \
+  /home/emiliano/Documenti/better_env/benv/include/nest/weight_recorder.h \
+  /home/emiliano/Documenti/better_env/benv/include/nest/recording_device.h \
+  /home/emiliano/Documenti/better_env/benv/include/nest/syn_id_delay.h \
+  /home/emiliano/Documenti/better_env/benv/include/nest/dict_util.h \
+  /home/emiliano/Documenti/better_env/benv/include/nest/event.h \
+  /home/emiliano/Documenti/better_env/benv/include/nest/ring_buffer.h \
+  /home/emiliano/Documenti/better_env/benv/include/nest/universal_data_logger.h
 
 CMakeFiles/custom_stdp_module_module.dir/eglif_io_nestml.o: ../eglif_io_nestml.cpp \
   /usr/include/stdc-predef.h \
@@ -4590,8 +4590,8 @@ CMakeFiles/custom_stdp_module_module.dir/eglif_io_nestml.o: ../eglif_io_nestml.c
   /usr/include/x86_64-linux-gnu/gnu/stubs-64.h \
   /usr/include/x86_64-linux-gnu/c++/11/bits/cpu_defines.h \
   /usr/include/c++/11/pstl/pstl_config.h \
-  /home/emiliano/Documenti/other_env/other_e/include/nest/numerics.h \
-  /home/emiliano/Documenti/other_env/other_e/include/nest/config.h \
+  /home/emiliano/Documenti/better_env/benv/include/nest/numerics.h \
+  /home/emiliano/Documenti/better_env/benv/include/nest/config.h \
   /usr/include/c++/11/cassert \
   /usr/include/assert.h \
   /usr/include/c++/11/cmath \
@@ -4676,8 +4676,8 @@ CMakeFiles/custom_stdp_module_module.dir/eglif_io_nestml.o: ../eglif_io_nestml.c
   /usr/include/c++/11/tr1/poly_hermite.tcc \
   /usr/include/c++/11/tr1/poly_laguerre.tcc \
   /usr/include/c++/11/tr1/riemann_zeta.tcc \
-  /home/emiliano/Documenti/other_env/other_e/include/nest/exceptions.h \
-  /home/emiliano/Documenti/other_env/other_e/include/nest/nest_time.h \
+  /home/emiliano/Documenti/better_env/benv/include/nest/exceptions.h \
+  /home/emiliano/Documenti/better_env/benv/include/nest/nest_time.h \
   /usr/include/c++/11/cfloat \
   /usr/lib/gcc/x86_64-linux-gnu/11/include/float.h \
   /usr/include/c++/11/cstdlib \
@@ -4794,8 +4794,8 @@ CMakeFiles/custom_stdp_module_module.dir/eglif_io_nestml.o: ../eglif_io_nestml.c
   /usr/include/c++/11/bits/ostream.tcc \
   /usr/include/c++/11/istream \
   /usr/include/c++/11/bits/istream.tcc \
-  /home/emiliano/Documenti/other_env/other_e/include/nest/numerics.h \
-  /home/emiliano/Documenti/other_env/other_e/include/nest/nest_types.h \
+  /home/emiliano/Documenti/better_env/benv/include/nest/numerics.h \
+  /home/emiliano/Documenti/better_env/benv/include/nest/nest_types.h \
   /usr/include/c++/11/climits \
   /usr/lib/gcc/x86_64-linux-gnu/11/include/limits.h \
   /usr/lib/gcc/x86_64-linux-gnu/11/include/syslimits.h \
@@ -4807,7 +4807,7 @@ CMakeFiles/custom_stdp_module_module.dir/eglif_io_nestml.o: ../eglif_io_nestml.c
   /usr/include/x86_64-linux-gnu/bits/xopen_lim.h \
   /usr/include/x86_64-linux-gnu/bits/uio_lim.h \
   /usr/include/c++/11/cstddef \
-  /home/emiliano/Documenti/other_env/other_e/include/nest/name.h \
+  /home/emiliano/Documenti/better_env/benv/include/nest/name.h \
   /usr/include/c++/11/deque \
   /usr/include/c++/11/bits/stl_uninitialized.h \
   /usr/include/c++/11/bits/stl_deque.h \
@@ -4825,17 +4825,17 @@ CMakeFiles/custom_stdp_module_module.dir/eglif_io_nestml.o: ../eglif_io_nestml.c
   /usr/include/c++/11/bits/invoke.h \
   /usr/include/c++/11/bits/stl_multimap.h \
   /usr/include/c++/11/bits/erase_if.h \
-  /home/emiliano/Documenti/other_env/other_e/include/nest/sliexceptions.h \
+  /home/emiliano/Documenti/better_env/benv/include/nest/sliexceptions.h \
   /usr/include/c++/11/vector \
   /usr/include/c++/11/bits/stl_vector.h \
   /usr/include/c++/11/bits/stl_bvector.h \
   /usr/include/c++/11/bits/vector.tcc \
-  /home/emiliano/Documenti/other_env/other_e/include/nest/kernel_manager.h \
-  /home/emiliano/Documenti/other_env/other_e/include/nest/connection_manager.h \
-  /home/emiliano/Documenti/other_env/other_e/include/nest/manager_interface.h \
-  /home/emiliano/Documenti/other_env/other_e/include/nest/dictdatum.h \
-  /home/emiliano/Documenti/other_env/other_e/include/nest/dict.h \
-  /home/emiliano/Documenti/other_env/other_e/include/nest/token.h \
+  /home/emiliano/Documenti/better_env/benv/include/nest/kernel_manager.h \
+  /home/emiliano/Documenti/better_env/benv/include/nest/connection_manager.h \
+  /home/emiliano/Documenti/better_env/benv/include/nest/manager_interface.h \
+  /home/emiliano/Documenti/better_env/benv/include/nest/dictdatum.h \
+  /home/emiliano/Documenti/better_env/benv/include/nest/dict.h \
+  /home/emiliano/Documenti/better_env/benv/include/nest/token.h \
   /usr/include/c++/11/iomanip \
   /usr/include/c++/11/locale \
   /usr/include/c++/11/bits/locale_facets_nonio.h \
@@ -4850,20 +4850,20 @@ CMakeFiles/custom_stdp_module_module.dir/eglif_io_nestml.o: ../eglif_io_nestml.c
   /usr/include/c++/11/bits/quoted_string.h \
   /usr/include/c++/11/sstream \
   /usr/include/c++/11/bits/sstream.tcc \
-  /home/emiliano/Documenti/other_env/other_e/include/nest/datum.h \
-  /home/emiliano/Documenti/other_env/other_e/include/nest/slitype.h \
-  /home/emiliano/Documenti/other_env/other_e/include/nest/slifunction.h \
-  /home/emiliano/Documenti/other_env/other_e/include/nest/interpret.h \
+  /home/emiliano/Documenti/better_env/benv/include/nest/datum.h \
+  /home/emiliano/Documenti/better_env/benv/include/nest/slitype.h \
+  /home/emiliano/Documenti/better_env/benv/include/nest/slifunction.h \
+  /home/emiliano/Documenti/better_env/benv/include/nest/interpret.h \
   /usr/include/c++/11/list \
   /usr/include/c++/11/bits/stl_list.h \
   /usr/include/c++/11/bits/allocated_ptr.h \
   /usr/include/c++/11/bits/list.tcc \
-  /home/emiliano/Documenti/other_env/other_e/include/nest/sliactions.h \
-  /home/emiliano/Documenti/other_env/other_e/include/nest/slibuiltins.h \
-  /home/emiliano/Documenti/other_env/other_e/include/nest/slimodule.h \
-  /home/emiliano/Documenti/other_env/other_e/include/nest/tokenstack.h \
-  /home/emiliano/Documenti/other_env/other_e/include/nest/tarrayobj.h \
-  /home/emiliano/Documenti/other_env/other_e/include/nest/tokenarray.h \
+  /home/emiliano/Documenti/better_env/benv/include/nest/sliactions.h \
+  /home/emiliano/Documenti/better_env/benv/include/nest/slibuiltins.h \
+  /home/emiliano/Documenti/better_env/benv/include/nest/slimodule.h \
+  /home/emiliano/Documenti/better_env/benv/include/nest/tokenstack.h \
+  /home/emiliano/Documenti/better_env/benv/include/nest/tarrayobj.h \
+  /home/emiliano/Documenti/better_env/benv/include/nest/tokenarray.h \
   /usr/include/c++/11/algorithm \
   /usr/include/c++/11/bits/stl_algo.h \
   /usr/include/c++/11/bits/algorithmfwd.h \
@@ -4880,8 +4880,8 @@ CMakeFiles/custom_stdp_module_module.dir/eglif_io_nestml.o: ../eglif_io_nestml.c
   /usr/include/c++/11/bits/enable_special_members.h \
   /usr/include/c++/11/bits/unordered_map.h \
   /usr/include/c++/11/pstl/execution_defs.h \
-  /home/emiliano/Documenti/other_env/other_e/include/nest/lockptrdatum.h \
-  /home/emiliano/Documenti/other_env/other_e/include/nest/lockptr.h \
+  /home/emiliano/Documenti/better_env/benv/include/nest/lockptrdatum.h \
+  /home/emiliano/Documenti/better_env/benv/include/nest/lockptr.h \
   /usr/include/c++/11/memory \
   /usr/include/c++/11/bits/stl_raw_storage_iter.h \
   /usr/include/c++/11/bits/align.h \
@@ -4894,49 +4894,49 @@ CMakeFiles/custom_stdp_module_module.dir/eglif_io_nestml.o: ../eglif_io_nestml.c
   /usr/include/c++/11/bits/atomic_lockfree_defines.h \
   /usr/include/c++/11/backward/auto_ptr.h \
   /usr/include/c++/11/pstl/glue_memory_defs.h \
-  /home/emiliano/Documenti/other_env/other_e/include/nest/stopwatch.h \
+  /home/emiliano/Documenti/better_env/benv/include/nest/stopwatch.h \
   /usr/include/x86_64-linux-gnu/sys/time.h \
-  /home/emiliano/Documenti/other_env/other_e/include/nest/conn_builder.h \
+  /home/emiliano/Documenti/better_env/benv/include/nest/conn_builder.h \
   /usr/include/c++/11/set \
   /usr/include/c++/11/bits/stl_set.h \
   /usr/include/c++/11/bits/stl_multiset.h \
-  /home/emiliano/Documenti/other_env/other_e/include/nest/conn_parameter.h \
-  /home/emiliano/Documenti/other_env/other_e/include/nest/exceptions.h \
-  /home/emiliano/Documenti/other_env/other_e/include/nest/nest_datums.h \
-  /home/emiliano/Documenti/other_env/other_e/include/nest/connection_id.h \
-  /home/emiliano/Documenti/other_env/other_e/include/nest/arraydatum.h \
-  /home/emiliano/Documenti/other_env/other_e/include/nest/aggregatedatum.h \
-  /home/emiliano/Documenti/other_env/other_e/include/nest/allocator.h \
-  /home/emiliano/Documenti/other_env/other_e/include/nest/dictutils.h \
-  /home/emiliano/Documenti/other_env/other_e/include/nest/doubledatum.h \
-  /home/emiliano/Documenti/other_env/other_e/include/nest/numericdatum.h \
-  /home/emiliano/Documenti/other_env/other_e/include/nest/genericdatum.h \
-  /home/emiliano/Documenti/other_env/other_e/include/nest/integerdatum.h \
-  /home/emiliano/Documenti/other_env/other_e/include/nest/namedatum.h \
-  /home/emiliano/Documenti/other_env/other_e/include/nest/tokenutils.h \
-  /home/emiliano/Documenti/other_env/other_e/include/nest/nestmodule.h \
-  /home/emiliano/Documenti/other_env/other_e/include/nest/event.h \
+  /home/emiliano/Documenti/better_env/benv/include/nest/conn_parameter.h \
+  /home/emiliano/Documenti/better_env/benv/include/nest/exceptions.h \
+  /home/emiliano/Documenti/better_env/benv/include/nest/nest_datums.h \
+  /home/emiliano/Documenti/better_env/benv/include/nest/connection_id.h \
+  /home/emiliano/Documenti/better_env/benv/include/nest/arraydatum.h \
+  /home/emiliano/Documenti/better_env/benv/include/nest/aggregatedatum.h \
+  /home/emiliano/Documenti/better_env/benv/include/nest/allocator.h \
+  /home/emiliano/Documenti/better_env/benv/include/nest/dictutils.h \
+  /home/emiliano/Documenti/better_env/benv/include/nest/doubledatum.h \
+  /home/emiliano/Documenti/better_env/benv/include/nest/numericdatum.h \
+  /home/emiliano/Documenti/better_env/benv/include/nest/genericdatum.h \
+  /home/emiliano/Documenti/better_env/benv/include/nest/integerdatum.h \
+  /home/emiliano/Documenti/better_env/benv/include/nest/namedatum.h \
+  /home/emiliano/Documenti/better_env/benv/include/nest/tokenutils.h \
+  /home/emiliano/Documenti/better_env/benv/include/nest/nestmodule.h \
+  /home/emiliano/Documenti/better_env/benv/include/nest/event.h \
   /usr/include/c++/11/cstring \
   /usr/include/string.h \
   /usr/include/strings.h \
   /usr/include/x86_64-linux-gnu/bits/strings_fortified.h \
   /usr/include/x86_64-linux-gnu/bits/string_fortified.h \
-  /home/emiliano/Documenti/other_env/other_e/include/nest/spike_data.h \
-  /home/emiliano/Documenti/other_env/other_e/include/nest/target.h \
-  /home/emiliano/Documenti/other_env/other_e/include/nest/static_assert.h \
-  /home/emiliano/Documenti/other_env/other_e/include/nest/vp_manager.h \
+  /home/emiliano/Documenti/better_env/benv/include/nest/spike_data.h \
+  /home/emiliano/Documenti/better_env/benv/include/nest/target.h \
+  /home/emiliano/Documenti/better_env/benv/include/nest/static_assert.h \
+  /home/emiliano/Documenti/better_env/benv/include/nest/vp_manager.h \
   /usr/lib/gcc/x86_64-linux-gnu/11/include/omp.h \
-  /home/emiliano/Documenti/other_env/other_e/include/nest/generic_factory.h \
-  /home/emiliano/Documenti/other_env/other_e/include/nest/ntree.h \
+  /home/emiliano/Documenti/better_env/benv/include/nest/generic_factory.h \
+  /home/emiliano/Documenti/better_env/benv/include/nest/ntree.h \
   /usr/include/c++/11/bitset \
   /usr/include/c++/11/iterator \
   /usr/include/c++/11/bits/stream_iterator.h \
-  /home/emiliano/Documenti/other_env/other_e/include/nest/position.h \
-  /home/emiliano/Documenti/other_env/other_e/include/nest/compose.hpp \
-  /home/emiliano/Documenti/other_env/other_e/include/nest/parameter.h \
-  /home/emiliano/Documenti/other_env/other_e/include/nest/nest_names.h \
-  /home/emiliano/Documenti/other_env/other_e/include/nest/node_collection.h \
-  /home/emiliano/Documenti/other_env/other_e/include/nest/random_generators.h \
+  /home/emiliano/Documenti/better_env/benv/include/nest/position.h \
+  /home/emiliano/Documenti/better_env/benv/include/nest/compose.hpp \
+  /home/emiliano/Documenti/better_env/benv/include/nest/parameter.h \
+  /home/emiliano/Documenti/better_env/benv/include/nest/nest_names.h \
+  /home/emiliano/Documenti/better_env/benv/include/nest/node_collection.h \
+  /home/emiliano/Documenti/better_env/benv/include/nest/random_generators.h \
   /usr/include/c++/11/random \
   /usr/include/c++/11/bits/random.h \
   /usr/include/x86_64-linux-gnu/c++/11/bits/opt_random.h \
@@ -4944,7 +4944,7 @@ CMakeFiles/custom_stdp_module_module.dir/eglif_io_nestml.o: ../eglif_io_nestml.c
   /usr/include/c++/11/numeric \
   /usr/include/c++/11/bits/stl_numeric.h \
   /usr/include/c++/11/pstl/glue_numeric_defs.h \
-  /home/emiliano/Documenti/other_env/other_e/include/nest/randutils.hpp \
+  /home/emiliano/Documenti/better_env/benv/include/nest/randutils.hpp \
   /usr/include/c++/11/chrono \
   /usr/include/c++/11/ratio \
   /usr/include/c++/11/bits/parse_numbers.h \
@@ -4960,11 +4960,11 @@ CMakeFiles/custom_stdp_module_module.dir/eglif_io_nestml.o: ../eglif_io_nestml.c
   /usr/include/x86_64-linux-gnu/bits/unistd.h \
   /usr/include/x86_64-linux-gnu/bits/unistd_ext.h \
   /usr/include/linux/close_range.h \
-  /home/emiliano/Documenti/other_env/other_e/include/nest/sharedptrdatum.h \
-  /home/emiliano/Documenti/other_env/other_e/include/nest/connector_base.h \
-  /home/emiliano/Documenti/other_env/other_e/include/nest/sort.h \
-  /home/emiliano/Documenti/other_env/other_e/include/nest/block_vector.h \
-  /home/emiliano/Documenti/other_env/other_e/include/nest/iterator_pair.h \
+  /home/emiliano/Documenti/better_env/benv/include/nest/sharedptrdatum.h \
+  /home/emiliano/Documenti/better_env/benv/include/nest/connector_base.h \
+  /home/emiliano/Documenti/better_env/benv/include/nest/sort.h \
+  /home/emiliano/Documenti/better_env/benv/include/nest/block_vector.h \
+  /home/emiliano/Documenti/better_env/benv/include/nest/iterator_pair.h \
   /usr/include/boost/iterator/iterator_adaptor.hpp \
   /usr/include/boost/static_assert.hpp \
   /usr/include/boost/config.hpp \
@@ -5190,7 +5190,7 @@ CMakeFiles/custom_stdp_module_module.dir/eglif_io_nestml.o: ../eglif_io_nestml.c
   /usr/include/boost/utility/swap.hpp \
   /usr/include/boost/core/swap.hpp \
   /usr/include/boost/core/enable_if.hpp \
-  /home/emiliano/Documenti/other_env/other_e/include/nest/source.h \
+  /home/emiliano/Documenti/better_env/benv/include/nest/source.h \
   /usr/include/boost/sort/spreadsort/spreadsort.hpp \
   /usr/include/boost/type_traits.hpp \
   /usr/include/boost/type_traits/aligned_storage.hpp \
@@ -5327,24 +5327,24 @@ CMakeFiles/custom_stdp_module_module.dir/eglif_io_nestml.o: ../eglif_io_nestml.c
   /usr/include/boost/sort/spreadsort/detail/float_sort.hpp \
   /usr/include/boost/sort/spreadsort/string_sort.hpp \
   /usr/include/boost/sort/spreadsort/detail/string_sort.hpp \
-  /home/emiliano/Documenti/other_env/other_e/include/nest/vector_util.h \
-  /home/emiliano/Documenti/other_env/other_e/include/nest/common_synapse_properties.h \
-  /home/emiliano/Documenti/other_env/other_e/include/nest/connector_model.h \
-  /home/emiliano/Documenti/other_env/other_e/include/nest/enum_bitfield.h \
-  /home/emiliano/Documenti/other_env/other_e/include/nest/secondary_event.h \
-  /home/emiliano/Documenti/other_env/other_e/include/nest/node.h \
-  /home/emiliano/Documenti/other_env/other_e/include/nest/deprecation_warning.h \
-  /home/emiliano/Documenti/other_env/other_e/include/nest/histentry.h \
-  /home/emiliano/Documenti/other_env/other_e/include/nest/connection_label.h \
-  /home/emiliano/Documenti/other_env/other_e/include/nest/nest.h \
-  /home/emiliano/Documenti/other_env/other_e/include/nest/logging.h \
-  /home/emiliano/Documenti/other_env/other_e/include/nest/spikecounter.h \
-  /home/emiliano/Documenti/other_env/other_e/include/nest/nest_timeconverter.h \
-  /home/emiliano/Documenti/other_env/other_e/include/nest/per_thread_bool_indicator.h \
+  /home/emiliano/Documenti/better_env/benv/include/nest/vector_util.h \
+  /home/emiliano/Documenti/better_env/benv/include/nest/common_synapse_properties.h \
+  /home/emiliano/Documenti/better_env/benv/include/nest/connector_model.h \
+  /home/emiliano/Documenti/better_env/benv/include/nest/enum_bitfield.h \
+  /home/emiliano/Documenti/better_env/benv/include/nest/secondary_event.h \
+  /home/emiliano/Documenti/better_env/benv/include/nest/node.h \
+  /home/emiliano/Documenti/better_env/benv/include/nest/deprecation_warning.h \
+  /home/emiliano/Documenti/better_env/benv/include/nest/histentry.h \
+  /home/emiliano/Documenti/better_env/benv/include/nest/connection_label.h \
+  /home/emiliano/Documenti/better_env/benv/include/nest/nest.h \
+  /home/emiliano/Documenti/better_env/benv/include/nest/logging.h \
+  /home/emiliano/Documenti/better_env/benv/include/nest/spikecounter.h \
+  /home/emiliano/Documenti/better_env/benv/include/nest/nest_timeconverter.h \
+  /home/emiliano/Documenti/better_env/benv/include/nest/per_thread_bool_indicator.h \
   /usr/include/c++/11/atomic \
-  /home/emiliano/Documenti/other_env/other_e/include/nest/send_buffer_position.h \
-  /home/emiliano/Documenti/other_env/other_e/include/nest/source_table.h \
-  /home/emiliano/Documenti/other_env/other_e/include/nest/mpi_manager.h \
+  /home/emiliano/Documenti/better_env/benv/include/nest/send_buffer_position.h \
+  /home/emiliano/Documenti/better_env/benv/include/nest/source_table.h \
+  /home/emiliano/Documenti/better_env/benv/include/nest/mpi_manager.h \
   /usr/lib/x86_64-linux-gnu/openmpi/include/mpi.h \
   /usr/lib/x86_64-linux-gnu/openmpi/include/mpi_portable_platform.h \
   /usr/lib/x86_64-linux-gnu/openmpi/include/openmpi/ompi/mpi/cxx/mpicxx.h \
@@ -5378,67 +5378,67 @@ CMakeFiles/custom_stdp_module_module.dir/eglif_io_nestml.o: ../eglif_io_nestml.c
   /usr/lib/x86_64-linux-gnu/openmpi/include/openmpi/ompi/mpi/cxx/info_inln.h \
   /usr/lib/x86_64-linux-gnu/openmpi/include/openmpi/ompi/mpi/cxx/win_inln.h \
   /usr/lib/x86_64-linux-gnu/openmpi/include/openmpi/ompi/mpi/cxx/file_inln.h \
-  /home/emiliano/Documenti/other_env/other_e/include/nest/target_data.h \
-  /home/emiliano/Documenti/other_env/other_e/include/nest/source_table_position.h \
-  /home/emiliano/Documenti/other_env/other_e/include/nest/target_table.h \
-  /home/emiliano/Documenti/other_env/other_e/include/nest/target_table_devices.h \
-  /home/emiliano/Documenti/other_env/other_e/include/nest/event_delivery_manager.h \
-  /home/emiliano/Documenti/other_env/other_e/include/nest/buffer_resize_log.h \
-  /home/emiliano/Documenti/other_env/other_e/include/nest/io_manager.h \
-  /home/emiliano/Documenti/other_env/other_e/include/nest/recording_backend.h \
-  /home/emiliano/Documenti/other_env/other_e/include/nest/stimulation_backend.h \
-  /home/emiliano/Documenti/other_env/other_e/include/nest/stimulation_device.h \
-  /home/emiliano/Documenti/other_env/other_e/include/nest/device.h \
-  /home/emiliano/Documenti/other_env/other_e/include/nest/device_node.h \
-  /home/emiliano/Documenti/other_env/other_e/include/nest/logging_manager.h \
-  /home/emiliano/Documenti/other_env/other_e/include/nest/model_manager.h \
-  /home/emiliano/Documenti/other_env/other_e/include/nest/genericmodel.h \
-  /home/emiliano/Documenti/other_env/other_e/include/nest/model.h \
-  /home/emiliano/Documenti/other_env/other_e/include/nest/modelrange_manager.h \
-  /home/emiliano/Documenti/other_env/other_e/include/nest/modelrange.h \
-  /home/emiliano/Documenti/other_env/other_e/include/nest/module_manager.h \
+  /home/emiliano/Documenti/better_env/benv/include/nest/target_data.h \
+  /home/emiliano/Documenti/better_env/benv/include/nest/source_table_position.h \
+  /home/emiliano/Documenti/better_env/benv/include/nest/target_table.h \
+  /home/emiliano/Documenti/better_env/benv/include/nest/target_table_devices.h \
+  /home/emiliano/Documenti/better_env/benv/include/nest/event_delivery_manager.h \
+  /home/emiliano/Documenti/better_env/benv/include/nest/buffer_resize_log.h \
+  /home/emiliano/Documenti/better_env/benv/include/nest/io_manager.h \
+  /home/emiliano/Documenti/better_env/benv/include/nest/recording_backend.h \
+  /home/emiliano/Documenti/better_env/benv/include/nest/stimulation_backend.h \
+  /home/emiliano/Documenti/better_env/benv/include/nest/stimulation_device.h \
+  /home/emiliano/Documenti/better_env/benv/include/nest/device.h \
+  /home/emiliano/Documenti/better_env/benv/include/nest/device_node.h \
+  /home/emiliano/Documenti/better_env/benv/include/nest/logging_manager.h \
+  /home/emiliano/Documenti/better_env/benv/include/nest/model_manager.h \
+  /home/emiliano/Documenti/better_env/benv/include/nest/genericmodel.h \
+  /home/emiliano/Documenti/better_env/benv/include/nest/model.h \
+  /home/emiliano/Documenti/better_env/benv/include/nest/modelrange_manager.h \
+  /home/emiliano/Documenti/better_env/benv/include/nest/modelrange.h \
+  /home/emiliano/Documenti/better_env/benv/include/nest/module_manager.h \
   /usr/include/ltdl.h \
   /usr/include/libltdl/lt_system.h \
   /usr/include/c++/11/stdlib.h \
   /usr/include/libltdl/lt_error.h \
   /usr/include/libltdl/lt_dlloader.h \
-  /home/emiliano/Documenti/other_env/other_e/include/nest/music_manager.h \
-  /home/emiliano/Documenti/other_env/other_e/include/nest/node_manager.h \
-  /home/emiliano/Documenti/other_env/other_e/include/nest/sparse_node_array.h \
-  /home/emiliano/Documenti/other_env/other_e/include/nest/random_manager.h \
-  /home/emiliano/Documenti/other_env/other_e/include/nest/simulation_manager.h \
-  /home/emiliano/Documenti/other_env/other_e/include/nest/sp_manager.h \
-  /home/emiliano/Documenti/other_env/other_e/include/nest/growth_curve_factory.h \
-  /home/emiliano/Documenti/other_env/other_e/include/nest/growth_curve.h \
+  /home/emiliano/Documenti/better_env/benv/include/nest/music_manager.h \
+  /home/emiliano/Documenti/better_env/benv/include/nest/node_manager.h \
+  /home/emiliano/Documenti/better_env/benv/include/nest/sparse_node_array.h \
+  /home/emiliano/Documenti/better_env/benv/include/nest/random_manager.h \
+  /home/emiliano/Documenti/better_env/benv/include/nest/simulation_manager.h \
+  /home/emiliano/Documenti/better_env/benv/include/nest/sp_manager.h \
+  /home/emiliano/Documenti/better_env/benv/include/nest/growth_curve_factory.h \
+  /home/emiliano/Documenti/better_env/benv/include/nest/growth_curve.h \
   /usr/include/c++/11/fstream \
   /usr/include/x86_64-linux-gnu/c++/11/bits/basic_file.h \
   /usr/include/x86_64-linux-gnu/c++/11/bits/c++io.h \
   /usr/include/c++/11/bits/fstream.tcc \
-  /home/emiliano/Documenti/other_env/other_e/include/nest/nest_impl.h \
-  /home/emiliano/Documenti/other_env/other_e/include/nest/connector_model_impl.h \
-  /home/emiliano/Documenti/other_env/other_e/include/nest/delay_checker.h \
-  /home/emiliano/Documenti/other_env/other_e/include/nest/kernel_manager.h \
-  /home/emiliano/Documenti/other_env/other_e/include/nest/secondary_event_impl.h \
-  /home/emiliano/Documenti/other_env/other_e/include/nest/genericmodel_impl.h \
-  /home/emiliano/Documenti/other_env/other_e/include/nest/model_manager_impl.h \
-  /home/emiliano/Documenti/other_env/other_e/include/nest/string_utils.h \
-  /home/emiliano/Documenti/other_env/other_e/include/nest/target_identifier.h \
-  /home/emiliano/Documenti/other_env/other_e/include/nest/universal_data_logger_impl.h \
-  /home/emiliano/Documenti/other_env/other_e/include/nest/universal_data_logger.h \
-  /home/emiliano/Documenti/other_env/other_e/include/nest/recordables_map.h \
-  /home/emiliano/Documenti/other_env/other_e/include/nest/event_delivery_manager_impl.h \
-  /home/emiliano/Documenti/other_env/other_e/include/nest/connection_manager_impl.h \
-  /home/emiliano/Documenti/other_env/other_e/include/nest/conn_builder_factory.h \
-  /home/emiliano/Documenti/other_env/other_e/include/nest/target_table_devices_impl.h \
-  /home/emiliano/Documenti/other_env/other_e/include/nest/vp_manager_impl.h \
-  /home/emiliano/Documenti/other_env/other_e/include/nest/mpi_manager_impl.h \
-  /home/emiliano/Documenti/other_env/other_e/include/nest/dict.h \
-  /home/emiliano/Documenti/other_env/other_e/include/nest/dictutils.h \
-  /home/emiliano/Documenti/other_env/other_e/include/nest/doubledatum.h \
-  /home/emiliano/Documenti/other_env/other_e/include/nest/integerdatum.h \
-  /home/emiliano/Documenti/other_env/other_e/include/nest/lockptrdatum.h \
+  /home/emiliano/Documenti/better_env/benv/include/nest/nest_impl.h \
+  /home/emiliano/Documenti/better_env/benv/include/nest/connector_model_impl.h \
+  /home/emiliano/Documenti/better_env/benv/include/nest/delay_checker.h \
+  /home/emiliano/Documenti/better_env/benv/include/nest/kernel_manager.h \
+  /home/emiliano/Documenti/better_env/benv/include/nest/secondary_event_impl.h \
+  /home/emiliano/Documenti/better_env/benv/include/nest/genericmodel_impl.h \
+  /home/emiliano/Documenti/better_env/benv/include/nest/model_manager_impl.h \
+  /home/emiliano/Documenti/better_env/benv/include/nest/string_utils.h \
+  /home/emiliano/Documenti/better_env/benv/include/nest/target_identifier.h \
+  /home/emiliano/Documenti/better_env/benv/include/nest/universal_data_logger_impl.h \
+  /home/emiliano/Documenti/better_env/benv/include/nest/universal_data_logger.h \
+  /home/emiliano/Documenti/better_env/benv/include/nest/recordables_map.h \
+  /home/emiliano/Documenti/better_env/benv/include/nest/event_delivery_manager_impl.h \
+  /home/emiliano/Documenti/better_env/benv/include/nest/connection_manager_impl.h \
+  /home/emiliano/Documenti/better_env/benv/include/nest/conn_builder_factory.h \
+  /home/emiliano/Documenti/better_env/benv/include/nest/target_table_devices_impl.h \
+  /home/emiliano/Documenti/better_env/benv/include/nest/vp_manager_impl.h \
+  /home/emiliano/Documenti/better_env/benv/include/nest/mpi_manager_impl.h \
+  /home/emiliano/Documenti/better_env/benv/include/nest/dict.h \
+  /home/emiliano/Documenti/better_env/benv/include/nest/dictutils.h \
+  /home/emiliano/Documenti/better_env/benv/include/nest/doubledatum.h \
+  /home/emiliano/Documenti/better_env/benv/include/nest/integerdatum.h \
+  /home/emiliano/Documenti/better_env/benv/include/nest/lockptrdatum.h \
   ../eglif_io_nestml.h \
-  /home/emiliano/Documenti/other_env/other_e/include/nest/config.h \
+  /home/emiliano/Documenti/better_env/benv/include/nest/config.h \
   /usr/include/gsl/gsl_errno.h \
   /usr/include/gsl/gsl_types.h \
   /usr/include/gsl/gsl_matrix.h \
@@ -5491,26 +5491,26 @@ CMakeFiles/custom_stdp_module_module.dir/eglif_io_nestml.o: ../eglif_io_nestml.c
   /usr/include/gsl/gsl_vector_char.h \
   /usr/include/gsl/gsl_block_char.h \
   /usr/include/gsl/gsl_odeiv.h \
-  /home/emiliano/Documenti/other_env/other_e/include/nest/archiving_node.h \
-  /home/emiliano/Documenti/other_env/other_e/include/nest/structural_plasticity_node.h \
-  /home/emiliano/Documenti/other_env/other_e/include/nest/synaptic_element.h \
+  /home/emiliano/Documenti/better_env/benv/include/nest/archiving_node.h \
+  /home/emiliano/Documenti/better_env/benv/include/nest/structural_plasticity_node.h \
+  /home/emiliano/Documenti/better_env/benv/include/nest/synaptic_element.h \
   ../extended_post_history_archiving_node.h \
   ../extended_hist_entry.h \
-  /home/emiliano/Documenti/other_env/other_e/include/nest/structural_plasticity_node.h \
-  /home/emiliano/Documenti/other_env/other_e/include/nest/nest_time.h \
-  /home/emiliano/Documenti/other_env/other_e/include/nest/nest_types.h \
-  /home/emiliano/Documenti/other_env/other_e/include/nest/node.h \
-  /home/emiliano/Documenti/other_env/other_e/include/nest/dictdatum.h \
-  /home/emiliano/Documenti/other_env/other_e/include/nest/nest_datums.h \
-  /home/emiliano/Documenti/other_env/other_e/include/nest/connection.h \
-  /home/emiliano/Documenti/other_env/other_e/include/nest/connector_base_impl.h \
-  /home/emiliano/Documenti/other_env/other_e/include/nest/weight_recorder.h \
-  /home/emiliano/Documenti/other_env/other_e/include/nest/recording_device.h \
-  /home/emiliano/Documenti/other_env/other_e/include/nest/syn_id_delay.h \
-  /home/emiliano/Documenti/other_env/other_e/include/nest/dict_util.h \
-  /home/emiliano/Documenti/other_env/other_e/include/nest/event.h \
-  /home/emiliano/Documenti/other_env/other_e/include/nest/ring_buffer.h \
-  /home/emiliano/Documenti/other_env/other_e/include/nest/universal_data_logger.h
+  /home/emiliano/Documenti/better_env/benv/include/nest/structural_plasticity_node.h \
+  /home/emiliano/Documenti/better_env/benv/include/nest/nest_time.h \
+  /home/emiliano/Documenti/better_env/benv/include/nest/nest_types.h \
+  /home/emiliano/Documenti/better_env/benv/include/nest/node.h \
+  /home/emiliano/Documenti/better_env/benv/include/nest/dictdatum.h \
+  /home/emiliano/Documenti/better_env/benv/include/nest/nest_datums.h \
+  /home/emiliano/Documenti/better_env/benv/include/nest/connection.h \
+  /home/emiliano/Documenti/better_env/benv/include/nest/connector_base_impl.h \
+  /home/emiliano/Documenti/better_env/benv/include/nest/weight_recorder.h \
+  /home/emiliano/Documenti/better_env/benv/include/nest/recording_device.h \
+  /home/emiliano/Documenti/better_env/benv/include/nest/syn_id_delay.h \
+  /home/emiliano/Documenti/better_env/benv/include/nest/dict_util.h \
+  /home/emiliano/Documenti/better_env/benv/include/nest/event.h \
+  /home/emiliano/Documenti/better_env/benv/include/nest/ring_buffer.h \
+  /home/emiliano/Documenti/better_env/benv/include/nest/universal_data_logger.h
 
 CMakeFiles/custom_stdp_module_module.dir/eglif_mli.o: ../eglif_mli.cpp \
   /usr/include/stdc-predef.h \
@@ -5527,8 +5527,8 @@ CMakeFiles/custom_stdp_module_module.dir/eglif_mli.o: ../eglif_mli.cpp \
   /usr/include/x86_64-linux-gnu/gnu/stubs-64.h \
   /usr/include/x86_64-linux-gnu/c++/11/bits/cpu_defines.h \
   /usr/include/c++/11/pstl/pstl_config.h \
-  /home/emiliano/Documenti/other_env/other_e/include/nest/numerics.h \
-  /home/emiliano/Documenti/other_env/other_e/include/nest/config.h \
+  /home/emiliano/Documenti/better_env/benv/include/nest/numerics.h \
+  /home/emiliano/Documenti/better_env/benv/include/nest/config.h \
   /usr/include/c++/11/cassert \
   /usr/include/assert.h \
   /usr/include/c++/11/cmath \
@@ -5613,8 +5613,8 @@ CMakeFiles/custom_stdp_module_module.dir/eglif_mli.o: ../eglif_mli.cpp \
   /usr/include/c++/11/tr1/poly_hermite.tcc \
   /usr/include/c++/11/tr1/poly_laguerre.tcc \
   /usr/include/c++/11/tr1/riemann_zeta.tcc \
-  /home/emiliano/Documenti/other_env/other_e/include/nest/exceptions.h \
-  /home/emiliano/Documenti/other_env/other_e/include/nest/nest_time.h \
+  /home/emiliano/Documenti/better_env/benv/include/nest/exceptions.h \
+  /home/emiliano/Documenti/better_env/benv/include/nest/nest_time.h \
   /usr/include/c++/11/cfloat \
   /usr/lib/gcc/x86_64-linux-gnu/11/include/float.h \
   /usr/include/c++/11/cstdlib \
@@ -5731,8 +5731,8 @@ CMakeFiles/custom_stdp_module_module.dir/eglif_mli.o: ../eglif_mli.cpp \
   /usr/include/c++/11/bits/ostream.tcc \
   /usr/include/c++/11/istream \
   /usr/include/c++/11/bits/istream.tcc \
-  /home/emiliano/Documenti/other_env/other_e/include/nest/numerics.h \
-  /home/emiliano/Documenti/other_env/other_e/include/nest/nest_types.h \
+  /home/emiliano/Documenti/better_env/benv/include/nest/numerics.h \
+  /home/emiliano/Documenti/better_env/benv/include/nest/nest_types.h \
   /usr/include/c++/11/climits \
   /usr/lib/gcc/x86_64-linux-gnu/11/include/limits.h \
   /usr/lib/gcc/x86_64-linux-gnu/11/include/syslimits.h \
@@ -5744,7 +5744,7 @@ CMakeFiles/custom_stdp_module_module.dir/eglif_mli.o: ../eglif_mli.cpp \
   /usr/include/x86_64-linux-gnu/bits/xopen_lim.h \
   /usr/include/x86_64-linux-gnu/bits/uio_lim.h \
   /usr/include/c++/11/cstddef \
-  /home/emiliano/Documenti/other_env/other_e/include/nest/name.h \
+  /home/emiliano/Documenti/better_env/benv/include/nest/name.h \
   /usr/include/c++/11/deque \
   /usr/include/c++/11/bits/stl_uninitialized.h \
   /usr/include/c++/11/bits/stl_deque.h \
@@ -5762,17 +5762,17 @@ CMakeFiles/custom_stdp_module_module.dir/eglif_mli.o: ../eglif_mli.cpp \
   /usr/include/c++/11/bits/invoke.h \
   /usr/include/c++/11/bits/stl_multimap.h \
   /usr/include/c++/11/bits/erase_if.h \
-  /home/emiliano/Documenti/other_env/other_e/include/nest/sliexceptions.h \
+  /home/emiliano/Documenti/better_env/benv/include/nest/sliexceptions.h \
   /usr/include/c++/11/vector \
   /usr/include/c++/11/bits/stl_vector.h \
   /usr/include/c++/11/bits/stl_bvector.h \
   /usr/include/c++/11/bits/vector.tcc \
-  /home/emiliano/Documenti/other_env/other_e/include/nest/kernel_manager.h \
-  /home/emiliano/Documenti/other_env/other_e/include/nest/connection_manager.h \
-  /home/emiliano/Documenti/other_env/other_e/include/nest/manager_interface.h \
-  /home/emiliano/Documenti/other_env/other_e/include/nest/dictdatum.h \
-  /home/emiliano/Documenti/other_env/other_e/include/nest/dict.h \
-  /home/emiliano/Documenti/other_env/other_e/include/nest/token.h \
+  /home/emiliano/Documenti/better_env/benv/include/nest/kernel_manager.h \
+  /home/emiliano/Documenti/better_env/benv/include/nest/connection_manager.h \
+  /home/emiliano/Documenti/better_env/benv/include/nest/manager_interface.h \
+  /home/emiliano/Documenti/better_env/benv/include/nest/dictdatum.h \
+  /home/emiliano/Documenti/better_env/benv/include/nest/dict.h \
+  /home/emiliano/Documenti/better_env/benv/include/nest/token.h \
   /usr/include/c++/11/iomanip \
   /usr/include/c++/11/locale \
   /usr/include/c++/11/bits/locale_facets_nonio.h \
@@ -5787,20 +5787,20 @@ CMakeFiles/custom_stdp_module_module.dir/eglif_mli.o: ../eglif_mli.cpp \
   /usr/include/c++/11/bits/quoted_string.h \
   /usr/include/c++/11/sstream \
   /usr/include/c++/11/bits/sstream.tcc \
-  /home/emiliano/Documenti/other_env/other_e/include/nest/datum.h \
-  /home/emiliano/Documenti/other_env/other_e/include/nest/slitype.h \
-  /home/emiliano/Documenti/other_env/other_e/include/nest/slifunction.h \
-  /home/emiliano/Documenti/other_env/other_e/include/nest/interpret.h \
+  /home/emiliano/Documenti/better_env/benv/include/nest/datum.h \
+  /home/emiliano/Documenti/better_env/benv/include/nest/slitype.h \
+  /home/emiliano/Documenti/better_env/benv/include/nest/slifunction.h \
+  /home/emiliano/Documenti/better_env/benv/include/nest/interpret.h \
   /usr/include/c++/11/list \
   /usr/include/c++/11/bits/stl_list.h \
   /usr/include/c++/11/bits/allocated_ptr.h \
   /usr/include/c++/11/bits/list.tcc \
-  /home/emiliano/Documenti/other_env/other_e/include/nest/sliactions.h \
-  /home/emiliano/Documenti/other_env/other_e/include/nest/slibuiltins.h \
-  /home/emiliano/Documenti/other_env/other_e/include/nest/slimodule.h \
-  /home/emiliano/Documenti/other_env/other_e/include/nest/tokenstack.h \
-  /home/emiliano/Documenti/other_env/other_e/include/nest/tarrayobj.h \
-  /home/emiliano/Documenti/other_env/other_e/include/nest/tokenarray.h \
+  /home/emiliano/Documenti/better_env/benv/include/nest/sliactions.h \
+  /home/emiliano/Documenti/better_env/benv/include/nest/slibuiltins.h \
+  /home/emiliano/Documenti/better_env/benv/include/nest/slimodule.h \
+  /home/emiliano/Documenti/better_env/benv/include/nest/tokenstack.h \
+  /home/emiliano/Documenti/better_env/benv/include/nest/tarrayobj.h \
+  /home/emiliano/Documenti/better_env/benv/include/nest/tokenarray.h \
   /usr/include/c++/11/algorithm \
   /usr/include/c++/11/bits/stl_algo.h \
   /usr/include/c++/11/bits/algorithmfwd.h \
@@ -5817,8 +5817,8 @@ CMakeFiles/custom_stdp_module_module.dir/eglif_mli.o: ../eglif_mli.cpp \
   /usr/include/c++/11/bits/enable_special_members.h \
   /usr/include/c++/11/bits/unordered_map.h \
   /usr/include/c++/11/pstl/execution_defs.h \
-  /home/emiliano/Documenti/other_env/other_e/include/nest/lockptrdatum.h \
-  /home/emiliano/Documenti/other_env/other_e/include/nest/lockptr.h \
+  /home/emiliano/Documenti/better_env/benv/include/nest/lockptrdatum.h \
+  /home/emiliano/Documenti/better_env/benv/include/nest/lockptr.h \
   /usr/include/c++/11/memory \
   /usr/include/c++/11/bits/stl_raw_storage_iter.h \
   /usr/include/c++/11/bits/align.h \
@@ -5831,49 +5831,49 @@ CMakeFiles/custom_stdp_module_module.dir/eglif_mli.o: ../eglif_mli.cpp \
   /usr/include/c++/11/bits/atomic_lockfree_defines.h \
   /usr/include/c++/11/backward/auto_ptr.h \
   /usr/include/c++/11/pstl/glue_memory_defs.h \
-  /home/emiliano/Documenti/other_env/other_e/include/nest/stopwatch.h \
+  /home/emiliano/Documenti/better_env/benv/include/nest/stopwatch.h \
   /usr/include/x86_64-linux-gnu/sys/time.h \
-  /home/emiliano/Documenti/other_env/other_e/include/nest/conn_builder.h \
+  /home/emiliano/Documenti/better_env/benv/include/nest/conn_builder.h \
   /usr/include/c++/11/set \
   /usr/include/c++/11/bits/stl_set.h \
   /usr/include/c++/11/bits/stl_multiset.h \
-  /home/emiliano/Documenti/other_env/other_e/include/nest/conn_parameter.h \
-  /home/emiliano/Documenti/other_env/other_e/include/nest/exceptions.h \
-  /home/emiliano/Documenti/other_env/other_e/include/nest/nest_datums.h \
-  /home/emiliano/Documenti/other_env/other_e/include/nest/connection_id.h \
-  /home/emiliano/Documenti/other_env/other_e/include/nest/arraydatum.h \
-  /home/emiliano/Documenti/other_env/other_e/include/nest/aggregatedatum.h \
-  /home/emiliano/Documenti/other_env/other_e/include/nest/allocator.h \
-  /home/emiliano/Documenti/other_env/other_e/include/nest/dictutils.h \
-  /home/emiliano/Documenti/other_env/other_e/include/nest/doubledatum.h \
-  /home/emiliano/Documenti/other_env/other_e/include/nest/numericdatum.h \
-  /home/emiliano/Documenti/other_env/other_e/include/nest/genericdatum.h \
-  /home/emiliano/Documenti/other_env/other_e/include/nest/integerdatum.h \
-  /home/emiliano/Documenti/other_env/other_e/include/nest/namedatum.h \
-  /home/emiliano/Documenti/other_env/other_e/include/nest/tokenutils.h \
-  /home/emiliano/Documenti/other_env/other_e/include/nest/nestmodule.h \
-  /home/emiliano/Documenti/other_env/other_e/include/nest/event.h \
+  /home/emiliano/Documenti/better_env/benv/include/nest/conn_parameter.h \
+  /home/emiliano/Documenti/better_env/benv/include/nest/exceptions.h \
+  /home/emiliano/Documenti/better_env/benv/include/nest/nest_datums.h \
+  /home/emiliano/Documenti/better_env/benv/include/nest/connection_id.h \
+  /home/emiliano/Documenti/better_env/benv/include/nest/arraydatum.h \
+  /home/emiliano/Documenti/better_env/benv/include/nest/aggregatedatum.h \
+  /home/emiliano/Documenti/better_env/benv/include/nest/allocator.h \
+  /home/emiliano/Documenti/better_env/benv/include/nest/dictutils.h \
+  /home/emiliano/Documenti/better_env/benv/include/nest/doubledatum.h \
+  /home/emiliano/Documenti/better_env/benv/include/nest/numericdatum.h \
+  /home/emiliano/Documenti/better_env/benv/include/nest/genericdatum.h \
+  /home/emiliano/Documenti/better_env/benv/include/nest/integerdatum.h \
+  /home/emiliano/Documenti/better_env/benv/include/nest/namedatum.h \
+  /home/emiliano/Documenti/better_env/benv/include/nest/tokenutils.h \
+  /home/emiliano/Documenti/better_env/benv/include/nest/nestmodule.h \
+  /home/emiliano/Documenti/better_env/benv/include/nest/event.h \
   /usr/include/c++/11/cstring \
   /usr/include/string.h \
   /usr/include/strings.h \
   /usr/include/x86_64-linux-gnu/bits/strings_fortified.h \
   /usr/include/x86_64-linux-gnu/bits/string_fortified.h \
-  /home/emiliano/Documenti/other_env/other_e/include/nest/spike_data.h \
-  /home/emiliano/Documenti/other_env/other_e/include/nest/target.h \
-  /home/emiliano/Documenti/other_env/other_e/include/nest/static_assert.h \
-  /home/emiliano/Documenti/other_env/other_e/include/nest/vp_manager.h \
+  /home/emiliano/Documenti/better_env/benv/include/nest/spike_data.h \
+  /home/emiliano/Documenti/better_env/benv/include/nest/target.h \
+  /home/emiliano/Documenti/better_env/benv/include/nest/static_assert.h \
+  /home/emiliano/Documenti/better_env/benv/include/nest/vp_manager.h \
   /usr/lib/gcc/x86_64-linux-gnu/11/include/omp.h \
-  /home/emiliano/Documenti/other_env/other_e/include/nest/generic_factory.h \
-  /home/emiliano/Documenti/other_env/other_e/include/nest/ntree.h \
+  /home/emiliano/Documenti/better_env/benv/include/nest/generic_factory.h \
+  /home/emiliano/Documenti/better_env/benv/include/nest/ntree.h \
   /usr/include/c++/11/bitset \
   /usr/include/c++/11/iterator \
   /usr/include/c++/11/bits/stream_iterator.h \
-  /home/emiliano/Documenti/other_env/other_e/include/nest/position.h \
-  /home/emiliano/Documenti/other_env/other_e/include/nest/compose.hpp \
-  /home/emiliano/Documenti/other_env/other_e/include/nest/parameter.h \
-  /home/emiliano/Documenti/other_env/other_e/include/nest/nest_names.h \
-  /home/emiliano/Documenti/other_env/other_e/include/nest/node_collection.h \
-  /home/emiliano/Documenti/other_env/other_e/include/nest/random_generators.h \
+  /home/emiliano/Documenti/better_env/benv/include/nest/position.h \
+  /home/emiliano/Documenti/better_env/benv/include/nest/compose.hpp \
+  /home/emiliano/Documenti/better_env/benv/include/nest/parameter.h \
+  /home/emiliano/Documenti/better_env/benv/include/nest/nest_names.h \
+  /home/emiliano/Documenti/better_env/benv/include/nest/node_collection.h \
+  /home/emiliano/Documenti/better_env/benv/include/nest/random_generators.h \
   /usr/include/c++/11/random \
   /usr/include/c++/11/bits/random.h \
   /usr/include/x86_64-linux-gnu/c++/11/bits/opt_random.h \
@@ -5881,7 +5881,7 @@ CMakeFiles/custom_stdp_module_module.dir/eglif_mli.o: ../eglif_mli.cpp \
   /usr/include/c++/11/numeric \
   /usr/include/c++/11/bits/stl_numeric.h \
   /usr/include/c++/11/pstl/glue_numeric_defs.h \
-  /home/emiliano/Documenti/other_env/other_e/include/nest/randutils.hpp \
+  /home/emiliano/Documenti/better_env/benv/include/nest/randutils.hpp \
   /usr/include/c++/11/chrono \
   /usr/include/c++/11/ratio \
   /usr/include/c++/11/bits/parse_numbers.h \
@@ -5897,11 +5897,11 @@ CMakeFiles/custom_stdp_module_module.dir/eglif_mli.o: ../eglif_mli.cpp \
   /usr/include/x86_64-linux-gnu/bits/unistd.h \
   /usr/include/x86_64-linux-gnu/bits/unistd_ext.h \
   /usr/include/linux/close_range.h \
-  /home/emiliano/Documenti/other_env/other_e/include/nest/sharedptrdatum.h \
-  /home/emiliano/Documenti/other_env/other_e/include/nest/connector_base.h \
-  /home/emiliano/Documenti/other_env/other_e/include/nest/sort.h \
-  /home/emiliano/Documenti/other_env/other_e/include/nest/block_vector.h \
-  /home/emiliano/Documenti/other_env/other_e/include/nest/iterator_pair.h \
+  /home/emiliano/Documenti/better_env/benv/include/nest/sharedptrdatum.h \
+  /home/emiliano/Documenti/better_env/benv/include/nest/connector_base.h \
+  /home/emiliano/Documenti/better_env/benv/include/nest/sort.h \
+  /home/emiliano/Documenti/better_env/benv/include/nest/block_vector.h \
+  /home/emiliano/Documenti/better_env/benv/include/nest/iterator_pair.h \
   /usr/include/boost/iterator/iterator_adaptor.hpp \
   /usr/include/boost/static_assert.hpp \
   /usr/include/boost/config.hpp \
@@ -6127,7 +6127,7 @@ CMakeFiles/custom_stdp_module_module.dir/eglif_mli.o: ../eglif_mli.cpp \
   /usr/include/boost/utility/swap.hpp \
   /usr/include/boost/core/swap.hpp \
   /usr/include/boost/core/enable_if.hpp \
-  /home/emiliano/Documenti/other_env/other_e/include/nest/source.h \
+  /home/emiliano/Documenti/better_env/benv/include/nest/source.h \
   /usr/include/boost/sort/spreadsort/spreadsort.hpp \
   /usr/include/boost/type_traits.hpp \
   /usr/include/boost/type_traits/aligned_storage.hpp \
@@ -6264,24 +6264,24 @@ CMakeFiles/custom_stdp_module_module.dir/eglif_mli.o: ../eglif_mli.cpp \
   /usr/include/boost/sort/spreadsort/detail/float_sort.hpp \
   /usr/include/boost/sort/spreadsort/string_sort.hpp \
   /usr/include/boost/sort/spreadsort/detail/string_sort.hpp \
-  /home/emiliano/Documenti/other_env/other_e/include/nest/vector_util.h \
-  /home/emiliano/Documenti/other_env/other_e/include/nest/common_synapse_properties.h \
-  /home/emiliano/Documenti/other_env/other_e/include/nest/connector_model.h \
-  /home/emiliano/Documenti/other_env/other_e/include/nest/enum_bitfield.h \
-  /home/emiliano/Documenti/other_env/other_e/include/nest/secondary_event.h \
-  /home/emiliano/Documenti/other_env/other_e/include/nest/node.h \
-  /home/emiliano/Documenti/other_env/other_e/include/nest/deprecation_warning.h \
-  /home/emiliano/Documenti/other_env/other_e/include/nest/histentry.h \
-  /home/emiliano/Documenti/other_env/other_e/include/nest/connection_label.h \
-  /home/emiliano/Documenti/other_env/other_e/include/nest/nest.h \
-  /home/emiliano/Documenti/other_env/other_e/include/nest/logging.h \
-  /home/emiliano/Documenti/other_env/other_e/include/nest/spikecounter.h \
-  /home/emiliano/Documenti/other_env/other_e/include/nest/nest_timeconverter.h \
-  /home/emiliano/Documenti/other_env/other_e/include/nest/per_thread_bool_indicator.h \
+  /home/emiliano/Documenti/better_env/benv/include/nest/vector_util.h \
+  /home/emiliano/Documenti/better_env/benv/include/nest/common_synapse_properties.h \
+  /home/emiliano/Documenti/better_env/benv/include/nest/connector_model.h \
+  /home/emiliano/Documenti/better_env/benv/include/nest/enum_bitfield.h \
+  /home/emiliano/Documenti/better_env/benv/include/nest/secondary_event.h \
+  /home/emiliano/Documenti/better_env/benv/include/nest/node.h \
+  /home/emiliano/Documenti/better_env/benv/include/nest/deprecation_warning.h \
+  /home/emiliano/Documenti/better_env/benv/include/nest/histentry.h \
+  /home/emiliano/Documenti/better_env/benv/include/nest/connection_label.h \
+  /home/emiliano/Documenti/better_env/benv/include/nest/nest.h \
+  /home/emiliano/Documenti/better_env/benv/include/nest/logging.h \
+  /home/emiliano/Documenti/better_env/benv/include/nest/spikecounter.h \
+  /home/emiliano/Documenti/better_env/benv/include/nest/nest_timeconverter.h \
+  /home/emiliano/Documenti/better_env/benv/include/nest/per_thread_bool_indicator.h \
   /usr/include/c++/11/atomic \
-  /home/emiliano/Documenti/other_env/other_e/include/nest/send_buffer_position.h \
-  /home/emiliano/Documenti/other_env/other_e/include/nest/source_table.h \
-  /home/emiliano/Documenti/other_env/other_e/include/nest/mpi_manager.h \
+  /home/emiliano/Documenti/better_env/benv/include/nest/send_buffer_position.h \
+  /home/emiliano/Documenti/better_env/benv/include/nest/source_table.h \
+  /home/emiliano/Documenti/better_env/benv/include/nest/mpi_manager.h \
   /usr/lib/x86_64-linux-gnu/openmpi/include/mpi.h \
   /usr/lib/x86_64-linux-gnu/openmpi/include/mpi_portable_platform.h \
   /usr/lib/x86_64-linux-gnu/openmpi/include/openmpi/ompi/mpi/cxx/mpicxx.h \
@@ -6315,67 +6315,67 @@ CMakeFiles/custom_stdp_module_module.dir/eglif_mli.o: ../eglif_mli.cpp \
   /usr/lib/x86_64-linux-gnu/openmpi/include/openmpi/ompi/mpi/cxx/info_inln.h \
   /usr/lib/x86_64-linux-gnu/openmpi/include/openmpi/ompi/mpi/cxx/win_inln.h \
   /usr/lib/x86_64-linux-gnu/openmpi/include/openmpi/ompi/mpi/cxx/file_inln.h \
-  /home/emiliano/Documenti/other_env/other_e/include/nest/target_data.h \
-  /home/emiliano/Documenti/other_env/other_e/include/nest/source_table_position.h \
-  /home/emiliano/Documenti/other_env/other_e/include/nest/target_table.h \
-  /home/emiliano/Documenti/other_env/other_e/include/nest/target_table_devices.h \
-  /home/emiliano/Documenti/other_env/other_e/include/nest/event_delivery_manager.h \
-  /home/emiliano/Documenti/other_env/other_e/include/nest/buffer_resize_log.h \
-  /home/emiliano/Documenti/other_env/other_e/include/nest/io_manager.h \
-  /home/emiliano/Documenti/other_env/other_e/include/nest/recording_backend.h \
-  /home/emiliano/Documenti/other_env/other_e/include/nest/stimulation_backend.h \
-  /home/emiliano/Documenti/other_env/other_e/include/nest/stimulation_device.h \
-  /home/emiliano/Documenti/other_env/other_e/include/nest/device.h \
-  /home/emiliano/Documenti/other_env/other_e/include/nest/device_node.h \
-  /home/emiliano/Documenti/other_env/other_e/include/nest/logging_manager.h \
-  /home/emiliano/Documenti/other_env/other_e/include/nest/model_manager.h \
-  /home/emiliano/Documenti/other_env/other_e/include/nest/genericmodel.h \
-  /home/emiliano/Documenti/other_env/other_e/include/nest/model.h \
-  /home/emiliano/Documenti/other_env/other_e/include/nest/modelrange_manager.h \
-  /home/emiliano/Documenti/other_env/other_e/include/nest/modelrange.h \
-  /home/emiliano/Documenti/other_env/other_e/include/nest/module_manager.h \
+  /home/emiliano/Documenti/better_env/benv/include/nest/target_data.h \
+  /home/emiliano/Documenti/better_env/benv/include/nest/source_table_position.h \
+  /home/emiliano/Documenti/better_env/benv/include/nest/target_table.h \
+  /home/emiliano/Documenti/better_env/benv/include/nest/target_table_devices.h \
+  /home/emiliano/Documenti/better_env/benv/include/nest/event_delivery_manager.h \
+  /home/emiliano/Documenti/better_env/benv/include/nest/buffer_resize_log.h \
+  /home/emiliano/Documenti/better_env/benv/include/nest/io_manager.h \
+  /home/emiliano/Documenti/better_env/benv/include/nest/recording_backend.h \
+  /home/emiliano/Documenti/better_env/benv/include/nest/stimulation_backend.h \
+  /home/emiliano/Documenti/better_env/benv/include/nest/stimulation_device.h \
+  /home/emiliano/Documenti/better_env/benv/include/nest/device.h \
+  /home/emiliano/Documenti/better_env/benv/include/nest/device_node.h \
+  /home/emiliano/Documenti/better_env/benv/include/nest/logging_manager.h \
+  /home/emiliano/Documenti/better_env/benv/include/nest/model_manager.h \
+  /home/emiliano/Documenti/better_env/benv/include/nest/genericmodel.h \
+  /home/emiliano/Documenti/better_env/benv/include/nest/model.h \
+  /home/emiliano/Documenti/better_env/benv/include/nest/modelrange_manager.h \
+  /home/emiliano/Documenti/better_env/benv/include/nest/modelrange.h \
+  /home/emiliano/Documenti/better_env/benv/include/nest/module_manager.h \
   /usr/include/ltdl.h \
   /usr/include/libltdl/lt_system.h \
   /usr/include/c++/11/stdlib.h \
   /usr/include/libltdl/lt_error.h \
   /usr/include/libltdl/lt_dlloader.h \
-  /home/emiliano/Documenti/other_env/other_e/include/nest/music_manager.h \
-  /home/emiliano/Documenti/other_env/other_e/include/nest/node_manager.h \
-  /home/emiliano/Documenti/other_env/other_e/include/nest/sparse_node_array.h \
-  /home/emiliano/Documenti/other_env/other_e/include/nest/random_manager.h \
-  /home/emiliano/Documenti/other_env/other_e/include/nest/simulation_manager.h \
-  /home/emiliano/Documenti/other_env/other_e/include/nest/sp_manager.h \
-  /home/emiliano/Documenti/other_env/other_e/include/nest/growth_curve_factory.h \
-  /home/emiliano/Documenti/other_env/other_e/include/nest/growth_curve.h \
+  /home/emiliano/Documenti/better_env/benv/include/nest/music_manager.h \
+  /home/emiliano/Documenti/better_env/benv/include/nest/node_manager.h \
+  /home/emiliano/Documenti/better_env/benv/include/nest/sparse_node_array.h \
+  /home/emiliano/Documenti/better_env/benv/include/nest/random_manager.h \
+  /home/emiliano/Documenti/better_env/benv/include/nest/simulation_manager.h \
+  /home/emiliano/Documenti/better_env/benv/include/nest/sp_manager.h \
+  /home/emiliano/Documenti/better_env/benv/include/nest/growth_curve_factory.h \
+  /home/emiliano/Documenti/better_env/benv/include/nest/growth_curve.h \
   /usr/include/c++/11/fstream \
   /usr/include/x86_64-linux-gnu/c++/11/bits/basic_file.h \
   /usr/include/x86_64-linux-gnu/c++/11/bits/c++io.h \
   /usr/include/c++/11/bits/fstream.tcc \
-  /home/emiliano/Documenti/other_env/other_e/include/nest/nest_impl.h \
-  /home/emiliano/Documenti/other_env/other_e/include/nest/connector_model_impl.h \
-  /home/emiliano/Documenti/other_env/other_e/include/nest/delay_checker.h \
-  /home/emiliano/Documenti/other_env/other_e/include/nest/kernel_manager.h \
-  /home/emiliano/Documenti/other_env/other_e/include/nest/secondary_event_impl.h \
-  /home/emiliano/Documenti/other_env/other_e/include/nest/genericmodel_impl.h \
-  /home/emiliano/Documenti/other_env/other_e/include/nest/model_manager_impl.h \
-  /home/emiliano/Documenti/other_env/other_e/include/nest/string_utils.h \
-  /home/emiliano/Documenti/other_env/other_e/include/nest/target_identifier.h \
-  /home/emiliano/Documenti/other_env/other_e/include/nest/universal_data_logger_impl.h \
-  /home/emiliano/Documenti/other_env/other_e/include/nest/universal_data_logger.h \
-  /home/emiliano/Documenti/other_env/other_e/include/nest/recordables_map.h \
-  /home/emiliano/Documenti/other_env/other_e/include/nest/event_delivery_manager_impl.h \
-  /home/emiliano/Documenti/other_env/other_e/include/nest/connection_manager_impl.h \
-  /home/emiliano/Documenti/other_env/other_e/include/nest/conn_builder_factory.h \
-  /home/emiliano/Documenti/other_env/other_e/include/nest/target_table_devices_impl.h \
-  /home/emiliano/Documenti/other_env/other_e/include/nest/vp_manager_impl.h \
-  /home/emiliano/Documenti/other_env/other_e/include/nest/mpi_manager_impl.h \
-  /home/emiliano/Documenti/other_env/other_e/include/nest/dict.h \
-  /home/emiliano/Documenti/other_env/other_e/include/nest/dictutils.h \
-  /home/emiliano/Documenti/other_env/other_e/include/nest/doubledatum.h \
-  /home/emiliano/Documenti/other_env/other_e/include/nest/integerdatum.h \
-  /home/emiliano/Documenti/other_env/other_e/include/nest/lockptrdatum.h \
+  /home/emiliano/Documenti/better_env/benv/include/nest/nest_impl.h \
+  /home/emiliano/Documenti/better_env/benv/include/nest/connector_model_impl.h \
+  /home/emiliano/Documenti/better_env/benv/include/nest/delay_checker.h \
+  /home/emiliano/Documenti/better_env/benv/include/nest/kernel_manager.h \
+  /home/emiliano/Documenti/better_env/benv/include/nest/secondary_event_impl.h \
+  /home/emiliano/Documenti/better_env/benv/include/nest/genericmodel_impl.h \
+  /home/emiliano/Documenti/better_env/benv/include/nest/model_manager_impl.h \
+  /home/emiliano/Documenti/better_env/benv/include/nest/string_utils.h \
+  /home/emiliano/Documenti/better_env/benv/include/nest/target_identifier.h \
+  /home/emiliano/Documenti/better_env/benv/include/nest/universal_data_logger_impl.h \
+  /home/emiliano/Documenti/better_env/benv/include/nest/universal_data_logger.h \
+  /home/emiliano/Documenti/better_env/benv/include/nest/recordables_map.h \
+  /home/emiliano/Documenti/better_env/benv/include/nest/event_delivery_manager_impl.h \
+  /home/emiliano/Documenti/better_env/benv/include/nest/connection_manager_impl.h \
+  /home/emiliano/Documenti/better_env/benv/include/nest/conn_builder_factory.h \
+  /home/emiliano/Documenti/better_env/benv/include/nest/target_table_devices_impl.h \
+  /home/emiliano/Documenti/better_env/benv/include/nest/vp_manager_impl.h \
+  /home/emiliano/Documenti/better_env/benv/include/nest/mpi_manager_impl.h \
+  /home/emiliano/Documenti/better_env/benv/include/nest/dict.h \
+  /home/emiliano/Documenti/better_env/benv/include/nest/dictutils.h \
+  /home/emiliano/Documenti/better_env/benv/include/nest/doubledatum.h \
+  /home/emiliano/Documenti/better_env/benv/include/nest/integerdatum.h \
+  /home/emiliano/Documenti/better_env/benv/include/nest/lockptrdatum.h \
   ../eglif_mli.h \
-  /home/emiliano/Documenti/other_env/other_e/include/nest/config.h \
+  /home/emiliano/Documenti/better_env/benv/include/nest/config.h \
   /usr/include/gsl/gsl_errno.h \
   /usr/include/gsl/gsl_types.h \
   /usr/include/gsl/gsl_matrix.h \
@@ -6428,26 +6428,26 @@ CMakeFiles/custom_stdp_module_module.dir/eglif_mli.o: ../eglif_mli.cpp \
   /usr/include/gsl/gsl_vector_char.h \
   /usr/include/gsl/gsl_block_char.h \
   /usr/include/gsl/gsl_odeiv.h \
-  /home/emiliano/Documenti/other_env/other_e/include/nest/archiving_node.h \
-  /home/emiliano/Documenti/other_env/other_e/include/nest/structural_plasticity_node.h \
-  /home/emiliano/Documenti/other_env/other_e/include/nest/synaptic_element.h \
+  /home/emiliano/Documenti/better_env/benv/include/nest/archiving_node.h \
+  /home/emiliano/Documenti/better_env/benv/include/nest/structural_plasticity_node.h \
+  /home/emiliano/Documenti/better_env/benv/include/nest/synaptic_element.h \
   ../extended_post_history_archiving_node.h \
   ../extended_hist_entry.h \
-  /home/emiliano/Documenti/other_env/other_e/include/nest/structural_plasticity_node.h \
-  /home/emiliano/Documenti/other_env/other_e/include/nest/nest_time.h \
-  /home/emiliano/Documenti/other_env/other_e/include/nest/nest_types.h \
-  /home/emiliano/Documenti/other_env/other_e/include/nest/node.h \
-  /home/emiliano/Documenti/other_env/other_e/include/nest/dictdatum.h \
-  /home/emiliano/Documenti/other_env/other_e/include/nest/nest_datums.h \
-  /home/emiliano/Documenti/other_env/other_e/include/nest/connection.h \
-  /home/emiliano/Documenti/other_env/other_e/include/nest/connector_base_impl.h \
-  /home/emiliano/Documenti/other_env/other_e/include/nest/weight_recorder.h \
-  /home/emiliano/Documenti/other_env/other_e/include/nest/recording_device.h \
-  /home/emiliano/Documenti/other_env/other_e/include/nest/syn_id_delay.h \
-  /home/emiliano/Documenti/other_env/other_e/include/nest/dict_util.h \
-  /home/emiliano/Documenti/other_env/other_e/include/nest/event.h \
-  /home/emiliano/Documenti/other_env/other_e/include/nest/ring_buffer.h \
-  /home/emiliano/Documenti/other_env/other_e/include/nest/universal_data_logger.h
+  /home/emiliano/Documenti/better_env/benv/include/nest/structural_plasticity_node.h \
+  /home/emiliano/Documenti/better_env/benv/include/nest/nest_time.h \
+  /home/emiliano/Documenti/better_env/benv/include/nest/nest_types.h \
+  /home/emiliano/Documenti/better_env/benv/include/nest/node.h \
+  /home/emiliano/Documenti/better_env/benv/include/nest/dictdatum.h \
+  /home/emiliano/Documenti/better_env/benv/include/nest/nest_datums.h \
+  /home/emiliano/Documenti/better_env/benv/include/nest/connection.h \
+  /home/emiliano/Documenti/better_env/benv/include/nest/connector_base_impl.h \
+  /home/emiliano/Documenti/better_env/benv/include/nest/weight_recorder.h \
+  /home/emiliano/Documenti/better_env/benv/include/nest/recording_device.h \
+  /home/emiliano/Documenti/better_env/benv/include/nest/syn_id_delay.h \
+  /home/emiliano/Documenti/better_env/benv/include/nest/dict_util.h \
+  /home/emiliano/Documenti/better_env/benv/include/nest/event.h \
+  /home/emiliano/Documenti/better_env/benv/include/nest/ring_buffer.h \
+  /home/emiliano/Documenti/better_env/benv/include/nest/universal_data_logger.h
 
 CMakeFiles/custom_stdp_module_module.dir/eglif_pc_nestml.o: ../eglif_pc_nestml.cpp \
   /usr/include/stdc-predef.h \
@@ -6464,8 +6464,8 @@ CMakeFiles/custom_stdp_module_module.dir/eglif_pc_nestml.o: ../eglif_pc_nestml.c
   /usr/include/x86_64-linux-gnu/gnu/stubs-64.h \
   /usr/include/x86_64-linux-gnu/c++/11/bits/cpu_defines.h \
   /usr/include/c++/11/pstl/pstl_config.h \
-  /home/emiliano/Documenti/other_env/other_e/include/nest/numerics.h \
-  /home/emiliano/Documenti/other_env/other_e/include/nest/config.h \
+  /home/emiliano/Documenti/better_env/benv/include/nest/numerics.h \
+  /home/emiliano/Documenti/better_env/benv/include/nest/config.h \
   /usr/include/c++/11/cassert \
   /usr/include/assert.h \
   /usr/include/c++/11/cmath \
@@ -6550,8 +6550,8 @@ CMakeFiles/custom_stdp_module_module.dir/eglif_pc_nestml.o: ../eglif_pc_nestml.c
   /usr/include/c++/11/tr1/poly_hermite.tcc \
   /usr/include/c++/11/tr1/poly_laguerre.tcc \
   /usr/include/c++/11/tr1/riemann_zeta.tcc \
-  /home/emiliano/Documenti/other_env/other_e/include/nest/exceptions.h \
-  /home/emiliano/Documenti/other_env/other_e/include/nest/nest_time.h \
+  /home/emiliano/Documenti/better_env/benv/include/nest/exceptions.h \
+  /home/emiliano/Documenti/better_env/benv/include/nest/nest_time.h \
   /usr/include/c++/11/cfloat \
   /usr/lib/gcc/x86_64-linux-gnu/11/include/float.h \
   /usr/include/c++/11/cstdlib \
@@ -6668,8 +6668,8 @@ CMakeFiles/custom_stdp_module_module.dir/eglif_pc_nestml.o: ../eglif_pc_nestml.c
   /usr/include/c++/11/bits/ostream.tcc \
   /usr/include/c++/11/istream \
   /usr/include/c++/11/bits/istream.tcc \
-  /home/emiliano/Documenti/other_env/other_e/include/nest/numerics.h \
-  /home/emiliano/Documenti/other_env/other_e/include/nest/nest_types.h \
+  /home/emiliano/Documenti/better_env/benv/include/nest/numerics.h \
+  /home/emiliano/Documenti/better_env/benv/include/nest/nest_types.h \
   /usr/include/c++/11/climits \
   /usr/lib/gcc/x86_64-linux-gnu/11/include/limits.h \
   /usr/lib/gcc/x86_64-linux-gnu/11/include/syslimits.h \
@@ -6681,7 +6681,7 @@ CMakeFiles/custom_stdp_module_module.dir/eglif_pc_nestml.o: ../eglif_pc_nestml.c
   /usr/include/x86_64-linux-gnu/bits/xopen_lim.h \
   /usr/include/x86_64-linux-gnu/bits/uio_lim.h \
   /usr/include/c++/11/cstddef \
-  /home/emiliano/Documenti/other_env/other_e/include/nest/name.h \
+  /home/emiliano/Documenti/better_env/benv/include/nest/name.h \
   /usr/include/c++/11/deque \
   /usr/include/c++/11/bits/stl_uninitialized.h \
   /usr/include/c++/11/bits/stl_deque.h \
@@ -6699,17 +6699,17 @@ CMakeFiles/custom_stdp_module_module.dir/eglif_pc_nestml.o: ../eglif_pc_nestml.c
   /usr/include/c++/11/bits/invoke.h \
   /usr/include/c++/11/bits/stl_multimap.h \
   /usr/include/c++/11/bits/erase_if.h \
-  /home/emiliano/Documenti/other_env/other_e/include/nest/sliexceptions.h \
+  /home/emiliano/Documenti/better_env/benv/include/nest/sliexceptions.h \
   /usr/include/c++/11/vector \
   /usr/include/c++/11/bits/stl_vector.h \
   /usr/include/c++/11/bits/stl_bvector.h \
   /usr/include/c++/11/bits/vector.tcc \
-  /home/emiliano/Documenti/other_env/other_e/include/nest/kernel_manager.h \
-  /home/emiliano/Documenti/other_env/other_e/include/nest/connection_manager.h \
-  /home/emiliano/Documenti/other_env/other_e/include/nest/manager_interface.h \
-  /home/emiliano/Documenti/other_env/other_e/include/nest/dictdatum.h \
-  /home/emiliano/Documenti/other_env/other_e/include/nest/dict.h \
-  /home/emiliano/Documenti/other_env/other_e/include/nest/token.h \
+  /home/emiliano/Documenti/better_env/benv/include/nest/kernel_manager.h \
+  /home/emiliano/Documenti/better_env/benv/include/nest/connection_manager.h \
+  /home/emiliano/Documenti/better_env/benv/include/nest/manager_interface.h \
+  /home/emiliano/Documenti/better_env/benv/include/nest/dictdatum.h \
+  /home/emiliano/Documenti/better_env/benv/include/nest/dict.h \
+  /home/emiliano/Documenti/better_env/benv/include/nest/token.h \
   /usr/include/c++/11/iomanip \
   /usr/include/c++/11/locale \
   /usr/include/c++/11/bits/locale_facets_nonio.h \
@@ -6724,20 +6724,20 @@ CMakeFiles/custom_stdp_module_module.dir/eglif_pc_nestml.o: ../eglif_pc_nestml.c
   /usr/include/c++/11/bits/quoted_string.h \
   /usr/include/c++/11/sstream \
   /usr/include/c++/11/bits/sstream.tcc \
-  /home/emiliano/Documenti/other_env/other_e/include/nest/datum.h \
-  /home/emiliano/Documenti/other_env/other_e/include/nest/slitype.h \
-  /home/emiliano/Documenti/other_env/other_e/include/nest/slifunction.h \
-  /home/emiliano/Documenti/other_env/other_e/include/nest/interpret.h \
+  /home/emiliano/Documenti/better_env/benv/include/nest/datum.h \
+  /home/emiliano/Documenti/better_env/benv/include/nest/slitype.h \
+  /home/emiliano/Documenti/better_env/benv/include/nest/slifunction.h \
+  /home/emiliano/Documenti/better_env/benv/include/nest/interpret.h \
   /usr/include/c++/11/list \
   /usr/include/c++/11/bits/stl_list.h \
   /usr/include/c++/11/bits/allocated_ptr.h \
   /usr/include/c++/11/bits/list.tcc \
-  /home/emiliano/Documenti/other_env/other_e/include/nest/sliactions.h \
-  /home/emiliano/Documenti/other_env/other_e/include/nest/slibuiltins.h \
-  /home/emiliano/Documenti/other_env/other_e/include/nest/slimodule.h \
-  /home/emiliano/Documenti/other_env/other_e/include/nest/tokenstack.h \
-  /home/emiliano/Documenti/other_env/other_e/include/nest/tarrayobj.h \
-  /home/emiliano/Documenti/other_env/other_e/include/nest/tokenarray.h \
+  /home/emiliano/Documenti/better_env/benv/include/nest/sliactions.h \
+  /home/emiliano/Documenti/better_env/benv/include/nest/slibuiltins.h \
+  /home/emiliano/Documenti/better_env/benv/include/nest/slimodule.h \
+  /home/emiliano/Documenti/better_env/benv/include/nest/tokenstack.h \
+  /home/emiliano/Documenti/better_env/benv/include/nest/tarrayobj.h \
+  /home/emiliano/Documenti/better_env/benv/include/nest/tokenarray.h \
   /usr/include/c++/11/algorithm \
   /usr/include/c++/11/bits/stl_algo.h \
   /usr/include/c++/11/bits/algorithmfwd.h \
@@ -6754,8 +6754,8 @@ CMakeFiles/custom_stdp_module_module.dir/eglif_pc_nestml.o: ../eglif_pc_nestml.c
   /usr/include/c++/11/bits/enable_special_members.h \
   /usr/include/c++/11/bits/unordered_map.h \
   /usr/include/c++/11/pstl/execution_defs.h \
-  /home/emiliano/Documenti/other_env/other_e/include/nest/lockptrdatum.h \
-  /home/emiliano/Documenti/other_env/other_e/include/nest/lockptr.h \
+  /home/emiliano/Documenti/better_env/benv/include/nest/lockptrdatum.h \
+  /home/emiliano/Documenti/better_env/benv/include/nest/lockptr.h \
   /usr/include/c++/11/memory \
   /usr/include/c++/11/bits/stl_raw_storage_iter.h \
   /usr/include/c++/11/bits/align.h \
@@ -6768,49 +6768,49 @@ CMakeFiles/custom_stdp_module_module.dir/eglif_pc_nestml.o: ../eglif_pc_nestml.c
   /usr/include/c++/11/bits/atomic_lockfree_defines.h \
   /usr/include/c++/11/backward/auto_ptr.h \
   /usr/include/c++/11/pstl/glue_memory_defs.h \
-  /home/emiliano/Documenti/other_env/other_e/include/nest/stopwatch.h \
+  /home/emiliano/Documenti/better_env/benv/include/nest/stopwatch.h \
   /usr/include/x86_64-linux-gnu/sys/time.h \
-  /home/emiliano/Documenti/other_env/other_e/include/nest/conn_builder.h \
+  /home/emiliano/Documenti/better_env/benv/include/nest/conn_builder.h \
   /usr/include/c++/11/set \
   /usr/include/c++/11/bits/stl_set.h \
   /usr/include/c++/11/bits/stl_multiset.h \
-  /home/emiliano/Documenti/other_env/other_e/include/nest/conn_parameter.h \
-  /home/emiliano/Documenti/other_env/other_e/include/nest/exceptions.h \
-  /home/emiliano/Documenti/other_env/other_e/include/nest/nest_datums.h \
-  /home/emiliano/Documenti/other_env/other_e/include/nest/connection_id.h \
-  /home/emiliano/Documenti/other_env/other_e/include/nest/arraydatum.h \
-  /home/emiliano/Documenti/other_env/other_e/include/nest/aggregatedatum.h \
-  /home/emiliano/Documenti/other_env/other_e/include/nest/allocator.h \
-  /home/emiliano/Documenti/other_env/other_e/include/nest/dictutils.h \
-  /home/emiliano/Documenti/other_env/other_e/include/nest/doubledatum.h \
-  /home/emiliano/Documenti/other_env/other_e/include/nest/numericdatum.h \
-  /home/emiliano/Documenti/other_env/other_e/include/nest/genericdatum.h \
-  /home/emiliano/Documenti/other_env/other_e/include/nest/integerdatum.h \
-  /home/emiliano/Documenti/other_env/other_e/include/nest/namedatum.h \
-  /home/emiliano/Documenti/other_env/other_e/include/nest/tokenutils.h \
-  /home/emiliano/Documenti/other_env/other_e/include/nest/nestmodule.h \
-  /home/emiliano/Documenti/other_env/other_e/include/nest/event.h \
+  /home/emiliano/Documenti/better_env/benv/include/nest/conn_parameter.h \
+  /home/emiliano/Documenti/better_env/benv/include/nest/exceptions.h \
+  /home/emiliano/Documenti/better_env/benv/include/nest/nest_datums.h \
+  /home/emiliano/Documenti/better_env/benv/include/nest/connection_id.h \
+  /home/emiliano/Documenti/better_env/benv/include/nest/arraydatum.h \
+  /home/emiliano/Documenti/better_env/benv/include/nest/aggregatedatum.h \
+  /home/emiliano/Documenti/better_env/benv/include/nest/allocator.h \
+  /home/emiliano/Documenti/better_env/benv/include/nest/dictutils.h \
+  /home/emiliano/Documenti/better_env/benv/include/nest/doubledatum.h \
+  /home/emiliano/Documenti/better_env/benv/include/nest/numericdatum.h \
+  /home/emiliano/Documenti/better_env/benv/include/nest/genericdatum.h \
+  /home/emiliano/Documenti/better_env/benv/include/nest/integerdatum.h \
+  /home/emiliano/Documenti/better_env/benv/include/nest/namedatum.h \
+  /home/emiliano/Documenti/better_env/benv/include/nest/tokenutils.h \
+  /home/emiliano/Documenti/better_env/benv/include/nest/nestmodule.h \
+  /home/emiliano/Documenti/better_env/benv/include/nest/event.h \
   /usr/include/c++/11/cstring \
   /usr/include/string.h \
   /usr/include/strings.h \
   /usr/include/x86_64-linux-gnu/bits/strings_fortified.h \
   /usr/include/x86_64-linux-gnu/bits/string_fortified.h \
-  /home/emiliano/Documenti/other_env/other_e/include/nest/spike_data.h \
-  /home/emiliano/Documenti/other_env/other_e/include/nest/target.h \
-  /home/emiliano/Documenti/other_env/other_e/include/nest/static_assert.h \
-  /home/emiliano/Documenti/other_env/other_e/include/nest/vp_manager.h \
+  /home/emiliano/Documenti/better_env/benv/include/nest/spike_data.h \
+  /home/emiliano/Documenti/better_env/benv/include/nest/target.h \
+  /home/emiliano/Documenti/better_env/benv/include/nest/static_assert.h \
+  /home/emiliano/Documenti/better_env/benv/include/nest/vp_manager.h \
   /usr/lib/gcc/x86_64-linux-gnu/11/include/omp.h \
-  /home/emiliano/Documenti/other_env/other_e/include/nest/generic_factory.h \
-  /home/emiliano/Documenti/other_env/other_e/include/nest/ntree.h \
+  /home/emiliano/Documenti/better_env/benv/include/nest/generic_factory.h \
+  /home/emiliano/Documenti/better_env/benv/include/nest/ntree.h \
   /usr/include/c++/11/bitset \
   /usr/include/c++/11/iterator \
   /usr/include/c++/11/bits/stream_iterator.h \
-  /home/emiliano/Documenti/other_env/other_e/include/nest/position.h \
-  /home/emiliano/Documenti/other_env/other_e/include/nest/compose.hpp \
-  /home/emiliano/Documenti/other_env/other_e/include/nest/parameter.h \
-  /home/emiliano/Documenti/other_env/other_e/include/nest/nest_names.h \
-  /home/emiliano/Documenti/other_env/other_e/include/nest/node_collection.h \
-  /home/emiliano/Documenti/other_env/other_e/include/nest/random_generators.h \
+  /home/emiliano/Documenti/better_env/benv/include/nest/position.h \
+  /home/emiliano/Documenti/better_env/benv/include/nest/compose.hpp \
+  /home/emiliano/Documenti/better_env/benv/include/nest/parameter.h \
+  /home/emiliano/Documenti/better_env/benv/include/nest/nest_names.h \
+  /home/emiliano/Documenti/better_env/benv/include/nest/node_collection.h \
+  /home/emiliano/Documenti/better_env/benv/include/nest/random_generators.h \
   /usr/include/c++/11/random \
   /usr/include/c++/11/bits/random.h \
   /usr/include/x86_64-linux-gnu/c++/11/bits/opt_random.h \
@@ -6818,7 +6818,7 @@ CMakeFiles/custom_stdp_module_module.dir/eglif_pc_nestml.o: ../eglif_pc_nestml.c
   /usr/include/c++/11/numeric \
   /usr/include/c++/11/bits/stl_numeric.h \
   /usr/include/c++/11/pstl/glue_numeric_defs.h \
-  /home/emiliano/Documenti/other_env/other_e/include/nest/randutils.hpp \
+  /home/emiliano/Documenti/better_env/benv/include/nest/randutils.hpp \
   /usr/include/c++/11/chrono \
   /usr/include/c++/11/ratio \
   /usr/include/c++/11/bits/parse_numbers.h \
@@ -6834,11 +6834,11 @@ CMakeFiles/custom_stdp_module_module.dir/eglif_pc_nestml.o: ../eglif_pc_nestml.c
   /usr/include/x86_64-linux-gnu/bits/unistd.h \
   /usr/include/x86_64-linux-gnu/bits/unistd_ext.h \
   /usr/include/linux/close_range.h \
-  /home/emiliano/Documenti/other_env/other_e/include/nest/sharedptrdatum.h \
-  /home/emiliano/Documenti/other_env/other_e/include/nest/connector_base.h \
-  /home/emiliano/Documenti/other_env/other_e/include/nest/sort.h \
-  /home/emiliano/Documenti/other_env/other_e/include/nest/block_vector.h \
-  /home/emiliano/Documenti/other_env/other_e/include/nest/iterator_pair.h \
+  /home/emiliano/Documenti/better_env/benv/include/nest/sharedptrdatum.h \
+  /home/emiliano/Documenti/better_env/benv/include/nest/connector_base.h \
+  /home/emiliano/Documenti/better_env/benv/include/nest/sort.h \
+  /home/emiliano/Documenti/better_env/benv/include/nest/block_vector.h \
+  /home/emiliano/Documenti/better_env/benv/include/nest/iterator_pair.h \
   /usr/include/boost/iterator/iterator_adaptor.hpp \
   /usr/include/boost/static_assert.hpp \
   /usr/include/boost/config.hpp \
@@ -7064,7 +7064,7 @@ CMakeFiles/custom_stdp_module_module.dir/eglif_pc_nestml.o: ../eglif_pc_nestml.c
   /usr/include/boost/utility/swap.hpp \
   /usr/include/boost/core/swap.hpp \
   /usr/include/boost/core/enable_if.hpp \
-  /home/emiliano/Documenti/other_env/other_e/include/nest/source.h \
+  /home/emiliano/Documenti/better_env/benv/include/nest/source.h \
   /usr/include/boost/sort/spreadsort/spreadsort.hpp \
   /usr/include/boost/type_traits.hpp \
   /usr/include/boost/type_traits/aligned_storage.hpp \
@@ -7201,24 +7201,24 @@ CMakeFiles/custom_stdp_module_module.dir/eglif_pc_nestml.o: ../eglif_pc_nestml.c
   /usr/include/boost/sort/spreadsort/detail/float_sort.hpp \
   /usr/include/boost/sort/spreadsort/string_sort.hpp \
   /usr/include/boost/sort/spreadsort/detail/string_sort.hpp \
-  /home/emiliano/Documenti/other_env/other_e/include/nest/vector_util.h \
-  /home/emiliano/Documenti/other_env/other_e/include/nest/common_synapse_properties.h \
-  /home/emiliano/Documenti/other_env/other_e/include/nest/connector_model.h \
-  /home/emiliano/Documenti/other_env/other_e/include/nest/enum_bitfield.h \
-  /home/emiliano/Documenti/other_env/other_e/include/nest/secondary_event.h \
-  /home/emiliano/Documenti/other_env/other_e/include/nest/node.h \
-  /home/emiliano/Documenti/other_env/other_e/include/nest/deprecation_warning.h \
-  /home/emiliano/Documenti/other_env/other_e/include/nest/histentry.h \
-  /home/emiliano/Documenti/other_env/other_e/include/nest/connection_label.h \
-  /home/emiliano/Documenti/other_env/other_e/include/nest/nest.h \
-  /home/emiliano/Documenti/other_env/other_e/include/nest/logging.h \
-  /home/emiliano/Documenti/other_env/other_e/include/nest/spikecounter.h \
-  /home/emiliano/Documenti/other_env/other_e/include/nest/nest_timeconverter.h \
-  /home/emiliano/Documenti/other_env/other_e/include/nest/per_thread_bool_indicator.h \
+  /home/emiliano/Documenti/better_env/benv/include/nest/vector_util.h \
+  /home/emiliano/Documenti/better_env/benv/include/nest/common_synapse_properties.h \
+  /home/emiliano/Documenti/better_env/benv/include/nest/connector_model.h \
+  /home/emiliano/Documenti/better_env/benv/include/nest/enum_bitfield.h \
+  /home/emiliano/Documenti/better_env/benv/include/nest/secondary_event.h \
+  /home/emiliano/Documenti/better_env/benv/include/nest/node.h \
+  /home/emiliano/Documenti/better_env/benv/include/nest/deprecation_warning.h \
+  /home/emiliano/Documenti/better_env/benv/include/nest/histentry.h \
+  /home/emiliano/Documenti/better_env/benv/include/nest/connection_label.h \
+  /home/emiliano/Documenti/better_env/benv/include/nest/nest.h \
+  /home/emiliano/Documenti/better_env/benv/include/nest/logging.h \
+  /home/emiliano/Documenti/better_env/benv/include/nest/spikecounter.h \
+  /home/emiliano/Documenti/better_env/benv/include/nest/nest_timeconverter.h \
+  /home/emiliano/Documenti/better_env/benv/include/nest/per_thread_bool_indicator.h \
   /usr/include/c++/11/atomic \
-  /home/emiliano/Documenti/other_env/other_e/include/nest/send_buffer_position.h \
-  /home/emiliano/Documenti/other_env/other_e/include/nest/source_table.h \
-  /home/emiliano/Documenti/other_env/other_e/include/nest/mpi_manager.h \
+  /home/emiliano/Documenti/better_env/benv/include/nest/send_buffer_position.h \
+  /home/emiliano/Documenti/better_env/benv/include/nest/source_table.h \
+  /home/emiliano/Documenti/better_env/benv/include/nest/mpi_manager.h \
   /usr/lib/x86_64-linux-gnu/openmpi/include/mpi.h \
   /usr/lib/x86_64-linux-gnu/openmpi/include/mpi_portable_platform.h \
   /usr/lib/x86_64-linux-gnu/openmpi/include/openmpi/ompi/mpi/cxx/mpicxx.h \
@@ -7252,67 +7252,67 @@ CMakeFiles/custom_stdp_module_module.dir/eglif_pc_nestml.o: ../eglif_pc_nestml.c
   /usr/lib/x86_64-linux-gnu/openmpi/include/openmpi/ompi/mpi/cxx/info_inln.h \
   /usr/lib/x86_64-linux-gnu/openmpi/include/openmpi/ompi/mpi/cxx/win_inln.h \
   /usr/lib/x86_64-linux-gnu/openmpi/include/openmpi/ompi/mpi/cxx/file_inln.h \
-  /home/emiliano/Documenti/other_env/other_e/include/nest/target_data.h \
-  /home/emiliano/Documenti/other_env/other_e/include/nest/source_table_position.h \
-  /home/emiliano/Documenti/other_env/other_e/include/nest/target_table.h \
-  /home/emiliano/Documenti/other_env/other_e/include/nest/target_table_devices.h \
-  /home/emiliano/Documenti/other_env/other_e/include/nest/event_delivery_manager.h \
-  /home/emiliano/Documenti/other_env/other_e/include/nest/buffer_resize_log.h \
-  /home/emiliano/Documenti/other_env/other_e/include/nest/io_manager.h \
-  /home/emiliano/Documenti/other_env/other_e/include/nest/recording_backend.h \
-  /home/emiliano/Documenti/other_env/other_e/include/nest/stimulation_backend.h \
-  /home/emiliano/Documenti/other_env/other_e/include/nest/stimulation_device.h \
-  /home/emiliano/Documenti/other_env/other_e/include/nest/device.h \
-  /home/emiliano/Documenti/other_env/other_e/include/nest/device_node.h \
-  /home/emiliano/Documenti/other_env/other_e/include/nest/logging_manager.h \
-  /home/emiliano/Documenti/other_env/other_e/include/nest/model_manager.h \
-  /home/emiliano/Documenti/other_env/other_e/include/nest/genericmodel.h \
-  /home/emiliano/Documenti/other_env/other_e/include/nest/model.h \
-  /home/emiliano/Documenti/other_env/other_e/include/nest/modelrange_manager.h \
-  /home/emiliano/Documenti/other_env/other_e/include/nest/modelrange.h \
-  /home/emiliano/Documenti/other_env/other_e/include/nest/module_manager.h \
+  /home/emiliano/Documenti/better_env/benv/include/nest/target_data.h \
+  /home/emiliano/Documenti/better_env/benv/include/nest/source_table_position.h \
+  /home/emiliano/Documenti/better_env/benv/include/nest/target_table.h \
+  /home/emiliano/Documenti/better_env/benv/include/nest/target_table_devices.h \
+  /home/emiliano/Documenti/better_env/benv/include/nest/event_delivery_manager.h \
+  /home/emiliano/Documenti/better_env/benv/include/nest/buffer_resize_log.h \
+  /home/emiliano/Documenti/better_env/benv/include/nest/io_manager.h \
+  /home/emiliano/Documenti/better_env/benv/include/nest/recording_backend.h \
+  /home/emiliano/Documenti/better_env/benv/include/nest/stimulation_backend.h \
+  /home/emiliano/Documenti/better_env/benv/include/nest/stimulation_device.h \
+  /home/emiliano/Documenti/better_env/benv/include/nest/device.h \
+  /home/emiliano/Documenti/better_env/benv/include/nest/device_node.h \
+  /home/emiliano/Documenti/better_env/benv/include/nest/logging_manager.h \
+  /home/emiliano/Documenti/better_env/benv/include/nest/model_manager.h \
+  /home/emiliano/Documenti/better_env/benv/include/nest/genericmodel.h \
+  /home/emiliano/Documenti/better_env/benv/include/nest/model.h \
+  /home/emiliano/Documenti/better_env/benv/include/nest/modelrange_manager.h \
+  /home/emiliano/Documenti/better_env/benv/include/nest/modelrange.h \
+  /home/emiliano/Documenti/better_env/benv/include/nest/module_manager.h \
   /usr/include/ltdl.h \
   /usr/include/libltdl/lt_system.h \
   /usr/include/c++/11/stdlib.h \
   /usr/include/libltdl/lt_error.h \
   /usr/include/libltdl/lt_dlloader.h \
-  /home/emiliano/Documenti/other_env/other_e/include/nest/music_manager.h \
-  /home/emiliano/Documenti/other_env/other_e/include/nest/node_manager.h \
-  /home/emiliano/Documenti/other_env/other_e/include/nest/sparse_node_array.h \
-  /home/emiliano/Documenti/other_env/other_e/include/nest/random_manager.h \
-  /home/emiliano/Documenti/other_env/other_e/include/nest/simulation_manager.h \
-  /home/emiliano/Documenti/other_env/other_e/include/nest/sp_manager.h \
-  /home/emiliano/Documenti/other_env/other_e/include/nest/growth_curve_factory.h \
-  /home/emiliano/Documenti/other_env/other_e/include/nest/growth_curve.h \
+  /home/emiliano/Documenti/better_env/benv/include/nest/music_manager.h \
+  /home/emiliano/Documenti/better_env/benv/include/nest/node_manager.h \
+  /home/emiliano/Documenti/better_env/benv/include/nest/sparse_node_array.h \
+  /home/emiliano/Documenti/better_env/benv/include/nest/random_manager.h \
+  /home/emiliano/Documenti/better_env/benv/include/nest/simulation_manager.h \
+  /home/emiliano/Documenti/better_env/benv/include/nest/sp_manager.h \
+  /home/emiliano/Documenti/better_env/benv/include/nest/growth_curve_factory.h \
+  /home/emiliano/Documenti/better_env/benv/include/nest/growth_curve.h \
   /usr/include/c++/11/fstream \
   /usr/include/x86_64-linux-gnu/c++/11/bits/basic_file.h \
   /usr/include/x86_64-linux-gnu/c++/11/bits/c++io.h \
   /usr/include/c++/11/bits/fstream.tcc \
-  /home/emiliano/Documenti/other_env/other_e/include/nest/nest_impl.h \
-  /home/emiliano/Documenti/other_env/other_e/include/nest/connector_model_impl.h \
-  /home/emiliano/Documenti/other_env/other_e/include/nest/delay_checker.h \
-  /home/emiliano/Documenti/other_env/other_e/include/nest/kernel_manager.h \
-  /home/emiliano/Documenti/other_env/other_e/include/nest/secondary_event_impl.h \
-  /home/emiliano/Documenti/other_env/other_e/include/nest/genericmodel_impl.h \
-  /home/emiliano/Documenti/other_env/other_e/include/nest/model_manager_impl.h \
-  /home/emiliano/Documenti/other_env/other_e/include/nest/string_utils.h \
-  /home/emiliano/Documenti/other_env/other_e/include/nest/target_identifier.h \
-  /home/emiliano/Documenti/other_env/other_e/include/nest/universal_data_logger_impl.h \
-  /home/emiliano/Documenti/other_env/other_e/include/nest/universal_data_logger.h \
-  /home/emiliano/Documenti/other_env/other_e/include/nest/recordables_map.h \
-  /home/emiliano/Documenti/other_env/other_e/include/nest/event_delivery_manager_impl.h \
-  /home/emiliano/Documenti/other_env/other_e/include/nest/connection_manager_impl.h \
-  /home/emiliano/Documenti/other_env/other_e/include/nest/conn_builder_factory.h \
-  /home/emiliano/Documenti/other_env/other_e/include/nest/target_table_devices_impl.h \
-  /home/emiliano/Documenti/other_env/other_e/include/nest/vp_manager_impl.h \
-  /home/emiliano/Documenti/other_env/other_e/include/nest/mpi_manager_impl.h \
-  /home/emiliano/Documenti/other_env/other_e/include/nest/dict.h \
-  /home/emiliano/Documenti/other_env/other_e/include/nest/dictutils.h \
-  /home/emiliano/Documenti/other_env/other_e/include/nest/doubledatum.h \
-  /home/emiliano/Documenti/other_env/other_e/include/nest/integerdatum.h \
-  /home/emiliano/Documenti/other_env/other_e/include/nest/lockptrdatum.h \
+  /home/emiliano/Documenti/better_env/benv/include/nest/nest_impl.h \
+  /home/emiliano/Documenti/better_env/benv/include/nest/connector_model_impl.h \
+  /home/emiliano/Documenti/better_env/benv/include/nest/delay_checker.h \
+  /home/emiliano/Documenti/better_env/benv/include/nest/kernel_manager.h \
+  /home/emiliano/Documenti/better_env/benv/include/nest/secondary_event_impl.h \
+  /home/emiliano/Documenti/better_env/benv/include/nest/genericmodel_impl.h \
+  /home/emiliano/Documenti/better_env/benv/include/nest/model_manager_impl.h \
+  /home/emiliano/Documenti/better_env/benv/include/nest/string_utils.h \
+  /home/emiliano/Documenti/better_env/benv/include/nest/target_identifier.h \
+  /home/emiliano/Documenti/better_env/benv/include/nest/universal_data_logger_impl.h \
+  /home/emiliano/Documenti/better_env/benv/include/nest/universal_data_logger.h \
+  /home/emiliano/Documenti/better_env/benv/include/nest/recordables_map.h \
+  /home/emiliano/Documenti/better_env/benv/include/nest/event_delivery_manager_impl.h \
+  /home/emiliano/Documenti/better_env/benv/include/nest/connection_manager_impl.h \
+  /home/emiliano/Documenti/better_env/benv/include/nest/conn_builder_factory.h \
+  /home/emiliano/Documenti/better_env/benv/include/nest/target_table_devices_impl.h \
+  /home/emiliano/Documenti/better_env/benv/include/nest/vp_manager_impl.h \
+  /home/emiliano/Documenti/better_env/benv/include/nest/mpi_manager_impl.h \
+  /home/emiliano/Documenti/better_env/benv/include/nest/dict.h \
+  /home/emiliano/Documenti/better_env/benv/include/nest/dictutils.h \
+  /home/emiliano/Documenti/better_env/benv/include/nest/doubledatum.h \
+  /home/emiliano/Documenti/better_env/benv/include/nest/integerdatum.h \
+  /home/emiliano/Documenti/better_env/benv/include/nest/lockptrdatum.h \
   ../eglif_pc_nestml.h \
-  /home/emiliano/Documenti/other_env/other_e/include/nest/config.h \
+  /home/emiliano/Documenti/better_env/benv/include/nest/config.h \
   /usr/include/gsl/gsl_errno.h \
   /usr/include/gsl/gsl_types.h \
   /usr/include/gsl/gsl_matrix.h \
@@ -7365,26 +7365,26 @@ CMakeFiles/custom_stdp_module_module.dir/eglif_pc_nestml.o: ../eglif_pc_nestml.c
   /usr/include/gsl/gsl_vector_char.h \
   /usr/include/gsl/gsl_block_char.h \
   /usr/include/gsl/gsl_odeiv.h \
-  /home/emiliano/Documenti/other_env/other_e/include/nest/archiving_node.h \
-  /home/emiliano/Documenti/other_env/other_e/include/nest/structural_plasticity_node.h \
-  /home/emiliano/Documenti/other_env/other_e/include/nest/synaptic_element.h \
+  /home/emiliano/Documenti/better_env/benv/include/nest/archiving_node.h \
+  /home/emiliano/Documenti/better_env/benv/include/nest/structural_plasticity_node.h \
+  /home/emiliano/Documenti/better_env/benv/include/nest/synaptic_element.h \
   ../extended_post_history_archiving_node.h \
   ../extended_hist_entry.h \
-  /home/emiliano/Documenti/other_env/other_e/include/nest/structural_plasticity_node.h \
-  /home/emiliano/Documenti/other_env/other_e/include/nest/nest_time.h \
-  /home/emiliano/Documenti/other_env/other_e/include/nest/nest_types.h \
-  /home/emiliano/Documenti/other_env/other_e/include/nest/node.h \
-  /home/emiliano/Documenti/other_env/other_e/include/nest/dictdatum.h \
-  /home/emiliano/Documenti/other_env/other_e/include/nest/nest_datums.h \
-  /home/emiliano/Documenti/other_env/other_e/include/nest/connection.h \
-  /home/emiliano/Documenti/other_env/other_e/include/nest/connector_base_impl.h \
-  /home/emiliano/Documenti/other_env/other_e/include/nest/weight_recorder.h \
-  /home/emiliano/Documenti/other_env/other_e/include/nest/recording_device.h \
-  /home/emiliano/Documenti/other_env/other_e/include/nest/syn_id_delay.h \
-  /home/emiliano/Documenti/other_env/other_e/include/nest/dict_util.h \
-  /home/emiliano/Documenti/other_env/other_e/include/nest/event.h \
-  /home/emiliano/Documenti/other_env/other_e/include/nest/ring_buffer.h \
-  /home/emiliano/Documenti/other_env/other_e/include/nest/universal_data_logger.h
+  /home/emiliano/Documenti/better_env/benv/include/nest/structural_plasticity_node.h \
+  /home/emiliano/Documenti/better_env/benv/include/nest/nest_time.h \
+  /home/emiliano/Documenti/better_env/benv/include/nest/nest_types.h \
+  /home/emiliano/Documenti/better_env/benv/include/nest/node.h \
+  /home/emiliano/Documenti/better_env/benv/include/nest/dictdatum.h \
+  /home/emiliano/Documenti/better_env/benv/include/nest/nest_datums.h \
+  /home/emiliano/Documenti/better_env/benv/include/nest/connection.h \
+  /home/emiliano/Documenti/better_env/benv/include/nest/connector_base_impl.h \
+  /home/emiliano/Documenti/better_env/benv/include/nest/weight_recorder.h \
+  /home/emiliano/Documenti/better_env/benv/include/nest/recording_device.h \
+  /home/emiliano/Documenti/better_env/benv/include/nest/syn_id_delay.h \
+  /home/emiliano/Documenti/better_env/benv/include/nest/dict_util.h \
+  /home/emiliano/Documenti/better_env/benv/include/nest/event.h \
+  /home/emiliano/Documenti/better_env/benv/include/nest/ring_buffer.h \
+  /home/emiliano/Documenti/better_env/benv/include/nest/universal_data_logger.h
 
 CMakeFiles/custom_stdp_module_module.dir/extended_hist_entry.o: ../extended_hist_entry.cpp \
   /usr/include/stdc-predef.h \
@@ -7748,9 +7748,9 @@ CMakeFiles/custom_stdp_module_module.dir/extended_post_history_archiving_node.o:
   /usr/include/c++/11/tr1/poly_hermite.tcc \
   /usr/include/c++/11/tr1/poly_laguerre.tcc \
   /usr/include/c++/11/tr1/riemann_zeta.tcc \
-  /home/emiliano/Documenti/other_env/other_e/include/nest/archiving_node.h \
-  /home/emiliano/Documenti/other_env/other_e/include/nest/histentry.h \
-  /home/emiliano/Documenti/other_env/other_e/include/nest/nest_types.h \
+  /home/emiliano/Documenti/better_env/benv/include/nest/archiving_node.h \
+  /home/emiliano/Documenti/better_env/benv/include/nest/histentry.h \
+  /home/emiliano/Documenti/better_env/benv/include/nest/nest_types.h \
   /usr/include/c++/11/cfloat \
   /usr/lib/gcc/x86_64-linux-gnu/11/include/float.h \
   /usr/include/c++/11/climits \
@@ -7769,9 +7769,9 @@ CMakeFiles/custom_stdp_module_module.dir/extended_post_history_archiving_node.o:
   /usr/include/stdint.h \
   /usr/include/x86_64-linux-gnu/bits/wchar.h \
   /usr/include/x86_64-linux-gnu/bits/stdint-uintn.h \
-  /home/emiliano/Documenti/other_env/other_e/include/nest/config.h \
+  /home/emiliano/Documenti/better_env/benv/include/nest/config.h \
   /usr/include/c++/11/cstdint \
-  /home/emiliano/Documenti/other_env/other_e/include/nest/nest_time.h \
+  /home/emiliano/Documenti/better_env/benv/include/nest/nest_time.h \
   /usr/include/c++/11/cassert \
   /usr/include/assert.h \
   /usr/include/c++/11/iostream \
@@ -7865,33 +7865,33 @@ CMakeFiles/custom_stdp_module_module.dir/extended_post_history_archiving_node.o:
   /usr/include/c++/11/bits/ostream.tcc \
   /usr/include/c++/11/istream \
   /usr/include/c++/11/bits/istream.tcc \
-  /home/emiliano/Documenti/other_env/other_e/include/nest/numerics.h \
-  /home/emiliano/Documenti/other_env/other_e/include/nest/node.h \
+  /home/emiliano/Documenti/better_env/benv/include/nest/numerics.h \
+  /home/emiliano/Documenti/better_env/benv/include/nest/node.h \
   /usr/include/c++/11/bitset \
   /usr/include/c++/11/sstream \
   /usr/include/c++/11/bits/sstream.tcc \
-  /home/emiliano/Documenti/other_env/other_e/include/nest/deprecation_warning.h \
+  /home/emiliano/Documenti/better_env/benv/include/nest/deprecation_warning.h \
   /usr/include/c++/11/map \
   /usr/include/c++/11/bits/stl_tree.h \
   /usr/include/c++/11/bits/stl_map.h \
   /usr/include/c++/11/bits/stl_multimap.h \
-  /home/emiliano/Documenti/other_env/other_e/include/nest/event.h \
+  /home/emiliano/Documenti/better_env/benv/include/nest/event.h \
   /usr/include/c++/11/cstring \
   /usr/include/string.h \
   /usr/include/strings.h \
   /usr/include/x86_64-linux-gnu/bits/strings_fortified.h \
   /usr/include/x86_64-linux-gnu/bits/string_fortified.h \
-  /home/emiliano/Documenti/other_env/other_e/include/nest/exceptions.h \
-  /home/emiliano/Documenti/other_env/other_e/include/nest/name.h \
-  /home/emiliano/Documenti/other_env/other_e/include/nest/sliexceptions.h \
-  /home/emiliano/Documenti/other_env/other_e/include/nest/spike_data.h \
-  /home/emiliano/Documenti/other_env/other_e/include/nest/target.h \
-  /home/emiliano/Documenti/other_env/other_e/include/nest/static_assert.h \
-  /home/emiliano/Documenti/other_env/other_e/include/nest/vp_manager.h \
-  /home/emiliano/Documenti/other_env/other_e/include/nest/manager_interface.h \
-  /home/emiliano/Documenti/other_env/other_e/include/nest/dictdatum.h \
-  /home/emiliano/Documenti/other_env/other_e/include/nest/dict.h \
-  /home/emiliano/Documenti/other_env/other_e/include/nest/token.h \
+  /home/emiliano/Documenti/better_env/benv/include/nest/exceptions.h \
+  /home/emiliano/Documenti/better_env/benv/include/nest/name.h \
+  /home/emiliano/Documenti/better_env/benv/include/nest/sliexceptions.h \
+  /home/emiliano/Documenti/better_env/benv/include/nest/spike_data.h \
+  /home/emiliano/Documenti/better_env/benv/include/nest/target.h \
+  /home/emiliano/Documenti/better_env/benv/include/nest/static_assert.h \
+  /home/emiliano/Documenti/better_env/benv/include/nest/vp_manager.h \
+  /home/emiliano/Documenti/better_env/benv/include/nest/manager_interface.h \
+  /home/emiliano/Documenti/better_env/benv/include/nest/dictdatum.h \
+  /home/emiliano/Documenti/better_env/benv/include/nest/dict.h \
+  /home/emiliano/Documenti/better_env/benv/include/nest/token.h \
   /usr/include/c++/11/iomanip \
   /usr/include/c++/11/locale \
   /usr/include/c++/11/bits/locale_facets_nonio.h \
@@ -7904,22 +7904,22 @@ CMakeFiles/custom_stdp_module_module.dir/extended_post_history_archiving_node.o:
   /usr/include/c++/11/bits/locale_conv.h \
   /usr/include/c++/11/bits/unique_ptr.h \
   /usr/include/c++/11/bits/quoted_string.h \
-  /home/emiliano/Documenti/other_env/other_e/include/nest/datum.h \
-  /home/emiliano/Documenti/other_env/other_e/include/nest/slitype.h \
-  /home/emiliano/Documenti/other_env/other_e/include/nest/slifunction.h \
-  /home/emiliano/Documenti/other_env/other_e/include/nest/interpret.h \
+  /home/emiliano/Documenti/better_env/benv/include/nest/datum.h \
+  /home/emiliano/Documenti/better_env/benv/include/nest/slitype.h \
+  /home/emiliano/Documenti/better_env/benv/include/nest/slifunction.h \
+  /home/emiliano/Documenti/better_env/benv/include/nest/interpret.h \
   /usr/include/c++/11/list \
   /usr/include/c++/11/bits/stl_list.h \
   /usr/include/c++/11/bits/allocated_ptr.h \
   /usr/include/c++/11/bits/list.tcc \
-  /home/emiliano/Documenti/other_env/other_e/include/nest/sliactions.h \
-  /home/emiliano/Documenti/other_env/other_e/include/nest/slibuiltins.h \
-  /home/emiliano/Documenti/other_env/other_e/include/nest/slimodule.h \
-  /home/emiliano/Documenti/other_env/other_e/include/nest/tokenstack.h \
-  /home/emiliano/Documenti/other_env/other_e/include/nest/tarrayobj.h \
-  /home/emiliano/Documenti/other_env/other_e/include/nest/tokenarray.h \
-  /home/emiliano/Documenti/other_env/other_e/include/nest/lockptrdatum.h \
-  /home/emiliano/Documenti/other_env/other_e/include/nest/lockptr.h \
+  /home/emiliano/Documenti/better_env/benv/include/nest/sliactions.h \
+  /home/emiliano/Documenti/better_env/benv/include/nest/slibuiltins.h \
+  /home/emiliano/Documenti/better_env/benv/include/nest/slimodule.h \
+  /home/emiliano/Documenti/better_env/benv/include/nest/tokenstack.h \
+  /home/emiliano/Documenti/better_env/benv/include/nest/tarrayobj.h \
+  /home/emiliano/Documenti/better_env/benv/include/nest/tokenarray.h \
+  /home/emiliano/Documenti/better_env/benv/include/nest/lockptrdatum.h \
+  /home/emiliano/Documenti/better_env/benv/include/nest/lockptr.h \
   /usr/include/c++/11/memory \
   /usr/include/c++/11/bits/stl_raw_storage_iter.h \
   /usr/include/c++/11/bits/align.h \
@@ -7933,46 +7933,46 @@ CMakeFiles/custom_stdp_module_module.dir/extended_post_history_archiving_node.o:
   /usr/include/c++/11/backward/auto_ptr.h \
   /usr/include/c++/11/pstl/glue_memory_defs.h \
   /usr/lib/gcc/x86_64-linux-gnu/11/include/omp.h \
-  /home/emiliano/Documenti/other_env/other_e/include/nest/nest_names.h \
-  /home/emiliano/Documenti/other_env/other_e/include/nest/secondary_event.h \
+  /home/emiliano/Documenti/better_env/benv/include/nest/nest_names.h \
+  /home/emiliano/Documenti/better_env/benv/include/nest/secondary_event.h \
   /usr/include/c++/11/set \
   /usr/include/c++/11/bits/stl_set.h \
   /usr/include/c++/11/bits/stl_multiset.h \
-  /home/emiliano/Documenti/other_env/other_e/include/nest/structural_plasticity_node.h \
-  /home/emiliano/Documenti/other_env/other_e/include/nest/synaptic_element.h \
-  /home/emiliano/Documenti/other_env/other_e/include/nest/growth_curve.h \
-  /home/emiliano/Documenti/other_env/other_e/include/nest/structural_plasticity_node.h \
-  /home/emiliano/Documenti/other_env/other_e/include/nest/nest_time.h \
-  /home/emiliano/Documenti/other_env/other_e/include/nest/nest_types.h \
-  /home/emiliano/Documenti/other_env/other_e/include/nest/node.h \
-  /home/emiliano/Documenti/other_env/other_e/include/nest/kernel_manager.h \
-  /home/emiliano/Documenti/other_env/other_e/include/nest/connection_manager.h \
-  /home/emiliano/Documenti/other_env/other_e/include/nest/stopwatch.h \
+  /home/emiliano/Documenti/better_env/benv/include/nest/structural_plasticity_node.h \
+  /home/emiliano/Documenti/better_env/benv/include/nest/synaptic_element.h \
+  /home/emiliano/Documenti/better_env/benv/include/nest/growth_curve.h \
+  /home/emiliano/Documenti/better_env/benv/include/nest/structural_plasticity_node.h \
+  /home/emiliano/Documenti/better_env/benv/include/nest/nest_time.h \
+  /home/emiliano/Documenti/better_env/benv/include/nest/nest_types.h \
+  /home/emiliano/Documenti/better_env/benv/include/nest/node.h \
+  /home/emiliano/Documenti/better_env/benv/include/nest/kernel_manager.h \
+  /home/emiliano/Documenti/better_env/benv/include/nest/connection_manager.h \
+  /home/emiliano/Documenti/better_env/benv/include/nest/stopwatch.h \
   /usr/include/x86_64-linux-gnu/sys/time.h \
-  /home/emiliano/Documenti/other_env/other_e/include/nest/conn_builder.h \
-  /home/emiliano/Documenti/other_env/other_e/include/nest/conn_parameter.h \
-  /home/emiliano/Documenti/other_env/other_e/include/nest/nest_datums.h \
-  /home/emiliano/Documenti/other_env/other_e/include/nest/connection_id.h \
-  /home/emiliano/Documenti/other_env/other_e/include/nest/arraydatum.h \
-  /home/emiliano/Documenti/other_env/other_e/include/nest/aggregatedatum.h \
-  /home/emiliano/Documenti/other_env/other_e/include/nest/allocator.h \
-  /home/emiliano/Documenti/other_env/other_e/include/nest/dictutils.h \
-  /home/emiliano/Documenti/other_env/other_e/include/nest/doubledatum.h \
-  /home/emiliano/Documenti/other_env/other_e/include/nest/numericdatum.h \
-  /home/emiliano/Documenti/other_env/other_e/include/nest/genericdatum.h \
-  /home/emiliano/Documenti/other_env/other_e/include/nest/integerdatum.h \
-  /home/emiliano/Documenti/other_env/other_e/include/nest/namedatum.h \
-  /home/emiliano/Documenti/other_env/other_e/include/nest/tokenutils.h \
-  /home/emiliano/Documenti/other_env/other_e/include/nest/nestmodule.h \
-  /home/emiliano/Documenti/other_env/other_e/include/nest/generic_factory.h \
-  /home/emiliano/Documenti/other_env/other_e/include/nest/ntree.h \
+  /home/emiliano/Documenti/better_env/benv/include/nest/conn_builder.h \
+  /home/emiliano/Documenti/better_env/benv/include/nest/conn_parameter.h \
+  /home/emiliano/Documenti/better_env/benv/include/nest/nest_datums.h \
+  /home/emiliano/Documenti/better_env/benv/include/nest/connection_id.h \
+  /home/emiliano/Documenti/better_env/benv/include/nest/arraydatum.h \
+  /home/emiliano/Documenti/better_env/benv/include/nest/aggregatedatum.h \
+  /home/emiliano/Documenti/better_env/benv/include/nest/allocator.h \
+  /home/emiliano/Documenti/better_env/benv/include/nest/dictutils.h \
+  /home/emiliano/Documenti/better_env/benv/include/nest/doubledatum.h \
+  /home/emiliano/Documenti/better_env/benv/include/nest/numericdatum.h \
+  /home/emiliano/Documenti/better_env/benv/include/nest/genericdatum.h \
+  /home/emiliano/Documenti/better_env/benv/include/nest/integerdatum.h \
+  /home/emiliano/Documenti/better_env/benv/include/nest/namedatum.h \
+  /home/emiliano/Documenti/better_env/benv/include/nest/tokenutils.h \
+  /home/emiliano/Documenti/better_env/benv/include/nest/nestmodule.h \
+  /home/emiliano/Documenti/better_env/benv/include/nest/generic_factory.h \
+  /home/emiliano/Documenti/better_env/benv/include/nest/ntree.h \
   /usr/include/c++/11/iterator \
   /usr/include/c++/11/bits/stream_iterator.h \
-  /home/emiliano/Documenti/other_env/other_e/include/nest/position.h \
-  /home/emiliano/Documenti/other_env/other_e/include/nest/compose.hpp \
-  /home/emiliano/Documenti/other_env/other_e/include/nest/parameter.h \
-  /home/emiliano/Documenti/other_env/other_e/include/nest/node_collection.h \
-  /home/emiliano/Documenti/other_env/other_e/include/nest/random_generators.h \
+  /home/emiliano/Documenti/better_env/benv/include/nest/position.h \
+  /home/emiliano/Documenti/better_env/benv/include/nest/compose.hpp \
+  /home/emiliano/Documenti/better_env/benv/include/nest/parameter.h \
+  /home/emiliano/Documenti/better_env/benv/include/nest/node_collection.h \
+  /home/emiliano/Documenti/better_env/benv/include/nest/random_generators.h \
   /usr/include/c++/11/random \
   /usr/include/c++/11/bits/random.h \
   /usr/include/x86_64-linux-gnu/c++/11/bits/opt_random.h \
@@ -7980,7 +7980,7 @@ CMakeFiles/custom_stdp_module_module.dir/extended_post_history_archiving_node.o:
   /usr/include/c++/11/numeric \
   /usr/include/c++/11/bits/stl_numeric.h \
   /usr/include/c++/11/pstl/glue_numeric_defs.h \
-  /home/emiliano/Documenti/other_env/other_e/include/nest/randutils.hpp \
+  /home/emiliano/Documenti/better_env/benv/include/nest/randutils.hpp \
   /usr/include/c++/11/chrono \
   /usr/include/c++/11/ratio \
   /usr/include/c++/11/bits/parse_numbers.h \
@@ -7996,11 +7996,11 @@ CMakeFiles/custom_stdp_module_module.dir/extended_post_history_archiving_node.o:
   /usr/include/x86_64-linux-gnu/bits/unistd.h \
   /usr/include/x86_64-linux-gnu/bits/unistd_ext.h \
   /usr/include/linux/close_range.h \
-  /home/emiliano/Documenti/other_env/other_e/include/nest/sharedptrdatum.h \
-  /home/emiliano/Documenti/other_env/other_e/include/nest/connector_base.h \
-  /home/emiliano/Documenti/other_env/other_e/include/nest/sort.h \
-  /home/emiliano/Documenti/other_env/other_e/include/nest/block_vector.h \
-  /home/emiliano/Documenti/other_env/other_e/include/nest/iterator_pair.h \
+  /home/emiliano/Documenti/better_env/benv/include/nest/sharedptrdatum.h \
+  /home/emiliano/Documenti/better_env/benv/include/nest/connector_base.h \
+  /home/emiliano/Documenti/better_env/benv/include/nest/sort.h \
+  /home/emiliano/Documenti/better_env/benv/include/nest/block_vector.h \
+  /home/emiliano/Documenti/better_env/benv/include/nest/iterator_pair.h \
   /usr/include/boost/iterator/iterator_adaptor.hpp \
   /usr/include/boost/static_assert.hpp \
   /usr/include/boost/config.hpp \
@@ -8226,7 +8226,7 @@ CMakeFiles/custom_stdp_module_module.dir/extended_post_history_archiving_node.o:
   /usr/include/boost/utility/swap.hpp \
   /usr/include/boost/core/swap.hpp \
   /usr/include/boost/core/enable_if.hpp \
-  /home/emiliano/Documenti/other_env/other_e/include/nest/source.h \
+  /home/emiliano/Documenti/better_env/benv/include/nest/source.h \
   /usr/include/boost/sort/spreadsort/spreadsort.hpp \
   /usr/include/boost/type_traits.hpp \
   /usr/include/boost/type_traits/aligned_storage.hpp \
@@ -8363,20 +8363,20 @@ CMakeFiles/custom_stdp_module_module.dir/extended_post_history_archiving_node.o:
   /usr/include/boost/sort/spreadsort/detail/float_sort.hpp \
   /usr/include/boost/sort/spreadsort/string_sort.hpp \
   /usr/include/boost/sort/spreadsort/detail/string_sort.hpp \
-  /home/emiliano/Documenti/other_env/other_e/include/nest/vector_util.h \
-  /home/emiliano/Documenti/other_env/other_e/include/nest/common_synapse_properties.h \
-  /home/emiliano/Documenti/other_env/other_e/include/nest/connector_model.h \
-  /home/emiliano/Documenti/other_env/other_e/include/nest/enum_bitfield.h \
-  /home/emiliano/Documenti/other_env/other_e/include/nest/connection_label.h \
-  /home/emiliano/Documenti/other_env/other_e/include/nest/nest.h \
-  /home/emiliano/Documenti/other_env/other_e/include/nest/logging.h \
-  /home/emiliano/Documenti/other_env/other_e/include/nest/spikecounter.h \
-  /home/emiliano/Documenti/other_env/other_e/include/nest/nest_timeconverter.h \
-  /home/emiliano/Documenti/other_env/other_e/include/nest/per_thread_bool_indicator.h \
+  /home/emiliano/Documenti/better_env/benv/include/nest/vector_util.h \
+  /home/emiliano/Documenti/better_env/benv/include/nest/common_synapse_properties.h \
+  /home/emiliano/Documenti/better_env/benv/include/nest/connector_model.h \
+  /home/emiliano/Documenti/better_env/benv/include/nest/enum_bitfield.h \
+  /home/emiliano/Documenti/better_env/benv/include/nest/connection_label.h \
+  /home/emiliano/Documenti/better_env/benv/include/nest/nest.h \
+  /home/emiliano/Documenti/better_env/benv/include/nest/logging.h \
+  /home/emiliano/Documenti/better_env/benv/include/nest/spikecounter.h \
+  /home/emiliano/Documenti/better_env/benv/include/nest/nest_timeconverter.h \
+  /home/emiliano/Documenti/better_env/benv/include/nest/per_thread_bool_indicator.h \
   /usr/include/c++/11/atomic \
-  /home/emiliano/Documenti/other_env/other_e/include/nest/send_buffer_position.h \
-  /home/emiliano/Documenti/other_env/other_e/include/nest/source_table.h \
-  /home/emiliano/Documenti/other_env/other_e/include/nest/mpi_manager.h \
+  /home/emiliano/Documenti/better_env/benv/include/nest/send_buffer_position.h \
+  /home/emiliano/Documenti/better_env/benv/include/nest/source_table.h \
+  /home/emiliano/Documenti/better_env/benv/include/nest/mpi_manager.h \
   /usr/lib/x86_64-linux-gnu/openmpi/include/mpi.h \
   /usr/lib/x86_64-linux-gnu/openmpi/include/mpi_portable_platform.h \
   /usr/lib/x86_64-linux-gnu/openmpi/include/openmpi/ompi/mpi/cxx/mpicxx.h \
@@ -8410,44 +8410,44 @@ CMakeFiles/custom_stdp_module_module.dir/extended_post_history_archiving_node.o:
   /usr/lib/x86_64-linux-gnu/openmpi/include/openmpi/ompi/mpi/cxx/info_inln.h \
   /usr/lib/x86_64-linux-gnu/openmpi/include/openmpi/ompi/mpi/cxx/win_inln.h \
   /usr/lib/x86_64-linux-gnu/openmpi/include/openmpi/ompi/mpi/cxx/file_inln.h \
-  /home/emiliano/Documenti/other_env/other_e/include/nest/target_data.h \
-  /home/emiliano/Documenti/other_env/other_e/include/nest/source_table_position.h \
-  /home/emiliano/Documenti/other_env/other_e/include/nest/target_table.h \
-  /home/emiliano/Documenti/other_env/other_e/include/nest/target_table_devices.h \
-  /home/emiliano/Documenti/other_env/other_e/include/nest/event_delivery_manager.h \
-  /home/emiliano/Documenti/other_env/other_e/include/nest/buffer_resize_log.h \
-  /home/emiliano/Documenti/other_env/other_e/include/nest/io_manager.h \
-  /home/emiliano/Documenti/other_env/other_e/include/nest/recording_backend.h \
-  /home/emiliano/Documenti/other_env/other_e/include/nest/stimulation_backend.h \
-  /home/emiliano/Documenti/other_env/other_e/include/nest/stimulation_device.h \
-  /home/emiliano/Documenti/other_env/other_e/include/nest/device.h \
-  /home/emiliano/Documenti/other_env/other_e/include/nest/device_node.h \
-  /home/emiliano/Documenti/other_env/other_e/include/nest/logging_manager.h \
-  /home/emiliano/Documenti/other_env/other_e/include/nest/model_manager.h \
-  /home/emiliano/Documenti/other_env/other_e/include/nest/genericmodel.h \
-  /home/emiliano/Documenti/other_env/other_e/include/nest/model.h \
-  /home/emiliano/Documenti/other_env/other_e/include/nest/modelrange_manager.h \
-  /home/emiliano/Documenti/other_env/other_e/include/nest/modelrange.h \
-  /home/emiliano/Documenti/other_env/other_e/include/nest/module_manager.h \
+  /home/emiliano/Documenti/better_env/benv/include/nest/target_data.h \
+  /home/emiliano/Documenti/better_env/benv/include/nest/source_table_position.h \
+  /home/emiliano/Documenti/better_env/benv/include/nest/target_table.h \
+  /home/emiliano/Documenti/better_env/benv/include/nest/target_table_devices.h \
+  /home/emiliano/Documenti/better_env/benv/include/nest/event_delivery_manager.h \
+  /home/emiliano/Documenti/better_env/benv/include/nest/buffer_resize_log.h \
+  /home/emiliano/Documenti/better_env/benv/include/nest/io_manager.h \
+  /home/emiliano/Documenti/better_env/benv/include/nest/recording_backend.h \
+  /home/emiliano/Documenti/better_env/benv/include/nest/stimulation_backend.h \
+  /home/emiliano/Documenti/better_env/benv/include/nest/stimulation_device.h \
+  /home/emiliano/Documenti/better_env/benv/include/nest/device.h \
+  /home/emiliano/Documenti/better_env/benv/include/nest/device_node.h \
+  /home/emiliano/Documenti/better_env/benv/include/nest/logging_manager.h \
+  /home/emiliano/Documenti/better_env/benv/include/nest/model_manager.h \
+  /home/emiliano/Documenti/better_env/benv/include/nest/genericmodel.h \
+  /home/emiliano/Documenti/better_env/benv/include/nest/model.h \
+  /home/emiliano/Documenti/better_env/benv/include/nest/modelrange_manager.h \
+  /home/emiliano/Documenti/better_env/benv/include/nest/modelrange.h \
+  /home/emiliano/Documenti/better_env/benv/include/nest/module_manager.h \
   /usr/include/ltdl.h \
   /usr/include/libltdl/lt_system.h \
   /usr/include/c++/11/stdlib.h \
   /usr/include/libltdl/lt_error.h \
   /usr/include/libltdl/lt_dlloader.h \
-  /home/emiliano/Documenti/other_env/other_e/include/nest/music_manager.h \
-  /home/emiliano/Documenti/other_env/other_e/include/nest/node_manager.h \
-  /home/emiliano/Documenti/other_env/other_e/include/nest/sparse_node_array.h \
-  /home/emiliano/Documenti/other_env/other_e/include/nest/random_manager.h \
-  /home/emiliano/Documenti/other_env/other_e/include/nest/simulation_manager.h \
-  /home/emiliano/Documenti/other_env/other_e/include/nest/sp_manager.h \
-  /home/emiliano/Documenti/other_env/other_e/include/nest/growth_curve_factory.h \
+  /home/emiliano/Documenti/better_env/benv/include/nest/music_manager.h \
+  /home/emiliano/Documenti/better_env/benv/include/nest/node_manager.h \
+  /home/emiliano/Documenti/better_env/benv/include/nest/sparse_node_array.h \
+  /home/emiliano/Documenti/better_env/benv/include/nest/random_manager.h \
+  /home/emiliano/Documenti/better_env/benv/include/nest/simulation_manager.h \
+  /home/emiliano/Documenti/better_env/benv/include/nest/sp_manager.h \
+  /home/emiliano/Documenti/better_env/benv/include/nest/growth_curve_factory.h \
   /usr/include/c++/11/fstream \
   /usr/include/x86_64-linux-gnu/c++/11/bits/basic_file.h \
   /usr/include/x86_64-linux-gnu/c++/11/bits/c++io.h \
   /usr/include/c++/11/bits/fstream.tcc \
-  /home/emiliano/Documenti/other_env/other_e/include/nest/dictdatum.h \
-  /home/emiliano/Documenti/other_env/other_e/include/nest/nest_datums.h \
-  /home/emiliano/Documenti/other_env/other_e/include/nest/config.h
+  /home/emiliano/Documenti/better_env/benv/include/nest/dictdatum.h \
+  /home/emiliano/Documenti/better_env/benv/include/nest/nest_datums.h \
+  /home/emiliano/Documenti/better_env/benv/include/nest/config.h
 
 CMakeFiles/custom_stdp_module_module.dir/rb_neuron_nestml.o: ../rb_neuron_nestml.cpp \
   /usr/include/stdc-predef.h \
@@ -8464,8 +8464,8 @@ CMakeFiles/custom_stdp_module_module.dir/rb_neuron_nestml.o: ../rb_neuron_nestml
   /usr/include/x86_64-linux-gnu/gnu/stubs-64.h \
   /usr/include/x86_64-linux-gnu/c++/11/bits/cpu_defines.h \
   /usr/include/c++/11/pstl/pstl_config.h \
-  /home/emiliano/Documenti/other_env/other_e/include/nest/numerics.h \
-  /home/emiliano/Documenti/other_env/other_e/include/nest/config.h \
+  /home/emiliano/Documenti/better_env/benv/include/nest/numerics.h \
+  /home/emiliano/Documenti/better_env/benv/include/nest/config.h \
   /usr/include/c++/11/cassert \
   /usr/include/assert.h \
   /usr/include/c++/11/cmath \
@@ -8550,8 +8550,8 @@ CMakeFiles/custom_stdp_module_module.dir/rb_neuron_nestml.o: ../rb_neuron_nestml
   /usr/include/c++/11/tr1/poly_hermite.tcc \
   /usr/include/c++/11/tr1/poly_laguerre.tcc \
   /usr/include/c++/11/tr1/riemann_zeta.tcc \
-  /home/emiliano/Documenti/other_env/other_e/include/nest/exceptions.h \
-  /home/emiliano/Documenti/other_env/other_e/include/nest/nest_time.h \
+  /home/emiliano/Documenti/better_env/benv/include/nest/exceptions.h \
+  /home/emiliano/Documenti/better_env/benv/include/nest/nest_time.h \
   /usr/include/c++/11/cfloat \
   /usr/lib/gcc/x86_64-linux-gnu/11/include/float.h \
   /usr/include/c++/11/cstdlib \
@@ -8668,8 +8668,8 @@ CMakeFiles/custom_stdp_module_module.dir/rb_neuron_nestml.o: ../rb_neuron_nestml
   /usr/include/c++/11/bits/ostream.tcc \
   /usr/include/c++/11/istream \
   /usr/include/c++/11/bits/istream.tcc \
-  /home/emiliano/Documenti/other_env/other_e/include/nest/numerics.h \
-  /home/emiliano/Documenti/other_env/other_e/include/nest/nest_types.h \
+  /home/emiliano/Documenti/better_env/benv/include/nest/numerics.h \
+  /home/emiliano/Documenti/better_env/benv/include/nest/nest_types.h \
   /usr/include/c++/11/climits \
   /usr/lib/gcc/x86_64-linux-gnu/11/include/limits.h \
   /usr/lib/gcc/x86_64-linux-gnu/11/include/syslimits.h \
@@ -8681,7 +8681,7 @@ CMakeFiles/custom_stdp_module_module.dir/rb_neuron_nestml.o: ../rb_neuron_nestml
   /usr/include/x86_64-linux-gnu/bits/xopen_lim.h \
   /usr/include/x86_64-linux-gnu/bits/uio_lim.h \
   /usr/include/c++/11/cstddef \
-  /home/emiliano/Documenti/other_env/other_e/include/nest/name.h \
+  /home/emiliano/Documenti/better_env/benv/include/nest/name.h \
   /usr/include/c++/11/deque \
   /usr/include/c++/11/bits/stl_uninitialized.h \
   /usr/include/c++/11/bits/stl_deque.h \
@@ -8699,17 +8699,17 @@ CMakeFiles/custom_stdp_module_module.dir/rb_neuron_nestml.o: ../rb_neuron_nestml
   /usr/include/c++/11/bits/invoke.h \
   /usr/include/c++/11/bits/stl_multimap.h \
   /usr/include/c++/11/bits/erase_if.h \
-  /home/emiliano/Documenti/other_env/other_e/include/nest/sliexceptions.h \
+  /home/emiliano/Documenti/better_env/benv/include/nest/sliexceptions.h \
   /usr/include/c++/11/vector \
   /usr/include/c++/11/bits/stl_vector.h \
   /usr/include/c++/11/bits/stl_bvector.h \
   /usr/include/c++/11/bits/vector.tcc \
-  /home/emiliano/Documenti/other_env/other_e/include/nest/kernel_manager.h \
-  /home/emiliano/Documenti/other_env/other_e/include/nest/connection_manager.h \
-  /home/emiliano/Documenti/other_env/other_e/include/nest/manager_interface.h \
-  /home/emiliano/Documenti/other_env/other_e/include/nest/dictdatum.h \
-  /home/emiliano/Documenti/other_env/other_e/include/nest/dict.h \
-  /home/emiliano/Documenti/other_env/other_e/include/nest/token.h \
+  /home/emiliano/Documenti/better_env/benv/include/nest/kernel_manager.h \
+  /home/emiliano/Documenti/better_env/benv/include/nest/connection_manager.h \
+  /home/emiliano/Documenti/better_env/benv/include/nest/manager_interface.h \
+  /home/emiliano/Documenti/better_env/benv/include/nest/dictdatum.h \
+  /home/emiliano/Documenti/better_env/benv/include/nest/dict.h \
+  /home/emiliano/Documenti/better_env/benv/include/nest/token.h \
   /usr/include/c++/11/iomanip \
   /usr/include/c++/11/locale \
   /usr/include/c++/11/bits/locale_facets_nonio.h \
@@ -8724,20 +8724,20 @@ CMakeFiles/custom_stdp_module_module.dir/rb_neuron_nestml.o: ../rb_neuron_nestml
   /usr/include/c++/11/bits/quoted_string.h \
   /usr/include/c++/11/sstream \
   /usr/include/c++/11/bits/sstream.tcc \
-  /home/emiliano/Documenti/other_env/other_e/include/nest/datum.h \
-  /home/emiliano/Documenti/other_env/other_e/include/nest/slitype.h \
-  /home/emiliano/Documenti/other_env/other_e/include/nest/slifunction.h \
-  /home/emiliano/Documenti/other_env/other_e/include/nest/interpret.h \
+  /home/emiliano/Documenti/better_env/benv/include/nest/datum.h \
+  /home/emiliano/Documenti/better_env/benv/include/nest/slitype.h \
+  /home/emiliano/Documenti/better_env/benv/include/nest/slifunction.h \
+  /home/emiliano/Documenti/better_env/benv/include/nest/interpret.h \
   /usr/include/c++/11/list \
   /usr/include/c++/11/bits/stl_list.h \
   /usr/include/c++/11/bits/allocated_ptr.h \
   /usr/include/c++/11/bits/list.tcc \
-  /home/emiliano/Documenti/other_env/other_e/include/nest/sliactions.h \
-  /home/emiliano/Documenti/other_env/other_e/include/nest/slibuiltins.h \
-  /home/emiliano/Documenti/other_env/other_e/include/nest/slimodule.h \
-  /home/emiliano/Documenti/other_env/other_e/include/nest/tokenstack.h \
-  /home/emiliano/Documenti/other_env/other_e/include/nest/tarrayobj.h \
-  /home/emiliano/Documenti/other_env/other_e/include/nest/tokenarray.h \
+  /home/emiliano/Documenti/better_env/benv/include/nest/sliactions.h \
+  /home/emiliano/Documenti/better_env/benv/include/nest/slibuiltins.h \
+  /home/emiliano/Documenti/better_env/benv/include/nest/slimodule.h \
+  /home/emiliano/Documenti/better_env/benv/include/nest/tokenstack.h \
+  /home/emiliano/Documenti/better_env/benv/include/nest/tarrayobj.h \
+  /home/emiliano/Documenti/better_env/benv/include/nest/tokenarray.h \
   /usr/include/c++/11/algorithm \
   /usr/include/c++/11/bits/stl_algo.h \
   /usr/include/c++/11/bits/algorithmfwd.h \
@@ -8754,8 +8754,8 @@ CMakeFiles/custom_stdp_module_module.dir/rb_neuron_nestml.o: ../rb_neuron_nestml
   /usr/include/c++/11/bits/enable_special_members.h \
   /usr/include/c++/11/bits/unordered_map.h \
   /usr/include/c++/11/pstl/execution_defs.h \
-  /home/emiliano/Documenti/other_env/other_e/include/nest/lockptrdatum.h \
-  /home/emiliano/Documenti/other_env/other_e/include/nest/lockptr.h \
+  /home/emiliano/Documenti/better_env/benv/include/nest/lockptrdatum.h \
+  /home/emiliano/Documenti/better_env/benv/include/nest/lockptr.h \
   /usr/include/c++/11/memory \
   /usr/include/c++/11/bits/stl_raw_storage_iter.h \
   /usr/include/c++/11/bits/align.h \
@@ -8768,49 +8768,49 @@ CMakeFiles/custom_stdp_module_module.dir/rb_neuron_nestml.o: ../rb_neuron_nestml
   /usr/include/c++/11/bits/atomic_lockfree_defines.h \
   /usr/include/c++/11/backward/auto_ptr.h \
   /usr/include/c++/11/pstl/glue_memory_defs.h \
-  /home/emiliano/Documenti/other_env/other_e/include/nest/stopwatch.h \
+  /home/emiliano/Documenti/better_env/benv/include/nest/stopwatch.h \
   /usr/include/x86_64-linux-gnu/sys/time.h \
-  /home/emiliano/Documenti/other_env/other_e/include/nest/conn_builder.h \
+  /home/emiliano/Documenti/better_env/benv/include/nest/conn_builder.h \
   /usr/include/c++/11/set \
   /usr/include/c++/11/bits/stl_set.h \
   /usr/include/c++/11/bits/stl_multiset.h \
-  /home/emiliano/Documenti/other_env/other_e/include/nest/conn_parameter.h \
-  /home/emiliano/Documenti/other_env/other_e/include/nest/exceptions.h \
-  /home/emiliano/Documenti/other_env/other_e/include/nest/nest_datums.h \
-  /home/emiliano/Documenti/other_env/other_e/include/nest/connection_id.h \
-  /home/emiliano/Documenti/other_env/other_e/include/nest/arraydatum.h \
-  /home/emiliano/Documenti/other_env/other_e/include/nest/aggregatedatum.h \
-  /home/emiliano/Documenti/other_env/other_e/include/nest/allocator.h \
-  /home/emiliano/Documenti/other_env/other_e/include/nest/dictutils.h \
-  /home/emiliano/Documenti/other_env/other_e/include/nest/doubledatum.h \
-  /home/emiliano/Documenti/other_env/other_e/include/nest/numericdatum.h \
-  /home/emiliano/Documenti/other_env/other_e/include/nest/genericdatum.h \
-  /home/emiliano/Documenti/other_env/other_e/include/nest/integerdatum.h \
-  /home/emiliano/Documenti/other_env/other_e/include/nest/namedatum.h \
-  /home/emiliano/Documenti/other_env/other_e/include/nest/tokenutils.h \
-  /home/emiliano/Documenti/other_env/other_e/include/nest/nestmodule.h \
-  /home/emiliano/Documenti/other_env/other_e/include/nest/event.h \
+  /home/emiliano/Documenti/better_env/benv/include/nest/conn_parameter.h \
+  /home/emiliano/Documenti/better_env/benv/include/nest/exceptions.h \
+  /home/emiliano/Documenti/better_env/benv/include/nest/nest_datums.h \
+  /home/emiliano/Documenti/better_env/benv/include/nest/connection_id.h \
+  /home/emiliano/Documenti/better_env/benv/include/nest/arraydatum.h \
+  /home/emiliano/Documenti/better_env/benv/include/nest/aggregatedatum.h \
+  /home/emiliano/Documenti/better_env/benv/include/nest/allocator.h \
+  /home/emiliano/Documenti/better_env/benv/include/nest/dictutils.h \
+  /home/emiliano/Documenti/better_env/benv/include/nest/doubledatum.h \
+  /home/emiliano/Documenti/better_env/benv/include/nest/numericdatum.h \
+  /home/emiliano/Documenti/better_env/benv/include/nest/genericdatum.h \
+  /home/emiliano/Documenti/better_env/benv/include/nest/integerdatum.h \
+  /home/emiliano/Documenti/better_env/benv/include/nest/namedatum.h \
+  /home/emiliano/Documenti/better_env/benv/include/nest/tokenutils.h \
+  /home/emiliano/Documenti/better_env/benv/include/nest/nestmodule.h \
+  /home/emiliano/Documenti/better_env/benv/include/nest/event.h \
   /usr/include/c++/11/cstring \
   /usr/include/string.h \
   /usr/include/strings.h \
   /usr/include/x86_64-linux-gnu/bits/strings_fortified.h \
   /usr/include/x86_64-linux-gnu/bits/string_fortified.h \
-  /home/emiliano/Documenti/other_env/other_e/include/nest/spike_data.h \
-  /home/emiliano/Documenti/other_env/other_e/include/nest/target.h \
-  /home/emiliano/Documenti/other_env/other_e/include/nest/static_assert.h \
-  /home/emiliano/Documenti/other_env/other_e/include/nest/vp_manager.h \
+  /home/emiliano/Documenti/better_env/benv/include/nest/spike_data.h \
+  /home/emiliano/Documenti/better_env/benv/include/nest/target.h \
+  /home/emiliano/Documenti/better_env/benv/include/nest/static_assert.h \
+  /home/emiliano/Documenti/better_env/benv/include/nest/vp_manager.h \
   /usr/lib/gcc/x86_64-linux-gnu/11/include/omp.h \
-  /home/emiliano/Documenti/other_env/other_e/include/nest/generic_factory.h \
-  /home/emiliano/Documenti/other_env/other_e/include/nest/ntree.h \
+  /home/emiliano/Documenti/better_env/benv/include/nest/generic_factory.h \
+  /home/emiliano/Documenti/better_env/benv/include/nest/ntree.h \
   /usr/include/c++/11/bitset \
   /usr/include/c++/11/iterator \
   /usr/include/c++/11/bits/stream_iterator.h \
-  /home/emiliano/Documenti/other_env/other_e/include/nest/position.h \
-  /home/emiliano/Documenti/other_env/other_e/include/nest/compose.hpp \
-  /home/emiliano/Documenti/other_env/other_e/include/nest/parameter.h \
-  /home/emiliano/Documenti/other_env/other_e/include/nest/nest_names.h \
-  /home/emiliano/Documenti/other_env/other_e/include/nest/node_collection.h \
-  /home/emiliano/Documenti/other_env/other_e/include/nest/random_generators.h \
+  /home/emiliano/Documenti/better_env/benv/include/nest/position.h \
+  /home/emiliano/Documenti/better_env/benv/include/nest/compose.hpp \
+  /home/emiliano/Documenti/better_env/benv/include/nest/parameter.h \
+  /home/emiliano/Documenti/better_env/benv/include/nest/nest_names.h \
+  /home/emiliano/Documenti/better_env/benv/include/nest/node_collection.h \
+  /home/emiliano/Documenti/better_env/benv/include/nest/random_generators.h \
   /usr/include/c++/11/random \
   /usr/include/c++/11/bits/random.h \
   /usr/include/x86_64-linux-gnu/c++/11/bits/opt_random.h \
@@ -8818,7 +8818,7 @@ CMakeFiles/custom_stdp_module_module.dir/rb_neuron_nestml.o: ../rb_neuron_nestml
   /usr/include/c++/11/numeric \
   /usr/include/c++/11/bits/stl_numeric.h \
   /usr/include/c++/11/pstl/glue_numeric_defs.h \
-  /home/emiliano/Documenti/other_env/other_e/include/nest/randutils.hpp \
+  /home/emiliano/Documenti/better_env/benv/include/nest/randutils.hpp \
   /usr/include/c++/11/chrono \
   /usr/include/c++/11/ratio \
   /usr/include/c++/11/bits/parse_numbers.h \
@@ -8834,11 +8834,11 @@ CMakeFiles/custom_stdp_module_module.dir/rb_neuron_nestml.o: ../rb_neuron_nestml
   /usr/include/x86_64-linux-gnu/bits/unistd.h \
   /usr/include/x86_64-linux-gnu/bits/unistd_ext.h \
   /usr/include/linux/close_range.h \
-  /home/emiliano/Documenti/other_env/other_e/include/nest/sharedptrdatum.h \
-  /home/emiliano/Documenti/other_env/other_e/include/nest/connector_base.h \
-  /home/emiliano/Documenti/other_env/other_e/include/nest/sort.h \
-  /home/emiliano/Documenti/other_env/other_e/include/nest/block_vector.h \
-  /home/emiliano/Documenti/other_env/other_e/include/nest/iterator_pair.h \
+  /home/emiliano/Documenti/better_env/benv/include/nest/sharedptrdatum.h \
+  /home/emiliano/Documenti/better_env/benv/include/nest/connector_base.h \
+  /home/emiliano/Documenti/better_env/benv/include/nest/sort.h \
+  /home/emiliano/Documenti/better_env/benv/include/nest/block_vector.h \
+  /home/emiliano/Documenti/better_env/benv/include/nest/iterator_pair.h \
   /usr/include/boost/iterator/iterator_adaptor.hpp \
   /usr/include/boost/static_assert.hpp \
   /usr/include/boost/config.hpp \
@@ -9064,7 +9064,7 @@ CMakeFiles/custom_stdp_module_module.dir/rb_neuron_nestml.o: ../rb_neuron_nestml
   /usr/include/boost/utility/swap.hpp \
   /usr/include/boost/core/swap.hpp \
   /usr/include/boost/core/enable_if.hpp \
-  /home/emiliano/Documenti/other_env/other_e/include/nest/source.h \
+  /home/emiliano/Documenti/better_env/benv/include/nest/source.h \
   /usr/include/boost/sort/spreadsort/spreadsort.hpp \
   /usr/include/boost/type_traits.hpp \
   /usr/include/boost/type_traits/aligned_storage.hpp \
@@ -9201,24 +9201,24 @@ CMakeFiles/custom_stdp_module_module.dir/rb_neuron_nestml.o: ../rb_neuron_nestml
   /usr/include/boost/sort/spreadsort/detail/float_sort.hpp \
   /usr/include/boost/sort/spreadsort/string_sort.hpp \
   /usr/include/boost/sort/spreadsort/detail/string_sort.hpp \
-  /home/emiliano/Documenti/other_env/other_e/include/nest/vector_util.h \
-  /home/emiliano/Documenti/other_env/other_e/include/nest/common_synapse_properties.h \
-  /home/emiliano/Documenti/other_env/other_e/include/nest/connector_model.h \
-  /home/emiliano/Documenti/other_env/other_e/include/nest/enum_bitfield.h \
-  /home/emiliano/Documenti/other_env/other_e/include/nest/secondary_event.h \
-  /home/emiliano/Documenti/other_env/other_e/include/nest/node.h \
-  /home/emiliano/Documenti/other_env/other_e/include/nest/deprecation_warning.h \
-  /home/emiliano/Documenti/other_env/other_e/include/nest/histentry.h \
-  /home/emiliano/Documenti/other_env/other_e/include/nest/connection_label.h \
-  /home/emiliano/Documenti/other_env/other_e/include/nest/nest.h \
-  /home/emiliano/Documenti/other_env/other_e/include/nest/logging.h \
-  /home/emiliano/Documenti/other_env/other_e/include/nest/spikecounter.h \
-  /home/emiliano/Documenti/other_env/other_e/include/nest/nest_timeconverter.h \
-  /home/emiliano/Documenti/other_env/other_e/include/nest/per_thread_bool_indicator.h \
+  /home/emiliano/Documenti/better_env/benv/include/nest/vector_util.h \
+  /home/emiliano/Documenti/better_env/benv/include/nest/common_synapse_properties.h \
+  /home/emiliano/Documenti/better_env/benv/include/nest/connector_model.h \
+  /home/emiliano/Documenti/better_env/benv/include/nest/enum_bitfield.h \
+  /home/emiliano/Documenti/better_env/benv/include/nest/secondary_event.h \
+  /home/emiliano/Documenti/better_env/benv/include/nest/node.h \
+  /home/emiliano/Documenti/better_env/benv/include/nest/deprecation_warning.h \
+  /home/emiliano/Documenti/better_env/benv/include/nest/histentry.h \
+  /home/emiliano/Documenti/better_env/benv/include/nest/connection_label.h \
+  /home/emiliano/Documenti/better_env/benv/include/nest/nest.h \
+  /home/emiliano/Documenti/better_env/benv/include/nest/logging.h \
+  /home/emiliano/Documenti/better_env/benv/include/nest/spikecounter.h \
+  /home/emiliano/Documenti/better_env/benv/include/nest/nest_timeconverter.h \
+  /home/emiliano/Documenti/better_env/benv/include/nest/per_thread_bool_indicator.h \
   /usr/include/c++/11/atomic \
-  /home/emiliano/Documenti/other_env/other_e/include/nest/send_buffer_position.h \
-  /home/emiliano/Documenti/other_env/other_e/include/nest/source_table.h \
-  /home/emiliano/Documenti/other_env/other_e/include/nest/mpi_manager.h \
+  /home/emiliano/Documenti/better_env/benv/include/nest/send_buffer_position.h \
+  /home/emiliano/Documenti/better_env/benv/include/nest/source_table.h \
+  /home/emiliano/Documenti/better_env/benv/include/nest/mpi_manager.h \
   /usr/lib/x86_64-linux-gnu/openmpi/include/mpi.h \
   /usr/lib/x86_64-linux-gnu/openmpi/include/mpi_portable_platform.h \
   /usr/lib/x86_64-linux-gnu/openmpi/include/openmpi/ompi/mpi/cxx/mpicxx.h \
@@ -9252,81 +9252,81 @@ CMakeFiles/custom_stdp_module_module.dir/rb_neuron_nestml.o: ../rb_neuron_nestml
   /usr/lib/x86_64-linux-gnu/openmpi/include/openmpi/ompi/mpi/cxx/info_inln.h \
   /usr/lib/x86_64-linux-gnu/openmpi/include/openmpi/ompi/mpi/cxx/win_inln.h \
   /usr/lib/x86_64-linux-gnu/openmpi/include/openmpi/ompi/mpi/cxx/file_inln.h \
-  /home/emiliano/Documenti/other_env/other_e/include/nest/target_data.h \
-  /home/emiliano/Documenti/other_env/other_e/include/nest/source_table_position.h \
-  /home/emiliano/Documenti/other_env/other_e/include/nest/target_table.h \
-  /home/emiliano/Documenti/other_env/other_e/include/nest/target_table_devices.h \
-  /home/emiliano/Documenti/other_env/other_e/include/nest/event_delivery_manager.h \
-  /home/emiliano/Documenti/other_env/other_e/include/nest/buffer_resize_log.h \
-  /home/emiliano/Documenti/other_env/other_e/include/nest/io_manager.h \
-  /home/emiliano/Documenti/other_env/other_e/include/nest/recording_backend.h \
-  /home/emiliano/Documenti/other_env/other_e/include/nest/stimulation_backend.h \
-  /home/emiliano/Documenti/other_env/other_e/include/nest/stimulation_device.h \
-  /home/emiliano/Documenti/other_env/other_e/include/nest/device.h \
-  /home/emiliano/Documenti/other_env/other_e/include/nest/device_node.h \
-  /home/emiliano/Documenti/other_env/other_e/include/nest/logging_manager.h \
-  /home/emiliano/Documenti/other_env/other_e/include/nest/model_manager.h \
-  /home/emiliano/Documenti/other_env/other_e/include/nest/genericmodel.h \
-  /home/emiliano/Documenti/other_env/other_e/include/nest/model.h \
-  /home/emiliano/Documenti/other_env/other_e/include/nest/modelrange_manager.h \
-  /home/emiliano/Documenti/other_env/other_e/include/nest/modelrange.h \
-  /home/emiliano/Documenti/other_env/other_e/include/nest/module_manager.h \
+  /home/emiliano/Documenti/better_env/benv/include/nest/target_data.h \
+  /home/emiliano/Documenti/better_env/benv/include/nest/source_table_position.h \
+  /home/emiliano/Documenti/better_env/benv/include/nest/target_table.h \
+  /home/emiliano/Documenti/better_env/benv/include/nest/target_table_devices.h \
+  /home/emiliano/Documenti/better_env/benv/include/nest/event_delivery_manager.h \
+  /home/emiliano/Documenti/better_env/benv/include/nest/buffer_resize_log.h \
+  /home/emiliano/Documenti/better_env/benv/include/nest/io_manager.h \
+  /home/emiliano/Documenti/better_env/benv/include/nest/recording_backend.h \
+  /home/emiliano/Documenti/better_env/benv/include/nest/stimulation_backend.h \
+  /home/emiliano/Documenti/better_env/benv/include/nest/stimulation_device.h \
+  /home/emiliano/Documenti/better_env/benv/include/nest/device.h \
+  /home/emiliano/Documenti/better_env/benv/include/nest/device_node.h \
+  /home/emiliano/Documenti/better_env/benv/include/nest/logging_manager.h \
+  /home/emiliano/Documenti/better_env/benv/include/nest/model_manager.h \
+  /home/emiliano/Documenti/better_env/benv/include/nest/genericmodel.h \
+  /home/emiliano/Documenti/better_env/benv/include/nest/model.h \
+  /home/emiliano/Documenti/better_env/benv/include/nest/modelrange_manager.h \
+  /home/emiliano/Documenti/better_env/benv/include/nest/modelrange.h \
+  /home/emiliano/Documenti/better_env/benv/include/nest/module_manager.h \
   /usr/include/ltdl.h \
   /usr/include/libltdl/lt_system.h \
   /usr/include/c++/11/stdlib.h \
   /usr/include/libltdl/lt_error.h \
   /usr/include/libltdl/lt_dlloader.h \
-  /home/emiliano/Documenti/other_env/other_e/include/nest/music_manager.h \
-  /home/emiliano/Documenti/other_env/other_e/include/nest/node_manager.h \
-  /home/emiliano/Documenti/other_env/other_e/include/nest/sparse_node_array.h \
-  /home/emiliano/Documenti/other_env/other_e/include/nest/random_manager.h \
-  /home/emiliano/Documenti/other_env/other_e/include/nest/simulation_manager.h \
-  /home/emiliano/Documenti/other_env/other_e/include/nest/sp_manager.h \
-  /home/emiliano/Documenti/other_env/other_e/include/nest/growth_curve_factory.h \
-  /home/emiliano/Documenti/other_env/other_e/include/nest/growth_curve.h \
+  /home/emiliano/Documenti/better_env/benv/include/nest/music_manager.h \
+  /home/emiliano/Documenti/better_env/benv/include/nest/node_manager.h \
+  /home/emiliano/Documenti/better_env/benv/include/nest/sparse_node_array.h \
+  /home/emiliano/Documenti/better_env/benv/include/nest/random_manager.h \
+  /home/emiliano/Documenti/better_env/benv/include/nest/simulation_manager.h \
+  /home/emiliano/Documenti/better_env/benv/include/nest/sp_manager.h \
+  /home/emiliano/Documenti/better_env/benv/include/nest/growth_curve_factory.h \
+  /home/emiliano/Documenti/better_env/benv/include/nest/growth_curve.h \
   /usr/include/c++/11/fstream \
   /usr/include/x86_64-linux-gnu/c++/11/bits/basic_file.h \
   /usr/include/x86_64-linux-gnu/c++/11/bits/c++io.h \
   /usr/include/c++/11/bits/fstream.tcc \
-  /home/emiliano/Documenti/other_env/other_e/include/nest/nest_impl.h \
-  /home/emiliano/Documenti/other_env/other_e/include/nest/connector_model_impl.h \
-  /home/emiliano/Documenti/other_env/other_e/include/nest/delay_checker.h \
-  /home/emiliano/Documenti/other_env/other_e/include/nest/kernel_manager.h \
-  /home/emiliano/Documenti/other_env/other_e/include/nest/secondary_event_impl.h \
-  /home/emiliano/Documenti/other_env/other_e/include/nest/genericmodel_impl.h \
-  /home/emiliano/Documenti/other_env/other_e/include/nest/model_manager_impl.h \
-  /home/emiliano/Documenti/other_env/other_e/include/nest/string_utils.h \
-  /home/emiliano/Documenti/other_env/other_e/include/nest/target_identifier.h \
-  /home/emiliano/Documenti/other_env/other_e/include/nest/universal_data_logger_impl.h \
-  /home/emiliano/Documenti/other_env/other_e/include/nest/universal_data_logger.h \
-  /home/emiliano/Documenti/other_env/other_e/include/nest/recordables_map.h \
-  /home/emiliano/Documenti/other_env/other_e/include/nest/event_delivery_manager_impl.h \
-  /home/emiliano/Documenti/other_env/other_e/include/nest/connection_manager_impl.h \
-  /home/emiliano/Documenti/other_env/other_e/include/nest/conn_builder_factory.h \
-  /home/emiliano/Documenti/other_env/other_e/include/nest/target_table_devices_impl.h \
-  /home/emiliano/Documenti/other_env/other_e/include/nest/vp_manager_impl.h \
-  /home/emiliano/Documenti/other_env/other_e/include/nest/mpi_manager_impl.h \
-  /home/emiliano/Documenti/other_env/other_e/include/nest/dict.h \
-  /home/emiliano/Documenti/other_env/other_e/include/nest/dictutils.h \
-  /home/emiliano/Documenti/other_env/other_e/include/nest/doubledatum.h \
-  /home/emiliano/Documenti/other_env/other_e/include/nest/integerdatum.h \
-  /home/emiliano/Documenti/other_env/other_e/include/nest/lockptrdatum.h \
+  /home/emiliano/Documenti/better_env/benv/include/nest/nest_impl.h \
+  /home/emiliano/Documenti/better_env/benv/include/nest/connector_model_impl.h \
+  /home/emiliano/Documenti/better_env/benv/include/nest/delay_checker.h \
+  /home/emiliano/Documenti/better_env/benv/include/nest/kernel_manager.h \
+  /home/emiliano/Documenti/better_env/benv/include/nest/secondary_event_impl.h \
+  /home/emiliano/Documenti/better_env/benv/include/nest/genericmodel_impl.h \
+  /home/emiliano/Documenti/better_env/benv/include/nest/model_manager_impl.h \
+  /home/emiliano/Documenti/better_env/benv/include/nest/string_utils.h \
+  /home/emiliano/Documenti/better_env/benv/include/nest/target_identifier.h \
+  /home/emiliano/Documenti/better_env/benv/include/nest/universal_data_logger_impl.h \
+  /home/emiliano/Documenti/better_env/benv/include/nest/universal_data_logger.h \
+  /home/emiliano/Documenti/better_env/benv/include/nest/recordables_map.h \
+  /home/emiliano/Documenti/better_env/benv/include/nest/event_delivery_manager_impl.h \
+  /home/emiliano/Documenti/better_env/benv/include/nest/connection_manager_impl.h \
+  /home/emiliano/Documenti/better_env/benv/include/nest/conn_builder_factory.h \
+  /home/emiliano/Documenti/better_env/benv/include/nest/target_table_devices_impl.h \
+  /home/emiliano/Documenti/better_env/benv/include/nest/vp_manager_impl.h \
+  /home/emiliano/Documenti/better_env/benv/include/nest/mpi_manager_impl.h \
+  /home/emiliano/Documenti/better_env/benv/include/nest/dict.h \
+  /home/emiliano/Documenti/better_env/benv/include/nest/dictutils.h \
+  /home/emiliano/Documenti/better_env/benv/include/nest/doubledatum.h \
+  /home/emiliano/Documenti/better_env/benv/include/nest/integerdatum.h \
+  /home/emiliano/Documenti/better_env/benv/include/nest/lockptrdatum.h \
   ../rb_neuron_nestml.h \
-  /home/emiliano/Documenti/other_env/other_e/include/nest/config.h \
-  /home/emiliano/Documenti/other_env/other_e/include/nest/structural_plasticity_node.h \
-  /home/emiliano/Documenti/other_env/other_e/include/nest/synaptic_element.h \
-  /home/emiliano/Documenti/other_env/other_e/include/nest/connection.h \
-  /home/emiliano/Documenti/other_env/other_e/include/nest/connector_base_impl.h \
-  /home/emiliano/Documenti/other_env/other_e/include/nest/weight_recorder.h \
-  /home/emiliano/Documenti/other_env/other_e/include/nest/recording_device.h \
-  /home/emiliano/Documenti/other_env/other_e/include/nest/syn_id_delay.h \
-  /home/emiliano/Documenti/other_env/other_e/include/nest/dict_util.h \
-  /home/emiliano/Documenti/other_env/other_e/include/nest/event.h \
-  /home/emiliano/Documenti/other_env/other_e/include/nest/nest_types.h \
-  /home/emiliano/Documenti/other_env/other_e/include/nest/ring_buffer.h \
-  /home/emiliano/Documenti/other_env/other_e/include/nest/universal_data_logger.h \
-  /home/emiliano/Documenti/other_env/other_e/include/nest/dictdatum.h \
-  /home/emiliano/Documenti/other_env/other_e/include/nest/nest_time.h
+  /home/emiliano/Documenti/better_env/benv/include/nest/config.h \
+  /home/emiliano/Documenti/better_env/benv/include/nest/structural_plasticity_node.h \
+  /home/emiliano/Documenti/better_env/benv/include/nest/synaptic_element.h \
+  /home/emiliano/Documenti/better_env/benv/include/nest/connection.h \
+  /home/emiliano/Documenti/better_env/benv/include/nest/connector_base_impl.h \
+  /home/emiliano/Documenti/better_env/benv/include/nest/weight_recorder.h \
+  /home/emiliano/Documenti/better_env/benv/include/nest/recording_device.h \
+  /home/emiliano/Documenti/better_env/benv/include/nest/syn_id_delay.h \
+  /home/emiliano/Documenti/better_env/benv/include/nest/dict_util.h \
+  /home/emiliano/Documenti/better_env/benv/include/nest/event.h \
+  /home/emiliano/Documenti/better_env/benv/include/nest/nest_types.h \
+  /home/emiliano/Documenti/better_env/benv/include/nest/ring_buffer.h \
+  /home/emiliano/Documenti/better_env/benv/include/nest/universal_data_logger.h \
+  /home/emiliano/Documenti/better_env/benv/include/nest/dictdatum.h \
+  /home/emiliano/Documenti/better_env/benv/include/nest/nest_time.h
 
 CMakeFiles/custom_stdp_module_module.dir/state_neuron_nestml.o: ../state_neuron_nestml.cpp \
   /usr/include/stdc-predef.h \
@@ -9343,8 +9343,8 @@ CMakeFiles/custom_stdp_module_module.dir/state_neuron_nestml.o: ../state_neuron_
   /usr/include/x86_64-linux-gnu/gnu/stubs-64.h \
   /usr/include/x86_64-linux-gnu/c++/11/bits/cpu_defines.h \
   /usr/include/c++/11/pstl/pstl_config.h \
-  /home/emiliano/Documenti/other_env/other_e/include/nest/numerics.h \
-  /home/emiliano/Documenti/other_env/other_e/include/nest/config.h \
+  /home/emiliano/Documenti/better_env/benv/include/nest/numerics.h \
+  /home/emiliano/Documenti/better_env/benv/include/nest/config.h \
   /usr/include/c++/11/cassert \
   /usr/include/assert.h \
   /usr/include/c++/11/cmath \
@@ -9429,8 +9429,8 @@ CMakeFiles/custom_stdp_module_module.dir/state_neuron_nestml.o: ../state_neuron_
   /usr/include/c++/11/tr1/poly_hermite.tcc \
   /usr/include/c++/11/tr1/poly_laguerre.tcc \
   /usr/include/c++/11/tr1/riemann_zeta.tcc \
-  /home/emiliano/Documenti/other_env/other_e/include/nest/exceptions.h \
-  /home/emiliano/Documenti/other_env/other_e/include/nest/nest_time.h \
+  /home/emiliano/Documenti/better_env/benv/include/nest/exceptions.h \
+  /home/emiliano/Documenti/better_env/benv/include/nest/nest_time.h \
   /usr/include/c++/11/cfloat \
   /usr/lib/gcc/x86_64-linux-gnu/11/include/float.h \
   /usr/include/c++/11/cstdlib \
@@ -9547,8 +9547,8 @@ CMakeFiles/custom_stdp_module_module.dir/state_neuron_nestml.o: ../state_neuron_
   /usr/include/c++/11/bits/ostream.tcc \
   /usr/include/c++/11/istream \
   /usr/include/c++/11/bits/istream.tcc \
-  /home/emiliano/Documenti/other_env/other_e/include/nest/numerics.h \
-  /home/emiliano/Documenti/other_env/other_e/include/nest/nest_types.h \
+  /home/emiliano/Documenti/better_env/benv/include/nest/numerics.h \
+  /home/emiliano/Documenti/better_env/benv/include/nest/nest_types.h \
   /usr/include/c++/11/climits \
   /usr/lib/gcc/x86_64-linux-gnu/11/include/limits.h \
   /usr/lib/gcc/x86_64-linux-gnu/11/include/syslimits.h \
@@ -9560,7 +9560,7 @@ CMakeFiles/custom_stdp_module_module.dir/state_neuron_nestml.o: ../state_neuron_
   /usr/include/x86_64-linux-gnu/bits/xopen_lim.h \
   /usr/include/x86_64-linux-gnu/bits/uio_lim.h \
   /usr/include/c++/11/cstddef \
-  /home/emiliano/Documenti/other_env/other_e/include/nest/name.h \
+  /home/emiliano/Documenti/better_env/benv/include/nest/name.h \
   /usr/include/c++/11/deque \
   /usr/include/c++/11/bits/stl_uninitialized.h \
   /usr/include/c++/11/bits/stl_deque.h \
@@ -9578,17 +9578,17 @@ CMakeFiles/custom_stdp_module_module.dir/state_neuron_nestml.o: ../state_neuron_
   /usr/include/c++/11/bits/invoke.h \
   /usr/include/c++/11/bits/stl_multimap.h \
   /usr/include/c++/11/bits/erase_if.h \
-  /home/emiliano/Documenti/other_env/other_e/include/nest/sliexceptions.h \
+  /home/emiliano/Documenti/better_env/benv/include/nest/sliexceptions.h \
   /usr/include/c++/11/vector \
   /usr/include/c++/11/bits/stl_vector.h \
   /usr/include/c++/11/bits/stl_bvector.h \
   /usr/include/c++/11/bits/vector.tcc \
-  /home/emiliano/Documenti/other_env/other_e/include/nest/kernel_manager.h \
-  /home/emiliano/Documenti/other_env/other_e/include/nest/connection_manager.h \
-  /home/emiliano/Documenti/other_env/other_e/include/nest/manager_interface.h \
-  /home/emiliano/Documenti/other_env/other_e/include/nest/dictdatum.h \
-  /home/emiliano/Documenti/other_env/other_e/include/nest/dict.h \
-  /home/emiliano/Documenti/other_env/other_e/include/nest/token.h \
+  /home/emiliano/Documenti/better_env/benv/include/nest/kernel_manager.h \
+  /home/emiliano/Documenti/better_env/benv/include/nest/connection_manager.h \
+  /home/emiliano/Documenti/better_env/benv/include/nest/manager_interface.h \
+  /home/emiliano/Documenti/better_env/benv/include/nest/dictdatum.h \
+  /home/emiliano/Documenti/better_env/benv/include/nest/dict.h \
+  /home/emiliano/Documenti/better_env/benv/include/nest/token.h \
   /usr/include/c++/11/iomanip \
   /usr/include/c++/11/locale \
   /usr/include/c++/11/bits/locale_facets_nonio.h \
@@ -9603,20 +9603,20 @@ CMakeFiles/custom_stdp_module_module.dir/state_neuron_nestml.o: ../state_neuron_
   /usr/include/c++/11/bits/quoted_string.h \
   /usr/include/c++/11/sstream \
   /usr/include/c++/11/bits/sstream.tcc \
-  /home/emiliano/Documenti/other_env/other_e/include/nest/datum.h \
-  /home/emiliano/Documenti/other_env/other_e/include/nest/slitype.h \
-  /home/emiliano/Documenti/other_env/other_e/include/nest/slifunction.h \
-  /home/emiliano/Documenti/other_env/other_e/include/nest/interpret.h \
+  /home/emiliano/Documenti/better_env/benv/include/nest/datum.h \
+  /home/emiliano/Documenti/better_env/benv/include/nest/slitype.h \
+  /home/emiliano/Documenti/better_env/benv/include/nest/slifunction.h \
+  /home/emiliano/Documenti/better_env/benv/include/nest/interpret.h \
   /usr/include/c++/11/list \
   /usr/include/c++/11/bits/stl_list.h \
   /usr/include/c++/11/bits/allocated_ptr.h \
   /usr/include/c++/11/bits/list.tcc \
-  /home/emiliano/Documenti/other_env/other_e/include/nest/sliactions.h \
-  /home/emiliano/Documenti/other_env/other_e/include/nest/slibuiltins.h \
-  /home/emiliano/Documenti/other_env/other_e/include/nest/slimodule.h \
-  /home/emiliano/Documenti/other_env/other_e/include/nest/tokenstack.h \
-  /home/emiliano/Documenti/other_env/other_e/include/nest/tarrayobj.h \
-  /home/emiliano/Documenti/other_env/other_e/include/nest/tokenarray.h \
+  /home/emiliano/Documenti/better_env/benv/include/nest/sliactions.h \
+  /home/emiliano/Documenti/better_env/benv/include/nest/slibuiltins.h \
+  /home/emiliano/Documenti/better_env/benv/include/nest/slimodule.h \
+  /home/emiliano/Documenti/better_env/benv/include/nest/tokenstack.h \
+  /home/emiliano/Documenti/better_env/benv/include/nest/tarrayobj.h \
+  /home/emiliano/Documenti/better_env/benv/include/nest/tokenarray.h \
   /usr/include/c++/11/algorithm \
   /usr/include/c++/11/bits/stl_algo.h \
   /usr/include/c++/11/bits/algorithmfwd.h \
@@ -9633,8 +9633,8 @@ CMakeFiles/custom_stdp_module_module.dir/state_neuron_nestml.o: ../state_neuron_
   /usr/include/c++/11/bits/enable_special_members.h \
   /usr/include/c++/11/bits/unordered_map.h \
   /usr/include/c++/11/pstl/execution_defs.h \
-  /home/emiliano/Documenti/other_env/other_e/include/nest/lockptrdatum.h \
-  /home/emiliano/Documenti/other_env/other_e/include/nest/lockptr.h \
+  /home/emiliano/Documenti/better_env/benv/include/nest/lockptrdatum.h \
+  /home/emiliano/Documenti/better_env/benv/include/nest/lockptr.h \
   /usr/include/c++/11/memory \
   /usr/include/c++/11/bits/stl_raw_storage_iter.h \
   /usr/include/c++/11/bits/align.h \
@@ -9647,49 +9647,49 @@ CMakeFiles/custom_stdp_module_module.dir/state_neuron_nestml.o: ../state_neuron_
   /usr/include/c++/11/bits/atomic_lockfree_defines.h \
   /usr/include/c++/11/backward/auto_ptr.h \
   /usr/include/c++/11/pstl/glue_memory_defs.h \
-  /home/emiliano/Documenti/other_env/other_e/include/nest/stopwatch.h \
+  /home/emiliano/Documenti/better_env/benv/include/nest/stopwatch.h \
   /usr/include/x86_64-linux-gnu/sys/time.h \
-  /home/emiliano/Documenti/other_env/other_e/include/nest/conn_builder.h \
+  /home/emiliano/Documenti/better_env/benv/include/nest/conn_builder.h \
   /usr/include/c++/11/set \
   /usr/include/c++/11/bits/stl_set.h \
   /usr/include/c++/11/bits/stl_multiset.h \
-  /home/emiliano/Documenti/other_env/other_e/include/nest/conn_parameter.h \
-  /home/emiliano/Documenti/other_env/other_e/include/nest/exceptions.h \
-  /home/emiliano/Documenti/other_env/other_e/include/nest/nest_datums.h \
-  /home/emiliano/Documenti/other_env/other_e/include/nest/connection_id.h \
-  /home/emiliano/Documenti/other_env/other_e/include/nest/arraydatum.h \
-  /home/emiliano/Documenti/other_env/other_e/include/nest/aggregatedatum.h \
-  /home/emiliano/Documenti/other_env/other_e/include/nest/allocator.h \
-  /home/emiliano/Documenti/other_env/other_e/include/nest/dictutils.h \
-  /home/emiliano/Documenti/other_env/other_e/include/nest/doubledatum.h \
-  /home/emiliano/Documenti/other_env/other_e/include/nest/numericdatum.h \
-  /home/emiliano/Documenti/other_env/other_e/include/nest/genericdatum.h \
-  /home/emiliano/Documenti/other_env/other_e/include/nest/integerdatum.h \
-  /home/emiliano/Documenti/other_env/other_e/include/nest/namedatum.h \
-  /home/emiliano/Documenti/other_env/other_e/include/nest/tokenutils.h \
-  /home/emiliano/Documenti/other_env/other_e/include/nest/nestmodule.h \
-  /home/emiliano/Documenti/other_env/other_e/include/nest/event.h \
+  /home/emiliano/Documenti/better_env/benv/include/nest/conn_parameter.h \
+  /home/emiliano/Documenti/better_env/benv/include/nest/exceptions.h \
+  /home/emiliano/Documenti/better_env/benv/include/nest/nest_datums.h \
+  /home/emiliano/Documenti/better_env/benv/include/nest/connection_id.h \
+  /home/emiliano/Documenti/better_env/benv/include/nest/arraydatum.h \
+  /home/emiliano/Documenti/better_env/benv/include/nest/aggregatedatum.h \
+  /home/emiliano/Documenti/better_env/benv/include/nest/allocator.h \
+  /home/emiliano/Documenti/better_env/benv/include/nest/dictutils.h \
+  /home/emiliano/Documenti/better_env/benv/include/nest/doubledatum.h \
+  /home/emiliano/Documenti/better_env/benv/include/nest/numericdatum.h \
+  /home/emiliano/Documenti/better_env/benv/include/nest/genericdatum.h \
+  /home/emiliano/Documenti/better_env/benv/include/nest/integerdatum.h \
+  /home/emiliano/Documenti/better_env/benv/include/nest/namedatum.h \
+  /home/emiliano/Documenti/better_env/benv/include/nest/tokenutils.h \
+  /home/emiliano/Documenti/better_env/benv/include/nest/nestmodule.h \
+  /home/emiliano/Documenti/better_env/benv/include/nest/event.h \
   /usr/include/c++/11/cstring \
   /usr/include/string.h \
   /usr/include/strings.h \
   /usr/include/x86_64-linux-gnu/bits/strings_fortified.h \
   /usr/include/x86_64-linux-gnu/bits/string_fortified.h \
-  /home/emiliano/Documenti/other_env/other_e/include/nest/spike_data.h \
-  /home/emiliano/Documenti/other_env/other_e/include/nest/target.h \
-  /home/emiliano/Documenti/other_env/other_e/include/nest/static_assert.h \
-  /home/emiliano/Documenti/other_env/other_e/include/nest/vp_manager.h \
+  /home/emiliano/Documenti/better_env/benv/include/nest/spike_data.h \
+  /home/emiliano/Documenti/better_env/benv/include/nest/target.h \
+  /home/emiliano/Documenti/better_env/benv/include/nest/static_assert.h \
+  /home/emiliano/Documenti/better_env/benv/include/nest/vp_manager.h \
   /usr/lib/gcc/x86_64-linux-gnu/11/include/omp.h \
-  /home/emiliano/Documenti/other_env/other_e/include/nest/generic_factory.h \
-  /home/emiliano/Documenti/other_env/other_e/include/nest/ntree.h \
+  /home/emiliano/Documenti/better_env/benv/include/nest/generic_factory.h \
+  /home/emiliano/Documenti/better_env/benv/include/nest/ntree.h \
   /usr/include/c++/11/bitset \
   /usr/include/c++/11/iterator \
   /usr/include/c++/11/bits/stream_iterator.h \
-  /home/emiliano/Documenti/other_env/other_e/include/nest/position.h \
-  /home/emiliano/Documenti/other_env/other_e/include/nest/compose.hpp \
-  /home/emiliano/Documenti/other_env/other_e/include/nest/parameter.h \
-  /home/emiliano/Documenti/other_env/other_e/include/nest/nest_names.h \
-  /home/emiliano/Documenti/other_env/other_e/include/nest/node_collection.h \
-  /home/emiliano/Documenti/other_env/other_e/include/nest/random_generators.h \
+  /home/emiliano/Documenti/better_env/benv/include/nest/position.h \
+  /home/emiliano/Documenti/better_env/benv/include/nest/compose.hpp \
+  /home/emiliano/Documenti/better_env/benv/include/nest/parameter.h \
+  /home/emiliano/Documenti/better_env/benv/include/nest/nest_names.h \
+  /home/emiliano/Documenti/better_env/benv/include/nest/node_collection.h \
+  /home/emiliano/Documenti/better_env/benv/include/nest/random_generators.h \
   /usr/include/c++/11/random \
   /usr/include/c++/11/bits/random.h \
   /usr/include/x86_64-linux-gnu/c++/11/bits/opt_random.h \
@@ -9697,7 +9697,7 @@ CMakeFiles/custom_stdp_module_module.dir/state_neuron_nestml.o: ../state_neuron_
   /usr/include/c++/11/numeric \
   /usr/include/c++/11/bits/stl_numeric.h \
   /usr/include/c++/11/pstl/glue_numeric_defs.h \
-  /home/emiliano/Documenti/other_env/other_e/include/nest/randutils.hpp \
+  /home/emiliano/Documenti/better_env/benv/include/nest/randutils.hpp \
   /usr/include/c++/11/chrono \
   /usr/include/c++/11/ratio \
   /usr/include/c++/11/bits/parse_numbers.h \
@@ -9713,11 +9713,11 @@ CMakeFiles/custom_stdp_module_module.dir/state_neuron_nestml.o: ../state_neuron_
   /usr/include/x86_64-linux-gnu/bits/unistd.h \
   /usr/include/x86_64-linux-gnu/bits/unistd_ext.h \
   /usr/include/linux/close_range.h \
-  /home/emiliano/Documenti/other_env/other_e/include/nest/sharedptrdatum.h \
-  /home/emiliano/Documenti/other_env/other_e/include/nest/connector_base.h \
-  /home/emiliano/Documenti/other_env/other_e/include/nest/sort.h \
-  /home/emiliano/Documenti/other_env/other_e/include/nest/block_vector.h \
-  /home/emiliano/Documenti/other_env/other_e/include/nest/iterator_pair.h \
+  /home/emiliano/Documenti/better_env/benv/include/nest/sharedptrdatum.h \
+  /home/emiliano/Documenti/better_env/benv/include/nest/connector_base.h \
+  /home/emiliano/Documenti/better_env/benv/include/nest/sort.h \
+  /home/emiliano/Documenti/better_env/benv/include/nest/block_vector.h \
+  /home/emiliano/Documenti/better_env/benv/include/nest/iterator_pair.h \
   /usr/include/boost/iterator/iterator_adaptor.hpp \
   /usr/include/boost/static_assert.hpp \
   /usr/include/boost/config.hpp \
@@ -9943,7 +9943,7 @@ CMakeFiles/custom_stdp_module_module.dir/state_neuron_nestml.o: ../state_neuron_
   /usr/include/boost/utility/swap.hpp \
   /usr/include/boost/core/swap.hpp \
   /usr/include/boost/core/enable_if.hpp \
-  /home/emiliano/Documenti/other_env/other_e/include/nest/source.h \
+  /home/emiliano/Documenti/better_env/benv/include/nest/source.h \
   /usr/include/boost/sort/spreadsort/spreadsort.hpp \
   /usr/include/boost/type_traits.hpp \
   /usr/include/boost/type_traits/aligned_storage.hpp \
@@ -10080,24 +10080,24 @@ CMakeFiles/custom_stdp_module_module.dir/state_neuron_nestml.o: ../state_neuron_
   /usr/include/boost/sort/spreadsort/detail/float_sort.hpp \
   /usr/include/boost/sort/spreadsort/string_sort.hpp \
   /usr/include/boost/sort/spreadsort/detail/string_sort.hpp \
-  /home/emiliano/Documenti/other_env/other_e/include/nest/vector_util.h \
-  /home/emiliano/Documenti/other_env/other_e/include/nest/common_synapse_properties.h \
-  /home/emiliano/Documenti/other_env/other_e/include/nest/connector_model.h \
-  /home/emiliano/Documenti/other_env/other_e/include/nest/enum_bitfield.h \
-  /home/emiliano/Documenti/other_env/other_e/include/nest/secondary_event.h \
-  /home/emiliano/Documenti/other_env/other_e/include/nest/node.h \
-  /home/emiliano/Documenti/other_env/other_e/include/nest/deprecation_warning.h \
-  /home/emiliano/Documenti/other_env/other_e/include/nest/histentry.h \
-  /home/emiliano/Documenti/other_env/other_e/include/nest/connection_label.h \
-  /home/emiliano/Documenti/other_env/other_e/include/nest/nest.h \
-  /home/emiliano/Documenti/other_env/other_e/include/nest/logging.h \
-  /home/emiliano/Documenti/other_env/other_e/include/nest/spikecounter.h \
-  /home/emiliano/Documenti/other_env/other_e/include/nest/nest_timeconverter.h \
-  /home/emiliano/Documenti/other_env/other_e/include/nest/per_thread_bool_indicator.h \
+  /home/emiliano/Documenti/better_env/benv/include/nest/vector_util.h \
+  /home/emiliano/Documenti/better_env/benv/include/nest/common_synapse_properties.h \
+  /home/emiliano/Documenti/better_env/benv/include/nest/connector_model.h \
+  /home/emiliano/Documenti/better_env/benv/include/nest/enum_bitfield.h \
+  /home/emiliano/Documenti/better_env/benv/include/nest/secondary_event.h \
+  /home/emiliano/Documenti/better_env/benv/include/nest/node.h \
+  /home/emiliano/Documenti/better_env/benv/include/nest/deprecation_warning.h \
+  /home/emiliano/Documenti/better_env/benv/include/nest/histentry.h \
+  /home/emiliano/Documenti/better_env/benv/include/nest/connection_label.h \
+  /home/emiliano/Documenti/better_env/benv/include/nest/nest.h \
+  /home/emiliano/Documenti/better_env/benv/include/nest/logging.h \
+  /home/emiliano/Documenti/better_env/benv/include/nest/spikecounter.h \
+  /home/emiliano/Documenti/better_env/benv/include/nest/nest_timeconverter.h \
+  /home/emiliano/Documenti/better_env/benv/include/nest/per_thread_bool_indicator.h \
   /usr/include/c++/11/atomic \
-  /home/emiliano/Documenti/other_env/other_e/include/nest/send_buffer_position.h \
-  /home/emiliano/Documenti/other_env/other_e/include/nest/source_table.h \
-  /home/emiliano/Documenti/other_env/other_e/include/nest/mpi_manager.h \
+  /home/emiliano/Documenti/better_env/benv/include/nest/send_buffer_position.h \
+  /home/emiliano/Documenti/better_env/benv/include/nest/source_table.h \
+  /home/emiliano/Documenti/better_env/benv/include/nest/mpi_manager.h \
   /usr/lib/x86_64-linux-gnu/openmpi/include/mpi.h \
   /usr/lib/x86_64-linux-gnu/openmpi/include/mpi_portable_platform.h \
   /usr/lib/x86_64-linux-gnu/openmpi/include/openmpi/ompi/mpi/cxx/mpicxx.h \
@@ -10131,81 +10131,81 @@ CMakeFiles/custom_stdp_module_module.dir/state_neuron_nestml.o: ../state_neuron_
   /usr/lib/x86_64-linux-gnu/openmpi/include/openmpi/ompi/mpi/cxx/info_inln.h \
   /usr/lib/x86_64-linux-gnu/openmpi/include/openmpi/ompi/mpi/cxx/win_inln.h \
   /usr/lib/x86_64-linux-gnu/openmpi/include/openmpi/ompi/mpi/cxx/file_inln.h \
-  /home/emiliano/Documenti/other_env/other_e/include/nest/target_data.h \
-  /home/emiliano/Documenti/other_env/other_e/include/nest/source_table_position.h \
-  /home/emiliano/Documenti/other_env/other_e/include/nest/target_table.h \
-  /home/emiliano/Documenti/other_env/other_e/include/nest/target_table_devices.h \
-  /home/emiliano/Documenti/other_env/other_e/include/nest/event_delivery_manager.h \
-  /home/emiliano/Documenti/other_env/other_e/include/nest/buffer_resize_log.h \
-  /home/emiliano/Documenti/other_env/other_e/include/nest/io_manager.h \
-  /home/emiliano/Documenti/other_env/other_e/include/nest/recording_backend.h \
-  /home/emiliano/Documenti/other_env/other_e/include/nest/stimulation_backend.h \
-  /home/emiliano/Documenti/other_env/other_e/include/nest/stimulation_device.h \
-  /home/emiliano/Documenti/other_env/other_e/include/nest/device.h \
-  /home/emiliano/Documenti/other_env/other_e/include/nest/device_node.h \
-  /home/emiliano/Documenti/other_env/other_e/include/nest/logging_manager.h \
-  /home/emiliano/Documenti/other_env/other_e/include/nest/model_manager.h \
-  /home/emiliano/Documenti/other_env/other_e/include/nest/genericmodel.h \
-  /home/emiliano/Documenti/other_env/other_e/include/nest/model.h \
-  /home/emiliano/Documenti/other_env/other_e/include/nest/modelrange_manager.h \
-  /home/emiliano/Documenti/other_env/other_e/include/nest/modelrange.h \
-  /home/emiliano/Documenti/other_env/other_e/include/nest/module_manager.h \
+  /home/emiliano/Documenti/better_env/benv/include/nest/target_data.h \
+  /home/emiliano/Documenti/better_env/benv/include/nest/source_table_position.h \
+  /home/emiliano/Documenti/better_env/benv/include/nest/target_table.h \
+  /home/emiliano/Documenti/better_env/benv/include/nest/target_table_devices.h \
+  /home/emiliano/Documenti/better_env/benv/include/nest/event_delivery_manager.h \
+  /home/emiliano/Documenti/better_env/benv/include/nest/buffer_resize_log.h \
+  /home/emiliano/Documenti/better_env/benv/include/nest/io_manager.h \
+  /home/emiliano/Documenti/better_env/benv/include/nest/recording_backend.h \
+  /home/emiliano/Documenti/better_env/benv/include/nest/stimulation_backend.h \
+  /home/emiliano/Documenti/better_env/benv/include/nest/stimulation_device.h \
+  /home/emiliano/Documenti/better_env/benv/include/nest/device.h \
+  /home/emiliano/Documenti/better_env/benv/include/nest/device_node.h \
+  /home/emiliano/Documenti/better_env/benv/include/nest/logging_manager.h \
+  /home/emiliano/Documenti/better_env/benv/include/nest/model_manager.h \
+  /home/emiliano/Documenti/better_env/benv/include/nest/genericmodel.h \
+  /home/emiliano/Documenti/better_env/benv/include/nest/model.h \
+  /home/emiliano/Documenti/better_env/benv/include/nest/modelrange_manager.h \
+  /home/emiliano/Documenti/better_env/benv/include/nest/modelrange.h \
+  /home/emiliano/Documenti/better_env/benv/include/nest/module_manager.h \
   /usr/include/ltdl.h \
   /usr/include/libltdl/lt_system.h \
   /usr/include/c++/11/stdlib.h \
   /usr/include/libltdl/lt_error.h \
   /usr/include/libltdl/lt_dlloader.h \
-  /home/emiliano/Documenti/other_env/other_e/include/nest/music_manager.h \
-  /home/emiliano/Documenti/other_env/other_e/include/nest/node_manager.h \
-  /home/emiliano/Documenti/other_env/other_e/include/nest/sparse_node_array.h \
-  /home/emiliano/Documenti/other_env/other_e/include/nest/random_manager.h \
-  /home/emiliano/Documenti/other_env/other_e/include/nest/simulation_manager.h \
-  /home/emiliano/Documenti/other_env/other_e/include/nest/sp_manager.h \
-  /home/emiliano/Documenti/other_env/other_e/include/nest/growth_curve_factory.h \
-  /home/emiliano/Documenti/other_env/other_e/include/nest/growth_curve.h \
+  /home/emiliano/Documenti/better_env/benv/include/nest/music_manager.h \
+  /home/emiliano/Documenti/better_env/benv/include/nest/node_manager.h \
+  /home/emiliano/Documenti/better_env/benv/include/nest/sparse_node_array.h \
+  /home/emiliano/Documenti/better_env/benv/include/nest/random_manager.h \
+  /home/emiliano/Documenti/better_env/benv/include/nest/simulation_manager.h \
+  /home/emiliano/Documenti/better_env/benv/include/nest/sp_manager.h \
+  /home/emiliano/Documenti/better_env/benv/include/nest/growth_curve_factory.h \
+  /home/emiliano/Documenti/better_env/benv/include/nest/growth_curve.h \
   /usr/include/c++/11/fstream \
   /usr/include/x86_64-linux-gnu/c++/11/bits/basic_file.h \
   /usr/include/x86_64-linux-gnu/c++/11/bits/c++io.h \
   /usr/include/c++/11/bits/fstream.tcc \
-  /home/emiliano/Documenti/other_env/other_e/include/nest/nest_impl.h \
-  /home/emiliano/Documenti/other_env/other_e/include/nest/connector_model_impl.h \
-  /home/emiliano/Documenti/other_env/other_e/include/nest/delay_checker.h \
-  /home/emiliano/Documenti/other_env/other_e/include/nest/kernel_manager.h \
-  /home/emiliano/Documenti/other_env/other_e/include/nest/secondary_event_impl.h \
-  /home/emiliano/Documenti/other_env/other_e/include/nest/genericmodel_impl.h \
-  /home/emiliano/Documenti/other_env/other_e/include/nest/model_manager_impl.h \
-  /home/emiliano/Documenti/other_env/other_e/include/nest/string_utils.h \
-  /home/emiliano/Documenti/other_env/other_e/include/nest/target_identifier.h \
-  /home/emiliano/Documenti/other_env/other_e/include/nest/universal_data_logger_impl.h \
-  /home/emiliano/Documenti/other_env/other_e/include/nest/universal_data_logger.h \
-  /home/emiliano/Documenti/other_env/other_e/include/nest/recordables_map.h \
-  /home/emiliano/Documenti/other_env/other_e/include/nest/event_delivery_manager_impl.h \
-  /home/emiliano/Documenti/other_env/other_e/include/nest/connection_manager_impl.h \
-  /home/emiliano/Documenti/other_env/other_e/include/nest/conn_builder_factory.h \
-  /home/emiliano/Documenti/other_env/other_e/include/nest/target_table_devices_impl.h \
-  /home/emiliano/Documenti/other_env/other_e/include/nest/vp_manager_impl.h \
-  /home/emiliano/Documenti/other_env/other_e/include/nest/mpi_manager_impl.h \
-  /home/emiliano/Documenti/other_env/other_e/include/nest/dict.h \
-  /home/emiliano/Documenti/other_env/other_e/include/nest/dictutils.h \
-  /home/emiliano/Documenti/other_env/other_e/include/nest/doubledatum.h \
-  /home/emiliano/Documenti/other_env/other_e/include/nest/integerdatum.h \
-  /home/emiliano/Documenti/other_env/other_e/include/nest/lockptrdatum.h \
+  /home/emiliano/Documenti/better_env/benv/include/nest/nest_impl.h \
+  /home/emiliano/Documenti/better_env/benv/include/nest/connector_model_impl.h \
+  /home/emiliano/Documenti/better_env/benv/include/nest/delay_checker.h \
+  /home/emiliano/Documenti/better_env/benv/include/nest/kernel_manager.h \
+  /home/emiliano/Documenti/better_env/benv/include/nest/secondary_event_impl.h \
+  /home/emiliano/Documenti/better_env/benv/include/nest/genericmodel_impl.h \
+  /home/emiliano/Documenti/better_env/benv/include/nest/model_manager_impl.h \
+  /home/emiliano/Documenti/better_env/benv/include/nest/string_utils.h \
+  /home/emiliano/Documenti/better_env/benv/include/nest/target_identifier.h \
+  /home/emiliano/Documenti/better_env/benv/include/nest/universal_data_logger_impl.h \
+  /home/emiliano/Documenti/better_env/benv/include/nest/universal_data_logger.h \
+  /home/emiliano/Documenti/better_env/benv/include/nest/recordables_map.h \
+  /home/emiliano/Documenti/better_env/benv/include/nest/event_delivery_manager_impl.h \
+  /home/emiliano/Documenti/better_env/benv/include/nest/connection_manager_impl.h \
+  /home/emiliano/Documenti/better_env/benv/include/nest/conn_builder_factory.h \
+  /home/emiliano/Documenti/better_env/benv/include/nest/target_table_devices_impl.h \
+  /home/emiliano/Documenti/better_env/benv/include/nest/vp_manager_impl.h \
+  /home/emiliano/Documenti/better_env/benv/include/nest/mpi_manager_impl.h \
+  /home/emiliano/Documenti/better_env/benv/include/nest/dict.h \
+  /home/emiliano/Documenti/better_env/benv/include/nest/dictutils.h \
+  /home/emiliano/Documenti/better_env/benv/include/nest/doubledatum.h \
+  /home/emiliano/Documenti/better_env/benv/include/nest/integerdatum.h \
+  /home/emiliano/Documenti/better_env/benv/include/nest/lockptrdatum.h \
   ../state_neuron_nestml.h \
-  /home/emiliano/Documenti/other_env/other_e/include/nest/config.h \
-  /home/emiliano/Documenti/other_env/other_e/include/nest/structural_plasticity_node.h \
-  /home/emiliano/Documenti/other_env/other_e/include/nest/synaptic_element.h \
-  /home/emiliano/Documenti/other_env/other_e/include/nest/connection.h \
-  /home/emiliano/Documenti/other_env/other_e/include/nest/connector_base_impl.h \
-  /home/emiliano/Documenti/other_env/other_e/include/nest/weight_recorder.h \
-  /home/emiliano/Documenti/other_env/other_e/include/nest/recording_device.h \
-  /home/emiliano/Documenti/other_env/other_e/include/nest/syn_id_delay.h \
-  /home/emiliano/Documenti/other_env/other_e/include/nest/dict_util.h \
-  /home/emiliano/Documenti/other_env/other_e/include/nest/event.h \
-  /home/emiliano/Documenti/other_env/other_e/include/nest/nest_types.h \
-  /home/emiliano/Documenti/other_env/other_e/include/nest/ring_buffer.h \
-  /home/emiliano/Documenti/other_env/other_e/include/nest/universal_data_logger.h \
-  /home/emiliano/Documenti/other_env/other_e/include/nest/dictdatum.h \
-  /home/emiliano/Documenti/other_env/other_e/include/nest/nest_time.h
+  /home/emiliano/Documenti/better_env/benv/include/nest/config.h \
+  /home/emiliano/Documenti/better_env/benv/include/nest/structural_plasticity_node.h \
+  /home/emiliano/Documenti/better_env/benv/include/nest/synaptic_element.h \
+  /home/emiliano/Documenti/better_env/benv/include/nest/connection.h \
+  /home/emiliano/Documenti/better_env/benv/include/nest/connector_base_impl.h \
+  /home/emiliano/Documenti/better_env/benv/include/nest/weight_recorder.h \
+  /home/emiliano/Documenti/better_env/benv/include/nest/recording_device.h \
+  /home/emiliano/Documenti/better_env/benv/include/nest/syn_id_delay.h \
+  /home/emiliano/Documenti/better_env/benv/include/nest/dict_util.h \
+  /home/emiliano/Documenti/better_env/benv/include/nest/event.h \
+  /home/emiliano/Documenti/better_env/benv/include/nest/nest_types.h \
+  /home/emiliano/Documenti/better_env/benv/include/nest/ring_buffer.h \
+  /home/emiliano/Documenti/better_env/benv/include/nest/universal_data_logger.h \
+  /home/emiliano/Documenti/better_env/benv/include/nest/dictdatum.h \
+  /home/emiliano/Documenti/better_env/benv/include/nest/nest_time.h
 
 CMakeFiles/custom_stdp_module_module.dir/stdp_synapse_alpha.o: ../stdp_synapse_alpha.cpp \
   /usr/include/stdc-predef.h \
@@ -10305,8 +10305,8 @@ CMakeFiles/custom_stdp_module_module.dir/stdp_synapse_alpha.o: ../stdp_synapse_a
   /usr/include/c++/11/tr1/poly_hermite.tcc \
   /usr/include/c++/11/tr1/poly_laguerre.tcc \
   /usr/include/c++/11/tr1/riemann_zeta.tcc \
-  /home/emiliano/Documenti/other_env/other_e/include/nest/common_synapse_properties.h \
-  /home/emiliano/Documenti/other_env/other_e/include/nest/connector_model.h \
+  /home/emiliano/Documenti/better_env/benv/include/nest/common_synapse_properties.h \
+  /home/emiliano/Documenti/better_env/benv/include/nest/connector_model.h \
   /usr/include/c++/11/string \
   /usr/include/c++/11/bits/stringfwd.h \
   /usr/include/c++/11/bits/memoryfwd.h \
@@ -10392,12 +10392,12 @@ CMakeFiles/custom_stdp_module_module.dir/stdp_synapse_alpha.o: ../stdp_synapse_a
   /usr/include/x86_64-linux-gnu/bits/types/error_t.h \
   /usr/include/c++/11/bits/charconv.h \
   /usr/include/c++/11/bits/basic_string.tcc \
-  /home/emiliano/Documenti/other_env/other_e/include/nest/numerics.h \
-  /home/emiliano/Documenti/other_env/other_e/include/nest/config.h \
+  /home/emiliano/Documenti/better_env/benv/include/nest/numerics.h \
+  /home/emiliano/Documenti/better_env/benv/include/nest/config.h \
   /usr/include/c++/11/cassert \
   /usr/include/assert.h \
-  /home/emiliano/Documenti/other_env/other_e/include/nest/enum_bitfield.h \
-  /home/emiliano/Documenti/other_env/other_e/include/nest/event.h \
+  /home/emiliano/Documenti/better_env/benv/include/nest/enum_bitfield.h \
+  /home/emiliano/Documenti/better_env/benv/include/nest/event.h \
   /usr/include/c++/11/algorithm \
   /usr/include/c++/11/utility \
   /usr/include/c++/11/bits/stl_relops.h \
@@ -10434,8 +10434,8 @@ CMakeFiles/custom_stdp_module_module.dir/stdp_synapse_alpha.o: ../stdp_synapse_a
   /usr/include/strings.h \
   /usr/include/x86_64-linux-gnu/bits/strings_fortified.h \
   /usr/include/x86_64-linux-gnu/bits/string_fortified.h \
-  /home/emiliano/Documenti/other_env/other_e/include/nest/exceptions.h \
-  /home/emiliano/Documenti/other_env/other_e/include/nest/nest_time.h \
+  /home/emiliano/Documenti/better_env/benv/include/nest/exceptions.h \
+  /home/emiliano/Documenti/better_env/benv/include/nest/nest_time.h \
   /usr/include/c++/11/cfloat \
   /usr/lib/gcc/x86_64-linux-gnu/11/include/float.h \
   /usr/include/c++/11/iostream \
@@ -10466,7 +10466,7 @@ CMakeFiles/custom_stdp_module_module.dir/stdp_synapse_alpha.o: ../stdp_synapse_a
   /usr/include/c++/11/bits/ostream.tcc \
   /usr/include/c++/11/istream \
   /usr/include/c++/11/bits/istream.tcc \
-  /home/emiliano/Documenti/other_env/other_e/include/nest/nest_types.h \
+  /home/emiliano/Documenti/better_env/benv/include/nest/nest_types.h \
   /usr/include/c++/11/climits \
   /usr/lib/gcc/x86_64-linux-gnu/11/include/limits.h \
   /usr/lib/gcc/x86_64-linux-gnu/11/include/syslimits.h \
@@ -10478,7 +10478,7 @@ CMakeFiles/custom_stdp_module_module.dir/stdp_synapse_alpha.o: ../stdp_synapse_a
   /usr/include/x86_64-linux-gnu/bits/xopen_lim.h \
   /usr/include/x86_64-linux-gnu/bits/uio_lim.h \
   /usr/include/c++/11/cstddef \
-  /home/emiliano/Documenti/other_env/other_e/include/nest/name.h \
+  /home/emiliano/Documenti/better_env/benv/include/nest/name.h \
   /usr/include/c++/11/deque \
   /usr/include/c++/11/bits/stl_deque.h \
   /usr/include/c++/11/bits/deque.tcc \
@@ -10486,15 +10486,15 @@ CMakeFiles/custom_stdp_module_module.dir/stdp_synapse_alpha.o: ../stdp_synapse_a
   /usr/include/c++/11/bits/stl_tree.h \
   /usr/include/c++/11/bits/stl_map.h \
   /usr/include/c++/11/bits/stl_multimap.h \
-  /home/emiliano/Documenti/other_env/other_e/include/nest/sliexceptions.h \
-  /home/emiliano/Documenti/other_env/other_e/include/nest/spike_data.h \
-  /home/emiliano/Documenti/other_env/other_e/include/nest/target.h \
-  /home/emiliano/Documenti/other_env/other_e/include/nest/static_assert.h \
-  /home/emiliano/Documenti/other_env/other_e/include/nest/vp_manager.h \
-  /home/emiliano/Documenti/other_env/other_e/include/nest/manager_interface.h \
-  /home/emiliano/Documenti/other_env/other_e/include/nest/dictdatum.h \
-  /home/emiliano/Documenti/other_env/other_e/include/nest/dict.h \
-  /home/emiliano/Documenti/other_env/other_e/include/nest/token.h \
+  /home/emiliano/Documenti/better_env/benv/include/nest/sliexceptions.h \
+  /home/emiliano/Documenti/better_env/benv/include/nest/spike_data.h \
+  /home/emiliano/Documenti/better_env/benv/include/nest/target.h \
+  /home/emiliano/Documenti/better_env/benv/include/nest/static_assert.h \
+  /home/emiliano/Documenti/better_env/benv/include/nest/vp_manager.h \
+  /home/emiliano/Documenti/better_env/benv/include/nest/manager_interface.h \
+  /home/emiliano/Documenti/better_env/benv/include/nest/dictdatum.h \
+  /home/emiliano/Documenti/better_env/benv/include/nest/dict.h \
+  /home/emiliano/Documenti/better_env/benv/include/nest/token.h \
   /usr/include/c++/11/iomanip \
   /usr/include/c++/11/locale \
   /usr/include/c++/11/bits/locale_facets_nonio.h \
@@ -10509,22 +10509,22 @@ CMakeFiles/custom_stdp_module_module.dir/stdp_synapse_alpha.o: ../stdp_synapse_a
   /usr/include/c++/11/bits/quoted_string.h \
   /usr/include/c++/11/sstream \
   /usr/include/c++/11/bits/sstream.tcc \
-  /home/emiliano/Documenti/other_env/other_e/include/nest/datum.h \
-  /home/emiliano/Documenti/other_env/other_e/include/nest/slitype.h \
-  /home/emiliano/Documenti/other_env/other_e/include/nest/slifunction.h \
-  /home/emiliano/Documenti/other_env/other_e/include/nest/interpret.h \
+  /home/emiliano/Documenti/better_env/benv/include/nest/datum.h \
+  /home/emiliano/Documenti/better_env/benv/include/nest/slitype.h \
+  /home/emiliano/Documenti/better_env/benv/include/nest/slifunction.h \
+  /home/emiliano/Documenti/better_env/benv/include/nest/interpret.h \
   /usr/include/c++/11/list \
   /usr/include/c++/11/bits/stl_list.h \
   /usr/include/c++/11/bits/allocated_ptr.h \
   /usr/include/c++/11/bits/list.tcc \
-  /home/emiliano/Documenti/other_env/other_e/include/nest/sliactions.h \
-  /home/emiliano/Documenti/other_env/other_e/include/nest/slibuiltins.h \
-  /home/emiliano/Documenti/other_env/other_e/include/nest/slimodule.h \
-  /home/emiliano/Documenti/other_env/other_e/include/nest/tokenstack.h \
-  /home/emiliano/Documenti/other_env/other_e/include/nest/tarrayobj.h \
-  /home/emiliano/Documenti/other_env/other_e/include/nest/tokenarray.h \
-  /home/emiliano/Documenti/other_env/other_e/include/nest/lockptrdatum.h \
-  /home/emiliano/Documenti/other_env/other_e/include/nest/lockptr.h \
+  /home/emiliano/Documenti/better_env/benv/include/nest/sliactions.h \
+  /home/emiliano/Documenti/better_env/benv/include/nest/slibuiltins.h \
+  /home/emiliano/Documenti/better_env/benv/include/nest/slimodule.h \
+  /home/emiliano/Documenti/better_env/benv/include/nest/tokenstack.h \
+  /home/emiliano/Documenti/better_env/benv/include/nest/tarrayobj.h \
+  /home/emiliano/Documenti/better_env/benv/include/nest/tokenarray.h \
+  /home/emiliano/Documenti/better_env/benv/include/nest/lockptrdatum.h \
+  /home/emiliano/Documenti/better_env/benv/include/nest/lockptr.h \
   /usr/include/c++/11/memory \
   /usr/include/c++/11/bits/stl_raw_storage_iter.h \
   /usr/include/c++/11/bits/align.h \
@@ -10538,34 +10538,34 @@ CMakeFiles/custom_stdp_module_module.dir/stdp_synapse_alpha.o: ../stdp_synapse_a
   /usr/include/c++/11/backward/auto_ptr.h \
   /usr/include/c++/11/pstl/glue_memory_defs.h \
   /usr/lib/gcc/x86_64-linux-gnu/11/include/omp.h \
-  /home/emiliano/Documenti/other_env/other_e/include/nest/secondary_event.h \
+  /home/emiliano/Documenti/better_env/benv/include/nest/secondary_event.h \
   /usr/include/c++/11/set \
   /usr/include/c++/11/bits/stl_set.h \
   /usr/include/c++/11/bits/stl_multiset.h \
-  /home/emiliano/Documenti/other_env/other_e/include/nest/dictutils.h \
-  /home/emiliano/Documenti/other_env/other_e/include/nest/arraydatum.h \
-  /home/emiliano/Documenti/other_env/other_e/include/nest/aggregatedatum.h \
-  /home/emiliano/Documenti/other_env/other_e/include/nest/allocator.h \
-  /home/emiliano/Documenti/other_env/other_e/include/nest/doubledatum.h \
-  /home/emiliano/Documenti/other_env/other_e/include/nest/numericdatum.h \
-  /home/emiliano/Documenti/other_env/other_e/include/nest/genericdatum.h \
-  /home/emiliano/Documenti/other_env/other_e/include/nest/integerdatum.h \
-  /home/emiliano/Documenti/other_env/other_e/include/nest/namedatum.h \
-  /home/emiliano/Documenti/other_env/other_e/include/nest/tokenutils.h \
-  /home/emiliano/Documenti/other_env/other_e/include/nest/nest_datums.h \
-  /home/emiliano/Documenti/other_env/other_e/include/nest/connection_id.h \
-  /home/emiliano/Documenti/other_env/other_e/include/nest/nestmodule.h \
-  /home/emiliano/Documenti/other_env/other_e/include/nest/generic_factory.h \
-  /home/emiliano/Documenti/other_env/other_e/include/nest/ntree.h \
+  /home/emiliano/Documenti/better_env/benv/include/nest/dictutils.h \
+  /home/emiliano/Documenti/better_env/benv/include/nest/arraydatum.h \
+  /home/emiliano/Documenti/better_env/benv/include/nest/aggregatedatum.h \
+  /home/emiliano/Documenti/better_env/benv/include/nest/allocator.h \
+  /home/emiliano/Documenti/better_env/benv/include/nest/doubledatum.h \
+  /home/emiliano/Documenti/better_env/benv/include/nest/numericdatum.h \
+  /home/emiliano/Documenti/better_env/benv/include/nest/genericdatum.h \
+  /home/emiliano/Documenti/better_env/benv/include/nest/integerdatum.h \
+  /home/emiliano/Documenti/better_env/benv/include/nest/namedatum.h \
+  /home/emiliano/Documenti/better_env/benv/include/nest/tokenutils.h \
+  /home/emiliano/Documenti/better_env/benv/include/nest/nest_datums.h \
+  /home/emiliano/Documenti/better_env/benv/include/nest/connection_id.h \
+  /home/emiliano/Documenti/better_env/benv/include/nest/nestmodule.h \
+  /home/emiliano/Documenti/better_env/benv/include/nest/generic_factory.h \
+  /home/emiliano/Documenti/better_env/benv/include/nest/ntree.h \
   /usr/include/c++/11/bitset \
   /usr/include/c++/11/iterator \
   /usr/include/c++/11/bits/stream_iterator.h \
-  /home/emiliano/Documenti/other_env/other_e/include/nest/position.h \
-  /home/emiliano/Documenti/other_env/other_e/include/nest/compose.hpp \
-  /home/emiliano/Documenti/other_env/other_e/include/nest/parameter.h \
-  /home/emiliano/Documenti/other_env/other_e/include/nest/nest_names.h \
-  /home/emiliano/Documenti/other_env/other_e/include/nest/node_collection.h \
-  /home/emiliano/Documenti/other_env/other_e/include/nest/random_generators.h \
+  /home/emiliano/Documenti/better_env/benv/include/nest/position.h \
+  /home/emiliano/Documenti/better_env/benv/include/nest/compose.hpp \
+  /home/emiliano/Documenti/better_env/benv/include/nest/parameter.h \
+  /home/emiliano/Documenti/better_env/benv/include/nest/nest_names.h \
+  /home/emiliano/Documenti/better_env/benv/include/nest/node_collection.h \
+  /home/emiliano/Documenti/better_env/benv/include/nest/random_generators.h \
   /usr/include/c++/11/random \
   /usr/include/c++/11/bits/random.h \
   /usr/include/x86_64-linux-gnu/c++/11/bits/opt_random.h \
@@ -10573,7 +10573,7 @@ CMakeFiles/custom_stdp_module_module.dir/stdp_synapse_alpha.o: ../stdp_synapse_a
   /usr/include/c++/11/numeric \
   /usr/include/c++/11/bits/stl_numeric.h \
   /usr/include/c++/11/pstl/glue_numeric_defs.h \
-  /home/emiliano/Documenti/other_env/other_e/include/nest/randutils.hpp \
+  /home/emiliano/Documenti/better_env/benv/include/nest/randutils.hpp \
   /usr/include/c++/11/chrono \
   /usr/include/c++/11/ratio \
   /usr/include/c++/11/bits/parse_numbers.h \
@@ -10589,20 +10589,20 @@ CMakeFiles/custom_stdp_module_module.dir/stdp_synapse_alpha.o: ../stdp_synapse_a
   /usr/include/x86_64-linux-gnu/bits/unistd.h \
   /usr/include/x86_64-linux-gnu/bits/unistd_ext.h \
   /usr/include/linux/close_range.h \
-  /home/emiliano/Documenti/other_env/other_e/include/nest/sharedptrdatum.h \
-  /home/emiliano/Documenti/other_env/other_e/include/nest/node.h \
-  /home/emiliano/Documenti/other_env/other_e/include/nest/deprecation_warning.h \
-  /home/emiliano/Documenti/other_env/other_e/include/nest/histentry.h \
-  /home/emiliano/Documenti/other_env/other_e/include/nest/connection.h \
-  /home/emiliano/Documenti/other_env/other_e/include/nest/common_synapse_properties.h \
-  /home/emiliano/Documenti/other_env/other_e/include/nest/connection_label.h \
-  /home/emiliano/Documenti/other_env/other_e/include/nest/nest.h \
-  /home/emiliano/Documenti/other_env/other_e/include/nest/logging.h \
-  /home/emiliano/Documenti/other_env/other_e/include/nest/connector_base_impl.h \
-  /home/emiliano/Documenti/other_env/other_e/include/nest/connector_base.h \
-  /home/emiliano/Documenti/other_env/other_e/include/nest/sort.h \
-  /home/emiliano/Documenti/other_env/other_e/include/nest/block_vector.h \
-  /home/emiliano/Documenti/other_env/other_e/include/nest/iterator_pair.h \
+  /home/emiliano/Documenti/better_env/benv/include/nest/sharedptrdatum.h \
+  /home/emiliano/Documenti/better_env/benv/include/nest/node.h \
+  /home/emiliano/Documenti/better_env/benv/include/nest/deprecation_warning.h \
+  /home/emiliano/Documenti/better_env/benv/include/nest/histentry.h \
+  /home/emiliano/Documenti/better_env/benv/include/nest/connection.h \
+  /home/emiliano/Documenti/better_env/benv/include/nest/common_synapse_properties.h \
+  /home/emiliano/Documenti/better_env/benv/include/nest/connection_label.h \
+  /home/emiliano/Documenti/better_env/benv/include/nest/nest.h \
+  /home/emiliano/Documenti/better_env/benv/include/nest/logging.h \
+  /home/emiliano/Documenti/better_env/benv/include/nest/connector_base_impl.h \
+  /home/emiliano/Documenti/better_env/benv/include/nest/connector_base.h \
+  /home/emiliano/Documenti/better_env/benv/include/nest/sort.h \
+  /home/emiliano/Documenti/better_env/benv/include/nest/block_vector.h \
+  /home/emiliano/Documenti/better_env/benv/include/nest/iterator_pair.h \
   /usr/include/boost/iterator/iterator_adaptor.hpp \
   /usr/include/boost/static_assert.hpp \
   /usr/include/boost/config.hpp \
@@ -10828,7 +10828,7 @@ CMakeFiles/custom_stdp_module_module.dir/stdp_synapse_alpha.o: ../stdp_synapse_a
   /usr/include/boost/utility/swap.hpp \
   /usr/include/boost/core/swap.hpp \
   /usr/include/boost/core/enable_if.hpp \
-  /home/emiliano/Documenti/other_env/other_e/include/nest/source.h \
+  /home/emiliano/Documenti/better_env/benv/include/nest/source.h \
   /usr/include/boost/sort/spreadsort/spreadsort.hpp \
   /usr/include/boost/type_traits.hpp \
   /usr/include/boost/type_traits/aligned_storage.hpp \
@@ -10965,20 +10965,20 @@ CMakeFiles/custom_stdp_module_module.dir/stdp_synapse_alpha.o: ../stdp_synapse_a
   /usr/include/boost/sort/spreadsort/detail/float_sort.hpp \
   /usr/include/boost/sort/spreadsort/string_sort.hpp \
   /usr/include/boost/sort/spreadsort/detail/string_sort.hpp \
-  /home/emiliano/Documenti/other_env/other_e/include/nest/vector_util.h \
-  /home/emiliano/Documenti/other_env/other_e/include/nest/spikecounter.h \
-  /home/emiliano/Documenti/other_env/other_e/include/nest/kernel_manager.h \
-  /home/emiliano/Documenti/other_env/other_e/include/nest/connection_manager.h \
-  /home/emiliano/Documenti/other_env/other_e/include/nest/stopwatch.h \
+  /home/emiliano/Documenti/better_env/benv/include/nest/vector_util.h \
+  /home/emiliano/Documenti/better_env/benv/include/nest/spikecounter.h \
+  /home/emiliano/Documenti/better_env/benv/include/nest/kernel_manager.h \
+  /home/emiliano/Documenti/better_env/benv/include/nest/connection_manager.h \
+  /home/emiliano/Documenti/better_env/benv/include/nest/stopwatch.h \
   /usr/include/x86_64-linux-gnu/sys/time.h \
-  /home/emiliano/Documenti/other_env/other_e/include/nest/conn_builder.h \
-  /home/emiliano/Documenti/other_env/other_e/include/nest/conn_parameter.h \
-  /home/emiliano/Documenti/other_env/other_e/include/nest/nest_timeconverter.h \
-  /home/emiliano/Documenti/other_env/other_e/include/nest/per_thread_bool_indicator.h \
+  /home/emiliano/Documenti/better_env/benv/include/nest/conn_builder.h \
+  /home/emiliano/Documenti/better_env/benv/include/nest/conn_parameter.h \
+  /home/emiliano/Documenti/better_env/benv/include/nest/nest_timeconverter.h \
+  /home/emiliano/Documenti/better_env/benv/include/nest/per_thread_bool_indicator.h \
   /usr/include/c++/11/atomic \
-  /home/emiliano/Documenti/other_env/other_e/include/nest/send_buffer_position.h \
-  /home/emiliano/Documenti/other_env/other_e/include/nest/source_table.h \
-  /home/emiliano/Documenti/other_env/other_e/include/nest/mpi_manager.h \
+  /home/emiliano/Documenti/better_env/benv/include/nest/send_buffer_position.h \
+  /home/emiliano/Documenti/better_env/benv/include/nest/source_table.h \
+  /home/emiliano/Documenti/better_env/benv/include/nest/mpi_manager.h \
   /usr/lib/x86_64-linux-gnu/openmpi/include/mpi.h \
   /usr/lib/x86_64-linux-gnu/openmpi/include/mpi_portable_platform.h \
   /usr/lib/x86_64-linux-gnu/openmpi/include/openmpi/ompi/mpi/cxx/mpicxx.h \
@@ -11012,70 +11012,70 @@ CMakeFiles/custom_stdp_module_module.dir/stdp_synapse_alpha.o: ../stdp_synapse_a
   /usr/lib/x86_64-linux-gnu/openmpi/include/openmpi/ompi/mpi/cxx/info_inln.h \
   /usr/lib/x86_64-linux-gnu/openmpi/include/openmpi/ompi/mpi/cxx/win_inln.h \
   /usr/lib/x86_64-linux-gnu/openmpi/include/openmpi/ompi/mpi/cxx/file_inln.h \
-  /home/emiliano/Documenti/other_env/other_e/include/nest/target_data.h \
-  /home/emiliano/Documenti/other_env/other_e/include/nest/source_table_position.h \
-  /home/emiliano/Documenti/other_env/other_e/include/nest/target_table.h \
-  /home/emiliano/Documenti/other_env/other_e/include/nest/target_table_devices.h \
-  /home/emiliano/Documenti/other_env/other_e/include/nest/event_delivery_manager.h \
-  /home/emiliano/Documenti/other_env/other_e/include/nest/buffer_resize_log.h \
-  /home/emiliano/Documenti/other_env/other_e/include/nest/io_manager.h \
-  /home/emiliano/Documenti/other_env/other_e/include/nest/recording_backend.h \
-  /home/emiliano/Documenti/other_env/other_e/include/nest/stimulation_backend.h \
-  /home/emiliano/Documenti/other_env/other_e/include/nest/stimulation_device.h \
-  /home/emiliano/Documenti/other_env/other_e/include/nest/device.h \
-  /home/emiliano/Documenti/other_env/other_e/include/nest/device_node.h \
-  /home/emiliano/Documenti/other_env/other_e/include/nest/logging_manager.h \
-  /home/emiliano/Documenti/other_env/other_e/include/nest/model_manager.h \
-  /home/emiliano/Documenti/other_env/other_e/include/nest/genericmodel.h \
-  /home/emiliano/Documenti/other_env/other_e/include/nest/model.h \
-  /home/emiliano/Documenti/other_env/other_e/include/nest/modelrange_manager.h \
-  /home/emiliano/Documenti/other_env/other_e/include/nest/modelrange.h \
-  /home/emiliano/Documenti/other_env/other_e/include/nest/module_manager.h \
+  /home/emiliano/Documenti/better_env/benv/include/nest/target_data.h \
+  /home/emiliano/Documenti/better_env/benv/include/nest/source_table_position.h \
+  /home/emiliano/Documenti/better_env/benv/include/nest/target_table.h \
+  /home/emiliano/Documenti/better_env/benv/include/nest/target_table_devices.h \
+  /home/emiliano/Documenti/better_env/benv/include/nest/event_delivery_manager.h \
+  /home/emiliano/Documenti/better_env/benv/include/nest/buffer_resize_log.h \
+  /home/emiliano/Documenti/better_env/benv/include/nest/io_manager.h \
+  /home/emiliano/Documenti/better_env/benv/include/nest/recording_backend.h \
+  /home/emiliano/Documenti/better_env/benv/include/nest/stimulation_backend.h \
+  /home/emiliano/Documenti/better_env/benv/include/nest/stimulation_device.h \
+  /home/emiliano/Documenti/better_env/benv/include/nest/device.h \
+  /home/emiliano/Documenti/better_env/benv/include/nest/device_node.h \
+  /home/emiliano/Documenti/better_env/benv/include/nest/logging_manager.h \
+  /home/emiliano/Documenti/better_env/benv/include/nest/model_manager.h \
+  /home/emiliano/Documenti/better_env/benv/include/nest/genericmodel.h \
+  /home/emiliano/Documenti/better_env/benv/include/nest/model.h \
+  /home/emiliano/Documenti/better_env/benv/include/nest/modelrange_manager.h \
+  /home/emiliano/Documenti/better_env/benv/include/nest/modelrange.h \
+  /home/emiliano/Documenti/better_env/benv/include/nest/module_manager.h \
   /usr/include/ltdl.h \
   /usr/include/libltdl/lt_system.h \
   /usr/include/c++/11/stdlib.h \
   /usr/include/libltdl/lt_error.h \
   /usr/include/libltdl/lt_dlloader.h \
-  /home/emiliano/Documenti/other_env/other_e/include/nest/music_manager.h \
-  /home/emiliano/Documenti/other_env/other_e/include/nest/node_manager.h \
-  /home/emiliano/Documenti/other_env/other_e/include/nest/sparse_node_array.h \
-  /home/emiliano/Documenti/other_env/other_e/include/nest/random_manager.h \
-  /home/emiliano/Documenti/other_env/other_e/include/nest/simulation_manager.h \
-  /home/emiliano/Documenti/other_env/other_e/include/nest/sp_manager.h \
-  /home/emiliano/Documenti/other_env/other_e/include/nest/growth_curve_factory.h \
-  /home/emiliano/Documenti/other_env/other_e/include/nest/growth_curve.h \
+  /home/emiliano/Documenti/better_env/benv/include/nest/music_manager.h \
+  /home/emiliano/Documenti/better_env/benv/include/nest/node_manager.h \
+  /home/emiliano/Documenti/better_env/benv/include/nest/sparse_node_array.h \
+  /home/emiliano/Documenti/better_env/benv/include/nest/random_manager.h \
+  /home/emiliano/Documenti/better_env/benv/include/nest/simulation_manager.h \
+  /home/emiliano/Documenti/better_env/benv/include/nest/sp_manager.h \
+  /home/emiliano/Documenti/better_env/benv/include/nest/growth_curve_factory.h \
+  /home/emiliano/Documenti/better_env/benv/include/nest/growth_curve.h \
   /usr/include/c++/11/fstream \
   /usr/include/x86_64-linux-gnu/c++/11/bits/basic_file.h \
   /usr/include/x86_64-linux-gnu/c++/11/bits/c++io.h \
   /usr/include/c++/11/bits/fstream.tcc \
-  /home/emiliano/Documenti/other_env/other_e/include/nest/weight_recorder.h \
-  /home/emiliano/Documenti/other_env/other_e/include/nest/recording_device.h \
-  /home/emiliano/Documenti/other_env/other_e/include/nest/delay_checker.h \
-  /home/emiliano/Documenti/other_env/other_e/include/nest/syn_id_delay.h \
-  /home/emiliano/Documenti/other_env/other_e/include/nest/connector_model.h \
-  /home/emiliano/Documenti/other_env/other_e/include/nest/event.h \
-  /home/emiliano/Documenti/other_env/other_e/include/nest/dictdatum.h \
-  /home/emiliano/Documenti/other_env/other_e/include/nest/dictutils.h \
-  /home/emiliano/Documenti/other_env/other_e/include/nest/histentry.h \
-  /home/emiliano/Documenti/other_env/other_e/include/nest/archiving_node.h \
-  /home/emiliano/Documenti/other_env/other_e/include/nest/structural_plasticity_node.h \
-  /home/emiliano/Documenti/other_env/other_e/include/nest/synaptic_element.h \
+  /home/emiliano/Documenti/better_env/benv/include/nest/weight_recorder.h \
+  /home/emiliano/Documenti/better_env/benv/include/nest/recording_device.h \
+  /home/emiliano/Documenti/better_env/benv/include/nest/delay_checker.h \
+  /home/emiliano/Documenti/better_env/benv/include/nest/syn_id_delay.h \
+  /home/emiliano/Documenti/better_env/benv/include/nest/connector_model.h \
+  /home/emiliano/Documenti/better_env/benv/include/nest/event.h \
+  /home/emiliano/Documenti/better_env/benv/include/nest/dictdatum.h \
+  /home/emiliano/Documenti/better_env/benv/include/nest/dictutils.h \
+  /home/emiliano/Documenti/better_env/benv/include/nest/histentry.h \
+  /home/emiliano/Documenti/better_env/benv/include/nest/archiving_node.h \
+  /home/emiliano/Documenti/better_env/benv/include/nest/structural_plasticity_node.h \
+  /home/emiliano/Documenti/better_env/benv/include/nest/synaptic_element.h \
   ../extended_hist_entry.h \
   ../extended_post_history_archiving_node.h \
-  /home/emiliano/Documenti/other_env/other_e/include/nest/structural_plasticity_node.h \
-  /home/emiliano/Documenti/other_env/other_e/include/nest/nest_time.h \
-  /home/emiliano/Documenti/other_env/other_e/include/nest/nest_types.h \
-  /home/emiliano/Documenti/other_env/other_e/include/nest/node.h \
-  /home/emiliano/Documenti/other_env/other_e/include/nest/kernel_manager.h \
-  /home/emiliano/Documenti/other_env/other_e/include/nest/nest_datums.h \
-  /home/emiliano/Documenti/other_env/other_e/include/nest/config.h \
-  /home/emiliano/Documenti/other_env/other_e/include/nest/nest_impl.h \
-  /home/emiliano/Documenti/other_env/other_e/include/nest/connector_model_impl.h \
-  /home/emiliano/Documenti/other_env/other_e/include/nest/secondary_event_impl.h \
-  /home/emiliano/Documenti/other_env/other_e/include/nest/genericmodel_impl.h \
-  /home/emiliano/Documenti/other_env/other_e/include/nest/model_manager_impl.h \
-  /home/emiliano/Documenti/other_env/other_e/include/nest/string_utils.h \
-  /home/emiliano/Documenti/other_env/other_e/include/nest/target_identifier.h
+  /home/emiliano/Documenti/better_env/benv/include/nest/structural_plasticity_node.h \
+  /home/emiliano/Documenti/better_env/benv/include/nest/nest_time.h \
+  /home/emiliano/Documenti/better_env/benv/include/nest/nest_types.h \
+  /home/emiliano/Documenti/better_env/benv/include/nest/node.h \
+  /home/emiliano/Documenti/better_env/benv/include/nest/kernel_manager.h \
+  /home/emiliano/Documenti/better_env/benv/include/nest/nest_datums.h \
+  /home/emiliano/Documenti/better_env/benv/include/nest/config.h \
+  /home/emiliano/Documenti/better_env/benv/include/nest/nest_impl.h \
+  /home/emiliano/Documenti/better_env/benv/include/nest/connector_model_impl.h \
+  /home/emiliano/Documenti/better_env/benv/include/nest/secondary_event_impl.h \
+  /home/emiliano/Documenti/better_env/benv/include/nest/genericmodel_impl.h \
+  /home/emiliano/Documenti/better_env/benv/include/nest/model_manager_impl.h \
+  /home/emiliano/Documenti/better_env/benv/include/nest/string_utils.h \
+  /home/emiliano/Documenti/better_env/benv/include/nest/target_identifier.h
 
 CMakeFiles/custom_stdp_module_module.dir/stdp_synapse_sinexp.o: ../stdp_synapse_sinexp.cpp \
   /usr/include/stdc-predef.h \
@@ -11175,8 +11175,8 @@ CMakeFiles/custom_stdp_module_module.dir/stdp_synapse_sinexp.o: ../stdp_synapse_
   /usr/include/c++/11/tr1/poly_hermite.tcc \
   /usr/include/c++/11/tr1/poly_laguerre.tcc \
   /usr/include/c++/11/tr1/riemann_zeta.tcc \
-  /home/emiliano/Documenti/other_env/other_e/include/nest/common_synapse_properties.h \
-  /home/emiliano/Documenti/other_env/other_e/include/nest/connector_model.h \
+  /home/emiliano/Documenti/better_env/benv/include/nest/common_synapse_properties.h \
+  /home/emiliano/Documenti/better_env/benv/include/nest/connector_model.h \
   /usr/include/c++/11/string \
   /usr/include/c++/11/bits/stringfwd.h \
   /usr/include/c++/11/bits/memoryfwd.h \
@@ -11262,12 +11262,12 @@ CMakeFiles/custom_stdp_module_module.dir/stdp_synapse_sinexp.o: ../stdp_synapse_
   /usr/include/x86_64-linux-gnu/bits/types/error_t.h \
   /usr/include/c++/11/bits/charconv.h \
   /usr/include/c++/11/bits/basic_string.tcc \
-  /home/emiliano/Documenti/other_env/other_e/include/nest/numerics.h \
-  /home/emiliano/Documenti/other_env/other_e/include/nest/config.h \
+  /home/emiliano/Documenti/better_env/benv/include/nest/numerics.h \
+  /home/emiliano/Documenti/better_env/benv/include/nest/config.h \
   /usr/include/c++/11/cassert \
   /usr/include/assert.h \
-  /home/emiliano/Documenti/other_env/other_e/include/nest/enum_bitfield.h \
-  /home/emiliano/Documenti/other_env/other_e/include/nest/event.h \
+  /home/emiliano/Documenti/better_env/benv/include/nest/enum_bitfield.h \
+  /home/emiliano/Documenti/better_env/benv/include/nest/event.h \
   /usr/include/c++/11/algorithm \
   /usr/include/c++/11/utility \
   /usr/include/c++/11/bits/stl_relops.h \
@@ -11304,8 +11304,8 @@ CMakeFiles/custom_stdp_module_module.dir/stdp_synapse_sinexp.o: ../stdp_synapse_
   /usr/include/strings.h \
   /usr/include/x86_64-linux-gnu/bits/strings_fortified.h \
   /usr/include/x86_64-linux-gnu/bits/string_fortified.h \
-  /home/emiliano/Documenti/other_env/other_e/include/nest/exceptions.h \
-  /home/emiliano/Documenti/other_env/other_e/include/nest/nest_time.h \
+  /home/emiliano/Documenti/better_env/benv/include/nest/exceptions.h \
+  /home/emiliano/Documenti/better_env/benv/include/nest/nest_time.h \
   /usr/include/c++/11/cfloat \
   /usr/lib/gcc/x86_64-linux-gnu/11/include/float.h \
   /usr/include/c++/11/iostream \
@@ -11336,7 +11336,7 @@ CMakeFiles/custom_stdp_module_module.dir/stdp_synapse_sinexp.o: ../stdp_synapse_
   /usr/include/c++/11/bits/ostream.tcc \
   /usr/include/c++/11/istream \
   /usr/include/c++/11/bits/istream.tcc \
-  /home/emiliano/Documenti/other_env/other_e/include/nest/nest_types.h \
+  /home/emiliano/Documenti/better_env/benv/include/nest/nest_types.h \
   /usr/include/c++/11/climits \
   /usr/lib/gcc/x86_64-linux-gnu/11/include/limits.h \
   /usr/lib/gcc/x86_64-linux-gnu/11/include/syslimits.h \
@@ -11348,7 +11348,7 @@ CMakeFiles/custom_stdp_module_module.dir/stdp_synapse_sinexp.o: ../stdp_synapse_
   /usr/include/x86_64-linux-gnu/bits/xopen_lim.h \
   /usr/include/x86_64-linux-gnu/bits/uio_lim.h \
   /usr/include/c++/11/cstddef \
-  /home/emiliano/Documenti/other_env/other_e/include/nest/name.h \
+  /home/emiliano/Documenti/better_env/benv/include/nest/name.h \
   /usr/include/c++/11/deque \
   /usr/include/c++/11/bits/stl_deque.h \
   /usr/include/c++/11/bits/deque.tcc \
@@ -11356,15 +11356,15 @@ CMakeFiles/custom_stdp_module_module.dir/stdp_synapse_sinexp.o: ../stdp_synapse_
   /usr/include/c++/11/bits/stl_tree.h \
   /usr/include/c++/11/bits/stl_map.h \
   /usr/include/c++/11/bits/stl_multimap.h \
-  /home/emiliano/Documenti/other_env/other_e/include/nest/sliexceptions.h \
-  /home/emiliano/Documenti/other_env/other_e/include/nest/spike_data.h \
-  /home/emiliano/Documenti/other_env/other_e/include/nest/target.h \
-  /home/emiliano/Documenti/other_env/other_e/include/nest/static_assert.h \
-  /home/emiliano/Documenti/other_env/other_e/include/nest/vp_manager.h \
-  /home/emiliano/Documenti/other_env/other_e/include/nest/manager_interface.h \
-  /home/emiliano/Documenti/other_env/other_e/include/nest/dictdatum.h \
-  /home/emiliano/Documenti/other_env/other_e/include/nest/dict.h \
-  /home/emiliano/Documenti/other_env/other_e/include/nest/token.h \
+  /home/emiliano/Documenti/better_env/benv/include/nest/sliexceptions.h \
+  /home/emiliano/Documenti/better_env/benv/include/nest/spike_data.h \
+  /home/emiliano/Documenti/better_env/benv/include/nest/target.h \
+  /home/emiliano/Documenti/better_env/benv/include/nest/static_assert.h \
+  /home/emiliano/Documenti/better_env/benv/include/nest/vp_manager.h \
+  /home/emiliano/Documenti/better_env/benv/include/nest/manager_interface.h \
+  /home/emiliano/Documenti/better_env/benv/include/nest/dictdatum.h \
+  /home/emiliano/Documenti/better_env/benv/include/nest/dict.h \
+  /home/emiliano/Documenti/better_env/benv/include/nest/token.h \
   /usr/include/c++/11/iomanip \
   /usr/include/c++/11/locale \
   /usr/include/c++/11/bits/locale_facets_nonio.h \
@@ -11379,22 +11379,22 @@ CMakeFiles/custom_stdp_module_module.dir/stdp_synapse_sinexp.o: ../stdp_synapse_
   /usr/include/c++/11/bits/quoted_string.h \
   /usr/include/c++/11/sstream \
   /usr/include/c++/11/bits/sstream.tcc \
-  /home/emiliano/Documenti/other_env/other_e/include/nest/datum.h \
-  /home/emiliano/Documenti/other_env/other_e/include/nest/slitype.h \
-  /home/emiliano/Documenti/other_env/other_e/include/nest/slifunction.h \
-  /home/emiliano/Documenti/other_env/other_e/include/nest/interpret.h \
+  /home/emiliano/Documenti/better_env/benv/include/nest/datum.h \
+  /home/emiliano/Documenti/better_env/benv/include/nest/slitype.h \
+  /home/emiliano/Documenti/better_env/benv/include/nest/slifunction.h \
+  /home/emiliano/Documenti/better_env/benv/include/nest/interpret.h \
   /usr/include/c++/11/list \
   /usr/include/c++/11/bits/stl_list.h \
   /usr/include/c++/11/bits/allocated_ptr.h \
   /usr/include/c++/11/bits/list.tcc \
-  /home/emiliano/Documenti/other_env/other_e/include/nest/sliactions.h \
-  /home/emiliano/Documenti/other_env/other_e/include/nest/slibuiltins.h \
-  /home/emiliano/Documenti/other_env/other_e/include/nest/slimodule.h \
-  /home/emiliano/Documenti/other_env/other_e/include/nest/tokenstack.h \
-  /home/emiliano/Documenti/other_env/other_e/include/nest/tarrayobj.h \
-  /home/emiliano/Documenti/other_env/other_e/include/nest/tokenarray.h \
-  /home/emiliano/Documenti/other_env/other_e/include/nest/lockptrdatum.h \
-  /home/emiliano/Documenti/other_env/other_e/include/nest/lockptr.h \
+  /home/emiliano/Documenti/better_env/benv/include/nest/sliactions.h \
+  /home/emiliano/Documenti/better_env/benv/include/nest/slibuiltins.h \
+  /home/emiliano/Documenti/better_env/benv/include/nest/slimodule.h \
+  /home/emiliano/Documenti/better_env/benv/include/nest/tokenstack.h \
+  /home/emiliano/Documenti/better_env/benv/include/nest/tarrayobj.h \
+  /home/emiliano/Documenti/better_env/benv/include/nest/tokenarray.h \
+  /home/emiliano/Documenti/better_env/benv/include/nest/lockptrdatum.h \
+  /home/emiliano/Documenti/better_env/benv/include/nest/lockptr.h \
   /usr/include/c++/11/memory \
   /usr/include/c++/11/bits/stl_raw_storage_iter.h \
   /usr/include/c++/11/bits/align.h \
@@ -11408,34 +11408,34 @@ CMakeFiles/custom_stdp_module_module.dir/stdp_synapse_sinexp.o: ../stdp_synapse_
   /usr/include/c++/11/backward/auto_ptr.h \
   /usr/include/c++/11/pstl/glue_memory_defs.h \
   /usr/lib/gcc/x86_64-linux-gnu/11/include/omp.h \
-  /home/emiliano/Documenti/other_env/other_e/include/nest/secondary_event.h \
+  /home/emiliano/Documenti/better_env/benv/include/nest/secondary_event.h \
   /usr/include/c++/11/set \
   /usr/include/c++/11/bits/stl_set.h \
   /usr/include/c++/11/bits/stl_multiset.h \
-  /home/emiliano/Documenti/other_env/other_e/include/nest/dictutils.h \
-  /home/emiliano/Documenti/other_env/other_e/include/nest/arraydatum.h \
-  /home/emiliano/Documenti/other_env/other_e/include/nest/aggregatedatum.h \
-  /home/emiliano/Documenti/other_env/other_e/include/nest/allocator.h \
-  /home/emiliano/Documenti/other_env/other_e/include/nest/doubledatum.h \
-  /home/emiliano/Documenti/other_env/other_e/include/nest/numericdatum.h \
-  /home/emiliano/Documenti/other_env/other_e/include/nest/genericdatum.h \
-  /home/emiliano/Documenti/other_env/other_e/include/nest/integerdatum.h \
-  /home/emiliano/Documenti/other_env/other_e/include/nest/namedatum.h \
-  /home/emiliano/Documenti/other_env/other_e/include/nest/tokenutils.h \
-  /home/emiliano/Documenti/other_env/other_e/include/nest/nest_datums.h \
-  /home/emiliano/Documenti/other_env/other_e/include/nest/connection_id.h \
-  /home/emiliano/Documenti/other_env/other_e/include/nest/nestmodule.h \
-  /home/emiliano/Documenti/other_env/other_e/include/nest/generic_factory.h \
-  /home/emiliano/Documenti/other_env/other_e/include/nest/ntree.h \
+  /home/emiliano/Documenti/better_env/benv/include/nest/dictutils.h \
+  /home/emiliano/Documenti/better_env/benv/include/nest/arraydatum.h \
+  /home/emiliano/Documenti/better_env/benv/include/nest/aggregatedatum.h \
+  /home/emiliano/Documenti/better_env/benv/include/nest/allocator.h \
+  /home/emiliano/Documenti/better_env/benv/include/nest/doubledatum.h \
+  /home/emiliano/Documenti/better_env/benv/include/nest/numericdatum.h \
+  /home/emiliano/Documenti/better_env/benv/include/nest/genericdatum.h \
+  /home/emiliano/Documenti/better_env/benv/include/nest/integerdatum.h \
+  /home/emiliano/Documenti/better_env/benv/include/nest/namedatum.h \
+  /home/emiliano/Documenti/better_env/benv/include/nest/tokenutils.h \
+  /home/emiliano/Documenti/better_env/benv/include/nest/nest_datums.h \
+  /home/emiliano/Documenti/better_env/benv/include/nest/connection_id.h \
+  /home/emiliano/Documenti/better_env/benv/include/nest/nestmodule.h \
+  /home/emiliano/Documenti/better_env/benv/include/nest/generic_factory.h \
+  /home/emiliano/Documenti/better_env/benv/include/nest/ntree.h \
   /usr/include/c++/11/bitset \
   /usr/include/c++/11/iterator \
   /usr/include/c++/11/bits/stream_iterator.h \
-  /home/emiliano/Documenti/other_env/other_e/include/nest/position.h \
-  /home/emiliano/Documenti/other_env/other_e/include/nest/compose.hpp \
-  /home/emiliano/Documenti/other_env/other_e/include/nest/parameter.h \
-  /home/emiliano/Documenti/other_env/other_e/include/nest/nest_names.h \
-  /home/emiliano/Documenti/other_env/other_e/include/nest/node_collection.h \
-  /home/emiliano/Documenti/other_env/other_e/include/nest/random_generators.h \
+  /home/emiliano/Documenti/better_env/benv/include/nest/position.h \
+  /home/emiliano/Documenti/better_env/benv/include/nest/compose.hpp \
+  /home/emiliano/Documenti/better_env/benv/include/nest/parameter.h \
+  /home/emiliano/Documenti/better_env/benv/include/nest/nest_names.h \
+  /home/emiliano/Documenti/better_env/benv/include/nest/node_collection.h \
+  /home/emiliano/Documenti/better_env/benv/include/nest/random_generators.h \
   /usr/include/c++/11/random \
   /usr/include/c++/11/bits/random.h \
   /usr/include/x86_64-linux-gnu/c++/11/bits/opt_random.h \
@@ -11443,7 +11443,7 @@ CMakeFiles/custom_stdp_module_module.dir/stdp_synapse_sinexp.o: ../stdp_synapse_
   /usr/include/c++/11/numeric \
   /usr/include/c++/11/bits/stl_numeric.h \
   /usr/include/c++/11/pstl/glue_numeric_defs.h \
-  /home/emiliano/Documenti/other_env/other_e/include/nest/randutils.hpp \
+  /home/emiliano/Documenti/better_env/benv/include/nest/randutils.hpp \
   /usr/include/c++/11/chrono \
   /usr/include/c++/11/ratio \
   /usr/include/c++/11/bits/parse_numbers.h \
@@ -11459,20 +11459,20 @@ CMakeFiles/custom_stdp_module_module.dir/stdp_synapse_sinexp.o: ../stdp_synapse_
   /usr/include/x86_64-linux-gnu/bits/unistd.h \
   /usr/include/x86_64-linux-gnu/bits/unistd_ext.h \
   /usr/include/linux/close_range.h \
-  /home/emiliano/Documenti/other_env/other_e/include/nest/sharedptrdatum.h \
-  /home/emiliano/Documenti/other_env/other_e/include/nest/node.h \
-  /home/emiliano/Documenti/other_env/other_e/include/nest/deprecation_warning.h \
-  /home/emiliano/Documenti/other_env/other_e/include/nest/histentry.h \
-  /home/emiliano/Documenti/other_env/other_e/include/nest/connection.h \
-  /home/emiliano/Documenti/other_env/other_e/include/nest/common_synapse_properties.h \
-  /home/emiliano/Documenti/other_env/other_e/include/nest/connection_label.h \
-  /home/emiliano/Documenti/other_env/other_e/include/nest/nest.h \
-  /home/emiliano/Documenti/other_env/other_e/include/nest/logging.h \
-  /home/emiliano/Documenti/other_env/other_e/include/nest/connector_base_impl.h \
-  /home/emiliano/Documenti/other_env/other_e/include/nest/connector_base.h \
-  /home/emiliano/Documenti/other_env/other_e/include/nest/sort.h \
-  /home/emiliano/Documenti/other_env/other_e/include/nest/block_vector.h \
-  /home/emiliano/Documenti/other_env/other_e/include/nest/iterator_pair.h \
+  /home/emiliano/Documenti/better_env/benv/include/nest/sharedptrdatum.h \
+  /home/emiliano/Documenti/better_env/benv/include/nest/node.h \
+  /home/emiliano/Documenti/better_env/benv/include/nest/deprecation_warning.h \
+  /home/emiliano/Documenti/better_env/benv/include/nest/histentry.h \
+  /home/emiliano/Documenti/better_env/benv/include/nest/connection.h \
+  /home/emiliano/Documenti/better_env/benv/include/nest/common_synapse_properties.h \
+  /home/emiliano/Documenti/better_env/benv/include/nest/connection_label.h \
+  /home/emiliano/Documenti/better_env/benv/include/nest/nest.h \
+  /home/emiliano/Documenti/better_env/benv/include/nest/logging.h \
+  /home/emiliano/Documenti/better_env/benv/include/nest/connector_base_impl.h \
+  /home/emiliano/Documenti/better_env/benv/include/nest/connector_base.h \
+  /home/emiliano/Documenti/better_env/benv/include/nest/sort.h \
+  /home/emiliano/Documenti/better_env/benv/include/nest/block_vector.h \
+  /home/emiliano/Documenti/better_env/benv/include/nest/iterator_pair.h \
   /usr/include/boost/iterator/iterator_adaptor.hpp \
   /usr/include/boost/static_assert.hpp \
   /usr/include/boost/config.hpp \
@@ -11698,7 +11698,7 @@ CMakeFiles/custom_stdp_module_module.dir/stdp_synapse_sinexp.o: ../stdp_synapse_
   /usr/include/boost/utility/swap.hpp \
   /usr/include/boost/core/swap.hpp \
   /usr/include/boost/core/enable_if.hpp \
-  /home/emiliano/Documenti/other_env/other_e/include/nest/source.h \
+  /home/emiliano/Documenti/better_env/benv/include/nest/source.h \
   /usr/include/boost/sort/spreadsort/spreadsort.hpp \
   /usr/include/boost/type_traits.hpp \
   /usr/include/boost/type_traits/aligned_storage.hpp \
@@ -11835,20 +11835,20 @@ CMakeFiles/custom_stdp_module_module.dir/stdp_synapse_sinexp.o: ../stdp_synapse_
   /usr/include/boost/sort/spreadsort/detail/float_sort.hpp \
   /usr/include/boost/sort/spreadsort/string_sort.hpp \
   /usr/include/boost/sort/spreadsort/detail/string_sort.hpp \
-  /home/emiliano/Documenti/other_env/other_e/include/nest/vector_util.h \
-  /home/emiliano/Documenti/other_env/other_e/include/nest/spikecounter.h \
-  /home/emiliano/Documenti/other_env/other_e/include/nest/kernel_manager.h \
-  /home/emiliano/Documenti/other_env/other_e/include/nest/connection_manager.h \
-  /home/emiliano/Documenti/other_env/other_e/include/nest/stopwatch.h \
+  /home/emiliano/Documenti/better_env/benv/include/nest/vector_util.h \
+  /home/emiliano/Documenti/better_env/benv/include/nest/spikecounter.h \
+  /home/emiliano/Documenti/better_env/benv/include/nest/kernel_manager.h \
+  /home/emiliano/Documenti/better_env/benv/include/nest/connection_manager.h \
+  /home/emiliano/Documenti/better_env/benv/include/nest/stopwatch.h \
   /usr/include/x86_64-linux-gnu/sys/time.h \
-  /home/emiliano/Documenti/other_env/other_e/include/nest/conn_builder.h \
-  /home/emiliano/Documenti/other_env/other_e/include/nest/conn_parameter.h \
-  /home/emiliano/Documenti/other_env/other_e/include/nest/nest_timeconverter.h \
-  /home/emiliano/Documenti/other_env/other_e/include/nest/per_thread_bool_indicator.h \
+  /home/emiliano/Documenti/better_env/benv/include/nest/conn_builder.h \
+  /home/emiliano/Documenti/better_env/benv/include/nest/conn_parameter.h \
+  /home/emiliano/Documenti/better_env/benv/include/nest/nest_timeconverter.h \
+  /home/emiliano/Documenti/better_env/benv/include/nest/per_thread_bool_indicator.h \
   /usr/include/c++/11/atomic \
-  /home/emiliano/Documenti/other_env/other_e/include/nest/send_buffer_position.h \
-  /home/emiliano/Documenti/other_env/other_e/include/nest/source_table.h \
-  /home/emiliano/Documenti/other_env/other_e/include/nest/mpi_manager.h \
+  /home/emiliano/Documenti/better_env/benv/include/nest/send_buffer_position.h \
+  /home/emiliano/Documenti/better_env/benv/include/nest/source_table.h \
+  /home/emiliano/Documenti/better_env/benv/include/nest/mpi_manager.h \
   /usr/lib/x86_64-linux-gnu/openmpi/include/mpi.h \
   /usr/lib/x86_64-linux-gnu/openmpi/include/mpi_portable_platform.h \
   /usr/lib/x86_64-linux-gnu/openmpi/include/openmpi/ompi/mpi/cxx/mpicxx.h \
@@ -11882,70 +11882,70 @@ CMakeFiles/custom_stdp_module_module.dir/stdp_synapse_sinexp.o: ../stdp_synapse_
   /usr/lib/x86_64-linux-gnu/openmpi/include/openmpi/ompi/mpi/cxx/info_inln.h \
   /usr/lib/x86_64-linux-gnu/openmpi/include/openmpi/ompi/mpi/cxx/win_inln.h \
   /usr/lib/x86_64-linux-gnu/openmpi/include/openmpi/ompi/mpi/cxx/file_inln.h \
-  /home/emiliano/Documenti/other_env/other_e/include/nest/target_data.h \
-  /home/emiliano/Documenti/other_env/other_e/include/nest/source_table_position.h \
-  /home/emiliano/Documenti/other_env/other_e/include/nest/target_table.h \
-  /home/emiliano/Documenti/other_env/other_e/include/nest/target_table_devices.h \
-  /home/emiliano/Documenti/other_env/other_e/include/nest/event_delivery_manager.h \
-  /home/emiliano/Documenti/other_env/other_e/include/nest/buffer_resize_log.h \
-  /home/emiliano/Documenti/other_env/other_e/include/nest/io_manager.h \
-  /home/emiliano/Documenti/other_env/other_e/include/nest/recording_backend.h \
-  /home/emiliano/Documenti/other_env/other_e/include/nest/stimulation_backend.h \
-  /home/emiliano/Documenti/other_env/other_e/include/nest/stimulation_device.h \
-  /home/emiliano/Documenti/other_env/other_e/include/nest/device.h \
-  /home/emiliano/Documenti/other_env/other_e/include/nest/device_node.h \
-  /home/emiliano/Documenti/other_env/other_e/include/nest/logging_manager.h \
-  /home/emiliano/Documenti/other_env/other_e/include/nest/model_manager.h \
-  /home/emiliano/Documenti/other_env/other_e/include/nest/genericmodel.h \
-  /home/emiliano/Documenti/other_env/other_e/include/nest/model.h \
-  /home/emiliano/Documenti/other_env/other_e/include/nest/modelrange_manager.h \
-  /home/emiliano/Documenti/other_env/other_e/include/nest/modelrange.h \
-  /home/emiliano/Documenti/other_env/other_e/include/nest/module_manager.h \
+  /home/emiliano/Documenti/better_env/benv/include/nest/target_data.h \
+  /home/emiliano/Documenti/better_env/benv/include/nest/source_table_position.h \
+  /home/emiliano/Documenti/better_env/benv/include/nest/target_table.h \
+  /home/emiliano/Documenti/better_env/benv/include/nest/target_table_devices.h \
+  /home/emiliano/Documenti/better_env/benv/include/nest/event_delivery_manager.h \
+  /home/emiliano/Documenti/better_env/benv/include/nest/buffer_resize_log.h \
+  /home/emiliano/Documenti/better_env/benv/include/nest/io_manager.h \
+  /home/emiliano/Documenti/better_env/benv/include/nest/recording_backend.h \
+  /home/emiliano/Documenti/better_env/benv/include/nest/stimulation_backend.h \
+  /home/emiliano/Documenti/better_env/benv/include/nest/stimulation_device.h \
+  /home/emiliano/Documenti/better_env/benv/include/nest/device.h \
+  /home/emiliano/Documenti/better_env/benv/include/nest/device_node.h \
+  /home/emiliano/Documenti/better_env/benv/include/nest/logging_manager.h \
+  /home/emiliano/Documenti/better_env/benv/include/nest/model_manager.h \
+  /home/emiliano/Documenti/better_env/benv/include/nest/genericmodel.h \
+  /home/emiliano/Documenti/better_env/benv/include/nest/model.h \
+  /home/emiliano/Documenti/better_env/benv/include/nest/modelrange_manager.h \
+  /home/emiliano/Documenti/better_env/benv/include/nest/modelrange.h \
+  /home/emiliano/Documenti/better_env/benv/include/nest/module_manager.h \
   /usr/include/ltdl.h \
   /usr/include/libltdl/lt_system.h \
   /usr/include/c++/11/stdlib.h \
   /usr/include/libltdl/lt_error.h \
   /usr/include/libltdl/lt_dlloader.h \
-  /home/emiliano/Documenti/other_env/other_e/include/nest/music_manager.h \
-  /home/emiliano/Documenti/other_env/other_e/include/nest/node_manager.h \
-  /home/emiliano/Documenti/other_env/other_e/include/nest/sparse_node_array.h \
-  /home/emiliano/Documenti/other_env/other_e/include/nest/random_manager.h \
-  /home/emiliano/Documenti/other_env/other_e/include/nest/simulation_manager.h \
-  /home/emiliano/Documenti/other_env/other_e/include/nest/sp_manager.h \
-  /home/emiliano/Documenti/other_env/other_e/include/nest/growth_curve_factory.h \
-  /home/emiliano/Documenti/other_env/other_e/include/nest/growth_curve.h \
+  /home/emiliano/Documenti/better_env/benv/include/nest/music_manager.h \
+  /home/emiliano/Documenti/better_env/benv/include/nest/node_manager.h \
+  /home/emiliano/Documenti/better_env/benv/include/nest/sparse_node_array.h \
+  /home/emiliano/Documenti/better_env/benv/include/nest/random_manager.h \
+  /home/emiliano/Documenti/better_env/benv/include/nest/simulation_manager.h \
+  /home/emiliano/Documenti/better_env/benv/include/nest/sp_manager.h \
+  /home/emiliano/Documenti/better_env/benv/include/nest/growth_curve_factory.h \
+  /home/emiliano/Documenti/better_env/benv/include/nest/growth_curve.h \
   /usr/include/c++/11/fstream \
   /usr/include/x86_64-linux-gnu/c++/11/bits/basic_file.h \
   /usr/include/x86_64-linux-gnu/c++/11/bits/c++io.h \
   /usr/include/c++/11/bits/fstream.tcc \
-  /home/emiliano/Documenti/other_env/other_e/include/nest/weight_recorder.h \
-  /home/emiliano/Documenti/other_env/other_e/include/nest/recording_device.h \
-  /home/emiliano/Documenti/other_env/other_e/include/nest/delay_checker.h \
-  /home/emiliano/Documenti/other_env/other_e/include/nest/syn_id_delay.h \
-  /home/emiliano/Documenti/other_env/other_e/include/nest/connector_model.h \
-  /home/emiliano/Documenti/other_env/other_e/include/nest/event.h \
-  /home/emiliano/Documenti/other_env/other_e/include/nest/dictdatum.h \
-  /home/emiliano/Documenti/other_env/other_e/include/nest/dictutils.h \
-  /home/emiliano/Documenti/other_env/other_e/include/nest/histentry.h \
-  /home/emiliano/Documenti/other_env/other_e/include/nest/archiving_node.h \
-  /home/emiliano/Documenti/other_env/other_e/include/nest/structural_plasticity_node.h \
-  /home/emiliano/Documenti/other_env/other_e/include/nest/synaptic_element.h \
+  /home/emiliano/Documenti/better_env/benv/include/nest/weight_recorder.h \
+  /home/emiliano/Documenti/better_env/benv/include/nest/recording_device.h \
+  /home/emiliano/Documenti/better_env/benv/include/nest/delay_checker.h \
+  /home/emiliano/Documenti/better_env/benv/include/nest/syn_id_delay.h \
+  /home/emiliano/Documenti/better_env/benv/include/nest/connector_model.h \
+  /home/emiliano/Documenti/better_env/benv/include/nest/event.h \
+  /home/emiliano/Documenti/better_env/benv/include/nest/dictdatum.h \
+  /home/emiliano/Documenti/better_env/benv/include/nest/dictutils.h \
+  /home/emiliano/Documenti/better_env/benv/include/nest/histentry.h \
+  /home/emiliano/Documenti/better_env/benv/include/nest/archiving_node.h \
+  /home/emiliano/Documenti/better_env/benv/include/nest/structural_plasticity_node.h \
+  /home/emiliano/Documenti/better_env/benv/include/nest/synaptic_element.h \
   ../extended_hist_entry.h \
   ../extended_post_history_archiving_node.h \
-  /home/emiliano/Documenti/other_env/other_e/include/nest/structural_plasticity_node.h \
-  /home/emiliano/Documenti/other_env/other_e/include/nest/nest_time.h \
-  /home/emiliano/Documenti/other_env/other_e/include/nest/nest_types.h \
-  /home/emiliano/Documenti/other_env/other_e/include/nest/node.h \
-  /home/emiliano/Documenti/other_env/other_e/include/nest/kernel_manager.h \
-  /home/emiliano/Documenti/other_env/other_e/include/nest/nest_datums.h \
-  /home/emiliano/Documenti/other_env/other_e/include/nest/config.h \
-  /home/emiliano/Documenti/other_env/other_e/include/nest/nest_impl.h \
-  /home/emiliano/Documenti/other_env/other_e/include/nest/connector_model_impl.h \
-  /home/emiliano/Documenti/other_env/other_e/include/nest/secondary_event_impl.h \
-  /home/emiliano/Documenti/other_env/other_e/include/nest/genericmodel_impl.h \
-  /home/emiliano/Documenti/other_env/other_e/include/nest/model_manager_impl.h \
-  /home/emiliano/Documenti/other_env/other_e/include/nest/string_utils.h \
-  /home/emiliano/Documenti/other_env/other_e/include/nest/target_identifier.h
+  /home/emiliano/Documenti/better_env/benv/include/nest/structural_plasticity_node.h \
+  /home/emiliano/Documenti/better_env/benv/include/nest/nest_time.h \
+  /home/emiliano/Documenti/better_env/benv/include/nest/nest_types.h \
+  /home/emiliano/Documenti/better_env/benv/include/nest/node.h \
+  /home/emiliano/Documenti/better_env/benv/include/nest/kernel_manager.h \
+  /home/emiliano/Documenti/better_env/benv/include/nest/nest_datums.h \
+  /home/emiliano/Documenti/better_env/benv/include/nest/config.h \
+  /home/emiliano/Documenti/better_env/benv/include/nest/nest_impl.h \
+  /home/emiliano/Documenti/better_env/benv/include/nest/connector_model_impl.h \
+  /home/emiliano/Documenti/better_env/benv/include/nest/secondary_event_impl.h \
+  /home/emiliano/Documenti/better_env/benv/include/nest/genericmodel_impl.h \
+  /home/emiliano/Documenti/better_env/benv/include/nest/model_manager_impl.h \
+  /home/emiliano/Documenti/better_env/benv/include/nest/string_utils.h \
+  /home/emiliano/Documenti/better_env/benv/include/nest/target_identifier.h
 
 CMakeFiles/custom_stdp_module_module.dir/tracking_neuron_nestml.o: ../tracking_neuron_nestml.cpp \
   /usr/include/stdc-predef.h \
@@ -11962,8 +11962,8 @@ CMakeFiles/custom_stdp_module_module.dir/tracking_neuron_nestml.o: ../tracking_n
   /usr/include/x86_64-linux-gnu/gnu/stubs-64.h \
   /usr/include/x86_64-linux-gnu/c++/11/bits/cpu_defines.h \
   /usr/include/c++/11/pstl/pstl_config.h \
-  /home/emiliano/Documenti/other_env/other_e/include/nest/numerics.h \
-  /home/emiliano/Documenti/other_env/other_e/include/nest/config.h \
+  /home/emiliano/Documenti/better_env/benv/include/nest/numerics.h \
+  /home/emiliano/Documenti/better_env/benv/include/nest/config.h \
   /usr/include/c++/11/cassert \
   /usr/include/assert.h \
   /usr/include/c++/11/cmath \
@@ -12048,8 +12048,8 @@ CMakeFiles/custom_stdp_module_module.dir/tracking_neuron_nestml.o: ../tracking_n
   /usr/include/c++/11/tr1/poly_hermite.tcc \
   /usr/include/c++/11/tr1/poly_laguerre.tcc \
   /usr/include/c++/11/tr1/riemann_zeta.tcc \
-  /home/emiliano/Documenti/other_env/other_e/include/nest/exceptions.h \
-  /home/emiliano/Documenti/other_env/other_e/include/nest/nest_time.h \
+  /home/emiliano/Documenti/better_env/benv/include/nest/exceptions.h \
+  /home/emiliano/Documenti/better_env/benv/include/nest/nest_time.h \
   /usr/include/c++/11/cfloat \
   /usr/lib/gcc/x86_64-linux-gnu/11/include/float.h \
   /usr/include/c++/11/cstdlib \
@@ -12166,8 +12166,8 @@ CMakeFiles/custom_stdp_module_module.dir/tracking_neuron_nestml.o: ../tracking_n
   /usr/include/c++/11/bits/ostream.tcc \
   /usr/include/c++/11/istream \
   /usr/include/c++/11/bits/istream.tcc \
-  /home/emiliano/Documenti/other_env/other_e/include/nest/numerics.h \
-  /home/emiliano/Documenti/other_env/other_e/include/nest/nest_types.h \
+  /home/emiliano/Documenti/better_env/benv/include/nest/numerics.h \
+  /home/emiliano/Documenti/better_env/benv/include/nest/nest_types.h \
   /usr/include/c++/11/climits \
   /usr/lib/gcc/x86_64-linux-gnu/11/include/limits.h \
   /usr/lib/gcc/x86_64-linux-gnu/11/include/syslimits.h \
@@ -12179,7 +12179,7 @@ CMakeFiles/custom_stdp_module_module.dir/tracking_neuron_nestml.o: ../tracking_n
   /usr/include/x86_64-linux-gnu/bits/xopen_lim.h \
   /usr/include/x86_64-linux-gnu/bits/uio_lim.h \
   /usr/include/c++/11/cstddef \
-  /home/emiliano/Documenti/other_env/other_e/include/nest/name.h \
+  /home/emiliano/Documenti/better_env/benv/include/nest/name.h \
   /usr/include/c++/11/deque \
   /usr/include/c++/11/bits/stl_uninitialized.h \
   /usr/include/c++/11/bits/stl_deque.h \
@@ -12197,17 +12197,17 @@ CMakeFiles/custom_stdp_module_module.dir/tracking_neuron_nestml.o: ../tracking_n
   /usr/include/c++/11/bits/invoke.h \
   /usr/include/c++/11/bits/stl_multimap.h \
   /usr/include/c++/11/bits/erase_if.h \
-  /home/emiliano/Documenti/other_env/other_e/include/nest/sliexceptions.h \
+  /home/emiliano/Documenti/better_env/benv/include/nest/sliexceptions.h \
   /usr/include/c++/11/vector \
   /usr/include/c++/11/bits/stl_vector.h \
   /usr/include/c++/11/bits/stl_bvector.h \
   /usr/include/c++/11/bits/vector.tcc \
-  /home/emiliano/Documenti/other_env/other_e/include/nest/kernel_manager.h \
-  /home/emiliano/Documenti/other_env/other_e/include/nest/connection_manager.h \
-  /home/emiliano/Documenti/other_env/other_e/include/nest/manager_interface.h \
-  /home/emiliano/Documenti/other_env/other_e/include/nest/dictdatum.h \
-  /home/emiliano/Documenti/other_env/other_e/include/nest/dict.h \
-  /home/emiliano/Documenti/other_env/other_e/include/nest/token.h \
+  /home/emiliano/Documenti/better_env/benv/include/nest/kernel_manager.h \
+  /home/emiliano/Documenti/better_env/benv/include/nest/connection_manager.h \
+  /home/emiliano/Documenti/better_env/benv/include/nest/manager_interface.h \
+  /home/emiliano/Documenti/better_env/benv/include/nest/dictdatum.h \
+  /home/emiliano/Documenti/better_env/benv/include/nest/dict.h \
+  /home/emiliano/Documenti/better_env/benv/include/nest/token.h \
   /usr/include/c++/11/iomanip \
   /usr/include/c++/11/locale \
   /usr/include/c++/11/bits/locale_facets_nonio.h \
@@ -12222,20 +12222,20 @@ CMakeFiles/custom_stdp_module_module.dir/tracking_neuron_nestml.o: ../tracking_n
   /usr/include/c++/11/bits/quoted_string.h \
   /usr/include/c++/11/sstream \
   /usr/include/c++/11/bits/sstream.tcc \
-  /home/emiliano/Documenti/other_env/other_e/include/nest/datum.h \
-  /home/emiliano/Documenti/other_env/other_e/include/nest/slitype.h \
-  /home/emiliano/Documenti/other_env/other_e/include/nest/slifunction.h \
-  /home/emiliano/Documenti/other_env/other_e/include/nest/interpret.h \
+  /home/emiliano/Documenti/better_env/benv/include/nest/datum.h \
+  /home/emiliano/Documenti/better_env/benv/include/nest/slitype.h \
+  /home/emiliano/Documenti/better_env/benv/include/nest/slifunction.h \
+  /home/emiliano/Documenti/better_env/benv/include/nest/interpret.h \
   /usr/include/c++/11/list \
   /usr/include/c++/11/bits/stl_list.h \
   /usr/include/c++/11/bits/allocated_ptr.h \
   /usr/include/c++/11/bits/list.tcc \
-  /home/emiliano/Documenti/other_env/other_e/include/nest/sliactions.h \
-  /home/emiliano/Documenti/other_env/other_e/include/nest/slibuiltins.h \
-  /home/emiliano/Documenti/other_env/other_e/include/nest/slimodule.h \
-  /home/emiliano/Documenti/other_env/other_e/include/nest/tokenstack.h \
-  /home/emiliano/Documenti/other_env/other_e/include/nest/tarrayobj.h \
-  /home/emiliano/Documenti/other_env/other_e/include/nest/tokenarray.h \
+  /home/emiliano/Documenti/better_env/benv/include/nest/sliactions.h \
+  /home/emiliano/Documenti/better_env/benv/include/nest/slibuiltins.h \
+  /home/emiliano/Documenti/better_env/benv/include/nest/slimodule.h \
+  /home/emiliano/Documenti/better_env/benv/include/nest/tokenstack.h \
+  /home/emiliano/Documenti/better_env/benv/include/nest/tarrayobj.h \
+  /home/emiliano/Documenti/better_env/benv/include/nest/tokenarray.h \
   /usr/include/c++/11/algorithm \
   /usr/include/c++/11/bits/stl_algo.h \
   /usr/include/c++/11/bits/algorithmfwd.h \
@@ -12252,8 +12252,8 @@ CMakeFiles/custom_stdp_module_module.dir/tracking_neuron_nestml.o: ../tracking_n
   /usr/include/c++/11/bits/enable_special_members.h \
   /usr/include/c++/11/bits/unordered_map.h \
   /usr/include/c++/11/pstl/execution_defs.h \
-  /home/emiliano/Documenti/other_env/other_e/include/nest/lockptrdatum.h \
-  /home/emiliano/Documenti/other_env/other_e/include/nest/lockptr.h \
+  /home/emiliano/Documenti/better_env/benv/include/nest/lockptrdatum.h \
+  /home/emiliano/Documenti/better_env/benv/include/nest/lockptr.h \
   /usr/include/c++/11/memory \
   /usr/include/c++/11/bits/stl_raw_storage_iter.h \
   /usr/include/c++/11/bits/align.h \
@@ -12266,49 +12266,49 @@ CMakeFiles/custom_stdp_module_module.dir/tracking_neuron_nestml.o: ../tracking_n
   /usr/include/c++/11/bits/atomic_lockfree_defines.h \
   /usr/include/c++/11/backward/auto_ptr.h \
   /usr/include/c++/11/pstl/glue_memory_defs.h \
-  /home/emiliano/Documenti/other_env/other_e/include/nest/stopwatch.h \
+  /home/emiliano/Documenti/better_env/benv/include/nest/stopwatch.h \
   /usr/include/x86_64-linux-gnu/sys/time.h \
-  /home/emiliano/Documenti/other_env/other_e/include/nest/conn_builder.h \
+  /home/emiliano/Documenti/better_env/benv/include/nest/conn_builder.h \
   /usr/include/c++/11/set \
   /usr/include/c++/11/bits/stl_set.h \
   /usr/include/c++/11/bits/stl_multiset.h \
-  /home/emiliano/Documenti/other_env/other_e/include/nest/conn_parameter.h \
-  /home/emiliano/Documenti/other_env/other_e/include/nest/exceptions.h \
-  /home/emiliano/Documenti/other_env/other_e/include/nest/nest_datums.h \
-  /home/emiliano/Documenti/other_env/other_e/include/nest/connection_id.h \
-  /home/emiliano/Documenti/other_env/other_e/include/nest/arraydatum.h \
-  /home/emiliano/Documenti/other_env/other_e/include/nest/aggregatedatum.h \
-  /home/emiliano/Documenti/other_env/other_e/include/nest/allocator.h \
-  /home/emiliano/Documenti/other_env/other_e/include/nest/dictutils.h \
-  /home/emiliano/Documenti/other_env/other_e/include/nest/doubledatum.h \
-  /home/emiliano/Documenti/other_env/other_e/include/nest/numericdatum.h \
-  /home/emiliano/Documenti/other_env/other_e/include/nest/genericdatum.h \
-  /home/emiliano/Documenti/other_env/other_e/include/nest/integerdatum.h \
-  /home/emiliano/Documenti/other_env/other_e/include/nest/namedatum.h \
-  /home/emiliano/Documenti/other_env/other_e/include/nest/tokenutils.h \
-  /home/emiliano/Documenti/other_env/other_e/include/nest/nestmodule.h \
-  /home/emiliano/Documenti/other_env/other_e/include/nest/event.h \
+  /home/emiliano/Documenti/better_env/benv/include/nest/conn_parameter.h \
+  /home/emiliano/Documenti/better_env/benv/include/nest/exceptions.h \
+  /home/emiliano/Documenti/better_env/benv/include/nest/nest_datums.h \
+  /home/emiliano/Documenti/better_env/benv/include/nest/connection_id.h \
+  /home/emiliano/Documenti/better_env/benv/include/nest/arraydatum.h \
+  /home/emiliano/Documenti/better_env/benv/include/nest/aggregatedatum.h \
+  /home/emiliano/Documenti/better_env/benv/include/nest/allocator.h \
+  /home/emiliano/Documenti/better_env/benv/include/nest/dictutils.h \
+  /home/emiliano/Documenti/better_env/benv/include/nest/doubledatum.h \
+  /home/emiliano/Documenti/better_env/benv/include/nest/numericdatum.h \
+  /home/emiliano/Documenti/better_env/benv/include/nest/genericdatum.h \
+  /home/emiliano/Documenti/better_env/benv/include/nest/integerdatum.h \
+  /home/emiliano/Documenti/better_env/benv/include/nest/namedatum.h \
+  /home/emiliano/Documenti/better_env/benv/include/nest/tokenutils.h \
+  /home/emiliano/Documenti/better_env/benv/include/nest/nestmodule.h \
+  /home/emiliano/Documenti/better_env/benv/include/nest/event.h \
   /usr/include/c++/11/cstring \
   /usr/include/string.h \
   /usr/include/strings.h \
   /usr/include/x86_64-linux-gnu/bits/strings_fortified.h \
   /usr/include/x86_64-linux-gnu/bits/string_fortified.h \
-  /home/emiliano/Documenti/other_env/other_e/include/nest/spike_data.h \
-  /home/emiliano/Documenti/other_env/other_e/include/nest/target.h \
-  /home/emiliano/Documenti/other_env/other_e/include/nest/static_assert.h \
-  /home/emiliano/Documenti/other_env/other_e/include/nest/vp_manager.h \
+  /home/emiliano/Documenti/better_env/benv/include/nest/spike_data.h \
+  /home/emiliano/Documenti/better_env/benv/include/nest/target.h \
+  /home/emiliano/Documenti/better_env/benv/include/nest/static_assert.h \
+  /home/emiliano/Documenti/better_env/benv/include/nest/vp_manager.h \
   /usr/lib/gcc/x86_64-linux-gnu/11/include/omp.h \
-  /home/emiliano/Documenti/other_env/other_e/include/nest/generic_factory.h \
-  /home/emiliano/Documenti/other_env/other_e/include/nest/ntree.h \
+  /home/emiliano/Documenti/better_env/benv/include/nest/generic_factory.h \
+  /home/emiliano/Documenti/better_env/benv/include/nest/ntree.h \
   /usr/include/c++/11/bitset \
   /usr/include/c++/11/iterator \
   /usr/include/c++/11/bits/stream_iterator.h \
-  /home/emiliano/Documenti/other_env/other_e/include/nest/position.h \
-  /home/emiliano/Documenti/other_env/other_e/include/nest/compose.hpp \
-  /home/emiliano/Documenti/other_env/other_e/include/nest/parameter.h \
-  /home/emiliano/Documenti/other_env/other_e/include/nest/nest_names.h \
-  /home/emiliano/Documenti/other_env/other_e/include/nest/node_collection.h \
-  /home/emiliano/Documenti/other_env/other_e/include/nest/random_generators.h \
+  /home/emiliano/Documenti/better_env/benv/include/nest/position.h \
+  /home/emiliano/Documenti/better_env/benv/include/nest/compose.hpp \
+  /home/emiliano/Documenti/better_env/benv/include/nest/parameter.h \
+  /home/emiliano/Documenti/better_env/benv/include/nest/nest_names.h \
+  /home/emiliano/Documenti/better_env/benv/include/nest/node_collection.h \
+  /home/emiliano/Documenti/better_env/benv/include/nest/random_generators.h \
   /usr/include/c++/11/random \
   /usr/include/c++/11/bits/random.h \
   /usr/include/x86_64-linux-gnu/c++/11/bits/opt_random.h \
@@ -12316,7 +12316,7 @@ CMakeFiles/custom_stdp_module_module.dir/tracking_neuron_nestml.o: ../tracking_n
   /usr/include/c++/11/numeric \
   /usr/include/c++/11/bits/stl_numeric.h \
   /usr/include/c++/11/pstl/glue_numeric_defs.h \
-  /home/emiliano/Documenti/other_env/other_e/include/nest/randutils.hpp \
+  /home/emiliano/Documenti/better_env/benv/include/nest/randutils.hpp \
   /usr/include/c++/11/chrono \
   /usr/include/c++/11/ratio \
   /usr/include/c++/11/bits/parse_numbers.h \
@@ -12332,11 +12332,11 @@ CMakeFiles/custom_stdp_module_module.dir/tracking_neuron_nestml.o: ../tracking_n
   /usr/include/x86_64-linux-gnu/bits/unistd.h \
   /usr/include/x86_64-linux-gnu/bits/unistd_ext.h \
   /usr/include/linux/close_range.h \
-  /home/emiliano/Documenti/other_env/other_e/include/nest/sharedptrdatum.h \
-  /home/emiliano/Documenti/other_env/other_e/include/nest/connector_base.h \
-  /home/emiliano/Documenti/other_env/other_e/include/nest/sort.h \
-  /home/emiliano/Documenti/other_env/other_e/include/nest/block_vector.h \
-  /home/emiliano/Documenti/other_env/other_e/include/nest/iterator_pair.h \
+  /home/emiliano/Documenti/better_env/benv/include/nest/sharedptrdatum.h \
+  /home/emiliano/Documenti/better_env/benv/include/nest/connector_base.h \
+  /home/emiliano/Documenti/better_env/benv/include/nest/sort.h \
+  /home/emiliano/Documenti/better_env/benv/include/nest/block_vector.h \
+  /home/emiliano/Documenti/better_env/benv/include/nest/iterator_pair.h \
   /usr/include/boost/iterator/iterator_adaptor.hpp \
   /usr/include/boost/static_assert.hpp \
   /usr/include/boost/config.hpp \
@@ -12562,7 +12562,7 @@ CMakeFiles/custom_stdp_module_module.dir/tracking_neuron_nestml.o: ../tracking_n
   /usr/include/boost/utility/swap.hpp \
   /usr/include/boost/core/swap.hpp \
   /usr/include/boost/core/enable_if.hpp \
-  /home/emiliano/Documenti/other_env/other_e/include/nest/source.h \
+  /home/emiliano/Documenti/better_env/benv/include/nest/source.h \
   /usr/include/boost/sort/spreadsort/spreadsort.hpp \
   /usr/include/boost/type_traits.hpp \
   /usr/include/boost/type_traits/aligned_storage.hpp \
@@ -12699,24 +12699,24 @@ CMakeFiles/custom_stdp_module_module.dir/tracking_neuron_nestml.o: ../tracking_n
   /usr/include/boost/sort/spreadsort/detail/float_sort.hpp \
   /usr/include/boost/sort/spreadsort/string_sort.hpp \
   /usr/include/boost/sort/spreadsort/detail/string_sort.hpp \
-  /home/emiliano/Documenti/other_env/other_e/include/nest/vector_util.h \
-  /home/emiliano/Documenti/other_env/other_e/include/nest/common_synapse_properties.h \
-  /home/emiliano/Documenti/other_env/other_e/include/nest/connector_model.h \
-  /home/emiliano/Documenti/other_env/other_e/include/nest/enum_bitfield.h \
-  /home/emiliano/Documenti/other_env/other_e/include/nest/secondary_event.h \
-  /home/emiliano/Documenti/other_env/other_e/include/nest/node.h \
-  /home/emiliano/Documenti/other_env/other_e/include/nest/deprecation_warning.h \
-  /home/emiliano/Documenti/other_env/other_e/include/nest/histentry.h \
-  /home/emiliano/Documenti/other_env/other_e/include/nest/connection_label.h \
-  /home/emiliano/Documenti/other_env/other_e/include/nest/nest.h \
-  /home/emiliano/Documenti/other_env/other_e/include/nest/logging.h \
-  /home/emiliano/Documenti/other_env/other_e/include/nest/spikecounter.h \
-  /home/emiliano/Documenti/other_env/other_e/include/nest/nest_timeconverter.h \
-  /home/emiliano/Documenti/other_env/other_e/include/nest/per_thread_bool_indicator.h \
+  /home/emiliano/Documenti/better_env/benv/include/nest/vector_util.h \
+  /home/emiliano/Documenti/better_env/benv/include/nest/common_synapse_properties.h \
+  /home/emiliano/Documenti/better_env/benv/include/nest/connector_model.h \
+  /home/emiliano/Documenti/better_env/benv/include/nest/enum_bitfield.h \
+  /home/emiliano/Documenti/better_env/benv/include/nest/secondary_event.h \
+  /home/emiliano/Documenti/better_env/benv/include/nest/node.h \
+  /home/emiliano/Documenti/better_env/benv/include/nest/deprecation_warning.h \
+  /home/emiliano/Documenti/better_env/benv/include/nest/histentry.h \
+  /home/emiliano/Documenti/better_env/benv/include/nest/connection_label.h \
+  /home/emiliano/Documenti/better_env/benv/include/nest/nest.h \
+  /home/emiliano/Documenti/better_env/benv/include/nest/logging.h \
+  /home/emiliano/Documenti/better_env/benv/include/nest/spikecounter.h \
+  /home/emiliano/Documenti/better_env/benv/include/nest/nest_timeconverter.h \
+  /home/emiliano/Documenti/better_env/benv/include/nest/per_thread_bool_indicator.h \
   /usr/include/c++/11/atomic \
-  /home/emiliano/Documenti/other_env/other_e/include/nest/send_buffer_position.h \
-  /home/emiliano/Documenti/other_env/other_e/include/nest/source_table.h \
-  /home/emiliano/Documenti/other_env/other_e/include/nest/mpi_manager.h \
+  /home/emiliano/Documenti/better_env/benv/include/nest/send_buffer_position.h \
+  /home/emiliano/Documenti/better_env/benv/include/nest/source_table.h \
+  /home/emiliano/Documenti/better_env/benv/include/nest/mpi_manager.h \
   /usr/lib/x86_64-linux-gnu/openmpi/include/mpi.h \
   /usr/lib/x86_64-linux-gnu/openmpi/include/mpi_portable_platform.h \
   /usr/lib/x86_64-linux-gnu/openmpi/include/openmpi/ompi/mpi/cxx/mpicxx.h \
@@ -12750,81 +12750,81 @@ CMakeFiles/custom_stdp_module_module.dir/tracking_neuron_nestml.o: ../tracking_n
   /usr/lib/x86_64-linux-gnu/openmpi/include/openmpi/ompi/mpi/cxx/info_inln.h \
   /usr/lib/x86_64-linux-gnu/openmpi/include/openmpi/ompi/mpi/cxx/win_inln.h \
   /usr/lib/x86_64-linux-gnu/openmpi/include/openmpi/ompi/mpi/cxx/file_inln.h \
-  /home/emiliano/Documenti/other_env/other_e/include/nest/target_data.h \
-  /home/emiliano/Documenti/other_env/other_e/include/nest/source_table_position.h \
-  /home/emiliano/Documenti/other_env/other_e/include/nest/target_table.h \
-  /home/emiliano/Documenti/other_env/other_e/include/nest/target_table_devices.h \
-  /home/emiliano/Documenti/other_env/other_e/include/nest/event_delivery_manager.h \
-  /home/emiliano/Documenti/other_env/other_e/include/nest/buffer_resize_log.h \
-  /home/emiliano/Documenti/other_env/other_e/include/nest/io_manager.h \
-  /home/emiliano/Documenti/other_env/other_e/include/nest/recording_backend.h \
-  /home/emiliano/Documenti/other_env/other_e/include/nest/stimulation_backend.h \
-  /home/emiliano/Documenti/other_env/other_e/include/nest/stimulation_device.h \
-  /home/emiliano/Documenti/other_env/other_e/include/nest/device.h \
-  /home/emiliano/Documenti/other_env/other_e/include/nest/device_node.h \
-  /home/emiliano/Documenti/other_env/other_e/include/nest/logging_manager.h \
-  /home/emiliano/Documenti/other_env/other_e/include/nest/model_manager.h \
-  /home/emiliano/Documenti/other_env/other_e/include/nest/genericmodel.h \
-  /home/emiliano/Documenti/other_env/other_e/include/nest/model.h \
-  /home/emiliano/Documenti/other_env/other_e/include/nest/modelrange_manager.h \
-  /home/emiliano/Documenti/other_env/other_e/include/nest/modelrange.h \
-  /home/emiliano/Documenti/other_env/other_e/include/nest/module_manager.h \
+  /home/emiliano/Documenti/better_env/benv/include/nest/target_data.h \
+  /home/emiliano/Documenti/better_env/benv/include/nest/source_table_position.h \
+  /home/emiliano/Documenti/better_env/benv/include/nest/target_table.h \
+  /home/emiliano/Documenti/better_env/benv/include/nest/target_table_devices.h \
+  /home/emiliano/Documenti/better_env/benv/include/nest/event_delivery_manager.h \
+  /home/emiliano/Documenti/better_env/benv/include/nest/buffer_resize_log.h \
+  /home/emiliano/Documenti/better_env/benv/include/nest/io_manager.h \
+  /home/emiliano/Documenti/better_env/benv/include/nest/recording_backend.h \
+  /home/emiliano/Documenti/better_env/benv/include/nest/stimulation_backend.h \
+  /home/emiliano/Documenti/better_env/benv/include/nest/stimulation_device.h \
+  /home/emiliano/Documenti/better_env/benv/include/nest/device.h \
+  /home/emiliano/Documenti/better_env/benv/include/nest/device_node.h \
+  /home/emiliano/Documenti/better_env/benv/include/nest/logging_manager.h \
+  /home/emiliano/Documenti/better_env/benv/include/nest/model_manager.h \
+  /home/emiliano/Documenti/better_env/benv/include/nest/genericmodel.h \
+  /home/emiliano/Documenti/better_env/benv/include/nest/model.h \
+  /home/emiliano/Documenti/better_env/benv/include/nest/modelrange_manager.h \
+  /home/emiliano/Documenti/better_env/benv/include/nest/modelrange.h \
+  /home/emiliano/Documenti/better_env/benv/include/nest/module_manager.h \
   /usr/include/ltdl.h \
   /usr/include/libltdl/lt_system.h \
   /usr/include/c++/11/stdlib.h \
   /usr/include/libltdl/lt_error.h \
   /usr/include/libltdl/lt_dlloader.h \
-  /home/emiliano/Documenti/other_env/other_e/include/nest/music_manager.h \
-  /home/emiliano/Documenti/other_env/other_e/include/nest/node_manager.h \
-  /home/emiliano/Documenti/other_env/other_e/include/nest/sparse_node_array.h \
-  /home/emiliano/Documenti/other_env/other_e/include/nest/random_manager.h \
-  /home/emiliano/Documenti/other_env/other_e/include/nest/simulation_manager.h \
-  /home/emiliano/Documenti/other_env/other_e/include/nest/sp_manager.h \
-  /home/emiliano/Documenti/other_env/other_e/include/nest/growth_curve_factory.h \
-  /home/emiliano/Documenti/other_env/other_e/include/nest/growth_curve.h \
+  /home/emiliano/Documenti/better_env/benv/include/nest/music_manager.h \
+  /home/emiliano/Documenti/better_env/benv/include/nest/node_manager.h \
+  /home/emiliano/Documenti/better_env/benv/include/nest/sparse_node_array.h \
+  /home/emiliano/Documenti/better_env/benv/include/nest/random_manager.h \
+  /home/emiliano/Documenti/better_env/benv/include/nest/simulation_manager.h \
+  /home/emiliano/Documenti/better_env/benv/include/nest/sp_manager.h \
+  /home/emiliano/Documenti/better_env/benv/include/nest/growth_curve_factory.h \
+  /home/emiliano/Documenti/better_env/benv/include/nest/growth_curve.h \
   /usr/include/c++/11/fstream \
   /usr/include/x86_64-linux-gnu/c++/11/bits/basic_file.h \
   /usr/include/x86_64-linux-gnu/c++/11/bits/c++io.h \
   /usr/include/c++/11/bits/fstream.tcc \
-  /home/emiliano/Documenti/other_env/other_e/include/nest/nest_impl.h \
-  /home/emiliano/Documenti/other_env/other_e/include/nest/connector_model_impl.h \
-  /home/emiliano/Documenti/other_env/other_e/include/nest/delay_checker.h \
-  /home/emiliano/Documenti/other_env/other_e/include/nest/kernel_manager.h \
-  /home/emiliano/Documenti/other_env/other_e/include/nest/secondary_event_impl.h \
-  /home/emiliano/Documenti/other_env/other_e/include/nest/genericmodel_impl.h \
-  /home/emiliano/Documenti/other_env/other_e/include/nest/model_manager_impl.h \
-  /home/emiliano/Documenti/other_env/other_e/include/nest/string_utils.h \
-  /home/emiliano/Documenti/other_env/other_e/include/nest/target_identifier.h \
-  /home/emiliano/Documenti/other_env/other_e/include/nest/universal_data_logger_impl.h \
-  /home/emiliano/Documenti/other_env/other_e/include/nest/universal_data_logger.h \
-  /home/emiliano/Documenti/other_env/other_e/include/nest/recordables_map.h \
-  /home/emiliano/Documenti/other_env/other_e/include/nest/event_delivery_manager_impl.h \
-  /home/emiliano/Documenti/other_env/other_e/include/nest/connection_manager_impl.h \
-  /home/emiliano/Documenti/other_env/other_e/include/nest/conn_builder_factory.h \
-  /home/emiliano/Documenti/other_env/other_e/include/nest/target_table_devices_impl.h \
-  /home/emiliano/Documenti/other_env/other_e/include/nest/vp_manager_impl.h \
-  /home/emiliano/Documenti/other_env/other_e/include/nest/mpi_manager_impl.h \
-  /home/emiliano/Documenti/other_env/other_e/include/nest/dict.h \
-  /home/emiliano/Documenti/other_env/other_e/include/nest/dictutils.h \
-  /home/emiliano/Documenti/other_env/other_e/include/nest/doubledatum.h \
-  /home/emiliano/Documenti/other_env/other_e/include/nest/integerdatum.h \
-  /home/emiliano/Documenti/other_env/other_e/include/nest/lockptrdatum.h \
+  /home/emiliano/Documenti/better_env/benv/include/nest/nest_impl.h \
+  /home/emiliano/Documenti/better_env/benv/include/nest/connector_model_impl.h \
+  /home/emiliano/Documenti/better_env/benv/include/nest/delay_checker.h \
+  /home/emiliano/Documenti/better_env/benv/include/nest/kernel_manager.h \
+  /home/emiliano/Documenti/better_env/benv/include/nest/secondary_event_impl.h \
+  /home/emiliano/Documenti/better_env/benv/include/nest/genericmodel_impl.h \
+  /home/emiliano/Documenti/better_env/benv/include/nest/model_manager_impl.h \
+  /home/emiliano/Documenti/better_env/benv/include/nest/string_utils.h \
+  /home/emiliano/Documenti/better_env/benv/include/nest/target_identifier.h \
+  /home/emiliano/Documenti/better_env/benv/include/nest/universal_data_logger_impl.h \
+  /home/emiliano/Documenti/better_env/benv/include/nest/universal_data_logger.h \
+  /home/emiliano/Documenti/better_env/benv/include/nest/recordables_map.h \
+  /home/emiliano/Documenti/better_env/benv/include/nest/event_delivery_manager_impl.h \
+  /home/emiliano/Documenti/better_env/benv/include/nest/connection_manager_impl.h \
+  /home/emiliano/Documenti/better_env/benv/include/nest/conn_builder_factory.h \
+  /home/emiliano/Documenti/better_env/benv/include/nest/target_table_devices_impl.h \
+  /home/emiliano/Documenti/better_env/benv/include/nest/vp_manager_impl.h \
+  /home/emiliano/Documenti/better_env/benv/include/nest/mpi_manager_impl.h \
+  /home/emiliano/Documenti/better_env/benv/include/nest/dict.h \
+  /home/emiliano/Documenti/better_env/benv/include/nest/dictutils.h \
+  /home/emiliano/Documenti/better_env/benv/include/nest/doubledatum.h \
+  /home/emiliano/Documenti/better_env/benv/include/nest/integerdatum.h \
+  /home/emiliano/Documenti/better_env/benv/include/nest/lockptrdatum.h \
   ../tracking_neuron_nestml.h \
-  /home/emiliano/Documenti/other_env/other_e/include/nest/config.h \
-  /home/emiliano/Documenti/other_env/other_e/include/nest/structural_plasticity_node.h \
-  /home/emiliano/Documenti/other_env/other_e/include/nest/synaptic_element.h \
-  /home/emiliano/Documenti/other_env/other_e/include/nest/connection.h \
-  /home/emiliano/Documenti/other_env/other_e/include/nest/connector_base_impl.h \
-  /home/emiliano/Documenti/other_env/other_e/include/nest/weight_recorder.h \
-  /home/emiliano/Documenti/other_env/other_e/include/nest/recording_device.h \
-  /home/emiliano/Documenti/other_env/other_e/include/nest/syn_id_delay.h \
-  /home/emiliano/Documenti/other_env/other_e/include/nest/dict_util.h \
-  /home/emiliano/Documenti/other_env/other_e/include/nest/event.h \
-  /home/emiliano/Documenti/other_env/other_e/include/nest/nest_types.h \
-  /home/emiliano/Documenti/other_env/other_e/include/nest/ring_buffer.h \
-  /home/emiliano/Documenti/other_env/other_e/include/nest/universal_data_logger.h \
-  /home/emiliano/Documenti/other_env/other_e/include/nest/dictdatum.h \
-  /home/emiliano/Documenti/other_env/other_e/include/nest/nest_time.h
+  /home/emiliano/Documenti/better_env/benv/include/nest/config.h \
+  /home/emiliano/Documenti/better_env/benv/include/nest/structural_plasticity_node.h \
+  /home/emiliano/Documenti/better_env/benv/include/nest/synaptic_element.h \
+  /home/emiliano/Documenti/better_env/benv/include/nest/connection.h \
+  /home/emiliano/Documenti/better_env/benv/include/nest/connector_base_impl.h \
+  /home/emiliano/Documenti/better_env/benv/include/nest/weight_recorder.h \
+  /home/emiliano/Documenti/better_env/benv/include/nest/recording_device.h \
+  /home/emiliano/Documenti/better_env/benv/include/nest/syn_id_delay.h \
+  /home/emiliano/Documenti/better_env/benv/include/nest/dict_util.h \
+  /home/emiliano/Documenti/better_env/benv/include/nest/event.h \
+  /home/emiliano/Documenti/better_env/benv/include/nest/nest_types.h \
+  /home/emiliano/Documenti/better_env/benv/include/nest/ring_buffer.h \
+  /home/emiliano/Documenti/better_env/benv/include/nest/universal_data_logger.h \
+  /home/emiliano/Documenti/better_env/benv/include/nest/dictdatum.h \
+  /home/emiliano/Documenti/better_env/benv/include/nest/nest_time.h
 
 CMakeFiles/custom_stdp_module_module.dir/tracking_neuron_planner_nestml.o: ../tracking_neuron_planner_nestml.cpp \
   /usr/include/stdc-predef.h \
@@ -12841,8 +12841,8 @@ CMakeFiles/custom_stdp_module_module.dir/tracking_neuron_planner_nestml.o: ../tr
   /usr/include/x86_64-linux-gnu/gnu/stubs-64.h \
   /usr/include/x86_64-linux-gnu/c++/11/bits/cpu_defines.h \
   /usr/include/c++/11/pstl/pstl_config.h \
-  /home/emiliano/Documenti/other_env/other_e/include/nest/numerics.h \
-  /home/emiliano/Documenti/other_env/other_e/include/nest/config.h \
+  /home/emiliano/Documenti/better_env/benv/include/nest/numerics.h \
+  /home/emiliano/Documenti/better_env/benv/include/nest/config.h \
   /usr/include/c++/11/cassert \
   /usr/include/assert.h \
   /usr/include/c++/11/cmath \
@@ -12927,8 +12927,8 @@ CMakeFiles/custom_stdp_module_module.dir/tracking_neuron_planner_nestml.o: ../tr
   /usr/include/c++/11/tr1/poly_hermite.tcc \
   /usr/include/c++/11/tr1/poly_laguerre.tcc \
   /usr/include/c++/11/tr1/riemann_zeta.tcc \
-  /home/emiliano/Documenti/other_env/other_e/include/nest/exceptions.h \
-  /home/emiliano/Documenti/other_env/other_e/include/nest/nest_time.h \
+  /home/emiliano/Documenti/better_env/benv/include/nest/exceptions.h \
+  /home/emiliano/Documenti/better_env/benv/include/nest/nest_time.h \
   /usr/include/c++/11/cfloat \
   /usr/lib/gcc/x86_64-linux-gnu/11/include/float.h \
   /usr/include/c++/11/cstdlib \
@@ -13045,8 +13045,8 @@ CMakeFiles/custom_stdp_module_module.dir/tracking_neuron_planner_nestml.o: ../tr
   /usr/include/c++/11/bits/ostream.tcc \
   /usr/include/c++/11/istream \
   /usr/include/c++/11/bits/istream.tcc \
-  /home/emiliano/Documenti/other_env/other_e/include/nest/numerics.h \
-  /home/emiliano/Documenti/other_env/other_e/include/nest/nest_types.h \
+  /home/emiliano/Documenti/better_env/benv/include/nest/numerics.h \
+  /home/emiliano/Documenti/better_env/benv/include/nest/nest_types.h \
   /usr/include/c++/11/climits \
   /usr/lib/gcc/x86_64-linux-gnu/11/include/limits.h \
   /usr/lib/gcc/x86_64-linux-gnu/11/include/syslimits.h \
@@ -13058,7 +13058,7 @@ CMakeFiles/custom_stdp_module_module.dir/tracking_neuron_planner_nestml.o: ../tr
   /usr/include/x86_64-linux-gnu/bits/xopen_lim.h \
   /usr/include/x86_64-linux-gnu/bits/uio_lim.h \
   /usr/include/c++/11/cstddef \
-  /home/emiliano/Documenti/other_env/other_e/include/nest/name.h \
+  /home/emiliano/Documenti/better_env/benv/include/nest/name.h \
   /usr/include/c++/11/deque \
   /usr/include/c++/11/bits/stl_uninitialized.h \
   /usr/include/c++/11/bits/stl_deque.h \
@@ -13076,17 +13076,17 @@ CMakeFiles/custom_stdp_module_module.dir/tracking_neuron_planner_nestml.o: ../tr
   /usr/include/c++/11/bits/invoke.h \
   /usr/include/c++/11/bits/stl_multimap.h \
   /usr/include/c++/11/bits/erase_if.h \
-  /home/emiliano/Documenti/other_env/other_e/include/nest/sliexceptions.h \
+  /home/emiliano/Documenti/better_env/benv/include/nest/sliexceptions.h \
   /usr/include/c++/11/vector \
   /usr/include/c++/11/bits/stl_vector.h \
   /usr/include/c++/11/bits/stl_bvector.h \
   /usr/include/c++/11/bits/vector.tcc \
-  /home/emiliano/Documenti/other_env/other_e/include/nest/kernel_manager.h \
-  /home/emiliano/Documenti/other_env/other_e/include/nest/connection_manager.h \
-  /home/emiliano/Documenti/other_env/other_e/include/nest/manager_interface.h \
-  /home/emiliano/Documenti/other_env/other_e/include/nest/dictdatum.h \
-  /home/emiliano/Documenti/other_env/other_e/include/nest/dict.h \
-  /home/emiliano/Documenti/other_env/other_e/include/nest/token.h \
+  /home/emiliano/Documenti/better_env/benv/include/nest/kernel_manager.h \
+  /home/emiliano/Documenti/better_env/benv/include/nest/connection_manager.h \
+  /home/emiliano/Documenti/better_env/benv/include/nest/manager_interface.h \
+  /home/emiliano/Documenti/better_env/benv/include/nest/dictdatum.h \
+  /home/emiliano/Documenti/better_env/benv/include/nest/dict.h \
+  /home/emiliano/Documenti/better_env/benv/include/nest/token.h \
   /usr/include/c++/11/iomanip \
   /usr/include/c++/11/locale \
   /usr/include/c++/11/bits/locale_facets_nonio.h \
@@ -13101,20 +13101,20 @@ CMakeFiles/custom_stdp_module_module.dir/tracking_neuron_planner_nestml.o: ../tr
   /usr/include/c++/11/bits/quoted_string.h \
   /usr/include/c++/11/sstream \
   /usr/include/c++/11/bits/sstream.tcc \
-  /home/emiliano/Documenti/other_env/other_e/include/nest/datum.h \
-  /home/emiliano/Documenti/other_env/other_e/include/nest/slitype.h \
-  /home/emiliano/Documenti/other_env/other_e/include/nest/slifunction.h \
-  /home/emiliano/Documenti/other_env/other_e/include/nest/interpret.h \
+  /home/emiliano/Documenti/better_env/benv/include/nest/datum.h \
+  /home/emiliano/Documenti/better_env/benv/include/nest/slitype.h \
+  /home/emiliano/Documenti/better_env/benv/include/nest/slifunction.h \
+  /home/emiliano/Documenti/better_env/benv/include/nest/interpret.h \
   /usr/include/c++/11/list \
   /usr/include/c++/11/bits/stl_list.h \
   /usr/include/c++/11/bits/allocated_ptr.h \
   /usr/include/c++/11/bits/list.tcc \
-  /home/emiliano/Documenti/other_env/other_e/include/nest/sliactions.h \
-  /home/emiliano/Documenti/other_env/other_e/include/nest/slibuiltins.h \
-  /home/emiliano/Documenti/other_env/other_e/include/nest/slimodule.h \
-  /home/emiliano/Documenti/other_env/other_e/include/nest/tokenstack.h \
-  /home/emiliano/Documenti/other_env/other_e/include/nest/tarrayobj.h \
-  /home/emiliano/Documenti/other_env/other_e/include/nest/tokenarray.h \
+  /home/emiliano/Documenti/better_env/benv/include/nest/sliactions.h \
+  /home/emiliano/Documenti/better_env/benv/include/nest/slibuiltins.h \
+  /home/emiliano/Documenti/better_env/benv/include/nest/slimodule.h \
+  /home/emiliano/Documenti/better_env/benv/include/nest/tokenstack.h \
+  /home/emiliano/Documenti/better_env/benv/include/nest/tarrayobj.h \
+  /home/emiliano/Documenti/better_env/benv/include/nest/tokenarray.h \
   /usr/include/c++/11/algorithm \
   /usr/include/c++/11/bits/stl_algo.h \
   /usr/include/c++/11/bits/algorithmfwd.h \
@@ -13131,8 +13131,8 @@ CMakeFiles/custom_stdp_module_module.dir/tracking_neuron_planner_nestml.o: ../tr
   /usr/include/c++/11/bits/enable_special_members.h \
   /usr/include/c++/11/bits/unordered_map.h \
   /usr/include/c++/11/pstl/execution_defs.h \
-  /home/emiliano/Documenti/other_env/other_e/include/nest/lockptrdatum.h \
-  /home/emiliano/Documenti/other_env/other_e/include/nest/lockptr.h \
+  /home/emiliano/Documenti/better_env/benv/include/nest/lockptrdatum.h \
+  /home/emiliano/Documenti/better_env/benv/include/nest/lockptr.h \
   /usr/include/c++/11/memory \
   /usr/include/c++/11/bits/stl_raw_storage_iter.h \
   /usr/include/c++/11/bits/align.h \
@@ -13145,49 +13145,49 @@ CMakeFiles/custom_stdp_module_module.dir/tracking_neuron_planner_nestml.o: ../tr
   /usr/include/c++/11/bits/atomic_lockfree_defines.h \
   /usr/include/c++/11/backward/auto_ptr.h \
   /usr/include/c++/11/pstl/glue_memory_defs.h \
-  /home/emiliano/Documenti/other_env/other_e/include/nest/stopwatch.h \
+  /home/emiliano/Documenti/better_env/benv/include/nest/stopwatch.h \
   /usr/include/x86_64-linux-gnu/sys/time.h \
-  /home/emiliano/Documenti/other_env/other_e/include/nest/conn_builder.h \
+  /home/emiliano/Documenti/better_env/benv/include/nest/conn_builder.h \
   /usr/include/c++/11/set \
   /usr/include/c++/11/bits/stl_set.h \
   /usr/include/c++/11/bits/stl_multiset.h \
-  /home/emiliano/Documenti/other_env/other_e/include/nest/conn_parameter.h \
-  /home/emiliano/Documenti/other_env/other_e/include/nest/exceptions.h \
-  /home/emiliano/Documenti/other_env/other_e/include/nest/nest_datums.h \
-  /home/emiliano/Documenti/other_env/other_e/include/nest/connection_id.h \
-  /home/emiliano/Documenti/other_env/other_e/include/nest/arraydatum.h \
-  /home/emiliano/Documenti/other_env/other_e/include/nest/aggregatedatum.h \
-  /home/emiliano/Documenti/other_env/other_e/include/nest/allocator.h \
-  /home/emiliano/Documenti/other_env/other_e/include/nest/dictutils.h \
-  /home/emiliano/Documenti/other_env/other_e/include/nest/doubledatum.h \
-  /home/emiliano/Documenti/other_env/other_e/include/nest/numericdatum.h \
-  /home/emiliano/Documenti/other_env/other_e/include/nest/genericdatum.h \
-  /home/emiliano/Documenti/other_env/other_e/include/nest/integerdatum.h \
-  /home/emiliano/Documenti/other_env/other_e/include/nest/namedatum.h \
-  /home/emiliano/Documenti/other_env/other_e/include/nest/tokenutils.h \
-  /home/emiliano/Documenti/other_env/other_e/include/nest/nestmodule.h \
-  /home/emiliano/Documenti/other_env/other_e/include/nest/event.h \
+  /home/emiliano/Documenti/better_env/benv/include/nest/conn_parameter.h \
+  /home/emiliano/Documenti/better_env/benv/include/nest/exceptions.h \
+  /home/emiliano/Documenti/better_env/benv/include/nest/nest_datums.h \
+  /home/emiliano/Documenti/better_env/benv/include/nest/connection_id.h \
+  /home/emiliano/Documenti/better_env/benv/include/nest/arraydatum.h \
+  /home/emiliano/Documenti/better_env/benv/include/nest/aggregatedatum.h \
+  /home/emiliano/Documenti/better_env/benv/include/nest/allocator.h \
+  /home/emiliano/Documenti/better_env/benv/include/nest/dictutils.h \
+  /home/emiliano/Documenti/better_env/benv/include/nest/doubledatum.h \
+  /home/emiliano/Documenti/better_env/benv/include/nest/numericdatum.h \
+  /home/emiliano/Documenti/better_env/benv/include/nest/genericdatum.h \
+  /home/emiliano/Documenti/better_env/benv/include/nest/integerdatum.h \
+  /home/emiliano/Documenti/better_env/benv/include/nest/namedatum.h \
+  /home/emiliano/Documenti/better_env/benv/include/nest/tokenutils.h \
+  /home/emiliano/Documenti/better_env/benv/include/nest/nestmodule.h \
+  /home/emiliano/Documenti/better_env/benv/include/nest/event.h \
   /usr/include/c++/11/cstring \
   /usr/include/string.h \
   /usr/include/strings.h \
   /usr/include/x86_64-linux-gnu/bits/strings_fortified.h \
   /usr/include/x86_64-linux-gnu/bits/string_fortified.h \
-  /home/emiliano/Documenti/other_env/other_e/include/nest/spike_data.h \
-  /home/emiliano/Documenti/other_env/other_e/include/nest/target.h \
-  /home/emiliano/Documenti/other_env/other_e/include/nest/static_assert.h \
-  /home/emiliano/Documenti/other_env/other_e/include/nest/vp_manager.h \
+  /home/emiliano/Documenti/better_env/benv/include/nest/spike_data.h \
+  /home/emiliano/Documenti/better_env/benv/include/nest/target.h \
+  /home/emiliano/Documenti/better_env/benv/include/nest/static_assert.h \
+  /home/emiliano/Documenti/better_env/benv/include/nest/vp_manager.h \
   /usr/lib/gcc/x86_64-linux-gnu/11/include/omp.h \
-  /home/emiliano/Documenti/other_env/other_e/include/nest/generic_factory.h \
-  /home/emiliano/Documenti/other_env/other_e/include/nest/ntree.h \
+  /home/emiliano/Documenti/better_env/benv/include/nest/generic_factory.h \
+  /home/emiliano/Documenti/better_env/benv/include/nest/ntree.h \
   /usr/include/c++/11/bitset \
   /usr/include/c++/11/iterator \
   /usr/include/c++/11/bits/stream_iterator.h \
-  /home/emiliano/Documenti/other_env/other_e/include/nest/position.h \
-  /home/emiliano/Documenti/other_env/other_e/include/nest/compose.hpp \
-  /home/emiliano/Documenti/other_env/other_e/include/nest/parameter.h \
-  /home/emiliano/Documenti/other_env/other_e/include/nest/nest_names.h \
-  /home/emiliano/Documenti/other_env/other_e/include/nest/node_collection.h \
-  /home/emiliano/Documenti/other_env/other_e/include/nest/random_generators.h \
+  /home/emiliano/Documenti/better_env/benv/include/nest/position.h \
+  /home/emiliano/Documenti/better_env/benv/include/nest/compose.hpp \
+  /home/emiliano/Documenti/better_env/benv/include/nest/parameter.h \
+  /home/emiliano/Documenti/better_env/benv/include/nest/nest_names.h \
+  /home/emiliano/Documenti/better_env/benv/include/nest/node_collection.h \
+  /home/emiliano/Documenti/better_env/benv/include/nest/random_generators.h \
   /usr/include/c++/11/random \
   /usr/include/c++/11/bits/random.h \
   /usr/include/x86_64-linux-gnu/c++/11/bits/opt_random.h \
@@ -13195,7 +13195,7 @@ CMakeFiles/custom_stdp_module_module.dir/tracking_neuron_planner_nestml.o: ../tr
   /usr/include/c++/11/numeric \
   /usr/include/c++/11/bits/stl_numeric.h \
   /usr/include/c++/11/pstl/glue_numeric_defs.h \
-  /home/emiliano/Documenti/other_env/other_e/include/nest/randutils.hpp \
+  /home/emiliano/Documenti/better_env/benv/include/nest/randutils.hpp \
   /usr/include/c++/11/chrono \
   /usr/include/c++/11/ratio \
   /usr/include/c++/11/bits/parse_numbers.h \
@@ -13211,11 +13211,11 @@ CMakeFiles/custom_stdp_module_module.dir/tracking_neuron_planner_nestml.o: ../tr
   /usr/include/x86_64-linux-gnu/bits/unistd.h \
   /usr/include/x86_64-linux-gnu/bits/unistd_ext.h \
   /usr/include/linux/close_range.h \
-  /home/emiliano/Documenti/other_env/other_e/include/nest/sharedptrdatum.h \
-  /home/emiliano/Documenti/other_env/other_e/include/nest/connector_base.h \
-  /home/emiliano/Documenti/other_env/other_e/include/nest/sort.h \
-  /home/emiliano/Documenti/other_env/other_e/include/nest/block_vector.h \
-  /home/emiliano/Documenti/other_env/other_e/include/nest/iterator_pair.h \
+  /home/emiliano/Documenti/better_env/benv/include/nest/sharedptrdatum.h \
+  /home/emiliano/Documenti/better_env/benv/include/nest/connector_base.h \
+  /home/emiliano/Documenti/better_env/benv/include/nest/sort.h \
+  /home/emiliano/Documenti/better_env/benv/include/nest/block_vector.h \
+  /home/emiliano/Documenti/better_env/benv/include/nest/iterator_pair.h \
   /usr/include/boost/iterator/iterator_adaptor.hpp \
   /usr/include/boost/static_assert.hpp \
   /usr/include/boost/config.hpp \
@@ -13441,7 +13441,7 @@ CMakeFiles/custom_stdp_module_module.dir/tracking_neuron_planner_nestml.o: ../tr
   /usr/include/boost/utility/swap.hpp \
   /usr/include/boost/core/swap.hpp \
   /usr/include/boost/core/enable_if.hpp \
-  /home/emiliano/Documenti/other_env/other_e/include/nest/source.h \
+  /home/emiliano/Documenti/better_env/benv/include/nest/source.h \
   /usr/include/boost/sort/spreadsort/spreadsort.hpp \
   /usr/include/boost/type_traits.hpp \
   /usr/include/boost/type_traits/aligned_storage.hpp \
@@ -13578,24 +13578,24 @@ CMakeFiles/custom_stdp_module_module.dir/tracking_neuron_planner_nestml.o: ../tr
   /usr/include/boost/sort/spreadsort/detail/float_sort.hpp \
   /usr/include/boost/sort/spreadsort/string_sort.hpp \
   /usr/include/boost/sort/spreadsort/detail/string_sort.hpp \
-  /home/emiliano/Documenti/other_env/other_e/include/nest/vector_util.h \
-  /home/emiliano/Documenti/other_env/other_e/include/nest/common_synapse_properties.h \
-  /home/emiliano/Documenti/other_env/other_e/include/nest/connector_model.h \
-  /home/emiliano/Documenti/other_env/other_e/include/nest/enum_bitfield.h \
-  /home/emiliano/Documenti/other_env/other_e/include/nest/secondary_event.h \
-  /home/emiliano/Documenti/other_env/other_e/include/nest/node.h \
-  /home/emiliano/Documenti/other_env/other_e/include/nest/deprecation_warning.h \
-  /home/emiliano/Documenti/other_env/other_e/include/nest/histentry.h \
-  /home/emiliano/Documenti/other_env/other_e/include/nest/connection_label.h \
-  /home/emiliano/Documenti/other_env/other_e/include/nest/nest.h \
-  /home/emiliano/Documenti/other_env/other_e/include/nest/logging.h \
-  /home/emiliano/Documenti/other_env/other_e/include/nest/spikecounter.h \
-  /home/emiliano/Documenti/other_env/other_e/include/nest/nest_timeconverter.h \
-  /home/emiliano/Documenti/other_env/other_e/include/nest/per_thread_bool_indicator.h \
+  /home/emiliano/Documenti/better_env/benv/include/nest/vector_util.h \
+  /home/emiliano/Documenti/better_env/benv/include/nest/common_synapse_properties.h \
+  /home/emiliano/Documenti/better_env/benv/include/nest/connector_model.h \
+  /home/emiliano/Documenti/better_env/benv/include/nest/enum_bitfield.h \
+  /home/emiliano/Documenti/better_env/benv/include/nest/secondary_event.h \
+  /home/emiliano/Documenti/better_env/benv/include/nest/node.h \
+  /home/emiliano/Documenti/better_env/benv/include/nest/deprecation_warning.h \
+  /home/emiliano/Documenti/better_env/benv/include/nest/histentry.h \
+  /home/emiliano/Documenti/better_env/benv/include/nest/connection_label.h \
+  /home/emiliano/Documenti/better_env/benv/include/nest/nest.h \
+  /home/emiliano/Documenti/better_env/benv/include/nest/logging.h \
+  /home/emiliano/Documenti/better_env/benv/include/nest/spikecounter.h \
+  /home/emiliano/Documenti/better_env/benv/include/nest/nest_timeconverter.h \
+  /home/emiliano/Documenti/better_env/benv/include/nest/per_thread_bool_indicator.h \
   /usr/include/c++/11/atomic \
-  /home/emiliano/Documenti/other_env/other_e/include/nest/send_buffer_position.h \
-  /home/emiliano/Documenti/other_env/other_e/include/nest/source_table.h \
-  /home/emiliano/Documenti/other_env/other_e/include/nest/mpi_manager.h \
+  /home/emiliano/Documenti/better_env/benv/include/nest/send_buffer_position.h \
+  /home/emiliano/Documenti/better_env/benv/include/nest/source_table.h \
+  /home/emiliano/Documenti/better_env/benv/include/nest/mpi_manager.h \
   /usr/lib/x86_64-linux-gnu/openmpi/include/mpi.h \
   /usr/lib/x86_64-linux-gnu/openmpi/include/mpi_portable_platform.h \
   /usr/lib/x86_64-linux-gnu/openmpi/include/openmpi/ompi/mpi/cxx/mpicxx.h \
@@ -13629,84 +13629,86 @@ CMakeFiles/custom_stdp_module_module.dir/tracking_neuron_planner_nestml.o: ../tr
   /usr/lib/x86_64-linux-gnu/openmpi/include/openmpi/ompi/mpi/cxx/info_inln.h \
   /usr/lib/x86_64-linux-gnu/openmpi/include/openmpi/ompi/mpi/cxx/win_inln.h \
   /usr/lib/x86_64-linux-gnu/openmpi/include/openmpi/ompi/mpi/cxx/file_inln.h \
-  /home/emiliano/Documenti/other_env/other_e/include/nest/target_data.h \
-  /home/emiliano/Documenti/other_env/other_e/include/nest/source_table_position.h \
-  /home/emiliano/Documenti/other_env/other_e/include/nest/target_table.h \
-  /home/emiliano/Documenti/other_env/other_e/include/nest/target_table_devices.h \
-  /home/emiliano/Documenti/other_env/other_e/include/nest/event_delivery_manager.h \
-  /home/emiliano/Documenti/other_env/other_e/include/nest/buffer_resize_log.h \
-  /home/emiliano/Documenti/other_env/other_e/include/nest/io_manager.h \
-  /home/emiliano/Documenti/other_env/other_e/include/nest/recording_backend.h \
-  /home/emiliano/Documenti/other_env/other_e/include/nest/stimulation_backend.h \
-  /home/emiliano/Documenti/other_env/other_e/include/nest/stimulation_device.h \
-  /home/emiliano/Documenti/other_env/other_e/include/nest/device.h \
-  /home/emiliano/Documenti/other_env/other_e/include/nest/device_node.h \
-  /home/emiliano/Documenti/other_env/other_e/include/nest/logging_manager.h \
-  /home/emiliano/Documenti/other_env/other_e/include/nest/model_manager.h \
-  /home/emiliano/Documenti/other_env/other_e/include/nest/genericmodel.h \
-  /home/emiliano/Documenti/other_env/other_e/include/nest/model.h \
-  /home/emiliano/Documenti/other_env/other_e/include/nest/modelrange_manager.h \
-  /home/emiliano/Documenti/other_env/other_e/include/nest/modelrange.h \
-  /home/emiliano/Documenti/other_env/other_e/include/nest/module_manager.h \
+  /home/emiliano/Documenti/better_env/benv/include/nest/target_data.h \
+  /home/emiliano/Documenti/better_env/benv/include/nest/source_table_position.h \
+  /home/emiliano/Documenti/better_env/benv/include/nest/target_table.h \
+  /home/emiliano/Documenti/better_env/benv/include/nest/target_table_devices.h \
+  /home/emiliano/Documenti/better_env/benv/include/nest/event_delivery_manager.h \
+  /home/emiliano/Documenti/better_env/benv/include/nest/buffer_resize_log.h \
+  /home/emiliano/Documenti/better_env/benv/include/nest/io_manager.h \
+  /home/emiliano/Documenti/better_env/benv/include/nest/recording_backend.h \
+  /home/emiliano/Documenti/better_env/benv/include/nest/stimulation_backend.h \
+  /home/emiliano/Documenti/better_env/benv/include/nest/stimulation_device.h \
+  /home/emiliano/Documenti/better_env/benv/include/nest/device.h \
+  /home/emiliano/Documenti/better_env/benv/include/nest/device_node.h \
+  /home/emiliano/Documenti/better_env/benv/include/nest/logging_manager.h \
+  /home/emiliano/Documenti/better_env/benv/include/nest/model_manager.h \
+  /home/emiliano/Documenti/better_env/benv/include/nest/genericmodel.h \
+  /home/emiliano/Documenti/better_env/benv/include/nest/model.h \
+  /home/emiliano/Documenti/better_env/benv/include/nest/modelrange_manager.h \
+  /home/emiliano/Documenti/better_env/benv/include/nest/modelrange.h \
+  /home/emiliano/Documenti/better_env/benv/include/nest/module_manager.h \
   /usr/include/ltdl.h \
   /usr/include/libltdl/lt_system.h \
   /usr/include/c++/11/stdlib.h \
   /usr/include/libltdl/lt_error.h \
   /usr/include/libltdl/lt_dlloader.h \
-  /home/emiliano/Documenti/other_env/other_e/include/nest/music_manager.h \
-  /home/emiliano/Documenti/other_env/other_e/include/nest/node_manager.h \
-  /home/emiliano/Documenti/other_env/other_e/include/nest/sparse_node_array.h \
-  /home/emiliano/Documenti/other_env/other_e/include/nest/random_manager.h \
-  /home/emiliano/Documenti/other_env/other_e/include/nest/simulation_manager.h \
-  /home/emiliano/Documenti/other_env/other_e/include/nest/sp_manager.h \
-  /home/emiliano/Documenti/other_env/other_e/include/nest/growth_curve_factory.h \
-  /home/emiliano/Documenti/other_env/other_e/include/nest/growth_curve.h \
+  /home/emiliano/Documenti/better_env/benv/include/nest/music_manager.h \
+  /home/emiliano/Documenti/better_env/benv/include/nest/node_manager.h \
+  /home/emiliano/Documenti/better_env/benv/include/nest/sparse_node_array.h \
+  /home/emiliano/Documenti/better_env/benv/include/nest/random_manager.h \
+  /home/emiliano/Documenti/better_env/benv/include/nest/simulation_manager.h \
+  /home/emiliano/Documenti/better_env/benv/include/nest/sp_manager.h \
+  /home/emiliano/Documenti/better_env/benv/include/nest/growth_curve_factory.h \
+  /home/emiliano/Documenti/better_env/benv/include/nest/growth_curve.h \
   /usr/include/c++/11/fstream \
   /usr/include/x86_64-linux-gnu/c++/11/bits/basic_file.h \
   /usr/include/x86_64-linux-gnu/c++/11/bits/c++io.h \
   /usr/include/c++/11/bits/fstream.tcc \
-  /home/emiliano/Documenti/other_env/other_e/include/nest/nest_impl.h \
-  /home/emiliano/Documenti/other_env/other_e/include/nest/connector_model_impl.h \
-  /home/emiliano/Documenti/other_env/other_e/include/nest/delay_checker.h \
-  /home/emiliano/Documenti/other_env/other_e/include/nest/kernel_manager.h \
-  /home/emiliano/Documenti/other_env/other_e/include/nest/secondary_event_impl.h \
-  /home/emiliano/Documenti/other_env/other_e/include/nest/genericmodel_impl.h \
-  /home/emiliano/Documenti/other_env/other_e/include/nest/model_manager_impl.h \
-  /home/emiliano/Documenti/other_env/other_e/include/nest/string_utils.h \
-  /home/emiliano/Documenti/other_env/other_e/include/nest/target_identifier.h \
-  /home/emiliano/Documenti/other_env/other_e/include/nest/universal_data_logger_impl.h \
-  /home/emiliano/Documenti/other_env/other_e/include/nest/universal_data_logger.h \
-  /home/emiliano/Documenti/other_env/other_e/include/nest/recordables_map.h \
-  /home/emiliano/Documenti/other_env/other_e/include/nest/event_delivery_manager_impl.h \
-  /home/emiliano/Documenti/other_env/other_e/include/nest/connection_manager_impl.h \
-  /home/emiliano/Documenti/other_env/other_e/include/nest/conn_builder_factory.h \
-  /home/emiliano/Documenti/other_env/other_e/include/nest/target_table_devices_impl.h \
-  /home/emiliano/Documenti/other_env/other_e/include/nest/vp_manager_impl.h \
-  /home/emiliano/Documenti/other_env/other_e/include/nest/mpi_manager_impl.h \
-  /home/emiliano/Documenti/other_env/other_e/include/nest/dict.h \
-  /home/emiliano/Documenti/other_env/other_e/include/nest/dictutils.h \
-  /home/emiliano/Documenti/other_env/other_e/include/nest/doubledatum.h \
-  /home/emiliano/Documenti/other_env/other_e/include/nest/integerdatum.h \
-  /home/emiliano/Documenti/other_env/other_e/include/nest/lockptrdatum.h \
+  /home/emiliano/Documenti/better_env/benv/include/nest/nest_impl.h \
+  /home/emiliano/Documenti/better_env/benv/include/nest/connector_model_impl.h \
+  /home/emiliano/Documenti/better_env/benv/include/nest/delay_checker.h \
+  /home/emiliano/Documenti/better_env/benv/include/nest/kernel_manager.h \
+  /home/emiliano/Documenti/better_env/benv/include/nest/secondary_event_impl.h \
+  /home/emiliano/Documenti/better_env/benv/include/nest/genericmodel_impl.h \
+  /home/emiliano/Documenti/better_env/benv/include/nest/model_manager_impl.h \
+  /home/emiliano/Documenti/better_env/benv/include/nest/string_utils.h \
+  /home/emiliano/Documenti/better_env/benv/include/nest/target_identifier.h \
+  /home/emiliano/Documenti/better_env/benv/include/nest/universal_data_logger_impl.h \
+  /home/emiliano/Documenti/better_env/benv/include/nest/universal_data_logger.h \
+  /home/emiliano/Documenti/better_env/benv/include/nest/recordables_map.h \
+  /home/emiliano/Documenti/better_env/benv/include/nest/event_delivery_manager_impl.h \
+  /home/emiliano/Documenti/better_env/benv/include/nest/connection_manager_impl.h \
+  /home/emiliano/Documenti/better_env/benv/include/nest/conn_builder_factory.h \
+  /home/emiliano/Documenti/better_env/benv/include/nest/target_table_devices_impl.h \
+  /home/emiliano/Documenti/better_env/benv/include/nest/vp_manager_impl.h \
+  /home/emiliano/Documenti/better_env/benv/include/nest/mpi_manager_impl.h \
+  /home/emiliano/Documenti/better_env/benv/include/nest/dict.h \
+  /home/emiliano/Documenti/better_env/benv/include/nest/dictutils.h \
+  /home/emiliano/Documenti/better_env/benv/include/nest/doubledatum.h \
+  /home/emiliano/Documenti/better_env/benv/include/nest/integerdatum.h \
+  /home/emiliano/Documenti/better_env/benv/include/nest/lockptrdatum.h \
   ../tracking_neuron_planner_nestml.h \
-  /home/emiliano/Documenti/other_env/other_e/include/nest/config.h \
-  /home/emiliano/Documenti/other_env/other_e/include/nest/structural_plasticity_node.h \
-  /home/emiliano/Documenti/other_env/other_e/include/nest/synaptic_element.h \
-  /home/emiliano/Documenti/other_env/other_e/include/nest/connection.h \
-  /home/emiliano/Documenti/other_env/other_e/include/nest/connector_base_impl.h \
-  /home/emiliano/Documenti/other_env/other_e/include/nest/weight_recorder.h \
-  /home/emiliano/Documenti/other_env/other_e/include/nest/recording_device.h \
-  /home/emiliano/Documenti/other_env/other_e/include/nest/syn_id_delay.h \
-  /home/emiliano/Documenti/other_env/other_e/include/nest/dict_util.h \
-  /home/emiliano/Documenti/other_env/other_e/include/nest/event.h \
-  /home/emiliano/Documenti/other_env/other_e/include/nest/nest_types.h \
-  /home/emiliano/Documenti/other_env/other_e/include/nest/ring_buffer.h \
-  /home/emiliano/Documenti/other_env/other_e/include/nest/universal_data_logger.h \
-  /home/emiliano/Documenti/other_env/other_e/include/nest/dictdatum.h \
-  /home/emiliano/Documenti/other_env/other_e/include/nest/nest_time.h
+  /home/emiliano/Documenti/better_env/benv/include/nest/config.h \
+  /home/emiliano/Documenti/better_env/benv/include/nest/structural_plasticity_node.h \
+  /home/emiliano/Documenti/better_env/benv/include/nest/synaptic_element.h \
+  /home/emiliano/Documenti/better_env/benv/include/nest/connection.h \
+  /home/emiliano/Documenti/better_env/benv/include/nest/connector_base_impl.h \
+  /home/emiliano/Documenti/better_env/benv/include/nest/weight_recorder.h \
+  /home/emiliano/Documenti/better_env/benv/include/nest/recording_device.h \
+  /home/emiliano/Documenti/better_env/benv/include/nest/syn_id_delay.h \
+  /home/emiliano/Documenti/better_env/benv/include/nest/dict_util.h \
+  /home/emiliano/Documenti/better_env/benv/include/nest/event.h \
+  /home/emiliano/Documenti/better_env/benv/include/nest/nest_types.h \
+  /home/emiliano/Documenti/better_env/benv/include/nest/ring_buffer.h \
+  /home/emiliano/Documenti/better_env/benv/include/nest/universal_data_logger.h \
+  /home/emiliano/Documenti/better_env/benv/include/nest/dictdatum.h \
+  /home/emiliano/Documenti/better_env/benv/include/nest/nest_time.h
 
 
 ../tracking_neuron_planner_nestml.cpp:
+
+../tracking_neuron_nestml.cpp:
 
 ../stdp_synapse_alpha.cpp:
 
@@ -13716,19 +13718,11 @@ CMakeFiles/custom_stdp_module_module.dir/tracking_neuron_planner_nestml.o: ../tr
 
 ../eglif_cond_alpha_multisyn.cpp:
 
-../eglif_cond_alpha_multisyn.h:
-
 ../state_neuron_nestml.h:
 
 ../rb_neuron_nestml.h:
 
-../diff_neuron_nestml.h:
-
 ../custom_stdp_module.h:
-
-../tracking_neuron_nestml.h:
-
-/usr/include/gsl/gsl_odeiv.h:
 
 /usr/include/gsl/gsl_block_char.h:
 
@@ -13741,8 +13735,6 @@ CMakeFiles/custom_stdp_module_module.dir/tracking_neuron_planner_nestml.o: ../tr
 /usr/include/gsl/gsl_block_long.h:
 
 /usr/include/gsl/gsl_block_ulong.h:
-
-/usr/include/gsl/gsl_matrix_double.h:
 
 /usr/include/gsl/gsl_matrix_long_double.h:
 
@@ -13766,8 +13758,6 @@ CMakeFiles/custom_stdp_module_module.dir/tracking_neuron_planner_nestml.o: ../tr
 
 /usr/include/gsl/gsl_vector_complex_double.h:
 
-/usr/include/gsl/gsl_matrix_complex_double.h:
-
 /usr/include/gsl/gsl_cblas.h:
 
 /usr/include/gsl/gsl_blas_types.h:
@@ -13775,6 +13765,8 @@ CMakeFiles/custom_stdp_module_module.dir/tracking_neuron_planner_nestml.o: ../tr
 /usr/include/gsl/gsl_vector_complex.h:
 
 /usr/include/gsl/gsl_block_long_double.h:
+
+/usr/include/gsl/gsl_vector_long_double.h:
 
 /usr/include/gsl/gsl_vector_complex_long_double.h:
 
@@ -13784,59 +13776,55 @@ CMakeFiles/custom_stdp_module_module.dir/tracking_neuron_planner_nestml.o: ../tr
 
 /usr/include/gsl/gsl_types.h:
 
-/home/emiliano/Documenti/other_env/other_e/include/nest/sp_manager_impl.h:
+/home/emiliano/Documenti/better_env/benv/include/nest/sp_manager_impl.h:
 
-/home/emiliano/Documenti/other_env/other_e/include/nest/nest_extension_interface.h:
+/home/emiliano/Documenti/better_env/benv/include/nest/weight_recorder.h:
 
-/home/emiliano/Documenti/other_env/other_e/include/nest/ring_buffer.h:
+/home/emiliano/Documenti/better_env/benv/include/nest/connection.h:
 
-/home/emiliano/Documenti/other_env/other_e/include/nest/dict_util.h:
+../eglif_cond_alpha_multisyn.h:
 
-/home/emiliano/Documenti/other_env/other_e/include/nest/syn_id_delay.h:
+/home/emiliano/Documenti/better_env/benv/include/nest/structural_plasticity_node.h:
 
-/home/emiliano/Documenti/other_env/other_e/include/nest/weight_recorder.h:
+/home/emiliano/Documenti/better_env/benv/include/nest/mpi_manager_impl.h:
 
-/home/emiliano/Documenti/other_env/other_e/include/nest/connector_base_impl.h:
+/home/emiliano/Documenti/better_env/benv/include/nest/vp_manager_impl.h:
 
-/home/emiliano/Documenti/other_env/other_e/include/nest/synaptic_element.h:
+/home/emiliano/Documenti/better_env/benv/include/nest/target_table_devices_impl.h:
 
-/home/emiliano/Documenti/other_env/other_e/include/nest/structural_plasticity_node.h:
+/home/emiliano/Documenti/better_env/benv/include/nest/conn_builder_factory.h:
 
-/home/emiliano/Documenti/other_env/other_e/include/nest/vp_manager_impl.h:
+/home/emiliano/Documenti/better_env/benv/include/nest/event_delivery_manager_impl.h:
 
-/home/emiliano/Documenti/other_env/other_e/include/nest/connection_manager_impl.h:
+/home/emiliano/Documenti/better_env/benv/include/nest/universal_data_logger_impl.h:
 
-/home/emiliano/Documenti/other_env/other_e/include/nest/event_delivery_manager_impl.h:
+/home/emiliano/Documenti/better_env/benv/include/nest/target_identifier.h:
 
-/home/emiliano/Documenti/other_env/other_e/include/nest/universal_data_logger.h:
+/home/emiliano/Documenti/better_env/benv/include/nest/secondary_event_impl.h:
 
-/home/emiliano/Documenti/other_env/other_e/include/nest/universal_data_logger_impl.h:
+/home/emiliano/Documenti/better_env/benv/include/nest/delay_checker.h:
 
-/home/emiliano/Documenti/other_env/other_e/include/nest/string_utils.h:
+../diff_neuron_nestml.h:
 
-/home/emiliano/Documenti/other_env/other_e/include/nest/model_manager_impl.h:
+/home/emiliano/Documenti/better_env/benv/include/nest/connector_model_impl.h:
 
-/home/emiliano/Documenti/other_env/other_e/include/nest/genericmodel_impl.h:
-
-/home/emiliano/Documenti/other_env/other_e/include/nest/connector_model_impl.h:
-
-/home/emiliano/Documenti/other_env/other_e/include/nest/nest_impl.h:
+/home/emiliano/Documenti/better_env/benv/include/nest/nest_impl.h:
 
 /usr/include/c++/11/bits/fstream.tcc:
 
 /usr/include/x86_64-linux-gnu/c++/11/bits/basic_file.h:
 
-/usr/include/c++/11/fstream:
+/home/emiliano/Documenti/better_env/benv/include/nest/growth_curve_factory.h:
 
-/home/emiliano/Documenti/other_env/other_e/include/nest/growth_curve.h:
+/home/emiliano/Documenti/better_env/benv/include/nest/sp_manager.h:
 
-../tracking_neuron_nestml.cpp:
+/home/emiliano/Documenti/better_env/benv/include/nest/simulation_manager.h:
 
-/home/emiliano/Documenti/other_env/other_e/include/nest/simulation_manager.h:
+/home/emiliano/Documenti/better_env/benv/include/nest/random_manager.h:
 
-/home/emiliano/Documenti/other_env/other_e/include/nest/sparse_node_array.h:
+../tracking_neuron_nestml.h:
 
-/home/emiliano/Documenti/other_env/other_e/include/nest/music_manager.h:
+/home/emiliano/Documenti/better_env/benv/include/nest/music_manager.h:
 
 /usr/include/libltdl/lt_error.h:
 
@@ -13846,23 +13834,19 @@ CMakeFiles/custom_stdp_module_module.dir/tracking_neuron_planner_nestml.o: ../tr
 
 /usr/include/libltdl/lt_system.h:
 
-/home/emiliano/Documenti/other_env/other_e/include/nest/module_manager.h:
+/home/emiliano/Documenti/better_env/benv/include/nest/model.h:
 
-/home/emiliano/Documenti/other_env/other_e/include/nest/model.h:
+/home/emiliano/Documenti/better_env/benv/include/nest/model_manager.h:
 
-/home/emiliano/Documenti/other_env/other_e/include/nest/genericmodel.h:
+/home/emiliano/Documenti/better_env/benv/include/nest/device_node.h:
 
-/home/emiliano/Documenti/other_env/other_e/include/nest/device_node.h:
+/home/emiliano/Documenti/better_env/benv/include/nest/buffer_resize_log.h:
 
-/home/emiliano/Documenti/other_env/other_e/include/nest/device.h:
+/home/emiliano/Documenti/better_env/benv/include/nest/target_table.h:
 
-/home/emiliano/Documenti/other_env/other_e/include/nest/stimulation_device.h:
+/home/emiliano/Documenti/better_env/benv/include/nest/source_table_position.h:
 
-/home/emiliano/Documenti/other_env/other_e/include/nest/recording_backend.h:
-
-/home/emiliano/Documenti/other_env/other_e/include/nest/buffer_resize_log.h:
-
-/home/emiliano/Documenti/other_env/other_e/include/nest/target_table.h:
+/home/emiliano/Documenti/better_env/benv/include/nest/target_data.h:
 
 /usr/lib/x86_64-linux-gnu/openmpi/include/openmpi/ompi/mpi/cxx/win_inln.h:
 
@@ -13870,19 +13854,13 @@ CMakeFiles/custom_stdp_module_module.dir/tracking_neuron_planner_nestml.o: ../tr
 
 /usr/lib/x86_64-linux-gnu/openmpi/include/openmpi/ompi/mpi/cxx/topology_inln.h:
 
-/usr/lib/x86_64-linux-gnu/openmpi/include/openmpi/ompi/mpi/cxx/comm_inln.h:
-
 /usr/lib/x86_64-linux-gnu/openmpi/include/openmpi/ompi/mpi/cxx/request_inln.h:
 
 /usr/lib/x86_64-linux-gnu/openmpi/include/openmpi/ompi/mpi/cxx/topology.h:
 
-/usr/lib/x86_64-linux-gnu/openmpi/include/openmpi/ompi/mpi/cxx/intracomm.h:
-
 /usr/lib/x86_64-linux-gnu/openmpi/include/openmpi/ompi/mpi/cxx/file.h:
 
 /usr/lib/x86_64-linux-gnu/openmpi/include/openmpi/ompi/mpi/cxx/win.h:
-
-/home/emiliano/Documenti/other_env/other_e/include/nest/mpi_manager_impl.h:
 
 /usr/lib/x86_64-linux-gnu/openmpi/include/openmpi/ompi/mpi/cxx/comm.h:
 
@@ -13894,23 +13872,27 @@ CMakeFiles/custom_stdp_module_module.dir/tracking_neuron_planner_nestml.o: ../tr
 
 /usr/lib/x86_64-linux-gnu/openmpi/include/mpi_portable_platform.h:
 
-/home/emiliano/Documenti/other_env/other_e/include/nest/mpi_manager.h:
+/usr/lib/x86_64-linux-gnu/openmpi/include/mpi.h:
 
-/home/emiliano/Documenti/other_env/other_e/include/nest/source_table.h:
+/usr/include/c++/11/fstream:
 
-/home/emiliano/Documenti/other_env/other_e/include/nest/send_buffer_position.h:
+/home/emiliano/Documenti/better_env/benv/include/nest/mpi_manager.h:
+
+/home/emiliano/Documenti/better_env/benv/include/nest/send_buffer_position.h:
 
 /usr/include/c++/11/atomic:
 
-/home/emiliano/Documenti/other_env/other_e/include/nest/nest.h:
+/home/emiliano/Documenti/better_env/benv/include/nest/per_thread_bool_indicator.h:
 
-/home/emiliano/Documenti/other_env/other_e/include/nest/deprecation_warning.h:
+/home/emiliano/Documenti/better_env/benv/include/nest/connection_label.h:
 
-/home/emiliano/Documenti/other_env/other_e/include/nest/secondary_event.h:
+/home/emiliano/Documenti/better_env/benv/include/nest/histentry.h:
 
-/usr/lib/x86_64-linux-gnu/openmpi/include/mpi.h:
+/home/emiliano/Documenti/better_env/benv/include/nest/connector_model.h:
 
-/home/emiliano/Documenti/other_env/other_e/include/nest/common_synapse_properties.h:
+/home/emiliano/Documenti/better_env/benv/include/nest/recording_device.h:
+
+/home/emiliano/Documenti/better_env/benv/include/nest/vector_util.h:
 
 /usr/include/boost/sort/spreadsort/detail/string_sort.hpp:
 
@@ -13923,6 +13905,8 @@ CMakeFiles/custom_stdp_module_module.dir/tracking_neuron_planner_nestml.o: ../tr
 /usr/include/boost/range/const_iterator.hpp:
 
 /usr/include/boost/range/detail/msvc_has_iterator_workaround.hpp:
+
+/home/emiliano/Documenti/better_env/benv/include/nest/io_manager.h:
 
 /usr/include/boost/range/mutable_iterator.hpp:
 
@@ -13940,13 +13924,13 @@ CMakeFiles/custom_stdp_module_module.dir/tracking_neuron_planner_nestml.o: ../tr
 
 /usr/include/boost/sort/spreadsort/integer_sort.hpp:
 
+/home/emiliano/Documenti/better_env/benv/include/nest/target_table_devices.h:
+
 /usr/include/boost/type_traits/type_identity.hpp:
 
 /usr/include/boost/type_traits/remove_cv_ref.hpp:
 
 /usr/include/boost/type_traits/rank.hpp:
-
-/usr/include/boost/type_traits/make_unsigned.hpp:
 
 /usr/include/boost/type_traits/make_signed.hpp:
 
@@ -14002,8 +13986,6 @@ CMakeFiles/custom_stdp_module_module.dir/tracking_neuron_planner_nestml.o: ../tr
 
 /usr/include/boost/type_traits/has_trivial_move_constructor.hpp:
 
-/home/emiliano/Documenti/other_env/other_e/include/nest/archiving_node.h:
-
 /usr/include/boost/type_traits/has_trivial_move_assign.hpp:
 
 /usr/include/boost/type_traits/has_trivial_copy.hpp:
@@ -14022,25 +14004,29 @@ CMakeFiles/custom_stdp_module_module.dir/tracking_neuron_planner_nestml.o: ../tr
 
 /usr/include/boost/type_traits/detail/has_postfix_operator.hpp:
 
-/usr/include/boost/type_traits/has_plus.hpp:
-
 /usr/include/boost/type_traits/has_trivial_destructor.hpp:
 
 /usr/include/boost/type_traits/is_constructible.hpp:
 
 /usr/include/boost/type_traits/is_copy_constructible.hpp:
 
+/usr/include/gsl/gsl_matrix_long.h:
+
+/home/emiliano/Documenti/better_env/benv/include/nest/universal_data_logger.h:
+
+/usr/include/boost/type_traits/is_default_constructible.hpp:
+
 /usr/include/boost/type_traits/has_nothrow_constructor.hpp:
 
-/usr/include/boost/type_traits/is_assignable.hpp:
-
-/usr/include/boost/type_traits/has_nothrow_assign.hpp:
-
 /usr/include/boost/type_traits/has_new_operator.hpp:
+
+/home/emiliano/Documenti/better_env/benv/include/nest/node.h:
 
 /usr/include/boost/type_traits/has_negate.hpp:
 
 /usr/include/boost/type_traits/has_multiplies.hpp:
+
+/home/emiliano/Documenti/better_env/benv/include/nest/secondary_event.h:
 
 /usr/include/boost/type_traits/has_modulus_assign.hpp:
 
@@ -14049,8 +14035,6 @@ CMakeFiles/custom_stdp_module_module.dir/tracking_neuron_planner_nestml.o: ../tr
 /usr/include/boost/type_traits/has_minus_assign.hpp:
 
 /usr/include/boost/type_traits/has_minus.hpp:
-
-/home/emiliano/Documenti/other_env/other_e/include/nest/logging.h:
 
 /usr/include/boost/type_traits/has_logical_or.hpp:
 
@@ -14083,6 +14067,8 @@ CMakeFiles/custom_stdp_module_module.dir/tracking_neuron_planner_nestml.o: ../tr
 /usr/include/boost/type_traits/has_bit_or.hpp:
 
 /usr/include/boost/type_traits/has_bit_and_assign.hpp:
+
+/usr/include/boost/type_traits/make_void.hpp:
 
 /usr/include/boost/type_traits/negation.hpp:
 
@@ -14122,10 +14108,6 @@ CMakeFiles/custom_stdp_module_module.dir/tracking_neuron_planner_nestml.o: ../tr
 
 /usr/include/boost/sort/spreadsort/spreadsort.hpp:
 
-/usr/include/gsl/gsl_vector_long_double.h:
-
-/home/emiliano/Documenti/other_env/other_e/include/nest/source.h:
-
 /usr/include/boost/core/enable_if.hpp:
 
 /usr/include/boost/core/swap.hpp:
@@ -14133,6 +14115,8 @@ CMakeFiles/custom_stdp_module_module.dir/tracking_neuron_planner_nestml.o: ../tr
 /usr/include/boost/utility/swap.hpp:
 
 /usr/include/boost/type_traits/function_traits.hpp:
+
+/usr/include/boost/type_traits/add_cv.hpp:
 
 /usr/include/boost/type_traits/add_volatile.hpp:
 
@@ -14172,11 +14156,7 @@ CMakeFiles/custom_stdp_module_module.dir/tracking_neuron_planner_nestml.o: ../tr
 
 /usr/include/boost/mpl/lambda.hpp:
 
-/home/emiliano/Documenti/other_env/other_e/include/nest/source_table_position.h:
-
 /usr/include/boost/mpl/aux_/preprocessed/gcc/apply_wrap.hpp:
-
-/usr/include/boost/mpl/aux_/msvc_never_true.hpp:
 
 /usr/include/boost/preprocessor/repetition/enum_trailing_params.hpp:
 
@@ -14184,19 +14164,21 @@ CMakeFiles/custom_stdp_module_module.dir/tracking_neuron_planner_nestml.o: ../tr
 
 /usr/include/boost/preprocessor/repetition/enum_params.hpp:
 
+/usr/include/boost/preprocessor/array/size.hpp:
+
 /usr/include/boost/type_traits/is_nothrow_move_constructible.hpp:
 
 /usr/include/boost/mpl/has_xxx.hpp:
 
 /usr/include/boost/mpl/apply_wrap.hpp:
 
-/usr/include/boost/mpl/apply_fwd.hpp:
+/usr/include/boost/mpl/aux_/preprocessed/gcc/apply_fwd.hpp:
 
 /usr/include/boost/mpl/aux_/preprocessor/default_params.hpp:
 
-/usr/include/x86_64-linux-gnu/c++/11/bits/c++io.h:
+/usr/include/boost/type_traits/is_enum.hpp:
 
-/home/emiliano/Documenti/other_env/other_e/include/nest/stimulation_backend.h:
+/usr/include/x86_64-linux-gnu/c++/11/bits/c++io.h:
 
 /usr/include/boost/type_traits/add_pointer.hpp:
 
@@ -14218,45 +14200,19 @@ CMakeFiles/custom_stdp_module_module.dir/tracking_neuron_planner_nestml.o: ../tr
 
 /usr/include/boost/type_traits/is_pointer.hpp:
 
+/usr/include/boost/detail/indirect_traits.hpp:
+
 /usr/include/boost/type_traits/is_const.hpp:
 
 /usr/include/boost/mpl/aux_/preprocessed/gcc/and.hpp:
-
-/usr/include/boost/type_traits/add_cv.hpp:
-
-/home/emiliano/Documenti/other_env/other_e/include/nest/manager_interface.h:
-
-/home/emiliano/Documenti/other_env/other_e/include/nest/io_manager_impl.h:
-
-/usr/include/x86_64-linux-gnu/bits/fp-logb.h:
-
-/usr/include/x86_64-linux-gnu/bits/wchar2.h:
-
-/home/emiliano/Documenti/other_env/other_e/include/nest/aggregatedatum.h:
-
-/home/emiliano/Documenti/other_env/other_e/include/nest/kernel_manager.h:
 
 /usr/lib/x86_64-linux-gnu/openmpi/include/openmpi/ompi/mpi/cxx/constants.h:
 
 /usr/include/c++/11/bits/stl_bvector.h:
 
-/usr/lib/x86_64-linux-gnu/openmpi/include/openmpi/ompi/mpi/cxx/intercomm_inln.h:
-
-/usr/include/x86_64-linux-gnu/bits/types/struct___jmp_buf_tag.h:
-
-/usr/include/gsl/gsl_matrix_long.h:
-
-/usr/include/boost/type_traits/is_default_constructible.hpp:
-
-/home/emiliano/Documenti/other_env/other_e/include/nest/config.h:
-
 /usr/include/boost/iterator/detail/enable_if.hpp:
 
 /usr/include/x86_64-linux-gnu/bits/types/clockid_t.h:
-
-/usr/lib/x86_64-linux-gnu/openmpi/include/openmpi/ompi/mpi/cxx/datatype_inln.h:
-
-/usr/include/c++/11/vector:
 
 /usr/include/c++/11/bits/erase_if.h:
 
@@ -14264,9 +14220,19 @@ CMakeFiles/custom_stdp_module_module.dir/tracking_neuron_planner_nestml.o: ../tr
 
 /usr/include/c++/11/bits/ptr_traits.h:
 
-/usr/include/c++/11/bits/stl_deque.h:
+/usr/include/boost/type_traits/is_assignable.hpp:
+
+/home/emiliano/Documenti/better_env/benv/include/nest/compose.hpp:
 
 /usr/include/c++/11/bits/stl_uninitialized.h:
+
+/usr/include/gsl/gsl_odeiv.h:
+
+/home/emiliano/Documenti/better_env/benv/include/nest/name.h:
+
+/usr/include/x86_64-linux-gnu/bits/types/struct_tm.h:
+
+/usr/include/c++/11/bits/this_thread_sleep.h:
 
 /usr/include/boost/type_traits/is_pod.hpp:
 
@@ -14276,8 +14242,6 @@ CMakeFiles/custom_stdp_module_module.dir/tracking_neuron_planner_nestml.o: ../tr
 
 /usr/include/c++/11/string:
 
-/home/emiliano/Documenti/other_env/other_e/include/nest/random_generators.h:
-
 /usr/include/c++/11/bits/stl_relops.h:
 
 /usr/include/boost/mpl/aux_/config/has_apply.hpp:
@@ -14286,7 +14250,9 @@ CMakeFiles/custom_stdp_module_module.dir/tracking_neuron_planner_nestml.o: ../tr
 
 /usr/lib/gcc/x86_64-linux-gnu/11/include/syslimits.h:
 
-/home/emiliano/Documenti/other_env/other_e/include/nest/vector_util.h:
+/home/emiliano/Documenti/better_env/benv/include/nest/kernel_manager.h:
+
+/home/emiliano/Documenti/better_env/benv/include/nest/recordables_map.h:
 
 /usr/include/c++/11/debug/debug.h:
 
@@ -14298,15 +14264,23 @@ CMakeFiles/custom_stdp_module_module.dir/tracking_neuron_planner_nestml.o: ../tr
 
 /usr/include/c++/11/tr1/beta_function.tcc:
 
+/home/emiliano/Documenti/better_env/benv/include/nest/static_assert.h:
+
 /usr/include/boost/mpl/aux_/nested_type_wknd.hpp:
 
 /usr/include/boost/type_traits/has_right_shift_assign.hpp:
 
 /usr/include/c++/11/climits:
 
+/home/emiliano/Documenti/better_env/benv/include/nest/model_manager_impl.h:
+
+/usr/include/c++/11/new:
+
 /usr/include/c++/11/bits/istream.tcc:
 
 /usr/include/c++/11/istream:
+
+/home/emiliano/Documenti/better_env/benv/include/nest/stimulation_device.h:
 
 /usr/include/c++/11/bits/codecvt.h:
 
@@ -14316,9 +14290,7 @@ CMakeFiles/custom_stdp_module_module.dir/tracking_neuron_planner_nestml.o: ../tr
 
 /usr/include/c++/11/bits/streambuf_iterator.h:
 
-/usr/lib/x86_64-linux-gnu/openmpi/include/openmpi/ompi/mpi/cxx/functions.h:
-
-/usr/include/c++/11/bits/uniform_int_dist.h:
+/home/emiliano/Documenti/better_env/benv/include/nest/sliexceptions.h:
 
 /usr/include/boost/range/end.hpp:
 
@@ -14344,31 +14316,37 @@ CMakeFiles/custom_stdp_module_module.dir/tracking_neuron_planner_nestml.o: ../tr
 
 /usr/include/sched.h:
 
+/home/emiliano/Documenti/better_env/benv/include/nest/integerdatum.h:
+
 /usr/include/boost/config/user.hpp:
 
 /usr/include/x86_64-linux-gnu/bits/errno.h:
 
-../diff_neuron_nestml.cpp:
+/usr/include/c++/11/cerrno:
 
-/usr/include/boost/type_traits/has_nothrow_copy.hpp:
+/usr/include/boost/type_traits/make_unsigned.hpp:
 
-/home/emiliano/Documenti/other_env/other_e/include/nest/connector_base.h:
+/home/emiliano/Documenti/better_env/benv/include/nest/nest_types.h:
 
 /usr/include/x86_64-linux-gnu/bits/types/cookie_io_functions_t.h:
 
-/usr/include/x86_64-linux-gnu/bits/types/struct_tm.h:
-
 /usr/include/x86_64-linux-gnu/bits/stdio2.h:
+
+/usr/lib/x86_64-linux-gnu/openmpi/include/openmpi/ompi/mpi/cxx/intercomm_inln.h:
+
+/usr/include/x86_64-linux-gnu/bits/types/struct___jmp_buf_tag.h:
+
+/home/emiliano/Documenti/better_env/benv/include/nest/nestmodule.h:
 
 /usr/include/boost/mpl/if.hpp:
 
-/home/emiliano/Documenti/other_env/other_e/include/nest/enum_bitfield.h:
+/usr/include/c++/11/bits/locale_facets.tcc:
 
-/home/emiliano/Documenti/other_env/other_e/include/nest/genericdatum.h:
+/usr/include/x86_64-linux-gnu/bits/stdio.h:
 
 /usr/include/boost/mpl/aux_/config/dtp.hpp:
 
-/usr/include/stdio.h:
+/usr/include/c++/11/cstdio:
 
 /usr/include/boost/sort/spreadsort/detail/spreadsort_common.hpp:
 
@@ -14388,6 +14366,8 @@ CMakeFiles/custom_stdp_module_module.dir/tracking_neuron_planner_nestml.o: ../tr
 
 /usr/include/stdc-predef.h:
 
+/home/emiliano/Documenti/better_env/benv/include/nest/modelrange.h:
+
 /usr/include/c++/11/initializer_list:
 
 /usr/include/gsl/gsl_matrix_float.h:
@@ -14396,19 +14376,17 @@ CMakeFiles/custom_stdp_module_module.dir/tracking_neuron_planner_nestml.o: ../tr
 
 /usr/include/c++/11/map:
 
-/home/emiliano/Documenti/other_env/other_e/include/nest/namedatum.h:
-
 /usr/include/x86_64-linux-gnu/bits/floatn.h:
-
-/usr/include/boost/type_traits/is_unscoped_enum.hpp:
-
-/usr/include/c++/11/bits/hashtable.h:
 
 /usr/include/c++/11/bits/stl_function.h:
 
 ../basic_neuron_nestml.h:
 
 /usr/include/c++/11/bits/memoryfwd.h:
+
+/home/emiliano/Documenti/better_env/benv/include/nest/datum.h:
+
+/home/emiliano/Documenti/better_env/benv/include/nest/logging_manager.h:
 
 /usr/include/c++/11/bits/sstream.tcc:
 
@@ -14417,8 +14395,6 @@ CMakeFiles/custom_stdp_module_module.dir/tracking_neuron_planner_nestml.o: ../tr
 /usr/include/c++/11/ext/alloc_traits.h:
 
 /usr/include/x86_64-linux-gnu/bits/sched.h:
-
-/home/emiliano/Documenti/other_env/other_e/include/nest/numericdatum.h:
 
 /usr/include/boost/static_assert.hpp:
 
@@ -14430,6 +14406,8 @@ CMakeFiles/custom_stdp_module_module.dir/tracking_neuron_planner_nestml.o: ../tr
 
 /usr/include/x86_64-linux-gnu/c++/11/bits/atomic_word.h:
 
+/home/emiliano/Documenti/better_env/benv/include/nest/stimulation_backend.h:
+
 /usr/include/c++/11/functional:
 
 /usr/include/x86_64-linux-gnu/bits/pthread_stack_min-dynamic.h:
@@ -14437,6 +14415,8 @@ CMakeFiles/custom_stdp_module_module.dir/tracking_neuron_planner_nestml.o: ../tr
 /usr/include/x86_64-linux-gnu/c++/11/bits/c++config.h:
 
 /usr/include/c++/11/tr1/legendre_function.tcc:
+
+/home/emiliano/Documenti/better_env/benv/include/nest/interpret.h:
 
 /usr/include/time.h:
 
@@ -14470,11 +14450,17 @@ CMakeFiles/custom_stdp_module_module.dir/tracking_neuron_planner_nestml.o: ../tr
 
 /usr/include/asm-generic/errno.h:
 
+/usr/include/gsl/gsl_vector_char.h:
+
+/usr/include/x86_64-linux-gnu/c++/11/bits/gthr-default.h:
+
 /usr/include/ctype.h:
 
 /usr/include/c++/11/locale:
 
 /usr/include/c++/11/cctype:
+
+/home/emiliano/Documenti/better_env/benv/include/nest/node_manager.h:
 
 /usr/include/c++/11/iomanip:
 
@@ -14482,19 +14468,17 @@ CMakeFiles/custom_stdp_module_module.dir/tracking_neuron_planner_nestml.o: ../tr
 
 /usr/include/x86_64-linux-gnu/bits/locale.h:
 
-/home/emiliano/Documenti/other_env/other_e/include/nest/conn_builder.h:
-
-/home/emiliano/Documenti/other_env/other_e/include/nest/connector_model.h:
-
 /usr/include/boost/type_traits/remove_volatile.hpp:
 
 /usr/include/c++/11/pstl/glue_numeric_defs.h:
 
-/home/emiliano/Documenti/other_env/other_e/include/nest/node_manager.h:
+/home/emiliano/Documenti/better_env/benv/include/nest/connection_manager.h:
 
 /usr/include/c++/11/bits/ostream.tcc:
 
 /usr/include/boost/mpl/aux_/template_arity_fwd.hpp:
+
+/home/emiliano/Documenti/better_env/benv/include/nest/genericmodel_impl.h:
 
 /usr/include/c++/11/clocale:
 
@@ -14518,6 +14502,10 @@ CMakeFiles/custom_stdp_module_module.dir/tracking_neuron_planner_nestml.o: ../tr
 
 /usr/include/c++/11/bits/basic_string.h:
 
+/home/emiliano/Documenti/better_env/benv/include/nest/doubledatum.h:
+
+/usr/include/c++/11/bits/shared_ptr_base.h:
+
 /usr/include/x86_64-linux-gnu/bits/waitstatus.h:
 
 /usr/include/asm-generic/errno-base.h:
@@ -14532,15 +14520,11 @@ CMakeFiles/custom_stdp_module_module.dir/tracking_neuron_planner_nestml.o: ../tr
 
 /usr/include/c++/11/typeinfo:
 
-/usr/include/x86_64-linux-gnu/sys/types.h:
-
 /usr/include/gsl/gsl_matrix_ulong.h:
 
 /usr/include/locale.h:
 
 /usr/include/gsl/gsl_inline.h:
-
-/home/emiliano/Documenti/other_env/other_e/include/nest/random_manager.h:
 
 /usr/include/x86_64-linux-gnu/bits/setjmp.h:
 
@@ -14558,19 +14542,21 @@ CMakeFiles/custom_stdp_module_module.dir/tracking_neuron_planner_nestml.o: ../tr
 
 /usr/include/c++/11/bits/locale_classes.tcc:
 
-/home/emiliano/Documenti/other_env/other_e/include/nest/exceptions.h:
-
 /usr/include/boost/config/detail/suffix.hpp:
+
+/home/emiliano/Documenti/better_env/benv/include/nest/genericmodel.h:
 
 /usr/include/boost/type_traits/is_integral.hpp:
 
 /usr/include/x86_64-linux-gnu/bits/fp-fast.h:
 
-/usr/include/boost/config/workaround.hpp:
-
 /usr/include/boost/mpl/aux_/config/gpu.hpp:
 
+/home/emiliano/Documenti/better_env/benv/include/nest/archiving_node.h:
+
 /usr/include/c++/11/bits/concept_check.h:
+
+/home/emiliano/Documenti/better_env/benv/include/nest/genericdatum.h:
 
 /usr/include/x86_64-linux-gnu/bits/flt-eval-method.h:
 
@@ -14594,17 +14580,13 @@ CMakeFiles/custom_stdp_module_module.dir/tracking_neuron_planner_nestml.o: ../tr
 
 /usr/include/c++/11/bits/stl_list.h:
 
-/usr/include/boost/type_traits/is_abstract.hpp:
-
 /usr/include/boost/type_traits/add_rvalue_reference.hpp:
 
-/home/emiliano/Documenti/other_env/other_e/include/nest/connection_manager.h:
+/usr/include/x86_64-linux-gnu/bits/types/struct_itimerspec.h:
 
 /usr/include/boost/preprocessor/tuple/detail/is_single_return.hpp:
 
-/usr/include/c++/11/bits/stl_multimap.h:
-
-/usr/include/features.h:
+/home/emiliano/Documenti/better_env/benv/include/nest/recording_backend.h:
 
 /usr/include/x86_64-linux-gnu/bits/long-double.h:
 
@@ -14614,11 +14596,9 @@ CMakeFiles/custom_stdp_module_module.dir/tracking_neuron_planner_nestml.o: ../tr
 
 /usr/include/boost/config/detail/select_stdlib_config.hpp:
 
-/home/emiliano/Documenti/other_env/other_e/include/nest/growth_curve_factory.h:
-
 /usr/include/x86_64-linux-gnu/bits/types/__sigset_t.h:
 
-/usr/include/c++/11/limits:
+/home/emiliano/Documenti/better_env/benv/include/nest/dictdatum.h:
 
 /usr/include/x86_64-linux-gnu/bits/types/clock_t.h:
 
@@ -14632,8 +14612,6 @@ CMakeFiles/custom_stdp_module_module.dir/tracking_neuron_planner_nestml.o: ../tr
 
 ../stdp_synapse_alpha.h:
 
-/home/emiliano/Documenti/other_env/other_e/include/nest/target_identifier.h:
-
 /usr/include/boost/mpl/aux_/template_arity.hpp:
 
 /usr/include/boost/mpl/identity.hpp:
@@ -14643,6 +14621,8 @@ CMakeFiles/custom_stdp_module_module.dir/tracking_neuron_planner_nestml.o: ../tr
 /usr/include/x86_64-linux-gnu/bits/time64.h:
 
 /usr/include/c++/11/streambuf:
+
+/home/emiliano/Documenti/better_env/benv/include/nest/vp_manager.h:
 
 /usr/include/boost/mpl/int.hpp:
 
@@ -14660,29 +14640,43 @@ CMakeFiles/custom_stdp_module_module.dir/tracking_neuron_planner_nestml.o: ../tr
 
 /usr/include/boost/type_traits/remove_pointer.hpp:
 
-/home/emiliano/Documenti/other_env/other_e/include/nest/vp_manager.h:
-
 /usr/include/stdlib.h:
 
 /usr/include/boost/preprocessor/cat.hpp:
 
-/usr/include/x86_64-linux-gnu/bits/wordsize.h:
+/home/emiliano/Documenti/better_env/benv/include/nest/source_table.h:
 
-/home/emiliano/Documenti/other_env/other_e/include/nest/tokenarray.h:
+/usr/include/x86_64-linux-gnu/bits/wordsize.h:
 
 /usr/include/boost/mpl/protect.hpp:
 
 /usr/include/c++/11/chrono:
 
+/home/emiliano/Documenti/better_env/benv/include/nest/syn_id_delay.h:
+
 /usr/include/boost/ref.hpp:
 
 /usr/include/c++/11/bits/ios_base.h:
+
+/usr/include/x86_64-linux-gnu/bits/fp-logb.h:
+
+/usr/include/x86_64-linux-gnu/bits/wchar2.h:
 
 /usr/include/boost/type_traits/has_dereference.hpp:
 
 /usr/include/endian.h:
 
 /usr/include/c++/11/bits/cpp_type_traits.h:
+
+/usr/include/boost/type_traits/is_abstract.hpp:
+
+/home/emiliano/Documenti/better_env/benv/include/nest/lockptrdatum.h:
+
+/usr/lib/x86_64-linux-gnu/openmpi/include/openmpi/ompi/mpi/cxx/functions.h:
+
+/usr/include/c++/11/bits/uniform_int_dist.h:
+
+/home/emiliano/Documenti/better_env/benv/include/nest/tokenutils.h:
 
 /usr/include/c++/11/bits/std_thread.h:
 
@@ -14693,8 +14687,6 @@ CMakeFiles/custom_stdp_module_module.dir/tracking_neuron_planner_nestml.o: ../tr
 /usr/include/c++/11/bits/range_access.h:
 
 /usr/include/x86_64-linux-gnu/bits/stdint-intn.h:
-
-/home/emiliano/Documenti/other_env/other_e/include/nest/target_table_devices_impl.h:
 
 /usr/include/c++/11/cfloat:
 
@@ -14714,23 +14706,7 @@ CMakeFiles/custom_stdp_module_module.dir/tracking_neuron_planner_nestml.o: ../tr
 
 /usr/include/c++/11/type_traits:
 
-/usr/include/boost/mpl/aux_/preprocessed/gcc/apply_fwd.hpp:
-
-/home/emiliano/Documenti/other_env/other_e/include/nest/slitype.h:
-
 /usr/include/c++/11/pstl/pstl_config.h:
-
-/usr/include/x86_64-linux-gnu/asm/errno.h:
-
-/usr/include/boost/type_traits/add_lvalue_reference.hpp:
-
-/usr/include/x86_64-linux-gnu/bits/types/struct_timeval.h:
-
-/usr/include/boost/type_traits/add_reference.hpp:
-
-/usr/include/boost/type_traits/integral_constant.hpp:
-
-/usr/include/c++/11/ostream:
 
 /usr/include/string.h:
 
@@ -14741,10 +14717,6 @@ CMakeFiles/custom_stdp_module_module.dir/tracking_neuron_planner_nestml.o: ../tr
 /usr/include/c++/11/iostream:
 
 /usr/include/x86_64-linux-gnu/bits/uintn-identity.h:
-
-/usr/include/boost/preprocessor/array/size.hpp:
-
-/home/emiliano/Documenti/other_env/other_e/include/nest/lockptrdatum.h:
 
 /usr/include/boost/mpl/arg_fwd.hpp:
 
@@ -14764,6 +14736,8 @@ CMakeFiles/custom_stdp_module_module.dir/tracking_neuron_planner_nestml.o: ../tr
 
 /usr/include/x86_64-linux-gnu/bits/select2.h:
 
+/home/emiliano/Documenti/better_env/benv/include/nest/device.h:
+
 /usr/include/c++/11/cwchar:
 
 /usr/include/boost/mpl/aux_/config/arrays.hpp:
@@ -14771,8 +14745,6 @@ CMakeFiles/custom_stdp_module_module.dir/tracking_neuron_planner_nestml.o: ../tr
 /usr/include/x86_64-linux-gnu/bits/floatn-common.h:
 
 /usr/include/x86_64-linux-gnu/bits/types/wint_t.h:
-
-/home/emiliano/Documenti/other_env/other_e/include/nest/lockptr.h:
 
 /usr/lib/x86_64-linux-gnu/openmpi/include/openmpi/ompi/mpi/cxx/errhandler.h:
 
@@ -14784,51 +14756,45 @@ CMakeFiles/custom_stdp_module_module.dir/tracking_neuron_planner_nestml.o: ../tr
 
 /usr/include/x86_64-linux-gnu/bits/types/__locale_t.h:
 
-/home/emiliano/Documenti/other_env/other_e/include/nest/recording_device.h:
-
 /usr/include/c++/11/bits/std_abs.h:
-
-/home/emiliano/Documenti/other_env/other_e/include/nest/spikecounter.h:
 
 /usr/include/c++/11/bits/stl_heap.h:
 
+/usr/include/x86_64-linux-gnu/bits/types/struct_timespec.h:
+
 /usr/include/x86_64-linux-gnu/sys/select.h:
 
-/usr/include/gsl/gsl_vector_char.h:
+/usr/include/c++/11/bits/stl_multimap.h:
 
-/usr/include/x86_64-linux-gnu/c++/11/bits/gthr-default.h:
+/usr/include/features.h:
 
-/home/emiliano/Documenti/other_env/other_e/include/nest/numerics.h:
+/usr/include/x86_64-linux-gnu/asm/errno.h:
 
-/usr/include/x86_64-linux-gnu/c++/11/bits/os_defines.h:
+/usr/include/boost/type_traits/add_lvalue_reference.hpp:
 
-/usr/include/c++/11/bits/exception_defines.h:
+/usr/include/x86_64-linux-gnu/bits/types/struct_timeval.h:
 
-/usr/include/c++/11/ext/type_traits.h:
+/usr/include/boost/type_traits/add_reference.hpp:
 
-/usr/include/boost/mpl/bool_fwd.hpp:
+/usr/include/boost/type_traits/integral_constant.hpp:
 
-/usr/include/x86_64-linux-gnu/bits/endianness.h:
+/home/emiliano/Documenti/better_env/benv/include/nest/config.h:
 
-/usr/include/c++/11/bits/charconv.h:
+../extended_post_history_archiving_node.cpp:
 
-/usr/include/x86_64-linux-gnu/bits/types/__mbstate_t.h:
+/usr/include/boost/mpl/aux_/lambda_arity_param.hpp:
 
-/usr/include/c++/11/bits/exception_ptr.h:
+/usr/include/x86_64-linux-gnu/bits/local_lim.h:
 
-/usr/include/math.h:
+/usr/include/c++/11/string_view:
 
-/usr/include/x86_64-linux-gnu/c++/11/bits/c++allocator.h:
+/usr/include/boost/type_traits/is_complete.hpp:
 
-/home/emiliano/Documenti/other_env/other_e/include/nest/target_table_devices.h:
-
-/usr/include/x86_64-linux-gnu/bits/typesizes.h:
-
-/usr/include/c++/11/bits/predefined_ops.h:
+/usr/include/boost/preprocessor/detail/auto_rec.hpp:
 
 /usr/include/gsl/gsl_vector_ushort.h:
 
-/home/emiliano/Documenti/other_env/other_e/include/nest/nest_timeconverter.h:
+/home/emiliano/Documenti/better_env/benv/include/nest/sparse_node_array.h:
 
 /usr/include/x86_64-linux-gnu/bits/mathcalls.h:
 
@@ -14844,15 +14810,41 @@ CMakeFiles/custom_stdp_module_module.dir/tracking_neuron_planner_nestml.o: ../tr
 
 /usr/include/x86_64-linux-gnu/bits/mathcalls-narrow.h:
 
-/usr/include/c++/11/bits/postypes.h:
+/home/emiliano/Documenti/better_env/benv/include/nest/block_vector.h:
 
-/home/emiliano/Documenti/other_env/other_e/include/nest/event_delivery_manager.h:
+/usr/include/c++/11/bits/postypes.h:
 
 /usr/include/boost/mpl/integral_c_tag.hpp:
 
 /usr/include/boost/preprocessor/punctuation/comma.hpp:
 
 /usr/include/boost/preprocessor/tuple/elem.hpp:
+
+/usr/include/x86_64-linux-gnu/c++/11/bits/os_defines.h:
+
+/usr/include/c++/11/bits/exception_defines.h:
+
+/usr/include/c++/11/ext/type_traits.h:
+
+/usr/include/boost/mpl/bool_fwd.hpp:
+
+/usr/include/x86_64-linux-gnu/bits/endianness.h:
+
+/home/emiliano/Documenti/better_env/benv/include/nest/ring_buffer.h:
+
+/usr/include/c++/11/bits/charconv.h:
+
+/usr/include/x86_64-linux-gnu/bits/types/__mbstate_t.h:
+
+/usr/include/c++/11/bits/exception_ptr.h:
+
+/usr/include/math.h:
+
+/usr/include/x86_64-linux-gnu/c++/11/bits/c++allocator.h:
+
+/usr/include/x86_64-linux-gnu/bits/typesizes.h:
+
+/usr/include/c++/11/bits/predefined_ops.h:
 
 /usr/include/boost/sort/spreadsort/detail/float_sort.hpp:
 
@@ -14862,31 +14854,19 @@ CMakeFiles/custom_stdp_module_module.dir/tracking_neuron_planner_nestml.o: ../tr
 
 /usr/include/x86_64-linux-gnu/bits/math-vector.h:
 
-/home/emiliano/Documenti/other_env/other_e/include/nest/sliexceptions.h:
-
 /usr/include/c++/11/tr1/riemann_zeta.tcc:
-
-/usr/include/boost/mpl/or.hpp:
 
 /usr/include/x86_64-linux-gnu/bits/pthreadtypes.h:
 
 /usr/include/gsl/gsl_errno.h:
 
-/home/emiliano/Documenti/other_env/other_e/include/nest/delay_checker.h:
-
 /usr/include/c++/11/ext/new_allocator.h:
 
-/home/emiliano/Documenti/other_env/other_e/include/nest/io_manager.h:
-
-/usr/include/c++/11/cstdio:
-
-/home/emiliano/Documenti/other_env/other_e/include/nest/randutils.hpp:
+/home/emiliano/Documenti/better_env/benv/include/nest/sort.h:
 
 /usr/include/x86_64-linux-gnu/bits/struct_rwlock.h:
 
-/usr/include/c++/11/new:
-
-/home/emiliano/Documenti/other_env/other_e/include/nest/ntree.h:
+/usr/include/alloca.h:
 
 /usr/include/x86_64-linux-gnu/bits/time.h:
 
@@ -14899,6 +14879,8 @@ CMakeFiles/custom_stdp_module_module.dir/tracking_neuron_planner_nestml.o: ../tr
 /usr/include/x86_64-linux-gnu/bits/atomic_wide_counter.h:
 
 /usr/include/gsl/gsl_matrix_complex_long_double.h:
+
+/home/emiliano/Documenti/better_env/benv/include/nest/manager_interface.h:
 
 /usr/include/c++/11/tuple:
 
@@ -14920,11 +14902,19 @@ CMakeFiles/custom_stdp_module_module.dir/tracking_neuron_planner_nestml.o: ../tr
 
 /usr/include/c++/11/cstdlib:
 
+/usr/include/c++/11/bits/allocated_ptr.h:
+
+/usr/include/assert.h:
+
 /usr/include/boost/mpl/placeholders.hpp:
 
 /usr/include/boost/iterator/detail/config_undef.hpp:
 
 /usr/include/c++/11/tr1/poly_laguerre.tcc:
+
+/usr/include/x86_64-linux-gnu/c++/11/bits/error_constants.h:
+
+/usr/include/c++/11/tr1/ell_integral.tcc:
 
 /usr/include/gsl/gsl_block_short.h:
 
@@ -14934,11 +14924,15 @@ CMakeFiles/custom_stdp_module_module.dir/tracking_neuron_planner_nestml.o: ../tr
 
 /usr/include/boost/mpl/bool.hpp:
 
+/home/emiliano/Documenti/better_env/benv/include/nest/spikecounter.h:
+
 /usr/include/c++/11/bits/shared_ptr.h:
 
 /usr/include/gsl/gsl_vector_short.h:
 
 /usr/include/c++/11/tr1/exp_integral.tcc:
+
+/home/emiliano/Documenti/better_env/benv/include/nest/enum_bitfield.h:
 
 /usr/include/boost/preprocessor/list/reverse.hpp:
 
@@ -14966,6 +14960,10 @@ CMakeFiles/custom_stdp_module_module.dir/tracking_neuron_planner_nestml.o: ../tr
 
 /usr/include/boost/type_traits/detail/config.hpp:
 
+/usr/include/c++/11/tr1/special_function_util.h:
+
+/home/emiliano/Documenti/better_env/benv/include/nest/event.h:
+
 /usr/include/boost/mpl/aux_/config/msvc_typename.hpp:
 
 /usr/include/c++/11/bits/deque.tcc:
@@ -14980,57 +14978,61 @@ CMakeFiles/custom_stdp_module_module.dir/tracking_neuron_planner_nestml.o: ../tr
 
 /usr/include/c++/11/bits/stringfwd.h:
 
-/usr/include/c++/11/tr1/special_function_util.h:
+/home/emiliano/Documenti/better_env/benv/include/nest/tokenstack.h:
+
+/usr/include/stdio.h:
+
+/home/emiliano/Documenti/better_env/benv/include/nest/node_collection.h:
 
 /usr/lib/gcc/x86_64-linux-gnu/11/include/stdint.h:
 
-/usr/include/gsl/gsl_block_ushort.h:
+/usr/include/boost/mpl/aux_/msvc_never_true.hpp:
 
-/usr/include/c++/11/bits/stl_algobase.h:
+/home/emiliano/Documenti/better_env/benv/include/nest/target.h:
 
 /usr/include/unistd.h:
 
-../extended_post_history_archiving_node.cpp:
+/home/emiliano/Documenti/better_env/benv/include/nest/nest_extension_interface.h:
 
-/usr/include/boost/mpl/aux_/lambda_arity_param.hpp:
+/home/emiliano/Documenti/better_env/benv/include/nest/randutils.hpp:
 
-/usr/include/x86_64-linux-gnu/bits/local_lim.h:
+/usr/include/x86_64-linux-gnu/bits/wchar.h:
 
-/usr/include/c++/11/string_view:
+/usr/lib/x86_64-linux-gnu/openmpi/include/openmpi/ompi/mpi/cxx/intracomm.h:
 
-/usr/include/boost/type_traits/is_complete.hpp:
+/home/emiliano/Documenti/better_env/benv/include/nest/nest_time.h:
 
-/usr/include/boost/preprocessor/detail/auto_rec.hpp:
+/home/emiliano/Documenti/better_env/benv/include/nest/numericdatum.h:
 
-/usr/include/x86_64-linux-gnu/bits/types/struct_itimerspec.h:
+/usr/include/boost/mpl/aux_/include_preprocessed.hpp:
 
-/home/emiliano/Documenti/other_env/other_e/include/nest/nest_types.h:
+/usr/include/boost/type_traits/conditional.hpp:
 
-/home/emiliano/Documenti/other_env/other_e/include/nest/node.h:
-
-/usr/include/c++/11/bits/uses_allocator.h:
-
-/usr/include/boost/mpl/aux_/config/workaround.hpp:
+/usr/include/x86_64-linux-gnu/bits/types/mbstate_t.h:
 
 /usr/include/c++/11/bits/specfun.h:
 
+/usr/include/c++/11/exception:
+
+/home/emiliano/Documenti/better_env/benv/include/nest/sharedptrdatum.h:
+
 /usr/include/c++/11/bits/cxxabi_init_exception.h:
 
-/usr/include/c++/11/cerrno:
+/usr/include/boost/type_traits/has_plus.hpp:
 
-/home/emiliano/Documenti/other_env/other_e/include/nest/dictdatum.h:
+/home/emiliano/Documenti/better_env/benv/include/nest/numerics.h:
 
-../stdp_synapse_sinexp.cpp:
+/home/emiliano/Documenti/better_env/benv/include/nest/dict.h:
 
-/usr/include/c++/11/bits/quoted_string.h:
+/usr/include/c++/11/limits:
 
-/home/emiliano/Documenti/other_env/other_e/include/nest/token.h:
-
-/usr/include/boost/version.hpp:
+/home/emiliano/Documenti/better_env/benv/include/nest/token.h:
 
 /usr/include/c++/11/bits/locale_facets_nonio.h:
 
 /usr/include/gsl/gsl_block_complex_long_double.h:
+
+/home/emiliano/Documenti/better_env/benv/include/nest/modelrange_manager.h:
 
 /usr/include/c++/11/ctime:
 
@@ -15054,35 +15056,41 @@ CMakeFiles/custom_stdp_module_module.dir/tracking_neuron_planner_nestml.o: ../tr
 
 /usr/include/boost/mpl/aux_/arity_spec.hpp:
 
+/home/emiliano/Documenti/better_env/benv/include/nest/nest_timeconverter.h:
+
 /usr/include/c++/11/bits/locale_conv.h:
+
+/home/emiliano/Documenti/better_env/benv/include/nest/growth_curve.h:
 
 /usr/include/boost/config/platform/linux.hpp:
 
 /usr/include/c++/11/bits/unique_ptr.h:
 
+../stdp_synapse_sinexp.cpp:
+
+/usr/include/c++/11/bits/quoted_string.h:
+
 /usr/include/c++/11/sstream:
+
+/usr/include/gsl/gsl_block_ushort.h:
+
+/usr/include/c++/11/bits/stl_algobase.h:
+
+/home/emiliano/Documenti/better_env/benv/include/nest/slimodule.h:
 
 /usr/include/boost/mpl/aux_/config/gcc.hpp:
 
 /usr/include/boost/mpl/aux_/config/ttp.hpp:
 
-/usr/include/boost/type_traits/make_void.hpp:
+/usr/lib/x86_64-linux-gnu/openmpi/include/openmpi/ompi/mpi/cxx/datatype_inln.h:
 
-/home/emiliano/Documenti/other_env/other_e/include/nest/slifunction.h:
+/usr/include/c++/11/vector:
 
-/home/emiliano/Documenti/other_env/other_e/include/nest/interpret.h:
-
-/usr/include/boost/type_traits/is_lvalue_reference.hpp:
+/home/emiliano/Documenti/better_env/benv/include/nest/slifunction.h:
 
 /usr/include/boost/preprocessor/array/elem.hpp:
 
-/home/emiliano/Documenti/other_env/other_e/include/nest/datum.h:
-
 /usr/include/c++/11/list:
-
-/usr/include/assert.h:
-
-/usr/include/c++/11/bits/allocated_ptr.h:
 
 /usr/include/boost/mpl/aux_/config/use_preprocessed.hpp:
 
@@ -15090,15 +15098,23 @@ CMakeFiles/custom_stdp_module_module.dir/tracking_neuron_planner_nestml.o: ../tr
 
 /usr/include/c++/11/bits/list.tcc:
 
-/home/emiliano/Documenti/other_env/other_e/include/nest/sliactions.h:
+/home/emiliano/Documenti/better_env/benv/include/nest/random_generators.h:
 
-/usr/include/boost/type_traits/is_enum.hpp:
+/home/emiliano/Documenti/better_env/benv/include/nest/sliactions.h:
 
-/home/emiliano/Documenti/other_env/other_e/include/nest/slibuiltins.h:
+/usr/lib/x86_64-linux-gnu/openmpi/include/openmpi/ompi/mpi/cxx/comm_inln.h:
 
-/home/emiliano/Documenti/other_env/other_e/include/nest/tokenstack.h:
+/home/emiliano/Documenti/better_env/benv/include/nest/slibuiltins.h:
 
-/home/emiliano/Documenti/other_env/other_e/include/nest/tarrayobj.h:
+/usr/include/c++/11/numeric:
+
+/home/emiliano/Documenti/better_env/benv/include/nest/tarrayobj.h:
+
+/home/emiliano/Documenti/better_env/benv/include/nest/tokenarray.h:
+
+/usr/include/c++/11/bits/random.tcc:
+
+/usr/include/c++/11/bits/atomic_base.h:
 
 /usr/include/c++/11/algorithm:
 
@@ -15114,23 +15130,27 @@ CMakeFiles/custom_stdp_module_module.dir/tracking_neuron_planner_nestml.o: ../tr
 
 /usr/include/c++/11/bits/stl_tempbuf.h:
 
-/home/emiliano/Documenti/other_env/other_e/include/nest/sp_manager.h:
-
 /usr/include/c++/11/bits/refwrap.h:
 
-/usr/include/boost/mpl/int_fwd.hpp:
+/home/emiliano/Documenti/better_env/benv/include/nest/io_manager_impl.h:
 
-/home/emiliano/Documenti/other_env/other_e/include/nest/nest_time.h:
+/home/emiliano/Documenti/better_env/benv/include/nest/string_utils.h:
+
+/usr/include/boost/mpl/int_fwd.hpp:
 
 /usr/lib/gcc/x86_64-linux-gnu/11/include/omp.h:
 
 /usr/include/c++/11/unordered_map:
 
-/home/emiliano/Documenti/other_env/other_e/include/nest/secondary_event_impl.h:
+/usr/include/boost/type_traits/is_unscoped_enum.hpp:
+
+/usr/include/c++/11/bits/hashtable.h:
 
 /usr/include/boost/type_traits/is_destructible.hpp:
 
 /usr/include/c++/11/bits/hashtable_policy.h:
+
+/home/emiliano/Documenti/better_env/benv/include/nest/lockptr.h:
 
 /usr/include/c++/11/memory:
 
@@ -15138,29 +15158,29 @@ CMakeFiles/custom_stdp_module_module.dir/tracking_neuron_planner_nestml.o: ../tr
 
 /usr/include/c++/11/bits/stl_raw_storage_iter.h:
 
+/home/emiliano/Documenti/better_env/benv/include/nest/connector_base_impl.h:
+
+/usr/include/x86_64-linux-gnu/bits/select.h:
+
+/usr/include/boost/preprocessor/detail/is_binary.hpp:
+
+/home/emiliano/Documenti/better_env/benv/include/nest/deprecation_warning.h:
+
 /usr/include/c++/11/bits/align.h:
+
+/home/emiliano/Documenti/better_env/benv/include/nest/synaptic_element.h:
 
 /usr/include/boost/mpl/aux_/preprocessed/gcc/or.hpp:
 
 /usr/lib/x86_64-linux-gnu/openmpi/include/openmpi/ompi/mpi/cxx/intracomm_inln.h:
+
+/home/emiliano/Documenti/better_env/benv/include/nest/logging.h:
 
 /usr/include/c++/11/bit:
 
 /usr/include/boost/preprocessor/punctuation/comma_if.hpp:
 
 /usr/include/c++/11/bits/shared_ptr_atomic.h:
-
-/usr/include/boost/type_traits/conditional.hpp:
-
-/usr/include/x86_64-linux-gnu/bits/types/mbstate_t.h:
-
-/home/emiliano/Documenti/other_env/other_e/include/nest/sort.h:
-
-/home/emiliano/Documenti/other_env/other_e/include/nest/histentry.h:
-
-/usr/include/c++/11/bits/random.tcc:
-
-/usr/include/c++/11/bits/atomic_base.h:
 
 /usr/lib/x86_64-linux-gnu/openmpi/include/openmpi/ompi/mpi/cxx/file_inln.h:
 
@@ -15174,107 +15194,107 @@ CMakeFiles/custom_stdp_module_module.dir/tracking_neuron_planner_nestml.o: ../tr
 
 /usr/include/c++/11/backward/auto_ptr.h:
 
-/home/emiliano/Documenti/other_env/other_e/include/nest/doubledatum.h:
-
 /usr/include/gsl/gsl_vector_long.h:
 
 /usr/include/c++/11/pstl/glue_memory_defs.h:
 
-/usr/include/c++/11/bits/this_thread_sleep.h:
+/home/emiliano/Documenti/better_env/benv/include/nest/iterator_pair.h:
 
-/home/emiliano/Documenti/other_env/other_e/include/nest/stopwatch.h:
+/home/emiliano/Documenti/better_env/benv/include/nest/stopwatch.h:
+
+/usr/include/boost/preprocessor/config/config.hpp:
 
 /usr/include/x86_64-linux-gnu/sys/time.h:
+
+/usr/include/x86_64-linux-gnu/sys/types.h:
+
+/home/emiliano/Documenti/better_env/benv/include/nest/conn_builder.h:
 
 /usr/include/x86_64-linux-gnu/gnu/stubs.h:
 
 /usr/include/c++/11/set:
 
-/home/emiliano/Documenti/other_env/other_e/include/nest/modelrange.h:
-
 /usr/include/c++/11/bits/stl_set.h:
 
-/home/emiliano/Documenti/other_env/other_e/include/nest/conn_parameter.h:
+/usr/include/c++/11/bits/stl_deque.h:
 
-/usr/include/c++/11/bits/locale_facets.tcc:
+/home/emiliano/Documenti/better_env/benv/include/nest/nest_datums.h:
 
-/usr/include/x86_64-linux-gnu/bits/stdio.h:
+/usr/include/c++/11/bits/unordered_map.h:
 
-/home/emiliano/Documenti/other_env/other_e/include/nest/connection_id.h:
+/usr/include/boost/type_traits/is_arithmetic.hpp:
 
-/usr/include/boost/mpl/quote.hpp:
+/usr/include/gsl/gsl_matrix_complex_double.h:
 
-/usr/include/boost/preprocessor/identity.hpp:
+/home/emiliano/Documenti/better_env/benv/include/nest/connection_id.h:
 
-/home/emiliano/Documenti/other_env/other_e/include/nest/arraydatum.h:
+/usr/include/x86_64-linux-gnu/bits/unistd.h:
 
-/usr/include/x86_64-linux-gnu/bits/select.h:
+/usr/include/boost/type_traits/has_nothrow_assign.hpp:
 
-/usr/include/boost/preprocessor/detail/is_binary.hpp:
-
-/home/emiliano/Documenti/other_env/other_e/include/nest/allocator.h:
-
-/usr/include/boost/preprocessor/logical/bool.hpp:
-
-/usr/include/alloca.h:
-
-/home/emiliano/Documenti/other_env/other_e/include/nest/dictutils.h:
-
-/home/emiliano/Documenti/other_env/other_e/include/nest/integerdatum.h:
-
-/usr/include/x86_64-linux-gnu/bits/types/struct_timespec.h:
-
-/home/emiliano/Documenti/other_env/other_e/include/nest/tokenutils.h:
-
-/home/emiliano/Documenti/other_env/other_e/include/nest/nestmodule.h:
-
-/usr/include/x86_64-linux-gnu/c++/11/bits/error_constants.h:
-
-/usr/include/c++/11/tr1/ell_integral.tcc:
-
-/home/emiliano/Documenti/other_env/other_e/include/nest/event.h:
-
-/usr/include/strings.h:
-
-/home/emiliano/Documenti/other_env/other_e/include/nest/position.h:
-
-/usr/include/x86_64-linux-gnu/bits/strings_fortified.h:
-
-/home/emiliano/Documenti/other_env/other_e/include/nest/spike_data.h:
+/home/emiliano/Documenti/better_env/benv/include/nest/arraydatum.h:
 
 /usr/include/c++/11/bits/enable_special_members.h:
 
 /usr/include/boost/preprocessor/control/iif.hpp:
 
-/home/emiliano/Documenti/other_env/other_e/include/nest/connection_label.h:
+/usr/include/boost/config/workaround.hpp:
 
-/usr/include/boost/detail/indirect_traits.hpp:
+/home/emiliano/Documenti/better_env/benv/include/nest/aggregatedatum.h:
 
-/home/emiliano/Documenti/other_env/other_e/include/nest/target.h:
+../diff_neuron_nestml.cpp:
 
-/home/emiliano/Documenti/other_env/other_e/include/nest/static_assert.h:
+/usr/include/boost/type_traits/has_nothrow_copy.hpp:
 
-/usr/include/boost/mpl/aux_/arg_typedef.hpp:
+/home/emiliano/Documenti/better_env/benv/include/nest/allocator.h:
 
-/usr/include/boost/mpl/aux_/preprocessed/gcc/arg.hpp:
+/usr/include/gsl/gsl_matrix_double.h:
 
-/usr/include/boost/preprocessor/comma_if.hpp:
+/home/emiliano/Documenti/better_env/benv/include/nest/dictutils.h:
 
-/home/emiliano/Documenti/other_env/other_e/include/nest/generic_factory.h:
+../basic_neuron_nestml.cpp:
+
+/usr/include/boost/preprocessor/inc.hpp:
+
+/home/emiliano/Documenti/better_env/benv/include/nest/namedatum.h:
+
+/usr/include/boost/preprocessor/arithmetic/sub.hpp:
+
+/usr/include/strings.h:
+
+/usr/include/x86_64-linux-gnu/bits/strings_fortified.h:
+
+/usr/include/boost/mpl/apply_fwd.hpp:
+
+/home/emiliano/Documenti/better_env/benv/include/nest/spike_data.h:
+
+/usr/include/c++/11/ostream:
+
+/home/emiliano/Documenti/better_env/benv/include/nest/generic_factory.h:
+
+/usr/include/libltdl/lt_dlloader.h:
+
+/usr/include/x86_64-linux-gnu/bits/unistd_ext.h:
+
+/home/emiliano/Documenti/better_env/benv/include/nest/ntree.h:
 
 /usr/include/c++/11/bitset:
 
+/home/emiliano/Documenti/better_env/benv/include/nest/dict_util.h:
+
 /usr/include/c++/11/bits/stream_iterator.h:
 
-/usr/include/c++/11/bits/shared_ptr_base.h:
+/usr/include/boost/mpl/or.hpp:
 
-/home/emiliano/Documenti/other_env/other_e/include/nest/compose.hpp:
+/home/emiliano/Documenti/better_env/benv/include/nest/position.h:
 
-/home/emiliano/Documenti/other_env/other_e/include/nest/parameter.h:
+../extended_hist_entry.cpp:
 
-/usr/include/x86_64-linux-gnu/bits/wchar.h:
+/usr/include/boost/type_traits/has_logical_and.hpp:
 
-/home/emiliano/Documenti/other_env/other_e/include/nest/nest_names.h:
+/usr/include/x86_64-linux-gnu/bits/confname.h:
+
+/home/emiliano/Documenti/better_env/benv/include/nest/nest_names.h:
 
 /usr/include/boost/config.hpp:
 
@@ -15284,11 +15304,11 @@ CMakeFiles/custom_stdp_module_module.dir/tracking_neuron_planner_nestml.o: ../tr
 
 /usr/include/c++/11/bits/random.h:
 
-/home/emiliano/Documenti/other_env/other_e/include/nest/conn_builder_factory.h:
+../eglif_dcnp.h:
 
-/home/emiliano/Documenti/other_env/other_e/include/nest/name.h:
+/usr/include/linux/close_range.h:
 
-/usr/include/c++/11/numeric:
+/usr/include/c++/11/bits/stl_numeric.h:
 
 /usr/include/boost/type_traits/has_greater_equal.hpp:
 
@@ -15302,21 +15322,9 @@ CMakeFiles/custom_stdp_module_module.dir/tracking_neuron_planner_nestml.o: ../tr
 
 /usr/include/c++/11/thread:
 
-/home/emiliano/Documenti/other_env/other_e/include/nest/recordables_map.h:
-
 /usr/include/c++/11/bits/parse_numbers.h:
 
-/home/emiliano/Documenti/other_env/other_e/include/nest/per_thread_bool_indicator.h:
-
 /usr/include/x86_64-linux-gnu/bits/posix_opt.h:
-
-../extended_hist_entry.cpp:
-
-/usr/include/boost/type_traits/has_logical_and.hpp:
-
-/home/emiliano/Documenti/other_env/other_e/include/nest/nest_datums.h:
-
-/usr/include/x86_64-linux-gnu/bits/confname.h:
 
 /usr/include/c++/11/bits/functexcept.h:
 
@@ -15329,24 +15337,6 @@ CMakeFiles/custom_stdp_module_module.dir/tracking_neuron_planner_nestml.o: ../tr
 /usr/include/boost/range/config.hpp:
 
 /usr/include/boost/mpl/aux_/config/nttp.hpp:
-
-/usr/include/x86_64-linux-gnu/bits/unistd.h:
-
-/usr/include/libltdl/lt_dlloader.h:
-
-/usr/include/x86_64-linux-gnu/bits/unistd_ext.h:
-
-../eglif_dcnp.h:
-
-/usr/include/c++/11/bits/stl_numeric.h:
-
-/usr/include/linux/close_range.h:
-
-/home/emiliano/Documenti/other_env/other_e/include/nest/sharedptrdatum.h:
-
-/usr/include/c++/11/exception:
-
-/home/emiliano/Documenti/other_env/other_e/include/nest/iterator_pair.h:
 
 /usr/include/boost/iterator/iterator_adaptor.hpp:
 
@@ -15370,15 +15360,19 @@ CMakeFiles/custom_stdp_module_module.dir/tracking_neuron_planner_nestml.o: ../tr
 
 ../eglif_io_nestml.cpp:
 
-/usr/include/boost/config/helper_macros.hpp:
+/home/emiliano/Documenti/better_env/benv/include/nest/parameter.h:
 
-/home/emiliano/Documenti/other_env/other_e/include/nest/slimodule.h:
+/usr/include/boost/config/helper_macros.hpp:
 
 /usr/include/boost/detail/workaround.hpp:
 
-/home/emiliano/Documenti/other_env/other_e/include/nest/connection.h:
+/home/emiliano/Documenti/better_env/benv/include/nest/exceptions.h:
 
 /usr/include/boost/iterator/iterator_categories.hpp:
+
+/usr/include/c++/11/bits/uses_allocator.h:
+
+/usr/include/boost/mpl/aux_/config/workaround.hpp:
 
 /usr/include/boost/mpl/aux_/config/integral.hpp:
 
@@ -15388,13 +15382,11 @@ CMakeFiles/custom_stdp_module_module.dir/tracking_neuron_planner_nestml.o: ../tr
 
 /usr/include/boost/mpl/aux_/config/msvc.hpp:
 
+/home/emiliano/Documenti/better_env/benv/include/nest/source.h:
+
 /usr/include/boost/mpl/aux_/na_spec.hpp:
 
-/home/emiliano/Documenti/other_env/other_e/include/nest/block_vector.h:
-
 /usr/include/boost/mpl/lambda_fwd.hpp:
-
-/home/emiliano/Documenti/other_env/other_e/include/nest/logging_manager.h:
 
 /usr/include/boost/type_traits/is_complex.hpp:
 
@@ -15404,19 +15396,21 @@ CMakeFiles/custom_stdp_module_module.dir/tracking_neuron_planner_nestml.o: ../tr
 
 /usr/include/c++/11/bits/stl_construct.h:
 
-/home/emiliano/Documenti/other_env/other_e/include/nest/node_collection.h:
-
 /usr/include/boost/mpl/aux_/adl_barrier.hpp:
+
+/home/emiliano/Documenti/better_env/benv/include/nest/module_manager.h:
+
+/home/emiliano/Documenti/better_env/benv/include/nest/nest.h:
 
 /usr/include/boost/mpl/aux_/na.hpp:
 
 /usr/include/boost/type_traits/is_same.hpp:
 
+/home/emiliano/Documenti/better_env/benv/include/nest/connector_base.h:
+
 /usr/include/c++/11/ext/concurrence.h:
 
 /usr/include/boost/mpl/aux_/config/lambda.hpp:
-
-/home/emiliano/Documenti/other_env/other_e/include/nest/target_data.h:
 
 /usr/include/boost/type_traits/is_float.hpp:
 
@@ -15434,13 +15428,9 @@ CMakeFiles/custom_stdp_module_module.dir/tracking_neuron_planner_nestml.o: ../tr
 
 /usr/include/boost/preprocessor/list/detail/fold_right.hpp:
 
-/usr/include/boost/preprocessor/config/config.hpp:
-
 /usr/include/boost/mpl/aux_/preprocessor/params.hpp:
 
 /usr/include/boost/type_traits/is_function.hpp:
-
-/home/emiliano/Documenti/other_env/other_e/include/nest/modelrange_manager.h:
 
 /usr/include/x86_64-linux-gnu/c++/11/bits/opt_random.h:
 
@@ -15450,11 +15440,19 @@ CMakeFiles/custom_stdp_module_module.dir/tracking_neuron_planner_nestml.o: ../tr
 
 /usr/include/boost/type_traits/is_array.hpp:
 
+/usr/include/boost/mpl/aux_/arg_typedef.hpp:
+
+/usr/include/boost/mpl/aux_/preprocessed/gcc/arg.hpp:
+
+/usr/include/boost/preprocessor/comma_if.hpp:
+
 /usr/include/c++/11/bits/stl_iterator_base_funcs.h:
 
 /usr/include/c++/11/bits/streambuf.tcc:
 
 /usr/include/boost/preprocessor/control/if.hpp:
+
+/usr/include/boost/preprocessor/logical/bool.hpp:
 
 /usr/include/boost/preprocessor/repeat.hpp:
 
@@ -15467,10 +15465,6 @@ CMakeFiles/custom_stdp_module_module.dir/tracking_neuron_planner_nestml.o: ../tr
 /usr/include/boost/preprocessor/repetition/repeat.hpp:
 
 /usr/include/boost/preprocessor/tuple/eat.hpp:
-
-../basic_neuron_nestml.cpp:
-
-/usr/include/boost/preprocessor/inc.hpp:
 
 /usr/include/c++/11/bits/stl_iterator.h:
 
@@ -15492,13 +15486,17 @@ CMakeFiles/custom_stdp_module_module.dir/tracking_neuron_planner_nestml.o: ../tr
 
 /usr/include/boost/preprocessor/control/while.hpp:
 
-/usr/include/gsl/gsl_block_int.h:
+/usr/include/boost/mpl/quote.hpp:
 
-/home/emiliano/Documenti/other_env/other_e/include/nest/model_manager.h:
+/usr/include/boost/preprocessor/identity.hpp:
+
+/usr/include/gsl/gsl_block_int.h:
 
 /usr/include/c++/11/tr1/modified_bessel_func.tcc:
 
 /usr/include/boost/preprocessor/facilities/identity.hpp:
+
+/home/emiliano/Documenti/better_env/benv/include/nest/slitype.h:
 
 /usr/include/boost/preprocessor/empty.hpp:
 
@@ -15524,9 +15522,13 @@ CMakeFiles/custom_stdp_module_module.dir/tracking_neuron_planner_nestml.o: ../tr
 
 /usr/include/boost/preprocessor/detail/check.hpp:
 
+/home/emiliano/Documenti/better_env/benv/include/nest/event_delivery_manager.h:
+
 /usr/include/boost/type_traits/has_post_decrement.hpp:
 
 /usr/include/boost/preprocessor/logical/compl.hpp:
+
+/home/emiliano/Documenti/better_env/benv/include/nest/conn_parameter.h:
 
 /usr/include/boost/preprocessor/control/detail/while.hpp:
 
@@ -15544,8 +15546,6 @@ CMakeFiles/custom_stdp_module_module.dir/tracking_neuron_planner_nestml.o: ../tr
 
 /usr/include/boost/preprocessor/tuple/rem.hpp:
 
-/usr/include/boost/preprocessor/arithmetic/sub.hpp:
-
 /usr/include/boost/detail/select_type.hpp:
 
 /usr/include/boost/mpl/aux_/lambda_support.hpp:
@@ -15558,8 +15558,6 @@ CMakeFiles/custom_stdp_module_module.dir/tracking_neuron_planner_nestml.o: ../tr
 
 /usr/include/boost/mpl/aux_/config/pp_counter.hpp:
 
-/usr/include/boost/mpl/aux_/include_preprocessed.hpp:
-
 /usr/include/boost/mpl/aux_/config/compiler.hpp:
 
 /usr/include/boost/type_traits/is_noncopyable.hpp:
@@ -15570,17 +15568,21 @@ CMakeFiles/custom_stdp_module_module.dir/tracking_neuron_planner_nestml.o: ../tr
 
 /usr/include/boost/type_traits/cv_traits.hpp:
 
-/home/emiliano/Documenti/other_env/other_e/include/nest/dict.h:
-
 /usr/include/boost/mpl/aux_/preprocessed/gcc/placeholders.hpp:
 
+/home/emiliano/Documenti/better_env/benv/include/nest/common_synapse_properties.h:
+
 /usr/include/boost/type_traits/intrinsics.hpp:
+
+/usr/include/boost/version.hpp:
 
 /usr/include/c++/11/tr1/bessel_function.tcc:
 
 /usr/include/boost/type_traits/declval.hpp:
 
 /usr/include/boost/type_traits/is_reference.hpp:
+
+/usr/include/boost/type_traits/is_lvalue_reference.hpp:
 
 ../extended_hist_entry.h:
 
@@ -15590,10 +15592,6 @@ CMakeFiles/custom_stdp_module_module.dir/tracking_neuron_planner_nestml.o: ../tr
 
 /usr/include/boost/type_traits/detail/is_function_cxx_11.hpp:
 
-/usr/include/c++/11/bits/unordered_map.h:
-
-/usr/include/boost/type_traits/is_arithmetic.hpp:
-
 /usr/include/boost/type_traits/is_floating_point.hpp:
 
 /usr/lib/x86_64-linux-gnu/openmpi/include/openmpi/ompi/mpi/cxx/status.h:
@@ -15601,6 +15599,8 @@ CMakeFiles/custom_stdp_module_module.dir/tracking_neuron_planner_nestml.o: ../tr
 /usr/include/boost/type_traits/integral_promotion.hpp:
 
 /usr/include/boost/iterator/detail/facade_iterator_category.hpp:
+
+/home/emiliano/Documenti/better_env/benv/include/nest/connection_manager_impl.h:
 
 /usr/include/boost/mpl/aux_/config/overload_resolution.hpp:
 

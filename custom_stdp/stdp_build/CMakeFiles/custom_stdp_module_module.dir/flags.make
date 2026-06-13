@@ -4,7 +4,7 @@
 # compile CXX with /usr/bin/c++
 CXX_DEFINES = -Dcustom_stdp_module_module_EXPORTS
 
-CXX_INCLUDES = -I/home/emiliano/Documenti/other_env/other_e/include/nest -I/usr/lib/x86_64-linux-gnu/openmpi/include -I/usr/lib/x86_64-linux-gnu/openmpi/include/openmpi
+CXX_INCLUDES = -I/home/emiliano/Documenti/better_env/benv/include/nest -I/usr/lib/x86_64-linux-gnu/openmpi/include -I/usr/lib/x86_64-linux-gnu/openmpi/include/openmpi
 
 CXX_FLAGS = -fPIC  -std=c++17 -Wall -fopenmp  -O2 -fdiagnostics-color=auto -DLTX_MODULE
 

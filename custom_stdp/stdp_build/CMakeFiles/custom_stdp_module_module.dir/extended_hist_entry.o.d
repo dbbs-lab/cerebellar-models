@@ -1,7 +1,7 @@
 CMakeFiles/custom_stdp_module_module.dir/extended_hist_entry.o: \
- /home/emiliano/Documenti/other_env/cerebellar-models/custom_stdp/extended_hist_entry.cpp \
+ /home/emiliano/Documenti/better_env/cerebellar-models/custom_stdp/extended_hist_entry.cpp \
  /usr/include/stdc-predef.h \
- /home/emiliano/Documenti/other_env/cerebellar-models/custom_stdp/extended_hist_entry.h \
+ /home/emiliano/Documenti/better_env/cerebellar-models/custom_stdp/extended_hist_entry.h \
  /usr/include/c++/11/cmath \
  /usr/include/x86_64-linux-gnu/c++/11/bits/c++config.h \
  /usr/include/x86_64-linux-gnu/c++/11/bits/os_defines.h \

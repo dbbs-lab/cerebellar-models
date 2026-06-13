@@ -53,10 +53,10 @@ RM = /usr/bin/cmake -E rm -f
 EQUALS = =
 
 # The top-level source directory on which CMake was run.
-CMAKE_SOURCE_DIR = /home/emiliano/Documenti/other_env/cerebellar-models/custom_stdp
+CMAKE_SOURCE_DIR = /home/emiliano/Documenti/better_env/cerebellar-models/custom_stdp
 
 # The top-level build directory on which CMake was run.
-CMAKE_BINARY_DIR = /home/emiliano/Documenti/other_env/cerebellar-models/custom_stdp/stdp_build
+CMAKE_BINARY_DIR = /home/emiliano/Documenti/better_env/cerebellar-models/custom_stdp/stdp_build
 
 # Include any dependencies generated for this target.
 include CMakeFiles/custom_stdp_module_module.dir/depend.make
@@ -72,226 +72,226 @@ include CMakeFiles/custom_stdp_module_module.dir/flags.make
 CMakeFiles/custom_stdp_module_module.dir/custom_stdp_module.o: CMakeFiles/custom_stdp_module_module.dir/flags.make
 CMakeFiles/custom_stdp_module_module.dir/custom_stdp_module.o: ../custom_stdp_module.cpp
 CMakeFiles/custom_stdp_module_module.dir/custom_stdp_module.o: CMakeFiles/custom_stdp_module_module.dir/compiler_depend.ts
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/home/emiliano/Documenti/other_env/cerebellar-models/custom_stdp/stdp_build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_1) "Building CXX object CMakeFiles/custom_stdp_module_module.dir/custom_stdp_module.o"
-	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -MD -MT CMakeFiles/custom_stdp_module_module.dir/custom_stdp_module.o -MF CMakeFiles/custom_stdp_module_module.dir/custom_stdp_module.o.d -o CMakeFiles/custom_stdp_module_module.dir/custom_stdp_module.o -c /home/emiliano/Documenti/other_env/cerebellar-models/custom_stdp/custom_stdp_module.cpp
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/home/emiliano/Documenti/better_env/cerebellar-models/custom_stdp/stdp_build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_1) "Building CXX object CMakeFiles/custom_stdp_module_module.dir/custom_stdp_module.o"
+	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -MD -MT CMakeFiles/custom_stdp_module_module.dir/custom_stdp_module.o -MF CMakeFiles/custom_stdp_module_module.dir/custom_stdp_module.o.d -o CMakeFiles/custom_stdp_module_module.dir/custom_stdp_module.o -c /home/emiliano/Documenti/better_env/cerebellar-models/custom_stdp/custom_stdp_module.cpp
 
 CMakeFiles/custom_stdp_module_module.dir/custom_stdp_module.i: cmake_force
 	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Preprocessing CXX source to CMakeFiles/custom_stdp_module_module.dir/custom_stdp_module.i"
-	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E /home/emiliano/Documenti/other_env/cerebellar-models/custom_stdp/custom_stdp_module.cpp > CMakeFiles/custom_stdp_module_module.dir/custom_stdp_module.i
+	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E /home/emiliano/Documenti/better_env/cerebellar-models/custom_stdp/custom_stdp_module.cpp > CMakeFiles/custom_stdp_module_module.dir/custom_stdp_module.i
 
 CMakeFiles/custom_stdp_module_module.dir/custom_stdp_module.s: cmake_force
 	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Compiling CXX source to assembly CMakeFiles/custom_stdp_module_module.dir/custom_stdp_module.s"
-	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S /home/emiliano/Documenti/other_env/cerebellar-models/custom_stdp/custom_stdp_module.cpp -o CMakeFiles/custom_stdp_module_module.dir/custom_stdp_module.s
+	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S /home/emiliano/Documenti/better_env/cerebellar-models/custom_stdp/custom_stdp_module.cpp -o CMakeFiles/custom_stdp_module_module.dir/custom_stdp_module.s
 
 CMakeFiles/custom_stdp_module_module.dir/eglif_io_nestml.o: CMakeFiles/custom_stdp_module_module.dir/flags.make
 CMakeFiles/custom_stdp_module_module.dir/eglif_io_nestml.o: ../eglif_io_nestml.cpp
 CMakeFiles/custom_stdp_module_module.dir/eglif_io_nestml.o: CMakeFiles/custom_stdp_module_module.dir/compiler_depend.ts
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/home/emiliano/Documenti/other_env/cerebellar-models/custom_stdp/stdp_build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_2) "Building CXX object CMakeFiles/custom_stdp_module_module.dir/eglif_io_nestml.o"
-	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -MD -MT CMakeFiles/custom_stdp_module_module.dir/eglif_io_nestml.o -MF CMakeFiles/custom_stdp_module_module.dir/eglif_io_nestml.o.d -o CMakeFiles/custom_stdp_module_module.dir/eglif_io_nestml.o -c /home/emiliano/Documenti/other_env/cerebellar-models/custom_stdp/eglif_io_nestml.cpp
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/home/emiliano/Documenti/better_env/cerebellar-models/custom_stdp/stdp_build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_2) "Building CXX object CMakeFiles/custom_stdp_module_module.dir/eglif_io_nestml.o"
+	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -MD -MT CMakeFiles/custom_stdp_module_module.dir/eglif_io_nestml.o -MF CMakeFiles/custom_stdp_module_module.dir/eglif_io_nestml.o.d -o CMakeFiles/custom_stdp_module_module.dir/eglif_io_nestml.o -c /home/emiliano/Documenti/better_env/cerebellar-models/custom_stdp/eglif_io_nestml.cpp
 
 CMakeFiles/custom_stdp_module_module.dir/eglif_io_nestml.i: cmake_force
 	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Preprocessing CXX source to CMakeFiles/custom_stdp_module_module.dir/eglif_io_nestml.i"
-	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E /home/emiliano/Documenti/other_env/cerebellar-models/custom_stdp/eglif_io_nestml.cpp > CMakeFiles/custom_stdp_module_module.dir/eglif_io_nestml.i
+	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E /home/emiliano/Documenti/better_env/cerebellar-models/custom_stdp/eglif_io_nestml.cpp > CMakeFiles/custom_stdp_module_module.dir/eglif_io_nestml.i
 
 CMakeFiles/custom_stdp_module_module.dir/eglif_io_nestml.s: cmake_force
 	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Compiling CXX source to assembly CMakeFiles/custom_stdp_module_module.dir/eglif_io_nestml.s"
-	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S /home/emiliano/Documenti/other_env/cerebellar-models/custom_stdp/eglif_io_nestml.cpp -o CMakeFiles/custom_stdp_module_module.dir/eglif_io_nestml.s
+	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S /home/emiliano/Documenti/better_env/cerebellar-models/custom_stdp/eglif_io_nestml.cpp -o CMakeFiles/custom_stdp_module_module.dir/eglif_io_nestml.s
 
 CMakeFiles/custom_stdp_module_module.dir/eglif_pc_nestml.o: CMakeFiles/custom_stdp_module_module.dir/flags.make
 CMakeFiles/custom_stdp_module_module.dir/eglif_pc_nestml.o: ../eglif_pc_nestml.cpp
 CMakeFiles/custom_stdp_module_module.dir/eglif_pc_nestml.o: CMakeFiles/custom_stdp_module_module.dir/compiler_depend.ts
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/home/emiliano/Documenti/other_env/cerebellar-models/custom_stdp/stdp_build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_3) "Building CXX object CMakeFiles/custom_stdp_module_module.dir/eglif_pc_nestml.o"
-	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -MD -MT CMakeFiles/custom_stdp_module_module.dir/eglif_pc_nestml.o -MF CMakeFiles/custom_stdp_module_module.dir/eglif_pc_nestml.o.d -o CMakeFiles/custom_stdp_module_module.dir/eglif_pc_nestml.o -c /home/emiliano/Documenti/other_env/cerebellar-models/custom_stdp/eglif_pc_nestml.cpp
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/home/emiliano/Documenti/better_env/cerebellar-models/custom_stdp/stdp_build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_3) "Building CXX object CMakeFiles/custom_stdp_module_module.dir/eglif_pc_nestml.o"
+	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -MD -MT CMakeFiles/custom_stdp_module_module.dir/eglif_pc_nestml.o -MF CMakeFiles/custom_stdp_module_module.dir/eglif_pc_nestml.o.d -o CMakeFiles/custom_stdp_module_module.dir/eglif_pc_nestml.o -c /home/emiliano/Documenti/better_env/cerebellar-models/custom_stdp/eglif_pc_nestml.cpp
 
 CMakeFiles/custom_stdp_module_module.dir/eglif_pc_nestml.i: cmake_force
 	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Preprocessing CXX source to CMakeFiles/custom_stdp_module_module.dir/eglif_pc_nestml.i"
-	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E /home/emiliano/Documenti/other_env/cerebellar-models/custom_stdp/eglif_pc_nestml.cpp > CMakeFiles/custom_stdp_module_module.dir/eglif_pc_nestml.i
+	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E /home/emiliano/Documenti/better_env/cerebellar-models/custom_stdp/eglif_pc_nestml.cpp > CMakeFiles/custom_stdp_module_module.dir/eglif_pc_nestml.i
 
 CMakeFiles/custom_stdp_module_module.dir/eglif_pc_nestml.s: cmake_force
 	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Compiling CXX source to assembly CMakeFiles/custom_stdp_module_module.dir/eglif_pc_nestml.s"
-	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S /home/emiliano/Documenti/other_env/cerebellar-models/custom_stdp/eglif_pc_nestml.cpp -o CMakeFiles/custom_stdp_module_module.dir/eglif_pc_nestml.s
+	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S /home/emiliano/Documenti/better_env/cerebellar-models/custom_stdp/eglif_pc_nestml.cpp -o CMakeFiles/custom_stdp_module_module.dir/eglif_pc_nestml.s
 
 CMakeFiles/custom_stdp_module_module.dir/eglif_mli.o: CMakeFiles/custom_stdp_module_module.dir/flags.make
 CMakeFiles/custom_stdp_module_module.dir/eglif_mli.o: ../eglif_mli.cpp
 CMakeFiles/custom_stdp_module_module.dir/eglif_mli.o: CMakeFiles/custom_stdp_module_module.dir/compiler_depend.ts
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/home/emiliano/Documenti/other_env/cerebellar-models/custom_stdp/stdp_build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_4) "Building CXX object CMakeFiles/custom_stdp_module_module.dir/eglif_mli.o"
-	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -MD -MT CMakeFiles/custom_stdp_module_module.dir/eglif_mli.o -MF CMakeFiles/custom_stdp_module_module.dir/eglif_mli.o.d -o CMakeFiles/custom_stdp_module_module.dir/eglif_mli.o -c /home/emiliano/Documenti/other_env/cerebellar-models/custom_stdp/eglif_mli.cpp
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/home/emiliano/Documenti/better_env/cerebellar-models/custom_stdp/stdp_build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_4) "Building CXX object CMakeFiles/custom_stdp_module_module.dir/eglif_mli.o"
+	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -MD -MT CMakeFiles/custom_stdp_module_module.dir/eglif_mli.o -MF CMakeFiles/custom_stdp_module_module.dir/eglif_mli.o.d -o CMakeFiles/custom_stdp_module_module.dir/eglif_mli.o -c /home/emiliano/Documenti/better_env/cerebellar-models/custom_stdp/eglif_mli.cpp
 
 CMakeFiles/custom_stdp_module_module.dir/eglif_mli.i: cmake_force
 	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Preprocessing CXX source to CMakeFiles/custom_stdp_module_module.dir/eglif_mli.i"
-	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E /home/emiliano/Documenti/other_env/cerebellar-models/custom_stdp/eglif_mli.cpp > CMakeFiles/custom_stdp_module_module.dir/eglif_mli.i
+	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E /home/emiliano/Documenti/better_env/cerebellar-models/custom_stdp/eglif_mli.cpp > CMakeFiles/custom_stdp_module_module.dir/eglif_mli.i
 
 CMakeFiles/custom_stdp_module_module.dir/eglif_mli.s: cmake_force
 	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Compiling CXX source to assembly CMakeFiles/custom_stdp_module_module.dir/eglif_mli.s"
-	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S /home/emiliano/Documenti/other_env/cerebellar-models/custom_stdp/eglif_mli.cpp -o CMakeFiles/custom_stdp_module_module.dir/eglif_mli.s
+	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S /home/emiliano/Documenti/better_env/cerebellar-models/custom_stdp/eglif_mli.cpp -o CMakeFiles/custom_stdp_module_module.dir/eglif_mli.s
 
 CMakeFiles/custom_stdp_module_module.dir/eglif_dcnp.o: CMakeFiles/custom_stdp_module_module.dir/flags.make
 CMakeFiles/custom_stdp_module_module.dir/eglif_dcnp.o: ../eglif_dcnp.cpp
 CMakeFiles/custom_stdp_module_module.dir/eglif_dcnp.o: CMakeFiles/custom_stdp_module_module.dir/compiler_depend.ts
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/home/emiliano/Documenti/other_env/cerebellar-models/custom_stdp/stdp_build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_5) "Building CXX object CMakeFiles/custom_stdp_module_module.dir/eglif_dcnp.o"
-	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -MD -MT CMakeFiles/custom_stdp_module_module.dir/eglif_dcnp.o -MF CMakeFiles/custom_stdp_module_module.dir/eglif_dcnp.o.d -o CMakeFiles/custom_stdp_module_module.dir/eglif_dcnp.o -c /home/emiliano/Documenti/other_env/cerebellar-models/custom_stdp/eglif_dcnp.cpp
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/home/emiliano/Documenti/better_env/cerebellar-models/custom_stdp/stdp_build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_5) "Building CXX object CMakeFiles/custom_stdp_module_module.dir/eglif_dcnp.o"
+	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -MD -MT CMakeFiles/custom_stdp_module_module.dir/eglif_dcnp.o -MF CMakeFiles/custom_stdp_module_module.dir/eglif_dcnp.o.d -o CMakeFiles/custom_stdp_module_module.dir/eglif_dcnp.o -c /home/emiliano/Documenti/better_env/cerebellar-models/custom_stdp/eglif_dcnp.cpp
 
 CMakeFiles/custom_stdp_module_module.dir/eglif_dcnp.i: cmake_force
 	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Preprocessing CXX source to CMakeFiles/custom_stdp_module_module.dir/eglif_dcnp.i"
-	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E /home/emiliano/Documenti/other_env/cerebellar-models/custom_stdp/eglif_dcnp.cpp > CMakeFiles/custom_stdp_module_module.dir/eglif_dcnp.i
+	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E /home/emiliano/Documenti/better_env/cerebellar-models/custom_stdp/eglif_dcnp.cpp > CMakeFiles/custom_stdp_module_module.dir/eglif_dcnp.i
 
 CMakeFiles/custom_stdp_module_module.dir/eglif_dcnp.s: cmake_force
 	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Compiling CXX source to assembly CMakeFiles/custom_stdp_module_module.dir/eglif_dcnp.s"
-	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S /home/emiliano/Documenti/other_env/cerebellar-models/custom_stdp/eglif_dcnp.cpp -o CMakeFiles/custom_stdp_module_module.dir/eglif_dcnp.s
+	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S /home/emiliano/Documenti/better_env/cerebellar-models/custom_stdp/eglif_dcnp.cpp -o CMakeFiles/custom_stdp_module_module.dir/eglif_dcnp.s
 
 CMakeFiles/custom_stdp_module_module.dir/stdp_synapse_sinexp.o: CMakeFiles/custom_stdp_module_module.dir/flags.make
 CMakeFiles/custom_stdp_module_module.dir/stdp_synapse_sinexp.o: ../stdp_synapse_sinexp.cpp
 CMakeFiles/custom_stdp_module_module.dir/stdp_synapse_sinexp.o: CMakeFiles/custom_stdp_module_module.dir/compiler_depend.ts
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/home/emiliano/Documenti/other_env/cerebellar-models/custom_stdp/stdp_build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_6) "Building CXX object CMakeFiles/custom_stdp_module_module.dir/stdp_synapse_sinexp.o"
-	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -MD -MT CMakeFiles/custom_stdp_module_module.dir/stdp_synapse_sinexp.o -MF CMakeFiles/custom_stdp_module_module.dir/stdp_synapse_sinexp.o.d -o CMakeFiles/custom_stdp_module_module.dir/stdp_synapse_sinexp.o -c /home/emiliano/Documenti/other_env/cerebellar-models/custom_stdp/stdp_synapse_sinexp.cpp
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/home/emiliano/Documenti/better_env/cerebellar-models/custom_stdp/stdp_build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_6) "Building CXX object CMakeFiles/custom_stdp_module_module.dir/stdp_synapse_sinexp.o"
+	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -MD -MT CMakeFiles/custom_stdp_module_module.dir/stdp_synapse_sinexp.o -MF CMakeFiles/custom_stdp_module_module.dir/stdp_synapse_sinexp.o.d -o CMakeFiles/custom_stdp_module_module.dir/stdp_synapse_sinexp.o -c /home/emiliano/Documenti/better_env/cerebellar-models/custom_stdp/stdp_synapse_sinexp.cpp
 
 CMakeFiles/custom_stdp_module_module.dir/stdp_synapse_sinexp.i: cmake_force
 	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Preprocessing CXX source to CMakeFiles/custom_stdp_module_module.dir/stdp_synapse_sinexp.i"
-	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E /home/emiliano/Documenti/other_env/cerebellar-models/custom_stdp/stdp_synapse_sinexp.cpp > CMakeFiles/custom_stdp_module_module.dir/stdp_synapse_sinexp.i
+	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E /home/emiliano/Documenti/better_env/cerebellar-models/custom_stdp/stdp_synapse_sinexp.cpp > CMakeFiles/custom_stdp_module_module.dir/stdp_synapse_sinexp.i
 
 CMakeFiles/custom_stdp_module_module.dir/stdp_synapse_sinexp.s: cmake_force
 	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Compiling CXX source to assembly CMakeFiles/custom_stdp_module_module.dir/stdp_synapse_sinexp.s"
-	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S /home/emiliano/Documenti/other_env/cerebellar-models/custom_stdp/stdp_synapse_sinexp.cpp -o CMakeFiles/custom_stdp_module_module.dir/stdp_synapse_sinexp.s
+	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S /home/emiliano/Documenti/better_env/cerebellar-models/custom_stdp/stdp_synapse_sinexp.cpp -o CMakeFiles/custom_stdp_module_module.dir/stdp_synapse_sinexp.s
 
 CMakeFiles/custom_stdp_module_module.dir/stdp_synapse_alpha.o: CMakeFiles/custom_stdp_module_module.dir/flags.make
 CMakeFiles/custom_stdp_module_module.dir/stdp_synapse_alpha.o: ../stdp_synapse_alpha.cpp
 CMakeFiles/custom_stdp_module_module.dir/stdp_synapse_alpha.o: CMakeFiles/custom_stdp_module_module.dir/compiler_depend.ts
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/home/emiliano/Documenti/other_env/cerebellar-models/custom_stdp/stdp_build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_7) "Building CXX object CMakeFiles/custom_stdp_module_module.dir/stdp_synapse_alpha.o"
-	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -MD -MT CMakeFiles/custom_stdp_module_module.dir/stdp_synapse_alpha.o -MF CMakeFiles/custom_stdp_module_module.dir/stdp_synapse_alpha.o.d -o CMakeFiles/custom_stdp_module_module.dir/stdp_synapse_alpha.o -c /home/emiliano/Documenti/other_env/cerebellar-models/custom_stdp/stdp_synapse_alpha.cpp
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/home/emiliano/Documenti/better_env/cerebellar-models/custom_stdp/stdp_build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_7) "Building CXX object CMakeFiles/custom_stdp_module_module.dir/stdp_synapse_alpha.o"
+	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -MD -MT CMakeFiles/custom_stdp_module_module.dir/stdp_synapse_alpha.o -MF CMakeFiles/custom_stdp_module_module.dir/stdp_synapse_alpha.o.d -o CMakeFiles/custom_stdp_module_module.dir/stdp_synapse_alpha.o -c /home/emiliano/Documenti/better_env/cerebellar-models/custom_stdp/stdp_synapse_alpha.cpp
 
 CMakeFiles/custom_stdp_module_module.dir/stdp_synapse_alpha.i: cmake_force
 	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Preprocessing CXX source to CMakeFiles/custom_stdp_module_module.dir/stdp_synapse_alpha.i"
-	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E /home/emiliano/Documenti/other_env/cerebellar-models/custom_stdp/stdp_synapse_alpha.cpp > CMakeFiles/custom_stdp_module_module.dir/stdp_synapse_alpha.i
+	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E /home/emiliano/Documenti/better_env/cerebellar-models/custom_stdp/stdp_synapse_alpha.cpp > CMakeFiles/custom_stdp_module_module.dir/stdp_synapse_alpha.i
 
 CMakeFiles/custom_stdp_module_module.dir/stdp_synapse_alpha.s: cmake_force
 	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Compiling CXX source to assembly CMakeFiles/custom_stdp_module_module.dir/stdp_synapse_alpha.s"
-	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S /home/emiliano/Documenti/other_env/cerebellar-models/custom_stdp/stdp_synapse_alpha.cpp -o CMakeFiles/custom_stdp_module_module.dir/stdp_synapse_alpha.s
+	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S /home/emiliano/Documenti/better_env/cerebellar-models/custom_stdp/stdp_synapse_alpha.cpp -o CMakeFiles/custom_stdp_module_module.dir/stdp_synapse_alpha.s
 
 CMakeFiles/custom_stdp_module_module.dir/extended_post_history_archiving_node.o: CMakeFiles/custom_stdp_module_module.dir/flags.make
 CMakeFiles/custom_stdp_module_module.dir/extended_post_history_archiving_node.o: ../extended_post_history_archiving_node.cpp
 CMakeFiles/custom_stdp_module_module.dir/extended_post_history_archiving_node.o: CMakeFiles/custom_stdp_module_module.dir/compiler_depend.ts
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/home/emiliano/Documenti/other_env/cerebellar-models/custom_stdp/stdp_build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_8) "Building CXX object CMakeFiles/custom_stdp_module_module.dir/extended_post_history_archiving_node.o"
-	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -MD -MT CMakeFiles/custom_stdp_module_module.dir/extended_post_history_archiving_node.o -MF CMakeFiles/custom_stdp_module_module.dir/extended_post_history_archiving_node.o.d -o CMakeFiles/custom_stdp_module_module.dir/extended_post_history_archiving_node.o -c /home/emiliano/Documenti/other_env/cerebellar-models/custom_stdp/extended_post_history_archiving_node.cpp
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/home/emiliano/Documenti/better_env/cerebellar-models/custom_stdp/stdp_build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_8) "Building CXX object CMakeFiles/custom_stdp_module_module.dir/extended_post_history_archiving_node.o"
+	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -MD -MT CMakeFiles/custom_stdp_module_module.dir/extended_post_history_archiving_node.o -MF CMakeFiles/custom_stdp_module_module.dir/extended_post_history_archiving_node.o.d -o CMakeFiles/custom_stdp_module_module.dir/extended_post_history_archiving_node.o -c /home/emiliano/Documenti/better_env/cerebellar-models/custom_stdp/extended_post_history_archiving_node.cpp
 
 CMakeFiles/custom_stdp_module_module.dir/extended_post_history_archiving_node.i: cmake_force
 	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Preprocessing CXX source to CMakeFiles/custom_stdp_module_module.dir/extended_post_history_archiving_node.i"
-	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E /home/emiliano/Documenti/other_env/cerebellar-models/custom_stdp/extended_post_history_archiving_node.cpp > CMakeFiles/custom_stdp_module_module.dir/extended_post_history_archiving_node.i
+	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E /home/emiliano/Documenti/better_env/cerebellar-models/custom_stdp/extended_post_history_archiving_node.cpp > CMakeFiles/custom_stdp_module_module.dir/extended_post_history_archiving_node.i
 
 CMakeFiles/custom_stdp_module_module.dir/extended_post_history_archiving_node.s: cmake_force
 	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Compiling CXX source to assembly CMakeFiles/custom_stdp_module_module.dir/extended_post_history_archiving_node.s"
-	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S /home/emiliano/Documenti/other_env/cerebellar-models/custom_stdp/extended_post_history_archiving_node.cpp -o CMakeFiles/custom_stdp_module_module.dir/extended_post_history_archiving_node.s
+	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S /home/emiliano/Documenti/better_env/cerebellar-models/custom_stdp/extended_post_history_archiving_node.cpp -o CMakeFiles/custom_stdp_module_module.dir/extended_post_history_archiving_node.s
 
 CMakeFiles/custom_stdp_module_module.dir/extended_hist_entry.o: CMakeFiles/custom_stdp_module_module.dir/flags.make
 CMakeFiles/custom_stdp_module_module.dir/extended_hist_entry.o: ../extended_hist_entry.cpp
 CMakeFiles/custom_stdp_module_module.dir/extended_hist_entry.o: CMakeFiles/custom_stdp_module_module.dir/compiler_depend.ts
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/home/emiliano/Documenti/other_env/cerebellar-models/custom_stdp/stdp_build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_9) "Building CXX object CMakeFiles/custom_stdp_module_module.dir/extended_hist_entry.o"
-	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -MD -MT CMakeFiles/custom_stdp_module_module.dir/extended_hist_entry.o -MF CMakeFiles/custom_stdp_module_module.dir/extended_hist_entry.o.d -o CMakeFiles/custom_stdp_module_module.dir/extended_hist_entry.o -c /home/emiliano/Documenti/other_env/cerebellar-models/custom_stdp/extended_hist_entry.cpp
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/home/emiliano/Documenti/better_env/cerebellar-models/custom_stdp/stdp_build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_9) "Building CXX object CMakeFiles/custom_stdp_module_module.dir/extended_hist_entry.o"
+	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -MD -MT CMakeFiles/custom_stdp_module_module.dir/extended_hist_entry.o -MF CMakeFiles/custom_stdp_module_module.dir/extended_hist_entry.o.d -o CMakeFiles/custom_stdp_module_module.dir/extended_hist_entry.o -c /home/emiliano/Documenti/better_env/cerebellar-models/custom_stdp/extended_hist_entry.cpp
 
 CMakeFiles/custom_stdp_module_module.dir/extended_hist_entry.i: cmake_force
 	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Preprocessing CXX source to CMakeFiles/custom_stdp_module_module.dir/extended_hist_entry.i"
-	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E /home/emiliano/Documenti/other_env/cerebellar-models/custom_stdp/extended_hist_entry.cpp > CMakeFiles/custom_stdp_module_module.dir/extended_hist_entry.i
+	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E /home/emiliano/Documenti/better_env/cerebellar-models/custom_stdp/extended_hist_entry.cpp > CMakeFiles/custom_stdp_module_module.dir/extended_hist_entry.i
 
 CMakeFiles/custom_stdp_module_module.dir/extended_hist_entry.s: cmake_force
 	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Compiling CXX source to assembly CMakeFiles/custom_stdp_module_module.dir/extended_hist_entry.s"
-	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S /home/emiliano/Documenti/other_env/cerebellar-models/custom_stdp/extended_hist_entry.cpp -o CMakeFiles/custom_stdp_module_module.dir/extended_hist_entry.s
+	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S /home/emiliano/Documenti/better_env/cerebellar-models/custom_stdp/extended_hist_entry.cpp -o CMakeFiles/custom_stdp_module_module.dir/extended_hist_entry.s
 
 CMakeFiles/custom_stdp_module_module.dir/eglif_cond_alpha_multisyn.o: CMakeFiles/custom_stdp_module_module.dir/flags.make
 CMakeFiles/custom_stdp_module_module.dir/eglif_cond_alpha_multisyn.o: ../eglif_cond_alpha_multisyn.cpp
 CMakeFiles/custom_stdp_module_module.dir/eglif_cond_alpha_multisyn.o: CMakeFiles/custom_stdp_module_module.dir/compiler_depend.ts
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/home/emiliano/Documenti/other_env/cerebellar-models/custom_stdp/stdp_build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_10) "Building CXX object CMakeFiles/custom_stdp_module_module.dir/eglif_cond_alpha_multisyn.o"
-	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -MD -MT CMakeFiles/custom_stdp_module_module.dir/eglif_cond_alpha_multisyn.o -MF CMakeFiles/custom_stdp_module_module.dir/eglif_cond_alpha_multisyn.o.d -o CMakeFiles/custom_stdp_module_module.dir/eglif_cond_alpha_multisyn.o -c /home/emiliano/Documenti/other_env/cerebellar-models/custom_stdp/eglif_cond_alpha_multisyn.cpp
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/home/emiliano/Documenti/better_env/cerebellar-models/custom_stdp/stdp_build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_10) "Building CXX object CMakeFiles/custom_stdp_module_module.dir/eglif_cond_alpha_multisyn.o"
+	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -MD -MT CMakeFiles/custom_stdp_module_module.dir/eglif_cond_alpha_multisyn.o -MF CMakeFiles/custom_stdp_module_module.dir/eglif_cond_alpha_multisyn.o.d -o CMakeFiles/custom_stdp_module_module.dir/eglif_cond_alpha_multisyn.o -c /home/emiliano/Documenti/better_env/cerebellar-models/custom_stdp/eglif_cond_alpha_multisyn.cpp
 
 CMakeFiles/custom_stdp_module_module.dir/eglif_cond_alpha_multisyn.i: cmake_force
 	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Preprocessing CXX source to CMakeFiles/custom_stdp_module_module.dir/eglif_cond_alpha_multisyn.i"
-	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E /home/emiliano/Documenti/other_env/cerebellar-models/custom_stdp/eglif_cond_alpha_multisyn.cpp > CMakeFiles/custom_stdp_module_module.dir/eglif_cond_alpha_multisyn.i
+	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E /home/emiliano/Documenti/better_env/cerebellar-models/custom_stdp/eglif_cond_alpha_multisyn.cpp > CMakeFiles/custom_stdp_module_module.dir/eglif_cond_alpha_multisyn.i
 
 CMakeFiles/custom_stdp_module_module.dir/eglif_cond_alpha_multisyn.s: cmake_force
 	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Compiling CXX source to assembly CMakeFiles/custom_stdp_module_module.dir/eglif_cond_alpha_multisyn.s"
-	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S /home/emiliano/Documenti/other_env/cerebellar-models/custom_stdp/eglif_cond_alpha_multisyn.cpp -o CMakeFiles/custom_stdp_module_module.dir/eglif_cond_alpha_multisyn.s
+	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S /home/emiliano/Documenti/better_env/cerebellar-models/custom_stdp/eglif_cond_alpha_multisyn.cpp -o CMakeFiles/custom_stdp_module_module.dir/eglif_cond_alpha_multisyn.s
 
 CMakeFiles/custom_stdp_module_module.dir/tracking_neuron_nestml.o: CMakeFiles/custom_stdp_module_module.dir/flags.make
 CMakeFiles/custom_stdp_module_module.dir/tracking_neuron_nestml.o: ../tracking_neuron_nestml.cpp
 CMakeFiles/custom_stdp_module_module.dir/tracking_neuron_nestml.o: CMakeFiles/custom_stdp_module_module.dir/compiler_depend.ts
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/home/emiliano/Documenti/other_env/cerebellar-models/custom_stdp/stdp_build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_11) "Building CXX object CMakeFiles/custom_stdp_module_module.dir/tracking_neuron_nestml.o"
-	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -MD -MT CMakeFiles/custom_stdp_module_module.dir/tracking_neuron_nestml.o -MF CMakeFiles/custom_stdp_module_module.dir/tracking_neuron_nestml.o.d -o CMakeFiles/custom_stdp_module_module.dir/tracking_neuron_nestml.o -c /home/emiliano/Documenti/other_env/cerebellar-models/custom_stdp/tracking_neuron_nestml.cpp
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/home/emiliano/Documenti/better_env/cerebellar-models/custom_stdp/stdp_build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_11) "Building CXX object CMakeFiles/custom_stdp_module_module.dir/tracking_neuron_nestml.o"
+	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -MD -MT CMakeFiles/custom_stdp_module_module.dir/tracking_neuron_nestml.o -MF CMakeFiles/custom_stdp_module_module.dir/tracking_neuron_nestml.o.d -o CMakeFiles/custom_stdp_module_module.dir/tracking_neuron_nestml.o -c /home/emiliano/Documenti/better_env/cerebellar-models/custom_stdp/tracking_neuron_nestml.cpp
 
 CMakeFiles/custom_stdp_module_module.dir/tracking_neuron_nestml.i: cmake_force
 	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Preprocessing CXX source to CMakeFiles/custom_stdp_module_module.dir/tracking_neuron_nestml.i"
-	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E /home/emiliano/Documenti/other_env/cerebellar-models/custom_stdp/tracking_neuron_nestml.cpp > CMakeFiles/custom_stdp_module_module.dir/tracking_neuron_nestml.i
+	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E /home/emiliano/Documenti/better_env/cerebellar-models/custom_stdp/tracking_neuron_nestml.cpp > CMakeFiles/custom_stdp_module_module.dir/tracking_neuron_nestml.i
 
 CMakeFiles/custom_stdp_module_module.dir/tracking_neuron_nestml.s: cmake_force
 	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Compiling CXX source to assembly CMakeFiles/custom_stdp_module_module.dir/tracking_neuron_nestml.s"
-	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S /home/emiliano/Documenti/other_env/cerebellar-models/custom_stdp/tracking_neuron_nestml.cpp -o CMakeFiles/custom_stdp_module_module.dir/tracking_neuron_nestml.s
+	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S /home/emiliano/Documenti/better_env/cerebellar-models/custom_stdp/tracking_neuron_nestml.cpp -o CMakeFiles/custom_stdp_module_module.dir/tracking_neuron_nestml.s
 
 CMakeFiles/custom_stdp_module_module.dir/basic_neuron_nestml.o: CMakeFiles/custom_stdp_module_module.dir/flags.make
 CMakeFiles/custom_stdp_module_module.dir/basic_neuron_nestml.o: ../basic_neuron_nestml.cpp
 CMakeFiles/custom_stdp_module_module.dir/basic_neuron_nestml.o: CMakeFiles/custom_stdp_module_module.dir/compiler_depend.ts
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/home/emiliano/Documenti/other_env/cerebellar-models/custom_stdp/stdp_build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_12) "Building CXX object CMakeFiles/custom_stdp_module_module.dir/basic_neuron_nestml.o"
-	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -MD -MT CMakeFiles/custom_stdp_module_module.dir/basic_neuron_nestml.o -MF CMakeFiles/custom_stdp_module_module.dir/basic_neuron_nestml.o.d -o CMakeFiles/custom_stdp_module_module.dir/basic_neuron_nestml.o -c /home/emiliano/Documenti/other_env/cerebellar-models/custom_stdp/basic_neuron_nestml.cpp
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/home/emiliano/Documenti/better_env/cerebellar-models/custom_stdp/stdp_build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_12) "Building CXX object CMakeFiles/custom_stdp_module_module.dir/basic_neuron_nestml.o"
+	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -MD -MT CMakeFiles/custom_stdp_module_module.dir/basic_neuron_nestml.o -MF CMakeFiles/custom_stdp_module_module.dir/basic_neuron_nestml.o.d -o CMakeFiles/custom_stdp_module_module.dir/basic_neuron_nestml.o -c /home/emiliano/Documenti/better_env/cerebellar-models/custom_stdp/basic_neuron_nestml.cpp
 
 CMakeFiles/custom_stdp_module_module.dir/basic_neuron_nestml.i: cmake_force
 	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Preprocessing CXX source to CMakeFiles/custom_stdp_module_module.dir/basic_neuron_nestml.i"
-	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E /home/emiliano/Documenti/other_env/cerebellar-models/custom_stdp/basic_neuron_nestml.cpp > CMakeFiles/custom_stdp_module_module.dir/basic_neuron_nestml.i
+	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E /home/emiliano/Documenti/better_env/cerebellar-models/custom_stdp/basic_neuron_nestml.cpp > CMakeFiles/custom_stdp_module_module.dir/basic_neuron_nestml.i
 
 CMakeFiles/custom_stdp_module_module.dir/basic_neuron_nestml.s: cmake_force
 	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Compiling CXX source to assembly CMakeFiles/custom_stdp_module_module.dir/basic_neuron_nestml.s"
-	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S /home/emiliano/Documenti/other_env/cerebellar-models/custom_stdp/basic_neuron_nestml.cpp -o CMakeFiles/custom_stdp_module_module.dir/basic_neuron_nestml.s
+	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S /home/emiliano/Documenti/better_env/cerebellar-models/custom_stdp/basic_neuron_nestml.cpp -o CMakeFiles/custom_stdp_module_module.dir/basic_neuron_nestml.s
 
 CMakeFiles/custom_stdp_module_module.dir/diff_neuron_nestml.o: CMakeFiles/custom_stdp_module_module.dir/flags.make
 CMakeFiles/custom_stdp_module_module.dir/diff_neuron_nestml.o: ../diff_neuron_nestml.cpp
 CMakeFiles/custom_stdp_module_module.dir/diff_neuron_nestml.o: CMakeFiles/custom_stdp_module_module.dir/compiler_depend.ts
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/home/emiliano/Documenti/other_env/cerebellar-models/custom_stdp/stdp_build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_13) "Building CXX object CMakeFiles/custom_stdp_module_module.dir/diff_neuron_nestml.o"
-	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -MD -MT CMakeFiles/custom_stdp_module_module.dir/diff_neuron_nestml.o -MF CMakeFiles/custom_stdp_module_module.dir/diff_neuron_nestml.o.d -o CMakeFiles/custom_stdp_module_module.dir/diff_neuron_nestml.o -c /home/emiliano/Documenti/other_env/cerebellar-models/custom_stdp/diff_neuron_nestml.cpp
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/home/emiliano/Documenti/better_env/cerebellar-models/custom_stdp/stdp_build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_13) "Building CXX object CMakeFiles/custom_stdp_module_module.dir/diff_neuron_nestml.o"
+	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -MD -MT CMakeFiles/custom_stdp_module_module.dir/diff_neuron_nestml.o -MF CMakeFiles/custom_stdp_module_module.dir/diff_neuron_nestml.o.d -o CMakeFiles/custom_stdp_module_module.dir/diff_neuron_nestml.o -c /home/emiliano/Documenti/better_env/cerebellar-models/custom_stdp/diff_neuron_nestml.cpp
 
 CMakeFiles/custom_stdp_module_module.dir/diff_neuron_nestml.i: cmake_force
 	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Preprocessing CXX source to CMakeFiles/custom_stdp_module_module.dir/diff_neuron_nestml.i"
-	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E /home/emiliano/Documenti/other_env/cerebellar-models/custom_stdp/diff_neuron_nestml.cpp > CMakeFiles/custom_stdp_module_module.dir/diff_neuron_nestml.i
+	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E /home/emiliano/Documenti/better_env/cerebellar-models/custom_stdp/diff_neuron_nestml.cpp > CMakeFiles/custom_stdp_module_module.dir/diff_neuron_nestml.i
 
 CMakeFiles/custom_stdp_module_module.dir/diff_neuron_nestml.s: cmake_force
 	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Compiling CXX source to assembly CMakeFiles/custom_stdp_module_module.dir/diff_neuron_nestml.s"
-	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S /home/emiliano/Documenti/other_env/cerebellar-models/custom_stdp/diff_neuron_nestml.cpp -o CMakeFiles/custom_stdp_module_module.dir/diff_neuron_nestml.s
+	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S /home/emiliano/Documenti/better_env/cerebellar-models/custom_stdp/diff_neuron_nestml.cpp -o CMakeFiles/custom_stdp_module_module.dir/diff_neuron_nestml.s
 
 CMakeFiles/custom_stdp_module_module.dir/rb_neuron_nestml.o: CMakeFiles/custom_stdp_module_module.dir/flags.make
 CMakeFiles/custom_stdp_module_module.dir/rb_neuron_nestml.o: ../rb_neuron_nestml.cpp
 CMakeFiles/custom_stdp_module_module.dir/rb_neuron_nestml.o: CMakeFiles/custom_stdp_module_module.dir/compiler_depend.ts
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/home/emiliano/Documenti/other_env/cerebellar-models/custom_stdp/stdp_build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_14) "Building CXX object CMakeFiles/custom_stdp_module_module.dir/rb_neuron_nestml.o"
-	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -MD -MT CMakeFiles/custom_stdp_module_module.dir/rb_neuron_nestml.o -MF CMakeFiles/custom_stdp_module_module.dir/rb_neuron_nestml.o.d -o CMakeFiles/custom_stdp_module_module.dir/rb_neuron_nestml.o -c /home/emiliano/Documenti/other_env/cerebellar-models/custom_stdp/rb_neuron_nestml.cpp
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/home/emiliano/Documenti/better_env/cerebellar-models/custom_stdp/stdp_build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_14) "Building CXX object CMakeFiles/custom_stdp_module_module.dir/rb_neuron_nestml.o"
+	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -MD -MT CMakeFiles/custom_stdp_module_module.dir/rb_neuron_nestml.o -MF CMakeFiles/custom_stdp_module_module.dir/rb_neuron_nestml.o.d -o CMakeFiles/custom_stdp_module_module.dir/rb_neuron_nestml.o -c /home/emiliano/Documenti/better_env/cerebellar-models/custom_stdp/rb_neuron_nestml.cpp
 
 CMakeFiles/custom_stdp_module_module.dir/rb_neuron_nestml.i: cmake_force
 	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Preprocessing CXX source to CMakeFiles/custom_stdp_module_module.dir/rb_neuron_nestml.i"
-	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E /home/emiliano/Documenti/other_env/cerebellar-models/custom_stdp/rb_neuron_nestml.cpp > CMakeFiles/custom_stdp_module_module.dir/rb_neuron_nestml.i
+	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E /home/emiliano/Documenti/better_env/cerebellar-models/custom_stdp/rb_neuron_nestml.cpp > CMakeFiles/custom_stdp_module_module.dir/rb_neuron_nestml.i
 
 CMakeFiles/custom_stdp_module_module.dir/rb_neuron_nestml.s: cmake_force
 	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Compiling CXX source to assembly CMakeFiles/custom_stdp_module_module.dir/rb_neuron_nestml.s"
-	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S /home/emiliano/Documenti/other_env/cerebellar-models/custom_stdp/rb_neuron_nestml.cpp -o CMakeFiles/custom_stdp_module_module.dir/rb_neuron_nestml.s
+	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S /home/emiliano/Documenti/better_env/cerebellar-models/custom_stdp/rb_neuron_nestml.cpp -o CMakeFiles/custom_stdp_module_module.dir/rb_neuron_nestml.s
 
 CMakeFiles/custom_stdp_module_module.dir/tracking_neuron_planner_nestml.o: CMakeFiles/custom_stdp_module_module.dir/flags.make
 CMakeFiles/custom_stdp_module_module.dir/tracking_neuron_planner_nestml.o: ../tracking_neuron_planner_nestml.cpp
 CMakeFiles/custom_stdp_module_module.dir/tracking_neuron_planner_nestml.o: CMakeFiles/custom_stdp_module_module.dir/compiler_depend.ts
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/home/emiliano/Documenti/other_env/cerebellar-models/custom_stdp/stdp_build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_15) "Building CXX object CMakeFiles/custom_stdp_module_module.dir/tracking_neuron_planner_nestml.o"
-	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -MD -MT CMakeFiles/custom_stdp_module_module.dir/tracking_neuron_planner_nestml.o -MF CMakeFiles/custom_stdp_module_module.dir/tracking_neuron_planner_nestml.o.d -o CMakeFiles/custom_stdp_module_module.dir/tracking_neuron_planner_nestml.o -c /home/emiliano/Documenti/other_env/cerebellar-models/custom_stdp/tracking_neuron_planner_nestml.cpp
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/home/emiliano/Documenti/better_env/cerebellar-models/custom_stdp/stdp_build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_15) "Building CXX object CMakeFiles/custom_stdp_module_module.dir/tracking_neuron_planner_nestml.o"
+	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -MD -MT CMakeFiles/custom_stdp_module_module.dir/tracking_neuron_planner_nestml.o -MF CMakeFiles/custom_stdp_module_module.dir/tracking_neuron_planner_nestml.o.d -o CMakeFiles/custom_stdp_module_module.dir/tracking_neuron_planner_nestml.o -c /home/emiliano/Documenti/better_env/cerebellar-models/custom_stdp/tracking_neuron_planner_nestml.cpp
 
 CMakeFiles/custom_stdp_module_module.dir/tracking_neuron_planner_nestml.i: cmake_force
 	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Preprocessing CXX source to CMakeFiles/custom_stdp_module_module.dir/tracking_neuron_planner_nestml.i"
-	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E /home/emiliano/Documenti/other_env/cerebellar-models/custom_stdp/tracking_neuron_planner_nestml.cpp > CMakeFiles/custom_stdp_module_module.dir/tracking_neuron_planner_nestml.i
+	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E /home/emiliano/Documenti/better_env/cerebellar-models/custom_stdp/tracking_neuron_planner_nestml.cpp > CMakeFiles/custom_stdp_module_module.dir/tracking_neuron_planner_nestml.i
 
 CMakeFiles/custom_stdp_module_module.dir/tracking_neuron_planner_nestml.s: cmake_force
 	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Compiling CXX source to assembly CMakeFiles/custom_stdp_module_module.dir/tracking_neuron_planner_nestml.s"
-	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S /home/emiliano/Documenti/other_env/cerebellar-models/custom_stdp/tracking_neuron_planner_nestml.cpp -o CMakeFiles/custom_stdp_module_module.dir/tracking_neuron_planner_nestml.s
+	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S /home/emiliano/Documenti/better_env/cerebellar-models/custom_stdp/tracking_neuron_planner_nestml.cpp -o CMakeFiles/custom_stdp_module_module.dir/tracking_neuron_planner_nestml.s
 
 CMakeFiles/custom_stdp_module_module.dir/state_neuron_nestml.o: CMakeFiles/custom_stdp_module_module.dir/flags.make
 CMakeFiles/custom_stdp_module_module.dir/state_neuron_nestml.o: ../state_neuron_nestml.cpp
 CMakeFiles/custom_stdp_module_module.dir/state_neuron_nestml.o: CMakeFiles/custom_stdp_module_module.dir/compiler_depend.ts
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/home/emiliano/Documenti/other_env/cerebellar-models/custom_stdp/stdp_build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_16) "Building CXX object CMakeFiles/custom_stdp_module_module.dir/state_neuron_nestml.o"
-	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -MD -MT CMakeFiles/custom_stdp_module_module.dir/state_neuron_nestml.o -MF CMakeFiles/custom_stdp_module_module.dir/state_neuron_nestml.o.d -o CMakeFiles/custom_stdp_module_module.dir/state_neuron_nestml.o -c /home/emiliano/Documenti/other_env/cerebellar-models/custom_stdp/state_neuron_nestml.cpp
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/home/emiliano/Documenti/better_env/cerebellar-models/custom_stdp/stdp_build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_16) "Building CXX object CMakeFiles/custom_stdp_module_module.dir/state_neuron_nestml.o"
+	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -MD -MT CMakeFiles/custom_stdp_module_module.dir/state_neuron_nestml.o -MF CMakeFiles/custom_stdp_module_module.dir/state_neuron_nestml.o.d -o CMakeFiles/custom_stdp_module_module.dir/state_neuron_nestml.o -c /home/emiliano/Documenti/better_env/cerebellar-models/custom_stdp/state_neuron_nestml.cpp
 
 CMakeFiles/custom_stdp_module_module.dir/state_neuron_nestml.i: cmake_force
 	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Preprocessing CXX source to CMakeFiles/custom_stdp_module_module.dir/state_neuron_nestml.i"
-	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E /home/emiliano/Documenti/other_env/cerebellar-models/custom_stdp/state_neuron_nestml.cpp > CMakeFiles/custom_stdp_module_module.dir/state_neuron_nestml.i
+	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E /home/emiliano/Documenti/better_env/cerebellar-models/custom_stdp/state_neuron_nestml.cpp > CMakeFiles/custom_stdp_module_module.dir/state_neuron_nestml.i
 
 CMakeFiles/custom_stdp_module_module.dir/state_neuron_nestml.s: cmake_force
 	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Compiling CXX source to assembly CMakeFiles/custom_stdp_module_module.dir/state_neuron_nestml.s"
-	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S /home/emiliano/Documenti/other_env/cerebellar-models/custom_stdp/state_neuron_nestml.cpp -o CMakeFiles/custom_stdp_module_module.dir/state_neuron_nestml.s
+	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S /home/emiliano/Documenti/better_env/cerebellar-models/custom_stdp/state_neuron_nestml.cpp -o CMakeFiles/custom_stdp_module_module.dir/state_neuron_nestml.s
 
 # Object files for target custom_stdp_module_module
 custom_stdp_module_module_OBJECTS = \
@@ -333,7 +333,7 @@ custom_stdp_module.so: CMakeFiles/custom_stdp_module_module.dir/tracking_neuron_
 custom_stdp_module.so: CMakeFiles/custom_stdp_module_module.dir/state_neuron_nestml.o
 custom_stdp_module.so: CMakeFiles/custom_stdp_module_module.dir/build.make
 custom_stdp_module.so: CMakeFiles/custom_stdp_module_module.dir/link.txt
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --bold --progress-dir=/home/emiliano/Documenti/other_env/cerebellar-models/custom_stdp/stdp_build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_17) "Linking CXX shared module custom_stdp_module.so"
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --bold --progress-dir=/home/emiliano/Documenti/better_env/cerebellar-models/custom_stdp/stdp_build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_17) "Linking CXX shared module custom_stdp_module.so"
 	$(CMAKE_COMMAND) -E cmake_link_script CMakeFiles/custom_stdp_module_module.dir/link.txt --verbose=$(VERBOSE)
 
 # Rule to build all files generated by this target.
@@ -345,6 +345,6 @@ CMakeFiles/custom_stdp_module_module.dir/clean:
 .PHONY : CMakeFiles/custom_stdp_module_module.dir/clean
 
 CMakeFiles/custom_stdp_module_module.dir/depend:
-	cd /home/emiliano/Documenti/other_env/cerebellar-models/custom_stdp/stdp_build && $(CMAKE_COMMAND) -E cmake_depends "Unix Makefiles" /home/emiliano/Documenti/other_env/cerebellar-models/custom_stdp /home/emiliano/Documenti/other_env/cerebellar-models/custom_stdp /home/emiliano/Documenti/other_env/cerebellar-models/custom_stdp/stdp_build /home/emiliano/Documenti/other_env/cerebellar-models/custom_stdp/stdp_build /home/emiliano/Documenti/other_env/cerebellar-models/custom_stdp/stdp_build/CMakeFiles/custom_stdp_module_module.dir/DependInfo.cmake --color=$(COLOR)
+	cd /home/emiliano/Documenti/better_env/cerebellar-models/custom_stdp/stdp_build && $(CMAKE_COMMAND) -E cmake_depends "Unix Makefiles" /home/emiliano/Documenti/better_env/cerebellar-models/custom_stdp /home/emiliano/Documenti/better_env/cerebellar-models/custom_stdp /home/emiliano/Documenti/better_env/cerebellar-models/custom_stdp/stdp_build /home/emiliano/Documenti/better_env/cerebellar-models/custom_stdp/stdp_build /home/emiliano/Documenti/better_env/cerebellar-models/custom_stdp/stdp_build/CMakeFiles/custom_stdp_module_module.dir/DependInfo.cmake --color=$(COLOR)
 .PHONY : CMakeFiles/custom_stdp_module_module.dir/depend
 

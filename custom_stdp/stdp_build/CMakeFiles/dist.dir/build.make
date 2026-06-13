@@ -53,10 +53,10 @@ RM = /usr/bin/cmake -E rm -f
 EQUALS = =
 
 # The top-level source directory on which CMake was run.
-CMAKE_SOURCE_DIR = /home/emiliano/Documenti/other_env/cerebellar-models/custom_stdp
+CMAKE_SOURCE_DIR = /home/emiliano/Documenti/better_env/cerebellar-models/custom_stdp
 
 # The top-level build directory on which CMake was run.
-CMAKE_BINARY_DIR = /home/emiliano/Documenti/other_env/cerebellar-models/custom_stdp/stdp_build
+CMAKE_BINARY_DIR = /home/emiliano/Documenti/better_env/cerebellar-models/custom_stdp/stdp_build
 
 # Utility rule file for dist.
 
@@ -67,7 +67,7 @@ include CMakeFiles/dist.dir/compiler_depend.make
 include CMakeFiles/dist.dir/progress.make
 
 CMakeFiles/dist:
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --blue --bold --progress-dir=/home/emiliano/Documenti/other_env/cerebellar-models/custom_stdp/stdp_build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_1) "Creating a source distribution from custom_stdp_module..."
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --blue --bold --progress-dir=/home/emiliano/Documenti/better_env/cerebellar-models/custom_stdp/stdp_build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_1) "Creating a source distribution from custom_stdp_module..."
 	/usr/bin/gmake package_source
 
 dist: CMakeFiles/dist
@@ -83,6 +83,6 @@ CMakeFiles/dist.dir/clean:
 .PHONY : CMakeFiles/dist.dir/clean
 
 CMakeFiles/dist.dir/depend:
-	cd /home/emiliano/Documenti/other_env/cerebellar-models/custom_stdp/stdp_build && $(CMAKE_COMMAND) -E cmake_depends "Unix Makefiles" /home/emiliano/Documenti/other_env/cerebellar-models/custom_stdp /home/emiliano/Documenti/other_env/cerebellar-models/custom_stdp /home/emiliano/Documenti/other_env/cerebellar-models/custom_stdp/stdp_build /home/emiliano/Documenti/other_env/cerebellar-models/custom_stdp/stdp_build /home/emiliano/Documenti/other_env/cerebellar-models/custom_stdp/stdp_build/CMakeFiles/dist.dir/DependInfo.cmake --color=$(COLOR)
+	cd /home/emiliano/Documenti/better_env/cerebellar-models/custom_stdp/stdp_build && $(CMAKE_COMMAND) -E cmake_depends "Unix Makefiles" /home/emiliano/Documenti/better_env/cerebellar-models/custom_stdp /home/emiliano/Documenti/better_env/cerebellar-models/custom_stdp /home/emiliano/Documenti/better_env/cerebellar-models/custom_stdp/stdp_build /home/emiliano/Documenti/better_env/cerebellar-models/custom_stdp/stdp_build /home/emiliano/Documenti/better_env/cerebellar-models/custom_stdp/stdp_build/CMakeFiles/dist.dir/DependInfo.cmake --color=$(COLOR)
 .PHONY : CMakeFiles/dist.dir/depend
 

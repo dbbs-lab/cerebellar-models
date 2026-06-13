@@ -1,8 +1,8 @@
-# Install script for directory: /home/emiliano/Documenti/other_env/cerebellar-models/custom_stdp
+# Install script for directory: /home/emiliano/Documenti/better_env/cerebellar-models/custom_stdp
 
 # Set the install prefix
 if(NOT DEFINED CMAKE_INSTALL_PREFIX)
-  set(CMAKE_INSTALL_PREFIX "/home/emiliano/Documenti/other_env/other_e")
+  set(CMAKE_INSTALL_PREFIX "/home/emiliano/Documenti/better_env/benv")
 endif()
 string(REGEX REPLACE "/$" "" CMAKE_INSTALL_PREFIX "${CMAKE_INSTALL_PREFIX}")
 
@@ -49,7 +49,7 @@ if("x${CMAKE_INSTALL_COMPONENT}x" STREQUAL "xUnspecifiedx" OR NOT CMAKE_INSTALL_
          FILE "$ENV{DESTDIR}${CMAKE_INSTALL_PREFIX}/lib/nest/custom_stdp_module.so"
          RPATH "")
   endif()
-  file(INSTALL DESTINATION "${CMAKE_INSTALL_PREFIX}/lib/nest" TYPE MODULE FILES "/home/emiliano/Documenti/other_env/cerebellar-models/custom_stdp/stdp_build/custom_stdp_module.so")
+  file(INSTALL DESTINATION "${CMAKE_INSTALL_PREFIX}/lib/nest" TYPE MODULE FILES "/home/emiliano/Documenti/better_env/cerebellar-models/custom_stdp/stdp_build/custom_stdp_module.so")
   if(EXISTS "$ENV{DESTDIR}${CMAKE_INSTALL_PREFIX}/lib/nest/custom_stdp_module.so" AND
      NOT IS_SYMLINK "$ENV{DESTDIR}${CMAKE_INSTALL_PREFIX}/lib/nest/custom_stdp_module.so")
     if(CMAKE_INSTALL_DO_STRIP)
@@ -66,5 +66,5 @@ endif()
 
 string(REPLACE ";" "\n" CMAKE_INSTALL_MANIFEST_CONTENT
        "${CMAKE_INSTALL_MANIFEST_FILES}")
-file(WRITE "/home/emiliano/Documenti/other_env/cerebellar-models/custom_stdp/stdp_build/${CMAKE_INSTALL_MANIFEST}"
+file(WRITE "/home/emiliano/Documenti/better_env/cerebellar-models/custom_stdp/stdp_build/${CMAKE_INSTALL_MANIFEST}"
      "${CMAKE_INSTALL_MANIFEST_CONTENT}")
