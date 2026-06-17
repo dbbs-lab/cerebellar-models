@@ -1,15 +1,20 @@
 import time
+
 import matplotlib.pyplot as plt
-from cerebellar_models.MFM.transfer_functions import TransferFunctionSimulator, TransferFunction
+
+from cerebellar_models.MFM.transfer_functions import (
+    TransferFunction,
+    TransferFunctionSimulator,
+)
 
 if __name__ == "__main__":
 
     SIMULATE = False
-    CELL_NAME     = 'granule_cell'
-    YAML_PATH     = 'circuit_Z-.yaml'
-    TF_DICT_PATH  = 'TF_dict.json'
-    SCAFFOLD_PATH = 'mouse_cerebellum.hdf5'
-    OUTPUT_DIR = 'output_TF'
+    CELL_NAME = "granule_cell"
+    YAML_PATH = "circuit_Z-.yaml"
+    TF_DICT_PATH = "TF_dict.json"
+    SCAFFOLD_PATH = "mouse_cerebellum.hdf5"
+    OUTPUT_DIR = "output_TF"
 
     if SIMULATE:
         sim = TransferFunctionSimulator(
@@ -19,9 +24,9 @@ if __name__ == "__main__":
             cell_name=CELL_NAME,
             n_workers=8,
         )
-        sim.n_reps=50
+        sim.n_reps = 50
 
-        print(f'Summary parameters: {sim.sim_info}')
+        print(f"Summary parameters: {sim.sim_info}")
         print("Running TF simulation...")
         t_start = time.time()
 
