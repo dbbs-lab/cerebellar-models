@@ -1,0 +1,42 @@
+name: DBBS Mouse cerebellum configuration v4.2 (Z+ Purkinje Cells)
+simulations:
+  nest_basal_activity:
+    cell_models:
+      purkinje_cell:
+        constants:
+          C_m: 334
+          E_L: -59
+          V_m: -59
+          V_min: -350
+          V_reset: -69
+          V_th: -43
+          t_ref: 0.5
+          tau_m: 47
+          A1: 1945.
+          A2: 4.96
+          I_e: 158.59
+          k_1: 0.29
+          k_2: 0.035
+          k_adap: 0.481
+          lambda_0: 1000.
+          tau_V: 0.1
+          tau_syn1: 1.1
+          tau_syn2: 2.8
+          tau_syn3: 0.4
+          E_rev1: 0
+          E_rev2: -80
+          E_rev3: 0
+$import:
+  ref: ./circuit_Z-.yaml#/
+  values:
+    - packages
+    - components
+    - storage
+    - network
+    - morphologies
+    - regions
+    - partitions
+    - cell_types
+    - placement
+    - connectivity
+    - simulations
