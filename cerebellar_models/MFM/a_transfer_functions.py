@@ -172,8 +172,8 @@ class TransferFunctionFitting:
         """
         
         cell_params = self.sim_info['cell_params']
-        print(self.sim_info)
-        exit
+        #print(self.sim_info)
+        #exit
         Gl = cell_params['C_m'] / cell_params['tau_m']
         El = cell_params['E_L']
         E_rev = cell_params['Erev']
@@ -206,7 +206,7 @@ class TransferFunctionFitting:
 
         # compute muV (no adaptation term)
         muV = (np.e * (muV_tot + Gl * El) - XX) / (muG + 1e-20)
-        print(muV)
+        # print(muV)
 
         return muV, muG
     
@@ -225,7 +225,7 @@ class TransferFunctionFitting:
         sV_terms = []
 
         for tag, info in self.sim_info['connections'].items():
-            f = np.array(rates_grid[tag], dtype=float)
+            f = np.array(rates_grid[tag], dtype=float)*10**-3
             K = float(info.get('convergence', 0.0))
             Q = float(info.get('weight', 0.0))
             T = float(info.get('delay', 1.0))
@@ -255,7 +255,7 @@ class TransferFunctionFitting:
         Tv_num_terms = []
 
         for tag, info in self.sim_info['connections'].items():
-            f = np.array(rates_grid[tag], dtype=float)
+            f = np.array(rates_grid[tag], dtype=float)*10**-3
             #print(np.shape(f), np.max(f))
 
             K = float(info.get('convergence', 0.0))
@@ -342,7 +342,7 @@ class TransferFunctionFitting:
         print(np.shape(self.num_tf))
         i_non_zeros = np.where((self.num_tf > 0.0) & (self.num_tf < foutlim))
         Vthre_eff = self._effective_Vthre(self.num_tf[i_non_zeros], muV[i_non_zeros], sV[i_non_zeros], TvN[i_non_zeros], Gl, Cm, alpha)
-        P0 = np.array([-50e-3, 0.0, 0.0, 0.0, 0.0])
+        P0 = np.array([-50, 0.0, 0.0, 0.0, 0.0])
 
         def res_vthre(p):
             """

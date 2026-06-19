@@ -12,15 +12,8 @@ from matplotlib import pyplot as plt
 from mpl_toolkits.axes_grid1.axes_divider import make_axes_locatable
 from quantities import ms
 
-from .plots import (
-    Legend,
-    Plot,
-    ScaffoldPlot,
-)
-from .report import (
-    BSBReport,
-    PlotTypeInfo,
-)
+from .plots import Legend, Plot, ScaffoldPlot
+from .report import BSBReport, PlotTypeInfo
 from .spiking_results import (
     SpikingResults,
     extract_isis,

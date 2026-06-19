@@ -1,18 +1,22 @@
 import time
+
 import matplotlib.pyplot as plt
-from cerebellar_models.MFM.transfer_functions import TransferFunctionSimulator, TransferFunction
 import numpy as np
 
+from cerebellar_models.MFM.transfer_functions import (
+    TransferFunction,
+    TransferFunctionSimulator,
+)
 
 if __name__ == "__main__":
 
     SIMULATE = False
-    CELL_NAME     = 'purkinje_cell'
-    SAVE_NAME     = 'purkinje_cell_Z-'
-    YAML_PATH     = 'circuit_Z-.yaml'
-    TF_DICT_PATH  = 'TF_dict.json'
-    SCAFFOLD_PATH = 'mouse_cerebellum.hdf5'
-    OUTPUT_DIR = 'output_TF'
+    CELL_NAME = "purkinje_cell"
+    SAVE_NAME = "purkinje_cell_Z-"
+    YAML_PATH = "circuit_Z-.yaml"
+    TF_DICT_PATH = "TF_dict.json"
+    SCAFFOLD_PATH = "mouse_cerebellum.hdf5"
+    OUTPUT_DIR = "output_TF"
 
     if SIMULATE:
         sim = TransferFunctionSimulator(
@@ -25,7 +29,7 @@ if __name__ == "__main__":
 
         sim.n_reps = 50
 
-        print(f'Summary parameters: {sim.sim_info}')
+        print(f"Summary parameters: {sim.sim_info}")
         print("Running TF simulation...")
         t_start = time.time()
 
@@ -39,9 +43,9 @@ if __name__ == "__main__":
         tf = TransferFunction.load(cell_name=SAVE_NAME, output_dir=OUTPUT_DIR)
 
     # check firing rates
-    grc_idx = np.argmin(np.abs(tf.freq_axes[tf.tags.index('GrC')] - 4))
+    grc_idx = np.argmin(np.abs(tf.freq_axes[tf.tags.index("GrC")] - 4))
     for mli_rate in [10, 20]:
-        mli_idx = np.argmin(np.abs(tf.freq_axes[tf.tags.index('MLI')] - mli_rate))
+        mli_idx = np.argmin(np.abs(tf.freq_axes[tf.tags.index("MLI")] - mli_rate))
         fr = tf.tf_mean[grc_idx, mli_idx]
         print(f"GrC=4 Hz, MLI={mli_rate} Hz -> PC firing rate = {fr:.2f} Hz")
 

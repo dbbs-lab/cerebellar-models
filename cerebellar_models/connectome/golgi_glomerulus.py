@@ -180,7 +180,7 @@ class ConnectomeGolgiGlomerulus(ConnectionStrategy):
             ct_postsyn_locs = []
             ct_ps_ids = []
             for i, post_ps in enumerate(post.placement):
-                (loc_glom_ids, loc_glom_pos, loc_post_locs) = self._get_glom_cluster(
+                loc_glom_ids, loc_glom_pos, loc_post_locs = self._get_glom_cluster(
                     chunk, post_ps, glom_cell_type
                 )
                 ct_glom_ids.extend(loc_glom_ids)
