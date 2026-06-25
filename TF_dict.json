@@ -1,0 +1,91 @@
+{
+  "granule_cell": {
+    "label": "GrC",
+    "connections": {
+      "glomerulus_to_granule": {
+        "label": "mf",
+        "rate_range": [0, 80]
+      },
+      "golgi_to_glomerulus": {
+        "label": "GoC",
+        "rate_range": [0, 60]
+      }
+    }
+  },
+  "golgi_cell": {
+    "label": "GoC",
+    "connections": {
+      "glomerulus_to_golgi": {
+        "label": "mf",
+        "rate_range": [0, 80]
+      },
+      "ascending_axon_to_golgi":{
+        "label": "GrC",
+        "rate_range": [0,50]
+      },
+      "parallel_fiber_to_golgi":{
+        "label": "GrC",
+        "rate_range": [0,50]
+      },
+      "golgi_to_golgi":{
+        "label": "GoC",
+        "rate_range": [0, 70]
+      }
+    }
+  },
+  "purkinje_cell": {
+    "connections": {
+      "ascending_axon_to_purkinje":
+        {
+          "label": "GrC",
+          "rate_range": [0,40]
+        },
+      "parallel_fiber_to_purkinje":
+      {
+        "label": "GrC",
+        "rate_range": [0, 40]
+      },
+      "basket_to_purkinje":
+      {
+        "label": "MLI",
+        "rate_range": [0, 300]
+      },
+      "stellate_to_purkinje":
+      {
+        "label": "MLI",
+        "rate_range": [0, 300]
+      }
+    }
+  },
+  "basket_cell": {
+    "label": "BC",
+    "connections": {
+      "parallel_fiber_to_basket":
+      {
+        "label": "GrC",
+        "rate_range": [0,50]
+      },
+      "basket_to_basket":
+      {
+        "label": "MLI",
+        "rate_range": [0, 120]
+      }
+    }
+  },
+  "stellate_cell": {
+    "label": "SC",
+    "connections": {
+      "parallel_fiber_to_stellate":
+      {
+        "label": "GrC",
+        "rate_range": [0,50]
+      },
+      "stellate_to_stellate":
+      {
+        "label": "MLI",
+        "rate_range": [0,120]
+      }
+    }
+  }
+}
+

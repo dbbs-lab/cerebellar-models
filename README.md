@@ -40,6 +40,13 @@ Cerebellar-models can be installed from PyPI through `pip`:
 pip install cerebellar-models
 ```
 
+To include simulation support for NEST and/or NEURON:
+
+```bash
+    pip install cerebellar-models[nest]  # For NEST
+    pip install cerebellar-models[neuron]  # For NEURON
+```
+
 #### Developers
 Developers best use pip's *editable* install. This creates a live link between the
 installed package and the local git repository:
@@ -47,7 +54,8 @@ installed package and the local git repository:
 ```bash
  git clone git@github.com:dbbs-lab/cerebellar-models
  cd cerebellar_models
- pip install -e .
+ # do not forget to add the optional simulators supports required.
+ pip install -e .[nest]
 ```
 
 ## Contents

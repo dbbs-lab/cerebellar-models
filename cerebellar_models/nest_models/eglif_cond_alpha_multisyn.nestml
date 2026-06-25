@@ -12,26 +12,26 @@
 #
 # .. math::
 #    \begin{cases}
-#        C_m \dfrac{dV_m}{dt} = \dfrac{C_m}{\tau_m}(V_m-E_L)
+#        C_m \dfrac{dV_m}{dt} = \dfrac{C_m}{\tau_m}(V_m - E_L)
 #                                 - I_{adap} + I_{dep} + I_e + I_{stim} + I_{syn}\\
-#        \dfrac{dI_{adap}}{dt}=k_{adap}(V_m-E_L)-k_2 \cdot I_{adap}\\
-#        \dfrac{dI_{dep}}{dt} =-k_1 \cdot I_{dep}\\
+#        \dfrac{dI_{adap}}{dt} = k_{adap}(V_m - E_L) - k_2 \cdot I_{adap}\\
+#        \dfrac{dI_{dep}}{dt} = -k_1 \cdot I_{dep}\\
 #    \end{cases}
 
 # where the synaptic current :math:`I_{syn}` integrates the input from 4 postsynaptic receptors:
 #
 # .. math::
-#        I_{syn} = \sum_{i=1} ^{4} g_i (V - E_{rev,i})
+#       I_{syn} = \sum_{i=1} ^{4} g_i (V_m - E_{rev,i})
 #
 # Here, the synapse `i` is excitatory or inhibitory depending on the value of :math:`E_{rev,i}`.
 #
 # Neuron produces spikes stochastically according to a point process with the firing intensity:
 #
 # .. math::
-#   \lambda = \lambda_0 \cdot e^{\dfrac{V_m -V_{th}}{\tau_V}}
+#   \lambda = \lambda_0 \cdot e^{\dfrac{V_m - V_{th}}{\tau_V}}
 #
 # In case of spike emission, the spike-triggered adaptation currents :math:`I_{adap}` and
-# :math:`I_{dep}` are respectively increased and set by their respective constant
+# :math:`I_{dep}` are respectively increased and set by their respective constants
 # (which can be positive or negative):
 #
 # .. math::
@@ -88,12 +88,12 @@ model eglif_cond_alpha_multisyn:
         E_L mV = -70.6 mV                   # Leak reversal Potential (aka resting potential)
         t_ref ms = 0.0 ms                   # Refractory period
         I_e pA = 0 pA                       # Constant endogenous current
+        V_reset mV = -60.0 mV               # Reset potential
         V_min mV = -150.0 mV                # Minimal membrane potential value
 
         V_th mV = -50.4 mV                  # Spike Threshold
         lambda_0 real = 0.001 / ms          # Escape rate parameter
         tau_V mV = 0.5 mV                   # Escape rate parameter
-        V_reset mV = -60.0 mV               # Reset potential
 
         k_1 real = pow(144.0, -1) / ms      # Decay rate
         k_2 real = pow(80.5, -1) / ms       # Adaptation constant
@@ -109,21 +109,22 @@ model eglif_cond_alpha_multisyn:
         tau_syn3 ms = 2.0 ms                # Postsynaptic receptor time constant
         E_rev4 mV = -80.0 mV                # Postsynaptic receptor reversal Potential
         tau_syn4 ms = 2.0 ms                # Postsynaptic receptor time constant
-    
+
     internals:
-        RefractoryCounts integer = steps(t_ref) # refractory time in steps
+        RefractoryCounts integer = steps(t_ref) # Refractory time in steps
 
     input:
         syn1_spike <- spike
         syn2_spike <- spike
         syn3_spike <- spike
         syn4_spike <- spike
-        I_stim pA <- continuous         # external stimulation current
+        I_stim pA <- continuous         # External stimulation current
 
     output:
         spike
 
     update:
+
         V_m = max(V_m, V_min)
         integrate_odes()
 

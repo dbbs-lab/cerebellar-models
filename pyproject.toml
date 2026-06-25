@@ -11,8 +11,7 @@ classifiers = ["License :: OSI Approved :: GNU General Public License v3 or late
 requires-python = ">=3.10"
 dynamic = ["version", "description"]
 dependencies = [
-    "bsb[parallel,nest,neuron]~=7.0",
-    "nestml~=8.2",
+    "bsb[parallel]~=7.0",
     "click~=8.1",
     "survey~=5.4.2",
     "matplotlib~=3.9",
@@ -20,7 +19,16 @@ dependencies = [
 ]
 
 [project.optional-dependencies]
+nest = [
+    "bsb[nest]~=7.0",
+    "nestml~=8.3.0-rc2",
+]
+neuron = [
+    "bsb[neuron]~=7.0",
+]
+
 test = [
+    "cerebellar-models[nest,neuron]",
     "bsb-test~=7.0",
     "coverage~=7.3",
 ]
@@ -59,8 +67,16 @@ known_third_party = ["nest"]
 [project.entry-points."bsb.components"]
 my_components = "cerebellar_models:classmap"
 
+[tool.coverage.run]
+branch = true
+source = ["cerebellar_models"]
+
+[tool.coverage.report]
+exclude_lines = [ "if typing.TYPE_CHECKING:", "pragma: nocover" ]
+show_missing = true
+
 [tool.bumpversion]
-current_version = "0.10.0"
+current_version = "0.12.0"
 parse = "(?P<major>\\d+)\\.(?P<minor>\\d+)\\.(?P<patch>\\d+)"
 serialize = ["{major}.{minor}.{patch}"]
 search = "{current_version}"
@@ -90,8 +106,8 @@ replace = 'cerebellar-models~={new_version}'
 
 [[tool.bumpversion.files]]
 filename = "configurations/mouse/in-vitro/nest/basal_vitro.yaml"
-search = 'cerebellar-models~={current_version}'
-replace = 'cerebellar-models~={new_version}'
+search = 'cerebellar-models[nest]~={current_version}'
+replace = 'cerebellar-models[nest]~={new_version}'
 
 [[tool.bumpversion.files]]
 filename = "codemeta.json"

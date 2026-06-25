@@ -1,0 +1,6 @@
+$import:
+  ref: ../../in-vitro/nest/mf_stimulus.yaml#/
+  values:
+    - packages
+    - simulations
+    - components
