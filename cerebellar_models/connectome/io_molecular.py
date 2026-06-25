@@ -3,7 +3,7 @@ Module for the configuration node of the IO to molecular layer interneurons (MLI
 """
 
 import numpy as np
-from bsb import ConfigurationError, ConnectionStrategy, config, refs
+from bsb import ConfigurationError, ConnectionStrategy, config, Hemitype, refs
 from bsb.mixins import NotParallel
 
 
@@ -18,7 +18,7 @@ class ConnectomeIO_MLI(NotParallel, ConnectionStrategy):
     """Connection Strategy that links IO to PC."""
     mli_pc_connectivity = config.reflist(refs.connectivity_ref, required=True)
     """List of Connection Strategies that links MLI to PC."""
-    pre_cell_pc = config.ref(refs.cell_type_ref, required=True)
+    pre_cell_pc = config.attr(type=Hemitype, required=True)
     """Celltype used for to represent PC."""
     depends_on: list[ConnectionStrategy] = config.reflist(refs.connectivity_ref)
 
