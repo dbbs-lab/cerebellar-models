@@ -5,7 +5,6 @@ import numpy as np
 
 from cerebellar_models.MFM.a_transfer_functions import TransferFunctionFitting
 
-
 if __name__ == "__main__":
     CELL_NAME = "granule_cell"
     YAML_PATH = "circuit_Z+.yaml"
@@ -36,22 +35,24 @@ if __name__ == "__main__":
     cell_params = fitter.sim_info["cell_params"]
     assert "Erev" in cell_params, "Erev mapping missing from sim_info.cell_params"
     assert isinstance(cell_params["Erev"], dict), "Erev should be a receptor-type dict"
-    assert len(cell_params["Erev"]) in (2, 3), "Purkinje cell should have 2 or 3 reversal potentials"
+    assert len(cell_params["Erev"]) in (
+        2,
+        3,
+    ), "Purkinje cell should have 2 or 3 reversal potentials"
 
     # Validate that the loaded E_rev mapping is consistent with connections.
     receptor_types = {
-        int(info["receptor_type"])
-        for info in fitter.sim_info["connections"].values()
+        int(info["receptor_type"]) for info in fitter.sim_info["connections"].values()
     }
     missing_receptors = receptor_types - set(cell_params["Erev"].keys())
-    assert not missing_receptors, (
-        f"Connections reference unmapped receptor types: {missing_receptors}"
-    )
+    assert (
+        not missing_receptors
+    ), f"Connections reference unmapped receptor types: {missing_receptors}"
 
     # Fit the analytical transfer function and report parameters.
     fitted_params = fitter.fit_tf(alpha=1.0, XX=0.0, maxiter=1000, xtol=1e-5)
     print(f"Fitted parameters: {fitted_params}")
 
     # Create a quick plot of the fitted analytical TF.
-    #fitter.plot_tf(save=False)
-    #plt.show()
+    # fitter.plot_tf(save=False)
+    # plt.show()

@@ -164,8 +164,7 @@ if __name__ == "__main__":
     pos_loss = post_first_spike_loss(targ, nest, protocol, thr, mode="max")
     neg_loss = post_rebound_loss(targ, nest, protocol, thr=thr, sign="neg", window=70.0)
 
-    print(
-        f"""Final errors:
+    print(f"""Final errors:
     Pacemaking:       {pacemaking}
     CV:               {cv_err}
     Rheobase:         {rheo}
@@ -173,8 +172,7 @@ if __name__ == "__main__":
     Gap:              {gap}
     Post-first-spike: {pos_loss}
     Rebound:          {neg_loss}
-"""
-    )
+""")
 
     error_dict = {
         "pacemaking_error": float(pacemaking),

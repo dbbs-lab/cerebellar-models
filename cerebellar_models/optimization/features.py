@@ -174,6 +174,24 @@ def peak_time(spike_train):
     return spike_train
 
 
+def _firing_rate_hz(peak_times, curr, start_stim, end_stim, duration_ms):
+    """Firing rate in Hz: n_spikes_in_window / window_duration_s.
+
+    For curr==0 the full simulation duration is used as window.
+    Consistent with plot_fi_curve in utils.py.
+    """
+    if peak_times is None:
+        return 0.0
+    st = np.asarray(peak_times, dtype=float).ravel()
+    st = st[np.isfinite(st)]
+    if curr == 0.0:
+        win_s = duration_ms / 1000.0
+    else:
+        st = st[(st >= start_stim) & (st <= end_stim)]
+        win_s = (end_stim - start_stim) / 1000.0
+    return float(st.size) / win_s if win_s > 0 else 0.0
+
+
 FEATURE_FUNCS = {
     "peak_time": peak_time,
     "time_to_first_spike": time_to_first_spike,
@@ -232,6 +250,7 @@ def multicomp_features(
 
     traces = []
     currents = np.empty(len(data_files), dtype=float)
+    duration_ms_zero = None  # full-trace duration for I=0 (used in firing_rate)
 
     for idx, f in enumerate(data_files):
         filepath = os.path.join(data_folder, f)
@@ -240,24 +259,27 @@ def multicomp_features(
         time = data[:, 0]
         voltage = data[:, 1]
 
-        if not start_stim:
-            start_stim = time[0]
-        if not end_stim:
-            end_stim = time[-1]
-
-        trace = {
-            "T": time,
-            "V": voltage,
-            "stim_start": [start_stim],
-            "stim_end": [end_stim],
-        }
-        traces.append(trace)
-
         match = re.search(r"inj(-?\d+(?:\.\d+)?)", f)
         if match:
             currents[idx] = float(match.group(1))
         else:
             currents[idx] = np.nan
+
+        trace_start = start_stim if start_stim else time[0]
+        trace_end = end_stim if end_stim else time[-1]
+
+        if currents[idx] == 0.0:
+            trace_start = time[0]
+            trace_end = time[-1]
+            duration_ms_zero = float(time[-1] - time[0])
+
+        trace = {
+            "T": time,
+            "V": voltage,
+            "stim_start": [trace_start],
+            "stim_end": [trace_end],
+        }
+        traces.append(trace)
 
     results = efel.get_feature_values(
         traces,
@@ -273,6 +295,19 @@ def multicomp_features(
     df = pd.DataFrame(df_list)
     df = df.sort_values("current").reset_index(drop=True)
 
+    _t0 = start_stim if start_stim is not None else 0.0
+    _t1 = end_stim if end_stim is not None else 0.0
+    df["mean_frequency"] = df.apply(
+        lambda row: _firing_rate_hz(
+            row.get("peak_time"),
+            float(row["current"]),
+            _t0,
+            _t1,
+            duration_ms_zero if float(row["current"]) == 0.0 else (_t1 - _t0),
+        ),
+        axis=1,
+    )
+
     return df
 
 
@@ -282,19 +317,42 @@ def point_neuron_features(
     features: Optional[list[str]] = FEATURE_FUNCS.keys(),
     start_stim: Optional[float] = None,
     end_stim: Optional[float] = None,
+    duration: Optional[float] = None,
 ) -> pd.DataFrame:
 
     features_ = _check_features(features)
     all_results = []
     for spike_train, curr in zip(spike_trains, currents):
+        if curr == 0.0:
+            if duration is None:
+                raise ValueError("duration must be provided when current=0 is present")
+            eff_start = 0.0
+            eff_end = duration
+        else:
+            eff_start = start_stim
+            eff_end = end_stim
+
         r = {}
         for feat in features_:
             func = FEATURE_FUNCS[feat]
-            r[feat] = _call_feature(func, spike_train, start_stim, end_stim)
+            r[feat] = _call_feature(func, spike_train, eff_start, eff_end)
         r["current"] = curr
         all_results.append(r)
 
     df = pd.DataFrame(all_results)
     df = df.sort_values("current").reset_index(drop=True)
+
+    _t0 = start_stim if start_stim is not None else 0.0
+    _t1 = end_stim if end_stim is not None else 0.0
+    df["mean_frequency"] = df.apply(
+        lambda row: _firing_rate_hz(
+            row.get("peak_time"),
+            float(row["current"]),
+            _t0,
+            _t1,
+            duration if float(row["current"]) == 0.0 else (_t1 - _t0),
+        ),
+        axis=1,
+    )
 
     return df

@@ -96,11 +96,27 @@ def extract_info(df, start, end):
     return pd.DataFrame(out)
 
 
+# -------   UTILS (spike extraction)   -------
+def _stim_spikes(df, current, start, end):
+    """Spike times within [start, end] for a given current level."""
+    rows = df[np.isclose(df["current"].astype(float), float(current))]
+    if rows.empty:
+        return np.array([])
+    raw = rows["peak_time"].values[0]
+    if raw is None:
+        return np.array([])
+    sp = np.asarray(raw if isinstance(raw, (list, tuple, np.ndarray)) else [raw], dtype=float)
+    sp = sp[(sp >= start) & (sp <= end)]
+    return np.sort(sp[np.isfinite(sp)])
+
+
 # -------   LOSSES   -------
 def rheobase_loss(nest_df, targ_df):
     try:
-        nest_thr = nest_df.loc[nest_df["spike_count_stimint"] > 0, "current"].min()
-        targ_thr = targ_df.loc[targ_df["spike_count_stimint"] > 0, "current"].min()
+        nest_sc = nest_df["spike_count_stimint"].apply(lambda x: float(_scalar(x) or 0))
+        targ_sc = targ_df["spike_count_stimint"].apply(lambda x: float(_scalar(x) or 0))
+        nest_thr = nest_df.loc[nest_sc > 0, "current"].min()
+        targ_thr = targ_df.loc[targ_sc > 0, "current"].min()
         rel_thr = abs(nest_thr - targ_thr) / max(abs(targ_thr), 1e-9)
         return np.clip(rel_thr / (1 + rel_thr), 0, 1), targ_thr
     except Exception:
@@ -109,8 +125,8 @@ def rheobase_loss(nest_df, targ_df):
 
 def pacemaking_loss(targ, nest):
     try:
-        tf = float(_scalar(targ.loc[targ["current"] == 0, "mean_frequency"]))
-        nf = float(_scalar(nest.loc[nest["current"] == 0, "mean_frequency"]))
+        tf = float(_scalar(targ.loc[targ["current"] == 0, "mean_frequency"].values[0]))
+        nf = float(_scalar(nest.loc[nest["current"] == 0, "mean_frequency"].values[0]))
         rel = abs(nf - tf) / max(tf, 1e-9)
         return np.clip(rel / (1 + rel), 0, 1)
     except Exception:
@@ -119,8 +135,8 @@ def pacemaking_loss(targ, nest):
 
 def cv_loss(targ, nest, delta=0.1, alpha=0.3, regularity=False):
     try:
-        tcv = float(_scalar(targ.loc[targ["current"] == 0, "ISI_CV"]))
-        ncv = float(_scalar(nest.loc[nest["current"] == 0, "ISI_CV"]))
+        tcv = float(_scalar(targ.loc[targ["current"] == 0, "ISI_CV"].values[0]))
+        ncv = float(_scalar(nest.loc[nest["current"] == 0, "ISI_CV"].values[0]))
         diff = abs(ncv - tcv)
 
         if diff <= delta:
@@ -200,7 +216,6 @@ def gap_loss(targ, nest, sel, weighted=None, missing_penalty=1.0):
                 raise ValueError(f"Weight strategy {weighted} not implemented")
 
             w = np.asarray(w, dtype=float)
-            w[m]
             if np.all(w <= 0):
                 mean_err = float(np.mean(err_vec))
             else:
@@ -276,7 +291,14 @@ def curvature_loss(
 
 
 def post_first_spike_loss(
-    targ, nest, protocol, thr=0.0, sign="pos", missing_penalty=0.5, mode="max"
+    targ,
+    nest,
+    protocol,
+    thr=0.0,
+    sign="pos",
+    missing_penalty=0.5,
+    mode="max",
+    tol_frac=0.4,
 ):
     start, end = protocol["end_stim"], protocol["duration"]
 
@@ -313,10 +335,90 @@ def post_first_spike_loss(
             if n is None or n["n_spikes"] == 0:
                 losses.append(1.0)
             else:
-                err = abs(n["first_spike"] - t["first_spike"]) / max(t["first_spike"], 1e-9)
-                losses.append(np.clip(err / (1 + err), 0.0, 1.0))
+                lat_t = t["first_spike"] - start  # post-stim latency, not absolute time
+                rel_err = abs(n["first_spike"] - t["first_spike"]) / max(lat_t, 1e-9)
+                if rel_err <= tol_frac:
+                    losses.append(0.0)
+                else:
+                    penalized = (rel_err - tol_frac) / (1.0 - tol_frac + 1e-9)
+                    losses.append(np.clip(penalized / (1 + penalized), 0.0, 1.0))
     if mode == "max":
         return float(np.max(losses)) if losses else float(missing_penalty)
+    return float(np.mean(losses)) if losses else float(missing_penalty)
+
+
+def adaptation_index_loss(targ, nest, protocol, sel=None, missing_penalty=0.5):
+    """
+    Compare adaptation index (AI = last_ISI / first_ISI).
+    AI > 1: cell slows down (adapts). AI ≈ 1: tonic firing.
+    Tests k_adap / A2 / k_2 dynamics directly.
+    For I=0: uses entire [0, duration] window (spontaneous pacemaking).
+    For I≠0: uses [start_stim, end_stim] window.
+    """
+    start, end = protocol["start_stim"], protocol["end_stim"]
+    duration = protocol.get("duration", end)
+    common = np.intersect1d(targ["current"].unique(), nest["current"].unique())
+    if sel is not None:
+        common = np.intersect1d(common, sel)
+    if common.size == 0:
+        return float(missing_penalty)
+
+    losses = []
+    for c in common:
+        win_start = 0.0 if float(c) == 0.0 else start
+        win_end = duration if float(c) == 0.0 else end
+        t_sp = _stim_spikes(targ, c, win_start, win_end)
+        n_sp = _stim_spikes(nest, c, win_start, win_end)
+        if t_sp.size < 3:
+            continue
+        t_isis = np.diff(t_sp)
+        t_ai = t_isis[-1] / max(t_isis[0], 1e-9)
+        if not np.isfinite(t_ai):
+            continue
+        if n_sp.size < 3:
+            losses.append(1.0)
+            continue
+        n_isis = np.diff(n_sp)
+        n_ai = n_isis[-1] / max(n_isis[0], 1e-9)
+        rel = abs(n_ai - t_ai) / max(t_ai, 1e-9)
+        losses.append(float(np.clip(rel / (1 + rel), 0.0, 1.0)))
+
+    return float(np.mean(losses)) if losses else float(missing_penalty)
+
+
+def first_spike_latency_loss(targ, nest, protocol, sel=None, missing_penalty=0.5, tol_frac=0.20):
+    """
+    Compare latency from stimulus onset to first spike during stim window.
+    Useful for non-pacemaking neurons (GrC); for pacemaking cells captures
+    whether the model fires immediately or with delay at each current.
+    tol_frac: relative tolerance on target latency before penalising.
+    """
+    start, end = protocol["start_stim"], protocol["end_stim"]
+    common = np.intersect1d(targ["current"].unique(), nest["current"].unique())
+    if sel is not None:
+        common = np.intersect1d(common, sel)
+    if common.size == 0:
+        return float(missing_penalty)
+
+    losses = []
+    for c in common:
+        t_sp = _stim_spikes(targ, c, start, end)
+        n_sp = _stim_spikes(nest, c, start, end)
+        if t_sp.size == 0:
+            losses.append(0.0 if n_sp.size == 0 else spike_penalty(n_sp.size))
+            continue
+        if n_sp.size == 0:
+            losses.append(1.0)
+            continue
+        t_lat = t_sp[0] - start
+        n_lat = n_sp[0] - start
+        rel = abs(n_lat - t_lat) / max(t_lat, 1e-9)
+        if rel <= tol_frac:
+            losses.append(0.0)
+        else:
+            penalized = (rel - tol_frac) / (1.0 - tol_frac + 1e-9)
+            losses.append(float(np.clip(penalized / (1 + penalized), 0.0, 1.0)))
+
     return float(np.mean(losses)) if losses else float(missing_penalty)
 
 
@@ -404,7 +506,7 @@ def post_rebound_loss(
             losses.append(1.0)
             continue
 
-        diff = abs(n["n_spikes"] - t["n_spikes"])
-        losses.append(spike_penalty(diff, scale))
+        rel = abs(n["n_spikes"] - t["n_spikes"]) / max(t["n_spikes"], 1)
+        losses.append(float(np.clip(rel / (1 + rel), 0.0, 1.0)))
 
     return float(np.nanmean(losses)) if losses else float(missing_penalty)

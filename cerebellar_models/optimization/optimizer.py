@@ -200,11 +200,13 @@ class Optimizer(object):
         self.print_evolution = False
         self._fit_names = list(self.fitness.keys())
         self._fit_hist = {name: [] for name in self._fit_names}
+        self._hv_hist = []
         self.knee_weights = np.array(
             knee_weights if knee_weights is not None else np.ones(len(fitness)), dtype=float
         )
         self.output_path = None
         self.return_pareto = False
+        self.FI_SNAPSHOT_INTERVAL = 10
 
     def _extract_multicomp_features(self):
         neuron_features = multicomp_features(
@@ -258,26 +260,23 @@ class Optimizer(object):
         nest.Simulate(self.protocol["duration"])
         return nest.GetStatus(sr, "events")[0]["times"]
 
-    def _nest_protocol(self, cell_params=None):
-        multicomp_features = self._extract_multicomp_features()
-        return {
-            I: self._nest_single_sim(I, params=cell_params)
-            for I in multicomp_features["current"].values
-        }
+    def _nest_protocol(self, cell_params=None, targ_df=None):
+        if targ_df is None:
+            targ_df = self._extract_multicomp_features()
+        return {I: self._nest_single_sim(I, params=cell_params) for I in targ_df["current"].values}
 
-    def _extract_nest_features(self):
-        multicomp_features = self._extract_multicomp_features()
-        nest_results = self._nest_protocol()
-        spike_trains = []
-        for I in multicomp_features["current"].values:
-            spike_trains.append(np.array(nest_results[I]))
-        nest_features = point_neuron_features(
+    def _extract_nest_features(self, targ_df=None):
+        if targ_df is None:
+            targ_df = self._extract_multicomp_features()
+        nest_results = self._nest_protocol(targ_df=targ_df)
+        spike_trains = [np.array(nest_results[I]) for I in targ_df["current"].values]
+        return point_neuron_features(
             spike_trains=spike_trains,
-            currents=multicomp_features["current"].values,
+            currents=targ_df["current"].values,
             start_stim=self.protocol["start_stim"],
             end_stim=self.protocol["end_stim"],
+            duration=self.protocol.get("duration"),
         )
-        return nest_features
 
     def _set_parallel(self):
         os.environ.update(PARALLEL_SETTINGS)
@@ -377,7 +376,7 @@ class Optimizer(object):
         pop = toolbox.select(pop + jittered, self.POP_SIZE)
         return pop
 
-    def log_fitness_hystory(self, pop):
+    def log_fitness_history(self, pop):
         vals = [ind.fitness.values for ind in pop if ind.fitness.valid]
         if not vals:
             return
@@ -387,6 +386,21 @@ class Optimizer(object):
         for i, name in enumerate(self._fit_names):
             self._fit_hist[name].append(float(means[i]))
 
+    def log_hypervolume(self, pareto_front):
+        """Compute and store hypervolume of the Pareto front.
+
+        Reference point is [1.0] * n_obj (worst possible for all objectives).
+        HV increases as the front improves in convergence or diversity.
+        """
+        try:
+            ref = [1.0 + 1e-6] * len(self._fit_names)
+            pts = [list(ind.fitness.values) for ind in pareto_front]
+            pts = [[max(0.0, v) for v in p] for p in pts]
+            hv = tools.hypervolume(pts, ref)
+            self._hv_hist.append(float(hv))
+        except Exception:
+            self._hv_hist.append(float("nan"))
+
     def plot_fitness_history(self, fname="fitness_history.png"):
         from itertools import cycle
 
@@ -395,18 +409,20 @@ class Optimizer(object):
         L = min(len(v) for v in self._fit_hist.values() if v)
         gens = np.arange(1, L + 1, dtype=int)
         markers = cycle(["o", "s", "^", "d", "x", "*", "v", ">", "<", "p", "h"])
-        plt.figure()
+
+        fig, ax1 = plt.subplots()
         for name in self._fit_names:
             y = np.asarray(self._fit_hist[name][:L], dtype=float)
-            plt.plot(gens, y, "-" + next(markers), label=name)
-        plt.xlabel("Generation")
-        plt.ylabel("Fitness")
-        plt.title("Population mean fitness per generation")
-        plt.legend()
-        plt.tight_layout()
+            ax1.plot(gens, y, "-" + next(markers), label=name)
+        ax1.set_xlabel("Generation")
+        ax1.set_ylabel("Mean error")
+        ax1.set_title("Population mean fitness per generation")
+
+        lines1, labs1 = ax1.get_legend_handles_labels()
+        ax1.legend(lines1, labs1, fontsize=7, loc="upper right")
+        fig.tight_layout()
         if self.output_path:
-            savefig_path = os.path.join(self.output_path, fname)
-            plt.savefig(savefig_path, dpi=100)
+            plt.savefig(os.path.join(self.output_path, fname), dpi=100)
         else:
             plt.savefig(fname, dpi=100)
         plt.close()
@@ -452,16 +468,32 @@ class Optimizer(object):
             self.protocol["duration"],
         )
 
-        target_freqs = (
-            neuron_data["mean_frequency"]
-            .apply(
-                lambda v: (
-                    float(np.nanmean(v))
-                    if isinstance(v, (list, np.ndarray))
-                    else float(v) if v is not None else 0.0
-                )
-            )
-            .values
+        def _peak_to_rate(peak_val, curr):
+            st = []
+            if peak_val is None:
+                pass
+            elif isinstance(peak_val, (list, tuple, np.ndarray)):
+                st.extend(np.asarray(peak_val, dtype=float).ravel().tolist())
+            else:
+                try:
+                    st.append(float(peak_val))
+                except Exception:
+                    pass
+            st = np.asarray(st, dtype=float)
+            st = st[np.isfinite(st)]
+            if curr == 0.0:
+                win_s = T / 1000.0
+            else:
+                st = st[(st >= t0) & (st <= t1)]
+                win_s = (t1 - t0) / 1000.0
+            return float(st.size) / win_s if win_s > 0 else 0.0
+
+        target_freqs = np.array(
+            [
+                _peak_to_rate(row["peak_time"], float(row["current"]))
+                for _, row in neuron_data.iterrows()
+            ],
+            dtype=float,
         )
 
         plt.figure(figsize=(7, 5))
@@ -470,7 +502,7 @@ class Optimizer(object):
         last_gen = None
         last_params = None
         for i, (gen, params) in enumerate(snapshots):
-            sim = self._nest_protocol(params)
+            sim = self._nest_protocol(params, targ_df=neuron_data)
             nest_freqs = np.array(
                 [_rate_for_plot(sim[I], t0, t1, T, use_global) for I in currents], dtype=float
             )
@@ -510,6 +542,153 @@ class Optimizer(object):
                     except Exception:
                         msg.append(f"  {k} = {last_params[k]}")
             print("\n".join(msg))
+
+    def plot_pareto_evolution(self, pareto_snapshots, fname="pareto_evolution.png"):
+        """Radar chart (knee evolution) + parallel coordinates (full Pareto front).
+
+        pareto_snapshots: list of (gen, front_fit, knee_fit)
+          front_fit : np.array (n_front, n_obj) — fitness of all Pareto front members
+          knee_fit  : np.array (n_obj,)         — fitness of the knee solution
+
+        How to read
+        -----------
+        Radar  — each spoke = one objective (centre=0 perfect, edge=1 worst).
+                 Each polygon = knee at one generation snapshot.
+                 Polygon shrinks toward centre as optimisation converges.
+                 Spokes that stop shrinking = stuck objectives.
+
+        Parallel coordinates — each vertical axis = one objective (0 bottom,
+                 1 top). Each line = one Pareto front individual; colour maps
+                 generation (dark=early, bright=late).
+                 Crossing lines between two axes → trade-off between them.
+                 Parallel lines → compatible objectives (improve together).
+                 Lines bunched at bottom of an axis → that objective solved.
+                 Lines spread top-to-bottom → main source of diversity.
+                 Thick dashed line = current knee.
+        """
+        import matplotlib.cm as cm
+        import matplotlib.pyplot as plt
+        from matplotlib.gridspec import GridSpec
+
+        if not pareto_snapshots:
+            return
+
+        n_obj = len(self._fit_names)
+        short_pc = [n.replace("_error", "").replace("_", " ") for n in self._fit_names]
+        short_rd = [n.replace("_error", "").replace("_", "\n") for n in self._fit_names]
+        n_snaps = len(pareto_snapshots)
+        cmap = cm.get_cmap("plasma_r", max(n_snaps, 2))
+        x = np.arange(n_obj)
+
+        fig = plt.figure(figsize=(16, 6))
+        gs = GridSpec(
+            1,
+            3,
+            figure=fig,
+            left=0.05,
+            right=0.96,
+            top=0.87,
+            bottom=0.13,
+            wspace=0.38,
+        )
+        ax_radar = fig.add_subplot(gs[0, 0], polar=True)
+        ax_pc = fig.add_subplot(gs[0, 1:])
+
+        # ── Radar chart ────────────────────────────────────────────────
+        angles = np.linspace(0, 2 * np.pi, n_obj, endpoint=False).tolist()
+        angles_closed = angles + angles[:1]
+
+        ax_radar.set_theta_offset(np.pi / 2)
+        ax_radar.set_theta_direction(-1)
+        ax_radar.set_rlim(0, 1)
+        ax_radar.set_rgrids([0.25, 0.5, 0.75, 1.0], fontsize=6, alpha=0.4)
+        ax_radar.set_thetagrids(np.degrees(angles), short_rd, fontsize=7)
+        ax_radar.set_title("Knee — radar", fontsize=9, pad=14)
+
+        step = max(1, n_snaps // 8)
+        radar_idx = list(range(0, n_snaps, step))
+        if n_snaps - 1 not in radar_idx:
+            radar_idx.append(n_snaps - 1)
+
+        for ri, si in enumerate(radar_idx):
+            gen, _, knee_fit = pareto_snapshots[si]
+            t = si / max(n_snaps - 1, 1)
+            color = cmap(t)
+            is_last = si == n_snaps - 1
+            vals = list(knee_fit) + [knee_fit[0]]
+            label = f"gen {gen}" if (ri == 0 or is_last) else None
+            ax_radar.plot(
+                angles_closed,
+                vals,
+                color=color,
+                linewidth=2.5 if is_last else 1.0,
+                alpha=1.0 if is_last else 0.5,
+                label=label,
+            )
+            ax_radar.fill(angles_closed, vals, color=color, alpha=0.15 if is_last else 0.05)
+
+        ax_radar.legend(
+            loc="lower left",
+            bbox_to_anchor=(-0.3, -0.22),
+            fontsize=7,
+            ncol=2,
+        )
+
+        # ── Parallel coordinates ───────────────────────────────────────
+        for h in [0.25, 0.5, 0.75]:
+            ax_pc.axhline(h, color="0.90", linewidth=0.7, zorder=0)
+        for xi in x:
+            ax_pc.axvline(xi, color="0.78", linewidth=1.0, zorder=0)
+
+        for snap_idx, (gen, front_fit, knee_fit) in enumerate(pareto_snapshots):
+            t = snap_idx / max(n_snaps - 1, 1)
+            color = cmap(t)
+            is_last = snap_idx == n_snaps - 1
+            alpha_front = 0.07 + 0.25 * t
+
+            for row in front_fit:
+                ax_pc.plot(x, row, color=color, alpha=alpha_front, linewidth=0.6, zorder=1)
+
+            ax_pc.plot(
+                x,
+                knee_fit,
+                color=color,
+                linewidth=2.8 if is_last else 1.2,
+                alpha=1.0 if is_last else 0.6,
+                linestyle="--",
+                marker="o",
+                markersize=5 if is_last else 2,
+                zorder=3,
+                label=f"knee gen {gen}" if is_last else None,
+            )
+
+        ax_pc.set_xticks(x)
+        ax_pc.set_xticklabels(short_pc, fontsize=8)
+        ax_pc.set_ylim(-0.02, 1.05)
+        ax_pc.set_ylabel("Error  [0 = perfect · 1 = worst]", fontsize=9)
+        ax_pc.set_title("Pareto front — parallel coordinates", fontsize=9)
+        ax_pc.legend(fontsize=8, loc="upper right")
+        ax_pc.spines["top"].set_visible(False)
+        ax_pc.spines["right"].set_visible(False)
+
+        sm = cm.ScalarMappable(
+            cmap="plasma_r",
+            norm=plt.Normalize(pareto_snapshots[0][0], pareto_snapshots[-1][0]),
+        )
+        sm.set_array([])
+        cb = fig.colorbar(sm, ax=ax_pc, pad=0.01, aspect=30, shrink=0.8)
+        cb.set_label("Generation", fontsize=8)
+
+        last_gen = pareto_snapshots[-1][0]
+        fig.suptitle(
+            f"Pareto front evolution — up to gen {last_gen}",
+            fontsize=11,
+        )
+        if self.output_path:
+            plt.savefig(os.path.join(self.output_path, fname), dpi=150, bbox_inches="tight")
+        else:
+            plt.savefig(fname, dpi=150, bbox_inches="tight")
+        plt.close()
 
     def set_optimizer(self, init_kwargs=None, eval_kwargs=None):
         init_kwargs = init_kwargs or {}
@@ -555,6 +734,7 @@ class Optimizer(object):
         best_individual, best_fitness, best_knee_score = None, np.inf, np.inf
         best_history = []
         snapshots = []
+        pareto_front_snapshots = []
         best_gen = []
         stale = 0
 
@@ -582,11 +762,12 @@ class Optimizer(object):
                 ind.fitness.values = tuple(fit)
 
             pop = toolbox.select(pop + offspring, self.POP_SIZE)
-            self.log_fitness_hystory(pop)
+            self.log_fitness_history(pop)
             if self.print_evolution:
                 self.plot_fitness_history()
 
             pareto_front = tools.sortNondominated(pop, k=len(pop), first_front_only=True)[0]
+            self.log_hypervolume(pareto_front)
             best_gen, knee_score = self.pick_knee(pareto_front)
 
             if knee_score < best_knee_score:
@@ -604,7 +785,7 @@ class Optimizer(object):
                     print("Add small jitter to top individuals to escape stagnation.")
                 pop = self.jitter(pop, toolbox, alpha=0.1)
                 stale = 0
-            if (gen + 1) % 10 == 0:
+            if (gen + 1) % self.FI_SNAPSHOT_INTERVAL == 0:
                 genes = best_individual if best_individual is not None else best_gen
                 cell_params_best = {
                     **self.model_params,
@@ -612,6 +793,11 @@ class Optimizer(object):
                 }
                 snapshots.append((gen + 1, cell_params_best))
                 self.plot_fI_snapshot(snapshots)
+                front_fit = np.array([ind.fitness.values for ind in pareto_front], dtype=float)
+                knee_fit = np.array(best_gen.fitness.values, dtype=float)
+                pareto_front_snapshots.append((gen + 1, front_fit, knee_fit))
+                if self.print_evolution:
+                    self.plot_pareto_evolution(pareto_front_snapshots)
             if (gen + 1) % 50 == 0 and self.return_pareto:
                 if self.output_path is not None:
                     save_dir = os.path.join(self.output_path, "pareto_snapshots")

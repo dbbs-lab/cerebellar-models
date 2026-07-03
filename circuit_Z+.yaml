@@ -6,7 +6,10 @@ simulations:
         constants:
           C_m: 334
           E_L: -59
-          V_m: -59
+          V_m:
+            distribution: uniform
+            max: -43
+            min: -59
           V_min: -350
           V_reset: -69
           V_th: -43

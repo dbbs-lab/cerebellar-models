@@ -6,6 +6,7 @@ import matplotlib.ticker as mticker
 import numpy as np
 
 from cerebellar_models.optimization.features import multicomp_features
+from cerebellar_models.optimization.utils import plot_fi_curve
 
 
 def parse_current_from_filename(fname: str) -> float:
@@ -64,10 +65,11 @@ def style_I_axis(axI, show_xlabel=False):
 
 
 if __name__ == "__main__":
-    protocol = {"start_stim": 200.0, "end_stim": 700.0, "duration": 2000.0}
-    cell_name = "PC"
+    protocol = {"start_stim": 1000.0, "end_stim": 2000.0, "duration": 3000.0}
+    cell_name = "PC_Z-"
     data_folder = f"../results_tofitEglif/{cell_name}/"
     threshold = -43.0
+    rebound_window_ms = 100.0  # ms post end_stim to highlight for negative currents
 
     features = multicomp_features(data_folder, threshold=threshold)
     spikes_df = features[["peak_time", "current"]]
@@ -139,6 +141,29 @@ if __name__ == "__main__":
                 zorder=0,
             )
 
+        if curr < 0:
+            reb_start = protocol["end_stim"]
+            reb_end = min(reb_start + rebound_window_ms, protocol["duration"])
+            axV.axvspan(
+                reb_start,
+                reb_end,
+                facecolor="#4da6ff",
+                alpha=0.22,
+                edgecolor="none",
+                zorder=0,
+            )
+            axV.axvline(reb_end, color="#1a6abf", linewidth=0.8, linestyle=":", zorder=1)
+            axV.text(
+                reb_end,
+                22,
+                f" {rebound_window_ms:.0f} ms",
+                fontsize=6,
+                color="#1a6abf",
+                va="top",
+                ha="left",
+                zorder=5,
+            )
+
         # Vm trace + threshold
         axV.plot(t, v, color="0.35", linewidth=1.1, zorder=2)
         axV.axhline(y=threshold, color="0.6", linestyle="--", linewidth=0.9, zorder=1)
@@ -194,4 +219,19 @@ if __name__ == "__main__":
     fig.subplots_adjust(top=0.985, bottom=0.085, left=0.12, right=0.93)
     fig.savefig(f"{cell_name}_exp.png", dpi=700, bbox_inches="tight")
     fig.savefig(f"{cell_name}_exp.pdf", dpi=700, bbox_inches="tight")
+
+    fig_fi, ax_fi = plt.subplots(figsize=(5, 4))
+    plot_fi_curve(
+        spikes_df,
+        protocol["start_stim"],
+        protocol["end_stim"],
+        protocol["duration"],
+        ax=ax_fi,
+        label=cell_name,
+    )
+    ax_fi.set_title(f"FI curve — {cell_name}")
+    fig_fi.tight_layout()
+    fig_fi.savefig(f"{cell_name}_FI.png", dpi=300, bbox_inches="tight")
+    fig_fi.savefig(f"{cell_name}_FI.pdf", dpi=300, bbox_inches="tight")
+
     plt.show()

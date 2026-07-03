@@ -1,14 +1,19 @@
 import json
+
+import matplotlib.pyplot as plt
 import nest
 import numpy as np
-import yaml
-import matplotlib.pyplot as plt
 import scipy.special as sp_spec
-from scipy.optimize import minimize
+import yaml
 from bsb import from_storage
-from cerebellar_models.analysis import StructureReport
-from cerebellar_models.MFM.transfer_functions import TransferFunction, TransferFunctionSimulator
 from matplotlib.colors import LinearSegmentedColormap
+from scipy.optimize import minimize
+
+from cerebellar_models.analysis import StructureReport
+from cerebellar_models.MFM.transfer_functions import (
+    TransferFunction,
+    TransferFunctionSimulator,
+)
 
 
 class TransferFunctionFitting:
@@ -19,19 +24,12 @@ class TransferFunctionFitting:
     """
 
     def __init__(
-        self,
-        scaffold_path,
-        yaml_path,
-        tf_dict_path,
-        cell_name,
-        num_tf,
-        n_points=20,
-        params = {}
+        self, scaffold_path, yaml_path, tf_dict_path, cell_name, num_tf, n_points=20, params={}
     ):
 
         scaffold = from_storage(scaffold_path)
         report = StructureReport(scaffold)
-        conn_table = report.plots['connectivity_table']
+        conn_table = report.plots["connectivity_table"]
         conn_table.update()
 
         self._convergences = {
@@ -86,20 +84,19 @@ class TransferFunctionFitting:
         return rev_map
 
     _CELL_COLORS = {
-        "granule_cell":   [0.7, 0.15, 0.15, 1.0],
-        "golgi_cell":     [0, 0.45, 0.7, 1.0],
-        "purkinje_cell":  [0.275, 0.800, 0.275, 1.0],
-        "basket_cell":    [1, 0.647, 0, 1.0],
-        "stellate_cell":  [1, 0.84, 0, 1.0],
-        "dcn_p":          [0.3, 0.3, 0.3, 1.0],
-        "dcn_i":          [0.635, 0, 0.145, 1.0],
-        "io":             [0.46, 0.376, 0.54, 1.0],
+        "granule_cell": [0.7, 0.15, 0.15, 1.0],
+        "golgi_cell": [0, 0.45, 0.7, 1.0],
+        "purkinje_cell": [0.275, 0.800, 0.275, 1.0],
+        "basket_cell": [1, 0.647, 0, 1.0],
+        "stellate_cell": [1, 0.84, 0, 1.0],
+        "dcn_p": [0.3, 0.3, 0.3, 1.0],
+        "dcn_i": [0.635, 0, 0.145, 1.0],
+        "io": [0.46, 0.376, 0.54, 1.0],
     }
 
     def _cell_cmap(self):
         color = self._CELL_COLORS.get(self.cell_name, [0, 0, 0, 1.0])
         return LinearSegmentedColormap.from_list(self.cell_name, [(1, 1, 1, 1), color])
-
 
     def _build_sim_info(self, yaml_path, tf_dict_path, cell_name):
         simulator = TransferFunctionSimulator(
@@ -118,21 +115,18 @@ class TransferFunctionFitting:
             stochastic_convergence=False,
         )
         sim_info = simulator.sim_info.copy()
-        sim_info['cell_params'] = simulator.sim_info['cell_params'].copy()
+        sim_info["cell_params"] = simulator.sim_info["cell_params"].copy()
 
-        if 'Erev' not in sim_info['cell_params']:
-            sim_info['cell_params']['Erev'] = self._extract_reversal_map(
-                sim_info['cell_params']
-            )
+        if "Erev" not in sim_info["cell_params"]:
+            sim_info["cell_params"]["Erev"] = self._extract_reversal_map(sim_info["cell_params"])
 
         return sim_info
 
-
     def _setup_grid(self):
         label_to_range = {}
-        for info in self.sim_info['connections'].values():
-            if info['label'] not in label_to_range:
-                label_to_range[info['label']] = info['rate_range']
+        for info in self.sim_info["connections"].values():
+            if info["label"] not in label_to_range:
+                label_to_range[info["label"]] = info["rate_range"]
         unique_labels = list(label_to_range.keys())
         label_to_idx = {lbl: i for i, lbl in enumerate(unique_labels)}
         freq_axes = [
@@ -141,26 +135,23 @@ class TransferFunctionFitting:
         ]
         return unique_labels, label_to_idx, freq_axes
 
-
     def _rates_dict(self, idx, label_to_idx, freq_axes):
         return {
-            conn_tag: freq_axes[label_to_idx[info['label']]][idx[label_to_idx[info['label']]]]
-            for conn_tag, info in self.sim_info['connections'].items()
+            conn_tag: freq_axes[label_to_idx[info["label"]]][idx[label_to_idx[info["label"]]]]
+            for conn_tag, info in self.sim_info["connections"].items()
         }
-    
 
     ## WANNA WORK WITH MATRICES
     def _rates_grid(self):
         """Build broadcasted rate arrays for every connection tag over the full TF grid."""
         unique_labels, label_to_idx, freq_axes = self._setup_grid()
         shape = tuple(len(ax) for ax in freq_axes)
-        grid_axes = np.meshgrid(*freq_axes, indexing='ij')
+        grid_axes = np.meshgrid(*freq_axes, indexing="ij")
         rates_grid = {
-            conn_tag: grid_axes[label_to_idx[info['label']]]
-            for conn_tag, info in self.sim_info['connections'].items()
+            conn_tag: grid_axes[label_to_idx[info["label"]]]
+            for conn_tag, info in self.sim_info["connections"].items()
         }
         return rates_grid, unique_labels, label_to_idx, freq_axes
-    
 
     def _compute_muV(self, rates_grid, XX=0.0):
         """Compute muV for a full grid.
@@ -170,30 +161,30 @@ class TransferFunctionFitting:
 
         Returns: (muV, muGe_tot, muGi_tot, muG)
         """
-        
-        cell_params = self.sim_info['cell_params']
-        #print(self.sim_info)
-        #exit
-        Gl = cell_params['C_m'] / cell_params['tau_m']
-        El = cell_params['E_L']
-        E_rev = cell_params['Erev']
+
+        cell_params = self.sim_info["cell_params"]
+        # print(self.sim_info)
+        # exit
+        Gl = cell_params["C_m"] / cell_params["tau_m"]
+        El = cell_params["E_L"]
+        E_rev = cell_params["Erev"]
 
         muV_terms = []
         muG_terms = []
 
-        for tag, info in self.sim_info['connections'].items():
+        for tag, info in self.sim_info["connections"].items():
             ## CASE OF PF THIS MUST BE:
             ## (Q_ascending_axons*K_ascending_axons*T_ascending_axons + Q_parallel_fibers*K_parallel_fibers*T_parallel_fibers)*f_GrC +
             ## (Q_basket*K_basket*T_basket + Q_stellate*K_stellate*T_stellate)*f_MLI
-            f = np.array(rates_grid[tag], dtype=float)*10**-3
-            #print(np.shape(f), f)
-            
-            K = float(info.get('convergence', None))
-            Q = float(info.get('weight', None))
-            T = float(info.get('delay', None))
-            receptor_type = int(info.get('receptor_type', None))
+            f = np.array(rates_grid[tag], dtype=float) * 10**-3
+            # print(np.shape(f), f)
 
-            #MuG single pop
+            K = float(info.get("convergence", None))
+            Q = float(info.get("weight", None))
+            T = float(info.get("delay", None))
+            receptor_type = int(info.get("receptor_type", None))
+
+            # MuG single pop
             term_muG = Q * K * T * f
             muG_terms.append(term_muG)
 
@@ -209,7 +200,6 @@ class TransferFunctionFitting:
         # print(muV)
 
         return muV, muG
-    
 
     def _compute_sigmaV(self, rates_grid, muV, muG):
         """Compute sigmaV for full grid.
@@ -217,56 +207,55 @@ class TransferFunctionFitting:
         Returns sV (ndarray).
         """
 
-        cell_params = self.sim_info['cell_params']
-        E_rev = cell_params['Erev']
+        cell_params = self.sim_info["cell_params"]
+        E_rev = cell_params["Erev"]
 
-        Tm = cell_params['C_m'] / (muG + 1e-20)
+        Tm = cell_params["C_m"] / (muG + 1e-20)
 
         sV_terms = []
 
-        for tag, info in self.sim_info['connections'].items():
-            f = np.array(rates_grid[tag], dtype=float)*10**-3
-            K = float(info.get('convergence', 0.0))
-            Q = float(info.get('weight', 0.0))
-            T = float(info.get('delay', 1.0))
-            receptor_type = int(info.get('receptor_type', 1))
+        for tag, info in self.sim_info["connections"].items():
+            f = np.array(rates_grid[tag], dtype=float) * 10**-3
+            K = float(info.get("convergence", 0.0))
+            Q = float(info.get("weight", 0.0))
+            T = float(info.get("delay", 1.0))
+            receptor_type = int(info.get("receptor_type", 1))
 
             U = Q / (muG + 1e-20) * (E_rev.get(receptor_type, E_rev.get(1, 0.0)) - muV)
             s = (2 * Tm + T) * ((np.e * U * T) / (2 * (T + Tm + 1e-20))) ** 2 * K * f
 
             sV_terms.append(s)
-        
+
         sV_sq = np.sum(sV_terms, axis=0)
         sV = np.sqrt(sV_sq) + 1e-20
 
         return sV
-    
 
     def _compute_tauV(self, rates_grid, muV, muG, sV):
         """Compute Tv and normalized TvN for full grid.
 
         Returns: TvN, Tv
         """
-        cell_params = self.sim_info['cell_params']
-        Cm = cell_params['C_m']
-        Gl = Cm / cell_params['tau_m']
-        E_rev = cell_params['Erev']
+        cell_params = self.sim_info["cell_params"]
+        Cm = cell_params["C_m"]
+        Gl = Cm / cell_params["tau_m"]
+        E_rev = cell_params["Erev"]
 
         Tv_num_terms = []
 
-        for tag, info in self.sim_info['connections'].items():
-            f = np.array(rates_grid[tag], dtype=float)*10**-3
-            #print(np.shape(f), np.max(f))
+        for tag, info in self.sim_info["connections"].items():
+            f = np.array(rates_grid[tag], dtype=float) * 10**-3
+            # print(np.shape(f), np.max(f))
 
-            K = float(info.get('convergence', 0.0))
-            Q = float(info.get('weight', 0.0))
-            T = float(info.get('delay', 1.0))
-            receptor_type = int(info.get('receptor_type', 1))
+            K = float(info.get("convergence", 0.0))
+            Q = float(info.get("weight", 0.0))
+            T = float(info.get("delay", 1.0))
+            receptor_type = int(info.get("receptor_type", 1))
 
             U = Q / (muG + 1e-20) * (E_rev.get(receptor_type, E_rev.get(1, 0.0)) - muV)
-            tv = K * f * U ** 2 * T ** 2 * np.e ** 2
+            tv = K * f * U**2 * T**2 * np.e**2
 
-            print('EREV', E_rev.get(receptor_type, E_rev.get(1, 0.0)))
+            print("EREV", E_rev.get(receptor_type, E_rev.get(1, 0.0)))
 
             Tv_num_terms.append(tv)
 
@@ -275,17 +264,17 @@ class TransferFunctionFitting:
         TvN = Tv * Gl / Cm
 
         return TvN, Tv
-    
+
     def _erfc_func(self, muV, sV, TvN, Vthre, Gl, Cm, alpha):
         """
         Error function-based analytical expression for the TF (eq. 19 in Zerlaut et al. 2016).
-        Compute Fout_th from muV, sV, TvN, Vthre using the erfc function. 
-        The expression is derived from the first-passage time problem for a leaky integrate-and-fire neuron 
-        with Gaussian voltage fluctuations, where the firing rate is proportional to the probability of the 
-        voltage crossing the threshold Vthre, which is given by the complementary error function (erfc) of 
+        Compute Fout_th from muV, sV, TvN, Vthre using the erfc function.
+        The expression is derived from the first-passage time problem for a leaky integrate-and-fire neuron
+        with Gaussian voltage fluctuations, where the firing rate is proportional to the probability of the
+        voltage crossing the threshold Vthre, which is given by the complementary error function (erfc) of
         the normalized distance between muV and Vthre, scaled by the voltage noise sV.
         """
-        return .5 / TvN * Gl / Cm * (sp_spec.erfc((Vthre - muV) / np.sqrt(2) / sV)) * alpha
+        return 0.5 / TvN * Gl / Cm * (sp_spec.erfc((Vthre - muV) / np.sqrt(2) / sV)) * alpha
 
     def _effective_Vthre(self, Fout, muV, sV, TvN, Gl, Cm, alpha):
         """
@@ -301,8 +290,13 @@ class TransferFunctionFitting:
         muV0, DmuV0 = -60e-3, 10e-3
         sV0, DsV0 = 4e-3, 6e-3
         TvN0, DTvN0 = 0.5, 1.0
-        return P0 + P1 * (muV - muV0) / DmuV0 + \
-               P2 * (sV - sV0) / DsV0 + P3 * (TvN - TvN0) / DTvN0 + P4 * np.log(muGn)
+        return (
+            P0
+            + P1 * (muV - muV0) / DmuV0
+            + P2 * (sV - sV0) / DsV0
+            + P3 * (TvN - TvN0) / DTvN0
+            + P4 * np.log(muGn)
+        )
 
     def _TF_my_templateup_eglif(self, rates_grid, XX, alpha, P0, P1, P2, P3, P4):
         """
@@ -313,13 +307,12 @@ class TransferFunctionFitting:
         sV = self._compute_sigmaV(rates_grid, muV, muG)
         TvN, _ = self._compute_tauV(rates_grid, muV, muG, sV)
         sV = np.maximum(sV, 1e-4)
-        cell_params = self.sim_info['cell_params']
-        Gl = cell_params['C_m'] / cell_params['tau_m']
-        Cm = cell_params['C_m']
+        cell_params = self.sim_info["cell_params"]
+        Gl = cell_params["C_m"] / cell_params["tau_m"]
+        Cm = cell_params["C_m"]
         Vthre = self._threshold_func(muV, sV, TvN, muG / np.maximum(Gl, 1e-20), P0, P1, P2, P3, P4)
         Fout_th = self._erfc_func(muV, sV, TvN, Vthre, Gl, Cm, alpha)
         return np.maximum(Fout_th, 1e-8)
-    
 
     def fit_tf(self, alpha, XX=0.0, maxiter=50000, xtol=1e-5):
         """
@@ -334,37 +327,64 @@ class TransferFunctionFitting:
         sV = self._compute_sigmaV(rates_grid, muV, muG)
         TvN, _ = self._compute_tauV(rates_grid, muV, muG, sV)
 
-        cell_params = self.sim_info['cell_params']
-        Gl = cell_params['C_m'] / cell_params['tau_m']
-        Cm = cell_params['C_m']
-        
+        cell_params = self.sim_info["cell_params"]
+        Gl = cell_params["C_m"] / cell_params["tau_m"]
+        Cm = cell_params["C_m"]
+
         foutlim = np.nanmax(self.num_tf)
         print(np.shape(self.num_tf))
         i_non_zeros = np.where((self.num_tf > 0.0) & (self.num_tf < foutlim))
-        Vthre_eff = self._effective_Vthre(self.num_tf[i_non_zeros], muV[i_non_zeros], sV[i_non_zeros], TvN[i_non_zeros], Gl, Cm, alpha)
+        Vthre_eff = self._effective_Vthre(
+            self.num_tf[i_non_zeros],
+            muV[i_non_zeros],
+            sV[i_non_zeros],
+            TvN[i_non_zeros],
+            Gl,
+            Cm,
+            alpha,
+        )
         P0 = np.array([-50, 0.0, 0.0, 0.0, 0.0])
 
         def res_vthre(p):
             """
-            1-Residual function for the first step of the fitting procedure, 
-            which fits the effective threshold Vthre_eff with the phenomenological threshold function (eq. 25 in Zerlaut et al. 2016) 
+            1-Residual function for the first step of the fitting procedure,
+            which fits the effective threshold Vthre_eff with the phenomenological threshold function (eq. 25 in Zerlaut et al. 2016)
             to extract the parameters P0...P4.
             """
-            return np.mean((Vthre_eff - self._threshold_func(muV[i_non_zeros], sV[i_non_zeros], TvN[i_non_zeros], muG[i_non_zeros] / Gl, *p)) ** 2)
+            return np.mean(
+                (
+                    Vthre_eff
+                    - self._threshold_func(
+                        muV[i_non_zeros],
+                        sV[i_non_zeros],
+                        TvN[i_non_zeros],
+                        muG[i_non_zeros] / Gl,
+                        *p,
+                    )
+                )
+                ** 2
+            )
 
-        plsq = minimize(res_vthre, P0, options={'disp': True})
+        plsq = minimize(res_vthre, P0, options={"disp": True})
         P = plsq.x
 
         def res_fout(p):
             """
-            2-Residual function for the second step of the fitting procedure, 
-            which fits the TF shape by minimizing the residual between Fout (numerical template) and 
+            2-Residual function for the second step of the fitting procedure,
+            which fits the TF shape by minimizing the residual between Fout (numerical template) and
             the TF template with the fitted parameters P.
             """
-            return np.mean((self.num_tf - self._TF_my_templateup_eglif(rates_grid, XX, alpha, *p)) ** 2)
+            return np.mean(
+                (self.num_tf - self._TF_my_templateup_eglif(rates_grid, XX, alpha, *p)) ** 2
+            )
 
-        plsq = minimize(res_fout, P, method='nelder-mead', options={'xtol': xtol, 'disp': True, 'maxiter': maxiter})
+        plsq = minimize(
+            res_fout,
+            P,
+            method="nelder-mead",
+            options={"xtol": xtol, "disp": True, "maxiter": maxiter},
+        )
         P = plsq.x
         print(P)
-        self.params['P'] = P
+        self.params["P"] = P
         return P

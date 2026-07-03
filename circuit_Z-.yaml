@@ -539,22 +539,23 @@ simulations:
         model: eglif_cond_alpha_multisyn
       purkinje_cell:
         constants:
-          t_ref: 0.5
-          V_min: -350
+          A1: 2434.0008897784705
+          A2: 46.12846171566953
           C_m: 334
-          V_th: -43
-          V_reset: -69
           E_L: -59
-          V_m: -59.0
-          lambda_0: 4.
-          tau_V: 3.5
+          I_e: 185.39534745227857
+          V_m:
+            distribution: uniform
+            max: -43
+            min: -59
+          V_min: -350
+          V_reset: -69
+          V_th: -43
+          k_1: 0.2462902995736806
+          k_2: 0.025023478935133806
+          k_adap: 0.20746553238369195
+          t_ref: 0.5
           tau_m: 47
-          I_e: 700.
-          k_adap: 1.491
-          k_1: 0.195
-          k_2: 0.041
-          A1: 157.622
-          A2: 172.622
           tau_syn1: 1.1
           tau_syn2: 2.8
           tau_syn3: 0.4

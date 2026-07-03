@@ -1,0 +1,9 @@
+{
+    "Rheobase": 0.0,
+    "fI curvature error": 0.07172598676737121,
+    "fI gap_error": 0.07462040407352916,
+    "cv_error": 0.042233139384152366,
+    "pacemaking_error": 0.04528301887041191,
+    "adaptation_index_error": 0.05410398059630449,
+    "post_stim_neg_error": 0.06666666666666667
+}
