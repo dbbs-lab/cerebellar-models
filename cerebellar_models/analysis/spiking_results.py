@@ -248,7 +248,7 @@ def get_firing_rates(spiking_results: SpikingResults, kernel=None) -> np.ndarray
     duration = int((spiking_results.time_to - spiking_results.time_from) / spiking_results.dt)
     firing_rates = np.zeros((duration, num_filter))
     for i in range(num_filter):
-        if loc_spikes[i].size <= 0:
+        if loc_spikes[i].size <= 2:
             continue  # pragma: nocover
         firing_rates[:, i] = (
             instantaneous_rate(

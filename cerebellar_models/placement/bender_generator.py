@@ -39,7 +39,7 @@ class GranuleGenerator(BenderGenerator, classmap_entry="granule_bender"):
         # We calculate the scaling ratio so that the tip of the ascending axon's depth ratio within
         # the molecular layer is equal to the depth ratio of the soma within the granular layer.
         curr_ann = self.voxel_data_of(point, self.annotations)
-        _, lay = self._ann_to_abv(curr_ann)
+        lay = self._ann_to_abv(curr_ann)
         if lay is not None:
             distances = self.voxel_data_of(point, self.thicknesses())
             top_dist = distances[1]  # dist to gr/mol boundary

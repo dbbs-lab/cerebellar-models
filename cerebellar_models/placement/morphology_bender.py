@@ -49,7 +49,7 @@ class MorphologyBender:
     boundaries_field: NrrdDependencyNode = config.ref(config.refs.vox_dset_ref)
 
     default_depth: cfgdict[str, float] = config.dict(
-        required=False, type=float, default={"mo": 150.0, "gr": 150.0, "pu": 150}
+        required=False, type=float, default={"mo": 150.0, "pu": 165.0, "gr": 150.0}
     )
     """reference layers' thickness to use during rescale"""
 
@@ -193,21 +193,16 @@ class MorphologyBender:
 
     def _ann_to_abv(self, id_reg):
         """
-        Return layer index for thickness estimation and abbreviation.
-        Return Nones if region is not part of Cerebellar cortex
+        Return layer abbreviation.
+        Return None if region is not part of Cerebellar cortex
 
         :param int id_reg: region id
         :return: layer index in thickness and its abbreviation.
-        :rtype: Tuple(int, str) | Tuple(None, None)
+        :rtype: str | None
         """
-        expected = {"mo": 0, "pu": 1, "gr": 1}
-        if id_reg == 0 or id_reg is None:
-            return None, None
-        lay = self.region_map.get(id_reg, "acronym")[-2:]
-        for exp, i in expected.items():
-            if exp in lay:
-                return i, exp
-        return None, None
+        if id_reg is None or id_reg <= 0:
+            return None
+        return self.region_map.get(id_reg, "acronym")[-2:]
 
     def test_voxels_between(self, old_vox, new_vox):
         """
@@ -372,15 +367,6 @@ class MorphologyBender:
         old_rots.rotation_to_correct = new_to_correct
         return scaled_diff_rotation
 
-    def local_layer_thickness(self, point, return_lay=False):
-        curr_ann = self.voxel_data_of(point, self.annotations)
-        thick, lay = self._ann_to_abv(curr_ann)
-        if lay is not None:
-            thick = np.sum(self.voxel_data_of(point, self.thicknesses())[thick : thick + 2])
-        if return_lay:
-            return thick, lay
-        return thick
-
     def process_scaling(self, point):
         """
         Calculate the local scaling factor to apply to a morphology segment based on the local
@@ -390,11 +376,39 @@ class MorphologyBender:
         :return: scaling factor at the current location
         :rtype: float
         """
-        thick, lay = self.local_layer_thickness(point, return_lay=True)
-        if lay is not None:
+        lay = self._ann_to_abv(int(self.voxel_data_of(point, self.annotations)))
+        if lay is not None and lay in ["mo", "pu", "gr"]:
+            if lay == "mo":  # take only mo thickness
+                thick = np.sum(self.voxel_data_of(point, self.thicknesses())[0:2])
+            elif lay == "pu":  # pu is too thin add mo
+                thick = np.sum(self.voxel_data_of(point, self.thicknesses())[0:3])
+            else:  # parts of pu is in gr
+                thick = np.sum(self.voxel_data_of(point, self.thicknesses())[1:4])
             return np.maximum(thick / self.default_depth[lay], 0.1)
         else:  # out of the annotations / depth / orientations fields.
             return 0.1
+
+    def _find_valid_scale(
+        self, source, old_coord, max_scale, branch_labels, fixed_dimension, n_iter=8
+    ):
+        """Binary search for the maximum scale in [0, max_scale] where the segment
+        source -> source + (old_coord - source) * scale doesn't cross a boundary."""
+        direction = old_coord - source
+        lo, hi = 0.0, max_scale
+        best = 0.0
+        best_coord = np.copy(source)
+        for _ in range(n_iter):
+            mid = (lo + hi) / 2
+            new_coord = source + direction * mid
+            if 0 <= fixed_dimension <= 2:
+                new_coord[fixed_dimension] = old_coord[fixed_dimension]
+            if self.is_target_wrong(source, new_coord, branch_labels):
+                hi = mid
+            else:
+                best = mid
+                best_coord = np.copy(new_coord)
+                lo = mid
+        return best, best_coord
 
     def scale_morpho(self, branch, i, scaling, branch_labels):
         """
@@ -420,7 +434,16 @@ class MorphologyBender:
             new_coord[fixed_dimension] = old_coord[fixed_dimension]
         # check that every voxel between the points remain within the region boundary
         rescale = self.is_target_wrong(branch.points[i - 1], new_coord, branch_labels)
-        # if scaling resulted in an overshoot, set to old point coordinate
+        # if scaling resulted in an overshoot
+        if rescale:
+            # Binary search: keep the point alive at the furthest valid position
+            best_scale, new_coord = self._find_valid_scale(
+                branch.points[i - 1], old_coord, scaling, branch_labels, fixed_dimension
+            )
+            if best_scale > 1e-3:  # threshold: avoid degenerate near-zero segments
+                scaling = best_scale
+                rescale = False
+        # set to old point coordinate if rescale failed
         branch.points[i] = np.copy(new_coord) if not rescale else np.copy(branch.points[i - 1])
         # translate all the points of the branch starting at i
         branch.points[i + 1 :] += branch.points[i] - old_coord
