@@ -40,7 +40,7 @@ class ConnectomeIO_MLI(NotParallel, ConnectionStrategy):
         found_post = np.full(len(self.postsynaptic.cell_types), False)
         for strat in self.mli_pc_connectivity:
             post_ct = strat.postsynaptic.cell_types
-            if len(post_ct) != 1 or post_ct[0] != self.pre_cell_pc:
+            if len(post_ct) != 1 or post_ct[0] not in self.pre_cell_pc.cell_types:
                 raise ConfigurationError(
                     f"PC cell type of the MLI to PC dependency rule does not correspond "
                     f"to the provided PC type for strat {strat.name}"
@@ -58,7 +58,7 @@ class ConnectomeIO_MLI(NotParallel, ConnectionStrategy):
             )
         for strat in self.io_pc_connectivity:
             post_ct = strat.postsynaptic.cell_types
-            if len(post_ct) != 1 or post_ct[0] != self.pre_cell_pc:
+            if len(post_ct) != 1 or post_ct[0] not in self.pre_cell_pc.cell_types:
                 raise ConfigurationError(
                     f"PC cell type of the IO to PC dependency rule does not correspond "
                     f"to the provided PC type for strategy {strat.name}"
@@ -83,7 +83,7 @@ class ConnectomeIO_MLI(NotParallel, ConnectionStrategy):
                 - an array of the presynaptic cell_type connection locations,
                 - an array of the postsynaptic pc connection locations
         """
-        cs = connection_strat.get_output_names(cell_type, self.pre_cell_pc)
+        cs = connection_strat.get_output_names(cell_type, self.pre_cell_pc.cell_types[0])
         assert (
             len(cs) == 1
         ), f"Only one connection set should be given from {connection_strat.name}."
