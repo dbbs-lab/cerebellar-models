@@ -64,13 +64,13 @@ class MossyFibersSpikeGenerator(NeuronDevice, classmap_entry="mossy_fibers_spike
         ).items():  # targetting done on mf id: pop is the list of id
             print("stim targetting ", model, " id mf ", mf_ids)
 
-            find_mossy_gr = [mossy[0] in mf_ids for mossy in mossy_list]
-            find_mossy_go = [mossy[0] in mf_ids for mossy in mossy_list_go]
-            post_mfGr = granule_list[find_mossy_gr]
-            post_mfGo = golgi_list[find_mossy_go]
+            # find_mossy_gr = [mossy[0] in mf_ids for mossy in mossy_list]
+            # find_mossy_go = [mossy[0] in mf_ids for mossy in mossy_list_go]
+            # post_mfGr = granule_list[find_mossy_gr]
+            # post_mfGo = golgi_list[find_mossy_go]
 
             # Insert and stimulate synapses in granule cells # important adding syn even if not stimulated in KO model, [glu] is a syn param
-            for i, gr_i in enumerate(post_mfGr):
+            for i, gr_i in enumerate(granule_list):
                 for (
                     syn_type
                 ) in (
@@ -100,7 +100,7 @@ class MossyFibersSpikeGenerator(NeuronDevice, classmap_entry="mossy_fibers_spike
                         print("Inserted synapses in granule cells")
 
             # Insert and stimulate synapses in golgi cells
-            for i, go_i in enumerate(post_mfGo):
+            for i, go_i in enumerate(golgi_list):
                 if mossy_list_go[i, 0] in mf_ids:
                     print(
                         "pre id ",
@@ -113,13 +113,13 @@ class MossyFibersSpikeGenerator(NeuronDevice, classmap_entry="mossy_fibers_spike
                         orig_go[pop_go[go_i[0]].id],
                     )
                     for syn_type in syn_type_go:
-                        for syn in (
-                            pop_go[go_i[0]].get_location(go_i[1:]).section.synapses
-                        ):  # check if already there
-                            if syn.synapse_name == syn_type:
-                                break
-                        else:
-                            syn = pop_go[go_i[0]].insert_synapse(syn_type, go_i[1:])
+                        # for syn in (
+                        #     pop_go[go_i[0]].get_location(go_i[1:]).section.synapses
+                        # ):  # check if already there
+                        #     if syn.synapse_name == syn_type:
+                        #         break
+                        # else:
+                        syn = pop_go[go_i[0]].insert_synapse(syn_type, go_i[1:])
                         syn.stimulate(
                             pattern=pattern[
                                 mossy_list_go[i, 0], pattern[mossy_list_go[i, 0]] < self.end
