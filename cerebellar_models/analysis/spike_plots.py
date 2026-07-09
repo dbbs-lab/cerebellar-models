@@ -191,10 +191,10 @@ class RasterPSTHPlot(SpikePlot):
         self.is_plotted = False
         self.nb_cols = 2
         num_filter = len(self.populations)
-        self.nb_rows = int(np.ceil(num_filter / 2.0))  # nb rows
+        self.nb_rows = int(np.ceil(num_filter / self.nb_cols))  # nb rows
         self.figure = plt.figure(figsize=self.fig_size, **kwargs)
         if self.nb_rows > 0:
-            global_gsp = gs.GridSpec(self.nb_rows, 2)
+            global_gsp = gs.GridSpec(self.nb_rows, self.nb_cols)
         self.axes = [[] for _ in range(self.nb_rows)]
         for i in range(num_filter):
             local_gsp = gs.GridSpecFromSubplotSpec(2, 1, subplot_spec=global_gsp[i], hspace=0)
@@ -203,7 +203,7 @@ class RasterPSTHPlot(SpikePlot):
 
             ax2 = plt.Subplot(self.figure, local_gsp[1])
             self.figure.add_subplot(ax2)
-            self.axes[i // 2].append([ax1, ax2])
+            self.axes[i // self.nb_cols].append([ax1, ax2])
 
     def clear(self):
         for ax in self.get_axes():
@@ -303,12 +303,17 @@ class Spike2Columns(SpikePlot):
         self.is_plotted = False
         self.nb_cols = 2
         num_filter = len(self.populations)
-        self.nb_rows = int(np.ceil(num_filter / 2.0))  # nb rows
+        self.nb_rows = int(np.ceil(num_filter / self.nb_cols))  # nb rows
         self.figure = plt.figure(figsize=self.fig_size, **kwargs)
         self.axes = [[] for _ in range(self.nb_rows)]
         for i in range(num_filter):
-            self.axes[i // 2].append(
-                plt.subplot2grid((self.nb_rows, 2), (i // 2, i % 2), rowspan=1, fig=self.figure)
+            self.axes[i // self.nb_cols].append(
+                plt.subplot2grid(
+                    (self.nb_rows, self.nb_cols),
+                    (i // self.nb_cols, i % self.nb_cols),
+                    rowspan=1,
+                    fig=self.figure,
+                )
             )
 
 
