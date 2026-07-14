@@ -1,1 +1,0 @@
-/home/emiliano/Documenti/better_env/benv/lib/nest/custom_stdp_module.so
