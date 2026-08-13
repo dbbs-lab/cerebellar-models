@@ -45,17 +45,19 @@ selected by pressing the right arrow and validated with the enter key.
     (see :ref:`NEST paradigms <nest-paradigms>`).
 
 
-Re-compile NESTML neuron models
-================================
+.. _cli-nestml:
+
+Re-compile NESTML models
+========================
 
 .. code-block:: bash
 
   cerebellar-models build-nestml [--model_dir <path>] [--build_dir <path>] [--module_name <name>]
 
-This command forces a full re-compilation of the NESTML neuron models used by the NEST
+This command forces a full re-compilation of the NESTML models used by the NEST
 simulator. It is equivalent to calling ``_build_nest_models(redo=True)`` programmatically:
 the existing build cache is cleared and PyNESTML re-generates the C++ source code and
-reinstalls the NEST module ``cerebmodule``.
+re-installs the NEST module ``cerebmodule``.
 
 Running this command is useful when:
 

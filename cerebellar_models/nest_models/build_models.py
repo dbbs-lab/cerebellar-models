@@ -99,6 +99,3 @@ def _build_nest_models(
                 }
             },
         )
-
-
-_build_nest_models()
