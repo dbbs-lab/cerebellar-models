@@ -609,6 +609,10 @@ def build_nestml(model_dir=None, build_dir=None, module_name=None):
     Deletes any previously cached build and re-runs PyNESTML code generation and
     installation, equivalent to calling _build_nest_models(redo=True).
     """
+    # Importing `build_models` normally auto-builds/deploys `cerebmodule` as a side effect.
+    # We're about to force a full rebuild right below anyway, so skip that auto-build here to
+    # avoid compiling the models twice in a row.
+    os.environ["_CEREBELLAR_MODELS_SKIP_AUTOBUILD"] = "1"
     from cerebellar_models.nest_models.build_models import _build_nest_models
 
     kwargs = {"redo": True}

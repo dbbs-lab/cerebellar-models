@@ -1,3 +1,4 @@
+import os
 import shutil
 from os import makedirs
 from os.path import abspath, dirname, exists, isdir, join
@@ -99,3 +100,13 @@ def _build_nest_models(
                 }
             },
         )
+
+
+# Auto-build/deploy `cerebmodule` the first time this module is imported (e.g. via a BSB
+# `components:` config entry, or NEST-dependent tests) so callers never have to trigger it
+# explicitly. Skipped when the importer (currently only the `build-nestml` CLI command) is
+# about to force a rebuild right after importing anyway, to avoid compiling the models twice
+# in a row; `.pop()` immediately clears the guard so it can't leak into any subprocess spawned
+# afterward and suppress its own auto-build.
+if os.environ.pop("_CEREBELLAR_MODELS_SKIP_AUTOBUILD", None) is None:
+    _build_nest_models()
