@@ -1,15 +1,16 @@
 [build-system]
-requires = ["flit_core >=3.2,<4"]
-build-backend = "flit_core.buildapi"
+requires = ["hatchling"]
+build-backend = "hatchling.build"
 
 [project]
 name = "cerebellar-models"
 authors = [{ name = "Dimitri RODARIE", email = "dimitri.rodarie@unipv.it" }]
+description = "Implementation of the BSB framework for cerebellar cortex reconstructions and simulations."
 readme = "README.md"
 license = { file = "LICENSE" }
 classifiers = ["License :: OSI Approved :: GNU General Public License v3 or later (GPLv3+)"]
 requires-python = ">=3.10"
-dynamic = ["version", "description"]
+dynamic = ["version"]
 dependencies = [
     "bsb[parallel]~=7.0",
     "click~=8.1",
@@ -66,6 +67,23 @@ known_third_party = ["nest"]
 
 [project.entry-points."bsb.components"]
 my_components = "cerebellar_models:classmap"
+
+[tool.hatch.version]
+path = "cerebellar_models/__init__.py"
+
+[tool.hatch.build.targets.wheel]
+packages = ["cerebellar_models"]
+
+# `configurations/` and `morphologies/` live at the repository root (not inside
+# `cerebellar_models/`) so they stay easy to find for contributors and tooling
+# (e.g. `bsb compile configurations/...`). They are copied into the built wheel
+# here so that `pip install cerebellar-models` ships them too; `cli.py` looks for
+# them in both locations to support editable installs, where this copy step does
+# not run and the files stay at their original repository path.
+[tool.hatch.build.targets.wheel.force-include]
+"configurations" = "cerebellar_models/configurations"
+"morphologies" = "cerebellar_models/morphologies"
+"tests/test_configurations/canonical_mouse_awake_io_nest.json" = "cerebellar_models/configurations/canonical_mouse_awake_io_nest.json"
 
 [tool.coverage.run]
 branch = true

@@ -3,7 +3,8 @@ import json
 import os
 from collections import OrderedDict
 from enum import Enum
-from os.path import abspath, dirname, join
+from os.path import abspath, join
+from pathlib import Path
 
 import click
 import numpy as np
@@ -23,8 +24,35 @@ from cerebellar_models.utils import (
     load_configs_in_folder,
 )
 
-ROOT_FOLDER = dirname(dirname(abspath(__file__)))
-CONFIGURATION_FOLDER = join(ROOT_FOLDER, "configurations")
+# `configurations/`, `morphologies/` and the JSON template below are bundled inside
+# `cerebellar_models/` for regular installs (see `force-include` in pyproject.toml),
+# but for editable/development installs they stay at their original location in the
+# repository, next to (or above) the package. Both locations are checked so the CLI
+# works the same way whether cerebellar-models was pip-installed or checked out.
+PACKAGE_FOLDER = Path(__file__).resolve().parent
+REPO_ROOT_FOLDER = PACKAGE_FOLDER.parent
+
+
+def _find_bundled_path(installed_relpath: str, source_relpath: str) -> str:
+    """
+    Locate a resource that is bundled inside the installed package, falling back
+    to its original path in a source/editable checkout.
+
+    :param str installed_relpath: path of the resource relative to the
+        ``cerebellar_models`` package directory, as shipped in the built wheel.
+    :param str source_relpath: path of the resource relative to the repository
+        root, as found in a source checkout or editable install.
+    :rtype: str
+    """
+    for candidate in (PACKAGE_FOLDER / installed_relpath, REPO_ROOT_FOLDER / source_relpath):
+        if candidate.exists():
+            return str(candidate)
+    raise FileNotFoundError(
+        f"Could not locate the '{source_relpath}' resource bundled with cerebellar_models."
+    )
+
+
+CONFIGURATION_FOLDER = _find_bundled_path("configurations", "configurations")
 
 
 class TypeTermElem(Enum):
@@ -517,9 +545,11 @@ def _write_config(configuration, output_folder, extension):
     filename = os.path.join(output_folder, f"circuit.{extension}")
     try:
         configuration = Configuration.default(**configuration)  # Check that the configuration works
-        with open(
-            join(ROOT_FOLDER, "tests", "test_configurations", "canonical_mouse_awake_io_nest.json")
-        ) as f:
+        template_path = _find_bundled_path(
+            join("configurations", "canonical_mouse_awake_io_nest.json"),
+            join("tests", "test_configurations", "canonical_mouse_awake_io_nest.json"),
+        )
+        with open(template_path) as f:
             content = f.read()
             template = json.loads(content, object_pairs_hook=OrderedDict)
         configuration = deep_order(configuration.__tree__(), template)
