@@ -1,6 +1,13 @@
 import copy
 import json
 import os
+
+# Pin a non-interactive backend here, before anything gets a chance to
+# `import matplotlib`, so that inheriting an interactive `MPLBACKEND` from the
+# parent shell can't crash it. This notably happens when running from a Jupyter
+# Colab notebook
+os.environ["MPLBACKEND"] = "Agg"
+
 from collections import OrderedDict
 from enum import Enum
 from os.path import abspath, join
