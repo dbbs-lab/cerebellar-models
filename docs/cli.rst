@@ -20,7 +20,7 @@ Retrieve a canonical circuit configuration
 
 .. code-block:: bash
 
-  cerebellar-models configure [--output_folder <./path>] [--species <mouse>] [--extension <yaml>] [--microzones]
+  cerebellar-models configure [--output_folder <./path>] [--species <mouse>] [--extension <yaml>] [--microzones] [--non-interactive]
 
 This command will construct a BSB configuration file based on the canonical cerebellar circuit
 developed by the DBBS.
@@ -38,6 +38,8 @@ selected by pressing the right arrow and validated with the enter key.
 * ``--output_folder``: Path to the output folder where the configuration will be stored.
 * ``--extension``: File extension for the configuration. Can be either ``json`` or ``yaml``.
 * ``--microzones``: Flag to split your circuit into 2 separated microzones (not set by default).
+* ``--non-interactive``: Skip every interactive form and use the default value for anything
+  not given through the other options above.
 
 .. note::
     When selecting a ``NEST`` simulation via the CLI, the output configuration will also

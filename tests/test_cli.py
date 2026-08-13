@@ -29,7 +29,7 @@ def deep_equal(d, u, path="/"):
     return True
 
 
-def mock_print_panel(options, title="test"):
+def mock_print_panel(options, title="test", non_interactive=False):
     return
 
 
@@ -179,7 +179,7 @@ class TestCli(unittest.TestCase):
 
     @patch(
         "cerebellar_models.cli.print_panel",
-        lambda options, title: mock_print_panel(options, title),
+        lambda options, title, **kwargs: mock_print_panel(options, title, **kwargs),
     )
     def test_configure_errors(self):
         runner = CliRunner()
@@ -221,7 +221,7 @@ class TestCli(unittest.TestCase):
 
     @patch(
         "cerebellar_models.cli.print_panel",
-        lambda options, title: mock_print_panel(options, title),
+        lambda options, title, **kwargs: mock_print_panel(options, title, **kwargs),
     )
     def test_configure(self):
         folder = dirname(__file__)
@@ -257,7 +257,7 @@ class TestCli(unittest.TestCase):
 
     @patch(
         "cerebellar_models.cli.print_panel",
-        lambda options, title: mock_print_panel(options, title),
+        lambda options, title, **kwargs: mock_print_panel(options, title, **kwargs),
     )
     def test_configure_no_microzones(self):
         runner = CliRunner()
@@ -270,9 +270,27 @@ class TestCli(unittest.TestCase):
         self.assertNotIn("after_placement", config)
         os.remove("./circuit.yaml")
 
+    def test_configure_non_interactive(self):
+        """``--non-interactive`` must skip the survey entirely and fall back to defaults,
+        without patching ``print_panel`` itself. Note: this deliberately does *not* mock
+        ``survey`` — if ``non_interactive`` failed to skip it, ``survey`` would try to set up
+        real terminal I/O and crash under pytest's captured stdin, the same class of failure
+        reported from Colab's non-tty stdin.
+        """
+        folder = dirname(__file__)
+        config2 = parse_configuration_file(
+            join(folder, "test_configurations/canonical_mouse_awake_io_nest.json")
+        ).__tree__()
+        runner = CliRunner()
+        result = runner.invoke(configure, ["--non-interactive"])
+        self.assertEqual(result.exit_code, 0, result.output)
+        config = parse_configuration_file("./circuit.yaml").__tree__()
+        self.assertTrue(deep_equal(config, config2))
+        os.remove("./circuit.yaml")
+
     @patch(
         "cerebellar_models.cli.print_panel",
-        lambda options, title: mock_print_panel(options, title),
+        lambda options, title, **kwargs: mock_print_panel(options, title, **kwargs),
     )
     def test_configure_json_extension(self):
         runner = CliRunner()

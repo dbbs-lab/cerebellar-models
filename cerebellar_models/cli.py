@@ -142,14 +142,20 @@ class MicrozonesParams:
         """Duplicated connections obtained from the cell type labelling"""
 
 
-def print_panel(options, title="Configure your cerebellum circuit."):  # pragma: nocover
+def print_panel(
+    options, title="Configure your cerebellum circuit.", non_interactive=False
+):  # pragma: nocover
     """
     Print a survey form based on a list of options.
     The result of the form will be saved in its options.
 
     :param list[CerebOption] options: List of options to display
     :param str title: Title to display on top of the form
+    :param bool non_interactive: If True, skip the survey entirely and keep each option's
+        already-computed default value (see ``CerebOption.__init__``).
     """
+    if non_interactive:
+        return
     import survey
 
     form = survey.routines.form(
@@ -178,7 +184,7 @@ AVAILABLE_SPECIES = click.Choice(get_folders_in_folder(CONFIGURATION_FOLDER), ca
 AVAILABLE_EXTENSIONS = click.Choice(["yaml", "json"], case_sensitive=True)
 
 
-def _configure_species(species):
+def _configure_species(species, non_interactive=False):
     main_options = [
         CerebOption(
             "Species",
@@ -187,11 +193,15 @@ def _configure_species(species):
             species,
         ),
     ]
-    print_panel(main_options, "Select your configuration's species")
+    print_panel(
+        main_options, "Select your configuration's species", non_interactive=non_interactive
+    )
     return main_options[0].value
 
 
-def _configure_cell_types(species_folder, config_cell_types, add_microzones: bool):
+def _configure_cell_types(
+    species_folder, config_cell_types, add_microzones: bool, non_interactive=False
+):
     cell_type_names = []
     for filename1, config_1 in config_cell_types.items():
         cell_types1 = list(config_1["cell_types"].keys())
@@ -226,7 +236,9 @@ def _configure_cell_types(species_folder, config_cell_types, add_microzones: boo
         ),
     ]
     print_panel(
-        species_options, "Select the state of the subject and the cell types to add in the circuit"
+        species_options,
+        "Select the state of the subject and the cell types to add in the circuit",
+        non_interactive=non_interactive,
     )
     return [option.value for option in species_options]
 
@@ -325,7 +337,7 @@ def _filter_simulations_devices(simulations, cell_types):
     return simulations
 
 
-def _configure_simulations(config_simulations):
+def _configure_simulations(config_simulations, non_interactive=False):
     simulation_names = list(
         set(
             [
@@ -346,7 +358,9 @@ def _configure_simulations(config_simulations):
         ),
     ]
     print_panel(
-        simulator_options, "Select the simulations(s) that you want your circuit to perform"
+        simulator_options,
+        "Select the simulations(s) that you want your circuit to perform",
+        non_interactive=non_interactive,
     )
     return simulator_options[0].value
 
@@ -374,6 +388,7 @@ def _configure_sim_params(
     simulation_names,
     micro_params: MicrozonesParams,
     circuit_cell_types: list,
+    non_interactive=False,
 ):
     dict_sim = {"simulations": {}}
     choices = {}
@@ -403,6 +418,7 @@ def _configure_sim_params(
         print_panel(
             [cell_model_option],
             f"Select the neuron model to use during the simulation {sim_name}.",
+            non_interactive=non_interactive,
         )
         cell_model_config = copy.deepcopy(
             config_simulations[simulator]["cell_models"][cell_model_option.value]
@@ -423,6 +439,7 @@ def _configure_sim_params(
         print_panel(
             [conn_model_option],
             f"Select the synapse model to use during the simulation {sim_name}.",
+            non_interactive=non_interactive,
         )
 
         # Rename chosen *_connection_models key → connection_models, drop the rest
@@ -517,7 +534,7 @@ def _clear_unnecessary_params(configuration):
     return configuration
 
 
-def _write_config(configuration, output_folder, extension):
+def _write_config(configuration, output_folder, extension, non_interactive=False):
     output_options = []
     if output_folder is None:
         output_options.append(
@@ -546,6 +563,7 @@ def _write_config(configuration, output_folder, extension):
         print_panel(
             output_options,
             "Configure the folder in which to put the configuration file and its extension.",
+            non_interactive=non_interactive,
         )
         output_folder = output_folder or output_options[0].value
         extension = extension or output_options[-1].value
@@ -628,11 +646,20 @@ def build_nestml(model_dir=None, build_dir=None, module_name=None):
     is_flag=True,
     help="Split your circuit into 2 separated microzones.",
 )
+@click.option(
+    "--non-interactive",
+    "non_interactive",
+    required=False,
+    is_flag=True,
+    help="Skip every interactive prompt and use the default value for anything not given "
+    "through the other options above.",
+)
 def configure(
     species: str = None,
     output_folder: str = None,
     extension: str = None,
     microzones: bool = False,
+    non_interactive: bool = False,
 ):
     """
     Resolve a canonical cerebellum configuration file for BSB based on user choices.
@@ -641,10 +668,12 @@ def configure(
     :param str output_folder: path where to write the output configuration file.
     :param str extension: extension for the configuration file.
     :param bool microzones: whether to split the circuit into microzones.
+    :param bool non_interactive: whether to skip every interactive prompt and use default
+        values for anything not given through the other parameters.
     """
     # Step 1: Species choice
     if species is None:
-        species = _configure_species(species)
+        species = _configure_species(species, non_interactive=non_interactive)
     else:
         print(f"Species chosen: {species}")
     species_folder = join(CONFIGURATION_FOLDER, species)
@@ -656,7 +685,7 @@ def configure(
 
     config_cell_types = load_configs_in_folder(join(species_folder, "cell_types"))
     state, cell_types, microzones = _configure_cell_types(
-        species_folder, config_cell_types, microzones
+        species_folder, config_cell_types, microzones, non_interactive=non_interactive
     )
     configuration = _update_cell_types(configuration, cell_types, config_cell_types)
     state_folder = join(species_folder, state)
@@ -679,7 +708,7 @@ def configure(
         }
         for simulator in get_folders_in_folder(state_folder)
     }
-    simulation_names = _configure_simulations(config_simulations)
+    simulation_names = _configure_simulations(config_simulations, non_interactive=non_interactive)
 
     # Step 4: Simulation models choice
     dict_sim, sim_choices = _configure_sim_params(
@@ -687,6 +716,7 @@ def configure(
         simulation_names,
         micro_params,
         list(configuration["cell_types"].keys()),
+        non_interactive=non_interactive,
     )
     deep_update(configuration, dict_sim)
 
@@ -709,4 +739,4 @@ def configure(
         print(f"\t\tSynapse model: {choices[1]}")
     print("----------------------------\n")
     # Step 7: output folder and extension
-    _write_config(configuration, output_folder, extension)
+    _write_config(configuration, output_folder, extension, non_interactive=non_interactive)
