@@ -20,7 +20,7 @@
     },
     "components": [
         {
-            "module": "cerebellar_models/nest_models/build_models.py"
+            "module": "cerebellar_models.nest_models.build_models"
         }
     ],
     "morphologies": [
