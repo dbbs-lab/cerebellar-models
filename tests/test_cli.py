@@ -12,6 +12,7 @@ from click.testing import CliRunner
 from cerebellar_models.cli import (
     CerebOption,
     TypeTermElem,
+    _absolutize_morphology_paths,
     _filter_simulations_devices,
     _get_compatible_models,
     _update_cell_types,
@@ -228,6 +229,9 @@ class TestCli(unittest.TestCase):
         config2 = parse_configuration_file(
             join(folder, "test_configurations/canonical_mouse_awake_io_nest.json")
         ).__tree__()
+        # The fixture keeps relative morphology paths for portability across machines;
+        # apply the same absolutization the CLI performs before comparing.
+        config2 = _absolutize_morphology_paths(config2)
         runner = CliRunner()
         result = runner.invoke(
             configure,
@@ -281,6 +285,9 @@ class TestCli(unittest.TestCase):
         config2 = parse_configuration_file(
             join(folder, "test_configurations/canonical_mouse_awake_io_nest.json")
         ).__tree__()
+        # The fixture keeps relative morphology paths for portability;
+        # apply the same absolutization the CLI performs before comparing.
+        config2 = _absolutize_morphology_paths(config2)
         runner = CliRunner()
         result = runner.invoke(configure, ["--non-interactive"])
         self.assertEqual(result.exit_code, 0, result.output)

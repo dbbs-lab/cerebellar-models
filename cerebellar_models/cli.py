@@ -534,6 +534,28 @@ def _clear_unnecessary_params(configuration):
     return configuration
 
 
+def _absolutize_morphology_paths(configuration):
+    """
+    Resolve every morphology source file to an absolute path, in place.
+
+    Morphology file paths in the canonical configurations are relative to
+    ``cerebellar_models``' own package folder (e.g. ``./morphologies/GranuleCell.swc``).
+    BSB resolves such relative paths against the current working directory at compile
+    time, so left as-is they would only work if ``bsb compile``/``bsb simulate`` happens
+    to be run from that exact folder. Making them absolute here lets the generated
+    configuration file be compiled from anywhere.
+
+    :param dict configuration: BSB configuration tree.
+    :rtype: dict
+    """
+    base_folder = os.path.dirname(CONFIGURATION_FOLDER)
+    for morphology in configuration.get("morphologies", []):
+        path = morphology.get("file")
+        if path and not os.path.isabs(path) and "://" not in path:
+            morphology["file"] = os.path.normpath(join(base_folder, path))
+    return configuration
+
+
 def _write_config(configuration, output_folder, extension, non_interactive=False):
     output_options = []
     if output_folder is None:
@@ -727,7 +749,11 @@ def configure(
     # Step 5: remove unnecessary cells and connections
     configuration = _clear_unnecessary_params(configuration)
 
-    # Step 6: Recap choices
+    # Step 6: absolutize morphology file paths so the configuration can be compiled
+    # from any working directory
+    configuration = _absolutize_morphology_paths(configuration)
+
+    # Step 7: Recap choices
     print("\n\nYour choices are:")
     print(f"Species: {species}")
     print(f"State: {state}")
@@ -742,5 +768,5 @@ def configure(
         print(f"\t\tCell model: {choices[0]}")
         print(f"\t\tSynapse model: {choices[1]}")
     print("----------------------------\n")
-    # Step 7: output folder and extension
+    # Step 8: output folder and extension
     _write_config(configuration, output_folder, extension, non_interactive=non_interactive)
