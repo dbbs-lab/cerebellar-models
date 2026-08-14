@@ -34,11 +34,11 @@ def _check_nest_is_buildable(module_name):
     """
     import nest
 
-    if "build_info" in dir(nest):
+    if "build_info" in dir(nest):  # pragma: nocover
         nest_path = nest.build_info["prefix"]
     else:
         nest_path = nest.ll_api.sli_func("statusdict/prefix ::")
-    if not isdir(nest_path):
+    if not isdir(nest_path):  # pragma: nocover
         raise RuntimeError(
             f"Cannot build the '{module_name}' NEST extension module: the NEST "
             f"install prefix reported by `nest` ('{nest_path}') does not exist on "

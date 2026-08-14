@@ -56,7 +56,7 @@ def _find_bundled_path(installed_relpath: str, source_relpath: str) -> str:
             return str(candidate)
     raise FileNotFoundError(
         f"Could not locate the '{source_relpath}' resource bundled with cerebellar_models."
-    )
+    )  # pragma: nocover
 
 
 CONFIGURATION_FOLDER = _find_bundled_path("configurations", "configurations")
