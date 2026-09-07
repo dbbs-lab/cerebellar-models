@@ -544,10 +544,7 @@ simulations:
           C_m: 334
           E_L: -59
           I_e: 185.39534745227857
-          V_m:
-            distribution: uniform
-            max: -43
-            min: -59
+          V_m: -59
           V_min: -350
           V_reset: -69
           V_th: -43
@@ -760,7 +757,3 @@ simulations:
           cell_models:
           - stellate_cell
           strategy: cell_model
-packages:
-- cerebellar-models[nest]~=0.11.0
-- bsb~=7.0
-- bsb-nest~=7.0

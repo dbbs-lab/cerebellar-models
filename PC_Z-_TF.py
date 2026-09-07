@@ -10,7 +10,7 @@ from cerebellar_models.MFM.transfer_functions import (
 
 if __name__ == "__main__":
 
-    SIMULATE = False
+    SIMULATE = True
     CELL_NAME = "purkinje_cell"
     SAVE_NAME = "purkinje_cell_Z-"
     YAML_PATH = "circuit_Z-.yaml"
