@@ -61,13 +61,11 @@ def style_I_axis(axI, show_xlabel=False):
         axI.set_xlabel("Time [ms]", fontsize=10, labelpad=8)
     else:
         axI.set_xlabel("")
+    
+def main(cell_name = "PC", protocol = {"start_stim": 200.0, "end_stim": 700.0, "duration": 2000.0, 'threshold': -43.0}):
 
-
-if __name__ == "__main__":
-    protocol = {"start_stim": 200.0, "end_stim": 700.0, "duration": 2000.0}
-    cell_name = "PC"
     data_folder = f"../results_tofitEglif/{cell_name}/"
-    threshold = -43.0
+    threshold = protocol['threshold']
 
     features = multicomp_features(data_folder, threshold=threshold)
     spikes_df = features[["peak_time", "current"]]
@@ -195,3 +193,6 @@ if __name__ == "__main__":
     fig.savefig(f"{cell_name}_exp.png", dpi=700, bbox_inches="tight")
     fig.savefig(f"{cell_name}_exp.pdf", dpi=700, bbox_inches="tight")
     plt.show()
+
+if __name__ == "__main__":
+    main()
