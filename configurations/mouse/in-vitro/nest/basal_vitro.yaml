@@ -1,9 +1,9 @@
 packages:
-  - cerebellar-models[nest]~=0.12.0
+  - cerebellar-models[nest]~=0.12.1
   - bsb~=7.0
   - bsb-nest~=7.0
 components:
-  - cerebellar_models/nest_models/build_models.py
+  - cerebellar_models.nest_models.build_models
 simulations:
   basal_activity:
     simulator: nest

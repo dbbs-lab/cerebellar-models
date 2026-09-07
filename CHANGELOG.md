@@ -1,13 +1,17 @@
-# v0.11.0 - 2025-05-28
+# v0.11.1 - 2026-08-25
+
+* fix: make cerebellar-models work outside the cloned repo context https://github.com/dbbs-lab/cerebellar-models/pull/82
+
+# v0.11.0 - 2026-05-28
 
 * feat: Add De Grazia eglif model by @drodarie and @albertoarturovergani in https://github.com/dbbs-lab/cerebellar-models/pull/76
 * fix: mf to glom strategy by @drodarie in https://github.com/dbbs-lab/cerebellar-models/pull/75
 
-# v0.11.0 - 2025-05-21
+# v0.11.0 - 2026-05-21
 
 * feat: split analysis from reporting by @drodarie in https://github.com/dbbs-lab/cerebellar-models/pull/74
 
-# v0.10.0 - 2025-03-24
+# v0.10.0 - 2026-03-24
 
 * feat: Add random microzones by @filimarc in https://github.com/dbbs-lab/cerebellar-models/pull/69
 
