@@ -22,9 +22,18 @@ Class parameters
   the analysis will be performed
 * :attr:`time_to<.analysis.spiking_results.SpikingResults.time_to>`: The end time at which the analysis will end.
 * :attr:`folder_nio<.analysis.spiking_results.SpikingResults.folder_nio>`: Path to folder containing
-  the `.nio` files produced by the BSB-NEST simulation
+  the `.nio` files produced by the BSB-NEST simulation. Takes priority over ``result`` when both are
+  provided.
 * :attr:`ignored_ct<.analysis.spiking_results.SpikingResults.ignored_ct>`: List of cell type names to
   ignore from the nio files (results from these cells will not be returned).
+* :attr:`result<.analysis.spiking_results.SpikingResults.result>`: BSB
+  :class:`SimulationResult <bsb.simulation.results.SimulationResult>` to load the spike trains
+  from directly, without going through a results file. Used as a fallback when ``folder_nio`` is
+  not given, e.g. when no results file has been written yet, such as in an ``after_simulation``
+  hook run in-memory (see :ref:`run_simulation_report`).
+
+.. note::
+   At least one of ``folder_nio`` or ``result`` must be provided.
 
 .. note::
    The ``time_from`` and ``time_to`` values can differ from the simulation start

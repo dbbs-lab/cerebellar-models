@@ -74,7 +74,7 @@ to produce a full pdf report with basic spike analysis of the simulation results
 
 .. code-block:: python
 
-    from cerebellar_models.analysis.spiking_results import BasicSimulationReport
+    from cerebellar_models.analysis.spike_plots import BasicSimulationReport
 
     scaffold_file = "path/to/your_bsb_scaffold.hdf5"
     simulation_name = "name_of_your_simulation"
@@ -83,3 +83,7 @@ to produce a full pdf report with basic spike analysis of the simulation results
 
     report = BasicSimulationReport(scaffold_file, simulation_name, nio_folder)
     report.print_report(output_filename)
+
+This report can also be produced automatically as soon as a simulation completes, the
+same way the structure report is: add an ``after_simulation`` section to your
+simulation's configuration (see :doc:`spike reporting section <../analysis/spike_plots>`).

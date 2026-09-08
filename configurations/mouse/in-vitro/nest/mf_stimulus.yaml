@@ -26,6 +26,7 @@ simulations:
       values:
         - cell_models
         - devices
+        - after_simulation
 $import:
   ref: ./basal_vitro.yaml#/
   values:

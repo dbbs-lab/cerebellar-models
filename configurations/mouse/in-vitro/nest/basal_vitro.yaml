@@ -109,3 +109,7 @@ simulations:
           strategy: cell_model
           cell_models:
             - io
+    after_simulation:
+      print_simulation_report:
+        strategy: cerebellar_models.analysis.spike_plots.RunSimulationReport
+        output_filename: bsb_report_simulation.pdf

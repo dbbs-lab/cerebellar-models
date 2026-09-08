@@ -34,15 +34,20 @@ Constructor parameters:
 * ``simulation_name``: Name of the simulation as defined in the scaffold
   configuration.
 * ``folder_nio``: Folder containing the simulation results stored as nio files.
+  Takes priority over ``result`` when both are provided.
 * ``time_from``: The starting time from which the analysis will be performed
 * ``time_to``: The end time at which the analysis will end.
 * ``ignored_ct``: List of cell type names to ignore from the nio files
   (results from these cells will not be displayed).
 * ``cell_type_info``: List of :class:`PlotTypeInfo <.analysis.report.PlotTypeInfo>`.
   This gives for each element to plot, its name, abbreviation and color.
+* ``result``: BSB :class:`SimulationResult <bsb.simulation.results.SimulationResult>` to
+  load the spike trains from directly, without going through a results file. Used as a
+  fallback when ``folder_nio`` is not given (see :ref:`run_simulation_report`).
 
-This class will load the results from nio files produced by the BSB simulation
-and store them in the ``spiking_results`` attribute (see :ref:`spiking_results`)
+At least one of ``folder_nio`` or ``result`` must be provided. This class will load the
+results either from the nio files produced by the BSB simulation, or directly from
+``result``, and store them in the ``spiking_results`` attribute (see :ref:`spiking_results`)
 
 .. note::
    Any modification to the ``time_from`` and ``time_to`` values will be automatically
@@ -175,3 +180,40 @@ and produces a report containing the following
   (see section :ref:`corr_coef_plot`)
 
 All these plots are saved in a single pdf file.
+
+You can also create this report automatically through the BSB configuration like
+so (see :ref:`run_simulation_report`).
+
+
+.. _run_simulation_report:
+
+:class:`RunSimulationReport <.analysis.spike_plots.RunSimulationReport>`
+--------------------------------------------------------------------------
+BSB postprocessing node to generate a :ref:`basic_sim_report` after a simulation
+has finished running. To automatically produce this once a simulation completes, add
+an ``after_simulation`` section to that simulation's configuration:
+
+.. code-block:: yaml
+
+    simulations:
+      basal_activity:
+        after_simulation:
+          print_simulation_report:
+            strategy: cerebellar_models.analysis.spike_plots.RunSimulationReport
+            output_filename: bsb_report_simulation.pdf
+
+Constructor parameters:
+
+* ``output_filename``: Name of the pdf file to save the report.
+* ``time_from``: The starting time from which the analysis will be performed. Defaults to 0.
+* ``time_to``: The end time at which the analysis will end. Defaults to the simulation's duration.
+* ``ignored_ct``: List of cell type names to ignore from the results
+  (results from these cells will not be displayed).
+
+.. note::
+   If the simulation was run with an output filename (i.e. its results were streamed
+   to a `.nio` file, as done by the ``bsb simulate`` CLI), the report is built from
+   that file. Otherwise, e.g. when the simulation was run programmatically without an
+   output filename, the report is built directly from the in-memory
+   :class:`SimulationResult <bsb.simulation.results.SimulationResult>` (see
+   :ref:`spiking_results`).

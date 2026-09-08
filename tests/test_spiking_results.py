@@ -76,6 +76,21 @@ class TestSpikingResults(
             self.scaffold.simulations["basal_activity"].resolution,
         )
 
+    def test_result_property(self):
+        self.assertEqual(
+            self.spiking_results.result,
+            None,
+        )
+
+    def test_raise_without_nio_nor_results(self):
+        with self.assertRaises(ValueError):
+            self.spiking_results = SpikingResults(
+                scaffold=self.scaffold,
+                simulation_name="basal_activity",
+                time_from=0,
+                time_to=None,
+            )
+
 
 class TestExtractISIs(unittest.TestCase):
     def test_extract_isis(self):

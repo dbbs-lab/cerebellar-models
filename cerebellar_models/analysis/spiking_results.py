@@ -9,6 +9,7 @@ from typing import List, Tuple
 
 import numpy as np
 from bsb import Scaffold
+from bsb.simulation.results import SimulationResult
 from elephant.conversion import BinnedSpikeTrain
 from elephant.spike_train_correlation import correlation_coefficient
 from elephant.statistics import instantaneous_rate, isi
@@ -31,19 +32,28 @@ class SpikingResults:
         simulation_name,
         time_from: float,
         time_to: float,
-        folder_nio: str,
-        ignored_ct: list[str],
+        folder_nio: str = None,
+        ignored_ct: list[str] = None,
+        result: SimulationResult = None,
     ):
         """
         :param scaffold: BSB scaffold
         :param simulation_name: name of the simulation
         :param time_from: start time of the analysis
         :param time_to: end time of the analysis
-        :param folder_nio: folder where the Neo results are stored
+        :param folder_nio: folder where the Neo results are stored. Takes priority
+            over ``result`` when both are given.
         :param ignored_ct: List of ignored cells names
+        :param result: BSB SimulationResult to load the spike trains from directly,
+            without going through a results file. Used as a fallback when
+            ``folder_nio`` is not given, e.g. no results file was written yet
+            (such as in an ``after_simulation`` hook run in-memory).
         """
+        if folder_nio is None and result is None:
+            raise ValueError("At least one of 'folder_nio' or 'result' must be provided.")
         self._scaffold = scaffold
         self._folder_nio = None  # will be initialized last
+        self._result = None  # will be initialized last
         self.simulation_name = simulation_name
         self._time_from = time_from or 0
         self.time_to = time_to or self.scaffold.simulations[self.simulation_name].duration
@@ -53,7 +63,13 @@ class SpikingResults:
         self._all_spikes = []
         self._nb_neurons = np.zeros(0, dtype=int)
         self._populations = []
-        self.folder_nio = folder_nio
+        # Store the fallback before triggering the initial load, so it's available to
+        # _extract_spikes_dict() even when folder_nio (which takes priority) is set.
+        self._result = result
+        if folder_nio is not None:
+            self.folder_nio = folder_nio  # setter triggers load_spikes()
+        else:
+            self.load_spikes()
 
     @staticmethod
     def _check_simulation(scaffold: Scaffold, simulation_name: str):
@@ -77,9 +93,31 @@ class SpikingResults:
         else:
             return device_name, set()
 
+    def _bin_spiketrains(self, spiketrains, spikes_res, cell_dict, current_id):
+        """
+        Group a list of SpikeTrains by neuron type, appending them to ``spikes_res``
+        and indexing the cell type labels into ``cell_dict``.
+
+        :return: The next free index to use in ``cell_dict``.
+        :rtype: int
+        """
+        for st in spiketrains:
+            st.segment = None  # remove spiketrain segment to allow merging
+            cell_type, labels = self._extract_ct_device_name(st.annotations["device"])
+            if cell_type in list(self.scaffold.cell_types.keys()):
+                cell_type_label = ScaffoldPlot.get_labelled_ct_name(cell_type, labels)
+                if cell_type_label not in cell_dict:
+                    cell_dict[cell_type_label] = current_id
+                    current_id += 1
+                    spikes_res.append([])
+                if "senders" in st.array_annotations:
+                    spikes_res[cell_dict[cell_type_label]].append(st)
+        return current_id
+
     def _extract_spikes_dict(self):
         """
-        Extract the spike events from nio files stored in a folder and group them by neuron type.
+        Extract the spike events, grouped by neuron type, either from the nio files
+        stored in ``folder_nio`` or directly from ``result``.
 
         :return: - List of spike events grouped by neuron type.
                  - Dictionary storing for each neuron type its index and its unique list of neuron ids.
@@ -90,27 +128,22 @@ class SpikingResults:
         cell_dict = {}
         current_id = 0
 
-        for f in listdir(self.folder_nio):
-            file_ = join(self.folder_nio, f)
-            if isfile(file_) and (".nio" in file_):
-                # BSB writes results to file append-only: re-running a simulation into
-                # an already-used filename adds a new block rather than overwriting the
-                # old one, so a file may hold more than one block. Take the last one,
-                # i.e. the most recent run.
-                block = nio.NixIO(file_, mode="ro").read_all_blocks()[-1]
-                spiketrains = block.segments[0].spiketrains  # assume only one segment
-
-                for st in spiketrains:
-                    st.segment = None  # remove spiketrain segment to allow merging
-                    cell_type, labels = self._extract_ct_device_name(st.annotations["device"])
-                    if cell_type in list(self.scaffold.cell_types.keys()):
-                        cell_type_label = ScaffoldPlot.get_labelled_ct_name(cell_type, labels)
-                        if cell_type_label not in cell_dict:
-                            cell_dict[cell_type_label] = current_id
-                            current_id += 1
-                            spikes_res.append([])
-                        if "senders" in st.array_annotations:
-                            spikes_res[cell_dict[cell_type_label]].append(st)
+        if self.folder_nio is not None:
+            for f in listdir(self.folder_nio):
+                file_ = join(self.folder_nio, f)
+                if isfile(file_) and (".nio" in file_):
+                    # BSB writes results to file append-only: re-running a simulation
+                    # into an already-used filename adds a new block rather than
+                    # overwriting the old one, so a file may hold more than one block.
+                    # Take the last one, i.e. the most recent run.
+                    block = nio.NixIO(file_, mode="ro").read_all_blocks()[-1]
+                    spiketrains = block.segments[0].spiketrains  # assume only one segment
+                    current_id = self._bin_spiketrains(
+                        spiketrains, spikes_res, cell_dict, current_id
+                    )
+        else:
+            spiketrains = self._result.block.segments[0].spiketrains  # assume only one segment
+            current_id = self._bin_spiketrains(spiketrains, spikes_res, cell_dict, current_id)
         return spikes_res, cell_dict
 
     def load_spikes(self):
@@ -198,7 +231,7 @@ class SpikingResults:
         self._simulation_name = simulation_name
         if self._scaffold is not None:
             self._check_simulation(self.scaffold, simulation_name)
-            if self._folder_nio is not None:
+            if self._folder_nio is not None or self._result is not None:
                 self.load_spikes()
 
     @property
@@ -211,13 +244,18 @@ class SpikingResults:
         self._scaffold = scaffold
         if self._simulation_name is not None:
             self._check_simulation(self.scaffold, self.simulation_name)
-            if self._folder_nio is not None:
+            if self._folder_nio is not None or self._result is not None:
                 self.load_spikes()
 
     @property
     def dt(self):
         """Time step of the simulation in ms"""
         return self._dt
+
+    @property
+    def result(self):
+        """BSB SimulationResult the spike trains are loaded from, if any."""
+        return self._result
 
     @property
     def folder_nio(self):
