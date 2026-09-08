@@ -18,11 +18,7 @@
         "ref": "../../configurations/mouse/in-vitro/nest/basal_vitro.yaml#/",
         "values": ["packages"]
     },
-    "components": [
-        {
-            "module": "cerebellar_models.nest_models.build_models"
-        }
-    ],
+    "components": [ "cerebellar_models.nest_models.build_models" ],
     "morphologies": [
         {
             "file": "./morphologies/GranuleCell.swc",

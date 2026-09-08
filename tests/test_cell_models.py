@@ -90,7 +90,7 @@ class TestSingleCellModels(
     @staticmethod
     def _load_spike_data(results):
         cell_dict = {}
-        for st in results.spiketrains:
+        for st in results.block.segments[0].spiketrains:
             cell_type = st.annotations["device"].split("_rec")[0]
             if cell_type not in cell_dict:
                 cell_dict[cell_type] = {}

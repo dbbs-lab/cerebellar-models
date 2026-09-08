@@ -93,7 +93,11 @@ class SpikingResults:
         for f in listdir(self.folder_nio):
             file_ = join(self.folder_nio, f)
             if isfile(file_) and (".nio" in file_):
-                block = nio.NixIO(file_, mode="ro").read_all_blocks()[0]  # assume only one block
+                # BSB writes results to file append-only: re-running a simulation into
+                # an already-used filename adds a new block rather than overwriting the
+                # old one, so a file may hold more than one block. Take the last one,
+                # i.e. the most recent run.
+                block = nio.NixIO(file_, mode="ro").read_all_blocks()[-1]
                 spiketrains = block.segments[0].spiketrains  # assume only one segment
 
                 for st in spiketrains:
