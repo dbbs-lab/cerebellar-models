@@ -48,6 +48,7 @@ class TestSingleCellModels(
         self.configuration_dict = {
             "name": "test",
             "storage": {"engine": "hdf5"},
+            "rng": {"seed": 1234},
             "network": {"x": 1, "y": 1, "z": 1},
             "components": ["cerebellar_models/nest_models/build_models.py"],
             "partitions": {"B": {"type": "layer", "thickness": 1}},
@@ -147,7 +148,6 @@ class TestSingleCellModels(
                 "simulator": "nest",
                 "duration": 21001,
                 "resolution": 0.1,
-                "seed": 1234,
                 "modules": ["cerebmodule"],
                 "cell_models": {
                     "$import": {
@@ -370,7 +370,6 @@ class TestSingleCellModels(
                 "simulator": "nest",
                 "duration": 2000.1,
                 "resolution": 0.1,
-                "seed": 1234,
                 "modules": ["cerebmodule"],
                 "cell_models": {
                     "granule_cell": {"constants": {"V_m": -62}},

@@ -12,7 +12,7 @@ classifiers = ["License :: OSI Approved :: GNU General Public License v3 or late
 requires-python = ">=3.10"
 dynamic = ["version"]
 dependencies = [
-    "bsb[parallel]~=7.0",
+    "bsb[parallel]~=7.6",
     "click~=8.1",
     "survey~=5.4.2",
     "matplotlib~=3.9",
@@ -21,16 +21,16 @@ dependencies = [
 
 [project.optional-dependencies]
 nest = [
-    "bsb[nest]~=7.0",
+    "bsb[nest]~=7.6",
     "nestml~=8.3.0",
 ]
 neuron = [
-    "bsb[neuron]~=7.0",
+    "bsb[neuron]~=7.6",
 ]
 
 test = [
     "cerebellar-models[nest,neuron]",
-    "bsb-test~=7.0",
+    "bsb-test~=7.6",
     "coverage~=7.3",
 ]
 docs = [

@@ -25,7 +25,10 @@ class DuplicateSynapses(AfterConnectivityHook):
             cs = self.scaffold.get_connectivity_set(cs_name)
             pre_ps = cs.pre_type.get_placement_set()
             post_ps = cs.post_type.get_placement_set()
-            duplicates = np.asarray(self.contacts.draw(len(cs)), dtype=int)
+            # Keyed on the hook and the connectivity set, so the draw is reproducible
+            # and does not depend on which rank computes it.
+            rng = self.get_rng(key=("after_connectivity", self.name, cs_name))
+            duplicates = np.asarray(self.contacts.draw(len(cs), rng=rng), dtype=int)
             for (pre_locs, post_locs), n in zip(cs.load_connections(), duplicates):
                 if n > 1:
                     pre_locs = np.repeat([pre_locs], n - 1, axis=0)

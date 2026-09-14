@@ -14,6 +14,7 @@ from bsb import (
     pool_cache,
     refs,
 )
+from bsb.connectivity.strategy import roi_key
 
 
 @config.node
@@ -169,6 +170,11 @@ class ConnectomeGolgiGlomerulus(ConnectionStrategy):
         if len(chunk) != 1:
             ConnectivityError("There should be exactly one presynaptic chunk")
         chunk = chunk[0]
+        # Keyed on the strategy, the presynaptic cell type, its chunk and the postsynaptic
+        # chunks involved, so every rank draws the same axon branches for the same chunk pair.
+        rng = self.get_rng(
+            key=("connectivity", self.name, pre_ps.cell_type.name, int(chunk.id), roi_key(post)),
+        )
 
         # Extract all unique glomeruli connections from connection strategy dependencies grouped by glomeruli
         glom_pos = np.empty([0, 3])
@@ -243,9 +249,7 @@ class ConnectomeGolgiGlomerulus(ConnectionStrategy):
                 selected_ps[ptr : ptr + post_to_connect] = ps_ids[post_conn]
                 # Select Golgi axon branch
                 pre_locs[ptr : ptr + post_to_connect, 0] = i
-                ids_branches = np.random.randint(
-                    low=0, high=len(axon_branches), size=post_to_connect
-                )
+                ids_branches = rng.integers(low=0, high=len(axon_branches), size=post_to_connect)
                 pre_locs[ptr : ptr + post_to_connect, 1] = terminal_branches_ids[ids_branches]
                 pre_locs[ptr : ptr + post_to_connect, 2] = tips_coordinates[ids_branches]
                 ptr += post_to_connect

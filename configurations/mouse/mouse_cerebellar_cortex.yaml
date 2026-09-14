@@ -1,7 +1,9 @@
 name: DBBS Mouse cerebellum configuration v4.2
 packages:
   - cerebellar-models~=0.12.1
-  - bsb~=7.0
+  - bsb~=7.6
+rng:
+  seed: 1234
 storage:
   engine: hdf5
   root: mouse_cerebellum.hdf5

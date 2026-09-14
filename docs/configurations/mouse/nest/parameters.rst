@@ -23,7 +23,6 @@ for the different populations' parameters to be described as distribution or pla
     simulations:
         simulation_name:
             simulator: nest
-            seed: 1234
             cell_models:
               granule_cell:
                 model: eglif_cond_alpha_multisyn
@@ -41,8 +40,9 @@ It can be useful to randomize certain parameters such as the initial membrane po
 synchrony of activity at the start of the simulation.
 
 .. note::
-    As in the previous configuration snippet, you can set the NEST random seed with BSB using the
-    ``seed`` parameter.
+    NEST simulations no longer take a ``seed`` of their own: the kernel derives it from the
+    reconstruction's ``rng.seed`` instead. See :doc:`the randomness guide </getting-started/randomness>`
+    for how to pin it or hold it independent from placement and connectivity.
 
 Parrot neurons
 ##############

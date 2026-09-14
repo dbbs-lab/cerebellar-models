@@ -3,7 +3,6 @@ simulations:
     simulator: nest
     resolution: 0.1
     duration: 2500
-    seed: 1234
     devices:
       granule_multimeter:
         device: multimeter

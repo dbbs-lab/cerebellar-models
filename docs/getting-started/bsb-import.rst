@@ -75,7 +75,6 @@ reuses the cell models and recording devices of the basal activity:
         simulator: nest
         resolution: 0.1
         duration: 2000
-        seed: 1234
         devices:
           mf_stimulus:           # only the new stimulus device is defined here
             device: poisson_generator
@@ -158,7 +157,6 @@ different sphere. Create a new file next to the provided ones:
         simulator: nest
         resolution: 0.1
         duration: 3000          # custom duration
-        seed: 42
         devices:
           my_mf_stimulus:
             device: poisson_generator
@@ -184,6 +182,14 @@ different sphere. Create a new file next to the provided ones:
       values:
         - packages
         - components
+
+.. note::
+    There is no ``rng`` to import here as ``my_custom_stimulus.yaml`` ends up
+    merged onto the base circuit configuration (either
+    by the CLI, or by your own ``$import`` of ``network``/``storage``/…), and it inherits that
+    configuration's ``rng`` for free — a merge never touches a key a scenario file does not
+    define. See :doc:`randomness` for the full picture, including how to give a scenario its own,
+    independent seed on purpose.
 
 Further reading
 ~~~~~~~~~~~~~~~

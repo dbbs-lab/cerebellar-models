@@ -1,7 +1,7 @@
 packages:
   - cerebellar-models[nest]~=0.12.1
-  - bsb~=7.0
-  - bsb-nest~=7.0
+  - bsb~=7.6
+  - bsb-nest~=7.6
 components:
   - cerebellar_models.nest_models.build_models
 simulations:
@@ -9,7 +9,6 @@ simulations:
     simulator: nest
     resolution: 0.1
     duration: 5000
-    seed: 1234
     cell_models:
       mossy_fibers:
         model: parrot_neuron

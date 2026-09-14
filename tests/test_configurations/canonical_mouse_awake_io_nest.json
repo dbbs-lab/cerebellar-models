@@ -14,6 +14,9 @@
         "y": 200,
         "z": 595
     },
+    "rng": {
+        "seed": 1234
+    },
     "$import":  {
         "ref": "../../configurations/mouse/in-vitro/nest/basal_vitro.yaml#/",
         "values": ["packages"]
@@ -1105,7 +1108,6 @@
             ],
             "duration": 5000,
             "resolution": 0.1,
-            "seed": 1234,
             "cell_models": {
                 "mossy_fibers": {
                     "model": "parrot_neuron"

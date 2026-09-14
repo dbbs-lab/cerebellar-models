@@ -3,7 +3,6 @@ simulations:
     simulator: nest
     resolution: 0.1
     duration: 2000
-    seed: 1234
     devices:
       mf_stimulus:
         device: poisson_generator

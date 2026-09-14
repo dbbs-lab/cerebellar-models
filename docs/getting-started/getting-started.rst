@@ -67,6 +67,9 @@ more :doc:`here <bsb:simulation/intro>`). These simulations are dependant on the
 choose and their paradigm. Some examples are provided for each simulator sustained by the
 `cerebellar-models` package in the :doc:`configurations section <../configurations/configurations>`.
 
+Both the reconstruction and the simulation draw random numbers — see :doc:`randomness` for how to
+pin them for a reproducible run, or leave them unset to get a fresh replicate every time.
+
 After the simulation has completed, `cerebellar-models` allows you to run a list of predefined analysis on the
 simulation results. For instance, for spiking based simulation, you can run the following python script
 to produce a full pdf report with basic spike analysis of the simulation results (see more in

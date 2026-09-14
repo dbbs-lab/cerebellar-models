@@ -4,6 +4,7 @@ Module for the configuration node of the Glomerulus to UBC ConnectionStrategy
 
 import numpy as np
 from bsb import ConfigurationError, ConnectionStrategy, config
+from bsb.connectivity.strategy import roi_key
 
 from cerebellar_models.connectome.presyn_dist_strat import PresynDistStrat
 
@@ -40,7 +41,18 @@ class ConnectomeGlomerulusUBC(PresynDistStrat, ConnectionStrategy):
 
         for post_ps in post.placement:
             ubc_pos = post_ps.load_positions()
-            ubc_ids = np.random.permutation(len(ubc_pos))
+            # Keyed on the strategy, the postsynaptic cell type and the chunks involved,
+            # so every rank draws the same permutation for the same chunk pair.
+            rng = self.get_rng(
+                key=(
+                    "connectivity",
+                    self.name,
+                    post_ps.cell_type.name,
+                    roi_key(pre),
+                    roi_key(post),
+                ),
+            )
+            ubc_ids = rng.permutation(len(ubc_pos))
             ubc_pos = ubc_pos[ubc_ids]
             cum_sum = 0
             loc_ratio = 0

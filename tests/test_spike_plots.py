@@ -33,6 +33,7 @@ class MiniCerebCircuitFixture(RandomStorageFixture, engine_name="hdf5", setup_cl
         nest_folder = "configurations/mouse/in-vitro/nest/"
         dict_cfg = {
             "components": ["cerebellar_models/nest_models/build_models.py"],
+            "rng": {"seed": 1234},
             "$import": {
                 "ref": "configurations/mouse/mouse_cerebellar_cortex.yaml#/",
                 "values": [
@@ -56,7 +57,6 @@ class MiniCerebCircuitFixture(RandomStorageFixture, engine_name="hdf5", setup_cl
                             "simulator",
                             "resolution",
                             "duration",
-                            "seed",
                             "cell_models",
                             "after_simulation",
                         ],
@@ -122,7 +122,6 @@ class MiniCerebCircuitFixture(RandomStorageFixture, engine_name="hdf5", setup_cl
                             "resolution",
                             "duration",
                             "modules",
-                            "seed",
                             "cell_models",
                             "connection_models",
                             "devices",
@@ -152,9 +151,9 @@ class MiniCerebCircuitFixture(RandomStorageFixture, engine_name="hdf5", setup_cl
         cls.cfg.network.y = 66
         cls.cfg.network.z = 100
         cls.cfg.partitions.granular_layer.thickness = 40
-        cls.cfg.partitions.purkinje_layer.thickness = 10
-        cls.cfg.partitions.b_molecular_layer.thickness = 17
-        cls.cfg.partitions.t_molecular_layer.thickness = 33
+        cls.cfg.partitions.purkinje_layer.thickness = 15
+        cls.cfg.partitions.b_molecular_layer.thickness = 15
+        cls.cfg.partitions.t_molecular_layer.thickness = 30
         # make sure there are enough mfs.
         cls.cfg.cell_types.glomerulus.spatial.density = 0.00034
 
