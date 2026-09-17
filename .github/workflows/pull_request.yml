@@ -2,16 +2,15 @@ name: Validate Pull Request
 
 on:
   pull_request:
-    types: [opened, synchronize, reopened, edited]
+    types: [opened, synchronize, reopened]
 
 jobs:
   preview-docs:
     runs-on: ubuntu-latest
-    if: github.event.action != 'edited'
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v7
       - name: Check modifications on docs
-        uses: dorny/paths-filter@v3
+        uses: dorny/paths-filter@v4
         id: filter
         with:
           filters: |
@@ -22,3 +21,13 @@ jobs:
         uses: readthedocs/actions/preview@v1
         with:
           project-slug: "cerebellar-models"
+  isort:
+    uses: ./.github/workflows/isort.yml
+  black:
+    uses: ./.github/workflows/black.yml
+  build:
+    uses: ./.github/workflows/integration.yml
+    secrets:
+      CODECOV_TOKEN: ${{ secrets.CODECOV_TOKEN }}
+  docs:
+    uses: ./.github/workflows/docs.yml

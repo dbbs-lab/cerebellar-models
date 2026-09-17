@@ -3,7 +3,8 @@ name: Check branch commit
 on:
   push:
     branches:
-      - '**'  # matches every branch ...
+      - master
+  workflow_dispatch:
 
 jobs:
   isort:
