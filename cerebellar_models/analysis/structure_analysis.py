@@ -7,7 +7,6 @@ from typing import List, Tuple, Union
 import numpy as np
 from bsb import (
     AfterConnectivityHook,
-    CellType,
     ConnectivitySet,
     Scaffold,
     cell_types,
@@ -34,6 +33,18 @@ class TablePlot:
     """Names of the table's rows"""
     columns = []
     """Names of the table's columns"""
+
+    def __init__(self, *, dict_abv: dict = None, **kwargs):
+        super().__init__(**kwargs)
+        self.dict_abv = dict_abv or {}
+        """Dictionary of abbreviations for cell types"""
+
+    def extract_ct_name(self, ct_name: str) -> str:
+        """
+        Convert a cell type (or population) name to its abbreviation, if one is
+        registered in :attr:`dict_abv`.
+        """
+        return self.dict_abv.get(ct_name, ct_name)
 
     def reset_table(self):
         """
@@ -77,20 +88,13 @@ class PlacementTable(TablePlot, ScaffoldPlot):
         **kwargs,
     ):
         super().__init__(
-            fig_size,
+            fig_size=fig_size,
             scaffold=scaffold,
             dict_colors=dict_colors,
+            dict_abv=dict_abv,
             **kwargs,
         )
         self.columns = ["Cell counts", r"Cell densities [$\mu m^{-3}$]"]
-        self.dict_abv = dict_abv or {}
-        """Dictionary of abbreviations for cell types"""
-
-    def extract_ct_name(self, ct: CellType):
-        """
-        Convert the name of a cell type to its abbreviation.
-        """
-        return self.dict_abv[ct.name] if ct.name in self.dict_abv else ct.name
 
     def update(self):
         super().update()
@@ -98,7 +102,7 @@ class PlacementTable(TablePlot, ScaffoldPlot):
         for i, ps in enumerate(self.scaffold.get_placement_sets()):
             ct = ps.cell_type
             volume = np.sum([p.volume() for place in ct.get_placement() for p in place.partitions])
-            ct_name = self.extract_ct_name(ct)
+            ct_name = self.extract_ct_name(ct.name)
             u_labels = self.get_unique_labels(ps)
             for labels in u_labels:
                 count = ps.get_labelled(labels).size
@@ -161,14 +165,13 @@ class ConnectivityTable(TablePlot, ScaffoldPlot):
         **kwargs,
     ):
         super().__init__(
-            fig_size,
+            fig_size=fig_size,
             scaffold=scaffold,
             dict_colors=dict_colors,
+            dict_abv=dict_abv,
             **kwargs,
         )
         self.columns = ["Nb. Synapses", "Synapses per pair", "Convergence", "Divergence"]
-        self.dict_abv = dict_abv or {}
-        """Dictionary of abbreviations for cell types"""
 
     def extract_strat_name(self, ps: ConnectivitySet):
         """
