@@ -3,7 +3,12 @@ import unittest
 from os.path import abspath, dirname, join
 
 import numpy as np
-from bsb import Scaffold, get_simulation_adapter, parse_configuration_content
+from bsb import (
+    ResultsError,
+    Scaffold,
+    get_simulation_adapter,
+    parse_configuration_content,
+)
 from bsb_test import NumpyTestCase, RandomStorageFixture
 from matplotlib import pyplot as plt
 
@@ -216,10 +221,10 @@ class TestSpikePlots(
         with self.assertRaises(ValueError):
             SpikeSimulationReport(self.scaffold, "blabla", "./")
 
-        empty_report = SpikeSimulationReport(self.scaffold, "basal_activity", "./cerebellar_models")
-        self.assertEqual(len(empty_report.filt_spikes), 0)
-        self.assertEqual(empty_report.nb_neurons.size, 0)
-        self.assertEqual(empty_report.populations, [])
+        # A folder holding no matching results raises, rather than silently
+        # producing an empty report.
+        with self.assertRaises(ResultsError):
+            SpikeSimulationReport(self.scaffold, "basal_activity", "./cerebellar_models")
         with self.assertRaises(ValueError):
             self.simulationReport.time_from = -1
         with self.assertRaises(ValueError):
@@ -621,6 +626,7 @@ class TestSpikePlots(
         self.basal_adapter.run_after_simulation([self.basal_simulation], self.simulation_results)
         self.assertTrue(os.path.isfile(streamed_report_filename))
         self.assertGreater(os.path.getsize(streamed_report_filename), 0)
+        os.remove(streamed_report_filename)
 
         self.basal_simulation.after_simulation["print_simulation_report"].output_filename = (
             self.hook_filename

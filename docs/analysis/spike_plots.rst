@@ -50,6 +50,11 @@ results either from the nio files produced by the BSB simulation, or directly fr
 ``result``, and store them in the ``spiking_results`` attribute (see :ref:`spiking_results`)
 
 .. note::
+   If no run of ``simulation_name`` matching the scaffold's storage is found (in
+   ``folder_nio`` or in ``result``), a :class:`~bsb.exceptions.ResultsError` is
+   raised. See :ref:`spiking_results` for details.
+
+.. note::
    Any modification to the ``time_from`` and ``time_to`` values will be automatically
    forwarded to the report's ``SpikePlots``
 
