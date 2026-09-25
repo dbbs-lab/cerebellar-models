@@ -60,9 +60,7 @@ def extract_multicomp_features(multicomp_data, protocol):
     )
 
 
-def nest_single_sim(
-    current, cell_params, protocol, nest_model="eglif_multirec_opt", multimeter=False
-):
+def nest_single_sim(current, cell_params, protocol, nest_model="eglif_multirec", multimeter=False):
     with _suppress_output():
         import nest
 
@@ -126,6 +124,7 @@ def extract_nest_features(multicomp_features, cell_params, protocol, multimeter=
         currents=multicomp_features["current"].values,
         start_stim=protocol["start_stim"],
         end_stim=protocol["end_stim"],
+        duration=protocol["duration"],
     )
     return nest_results, nest_features
 

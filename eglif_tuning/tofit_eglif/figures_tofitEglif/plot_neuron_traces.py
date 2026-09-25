@@ -65,8 +65,8 @@ def style_I_axis(axI, show_xlabel=False):
 
 
 if __name__ == "__main__":
-    protocol = {"start_stim": 1000.0, "end_stim": 2000.0, "duration": 3000.0}
-    cell_name = "PC_Z-"
+    protocol = {"start_stim": 200.0, "end_stim": 700.0, "duration": 3000.0}
+    cell_name = "PC_Z+_SCA6"
     data_folder = f"../results_tofitEglif/{cell_name}/"
     threshold = -43.0
     rebound_window_ms = 100.0  # ms post end_stim to highlight for negative currents
