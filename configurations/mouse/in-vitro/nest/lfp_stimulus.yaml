@@ -3,7 +3,6 @@ simulations:
     simulator: nest
     resolution: 0.1
     duration: 2500
-    seed: 1234
     devices:
       granule_multimeter:
         device: multimeter
@@ -14,7 +13,7 @@ simulations:
           strategy: sphere
           radius: 10.
           origin:
-            - 100
+            - 150
             - 100
             - 65
           cell_models:
@@ -49,6 +48,7 @@ simulations:
       ref: ./basal_vitro.yaml#/simulations/basal_activity
       values:
         - cell_models
+        - after_simulation
 $import:
   ref: ./basal_vitro.yaml#/
   values:

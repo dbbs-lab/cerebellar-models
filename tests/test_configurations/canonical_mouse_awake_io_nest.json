@@ -15,15 +15,14 @@
         "z": 595
     },
     "files": {},
+    "rng": {
+          "seed": 1234
+    },
     "$import":  {
         "ref": "../../configurations/mouse/in-vitro/nest/basal_vitro.yaml#/",
         "values": ["packages"]
     },
-    "components": [
-        {
-            "module": "cerebellar_models/nest_models/build_models.py"
-        }
-    ],
+    "components": [ "cerebellar_models.nest_models.build_models" ],
     "morphologies": [
         {
             "file": "./morphologies/GranuleCell.swc",
@@ -1110,7 +1109,6 @@
             ],
             "duration": 5000,
             "resolution": 0.1,
-            "seed": 1234,
             "cell_models": {
                 "mossy_fibers": {
                     "model": "parrot_neuron"
@@ -1791,6 +1789,12 @@
                         ],
                         "strategy": "by_label"
                     }
+                }
+            },
+            "after_simulation": {
+                "print_simulation_report": {
+                    "strategy": "cerebellar_models.analysis.spike_plots.RunSimulationReport",
+                    "output_filename": "bsb_report_simulation.pdf"
                 }
             }
         }

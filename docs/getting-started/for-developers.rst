@@ -68,7 +68,8 @@ geometry, cell-type densities, placement strategies, and connectivity rules. It 
 simulator-specific keys. All other fragments are merged on top of it by the CLI.
 
 **Where to edit:** network geometry, cell density / radius, placement or connectivity strategy
-names (i.e. anything that applies regardless of simulation state or tool).
+names, the network-wide ``rng.seed`` (i.e. anything that applies regardless of simulation state or
+tool — see :doc:`randomness`).
 
 Layer 2 — optional cell types
 ''''''''''''''''''''''''''''''
@@ -92,17 +93,21 @@ Inside each state folder, a subfolder per simulator (currently only ``nest/``) c
 **Simulation scenario files** (``basal_awake.yaml``, ``mf_stimulus.yaml``, …)
   Each file corresponds to one simulation the user can select. It specifies:
 
-  - ``simulations.<name>``: duration, resolution, seed, and the NEST ``devices`` (stimulators and
+  - ``simulations.<name>``: duration, resolution, and the NEST ``devices`` (stimulators and
     recorders) for that scenario.
   - ``packages`` and ``components``: BSB packages and build scripts required at runtime.
+
+  None of these files declare their own ``rng`` — they are always merged onto
+  ``<species>_cerebellar_cortex.yaml`` (Layer 1), so they inherit its seed for free; see
+  :doc:`randomness` for why that works for ``rng`` but not for ``packages``.
 
   The ``awake`` scenario files use BSB's ``$import`` directive to pull their content from the
   matching ``in-vitro`` files, then override only the parameters that differ between states.
   This avoids duplicating large blocks of YAML. When editing ``awake`` parameters, first check
   whether the key you need is defined locally or inherited from ``in-vitro``.
 
-  **Where to edit:** simulation duration/seed, recording-device targetting, stimulation rates,
-  or the list of packages required for a scenario.
+  **Where to edit:** simulation duration, recording-device targetting, stimulation rates, or the
+  list of packages required for a scenario.
 
 **Cell model files** (``cell_models/<model_name>.yaml``)
   Each file corresponds to one neuron model that the user can select during the interactive

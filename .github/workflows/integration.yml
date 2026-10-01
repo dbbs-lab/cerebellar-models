@@ -17,12 +17,12 @@ jobs:
     runs-on: ubuntu-latest
     strategy:
       matrix:
-        python-version: ["3.10", "3.12"]
+        python-version: ["3.11", "3.14"]
     steps:
-    - uses: actions/checkout@v4
+    - uses: actions/checkout@v7
 
     - name: Set up Python ${{ matrix.python-version }}
-      uses: actions/setup-python@v5
+      uses: actions/setup-python@v7
       with:
         python-version: ${{ matrix.python-version }}
 
@@ -39,7 +39,7 @@ jobs:
 
     - name: Cache NEST
       id: cache-nest
-      uses: actions/cache@v4
+      uses: actions/cache@v6
       with:
         path: ${{ github.workspace }}/simulators/nest
         key: ${{ runner.os }}-${{ matrix.python-version }}-nest
@@ -57,7 +57,7 @@ jobs:
         coverage run -p -m unittest discover -v -s ./tests -t .
 
     - name: Send coverage
-      uses: codecov/codecov-action@v5.4.1
+      uses: codecov/codecov-action@v7
       with:
         token: ${{ secrets.CODECOV_TOKEN }}
         slug: dbbs-lab/cerebellar-models

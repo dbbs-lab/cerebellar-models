@@ -15,5 +15,6 @@ report
 *.nio
 CLAUDE.md
 dist
-data
 results
+tmp
+data

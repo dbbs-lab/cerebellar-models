@@ -22,13 +22,36 @@ Class parameters
   the analysis will be performed
 * :attr:`time_to<.analysis.spiking_results.SpikingResults.time_to>`: The end time at which the analysis will end.
 * :attr:`folder_nio<.analysis.spiking_results.SpikingResults.folder_nio>`: Path to folder containing
-  the `.nio` files produced by the BSB-NEST simulation
+  the `.nio` files produced by the BSB-NEST simulation. Takes priority over ``result`` when both are
+  provided.
 * :attr:`ignored_ct<.analysis.spiking_results.SpikingResults.ignored_ct>`: List of cell type names to
   ignore from the nio files (results from these cells will not be returned).
+* :attr:`result<.analysis.spiking_results.SpikingResults.result>`: BSB
+  :class:`SimulationResult <bsb.simulation.results.SimulationResult>` to load the spike trains
+  from directly, without going through a results file. Used as a fallback when ``folder_nio`` is
+  not given, e.g. when no results file has been written yet, such as in an ``after_simulation``
+  hook run in-memory (see :ref:`run_simulation_report`).
+
+.. note::
+   At least one of ``folder_nio`` or ``result`` must be provided.
 
 .. note::
    The ``time_from`` and ``time_to`` values can differ from the simulation start
    and end time, but they should remain within the simulation time interval.
+
+.. note::
+   If ``folder_nio`` is given, every ``.nio`` file it contains is inspected, and the
+   most recent run of ``simulation_name`` matching the scaffold's storage is used.
+   Files produced by a different network are silently skipped, so a single folder can
+   safely hold results from more than one network. If no matching run is found (in
+   ``folder_nio`` or in ``result``), a :class:`~bsb.exceptions.ResultsError` is
+   raised.
+
+.. warning::
+   ``.nio`` files produced by ``cerebellar-models`` 0.12.1 or earlier (with BSB 7)
+   use a legacy format that is not supported: one spike train per recording device
+   with raw NEST ids and no provenance metadata. Loading such a file will fail.
+   Re-run the simulation with the current version to obtain a compatible file.
 
 The class will automatically load the spikes from the files for you. You can then use it to analyze your
 results.
@@ -102,7 +125,7 @@ for more information.
 Extract the 2D boolean matrix of the spiking activity for each neuron of a SpikeTrain object.
 Each line corresponds to a neuron, while the columns correspond to a time step in the simulation.
 Matrix box is True if the neuron of this line spiked at the corresponding time step.
-Neurons are sorted according to their NEST id.
+Neurons are sorted according to their BSB placement (cell) id.
 Parameters:
 
 * ``spikes``: :class:`SpikeTrain <neo.core.SpikeTrain>` instance of a cell population.

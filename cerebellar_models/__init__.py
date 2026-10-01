@@ -4,7 +4,7 @@ Implementation of the BSB framework for cerebellar cortex reconstructions and si
 
 import os
 
-__version__ = "0.12.0"
+__version__ = "0.12.1"
 
 
 def templates():  # pragma: nocover
@@ -29,5 +29,8 @@ classmap = {
     },
     "bsb.postprocessing.AfterConnectivityHook": {
         "struct_report": "cerebellar_models.analysis.structure_analysis.RunStructureReport",
+    },
+    "bsb.simulation.postprocessing.AfterSimulationHook": {
+        "sim_report": "cerebellar_models.analysis.spike_plots.RunSimulationReport",
     },
 }

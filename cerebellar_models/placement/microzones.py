@@ -19,14 +19,17 @@ class LabelCells(AfterPlacementHook):
     """Flag to split in ensembles of same size"""
 
     def split_indexes(self, ps):
+        # Keyed on the hook, the cell type and the number of labels, so the split is
+        # reproducible and does not depend on which rank computes it.
+        rng = self.get_rng(key=("after_placement", self.name, ps.cell_type.name))
         if self.same_size:
-            index_pos = np.random.permutation(len(ps))
+            index_pos = rng.permutation(len(ps))
             split_indexes = np.asarray(
                 np.round(np.linspace(0, len(index_pos), len(self.labels) + 1))[1:],
                 dtype=int,
             )
             return np.split(index_pos, split_indexes)[:-1]
-        choice = np.random.choice(len(self.labels), len(ps))
+        choice = rng.choice(len(self.labels), len(ps))
         return [np.where(choice == i)[0] for i in range(len(self.labels))]
 
     def postprocess(self):

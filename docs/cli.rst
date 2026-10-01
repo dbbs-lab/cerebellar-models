@@ -20,7 +20,7 @@ Retrieve a canonical circuit configuration
 
 .. code-block:: bash
 
-  cerebellar-models configure [--output_folder <./path>] [--species <mouse>] [--extension <yaml>] [--microzones]
+  cerebellar-models configure [--output_folder <./path>] [--species <mouse>] [--extension <yaml>] [--microzones] [--non-interactive]
 
 This command will construct a BSB configuration file based on the canonical cerebellar circuit
 developed by the DBBS.
@@ -38,6 +38,8 @@ selected by pressing the right arrow and validated with the enter key.
 * ``--output_folder``: Path to the output folder where the configuration will be stored.
 * ``--extension``: File extension for the configuration. Can be either ``json`` or ``yaml``.
 * ``--microzones``: Flag to split your circuit into 2 separated microzones (not set by default).
+* ``--non-interactive``: Skip every interactive form and use the default value for anything
+  not given through the other options above.
 
 .. note::
     When selecting a ``NEST`` simulation via the CLI, the output configuration will also
@@ -45,17 +47,19 @@ selected by pressing the right arrow and validated with the enter key.
     (see :ref:`NEST paradigms <nest-paradigms>`).
 
 
-Re-compile NESTML neuron models
-================================
+.. _cli-nestml:
+
+Re-compile NESTML models
+========================
 
 .. code-block:: bash
 
   cerebellar-models build-nestml [--model_dir <path>] [--build_dir <path>] [--module_name <name>]
 
-This command forces a full re-compilation of the NESTML neuron models used by the NEST
+This command forces a full re-compilation of the NESTML models used by the NEST
 simulator. It is equivalent to calling ``_build_nest_models(redo=True)`` programmatically:
 the existing build cache is cleared and PyNESTML re-generates the C++ source code and
-reinstalls the NEST module ``cerebmodule``.
+re-installs the NEST module ``cerebmodule``.
 
 Running this command is useful when:
 
