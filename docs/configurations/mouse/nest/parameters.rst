@@ -128,13 +128,14 @@ Mossy fiber stimulus
 ####################
 
 The mossy fiber stimulus configuration file
-`stimulus_mossy.yaml <https://github.com/dbbs-lab/cerebellar-models/blob/master/configurations/mouse/in-vitro/nest/mf_stimulus.yaml>`_
+`mf_stimulus.yaml <https://github.com/dbbs-lab/cerebellar-models/blob/master/configurations/mouse/in-vitro/nest/mf_stimulus.yaml>`_
 is derived from the ``basal_activity`` but adds a stimulus of the mossy fibers (see :ref:`basal-activity`).
 
 On top of the basal paradigm, we introduce here a ``stimulus`` represented as a ``150 Hz``
-``Poisson spike generator`` between ``1200`` and ``1250`` ms. This latter targets the
+``Poisson spike generator`` between ``1200`` and ``1260`` ms. This latter targets the
 ``mossy_fibers`` that are within a ``sphere`` of radius ``90`` :math:`\mu m` and a center at
-``(150.0, 65.0, 100.0)``. This mimic the integration of an input on the mossy fibers.
+``(150.0, 100.0, 65.0)``, i.e. the center of the granular layer. This mimic the integration of an
+input on the mossy fibers.
 
 Eyeblink Classical Conditioning
 ###############################

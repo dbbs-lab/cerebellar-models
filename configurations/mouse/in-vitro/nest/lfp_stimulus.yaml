@@ -13,7 +13,7 @@ simulations:
           strategy: sphere
           radius: 10.
           origin:
-            - 100
+            - 150
             - 100
             - 65
           cell_models:

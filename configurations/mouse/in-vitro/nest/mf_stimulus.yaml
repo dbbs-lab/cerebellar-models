@@ -14,8 +14,8 @@ simulations:
           radius: 90
           origin:
             - 150
-            - 65
             - 100
+            - 65
           cell_models:
             - mossy_fibers
         weight: 1

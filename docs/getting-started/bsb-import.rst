@@ -84,7 +84,7 @@ reuses the cell models and recording devices of the basal activity:
             targetting:
               strategy: sphere
               radius: 90
-              origin: [150, 65, 100]
+              origin: [150, 100, 65]
               cell_models:
                 - mossy_fibers
             weight: 1
