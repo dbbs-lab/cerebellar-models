@@ -12,7 +12,6 @@ import yaml
 from matplotlib.colors import LinearSegmentedColormap, Normalize
 from scipy.optimize import minimize
 
-
 # order expected by compute_statistics_eglif
 _PSEQ_KEYS = ("Qe", "Te", "Ee", "Qi", "Ti", "Ei", "Gl", "Cm", "El", "Ke", "Ki")
 
@@ -177,8 +176,6 @@ def _cell_cmap(cell_name):
     return LinearSegmentedColormap.from_list(cell_name, [(1, 1, 1, 1), color])
 
 
-
-
 class AnalyticalTransferFunction:
     """
     Holds a fitted (or loaded) analytical TF: the gain ``alpha``, the threshold
@@ -229,9 +226,7 @@ class AnalyticalTransferFunction:
     def save(self, output_dir="output_analytical_TFs"):
         os.makedirs(output_dir, exist_ok=True)
         path = os.path.join(output_dir, f"analyticalTF_{self.cell_name}.json")
-        params = {
-            k: (v.item() if isinstance(v, np.generic) else v) for k, v in self.params.items()
-        }
+        params = {k: (v.item() if isinstance(v, np.generic) else v) for k, v in self.params.items()}
         d = {
             "cell_name": self.cell_name,
             "synaptic_inputs": {
@@ -351,7 +346,13 @@ class AnalyticalTransferFunctionFitting:
     """
 
     def __init__(
-        self, scaffold_path, yaml_path, tf_dict_path, cell_name, numerical_tf, cut=2,
+        self,
+        scaffold_path,
+        yaml_path,
+        tf_dict_path,
+        cell_name,
+        numerical_tf,
+        cut=2,
     ):
         self.cell_name = cell_name
         self.cut = cut
@@ -475,7 +476,6 @@ class AnalyticalTransferFunctionFitting:
         )
         return params, exc_label, inh_label
 
-
     def _prepare_template(self):
         ntf = self.numerical_tf
         ie = ntf.tags.index(self.exc_label)
@@ -507,7 +507,12 @@ class AnalyticalTransferFunctionFitting:
     def fit(self, alpha=4.5, save=True, output_dir="output_analytical_TFs", verbose=True):
         """Two-step fit at a fixed gain ``alpha``. Returns an AnalyticalTransferFunction."""
         P, mse = fit_two_step(
-            self.MEAN, self.Fe_eff, self.fiSim, self.w, self.params, alpha,
+            self.MEAN,
+            self.Fe_eff,
+            self.fiSim,
+            self.w,
+            self.params,
+            alpha,
             verbose=verbose,
         )
         self._fit = self._make_result(alpha, P, mse)
@@ -518,7 +523,12 @@ class AnalyticalTransferFunctionFitting:
     def _scan_alpha(self, alphas):
         out = [
             fit_two_step(
-                self.MEAN, self.Fe_eff, self.fiSim, self.w, self.params, a,
+                self.MEAN,
+                self.Fe_eff,
+                self.fiSim,
+                self.w,
+                self.params,
+                a,
             )
             for a in alphas
         ]
@@ -579,8 +589,15 @@ class AnalyticalTransferFunctionFitting:
         for j, fi in enumerate(self.Fi):
             col = cmap(j / max(n - 1, 1))
             ax.errorbar(
-                self.Fe, self.MEAN[j], yerr=self.SD[j], color=col, marker="D", ms=4,
-                capsize=2, elinewidth=1, lw=0,
+                self.Fe,
+                self.MEAN[j],
+                yerr=self.SD[j],
+                color=col,
+                marker="D",
+                ms=4,
+                capsize=2,
+                elinewidth=1,
+                lw=0,
             )
             ax.plot(fe, self._fit.evaluate(fe, fi), color=col)
         m = self._fit.metrics(self.MEAN)

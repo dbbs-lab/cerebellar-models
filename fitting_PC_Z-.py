@@ -19,9 +19,7 @@ if __name__ == "__main__":
     OUTPUT_DIR = "./output_analytical_TFs"
 
     # Load numerical TF template (Tutorial 2 output)
-    num_tf = NumericalTransferFunction.load(
-        cell_name=TEMPLATE_NAME, output_dir=NUMERICAL_TFS_PATH
-    )
+    num_tf = NumericalTransferFunction.load(cell_name=TEMPLATE_NAME, output_dir=NUMERICAL_TFS_PATH)
 
     if FIT:
         fitter = AnalyticalTransferFunctionFitting(
@@ -38,9 +36,7 @@ if __name__ == "__main__":
         fitter.plot_tf(output_dir=OUTPUT_DIR)
         print("Metrics:", an_tf.metrics(fitter.MEAN))
     else:
-        an_tf = AnalyticalTransferFunction.load(
-            cell_name=TEMPLATE_NAME, output_dir=OUTPUT_DIR
-        )
+        an_tf = AnalyticalTransferFunction.load(cell_name=TEMPLATE_NAME, output_dir=OUTPUT_DIR)
         an_tf.plot_tf(numerical_tf=num_tf, output_dir=OUTPUT_DIR)
 
     an_tf.summary()

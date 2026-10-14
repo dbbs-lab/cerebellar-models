@@ -108,7 +108,6 @@ def _compute_point(args):
     return rep_rates.mean(), rep_rates.std()
 
 
-
 def _worker_init(sim_info):
     """Pool initializer: store sim_info once per worker process."""
     global _WORKER_SIM_INFO
@@ -515,7 +514,9 @@ class NumericalTransferFunctionSimulator:
                         tf_std[idx] = result[1]
                         pbar.update(1)
 
-        self._tf = NumericalTransferFunction(self.cell_name, tf_mean, tf_std, unique_labels, freq_axes)
+        self._tf = NumericalTransferFunction(
+            self.cell_name, tf_mean, tf_std, unique_labels, freq_axes
+        )
 
         if save:
             self._tf.save()
