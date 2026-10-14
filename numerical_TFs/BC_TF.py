@@ -2,22 +2,22 @@ import time
 
 import matplotlib.pyplot as plt
 
-from cerebellar_models.MFM.transfer_functions import (
-    TransferFunction,
-    TransferFunctionSimulator,
+from cerebellar_models.MFM.numerical_tf import (
+    NumericalTransferFunction,
+    NumericalTransferFunctionSimulator,
 )
 
 if __name__ == "__main__":
 
     SIMULATE = False
-    CELL_NAME = "granule_cell"
-    YAML_PATH = "circuit_Z-.yaml"
-    TF_DICT_PATH = "TF_dict.json"
-    SCAFFOLD_PATH = "mouse_cerebellum.hdf5"
-    OUTPUT_DIR = "output_TF"
+    CELL_NAME = "basket_cell"
+    YAML_PATH = "../circuit_Z-.yaml"
+    TF_DICT_PATH = "../TF_dict.json"
+    SCAFFOLD_PATH = "../mouse_cerebellum.hdf5"
+    OUTPUT_DIR = "output_TFs"
 
     if SIMULATE:
-        sim = TransferFunctionSimulator(
+        sim = NumericalTransferFunctionSimulator(
             scaffold_path=SCAFFOLD_PATH,
             yaml_path=YAML_PATH,
             tf_dict_path=TF_DICT_PATH,
@@ -34,9 +34,8 @@ if __name__ == "__main__":
 
         elapsed = time.time() - t_start
         print(f"\nRun duration: {elapsed:.1f}s ({elapsed/60:.1f} min)")
-
     else:
-        tf = TransferFunction.load(CELL_NAME, OUTPUT_DIR)
+        tf = NumericalTransferFunction.load(cell_name=CELL_NAME, output_dir=OUTPUT_DIR)
 
     tf.summary()
     tf.plot_tf()

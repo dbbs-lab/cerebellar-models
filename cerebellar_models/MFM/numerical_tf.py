@@ -19,6 +19,8 @@ from tqdm import tqdm
 
 from cerebellar_models.analysis import StructureReport
 
+_WORKER_SIM_INFO = None
+
 
 def _connect_neuron(neuron, sim_info, rates_dict, rng):
     """Wire one neuron to its Poisson generators."""
@@ -106,8 +108,6 @@ def _compute_point(args):
     return rep_rates.mean(), rep_rates.std()
 
 
-_WORKER_SIM_INFO = None
-
 
 def _worker_init(sim_info):
     """Pool initializer: store sim_info once per worker process."""
@@ -122,7 +122,7 @@ def _compute_point_worker(args):
     return _compute_point((_WORKER_SIM_INFO, rates_dict, n_reps, base_seed, duration, transient))
 
 
-class TransferFunction:
+class NumericalTransferFunction:
     """
     Holds a computed or loaded transfer function and provides plot/summary methods.
     """
@@ -149,7 +149,7 @@ class TransferFunction:
         self.freq_axes = [np.asarray(a) for a in freq_axes]
 
     @classmethod
-    def load(cls, cell_name, output_dir="output_TF"):
+    def load(cls, cell_name, output_dir="output_TFs"):
         """Load a previously saved TF from ``output_dir/TF_{cell_name}.npz``."""
         path = os.path.join(output_dir, f"TF_{cell_name}.npz")
         data = np.load(path, allow_pickle=True)
@@ -157,7 +157,7 @@ class TransferFunction:
         freq_axes = [data[f"freq_axis_{t}"] for t in tags]
         return cls(cell_name, data["tf_mean"], data["tf_std"], tags, freq_axes)
 
-    def save(self, output_dir="output_TF"):
+    def save(self, output_dir="output_TFs"):
         os.makedirs(output_dir, exist_ok=True)
         path = os.path.join(output_dir, f"TF_{self.cell_name}.npz")
         np.savez(
@@ -302,7 +302,7 @@ class TransferFunction:
         return fig_mean, fig_std
 
 
-class TransferFunctionSimulator:
+class NumericalTransferFunctionSimulator:
     """
     Computes the transfer function of a single-compartment NEST neuron
     driven by Poisson inputs, given a BSB scaffold and circuit configuration.
@@ -373,15 +373,15 @@ class TransferFunctionSimulator:
             if os.path.isabs(ref)
             else os.path.join(os.path.dirname(os.path.abspath(yaml_path)), ref)
         )
-        base = TransferFunctionSimulator._load_yaml(base_path)
-        return TransferFunctionSimulator._deep_merge(base, data)
+        base = NumericalTransferFunctionSimulator._load_yaml(base_path)
+        return NumericalTransferFunctionSimulator._deep_merge(base, data)
 
     @staticmethod
     def _deep_merge(base, override):
         result = dict(base)
         for k, v in override.items():
             if k in result and isinstance(result[k], dict) and isinstance(v, dict):
-                result[k] = TransferFunctionSimulator._deep_merge(result[k], v)
+                result[k] = NumericalTransferFunctionSimulator._deep_merge(result[k], v)
             else:
                 result[k] = v
         return result
@@ -515,7 +515,7 @@ class TransferFunctionSimulator:
                         tf_std[idx] = result[1]
                         pbar.update(1)
 
-        self._tf = TransferFunction(self.cell_name, tf_mean, tf_std, unique_labels, freq_axes)
+        self._tf = NumericalTransferFunction(self.cell_name, tf_mean, tf_std, unique_labels, freq_axes)
 
         if save:
             self._tf.save()

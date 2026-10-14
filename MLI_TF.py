@@ -3,10 +3,10 @@ import numpy as np
 from bsb import from_storage
 
 from cerebellar_models.analysis import StructureReport
-from cerebellar_models.MFM.transfer_functions import TransferFunction
+from cerebellar_models.MFM.numerical_tf import TransferFunction
 
 SCAFFOLD_PATH = "mouse_cerebellum.hdf5"
-OUTPUT_DIR = "output_TF"
+OUTPUT_DIR = "numerical_TFs/output_TFs"
 
 
 if __name__ == "__main__":

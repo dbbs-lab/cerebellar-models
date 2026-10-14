@@ -69,7 +69,7 @@ if __name__ == "__main__":
     cell_name = "PC_Z-"
     data_folder = f"../results_tofitEglif/{cell_name}/"
     threshold = -43.0
-    rebound_window_ms = 100.0  # ms post end_stim to highlight for negative currents
+    rebound_window_ms = 150.0  # ms post end_stim to highlight for negative currents
 
     features = multicomp_features(data_folder, threshold=threshold)
     spikes_df = features[["peak_time", "current"]]
@@ -231,7 +231,6 @@ if __name__ == "__main__":
     )
     ax_fi.set_title(f"FI curve — {cell_name}")
     fig_fi.tight_layout()
-    fig_fi.savefig(f"{cell_name}_FI.png", dpi=300, bbox_inches="tight")
-    fig_fi.savefig(f"{cell_name}_FI.pdf", dpi=300, bbox_inches="tight")
+    fig_fi.savefig(f"{cell_name}_fI.png", dpi=300, bbox_inches="tight")
 
     plt.show()

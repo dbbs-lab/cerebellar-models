@@ -347,13 +347,28 @@ def post_first_spike_loss(
     return float(np.mean(losses)) if losses else float(missing_penalty)
 
 
+def _adaptation_ratio(sp, skip=2, k=5):
+    """late/early mean-ISI ratio: >1 adapts, <1 facilitates, ~1 tonic. Robust to endpoints."""
+    isi = np.diff(sp)
+    if isi.size > skip:
+        isi = isi[skip:]
+    if isi.size < 2:
+        return np.nan
+    kk = max(1, min(k, isi.size // 2))
+    early = float(np.mean(isi[:kk]))
+    late = float(np.mean(isi[-kk:]))
+    if early <= 0:
+        return np.nan
+    return late / early
+
+
 def adaptation_index_loss(targ, nest, protocol, sel=None, missing_penalty=0.5):
     """
-    Compare adaptation index (AI = last_ISI / first_ISI).
-    AI > 1: cell slows down (adapts). AI ≈ 1: tonic firing.
-    Tests k_adap / A2 / k_2 dynamics directly.
+    Compare spike-frequency adaptation as the late/early mean-ISI ratio (onset skipped,
+    averaged over up to k ISIs). Loss = |r_nest - r_targ| / (r_nest + r_targ), bounded in
+    [0, 1], symmetric and with dynamic range independent of spike count.
     For I=0: uses entire [0, duration] window (spontaneous pacemaking).
-    For I≠0: uses [start_stim, end_stim] window.
+    For I!=0: uses [start_stim, end_stim] window.
     """
     start, end = protocol["start_stim"], protocol["end_stim"]
     duration = protocol.get("duration", end)
@@ -371,17 +386,14 @@ def adaptation_index_loss(targ, nest, protocol, sel=None, missing_penalty=0.5):
         n_sp = _stim_spikes(nest, c, win_start, win_end)
         if t_sp.size < 3:
             continue
-        t_isis = np.diff(t_sp)
-        t_ai = t_isis[-1] / max(t_isis[0], 1e-9)
-        if not np.isfinite(t_ai):
+        t_r = _adaptation_ratio(t_sp)
+        if not np.isfinite(t_r):
             continue
-        if n_sp.size < 3:
+        n_r = _adaptation_ratio(n_sp)
+        if n_sp.size < 3 or not np.isfinite(n_r):
             losses.append(1.0)
             continue
-        n_isis = np.diff(n_sp)
-        n_ai = n_isis[-1] / max(n_isis[0], 1e-9)
-        rel = abs(n_ai - t_ai) / max(t_ai, 1e-9)
-        losses.append(float(np.clip(rel / (1 + rel), 0.0, 1.0)))
+        losses.append(float(np.clip(abs(n_r - t_r) / (n_r + t_r), 0.0, 1.0)))
 
     return float(np.mean(losses)) if losses else float(missing_penalty)
 
