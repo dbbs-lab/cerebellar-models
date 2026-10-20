@@ -88,7 +88,7 @@ class SpikePlot(ScaffoldPlot):
         Dictionary of color for each population actually present in
         ``spiking_results``, keyed by their (possibly label-suffixed) population name.
 
-        Unlike :attr:`ScaffoldPlot.labelled_dict_colors`, this does not consult the
+        Unlike :attr:`~.plots.ScaffoldPlot.labelled_dict_colors`, this does not consult the
         scaffold's current placement sets: the scaffold may have been recompiled or
         relabelled since the run these results come from (BSB only warns on that
         mismatch, it does not block it), so a population recorded under one label
@@ -175,7 +175,7 @@ class SpikeSimulationReport(BSBReport):
     def labelled_cell_names(self):
         """
         The report's populations, i.e. the ones actually recorded in
-        ``spiking_results``, rather than :attr:`BSBReport.labelled_cell_names`'s every
+        ``spiking_results``, rather than :attr:`~.report.BSBReport.labelled_cell_names`'s every
         placement set currently in the scaffold: the scaffold may have changed since
         the run these results come from, and a population that was recorded then
         might not exist, or might resolve to a different one, live.
