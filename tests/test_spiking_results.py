@@ -205,6 +205,38 @@ class TestSpikingResults(
             spike_colors["purkinje_cell_minus"] * np.array([2 / 3] * 3 + [1.0]),
         )
 
+    def test_overlapping_labelled_populations(self):
+        # The cells labeled {plus, edge} also carry `plus`, so they are found by the
+        # label mask of {plus}: they must still be told apart from the {plus} cells.
+        ps = self.scaffold.get_placement_set("purkinje_cell")
+        ids = np.arange(len(ps))
+        edge, plus, minus = np.array_split(ids, 3)
+        ps.label(["plus"], np.concatenate([edge, plus]))
+        ps.label(["edge"], edge)
+        ps.label(["minus"], minus)
+        self.addCleanup(ps.remove_labels, ["minus"], minus)
+        self.addCleanup(ps.remove_labels, ["edge"], edge)
+        self.addCleanup(ps.remove_labels, ["plus"], np.concatenate([edge, plus]))
+        results = SpikingResults(
+            self.scaffold, "basal_activity", 0, None, result=self.simulation_results[0]
+        )
+        expected = {}
+        for combo in ScaffoldPlot.get_unique_labels(ps):
+            cells = {
+                frozenset({"plus", "edge"}): edge,
+                frozenset({"plus"}): plus,
+                frozenset({"minus"}): minus,
+            }[frozenset(combo)]
+            expected[ScaffoldPlot.get_labelled_ct_name("purkinje_cell", combo)] = cells
+        self.assertEqual(len(expected), 3)
+        nb_neurons = dict(zip(results.populations, results.nb_neurons))
+        for population, cells in expected.items():
+            self.assertEqual(nb_neurons.get(population), len(cells), population)
+            senders = results.filt_spikes[results.populations.index(population)].array_annotations[
+                "senders"
+            ]
+            self.assertTrue(np.isin(senders, cells).all(), f"{population} holds foreign cells")
+
 
 class TestExtractISIs(unittest.TestCase):
     def test_extract_isis(self):

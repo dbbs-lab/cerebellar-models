@@ -68,9 +68,10 @@ class SpikingResults:
         self._all_spikes = []
         self._nb_neurons = np.zeros(0, dtype=int)
         self._populations = []
-        # Label combinations actually used in a placement set, cached per cell type
-        # name so a population of many cells only computes it once.
-        self._label_combos: dict[str, list[tuple[set, np.ndarray]]] = {}
+        # Label combinations actually used in a placement set, and the mask of the cells
+        # carrying each label, cached per cell type name so a population of many cells
+        # only computes them once.
+        self._label_combos: dict[str, tuple[list[set], dict[str, np.ndarray]]] = {}
         # Placeholders, resolved for real below once the run (and its provenance) is
         # loaded: _check_times validates against the run's own recorded duration.
         self._time_from = 0.0
@@ -156,18 +157,21 @@ class SpikingResults:
         :return: The labels of the cell, or an empty set if it carries none.
         """
         ps_name = target.cell_type.name
-        combos = self._label_combos.get(ps_name)
-        if combos is None:
+        cached = self._label_combos.get(ps_name)
+        if cached is None:
             ps = target.placement_set
-            combos = [
-                (labels, ps.get_label_mask(list(labels)))
-                for labels in ScaffoldPlot.get_unique_labels(ps)
-            ]
-            self._label_combos[ps_name] = combos
-        for labels, mask in combos:
-            if mask[target.id]:
-                return labels
-        return set()
+            combos = list(ScaffoldPlot.get_unique_labels(ps))
+            # A label mask holds the cells carrying *any* of its labels, so the mask of
+            # a combination also holds the cells of every overlapping one (`{a}` holds
+            # the cells labeled `{a, b}`). Masks of single labels instead tell exactly
+            # which labels a cell carries.
+            masks = {label: ps.get_label_mask([label]) for label in set().union(*map(set, combos))}
+            cached = self._label_combos[ps_name] = (combos, masks)
+        combos, masks = cached
+        labels = {label for label, mask in masks.items() if mask[target.id]}
+        # Return the combination itself rather than the set just built, so that the
+        # population is named exactly as ScaffoldPlot names that combination.
+        return next((combo for combo in combos if set(combo) == labels), set())
 
     def _population_of(self, recording: NetworkRecording) -> str:
         """
