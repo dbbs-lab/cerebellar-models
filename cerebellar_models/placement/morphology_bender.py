@@ -49,7 +49,7 @@ class MorphologyBender:
     boundaries_field: NrrdDependencyNode = config.ref(config.refs.vox_dset_ref)
 
     default_depth: cfgdict[str, float] = config.dict(
-        required=False, type=float, default={"mo": 150.0, "pu": 165.0, "gr": 150.0}
+        required=False, type=float, default={"mo": 175.0, "pu": 190.0, "gr": 145.0}
     )
     """reference layers' thickness to use during rescale"""
 
