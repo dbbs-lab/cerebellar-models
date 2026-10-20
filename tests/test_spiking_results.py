@@ -1,9 +1,21 @@
+import copy
+import shutil
+import tempfile
 import unittest
+from os.path import join
+from types import SimpleNamespace
 
 import numpy as np
-from neo import SpikeTrain
-from quantities import ms
+from bsb import ResultsError
+from bsb.simulation.results import cell_annotations, device_annotations
+from bsb.storage.provenance import decode_annotation, encode_annotation
+from neo import AnalogSignal, SpikeTrain
+from neo import io as nio
+from quantities import ms, mV
 
+from cerebellar_models.analysis.plots import ScaffoldPlot
+from cerebellar_models.analysis.report import LIST_CT_INFO
+from cerebellar_models.analysis.spike_plots import SpikePlot
 from cerebellar_models.analysis.spiking_results import SpikingResults, extract_isis
 from tests.test_spike_plots import ReportBasalSimCircuitFixture
 
@@ -90,6 +102,108 @@ class TestSpikingResults(
                 time_from=0,
                 time_to=None,
             )
+
+    def _write_foreign_results(self, filename):
+        """
+        Copy the streamed results under `filename`, as if another network produced them.
+        """
+        with nio.NixIO(self.streamed_nio_file, mode="ro") as reader:
+            blocks = reader.read_all_blocks()
+        for block in blocks:
+            provenance = decode_annotation(block.annotations["bsb_provenance"])
+            provenance["scaffold"]["storage_id"] = "another-network"
+            block.annotations["bsb_provenance"] = encode_annotation(provenance)
+        with nio.NixIO(filename, mode="ow") as writer:
+            writer.write_all_blocks(blocks)
+
+    def test_folder_skips_results_of_other_networks(self):
+        folder = tempfile.mkdtemp()
+        self.addCleanup(shutil.rmtree, folder)
+        self._write_foreign_results(join(folder, "other_network.nio"))
+        # A folder holding only another network's results has nothing to load.
+        with self.assertRaises(ResultsError):
+            SpikingResults(self.scaffold, "basal_activity", 0, None, folder_nio=folder)
+        # Next to this network's results, the foreign file is simply ignored.
+        shutil.copy(self.streamed_nio_file, join(folder, "this_network.nio"))
+        results = SpikingResults(self.scaffold, "basal_activity", 0, None, folder_nio=folder)
+        self.assertEqual(results.populations, self.spiking_results.populations)
+        self.assertEqual(list(results.nb_neurons), list(self.spiking_results.nb_neurons))
+
+    def test_device_and_analog_recordings(self):
+        block = copy.deepcopy(self.simulation_results[0].block)
+        segment = block.segments[0]
+        # A spike train of the device itself, which names no cell of the network.
+        segment.spiketrains.append(
+            SpikeTrain(
+                [10.0, 20.0, 30.0] * ms,
+                t_stop=self.simulation_duration * ms,
+                bsb_device_name="device_spikes",
+                **device_annotations("record"),
+            )
+        )
+        # A membrane potential recording, which is no spike train to analyze.
+        cell_model = self.basal_simulation.cell_models["purkinje_cell"]
+        segment.analogsignals.append(
+            AnalogSignal(
+                np.zeros((10, 1)) * mV,
+                sampling_period=0.1 * ms,
+                bsb_device_name="purkinje_vm",
+                **cell_annotations(cell_model, 0, "record"),
+            )
+        )
+        results = SpikingResults(
+            self.scaffold,
+            "basal_activity",
+            0,
+            None,
+            ignored_ct=[],
+            result=SimpleNamespace(block=block),
+        )
+        self.assertIn("device_spikes", results.populations)
+        self.assertNotIn("purkinje_vm", results.populations)
+        idx = results.populations.index("device_spikes")
+        self.assertEqual(results.nb_neurons[idx], 1)
+        spikes = results.filt_spikes[idx]
+        self.assertEqual(list(spikes.magnitude), [10.0, 20.0, 30.0])
+        # Its spikes are attributed to its position in the population, as it has no cell id.
+        self.assertEqual(list(spikes.array_annotations["senders"]), [0, 0, 0])
+
+    def test_labelled_populations(self):
+        ps = self.scaffold.get_placement_set("purkinje_cell")
+        ids = np.arange(len(ps))
+        plus, minus = ids[: len(ids) // 2], ids[len(ids) // 2 :]
+        ps.label(["plus"], plus)
+        ps.label(["minus"], minus)
+        self.addCleanup(ps.remove_labels, ["minus"], minus)
+        self.addCleanup(ps.remove_labels, ["plus"], plus)
+        # Read the in-memory run: the streamed file would warn that the network was
+        # written to since the run, which is the very point of this test.
+        results = SpikingResults(
+            self.scaffold, "basal_activity", 0, None, result=self.simulation_results[0]
+        )
+        self.assertNotIn("purkinje_cell", results.populations)
+        nb_neurons = dict(zip(results.populations, results.nb_neurons))
+        self.assertEqual(nb_neurons["purkinje_cell_plus"], len(plus))
+        self.assertEqual(nb_neurons["purkinje_cell_minus"], len(minus))
+        for population, cells in (("purkinje_cell_plus", plus), ("purkinje_cell_minus", minus)):
+            senders = results.filt_spikes[results.populations.index(population)].array_annotations[
+                "senders"
+            ]
+            self.assertTrue(np.isin(senders, cells).all(), f"{population} holds foreign cells")
+
+        # The live scaffold and the recorded populations must agree on each shade.
+        colors = {ct.name: ct.color for ct in LIST_CT_INFO}
+        scaffold_colors = ScaffoldPlot(
+            (10, 10), self.scaffold, dict_colors=colors
+        ).labelled_dict_colors
+        spike_colors = SpikePlot((10, 10), results, dict_colors=colors).labelled_dict_colors
+        self.assertNotIn("purkinje_cell", spike_colors)
+        for population in ("purkinje_cell_minus", "purkinje_cell_plus"):
+            np.testing.assert_allclose(spike_colors[population], scaffold_colors[population])
+        np.testing.assert_allclose(
+            spike_colors["purkinje_cell_plus"],
+            spike_colors["purkinje_cell_minus"] * np.array([2 / 3] * 3 + [1.0]),
+        )
 
 
 class TestExtractISIs(unittest.TestCase):
