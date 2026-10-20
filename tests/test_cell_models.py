@@ -4,7 +4,7 @@ from os.path import abspath, dirname, getmtime, isfile, join
 
 import nest
 import numpy as np
-from bsb import Scaffold, parse_configuration_content
+from bsb import Scaffold, iter_recordings, parse_configuration_content
 from bsb.services import MPI
 from bsb_test import NumpyTestCase, RandomStorageFixture
 from pynestml.exceptions.invalid_path_exception import InvalidPathException
@@ -13,12 +13,13 @@ from scipy.optimize import curve_fit
 
 class TestNestModuleLoading(unittest.TestCase):
     def test_build_models(self):
-        from cerebellar_models.nest_models.build_models import _build_nest_models
+        from cerebellar_models.nest_models.build_models import (
+            _build_nest_models,
+            _nest_prefix,
+        )
 
         # cerebmodule should have been built
-        cerebmodule_file = join(
-            nest.ll_api.sli_func("statusdict/prefix ::"), "lib/nest/cerebmodule.so"
-        )
+        cerebmodule_file = join(_nest_prefix(), "lib/nest/cerebmodule.so")
         self.assertTrue(isfile(cerebmodule_file))
         # Does not raise because module exists
         _build_nest_models(model_dir="bla")
@@ -91,16 +92,18 @@ class TestSingleCellModels(
     @staticmethod
     def _load_spike_data(results):
         cell_dict = {}
-        for st in results.block.segments[0].spiketrains:
-            cell_type = st.annotations["device"].split("_rec")[0]
+        # BSB 8 multiplexes all the cells of a recorder in one SpikeTrain;
+        # iter_recordings splits it back into one recording per cell.
+        for recording in iter_recordings(results.block, kind="cell"):
+            if not recording.is_spike_train:
+                continue
+            cell_type = recording.device.split("_rec")[0]
             if cell_type not in cell_dict:
                 cell_dict[cell_type] = {}
-            if len(st.array_annotations["senders"]) > 0:
-                u_senders, inv = np.unique(st.array_annotations["senders"], return_inverse=True)
-                for i, sender in enumerate(u_senders):
-                    if str(sender) not in cell_dict[cell_type]:
-                        cell_dict[cell_type][str(sender)] = []
-                    cell_dict[cell_type][str(sender)].extend(st.magnitude[inv == i])
+            # Silent cells are part of the recorder's roster but have no spike to analyze.
+            if len(recording.signal) > 0:
+                cell_id = str(recording.annotations["bsb_cell_id"])
+                cell_dict[cell_type][cell_id] = list(recording.signal.magnitude)
         return cell_dict
 
     @staticmethod
