@@ -1,7 +1,7 @@
 packages:
   - cerebellar-models[nest]~=0.12.1
-  - bsb~=7.6
-  - bsb-nest~=7.6
+  - bsb~=8.0
+  - bsb-nest~=8.0
 components:
   - cerebellar_models.nest_models.build_models
 simulations:
