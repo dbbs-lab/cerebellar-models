@@ -1,23 +1,24 @@
 """
 SNN basic simulation to validate MFM simulations and fix the range in TF.json
 """
+
+import json
+from glob import glob
 from os import makedirs, remove
 from os.path import basename, dirname, join, normpath, splitext
-from glob import glob
-import json
+
+import matplotlib.pyplot as plt
 import numpy as np
 import pandas as pd
-import matplotlib.pyplot as plt
-from quantities import ms
-from bsb import from_storage, parse_configuration_file, MPI
-from elephant.statistics import instantaneous_rate
+from bsb import MPI, from_storage, parse_configuration_file
 from elephant.kernels import GaussianKernel
-from elephant.signal_processing import hilbert
 from elephant.phase_analysis import phase_locking_value
+from elephant.signal_processing import hilbert
+from elephant.statistics import instantaneous_rate
+from quantities import ms
 
 from cerebellar_models.analysis.spike_plots import BasicSimulationReport
 from cerebellar_models.analysis.spiking_results import SpikingResults
-
 
 PROTOCOLS = {
     "poisson_step": {
@@ -40,10 +41,19 @@ PRESYN_TO_POP = {
     "stellate": "stellate_cell",
 }
 
+
 class SNNSimulate_forMFM:
 
-    def __init__(self, mf_stims, config_path, scaffold_path, tf_json = None, output_path=None,
-                 stim_duration = 1000., transient=1000.):
+    def __init__(
+        self,
+        mf_stims,
+        config_path,
+        scaffold_path,
+        tf_json=None,
+        output_path=None,
+        stim_duration=1000.0,
+        transient=1000.0,
+    ):
         self.mf_stims = mf_stims
         self.config_path = config_path
         self.scaffold_path = scaffold_path
@@ -67,8 +77,7 @@ class SNNSimulate_forMFM:
 
     def _select_basal_sim(self):
         sim_name = next(
-            name for name in self.scaffold.configuration.simulations
-            if "basal_activity" in name
+            name for name in self.scaffold.configuration.simulations if "basal_activity" in name
         )
         sim = self.scaffold.configuration.simulations[sim_name]
         self.sim_name = sim_name
@@ -79,10 +88,10 @@ class SNNSimulate_forMFM:
         self._targetting = {"strategy": "cell_model", "cell_models": ["mossy_fibers"]}
         return sim
 
-    def _background(self, start, stop):
+    def _poisson_device(self, rate, start, stop):
         return {
             "device": "poisson_generator",
-            "rate": self._bg_rate,
+            "rate": float(rate),
             "start": start,
             "stop": stop,
             "targetting": self._targetting,
@@ -90,19 +99,11 @@ class SNNSimulate_forMFM:
             "delay": self._bg_delay,
         }
 
+    def _background(self, start, stop):
+        return self._poisson_device(self._bg_rate, start, stop)
+
     def prepare_sim(self):
         sim = self._select_basal_sim()
-
-        def stimulus(rate, start, stop):
-            return {
-                "device": "poisson_generator",
-                "rate": float(rate),
-                "start": start,
-                "stop": stop,
-                "targetting": self._targetting,
-                "weight": self._bg_weight,
-                "delay": self._bg_delay,
-            }
 
         # initial transient: only background noise
         t = 0.0
@@ -112,7 +113,7 @@ class SNNSimulate_forMFM:
         # one stim window per rate, each followed by a background-only gap
         self.windows = []
         for i, rate in enumerate(self.mf_stims):
-            sim.devices[f"mf_stim_{i}"] = stimulus(rate, t, t + self.stim_duration)
+            sim.devices[f"mf_stim_{i}"] = self._poisson_device(rate, t, t + self.stim_duration)
             self.windows.append((float(rate), t, t + self.stim_duration))
             t += self.stim_duration
             sim.devices[f"mf_background_{i + 1}"] = self._background(t, t + self.transient)
@@ -172,12 +173,14 @@ class SNNSimulate_forMFM:
         report.print_report(join(pdf_dir, f"{base}_full.pdf"))
 
         for i, (rate, start, stop) in enumerate(self.windows):
-            report_step = BasicSimulationReport(scaffold=self.scaffold,
-                                                simulation_name=self.sim_name,
-                                                folder_nio=folder_nio,
-                                                time_from=start,
-                                                time_to=stop,
-                                                ignored_ct=ignored_ct)
+            report_step = BasicSimulationReport(
+                scaffold=self.scaffold,
+                simulation_name=self.sim_name,
+                folder_nio=folder_nio,
+                time_from=start,
+                time_to=stop,
+                ignored_ct=ignored_ct,
+            )
             report_step.print_report(join(pdf_dir, f"{base}_step{i}_{rate:g}Hz.pdf"))
             del report_step
         MPI.barrier()
@@ -309,8 +312,9 @@ class SNNSimulate_forMFM:
             pop_spikes[pop] = (st, senders - senders.min())
         return pop_spikes
 
-    def _presyn_phases(self, pop_spikes, pre_type, pre_ids, start, stop,
-                       dt, kernel_sigma, min_spikes):
+    def _presyn_phases(
+        self, pop_spikes, pre_type, pre_ids, start, stop, dt, kernel_sigma, min_spikes
+    ):
         # Hilbert phase of each presynaptic neuron's instantaneous rate in the window
         merged, senders = pop_spikes[pre_type]
         phases = []
@@ -319,8 +323,10 @@ class SNNSimulate_forMFM:
             if st.size < min_spikes:
                 continue
             rate = instantaneous_rate(
-                st, sampling_period=dt * ms,
-                kernel=GaussianKernel(sigma=kernel_sigma * ms), border_correction=True,
+                st,
+                sampling_period=dt * ms,
+                kernel=GaussianKernel(sigma=kernel_sigma * ms),
+                border_correction=True,
             )
             phases.append(np.angle(hilbert(rate)).ravel())
         return phases
@@ -332,17 +338,26 @@ class SNNSimulate_forMFM:
         if n < 2:
             return np.nan
         vals = [
-            phase_locking_value(phases[i], phases[j])
-            for i in range(n) for j in range(i + 1, n)
+            phase_locking_value(phases[i], phases[j]) for i in range(n) for j in range(i + 1, n)
         ]
         return float(np.mean(vals))
 
-    def compute_plv(self, connections, output_path="plv.json", min_conv=2, min_spikes=2,
-                    dt=0.1, kernel_sigma=20., seed=None, ignored_ct=None):
+    def compute_plv(
+        self,
+        connections,
+        output_path="plv.json",
+        min_conv=2,
+        min_spikes=2,
+        dt=0.1,
+        kernel_sigma=20.0,
+        seed=None,
+        ignored_ct=None,
+    ):
         """
         For each connection, pick at random a significant postsynaptic neuron (with at
         least ``min_conv`` converging partners) and compute the phase locking value of
-        its presynaptic ensemble for every stimulation step, plus the mean across steps.
+        its presynaptic ensemble for every stimulation step, plus the mean across steps
+        and the value at the stimulation step closest to the middle of the mf range.
         Results are written to ``output_path`` (plv.json).
         """
         if MPI.get_rank() != 0:
@@ -350,6 +365,10 @@ class SNNSimulate_forMFM:
             return None
         rng = np.random.default_rng(seed)
         pop_spikes = self._load_pop_spikes(ignored_ct)
+
+        # stimulation step closest to the middle of the mf_stims range
+        mid_rate = (min(self.mf_stims) + max(self.mf_stims)) / 2.0
+        mid_freq = min((f for f, _, _ in self.windows), key=lambda f: abs(f - mid_rate))
 
         results = {}
         for conn in connections:
@@ -369,8 +388,14 @@ class SNNSimulate_forMFM:
             per_freq = {}
             for freq, start, stop in self.windows:
                 phases = self._presyn_phases(
-                    pop_spikes, cs.pre_type_name, pre_ids, start, stop,
-                    dt, kernel_sigma, min_spikes,
+                    pop_spikes,
+                    cs.pre_type_name,
+                    pre_ids,
+                    start,
+                    stop,
+                    dt,
+                    kernel_sigma,
+                    min_spikes,
                 )
                 per_freq[f"{freq:g}"] = self._ensemble_plv(phases)
 
@@ -382,6 +407,7 @@ class SNNSimulate_forMFM:
                 "n_pre": int(len(pre_ids)),
                 "plv_per_frequency": per_freq,
                 "plv_mean": float(np.mean(valid)) if valid else np.nan,
+                "plv_mid": per_freq[f"{mid_freq:g}"],
             }
 
         with open(output_path, "w") as f:
@@ -391,17 +417,28 @@ class SNNSimulate_forMFM:
 
 
 class SNNSimulate_forValidation(SNNSimulate_forMFM):
-    def __init__(self, protocol, config_path, scaffold_path, rate,
-                 tf_json=None, output_path=None,
-                 stim_duration=1000., transient=1000., **protocol_params):
+    def __init__(
+        self,
+        protocol,
+        config_path,
+        scaffold_path,
+        rate,
+        tf_json=None,
+        output_path=None,
+        stim_duration=1000.0,
+        transient=1000.0,
+        **protocol_params,
+    ):
         if protocol not in PROTOCOLS:
-            raise ValueError(
-                f"protocol must be one of {sorted(PROTOCOLS)}, got {protocol!r}"
-            )
+            raise ValueError(f"protocol must be one of {sorted(PROTOCOLS)}, got {protocol!r}")
         super().__init__(
-            mf_stims=[rate], config_path=config_path, scaffold_path=scaffold_path,
-            tf_json=tf_json, output_path=output_path,
-            stim_duration=stim_duration, transient=transient,
+            mf_stims=[rate],
+            config_path=config_path,
+            scaffold_path=scaffold_path,
+            tf_json=tf_json,
+            output_path=output_path,
+            stim_duration=stim_duration,
+            transient=transient,
         )
         self.protocol = protocol
         self.rate = float(rate)
@@ -410,8 +447,7 @@ class SNNSimulate_forValidation(SNNSimulate_forMFM):
         unknown = set(protocol_params) - set(allowed)
         if unknown:
             raise ValueError(
-                f"{protocol!r} accepts only {sorted(allowed)}, "
-                f"got unexpected {sorted(unknown)}"
+                f"{protocol!r} accepts only {sorted(allowed)}, " f"got unexpected {sorted(unknown)}"
             )
         self.protocol_params = {}
         for name, default in allowed.items():

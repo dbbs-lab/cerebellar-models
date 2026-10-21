@@ -21,9 +21,7 @@ def effective_Vthre(Y, muV, sV, TvN, Gl, Cm, alpha):
 
 def threshold_func(muV, sV, TvN, muGn, *P):
     """
-    Phenomenological threshold in the fluctuation moments (Zerlaut/EITN form).
-    The number of coefficients sets the order: 5 -> first order (muV, sV, TvN,
-    log(muGn)); up to 11 -> second order with the quadratic and cross terms.
+    Phenomenological threshold in the fluctuation moments.
     """
     muV0, DmuV0 = -60e-3, 10e-3
     sV0, DsV0 = 4e-3, 6e-3
@@ -31,19 +29,15 @@ def threshold_func(muV, sV, TvN, muGn, *P):
     v = (muV - muV0) / DmuV0
     s = (sV - sV0) / DsV0
     t = (TvN - TvN0) / DTvN0
-    # canonical basis: [1, v, s, t, log(muGn), v², s², t², v·s, v·t, s·t]
-    basis = [1.0, v, s, t, np.log(muGn), v * v, s * s, t * t, v * s, v * t, s * t]
-    if len(P) > len(basis):
-        raise ValueError(f"threshold_func takes at most {len(basis)} coefficients, got {len(P)}")
+    basis = [1.0, v, s, t, np.log(muGn)]
     return sum(P[k] * basis[k] for k in range(len(P)))
 
 
-def compute_statistics_eglif(fe, fi, XX, params):
+def compute_statistics_eglif(fe, fi, XX, params, use_plv=True):
     """
-    Fluctuation moments (muV, sigmaV, tauV) from shot-noise theory for a TF with
-    ``len(params["exc"])`` excitatory and ``len(params["inh"])`` inhibitory
-    channels. ``fe`` / ``fi`` are lists of rates aligned with the respective
-    channel lists (one entry per channel); ``XX`` is the adaptation variable.
+    Fluctuation moments (muV, sigmaV, tauV).
+    If ``use_plv`` is True each channel's mean conductance ``muG`` is scaled by its
+    phase-locking value ``c["plv"]`` (defaults to 1.0 when a channel has no PLV).
     """
     exc, inh = params["exc"], params["inh"]
     Gl, Cm, El = params["Gl"], params["Cm"], params["El"]
@@ -52,8 +46,10 @@ def compute_statistics_eglif(fe, fi, XX, params):
     if len(fi) != len(inh):
         raise ValueError(f"expected {len(inh)} inhibitory rates, got {len(fi)}")
 
-    muGe = [c["Q"] * c["K"] * c["Te"] * f for c, f in zip(exc, fe)]
-    muGi = [c["Q"] * c["K"] * c["Ti"] * f for c, f in zip(inh, fi)]
+    pe = [c.get("plv", 1.0) if use_plv else 1.0 for c in exc]
+    pi = [c.get("plv", 1.0) if use_plv else 1.0 for c in inh]
+    muGe = [c["Q"] * c["K"] * c["Te"] * f * p for c, f, p in zip(exc, fe, pe)]
+    muGi = [c["Q"] * c["K"] * c["Ti"] * f * p for c, f, p in zip(inh, fi, pi)]
     muG = Gl + sum(muGe) + sum(muGi)  # total input conductance
     muV = (
         np.e
@@ -81,9 +77,9 @@ def compute_statistics_eglif(fe, fi, XX, params):
     return muV, sV + 1e-20, muGn, TvN
 
 
-def analytical_tf_rate(fe, fi, XX, alpha, params, P):
+def analytical_tf_rate(fe, fi, XX, alpha, params, P, use_plv=True):
     """Analytical TF output rate for excitatory rate(s) ``fe`` and inhibitory rate(s) ``fi``."""
-    muV, sV, muGn, TvN = compute_statistics_eglif(fe, fi, XX, params)
+    muV, sV, muGn, TvN = compute_statistics_eglif(fe, fi, XX, params, use_plv=use_plv)
     return erfc_func(
         muV, sV, TvN, threshold_func(muV, sV, TvN, muGn, *P), params["Gl"], params["Cm"], alpha
     )
@@ -201,7 +197,19 @@ class AnalyticalTransferFunction:
     excitatory labels first, the inhibitory labels last.
     """
 
-    def __init__(self, cell_name, params, alpha, P, tags, freq_axes=None, mse=None):
+    def __init__(
+        self,
+        cell_name,
+        params,
+        alpha,
+        P,
+        tags,
+        freq_axes=None,
+        mse=None,
+        label_tags=None,
+        conn_weights=None,
+        use_plv=True,
+    ):
         self.cell_name = cell_name
         self.params = params
         self.alpha = float(alpha)
@@ -215,6 +223,32 @@ class AnalyticalTransferFunction:
             )
         self.freq_axes = None if freq_axes is None else [np.asarray(a) for a in freq_axes]
         self.mse = None if mse is None else float(mse)
+        self.label_tags = dict(label_tags) if label_tags else {}
+        self.conn_weights = dict(conn_weights) if conn_weights else {}
+        self.use_plv = use_plv
+
+    def load_plv(self, plv_path, metric="plv_mid", default=1.0):
+        with open(plv_path) as f:
+            plv = json.load(f)
+
+        def _value(entry):
+            if metric in ("plv_mid", "plv_mean"):
+                return entry.get(metric, np.nan)
+            return entry.get("plv_per_frequency", {}).get(metric, np.nan)
+
+        for tag, chan in zip(self.tags, self.params["exc"] + self.params["inh"]):
+            pairs = [
+                (_value(plv[t]), self.conn_weights.get(t, 1.0))
+                for t in self.label_tags.get(tag, [])
+                if t in plv
+            ]
+            pairs = [(v, w) for v, w in pairs if v is not None and not np.isnan(v)]
+            wsum = sum(w for _, w in pairs)
+            if pairs and wsum > 0:
+                chan["plv"] = float(sum(v * w for v, w in pairs) / wsum)
+            else:
+                chan["plv"] = default
+        return self
 
     @property
     def exc_tags(self):
@@ -225,24 +259,16 @@ class AnalyticalTransferFunction:
         return self.tags[self.n_exc :]
 
     def evaluate(self, *rates):
-        """
-        Analytical output rate. Call with the excitatory rate(s) first, the
-        inhibitory rate(s) next and an optional adaptation ``w`` last, e.g.
-        ``tf(fe, fi)`` / ``tf(fe, fi, w)`` for a 1-exc/1-inh TF, or
-        ``tf(fe1, fe2, fi, w)`` for the two-excitatory Golgi TF.
-        """
         n = self.n_exc + self.n_inh
         if len(rates) == n:
             w = 0.0
         elif len(rates) == n + 1:
             w = rates[n]
         else:
-            raise TypeError(
-                f"{self.cell_name} TF takes {n} rates (+optional w), got {len(rates)}"
-            )
+            raise TypeError(f"{self.cell_name} TF takes {n} rates (+optional w), got {len(rates)}")
         fe = list(rates[: self.n_exc])
         fi = list(rates[self.n_exc : n])
-        return analytical_tf_rate(fe, fi, w, self.alpha, self.params, self.P)
+        return analytical_tf_rate(fe, fi, w, self.alpha, self.params, self.P, use_plv=self.use_plv)
 
     __call__ = evaluate
 
@@ -268,6 +294,9 @@ class AnalyticalTransferFunction:
             d["tags"],
             freq_axes=d.get("freq_axes"),
             mse=d.get("mse"),
+            label_tags=d.get("label_tags"),
+            conn_weights=d.get("conn_weights"),
+            use_plv=d.get("use_plv", True),
         )
 
     def save(self, output_dir="output_analytical_TFs"):
@@ -306,6 +335,9 @@ class AnalyticalTransferFunction:
             "tags": self.tags,
             "freq_axes": None if self.freq_axes is None else [a.tolist() for a in self.freq_axes],
             "mse": self.mse,
+            "label_tags": self.label_tags,
+            "conn_weights": self.conn_weights,
+            "use_plv": self.use_plv,
         }
         with open(path, "w") as f:
             json.dump(d, f, indent=2)
@@ -484,11 +516,15 @@ class AnalyticalTransferFunctionFitting:
 
         # group connections by label (see class docstring for the Q/K rule)
         groups = {}
+        self.label_tags = {}
+        self.conn_K = {}  # per-connection convergence K, used to weight the per-connection PLV
         for tag, info in cell_conns.items():
             label = info["label"]
+            self.label_tags.setdefault(label, []).append(tag)
             syn = conn_models[tag]["synapses"][0]
             receptor = int(syn.get("receptor_type", 1))
             K = self._convergences[tag]
+            self.conn_K[tag] = K
             spp = self._synapses_per_pair.get(tag, 1.0)
             Q = float(syn["weight"]) * spp * 1e-9  # nS -> S
             pre = connectivity.get(tag, {}).get("presynaptic", {}).get("cell_types", [tag])
@@ -554,6 +590,8 @@ class AnalyticalTransferFunctionFitting:
             self.exc_labels + self.inh_labels,
             freq_axes=self.Fe_axes + self.Fi_axes,
             mse=mse,
+            label_tags=self.label_tags,
+            conn_weights=self.conn_K,
         )
 
     # -- fitting ------------------------------------------------------------ #
