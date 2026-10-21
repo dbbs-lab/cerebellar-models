@@ -1,7 +1,3 @@
-"""
-Semi-analytical MFM transfer functions module.
-"""
-
 import json
 import os
 
@@ -11,13 +7,6 @@ import scipy.special as special
 import yaml
 from matplotlib.colors import LinearSegmentedColormap, Normalize
 from scipy.optimize import minimize
-
-# order expected by compute_statistics_eglif
-_PSEQ_KEYS = ("Qe", "Te", "Ee", "Qi", "Ti", "Ei", "Gl", "Cm", "El", "Ke", "Ki")
-
-
-def pseq_params_eglif(p):
-    return tuple(p[k] for k in _PSEQ_KEYS)
 
 
 def erfc_func(muV, sV, TvN, Vthre, Gl, Cm, alpha):
@@ -31,57 +20,78 @@ def effective_Vthre(Y, muV, sV, TvN, Gl, Cm, alpha):
 
 
 def threshold_func(muV, sV, TvN, muGn, *P):
-    """Phenomenological threshold in the fluctuation moments.
-
-    1st order: linear in (muV, sV, TvN) plus a log(muGn) term (EITN notebook
-    form), i.e. ``len(P) == 5``.
+    """
+    Phenomenological threshold in the fluctuation moments (Zerlaut/EITN form).
+    The number of coefficients sets the order: 5 -> first order (muV, sV, TvN,
+    log(muGn)); up to 11 -> second order with the quadratic and cross terms.
     """
     muV0, DmuV0 = -60e-3, 10e-3
     sV0, DsV0 = 4e-3, 6e-3
     TvN0, DTvN0 = 0.5, 1.0
-    dmu = (muV - muV0) / DmuV0
-    dsig = (sV - sV0) / DsV0
-    dtau = (TvN - TvN0) / DTvN0
-    P0, P1, P2, P3, P4 = P
-    return P0 + P1 * dmu + P2 * dsig + P3 * dtau + P4 * np.log(muGn)
+    v = (muV - muV0) / DmuV0
+    s = (sV - sV0) / DsV0
+    t = (TvN - TvN0) / DTvN0
+    # canonical basis: [1, v, s, t, log(muGn), v², s², t², v·s, v·t, s·t]
+    basis = [1.0, v, s, t, np.log(muGn), v * v, s * s, t * t, v * s, v * t, s * t]
+    if len(P) > len(basis):
+        raise ValueError(f"threshold_func takes at most {len(basis)} coefficients, got {len(P)}")
+    return sum(P[k] * basis[k] for k in range(len(P)))
 
 
-def compute_statistics_eglif(Fe, Fi, XX, Qe, Te, Ee, Qi, Ti, Ei, Gl, Cm, El, Ke, Ki):
+def compute_statistics_eglif(fe, fi, XX, params):
     """
-    Fluctuation moments (muV, sigmaV, tauV) from shot-noise theory.
-    XX is the adaptation variable (disabled, XX = 0).
+    Fluctuation moments (muV, sigmaV, tauV) from shot-noise theory for a TF with
+    ``len(params["exc"])`` excitatory and ``len(params["inh"])`` inhibitory
+    channels. ``fe`` / ``fi`` are lists of rates aligned with the respective
+    channel lists (one entry per channel); ``XX`` is the adaptation variable.
     """
-    fe, fi = Fe, Fi
-    muGe, muGi = Qe * Ke * Te * fe, Qi * Ki * Ti * fi  # population conductances
-    muG = Gl + muGe + muGi  # total input conductance
-    muV = (np.e * (muGe * Ee + muGi * Ei + Gl * El) - XX) / muG
+    exc, inh = params["exc"], params["inh"]
+    Gl, Cm, El = params["Gl"], params["Cm"], params["El"]
+    if len(fe) != len(exc):
+        raise ValueError(f"expected {len(exc)} excitatory rates, got {len(fe)}")
+    if len(fi) != len(inh):
+        raise ValueError(f"expected {len(inh)} inhibitory rates, got {len(fi)}")
+
+    muGe = [c["Q"] * c["K"] * c["Te"] * f for c, f in zip(exc, fe)]
+    muGi = [c["Q"] * c["K"] * c["Ti"] * f for c, f in zip(inh, fi)]
+    muG = Gl + sum(muGe) + sum(muGi)  # total input conductance
+    muV = (
+        np.e
+        * (
+            sum(g * c["Ee"] for g, c in zip(muGe, exc))
+            + sum(g * c["Ei"] for g, c in zip(muGi, inh))
+            + Gl * El
+        )
+        - XX
+    ) / muG
     muGn, Tm = muG / Gl, Cm / muG
-    Ue, Ui = Qe / muG * (Ee - muV), Qi / muG * (Ei - muV)
-    sVe = (2 * Tm + Te) * ((np.e * Ue * Te) / (2 * (Te + Tm))) ** 2 * Ke * fe
-    sVi = (2 * Tm + Ti) * ((np.e * Ui * Ti) / (2 * (Ti + Tm))) ** 2 * Ki * fi
-    sV = np.sqrt(sVe + sVi)
-    fe, fi = fe + 1e-9, fi + 1e-9  # avoid division by zero
-    Tv_num = Ke * fe * Ue**2 * Te**2 * np.e**2 + Ki * fi * Ui**2 * Ti**2 * np.e**2
+
+    sV2, Tv_num = 0.0, 0.0
+    for c, f in zip(exc, fe):
+        U, Te = c["Q"] / muG * (c["Ee"] - muV), c["Te"]
+        sV2 = sV2 + (2 * Tm + Te) * ((np.e * U * Te) / (2 * (Te + Tm))) ** 2 * c["K"] * f
+        Tv_num = Tv_num + c["K"] * (f + 1e-9) * U**2 * Te**2 * np.e**2
+    for c, f in zip(inh, fi):
+        U, Ti = c["Q"] / muG * (c["Ei"] - muV), c["Ti"]
+        sV2 = sV2 + (2 * Tm + Ti) * ((np.e * U * Ti) / (2 * (Ti + Tm))) ** 2 * c["K"] * f
+        Tv_num = Tv_num + c["K"] * (f + 1e-9) * U**2 * Ti**2 * np.e**2
+    sV = np.sqrt(sV2)
     Tv = 0.5 * Tv_num / ((sV + 1e-20) ** 2)
     TvN = Tv * Gl / Cm
-    return muGe, muGi, muG, muV, sV + 1e-20, muGn, TvN, Tv
+    return muV, sV + 1e-20, muGn, TvN
 
 
 def analytical_tf_rate(fe, fi, XX, alpha, params, P):
-    """Analytical TF output rate for excitatory rate fe and inhibitory rate fi."""
-    _, _, _, muV, sV, muGn, TvN, _ = compute_statistics_eglif(
-        fe, fi, XX, *pseq_params_eglif(params)
-    )
+    """Analytical TF output rate for excitatory rate(s) ``fe`` and inhibitory rate(s) ``fi``."""
+    muV, sV, muGn, TvN = compute_statistics_eglif(fe, fi, XX, params)
     return erfc_func(
         muV, sV, TvN, threshold_func(muV, sV, TvN, muGn, *P), params["Gl"], params["Cm"], alpha
     )
 
 
-def fit_two_step(Fout, Fe_eff, fiSim, w, params, alpha, maxiter=50000, verbose=False):
+def fit_two_step(Fout, fe, fi, w, params, alpha, maxiter=50000, verbose=False):
     """Step 1: fit in threshold space; step 2: fit in rate space. Returns (P, MSE)."""
-    _, _, _, muV, sV, muGn, TvN, _ = compute_statistics_eglif(
-        Fe_eff, fiSim, w, *pseq_params_eglif(params)
-    )
+    muV, sV, muGn, TvN = compute_statistics_eglif(fe, fi, w, params)
 
     i = np.where((Fout > 0.0) & (Fout < Fout.max()))
     Vth = effective_Vthre(Fout[i], muV[i], sV[i], TvN[i], params["Gl"], params["Cm"], alpha)
@@ -96,7 +106,7 @@ def fit_two_step(Fout, Fe_eff, fiSim, w, params, alpha, maxiter=50000, verbose=F
     p0[0] = -50e-3
     P = minimize(res1, p0).x
 
-    res2 = lambda p: np.mean((Fout - analytical_tf_rate(Fe_eff, fiSim, w, alpha, params, p)) ** 2)
+    res2 = lambda p: np.mean((Fout - analytical_tf_rate(fe, fi, w, alpha, params, p)) ** 2)
     r = minimize(
         res2,
         P,
@@ -109,13 +119,13 @@ def fit_two_step(Fout, Fe_eff, fiSim, w, params, alpha, maxiter=50000, verbose=F
     return r.x, r.fun
 
 
-def fit_alpha_and_P(Fout, Fe_eff, fiSim, w, params, alpha0, P0):
+def fit_alpha_and_P(Fout, fe, fi, w, params, alpha0, P0):
     """Joint refinement of (alpha, P) in rate space, from a starting point."""
 
     def obj(x):
         if x[0] <= 0:
             return np.inf
-        return np.mean((Fout - analytical_tf_rate(Fe_eff, fiSim, w, x[0], params, x[1:])) ** 2)
+        return np.mean((Fout - analytical_tf_rate(fe, fi, w, x[0], params, x[1:])) ** 2)
 
     r = minimize(
         obj,
@@ -126,14 +136,24 @@ def fit_alpha_and_P(Fout, Fe_eff, fiSim, w, params, alpha0, P0):
     return r.x[0], r.x[1:], r.fun
 
 
-def nest_to_mf(constants, syn, exc_receptor=1, inh_receptor=2, name="cell"):
+def nest_to_mf(constants, exc_specs, inh_specs, name="cell"):
     """
     Convert NEST-unit E-GLIF ``constants`` (ms, mV, pF, pA, nS/ms) to the SI
-    dictionary used by the MF formulas. ``syn`` carries the network quantities
-    (Qe, Qi in S; Ke, Ki in-degrees); ``exc_receptor`` / ``inh_receptor`` select
-    which ``tau_syn{r}`` / ``E_rev{r}`` are the excitatory / inhibitory inputs.
+    parameter dictionary used by the MF formulas. ``exc_specs`` / ``inh_specs``
+    are lists of channels, each a dict with ``Q`` (S), ``K`` (in-degree) and
+    ``receptor`` (the NEST ``tau_syn{r}`` / ``E_rev{r}`` that channel uses).
     """
     ms, mV, pF, pA = 1e-3, 1e-3, 1e-12, 1e-12
+
+    def channel(spec, t_key, e_key):
+        r = spec["receptor"]
+        return {
+            "Q": spec["Q"],
+            "K": spec["K"],
+            t_key: constants[f"tau_syn{r}"] * ms,
+            e_key: constants[f"E_rev{r}"] * mV,
+        }
+
     out = {
         "name": name,
         "N": 1,
@@ -146,16 +166,13 @@ def nest_to_mf(constants, syn, exc_receptor=1, inh_receptor=2, name="cell"):
         "A1": constants["A1"] * pA,
         "A2": constants["A2"] * pA,
         "I_e": constants["I_e"] * pA,
-        "k_1": constants["k_1"] / ms,  # 1/ms -> 1/s
+        "k_1": constants["k_1"] / ms,
         "k_2": constants["k_2"] / ms,
-        "k_adap": constants["k_adap"] * 1e-9 / ms,  # nS/ms -> S/s
-        "Te": constants[f"tau_syn{exc_receptor}"] * ms,
-        "Ee": constants[f"E_rev{exc_receptor}"] * mV,
-        "Ti": constants[f"tau_syn{inh_receptor}"] * ms,
-        "Ei": constants[f"E_rev{inh_receptor}"] * mV,
+        "k_adap": constants["k_adap"] * 1e-9 / ms,
+        "exc": [channel(s, "Te", "Ee") for s in exc_specs],
+        "inh": [channel(s, "Ti", "Ei") for s in inh_specs],
     }
     out["Gl"] = out["Cm"] / out["tau_m"]  # S
-    out.update(syn)
     return out
 
 
@@ -179,8 +196,9 @@ def _cell_cmap(cell_name):
 class AnalyticalTransferFunction:
     """
     Holds a fitted (or loaded) analytical TF: the gain ``alpha``, the threshold
-    coefficients ``P`` and the SI parameter set needed to evaluate it. Two
-    inputs only: an excitatory and an inhibitory presynaptic rate.
+    coefficients ``P`` and the SI parameter set needed to evaluate it. The TF
+    has ``n_exc`` excitatory and ``n_inh`` inhibitory inputs; ``tags`` lists the
+    excitatory labels first, the inhibitory labels last.
     """
 
     def __init__(self, cell_name, params, alpha, P, tags, freq_axes=None, mse=None):
@@ -188,24 +206,53 @@ class AnalyticalTransferFunction:
         self.params = params
         self.alpha = float(alpha)
         self.P = np.asarray(P, dtype=float)
-        self.tags = list(tags)  # [exc_label, inh_label]
+        self.tags = list(tags)  # [exc labels..., inh labels...]
+        self.n_exc = len(self.params["exc"])
+        self.n_inh = len(self.params["inh"])
+        if len(self.tags) != self.n_exc + self.n_inh:
+            raise ValueError(
+                f"tags {self.tags} inconsistent with {self.n_exc} exc + {self.n_inh} inh channels"
+            )
         self.freq_axes = None if freq_axes is None else [np.asarray(a) for a in freq_axes]
         self.mse = None if mse is None else float(mse)
 
-    def evaluate(self, fe, fi, w=0.0):
-        """Analytical output rate at excitatory rate ``fe`` and inhibitory rate ``fi``."""
+    @property
+    def exc_tags(self):
+        return self.tags[: self.n_exc]
+
+    @property
+    def inh_tags(self):
+        return self.tags[self.n_exc :]
+
+    def evaluate(self, *rates):
+        """
+        Analytical output rate. Call with the excitatory rate(s) first, the
+        inhibitory rate(s) next and an optional adaptation ``w`` last, e.g.
+        ``tf(fe, fi)`` / ``tf(fe, fi, w)`` for a 1-exc/1-inh TF, or
+        ``tf(fe1, fe2, fi, w)`` for the two-excitatory Golgi TF.
+        """
+        n = self.n_exc + self.n_inh
+        if len(rates) == n:
+            w = 0.0
+        elif len(rates) == n + 1:
+            w = rates[n]
+        else:
+            raise TypeError(
+                f"{self.cell_name} TF takes {n} rates (+optional w), got {len(rates)}"
+            )
+        fe = list(rates[: self.n_exc])
+        fi = list(rates[self.n_exc : n])
         return analytical_tf_rate(fe, fi, w, self.alpha, self.params, self.P)
 
     __call__ = evaluate
 
     def evaluate_on_grid(self, freq_axes=None):
-        """Evaluate on the (exc, inh) grid; returns an [inh, exc] array."""
+        """Evaluate on the stored (exc..., inh...) grid; returns an array in tags order."""
         axes = freq_axes if freq_axes is not None else self.freq_axes
         if axes is None:
             raise RuntimeError("No freq_axes available; pass one explicitly.")
-        fe_ax, fi_ax = axes
-        FI, FE = np.meshgrid(np.asarray(fi_ax), np.asarray(fe_ax), indexing="ij")
-        return self.evaluate(FE, FI)
+        grids = np.meshgrid(*[np.asarray(a) for a in axes], indexing="ij")
+        return self.evaluate(*grids)
 
     @classmethod
     def load(cls, cell_name, output_dir="output_analytical_TFs"):
@@ -226,13 +273,33 @@ class AnalyticalTransferFunction:
     def save(self, output_dir="output_analytical_TFs"):
         os.makedirs(output_dir, exist_ok=True)
         path = os.path.join(output_dir, f"analyticalTF_{self.cell_name}.json")
-        params = {k: (v.item() if isinstance(v, np.generic) else v) for k, v in self.params.items()}
+
+        def _clean(v):
+            return v.item() if isinstance(v, np.generic) else v
+
+        def _clean_channels(channels):
+            return [{k: _clean(v) for k, v in c.items()} for c in channels]
+
+        params = {}
+        for k, v in self.params.items():
+            if k in ("exc", "inh"):
+                params[k] = _clean_channels(v)
+            else:
+                params[k] = _clean(v)
+
+        syn = {
+            tag: {"role": "exc", "Q_nS": c["Q"] * 1e9, "K": c["K"]}
+            for tag, c in zip(self.exc_tags, self.params["exc"])
+        }
+        syn.update(
+            {
+                tag: {"role": "inh", "Q_nS": c["Q"] * 1e9, "K": c["K"]}
+                for tag, c in zip(self.inh_tags, self.params["inh"])
+            }
+        )
         d = {
             "cell_name": self.cell_name,
-            "synaptic_inputs": {
-                self.tags[0]: {"role": "exc", "Q_nS": params["Qe"] * 1e9, "K": params["Ke"]},
-                self.tags[1]: {"role": "inh", "Q_nS": params["Qi"] * 1e9, "K": params["Ki"]},
-            },
+            "synaptic_inputs": syn,
             "params": params,
             "alpha": self.alpha,
             "P": self.P.tolist(),
@@ -246,9 +313,10 @@ class AnalyticalTransferFunction:
         return path
 
     def metrics(self, numerical_mean):
-        """RMSE / MAE / max|err| / R² of the analytical TF against a numerical grid."""
+        """RMSE / MAE / max|err| / R² of the analytical TF against a numerical grid (tags order)."""
         an = self.evaluate_on_grid()
-        r = np.asarray(numerical_mean) - an
+        numerical_mean = np.asarray(numerical_mean)
+        r = numerical_mean - an
         return {
             "RMSE": float(np.sqrt((r**2).mean())),
             "MAE": float(np.abs(r).mean()),
@@ -258,20 +326,22 @@ class AnalyticalTransferFunction:
 
     def summary(self):
         print(f"Cell    : {self.cell_name.replace('_', ' ')}")
-        print(f"Inputs  : exc={self.tags[0]}, inh={self.tags[1]}")
+        print(f"Inputs  : exc={self.exc_tags}, inh={self.inh_tags}")
         print(f"alpha   : {self.alpha:.3f}")
         print("P [mV]  : " + ", ".join(f"P{i}={p * 1e3:.2f}" for i, p in enumerate(self.P)))
         if self.freq_axes is not None:
-            fe, fi = self.freq_axes
-            print(
-                f"Domain  : {self.tags[0]} [{fe[0]:.1f}–{fe[-1]:.1f} Hz], "
-                f"{self.tags[1]} [{fi[0]:.1f}–{fi[-1]:.1f} Hz]"
-            )
+            for tag, ax in zip(self.tags, self.freq_axes):
+                print(f"Domain  : {tag} [{ax[0]:.1f}–{ax[-1]:.1f} Hz]")
         if self.mse is not None:
             print(f"Fit MSE : {self.mse:.3f} Hz^2  (RMSE {np.sqrt(self.mse):.2f} Hz)")
 
     def plot_tf(self, numerical_tf=None, save=True, n=60, output_dir="."):
-        """3D surface of the analytical TF, optionally with the numerical dots."""
+        """3D surface of the analytical TF (single excitatory + single inhibitory only)."""
+        if self.n_exc != 1 or self.n_inh != 1:
+            raise NotImplementedError(
+                "plot_tf surface is only defined for 1-exc/1-inh TFs; use the "
+                "numerical 3D scatter for TFs with more inputs (e.g. the Golgi cell)."
+            )
         if self.freq_axes is None:
             raise RuntimeError("No freq_axes stored; cannot pick a plotting domain.")
         fe_ax, fi_ax = self.freq_axes
@@ -328,22 +398,6 @@ class AnalyticalTransferFunction:
 
 
 class AnalyticalTransferFunctionFitting:
-    """
-    Fits the analytical TF on a numerical template. Single-cell and network
-    parameters come from the BSB scaffold + circuit YAML (same sources as
-    ``NumericalTransferFunctionSimulator``) and are converted to SI units.
-
-    The two TF inputs (one excitatory, one inhibitory) are inferred from the
-    connections in ``tf_dict``: connections are grouped by label, each label's
-    receptor fixes its reversal potential, and the label with the higher
-    reversal is taken as excitatory. Multiple connections sharing a label are
-    aggregated into one (Q, K): Q is the arithmetic mean of the per-connection
-    quantal conductances (each weight scaled by its synapses-per-pair, since
-    synaptic time constants are shared within a receptor); K sums the in-degree
-    within a presynaptic population and averages across the distinct
-    populations fused into the label (which collapse to one mean cell in the
-    MFM), i.e. K = sum(convergences) / n_presynaptic_populations.
-    """
 
     def __init__(
         self,
@@ -359,7 +413,7 @@ class AnalyticalTransferFunctionFitting:
         self.numerical_tf = numerical_tf
 
         self._convergences, self._synapses_per_pair = self._scaffold_convergences(scaffold_path)
-        self.params, self.exc_label, self.inh_label = self._build_params(
+        self.params, self.exc_labels, self.inh_labels = self._build_params(
             yaml_path, tf_dict_path, cell_name
         )
         self._prepare_template()
@@ -428,11 +482,7 @@ class AnalyticalTransferFunctionFitting:
         connectivity = circuit.get("connectivity", {})
         cell_conns = tf_dict[cell_name]["connections"]
 
-        # group connections by label. K sums the in-degree within each
-        # presynaptic population but averages across the distinct populations
-        # fused into the label (in the MFM they collapse to one mean cell),
-        # i.e. K = sum(convergences) / n_presynaptic_populations. Q is the
-        # arithmetic mean of theanc per-connection quantal conductances.
+        # group connections by label (see class docstring for the Q/K rule)
         groups = {}
         for tag, info in cell_conns.items():
             label = info["label"]
@@ -449,46 +499,50 @@ class AnalyticalTransferFunctionFitting:
             g["Qs"].append(Q)
             g["pops"].update(pre)
 
-        if len(groups) != 2:
-            raise ValueError(
-                f"analytical TF needs exactly 2 input labels (exc, inh); "
-                f"{cell_name} has {sorted(groups)}"
-            )
-
         for g in groups.values():
             g["E_rev"] = constants[f"E_rev{g['receptor']}"]
             g["Q"] = float(np.mean(g["Qs"])) if g["Qs"] else 0.0
             g["K"] = g["K"] / max(len(g["pops"]), 1)
-        exc_label, inh_label = sorted(groups, key=lambda l: groups[l]["E_rev"], reverse=True)
 
-        syn = {
-            "Qe": groups[exc_label]["Q"],
-            "Ke": groups[exc_label]["K"],
-            "Qi": groups[inh_label]["Q"],
-            "Ki": groups[inh_label]["K"],
-        }
-        params = nest_to_mf(
-            constants,
-            syn,
-            exc_receptor=groups[exc_label]["receptor"],
-            inh_receptor=groups[inh_label]["receptor"],
-            name=cell_name,
-        )
-        return params, exc_label, inh_label
+        # excitatory = reversal above leak (depolarizing), inhibitory otherwise;
+        # order by reversal (descending) for a deterministic channel ordering
+        El = constants["E_L"]
+        labels = sorted(groups, key=lambda l: groups[l]["E_rev"], reverse=True)
+        exc_labels = [l for l in labels if groups[l]["E_rev"] > El]
+        inh_labels = [l for l in labels if groups[l]["E_rev"] <= El]
+        if not exc_labels or not inh_labels:
+            raise ValueError(
+                f"{cell_name}: expected both exc and inh inputs, got "
+                f"exc={exc_labels}, inh={inh_labels}"
+            )
+
+        def specs(lbls):
+            return [
+                {"Q": groups[l]["Q"], "K": groups[l]["K"], "receptor": groups[l]["receptor"]}
+                for l in lbls
+            ]
+
+        params = nest_to_mf(constants, specs(exc_labels), specs(inh_labels), name=cell_name)
+        return params, exc_labels, inh_labels
 
     def _prepare_template(self):
         ntf = self.numerical_tf
-        ie = ntf.tags.index(self.exc_label)
-        ii = ntf.tags.index(self.inh_label)
+        order = self.exc_labels + self.inh_labels
+        idx = [ntf.tags.index(l) for l in order]
         c = self.cut
-        self.Fe = ntf.freq_axes[ie][c:]
-        self.Fi = ntf.freq_axes[ii][c:]
-        # orient to [exc, inh], drop the cut bins, store as [inh, exc]
-        mean = np.moveaxis(ntf.tf_mean, (ie, ii), (0, 1))[c:, c:]
-        std = np.moveaxis(ntf.tf_std, (ie, ii), (0, 1))[c:, c:]
-        self.MEAN = mean.T
-        self.SD = std.T
-        self.fiSim, self.Fe_eff = np.meshgrid(self.Fi, self.Fe, indexing="ij")
+        axes = [ntf.freq_axes[k][c:] for k in idx]
+        n_exc = len(self.exc_labels)
+        self.Fe_axes = axes[:n_exc]
+        self.Fi_axes = axes[n_exc:]
+
+        sl = tuple(slice(c, None) for _ in idx)
+        # reorder numerical axes to [exc..., inh...], drop the cut bins
+        self.MEAN = np.moveaxis(ntf.tf_mean, idx, range(len(idx)))[sl]
+        self.SD = np.moveaxis(ntf.tf_std, idx, range(len(idx)))[sl]
+
+        grids = np.meshgrid(*axes, indexing="ij")
+        self.fe_grids = grids[:n_exc]  # one per excitatory channel
+        self.fi_grids = grids[n_exc:]  # one per inhibitory channel
         self.w = np.zeros_like(self.MEAN)
 
     def _make_result(self, alpha, P, mse):
@@ -497,8 +551,8 @@ class AnalyticalTransferFunctionFitting:
             self.params,
             alpha,
             P,
-            [self.exc_label, self.inh_label],
-            freq_axes=[self.Fe, self.Fi],
+            self.exc_labels + self.inh_labels,
+            freq_axes=self.Fe_axes + self.Fi_axes,
             mse=mse,
         )
 
@@ -508,8 +562,8 @@ class AnalyticalTransferFunctionFitting:
         """Two-step fit at a fixed gain ``alpha``. Returns an AnalyticalTransferFunction."""
         P, mse = fit_two_step(
             self.MEAN,
-            self.Fe_eff,
-            self.fiSim,
+            self.fe_grids,
+            self.fi_grids,
             self.w,
             self.params,
             alpha,
@@ -524,8 +578,8 @@ class AnalyticalTransferFunctionFitting:
         out = [
             fit_two_step(
                 self.MEAN,
-                self.Fe_eff,
-                self.fiSim,
+                self.fe_grids,
+                self.fi_grids,
                 self.w,
                 self.params,
                 a,
@@ -557,7 +611,13 @@ class AnalyticalTransferFunctionFitting:
 
         b = int(np.nanargmin(mse_fine))
         a_opt, P_opt, mse_opt = fit_alpha_and_P(
-            self.MEAN, self.Fe_eff, self.fiSim, self.w, self.params, alpha_fine[b], Ps[b]
+            self.MEAN,
+            self.fe_grids,
+            self.fi_grids,
+            self.w,
+            self.params,
+            alpha_fine[b],
+            Ps[b],
         )
         self._fit = self._make_result(a_opt, P_opt, mse_opt)
         if verbose:
@@ -572,26 +632,40 @@ class AnalyticalTransferFunctionFitting:
     # -- plotting ----------------------------------------------------------- #
 
     def plot_tf(self, save=True, output_dir="."):
-        """3D surface of the current fit on top of the numerical dots."""
+        """3D surface of the current fit on top of the numerical dots (1-exc/1-inh only)."""
         if self._fit is None:
             raise RuntimeError("Run fit() or optimize_alpha() first.")
         return self._fit.plot_tf(numerical_tf=self.numerical_tf, save=save, output_dir=output_dir)
 
     def plot_fit(self, save=True, output_dir="."):
-        """Sections at fixed inhibition: numerical (diamonds, ±SD) vs analytical (lines)."""
+        """
+        Sections at fixed (primary) inhibition: numerical (diamonds, ±SD) vs
+        analytical (lines). Any extra excitatory/inhibitory channels are held at
+        their mid-range value; the x axis is the first excitatory channel and the
+        colour the first inhibitory channel.
+        """
         if self._fit is None:
             raise RuntimeError("Run fit() or optimize_alpha() first.")
-        fe = np.linspace(self.Fe[0], self.Fe[-1], 200)
+        fe_ax = self.Fe_axes[0]
+        fi_ax = self.Fi_axes[0]
+        fe = np.linspace(fe_ax[0], fe_ax[-1], 200)
         cmap = plt.cm.viridis
-        n = len(self.Fi)
+        n = len(fi_ax)
+
+        # hold the non-plotted channels at their middle grid value
+        extra_exc = [ax[len(ax) // 2] for ax in self.Fe_axes[1:]]
+        extra_inh = [ax[len(ax) // 2] for ax in self.Fi_axes[1:]]
+        mid_exc = [len(ax) // 2 for ax in self.Fe_axes[1:]]
+        mid_inh = [len(ax) // 2 for ax in self.Fi_axes[1:]]
 
         fig, ax = plt.subplots(figsize=(6, 4.5))
-        for j, fi in enumerate(self.Fi):
+        for j, fi0 in enumerate(fi_ax):
             col = cmap(j / max(n - 1, 1))
+            sl = (slice(None), *mid_exc, j, *mid_inh)
             ax.errorbar(
-                self.Fe,
-                self.MEAN[j],
-                yerr=self.SD[j],
+                fe_ax,
+                self.MEAN[sl],
+                yerr=self.SD[sl],
                 color=col,
                 marker="D",
                 ms=4,
@@ -599,15 +673,15 @@ class AnalyticalTransferFunctionFitting:
                 elinewidth=1,
                 lw=0,
             )
-            ax.plot(fe, self._fit.evaluate(fe, fi), color=col)
+            ax.plot(fe, self._fit.evaluate(fe, *extra_exc, fi0, *extra_inh), color=col)
         m = self._fit.metrics(self.MEAN)
         ax.set_title(
             f"{self.numerical_tf.cell_name}   α = {self._fit.alpha:.2f}   RMSE = {m['RMSE']:.1f} Hz"
         )
-        ax.set_xlabel(f"{self.exc_label} [Hz]")
+        ax.set_xlabel(f"{self.exc_labels[0]} [Hz]")
         ax.set_ylabel(f"{self.numerical_tf.cell_name.replace('_', ' ')} [Hz]")
-        sm = plt.cm.ScalarMappable(cmap=cmap, norm=Normalize(self.Fi[0], self.Fi[-1]))
-        fig.colorbar(sm, ax=ax, label=f"{self.inh_label} [Hz]")
+        sm = plt.cm.ScalarMappable(cmap=cmap, norm=Normalize(fi_ax[0], fi_ax[-1]))
+        fig.colorbar(sm, ax=ax, label=f"{self.inh_labels[0]} [Hz]")
         fig.tight_layout()
 
         if save:
