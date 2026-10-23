@@ -7,20 +7,22 @@ import itertools
 
 import numpy as np
 from bsb import Chunk, ConnectionStrategy, InvertedRoI, config
+from bsb.connectivity.strategy import roi_key
 
 from cerebellar_models.connectome.presyn_dist_strat import PresynDistStrat
 
 
-def norm_exp_dist(size: int = 1, b: float = 2.0):
+def norm_exp_dist(rng: np.random.Generator, size: int = 1, b: float = 2.0):
     """
     Normalized exponential random generator for distance based selection
 
+    :param numpy.random.Generator rng: generator to draw from.
     :param int size: number of random to sample
     :param float b: strength of the exponential decay.
     :return: random numbers sampled
     :rtype: numpy.ndarray
     """
-    return (np.exp(-b * np.random.rand(size)) - np.exp(-b)) / (1 - np.exp(-b))
+    return (np.exp(-b * rng.random(size)) - np.exp(-b)) / (1 - np.exp(-b))
 
 
 class ConnectomeGlomerulus(InvertedRoI, ConnectionStrategy):
@@ -42,11 +44,25 @@ class ConnectomeGlomerulus(InvertedRoI, ConnectionStrategy):
                 pre_locs = np.full((n_glom, 3), -1, dtype=int)
                 post_locs = np.full((n_glom, 3), -1, dtype=int)
 
+                # Keyed on the strategy, the cell type pair and the chunks involved, so
+                # every rank draws the same connections for the same chunk pair.
+                rng = self.get_rng(
+                    key=(
+                        "connectivity",
+                        self.name,
+                        pre_ps.cell_type.name,
+                        post_ps.cell_type.name,
+                        roi_key(pre),
+                        roi_key(post),
+                    ),
+                )
                 # We connect each glomerulus to a presynaptic cell.
                 for j, glomerulus in enumerate(glomeruli_pos):
                     pre_ids = self.pre_selection(presyn_pos, glomerulus)
                     if len(pre_ids) > 0:
-                        pre_locs[j, 0] = pre_ids[int(np.floor(len(pre_ids) * norm_exp_dist()[0]))]
+                        pre_locs[j, 0] = pre_ids[
+                            int(np.floor(len(pre_ids) * norm_exp_dist(rng)[0]))
+                        ]
                     else:
                         # if there is no presyn within the box use the closest one
                         pre_locs[j, 0] = np.argmin(np.linalg.norm(presyn_pos - glomerulus, axis=1))

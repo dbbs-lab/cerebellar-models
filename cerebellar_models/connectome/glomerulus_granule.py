@@ -15,6 +15,7 @@ from bsb import (
     pool_cache,
     refs,
 )
+from bsb.connectivity.strategy import roi_key
 
 
 class TooFewGlomeruliClusters(ConnectivityError):
@@ -88,7 +89,7 @@ class ConnectomeGlomerulusGranule(InvertedRoI, ConnectionStrategy):
 
     def connect(self, pre, post):
         for post_ps in post.placement:
-            self._connect_type(pre, post_ps)
+            self._connect_type(pre, post_ps, roi_key(post))
 
     @pool_cache
     def load_connections(self):
@@ -136,7 +137,7 @@ class ConnectomeGlomerulusGranule(InvertedRoI, ConnectionStrategy):
 
         return unique_pres, clusters
 
-    def _connect_type(self, pre, post_ps):
+    def _connect_type(self, pre, post_ps, post_roi_key):
         gran_pos = post_ps.load_positions()
         gran_morphos = post_ps.load_morphologies().iter_morphologies(cache=True, hard_cache=True)
 
@@ -168,6 +169,11 @@ class ConnectomeGlomerulusGranule(InvertedRoI, ConnectionStrategy):
         post_locs = np.full((n_conn, 3), -1, dtype=int)
         selected_pre = np.full(n_conn, -1, dtype=int)
         ptr = 0
+        # Keyed on the strategy, the postsynaptic cell type and the chunks involved, so
+        # every rank draws the same clusters and dendrites for the same chunk pair.
+        rng = self.get_rng(
+            key=("connectivity", self.name, post_ps.cell_type.name, roi_key(pre), post_roi_key),
+        )
         for i, gr_pos, morpho in zip(itertools.count(), gran_pos, gran_morphos):
             # morpho should have enough dendrites to match convergence
             dendrites = morpho.get_branches()
@@ -178,9 +184,9 @@ class ConnectomeGlomerulusGranule(InvertedRoI, ConnectionStrategy):
 
             # Randomize the order of the clusters and dendrites
             cluster_idx = np.arange(0, len(unique_pre))
-            np.random.shuffle(cluster_idx)
+            rng.shuffle(cluster_idx)
             dendrites_idx = np.arange(0, len(dendrites))
-            np.random.shuffle(dendrites_idx)
+            rng.shuffle(dendrites_idx)
 
             # The following loop connects a glomerulus from each cluster to a grc dendrite
             # until the convergence rule is reached.
@@ -206,7 +212,7 @@ class ConnectomeGlomerulusGranule(InvertedRoI, ConnectionStrategy):
                         current_cluster += 1
                         continue
                     # Id of the glomerulus, randomly selected between the available ones
-                    rnd = np.random.randint(low=0, high=len(close_indices))
+                    rnd = rng.integers(low=0, high=len(close_indices))
                     id_glom = clusters[close_indices[rnd]]
                 else:
                     # If there are some free dendrites, connect them to the closest glomeruli,

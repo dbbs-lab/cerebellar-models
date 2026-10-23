@@ -3,7 +3,12 @@ import unittest
 from os.path import abspath, dirname, join
 
 import numpy as np
-from bsb import Scaffold, parse_configuration_content
+from bsb import (
+    ResultsError,
+    Scaffold,
+    get_simulation_adapter,
+    parse_configuration_content,
+)
 from bsb_test import NumpyTestCase, RandomStorageFixture
 from matplotlib import pyplot as plt
 
@@ -14,6 +19,7 @@ from cerebellar_models.analysis.spike_plots import (
     FrequencyPlot,
     ISIPlot,
     RasterPSTHPlot,
+    RunSimulationReport,
     SimResultsTable,
     SortedPSTH,
     SpikeCorrelationPlot,
@@ -32,6 +38,7 @@ class MiniCerebCircuitFixture(RandomStorageFixture, engine_name="hdf5", setup_cl
         nest_folder = "configurations/mouse/in-vitro/nest/"
         dict_cfg = {
             "components": ["cerebellar_models/nest_models/build_models.py"],
+            "rng": {"seed": 1234},
             "$import": {
                 "ref": "configurations/mouse/mouse_cerebellar_cortex.yaml#/",
                 "values": [
@@ -55,8 +62,8 @@ class MiniCerebCircuitFixture(RandomStorageFixture, engine_name="hdf5", setup_cl
                             "simulator",
                             "resolution",
                             "duration",
-                            "seed",
                             "cell_models",
+                            "after_simulation",
                         ],
                     },
                     "cell_models": {
@@ -120,7 +127,6 @@ class MiniCerebCircuitFixture(RandomStorageFixture, engine_name="hdf5", setup_cl
                             "resolution",
                             "duration",
                             "modules",
-                            "seed",
                             "cell_models",
                             "connection_models",
                             "devices",
@@ -150,9 +156,9 @@ class MiniCerebCircuitFixture(RandomStorageFixture, engine_name="hdf5", setup_cl
         cls.cfg.network.y = 66
         cls.cfg.network.z = 100
         cls.cfg.partitions.granular_layer.thickness = 40
-        cls.cfg.partitions.purkinje_layer.thickness = 10
-        cls.cfg.partitions.b_molecular_layer.thickness = 17
-        cls.cfg.partitions.t_molecular_layer.thickness = 33
+        cls.cfg.partitions.purkinje_layer.thickness = 15
+        cls.cfg.partitions.b_molecular_layer.thickness = 15
+        cls.cfg.partitions.t_molecular_layer.thickness = 30
         # make sure there are enough mfs.
         cls.cfg.cell_types.glomerulus.spatial.density = 0.00034
 
@@ -165,10 +171,18 @@ class ReportBasalSimCircuitFixture(MiniCerebCircuitFixture, engine_name="hdf5", 
     def setUpClass(cls):
         super().setUpClass()
         cls.simulation_duration = 1000.0
-        cls.scaffold.simulations["basal_activity"].duration = cls.simulation_duration
+        cls.basal_simulation = cls.scaffold.simulations["basal_activity"]
+        cls.basal_simulation.duration = cls.simulation_duration
         cls.scaffold.simulations["mf_stimulus"].duration = cls.simulation_duration
-        cls.simulation_results = cls.scaffold.run_simulation("basal_activity")
-        cls.simulation_results.write("test_sim_results.nio", "ow")
+        cls.basal_adapter = get_simulation_adapter(
+            cls.basal_simulation.simulator, comm=cls.scaffold._comm.get_communicator()
+        )
+        cls.streamed_nio_file = "test_sim_results.nio"
+        cls.hook_filename = cls.basal_simulation.after_simulation[
+            "print_simulation_report"
+        ].output_filename
+        cls.simulation_results = cls.basal_adapter.simulate(cls.basal_simulation)
+        cls.simulation_results[0].write(cls.streamed_nio_file, "ow")
         cls.simulationReport = SpikeSimulationReport(
             cls.scaffold,
             "basal_activity",
@@ -179,7 +193,8 @@ class ReportBasalSimCircuitFixture(MiniCerebCircuitFixture, engine_name="hdf5", 
     def tearDownClass(cls):
         super().tearDownClass()
         plt.close("all")
-        os.remove("test_sim_results.nio")
+        os.remove(cls.streamed_nio_file)
+        os.remove(cls.hook_filename)
 
 
 class TestSpikePlots(
@@ -206,10 +221,10 @@ class TestSpikePlots(
         with self.assertRaises(ValueError):
             SpikeSimulationReport(self.scaffold, "blabla", "./")
 
-        empty_report = SpikeSimulationReport(self.scaffold, "basal_activity", "./cerebellar_models")
-        self.assertEqual(len(empty_report.filt_spikes), 0)
-        self.assertEqual(empty_report.nb_neurons.size, 0)
-        self.assertEqual(empty_report.populations, [])
+        # A folder holding no matching results raises, rather than silently
+        # producing an empty report.
+        with self.assertRaises(ResultsError):
+            SpikeSimulationReport(self.scaffold, "basal_activity", "./cerebellar_models")
         with self.assertRaises(ValueError):
             self.simulationReport.time_from = -1
         with self.assertRaises(ValueError):
@@ -592,3 +607,38 @@ class TestSpikePlots(
         self.assertEqual(len(report.plots["legend"].get_ax().legend_.legend_handles), 6)
         self.assertTrue(filename in os.listdir())
         os.remove(filename)
+
+    def test_report_from_in_memory_result(self):
+        # Check report produced directly from simulation results (not file)
+        self.assertTrue(os.path.isfile(self.hook_filename))
+        self.assertGreater(os.path.getsize(self.hook_filename), 0)
+
+    def test_report_from_streamed_result(self):
+        # pretend simulation streamed results to an output filename:
+        # the hook must read spikes back from it instead of the in-memory block
+        streamed_report_filename = "test_streamed_report.pdf"
+        self.basal_simulation.after_simulation["print_simulation_report"].output_filename = (
+            streamed_report_filename
+        )
+        # pretend simulation was streamed to file
+        self.simulation_results[0].filename = self.streamed_nio_file
+
+        self.basal_adapter.run_after_simulation([self.basal_simulation], self.simulation_results)
+        self.assertTrue(os.path.isfile(streamed_report_filename))
+        self.assertGreater(os.path.getsize(streamed_report_filename), 0)
+        os.remove(streamed_report_filename)
+
+        self.basal_simulation.after_simulation["print_simulation_report"].output_filename = (
+            self.hook_filename
+        )
+        self.simulation_results[0].filename = None
+
+    def test_report_content_matches_manual_report(self):
+        # Cross-check the hook actually loaded real spiking data (rather than an empty
+        # report) by comparing against a BasicSimulationReport built directly from the
+        # same in-memory result.
+        manual_report = BasicSimulationReport(
+            self.scaffold, "basal_activity", result=self.simulation_results[0]
+        )
+        self.assertEqual(manual_report.populations, self.simulationReport.populations)
+        self.assertAll(manual_report.nb_neurons == self.simulationReport.nb_neurons)

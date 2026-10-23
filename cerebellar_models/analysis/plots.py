@@ -215,7 +215,13 @@ class ScaffoldPlot(Plot):
             if len(u_labels) > 1:
                 color = np.array(result[ct_name])
                 del result[ct_name]
-                for j, labels in enumerate(u_labels):
+                # Sorted by the resulting name, not by `get_unique_labels`'s own
+                # (unspecified) order: this must match the shade a label combination
+                # gets in SpikePlot.labelled_dict_colors, which sorts the same way
+                # but has no placement set to read an order from in the first place.
+                for j, labels in enumerate(
+                    sorted(u_labels, key=lambda labs: self.get_labelled_ct_name(ct_name, labs))
+                ):
                     result[self.get_labelled_ct_name(ct_name, labels)] = color * (
                         [np.power(2 / 3, j)] * 3 + [1.0]
                     )
@@ -250,7 +256,29 @@ class Legend(Plot):
         dict_plot["ncol"] = self.cols_legend
         dict_plot.update(kwargs)
         keys = [self.dict_abbreviations.get(k, k) for k in self.dict_colors.keys()]
-        self.get_ax().legend(patchs, keys, **dict_plot)
+        legend = self.get_ax().legend(patchs, keys, **dict_plot)
+        self._fit_to_legend(legend)
+
+    def _fit_to_legend(self, legend, pad: float = 0.1):
+        """
+        Grow the figure, if needed, so the legend fits entirely within it.
+
+        How much room a legend needs depends on the font size, the number of
+        columns and how long the labels are, not just how many there are, so a
+        size guessed from the label count alone (as ``fig_size`` typically is)
+        can fall short. This measures the legend's actual rendered size and
+        enlarges the figure to match, rather than trying to predict it upfront.
+        """
+        self.figure.canvas.draw()
+        renderer = self.figure.canvas.get_renderer()
+        bbox = legend.get_window_extent(renderer).transformed(
+            self.figure.dpi_scale_trans.inverted()
+        )
+        width, height = self.figure.get_size_inches()
+        self.figure.set_size_inches(
+            max(width, bbox.width + 2 * pad),
+            max(height, bbox.height + 2 * pad),
+        )
 
     def remove_ct(self, to_keep: List[str], to_ignore: List[str] = None):
         """

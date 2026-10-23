@@ -89,10 +89,14 @@ def _test_distance_to_glomerulus(self, nb_trials=50):
     self.cfg.network.chunk_size = self.chunk_size
     self.cfg.cell_types["test_cell"].spatial.count = 3
     self.cfg.placement.ch4_c25.positions = np.vstack((pos_1, pos_2, pos_3))
-    self.network = Scaffold(self.cfg, self.storage)
 
     sources = np.full(nb_trials, -1)
     for i in range(nb_trials):
+        # Connectivity now draws from the network's own configured randomness, keyed on
+        # the chunk pair rather than the global generator, so repeating the same network
+        # repeats the same draw. Give each trial its own root seed to sample independently.
+        self.cfg.rng = {"seed": i}
+        self.network = Scaffold(self.cfg, self.storage)
         self.network.compile(clear=True)
         cs = self.network.get_connectivity_set("x_to_glomerulus")
         cell_positions = self.network.get_placement_set("test_cell").load_positions()

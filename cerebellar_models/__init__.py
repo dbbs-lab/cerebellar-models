@@ -30,4 +30,7 @@ classmap = {
     "bsb.postprocessing.AfterConnectivityHook": {
         "struct_report": "cerebellar_models.analysis.structure_analysis.RunStructureReport",
     },
+    "bsb.simulation.postprocessing.AfterSimulationHook": {
+        "sim_report": "cerebellar_models.analysis.spike_plots.RunSimulationReport",
+    },
 }

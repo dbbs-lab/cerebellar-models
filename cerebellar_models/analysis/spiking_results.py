@@ -5,15 +5,22 @@ Elephant.
 
 from os import listdir
 from os.path import abspath, isdir, isfile, join
-from typing import List, Tuple
+from typing import Dict, List, Tuple
 
 import numpy as np
-from bsb import Scaffold
+from bsb import PlacementSet, ResultsError, ResultsMismatchError, Scaffold
+from bsb.simulation.results import (
+    NetworkRecording,
+    RecordedCell,
+    ResultsReader,
+    SimulationResult,
+    SimulationRun,
+    read_results,
+)
 from elephant.conversion import BinnedSpikeTrain
 from elephant.spike_train_correlation import correlation_coefficient
 from elephant.statistics import instantaneous_rate, isi
 from neo import SpikeTrain
-from neo import io as nio
 from quantities import ms
 
 from cerebellar_models.analysis.plots import ScaffoldPlot
@@ -31,29 +38,59 @@ class SpikingResults:
         simulation_name,
         time_from: float,
         time_to: float,
-        folder_nio: str,
-        ignored_ct: list[str],
+        folder_nio: str = None,
+        ignored_ct: list[str] = None,
+        result: SimulationResult = None,
     ):
         """
         :param scaffold: BSB scaffold
         :param simulation_name: name of the simulation
         :param time_from: start time of the analysis
         :param time_to: end time of the analysis
-        :param folder_nio: folder where the Neo results are stored
+        :param folder_nio: folder where the Neo results are stored. Takes priority
+            over ``result`` when both are given.
         :param ignored_ct: List of ignored cells names
+        :param result: BSB SimulationResult to load the spike trains from directly,
+            without going through a results file. Used as a fallback when
+            ``folder_nio`` is not given, e.g. no results file was written yet
+            (such as in an ``after_simulation`` hook run in-memory).
         """
+        if folder_nio is None and result is None:
+            raise ValueError("At least one of 'folder_nio' or 'result' must be provided.")
         self._scaffold = scaffold
         self._folder_nio = None  # will be initialized last
+        self._result = None  # will be initialized last
         self.simulation_name = simulation_name
-        self._time_from = time_from or 0
-        self.time_to = time_to or self.scaffold.simulations[self.simulation_name].duration
-        self._dt = self.scaffold.simulations[simulation_name].resolution
         self.ignored_ct = ignored_ct if ignored_ct is not None else ["glomerulus", "ubc_glomerulus"]
         """List of ignored cell type names"""
+        self._run: SimulationRun | None = None
+        self._recordings: List[List[NetworkRecording]] = []
         self._all_spikes = []
         self._nb_neurons = np.zeros(0, dtype=int)
         self._populations = []
-        self.folder_nio = folder_nio
+        # Label combinations actually used in a placement set, and the mask of the cells
+        # carrying each label, cached per cell type name so a population of many cells
+        # only computes them once.
+        self._label_combos: dict[str, tuple[list[set], dict[str, np.ndarray]]] = {}
+        # Placeholders, resolved for real below once the run (and its provenance) is
+        # loaded: _check_times validates against the run's own recorded duration.
+        self._time_from = 0.0
+        self._time_to = 0.0
+        self._dt = None
+        # Store the fallback before triggering the initial load, so it's available to
+        # _find_run() even when folder_nio (which takes priority) is set.
+        self._result = result
+        if folder_nio is not None:
+            self.folder_nio = folder_nio  # setter triggers load_spikes()
+        else:
+            self.load_spikes()
+        # The run's own provenance, not the scaffold's live configuration, says how
+        # long it ran and at what resolution: the configuration may have changed
+        # since, and the run is what these results actually came from.
+        provenance = self._run.provenance or {}
+        self._dt = provenance.get("resolution_ms")
+        self._time_from = time_from or 0
+        self.time_to = time_to if time_to is not None else provenance.get("duration_ms")
 
     @staticmethod
     def _check_simulation(scaffold: Scaffold, simulation_name: str):
@@ -63,73 +100,175 @@ class SpikingResults:
         if simulation_name not in scaffold.simulations:
             raise ValueError(f"Simulation name {simulation_name} not in the scaffold simulations")
 
-    def _extract_ct_device_name(self, device_name: str):
+    @staticmethod
+    def _started_at(run: SimulationRun) -> str:
         """
-        Extract the cell type name from its device name.
+        A run's start time, for sorting runs from most to least recent.
+
+        ISO 8601 timestamps sort correctly as plain strings. A run that recorded
+        none sorts before every run that did, rather than failing the comparison.
         """
-        if "_record" in device_name:
-            targetting = (
-                self.scaffold.simulations[self.simulation_name].devices[device_name].targetting
-            )
-            ct = targetting.cell_models[0].name
-            labels = targetting["labels"] if "labels" in targetting else set()
-            return ct, labels
+        return (run.provenance or {}).get("started_at") or ""
+
+    def _find_run(self) -> SimulationRun:
+        """
+        The most recent run of :attr:`simulation_name` matching :attr:`scaffold`'s
+        storage, from ``folder_nio`` or from the in-memory ``result``.
+
+        Every ``.nio`` file in ``folder_nio`` is read with
+        :func:`~bsb.read_results`. One produced by a different network raises
+        :class:`~bsb.exceptions.ResultsMismatchError`, which is caught here and the
+        file simply excluded: a folder can hold results of more than one network,
+        and that is the routine case, not an error. Anything else that goes wrong
+        reading a file is not caught.
+
+        :raises bsb.exceptions.ResultsError: No run of :attr:`simulation_name`
+            matching the scaffold's storage was found.
+        :rtype: bsb.simulation.results.SimulationRun
+        """
+        candidates: List[SimulationRun] = []
+        if self.folder_nio is not None:
+            for f in sorted(listdir(self.folder_nio)):
+                file_ = join(self.folder_nio, f)
+                if not (isfile(file_) and file_.endswith(".nio")):
+                    continue
+                try:
+                    reader = read_results(self.scaffold, file_)
+                except ResultsMismatchError:
+                    continue
+                candidates.extend(run for run in reader.runs if run.name == self.simulation_name)
         else:
-            return device_name, set()
+            reader = ResultsReader(self.scaffold, [self._result.block])
+            candidates.extend(run for run in reader.runs if run.name == self.simulation_name)
+        if not candidates:
+            where = f" in '{self.folder_nio}'" if self.folder_nio is not None else ""
+            raise ResultsError(
+                f"No results of simulation '{self.simulation_name}' matching the "
+                f"scaffold's storage were found{where}."
+            )
+        return max(candidates, key=self._started_at)
 
-    def _extract_spikes_dict(self):
+    def _labels_of(self, target: RecordedCell) -> set:
         """
-        Extract the spike events from nio files stored in a folder and group them by neuron type.
+        The labels of a recorded cell, found among the label combinations actually
+        used in its placement set.
 
-        :return: - List of spike events grouped by neuron type.
-                 - Dictionary storing for each neuron type its index and its unique list of neuron ids.
-                   The index is stored under the "id" key and the neuron ids are stored under the "senders" key.
-        :rtype: Tuple[List[List[float]], Dict[str, numpy.ndarray[int]]
+        :param target: The recorded cell.
+        :return: The labels of the cell, or an empty set if it carries none.
         """
-        spikes_res = []
+        ps_name = target.cell_type.name
+        cached = self._label_combos.get(ps_name)
+        if cached is None:
+            ps = target.placement_set
+            combos = list(ScaffoldPlot.get_unique_labels(ps))
+            # A label mask holds the cells carrying *any* of its labels, so the mask of
+            # a combination also holds the cells of every overlapping one (`{a}` holds
+            # the cells labeled `{a, b}`). Masks of single labels instead tell exactly
+            # which labels a cell carries.
+            masks = {label: ps.get_label_mask([label]) for label in set().union(*map(set, combos))}
+            cached = self._label_combos[ps_name] = (combos, masks)
+        combos, masks = cached
+        labels = {label for label, mask in masks.items() if mask[target.id]}
+        # Return the combination itself rather than the set just built, so that the
+        # population is named exactly as ScaffoldPlot names that combination.
+        return next((combo for combo in combos if set(combo) == labels), set())
+
+    def _population_of(self, recording: NetworkRecording) -> str:
+        """
+        The population a recording belongs to: its cell type, split further by
+        microzone label, or the recording device's own name when it names no
+        particular cell (a device recording itself rather than one of its targets).
+        """
+        target = recording.target
+        if recording.kind != "cell" or target is None:
+            return recording.device
+        return ScaffoldPlot.get_labelled_ct_name(target.cell_type.name, self._labels_of(target))
+
+    def _extract_recordings(self, run: SimulationRun) -> Tuple[List[List[NetworkRecording]], dict]:
+        """
+        Group a run's spike-train recordings by population.
+
+        :return: - List of Recordings grouped by population: one list of per-cell
+                   ``NetworkRecording`` per population, since spikes are recorded
+                   one train per cell.
+                 - Dictionary storing for each population its index in that list.
+        :rtype: Tuple[List[List[NetworkRecording]], Dict[str, int]]
+        """
+        recordings: List[List[NetworkRecording]] = []
         cell_dict = {}
-        current_id = 0
+        for recording in run.recordings():
+            if not recording.is_spike_train:
+                continue
+            population = self._population_of(recording)
+            if population not in cell_dict:
+                cell_dict[population] = len(recordings)
+                recordings.append([])
+            recordings[cell_dict[population]].append(recording)
 
-        for f in listdir(self.folder_nio):
-            file_ = join(self.folder_nio, f)
-            if isfile(file_) and (".nio" in file_):
-                block = nio.NixIO(file_, mode="ro").read_all_blocks()[0]  # assume only one block
-                spiketrains = block.segments[0].spiketrains  # assume only one segment
-
-                for st in spiketrains:
-                    st.segment = None  # remove spiketrain segment to allow merging
-                    cell_type, labels = self._extract_ct_device_name(st.annotations["device"])
-                    if cell_type in list(self.scaffold.cell_types.keys()):
-                        cell_type_label = ScaffoldPlot.get_labelled_ct_name(cell_type, labels)
-                        if cell_type_label not in cell_dict:
-                            cell_dict[cell_type_label] = current_id
-                            current_id += 1
-                            spikes_res.append([])
-                        if "senders" in st.array_annotations:
-                            spikes_res[cell_dict[cell_type_label]].append(st)
-        return spikes_res, cell_dict
+        return recordings, cell_dict
 
     def load_spikes(self):
         """
-        Load the spike trains from nio files.
-
-        :return: - Boolean numpy array of shape (N*M) storing spike events for each time step.
-                   N corresponds to the number of time steps, M to the number of neuron. Neurons are sorted by type.
-                 - List of number of unique neuron per type.
-                 - List of cell type names.
-        :rtype: Tuple[List[neo.core.SpikeTrain], numpy.ndarray[int], List[str]]
+        Load the spike trains from the most recent matching run.
         """
-        spikes_res, cell_dict = self._extract_spikes_dict()
-        self._all_spikes = []
-        self._nb_neurons = np.zeros(len(cell_dict), dtype=int)
-        for i, cell_type in enumerate(cell_dict):
-            sts = spikes_res[cell_dict[cell_type]]
-            merged = sts[0]
-            for st in sts[1:]:
-                merged = merged.merge(st)
-            self._all_spikes.append(merged)
-            self._nb_neurons[i] = self._all_spikes[i].annotations["pop_size"]
+        self._run = self._find_run()
+        self._recordings, cell_dict = self._extract_recordings(self._run)
         self._populations = list(cell_dict.keys())
+
+        self._fill_lists()
+
+    @staticmethod
+    def _sender_id(recording: NetworkRecording, index: int) -> int:
+        """
+        The id a recording's spikes are attributed to in its population's merged
+        train: the cell's own id, or its position within the population for a
+        recording that names no particular cell.
+        """
+        target = recording.target
+        return target.id if recording.kind == "cell" and target is not None else index
+
+    #: Per-cell annotations that make no sense on a population's merged train,
+    #: since every cell in it disagrees on them; ``senders`` (an array annotation,
+    #: one entry per event) is what replaces them.
+    _PER_CELL_ANNOTATIONS = ("bsb_cell_id", "bsb_post_cell_id", "bsb_pre_cell_id")
+
+    def _fill_lists(self):
+        """
+        Merge each population's per-cell recordings into one ``SpikeTrain``, and
+        count how many cells were targeted per population.
+        """
+        duration = (self._run.provenance or {}).get("duration_ms") or 0.0
+        self._all_spikes = []  # One Neo SpikeTrain per population
+        self._nb_neurons = np.zeros(
+            len(self._recordings), dtype=int
+        )  # Nb of neurons per population
+        for i, group in enumerate(self._recordings):
+            self._nb_neurons[i] = len(group)
+            times = np.concatenate(
+                [recording.signal.times.rescale(ms).magnitude for recording in group]
+            )
+            senders = np.concatenate(
+                [
+                    np.full(len(recording.signal), self._sender_id(recording, j))
+                    for j, recording in enumerate(group)
+                ]
+            )
+            order = np.argsort(times)
+            first = group[0].signal
+            annotations = {
+                key: value
+                for key, value in first.annotations.items()
+                if key not in self._PER_CELL_ANNOTATIONS
+            }
+            self._all_spikes.append(
+                SpikeTrain(
+                    times[order] * ms,
+                    t_stop=duration,
+                    name=first.name,
+                    array_annotations={"senders": senders[order]},
+                    **annotations,
+                )
+            )
 
     @property
     def filt_spikes(self) -> List[SpikeTrain]:
@@ -155,11 +294,55 @@ class SpikingResults:
         """List of neuron type names"""
         return [pop for pop in self._populations if pop not in self.ignored_ct]
 
+    def get_placement_sets(self) -> Dict[str, List[PlacementSet]]:
+        """
+        The placement sets of the cells each population's recordings target.
+
+        Populations whose recordings target no cell (a device recording itself) have
+        no placement set and are left out, as are :attr:`ignored_ct`.
+
+        A recording of a device that selected its cells by label (e.g. with the
+        ``by_label`` targetting) gets the placement set of its cell type filtered by
+        those labels; any other recording gets the full placement set.
+
+        .. note::
+
+            A filtered placement set holds every cell carrying its labels, not only
+            the recorded ones. The ``senders`` of the spike trains are ids in the
+            full placement set of the cell type, not indices in a filtered one.
+
+        :return: Dictionary mapping each population name to the list of placement
+            sets its recordings target, one per cell type and label selection.
+        :rtype: Dict[str, List[bsb.storage.interfaces.PlacementSet]]
+        """
+        placement_sets = {}
+        for population, group in zip(self._populations, self._recordings):
+            if population in self.ignored_ct:
+                continue
+            # The recordings of a cell type selected by the same labels share their
+            # placement set: keep each once.
+            found = {}
+            for recording in group:
+                target = recording.target
+                if not isinstance(target, RecordedCell):
+                    continue
+                labels = getattr(recording, "placement_labels", None)
+                key = (target.cell_type.name, tuple(labels or ()))
+                if key not in found:
+                    found[key] = (
+                        target.placement_set
+                        if labels is None
+                        else self.scaffold.get_placement_set(target.cell_type, labels=labels)
+                    )
+            if found:
+                placement_sets[population] = list(found.values())
+        return placement_sets
+
     def _check_times(self, start, stop):
         if stop < 0 or start < 0:
             raise ValueError("time_from and time_to must be non-negative")
-        max_time = self.scaffold.simulations[self.simulation_name].duration
-        if stop > max_time:
+        max_time = (self._run.provenance or {}).get("duration_ms") if self._run else None
+        if max_time is not None and stop > max_time:
             raise ValueError("time_to must be less than the simulation's duration")
         if start > stop:
             raise ValueError("time_from must be less than time_to")
@@ -194,7 +377,7 @@ class SpikingResults:
         self._simulation_name = simulation_name
         if self._scaffold is not None:
             self._check_simulation(self.scaffold, simulation_name)
-            if self._folder_nio is not None:
+            if self._folder_nio is not None or self._result is not None:
                 self.load_spikes()
 
     @property
@@ -207,13 +390,18 @@ class SpikingResults:
         self._scaffold = scaffold
         if self._simulation_name is not None:
             self._check_simulation(self.scaffold, self.simulation_name)
-            if self._folder_nio is not None:
+            if self._folder_nio is not None or self._result is not None:
                 self.load_spikes()
 
     @property
     def dt(self):
         """Time step of the simulation in ms"""
         return self._dt
+
+    @property
+    def result(self):
+        """BSB SimulationResult the spike trains are loaded from, if any."""
+        return self._result
 
     @property
     def folder_nio(self):
@@ -265,7 +453,7 @@ def get_firing_rates(spiking_results: SpikingResults, kernel=None) -> np.ndarray
 def get_spike_matrix(spikes, dt):
     """
     Extract the 2D boolean matrix of the spiking activity for each neuron in the SpikeTrain object.
-    Neurons are sorted according to their NEST id.
+    Neurons are sorted according to their BSB placement (cell) id.
 
     :param neo.core.SpikeTrain spikes: population SpikeTrain object
     :param float dt: time step

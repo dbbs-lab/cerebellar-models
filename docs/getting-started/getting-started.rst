@@ -67,6 +67,9 @@ more :doc:`here <bsb:simulation/intro>`). These simulations are dependant on the
 choose and their paradigm. Some examples are provided for each simulator sustained by the
 `cerebellar-models` package in the :doc:`configurations section <../configurations/configurations>`.
 
+Both the reconstruction and the simulation draw random numbers — see :doc:`randomness` for how to
+pin them for a reproducible run, or leave them unset to get a fresh replicate every time.
+
 After the simulation has completed, `cerebellar-models` allows you to run a list of predefined analysis on the
 simulation results. For instance, for spiking based simulation, you can run the following python script
 to produce a full pdf report with basic spike analysis of the simulation results (see more in
@@ -74,7 +77,7 @@ to produce a full pdf report with basic spike analysis of the simulation results
 
 .. code-block:: python
 
-    from cerebellar_models.analysis.spiking_results import BasicSimulationReport
+    from cerebellar_models.analysis.spike_plots import BasicSimulationReport
 
     scaffold_file = "path/to/your_bsb_scaffold.hdf5"
     simulation_name = "name_of_your_simulation"
@@ -83,3 +86,7 @@ to produce a full pdf report with basic spike analysis of the simulation results
 
     report = BasicSimulationReport(scaffold_file, simulation_name, nio_folder)
     report.print_report(output_filename)
+
+This report can also be produced automatically as soon as a simulation completes, the
+same way the structure report is: add an ``after_simulation`` section to your
+simulation's configuration (see :doc:`spike reporting section <../analysis/spike_plots>`).

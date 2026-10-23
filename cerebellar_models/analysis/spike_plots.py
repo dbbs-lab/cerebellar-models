@@ -2,10 +2,13 @@
 Module for the plots and reports related to the simulation analysis of BSB scaffold.
 """
 
+import os
 from typing import List, Tuple, Union
 
 import numpy as np
-from bsb import Scaffold
+from bsb import AfterSimulationHook, Scaffold, config, types
+from bsb.services import MPI
+from bsb.simulation.results import SimulationResult
 from elephant.kernels import GaussianKernel, Kernel
 from matplotlib import gridspec as gs
 from matplotlib import pyplot as plt
@@ -79,6 +82,37 @@ class SpikePlot(ScaffoldPlot):
     def dt(self):
         return self.spiking_results.dt
 
+    @property
+    def labelled_dict_colors(self):
+        """
+        Dictionary of color for each population actually present in
+        ``spiking_results``, keyed by their (possibly label-suffixed) population name.
+
+        Unlike :attr:`~.plots.ScaffoldPlot.labelled_dict_colors`, this does not consult the
+        scaffold's current placement sets: the scaffold may have been recompiled or
+        relabelled since the run these results come from (BSB only warns on that
+        mismatch, it does not block it), so a population recorded under one label
+        combination might no longer resolve to the same one live. Basing the colors
+        on the recorded populations instead keeps every plotted population covered,
+        and avoids a ``KeyError`` when a recorded name (e.g. a microzone split or a
+        device that names itself) has no live counterpart.
+        """
+        result = self.dict_colors.copy()
+        bases = sorted((b for b in result if isinstance(b, str)), key=len, reverse=True)
+        groups: dict[str, list[str]] = {}
+        for ct in self.populations:
+            if ct in result:
+                continue
+            base = next((b for b in bases if ct == b or ct.startswith(b + "_")), None)
+            if base is not None:
+                groups.setdefault(base, []).append(ct)
+        for base, labelled in groups.items():
+            color = np.array(result[base])
+            del result[base]
+            for j, ct in enumerate(sorted(labelled)):
+                result[ct] = color * ([np.power(2 / 3, j)] * 3 + [1.0])
+        return result
+
 
 class SpikeSimulationReport(BSBReport):
     """
@@ -89,11 +123,12 @@ class SpikeSimulationReport(BSBReport):
         self,
         scaffold: Union[str, Scaffold],
         simulation_name: str,
-        folder_nio: str,
+        folder_nio: str = None,
         time_from: float = 0,
         time_to: float = None,
         ignored_ct=None,
         cell_types_info: List[PlotTypeInfo] = None,
+        result: SimulationResult = None,
     ):
         super().__init__(scaffold, cell_types_info)
         self.spiking_results = SpikingResults(
@@ -103,6 +138,7 @@ class SpikeSimulationReport(BSBReport):
             time_to=time_to,
             folder_nio=folder_nio,
             ignored_ct=ignored_ct,
+            result=result,
         )
 
     @property
@@ -133,6 +169,17 @@ class SpikeSimulationReport(BSBReport):
 
     @property
     def populations(self):
+        return self.spiking_results.populations
+
+    @property
+    def labelled_cell_names(self):
+        """
+        The report's populations, i.e. the ones actually recorded in
+        ``spiking_results``, rather than :attr:`~.report.BSBReport.labelled_cell_names`'s every
+        placement set currently in the scaffold: the scaffold may have changed since
+        the run these results come from, and a population that was recorded then
+        might not exist, or might resolve to a different one, live.
+        """
         return self.spiking_results.populations
 
     @property
@@ -482,14 +529,13 @@ class SimResultsTable(TablePlot, SpikePlot):
         **kwargs,
     ):
         super().__init__(
-            fig_size,
-            spiking_results,
-            dict_colors,
+            fig_size=fig_size,
+            spiking_results=spiking_results,
+            dict_colors=dict_colors,
+            dict_abv=dict_abv,
             **kwargs,
         )
         self.columns = ["Firing rate [Hz]", "Inter Spike Intervals [ms]"]
-        self.dict_abv = dict_abv or {}
-        """Dictionary of abbreviations for cell types"""
 
     def plot(self, **kwargs):
         super().plot()
@@ -523,7 +569,7 @@ class SimResultsTable(TablePlot, SpikePlot):
                     "{:.2} pm {:.2}".format(np.mean(isi), np.std(isi)) if len(isi) > 0 else "/",
                 ]
             )
-        self.rows = [(self.dict_abv[ct] if ct in self.dict_abv else ct) for ct in self.populations]
+        self.rows = [self.extract_ct_name(ct) for ct in self.populations]
 
     def get_firing_rates(self):
         """
@@ -672,14 +718,22 @@ class BasicSimulationReport(SpikeSimulationReport):
         self,
         scaffold: Union[str, Scaffold],
         simulation_name: str,
-        folder_nio: str,
+        folder_nio: str = None,
         time_from: float = 0,
         time_to: float = None,
         ignored_ct=None,
         cell_types_info: List[PlotTypeInfo] = None,
+        result: SimulationResult = None,
     ):
         super().__init__(
-            scaffold, simulation_name, folder_nio, time_from, time_to, ignored_ct, cell_types_info
+            scaffold,
+            simulation_name,
+            folder_nio,
+            time_from,
+            time_to,
+            ignored_ct,
+            cell_types_info,
+            result,
         )
         num_labelled_ct = len(self.populations)
         raster = RasterPSTHPlot(
@@ -689,7 +743,7 @@ class BasicSimulationReport(SpikeSimulationReport):
         table = SimResultsTable(
             (5, 0.22 * (num_labelled_ct + 1)),
             spiking_results=self.spiking_results,
-            dict_abv=self.abbreviations,
+            dict_abv=self.labelled_abbreviations,
         )
         firing_rates = FiringRatesPlot(
             (15, 2 * np.ceil(num_labelled_ct / 2)),
@@ -707,6 +761,7 @@ class BasicSimulationReport(SpikeSimulationReport):
         corr = SpikeCorrelationPlot(
             (10, 10.5),
             spiking_results=self.spiking_results,
+            dict_abv=self.labelled_abbreviations,
         )
         legend = Legend(
             (10, 0.6 * num_labelled_ct / 3.0),
@@ -727,3 +782,37 @@ class BasicSimulationReport(SpikeSimulationReport):
     def preprocessing(self):
         self.plots["table"].set_axis_off()
         self.plots["legend"].set_axis_off()
+
+
+@config.node
+class RunSimulationReport(AfterSimulationHook):
+    """
+    BSB postprocessing node to generate a basic simulation report once the simulation
+    it is configured on has finished running.
+    """
+
+    output_filename: str = config.attr(required=True)
+    """Name of the pdf file to save the report."""
+    time_from: float = config.attr(type=float, default=0)
+    """Start time of the analysis."""
+    time_to: float = config.attr(type=float, required=False)
+    """End time of the analysis. Defaults to the simulation's duration."""
+    ignored_ct: list = config.attr(type=types.list(type=str), required=False)
+    """List of ignored cell type names."""
+
+    def postprocess(self, adapter, simulation, result):
+        if MPI.get_size() == 1 or MPI.get_rank() == 0:
+            # Results streamed to file (result.filename set) are read back from that
+            # file; otherwise (in-memory run) the spike trains are read directly off
+            # the SimulationResult, since no file was ever written to load from.
+            folder_nio = (os.path.dirname(result.filename) or ".") if result.filename else None
+            report = BasicSimulationReport(
+                simulation.scaffold,
+                simulation.name,
+                folder_nio=folder_nio,
+                time_from=self.time_from,
+                time_to=self.time_to,
+                ignored_ct=self.ignored_ct,
+                result=result,
+            )
+            report.print_report(self.output_filename)

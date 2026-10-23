@@ -1,11 +1,23 @@
+import copy
+import shutil
+import tempfile
 import unittest
+from os.path import join
+from types import SimpleNamespace
 
 import numpy as np
-from neo import SpikeTrain
-from quantities import ms
+from bsb import ResultsError, get_simulation_adapter
+from bsb.simulation.results import Recording, cell_annotations, device_annotations
+from bsb.storage.provenance import decode_annotation, encode_annotation
+from neo import AnalogSignal, SpikeTrain
+from neo import io as nio
+from quantities import ms, mV
 
+from cerebellar_models.analysis.plots import ScaffoldPlot
+from cerebellar_models.analysis.report import LIST_CT_INFO
+from cerebellar_models.analysis.spike_plots import SpikePlot
 from cerebellar_models.analysis.spiking_results import SpikingResults, extract_isis
-from tests.test_spike_plots import ReportBasalSimCircuitFixture
+from tests.test_spike_plots import MiniCerebCircuitFixture, ReportBasalSimCircuitFixture
 
 
 class TestSpikingResults(
@@ -75,6 +87,245 @@ class TestSpikingResults(
             self.spiking_results.dt,
             self.scaffold.simulations["basal_activity"].resolution,
         )
+
+    def test_result_property(self):
+        self.assertEqual(
+            self.spiking_results.result,
+            None,
+        )
+
+    def test_raise_without_nio_nor_results(self):
+        with self.assertRaises(ValueError):
+            self.spiking_results = SpikingResults(
+                scaffold=self.scaffold,
+                simulation_name="basal_activity",
+                time_from=0,
+                time_to=None,
+            )
+
+    def _write_foreign_results(self, filename):
+        """
+        Copy the streamed results under `filename`, as if another network produced them.
+        """
+        with nio.NixIO(self.streamed_nio_file, mode="ro") as reader:
+            blocks = reader.read_all_blocks()
+        for block in blocks:
+            provenance = decode_annotation(block.annotations["bsb_provenance"])
+            provenance["scaffold"]["storage_id"] = "another-network"
+            block.annotations["bsb_provenance"] = encode_annotation(provenance)
+        with nio.NixIO(filename, mode="ow") as writer:
+            writer.write_all_blocks(blocks)
+
+    def test_folder_skips_results_of_other_networks(self):
+        folder = tempfile.mkdtemp()
+        self.addCleanup(shutil.rmtree, folder)
+        self._write_foreign_results(join(folder, "other_network.nio"))
+        # A folder holding only another network's results has nothing to load.
+        with self.assertRaises(ResultsError):
+            SpikingResults(self.scaffold, "basal_activity", 0, None, folder_nio=folder)
+        # Next to this network's results, the foreign file is simply ignored.
+        shutil.copy(self.streamed_nio_file, join(folder, "this_network.nio"))
+        results = SpikingResults(self.scaffold, "basal_activity", 0, None, folder_nio=folder)
+        self.assertEqual(results.populations, self.spiking_results.populations)
+        self.assertEqual(list(results.nb_neurons), list(self.spiking_results.nb_neurons))
+
+    def test_device_and_analog_recordings(self):
+        block = copy.deepcopy(self.simulation_results[0].block)
+        segment = block.segments[0]
+        # A spike train of the device itself, which names no cell of the network.
+        segment.spiketrains.append(
+            SpikeTrain(
+                [10.0, 20.0, 30.0] * ms,
+                t_stop=self.simulation_duration * ms,
+                bsb_device_name="device_spikes",
+                **device_annotations("record"),
+            )
+        )
+        # A membrane potential recording, which is no spike train to analyze.
+        cell_model = self.basal_simulation.cell_models["purkinje_cell"]
+        segment.analogsignals.append(
+            AnalogSignal(
+                np.zeros((10, 1)) * mV,
+                sampling_period=0.1 * ms,
+                bsb_device_name="purkinje_vm",
+                **cell_annotations(cell_model, 0, "record"),
+            )
+        )
+        results = SpikingResults(
+            self.scaffold,
+            "basal_activity",
+            0,
+            None,
+            ignored_ct=[],
+            result=SimpleNamespace(block=block),
+        )
+        self.assertIn("device_spikes", results.populations)
+        self.assertNotIn("purkinje_vm", results.populations)
+        idx = results.populations.index("device_spikes")
+        self.assertEqual(results.nb_neurons[idx], 1)
+        spikes = results.filt_spikes[idx]
+        self.assertEqual(list(spikes.magnitude), [10.0, 20.0, 30.0])
+        # Its spikes are attributed to its position in the population, as it has no cell id.
+        self.assertEqual(list(spikes.array_annotations["senders"]), [0, 0, 0])
+
+    def test_labelled_populations(self):
+        ps = self.scaffold.get_placement_set("purkinje_cell")
+        ids = np.arange(len(ps))
+        plus, minus = ids[: len(ids) // 2], ids[len(ids) // 2 :]
+        ps.label(["plus"], plus)
+        ps.label(["minus"], minus)
+        self.addCleanup(ps.remove_labels, ["minus"], minus)
+        self.addCleanup(ps.remove_labels, ["plus"], plus)
+        # Read the in-memory run: the streamed file would warn that the network was
+        # written to since the run, which is the very point of this test.
+        results = SpikingResults(
+            self.scaffold, "basal_activity", 0, None, result=self.simulation_results[0]
+        )
+        self.assertNotIn("purkinje_cell", results.populations)
+        nb_neurons = dict(zip(results.populations, results.nb_neurons))
+        self.assertEqual(nb_neurons["purkinje_cell_plus"], len(plus))
+        self.assertEqual(nb_neurons["purkinje_cell_minus"], len(minus))
+        for population, cells in (("purkinje_cell_plus", plus), ("purkinje_cell_minus", minus)):
+            senders = results.filt_spikes[results.populations.index(population)].array_annotations[
+                "senders"
+            ]
+            self.assertTrue(np.isin(senders, cells).all(), f"{population} holds foreign cells")
+
+        # The live scaffold and the recorded populations must agree on each shade.
+        colors = {ct.name: ct.color for ct in LIST_CT_INFO}
+        scaffold_colors = ScaffoldPlot(
+            (10, 10), self.scaffold, dict_colors=colors
+        ).labelled_dict_colors
+        spike_colors = SpikePlot((10, 10), results, dict_colors=colors).labelled_dict_colors
+        self.assertNotIn("purkinje_cell", spike_colors)
+        for population in ("purkinje_cell_minus", "purkinje_cell_plus"):
+            np.testing.assert_allclose(spike_colors[population], scaffold_colors[population])
+        np.testing.assert_allclose(
+            spike_colors["purkinje_cell_plus"],
+            spike_colors["purkinje_cell_minus"] * np.array([2 / 3] * 3 + [1.0]),
+        )
+
+    def test_overlapping_labelled_populations(self):
+        # The cells labeled {plus, edge} also carry `plus`, so they are found by the
+        # label mask of {plus}: they must still be told apart from the {plus} cells.
+        ps = self.scaffold.get_placement_set("purkinje_cell")
+        ids = np.arange(len(ps))
+        edge, plus, minus = np.array_split(ids, 3)
+        ps.label(["plus"], np.concatenate([edge, plus]))
+        ps.label(["edge"], edge)
+        ps.label(["minus"], minus)
+        self.addCleanup(ps.remove_labels, ["minus"], minus)
+        self.addCleanup(ps.remove_labels, ["edge"], edge)
+        self.addCleanup(ps.remove_labels, ["plus"], np.concatenate([edge, plus]))
+        results = SpikingResults(
+            self.scaffold, "basal_activity", 0, None, result=self.simulation_results[0]
+        )
+        expected = {}
+        for combo in ScaffoldPlot.get_unique_labels(ps):
+            cells = {
+                frozenset({"plus", "edge"}): edge,
+                frozenset({"plus"}): plus,
+                frozenset({"minus"}): minus,
+            }[frozenset(combo)]
+            expected[ScaffoldPlot.get_labelled_ct_name("purkinje_cell", combo)] = cells
+        self.assertEqual(len(expected), 3)
+        nb_neurons = dict(zip(results.populations, results.nb_neurons))
+        for population, cells in expected.items():
+            self.assertEqual(nb_neurons.get(population), len(cells), population)
+            senders = results.filt_spikes[results.populations.index(population)].array_annotations[
+                "senders"
+            ]
+            self.assertTrue(np.isin(senders, cells).all(), f"{population} holds foreign cells")
+
+    def test_get_placement_sets(self):
+        placement_sets = self.spiking_results.get_placement_sets()
+        self.assertEqual(list(placement_sets), self.spiking_results.populations)
+        for population, sets in placement_sets.items():
+            self.assertEqual(len(sets), 1)
+            self.assertEqual(sets[0].cell_type.name, population)
+            self.assertEqual(len(sets[0]), len(self.scaffold.get_placement_set(population)))
+        self.spiking_results.ignored_ct = ["purkinje_cell"]
+        self.assertNotIn("purkinje_cell", self.spiking_results.get_placement_sets())
+
+    def test_get_placement_sets_multiple_cell_types(self):
+        # A population whose recordings target cells of several cell types gets the
+        # placement set of each.
+        recordings = [list(group) for group in self.spiking_results._recordings]
+        pops = self.spiking_results._populations
+        first, second = pops.index("purkinje_cell"), pops.index("golgi_cell")
+        recordings[first] = recordings[first] + recordings[second]
+        self.spiking_results._recordings = recordings
+        placement_sets = self.spiking_results.get_placement_sets()
+        self.assertEqual(
+            [ps.cell_type.name for ps in placement_sets["purkinje_cell"]],
+            ["purkinje_cell", "golgi_cell"],
+        )
+        self.assertEqual([ps.cell_type.name for ps in placement_sets["golgi_cell"]], ["golgi_cell"])
+
+
+@unittest.skipUnless(
+    hasattr(Recording, "placement_labels"),
+    "This BSB version does not store the labels devices select their cells by.",
+)
+class LabelledSimCircuitFixture(
+    MiniCerebCircuitFixture, unittest.TestCase, engine_name="hdf5", setup_cls=True
+):
+    """
+    Purkinje cells split into a ``plus`` and a ``minus`` microzone before the simulation,
+    each recorded by its own spike recorder targetting the cells by label.
+    """
+
+    @classmethod
+    def setUpClass(cls):
+        super().setUpClass()
+        ps = cls.scaffold.get_placement_set("purkinje_cell")
+        ids = np.arange(len(ps))
+        cls.plus, cls.minus = ids[: len(ids) // 2], ids[len(ids) // 2 :]
+        ps.label(["plus"], cls.plus)
+        ps.label(["minus"], cls.minus)
+        simulation = cls.scaffold.simulations["basal_activity"]
+        simulation.duration = 1000.0
+        # No report needed here, only the spike recordings.
+        del simulation.after_simulation["print_simulation_report"]
+        del simulation.devices["purkinje_record"]
+        for label in ("plus", "minus"):
+            simulation.devices[f"purkinje_{label}_record"] = {
+                "device": "spike_recorder",
+                "delay": 0.1,
+                "targetting": {
+                    "strategy": "by_label",
+                    "cell_models": ["purkinje_cell"],
+                    "labels": [label],
+                },
+            }
+        adapter = get_simulation_adapter(
+            simulation.simulator, comm=cls.scaffold._comm.get_communicator()
+        )
+        cls.simulation_results = adapter.simulate(simulation)
+        cls.spiking_results = SpikingResults(
+            cls.scaffold, "basal_activity", 0, None, result=cls.simulation_results[0]
+        )
+
+    def test_get_labelled_placement_sets(self):
+        placement_sets = self.spiking_results.get_placement_sets()
+        self.assertNotIn("purkinje_cell", placement_sets)
+        positions = self.scaffold.get_placement_set("purkinje_cell").load_positions()
+        for population, label, cells in (
+            ("purkinje_cell_plus", "plus", self.plus),
+            ("purkinje_cell_minus", "minus", self.minus),
+        ):
+            # Each microzone is recorded by its own labelled recorder.
+            group = self.spiking_results._recordings[
+                self.spiking_results._populations.index(population)
+            ]
+            self.assertEqual({r.device for r in group}, {f"purkinje_{label}_record"})
+            self.assertEqual(len(group), len(cells))
+            # Each microzone gets the placement set of its cell type, filtered by its label.
+            (population_ps,) = placement_sets[population]
+            self.assertEqual(population_ps.cell_type.name, "purkinje_cell")
+            self.assertEqual(population_ps.get_label_filter(), [label])
+            self.assertEqual(len(population_ps), len(cells))
+            np.testing.assert_array_equal(population_ps.load_positions(), positions[cells])
 
 
 class TestExtractISIs(unittest.TestCase):
