@@ -11,6 +11,22 @@ _cereb_dirs = appdirs.AppDirs("cerebellar_models")
 _cache_path = _cereb_dirs.user_cache_dir
 
 
+def _nest_prefix():  # pragma: nocover
+    """
+    Install prefix reported by the installed ``nest`` package.
+
+    ``nest.build_info`` replaces the SLI ``statusdict`` in recent NEST versions, and
+    the SLI interpreter is gone altogether from NEST 3.10 onward.
+
+    :rtype: str
+    """
+    import nest
+
+    if "build_info" in dir(nest):
+        return nest.build_info["prefix"]
+    return nest.ll_api.sli_func("statusdict/prefix ::")
+
+
 def _check_nest_is_buildable(module_name):
     """
     Raise a clear error if the installed ``nest`` package cannot be used to build a
@@ -32,12 +48,7 @@ def _check_nest_is_buildable(module_name):
         locally, i.e. building a custom extension module is not currently
         possible with this NEST installation.
     """
-    import nest
-
-    if "build_info" in dir(nest):  # pragma: nocover
-        nest_path = nest.build_info["prefix"]
-    else:
-        nest_path = nest.ll_api.sli_func("statusdict/prefix ::")
+    nest_path = _nest_prefix()
     if not isdir(nest_path):  # pragma: nocover
         raise RuntimeError(
             f"Cannot build the '{module_name}' NEST extension module: the NEST "

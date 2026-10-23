@@ -9,10 +9,10 @@ description = "Implementation of the BSB framework for cerebellar cortex reconst
 readme = "README.md"
 license = { file = "LICENSE" }
 classifiers = ["License :: OSI Approved :: GNU General Public License v3 or later (GPLv3+)"]
-requires-python = ">=3.10"
+requires-python = ">=3.11"
 dynamic = ["version"]
 dependencies = [
-    "bsb[parallel]~=7.6",
+    "bsb[parallel]~=8.0",
     "click~=8.1",
     "survey~=5.4.2",
     "matplotlib~=3.9",
@@ -21,16 +21,16 @@ dependencies = [
 
 [project.optional-dependencies]
 nest = [
-    "bsb[nest]~=7.6",
+    "bsb[nest]~=8.0",
     "nestml~=8.3.0",
 ]
 neuron = [
-    "bsb[neuron]~=7.6",
+    "bsb[neuron]~=8.0",
 ]
 
 test = [
     "cerebellar-models[nest,neuron]",
-    "bsb-test~=7.6",
+    "bsb-test~=8.0",
     "coverage~=7.3",
 ]
 docs = [
@@ -42,7 +42,7 @@ dev = [
     "pre-commit~=3.5",
     "black~=25.1.0",
     "isort~=6.0.0",
-    "bump-my-version~=0.21"
+    "bump-my-version~=1.6"
 ]
 
 [dependency-groups]
@@ -94,7 +94,7 @@ exclude_lines = [ "if typing.TYPE_CHECKING:", "pragma: nocover" ]
 show_missing = true
 
 [tool.bumpversion]
-current_version = "0.12.1"
+current_version = "0.13.0"
 parse = "(?P<major>\\d+)\\.(?P<minor>\\d+)\\.(?P<patch>\\d+)"
 serialize = ["{major}.{minor}.{patch}"]
 search = "{current_version}"

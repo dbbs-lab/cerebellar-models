@@ -5,10 +5,10 @@ Elephant.
 
 from os import listdir
 from os.path import abspath, isdir, isfile, join
-from typing import List, Tuple
+from typing import Dict, List, Tuple
 
 import numpy as np
-from bsb import ResultsError, ResultsMismatchError, Scaffold
+from bsb import PlacementSet, ResultsError, ResultsMismatchError, Scaffold
 from bsb.simulation.results import (
     NetworkRecording,
     RecordedCell,
@@ -22,7 +22,7 @@ from elephant.spike_train_correlation import correlation_coefficient
 from elephant.statistics import instantaneous_rate, isi
 from neo import SpikeTrain
 from quantities import ms
-
+position
 from cerebellar_models.analysis.plots import ScaffoldPlot
 
 
@@ -68,9 +68,10 @@ class SpikingResults:
         self._all_spikes = []
         self._nb_neurons = np.zeros(0, dtype=int)
         self._populations = []
-        # Label combinations actually used in a placement set, cached per cell type
-        # name so a population of many cells only computes it once.
-        self._label_combos: dict[str, list[tuple[set, np.ndarray]]] = {}
+        # Label combinations actually used in a placement set, and the mask of the cells
+        # carrying each label, cached per cell type name so a population of many cells
+        # only computes them once.
+        self._label_combos: dict[str, tuple[list[set], dict[str, np.ndarray]]] = {}
         # Placeholders, resolved for real below once the run (and its provenance) is
         # loaded: _check_times validates against the run's own recorded duration.
         self._time_from = 0.0
@@ -156,18 +157,21 @@ class SpikingResults:
         :return: The labels of the cell, or an empty set if it carries none.
         """
         ps_name = target.cell_type.name
-        combos = self._label_combos.get(ps_name)
-        if combos is None:
+        cached = self._label_combos.get(ps_name)
+        if cached is None:
             ps = target.placement_set
-            combos = [
-                (labels, ps.get_label_mask(list(labels)))
-                for labels in ScaffoldPlot.get_unique_labels(ps)
-            ]
-            self._label_combos[ps_name] = combos
-        for labels, mask in combos:
-            if mask[target.id]:
-                return labels
-        return set()
+            combos = list(ScaffoldPlot.get_unique_labels(ps))
+            # A label mask holds the cells carrying *any* of its labels, so the mask of
+            # a combination also holds the cells of every overlapping one (`{a}` holds
+            # the cells labeled `{a, b}`). Masks of single labels instead tell exactly
+            # which labels a cell carries.
+            masks = {label: ps.get_label_mask([label]) for label in set().union(*map(set, combos))}
+            cached = self._label_combos[ps_name] = (combos, masks)
+        combos, masks = cached
+        labels = {label for label, mask in masks.items() if mask[target.id]}
+        # Return the combination itself rather than the set just built, so that the
+        # population is named exactly as ScaffoldPlot names that combination.
+        return next((combo for combo in combos if set(combo) == labels), set())
 
     def _population_of(self, recording: NetworkRecording) -> str:
         """
@@ -289,6 +293,50 @@ class SpikingResults:
     def populations(self) -> List[str]:
         """List of neuron type names"""
         return [pop for pop in self._populations if pop not in self.ignored_ct]
+
+    def get_placement_sets(self) -> Dict[str, List[PlacementSet]]:
+        """
+        The placement sets of the cells each population's recordings target.
+
+        Populations whose recordings target no cell (a device recording itself) have
+        no placement set and are left out, as are :attr:`ignored_ct`.
+
+        A recording of a device that selected its cells by label (e.g. with the
+        ``by_label`` targetting) gets the placement set of its cell type filtered by
+        those labels; any other recording gets the full placement set.
+
+        .. note::
+
+            A filtered placement set holds every cell carrying its labels, not only
+            the recorded ones. The ``senders`` of the spike trains are ids in the
+            full placement set of the cell type, not indices in a filtered one.
+
+        :return: Dictionary mapping each population name to the list of placement
+            sets its recordings target, one per cell type and label selection.
+        :rtype: Dict[str, List[bsb.storage.interfaces.PlacementSet]]
+        """
+        placement_sets = {}
+        for population, group in zip(self._populations, self._recordings):
+            if population in self.ignored_ct:
+                continue
+            # The recordings of a cell type selected by the same labels share their
+            # placement set: keep each once.
+            found = {}
+            for recording in group:
+                target = recording.target
+                if not isinstance(target, RecordedCell):
+                    continue
+                labels = getattr(recording, "placement_labels", None)
+                key = (target.cell_type.name, tuple(labels or ()))
+                if key not in found:
+                    found[key] = (
+                        target.placement_set
+                        if labels is None
+                        else self.scaffold.get_placement_set(target.cell_type, labels=labels)
+                    )
+            if found:
+                placement_sets[population] = list(found.values())
+        return placement_sets
 
     def _check_times(self, start, stop):
         if stop < 0 or start < 0:
