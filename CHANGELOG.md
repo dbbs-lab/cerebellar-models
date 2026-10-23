@@ -1,8 +1,12 @@
-# v0.11.1 - 2026-08-25
+# v0.13 - 2026-10-23
 
-* fix: make cerebellar-models work outside the cloned repo context https://github.com/dbbs-lab/cerebellar-models/pull/82
+* feat: bump cerebellar-models to bsb 8 in https://github.com/dbbs-lab/cerebellar-models/pull/84
 
-# v0.11.0 - 2026-05-28
+# v0.12.1 - 2026-08-25
+
+* fix: make cerebellar-models work outside the cloned repo context in https://github.com/dbbs-lab/cerebellar-models/pull/82
+
+# v0.12.0 - 2026-05-28
 
 * feat: Add De Grazia eglif model by @drodarie and @albertoarturovergani in https://github.com/dbbs-lab/cerebellar-models/pull/76
 * fix: mf to glom strategy by @drodarie in https://github.com/dbbs-lab/cerebellar-models/pull/75
