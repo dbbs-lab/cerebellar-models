@@ -5,10 +5,10 @@ Elephant.
 
 from os import listdir
 from os.path import abspath, isdir, isfile, join
-from typing import List, Tuple
+from typing import Dict, List, Tuple
 
 import numpy as np
-from bsb import ResultsError, ResultsMismatchError, Scaffold
+from bsb import PlacementSet, ResultsError, ResultsMismatchError, Scaffold
 from bsb.simulation.results import (
     NetworkRecording,
     RecordedCell,
@@ -293,6 +293,50 @@ class SpikingResults:
     def populations(self) -> List[str]:
         """List of neuron type names"""
         return [pop for pop in self._populations if pop not in self.ignored_ct]
+
+    def get_placement_sets(self) -> Dict[str, List[PlacementSet]]:
+        """
+        The placement sets of the cells each population's recordings target.
+
+        Populations whose recordings target no cell (a device recording itself) have
+        no placement set and are left out, as are :attr:`ignored_ct`.
+
+        A recording of a device that selected its cells by label (e.g. with the
+        ``by_label`` targetting) gets the placement set of its cell type filtered by
+        those labels; any other recording gets the full placement set.
+
+        .. note::
+
+            A filtered placement set holds every cell carrying its labels, not only
+            the recorded ones. The ``senders`` of the spike trains are ids in the
+            full placement set of the cell type, not indices in a filtered one.
+
+        :return: Dictionary mapping each population name to the list of placement
+            sets its recordings target, one per cell type and label selection.
+        :rtype: Dict[str, List[bsb.storage.interfaces.PlacementSet]]
+        """
+        placement_sets = {}
+        for population, group in zip(self._populations, self._recordings):
+            if population in self.ignored_ct:
+                continue
+            # The recordings of a cell type selected by the same labels share their
+            # placement set: keep each once.
+            found = {}
+            for recording in group:
+                target = recording.target
+                if not isinstance(target, RecordedCell):
+                    continue
+                labels = getattr(recording, "placement_labels", None)
+                key = (target.cell_type.name, tuple(labels or ()))
+                if key not in found:
+                    found[key] = (
+                        target.placement_set
+                        if labels is None
+                        else self.scaffold.get_placement_set(target.cell_type, labels=labels)
+                    )
+            if found:
+                placement_sets[population] = list(found.values())
+        return placement_sets
 
     def _check_times(self, start, stop):
         if stop < 0 or start < 0:

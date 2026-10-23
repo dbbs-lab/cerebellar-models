@@ -70,6 +70,32 @@ The following properties are all lists providing different information for each 
 * :attr:`nb_neurons<.analysis.spiking_results.SpikingResults.nb_neurons>`: Number of neurons for each population.
 * :attr:`populations<.analysis.spiking_results.SpikingResults.populations>`: The name of each neuron population.
 
+Class methods
+^^^^^^^^^^^^^
+
+* :meth:`get_placement_sets<.analysis.spiking_results.SpikingResults.get_placement_sets>`: Dictionary
+  mapping each population name to the list of BSB
+  :class:`PlacementSet <bsb.storage.interfaces.PlacementSet>` of the cells its recordings target,
+  one per cell type and label selection. Recordings of a device that selected its cells by label
+  (e.g. with the ``by_label`` targetting) get the placement set filtered by those labels, while
+  the others get the full placement set of their cell type. Populations ignored or recorded by a
+  device that targets no cell are left out.
+
+.. code-block:: python
+
+    placement_sets = spiking_results.get_placement_sets()
+    # e.g. positions of all the Purkinje cells in the "plus" microzone
+    positions = placement_sets["purkinje_cell_plus"][0].load_positions()
+
+.. note::
+   A filtered placement set holds every cell carrying its labels, not only the recorded ones.
+   The ``senders`` array annotation of the spike trains holds cell ids in the full placement set
+   of the cell type, not indices in a filtered one.
+
+.. note::
+   With a BSB version that does not store the labels devices select their cells by, every
+   population gets the unfiltered placement set of its cell type.
+
 
 Methods to analyze the spiking results
 --------------------------------------

@@ -6,8 +6,8 @@ from os.path import join
 from types import SimpleNamespace
 
 import numpy as np
-from bsb import ResultsError
-from bsb.simulation.results import cell_annotations, device_annotations
+from bsb import ResultsError, get_simulation_adapter
+from bsb.simulation.results import Recording, cell_annotations, device_annotations
 from bsb.storage.provenance import decode_annotation, encode_annotation
 from neo import AnalogSignal, SpikeTrain
 from neo import io as nio
@@ -17,7 +17,7 @@ from cerebellar_models.analysis.plots import ScaffoldPlot
 from cerebellar_models.analysis.report import LIST_CT_INFO
 from cerebellar_models.analysis.spike_plots import SpikePlot
 from cerebellar_models.analysis.spiking_results import SpikingResults, extract_isis
-from tests.test_spike_plots import ReportBasalSimCircuitFixture
+from tests.test_spike_plots import MiniCerebCircuitFixture, ReportBasalSimCircuitFixture
 
 
 class TestSpikingResults(
@@ -236,6 +236,96 @@ class TestSpikingResults(
                 "senders"
             ]
             self.assertTrue(np.isin(senders, cells).all(), f"{population} holds foreign cells")
+
+    def test_get_placement_sets(self):
+        placement_sets = self.spiking_results.get_placement_sets()
+        self.assertEqual(list(placement_sets), self.spiking_results.populations)
+        for population, sets in placement_sets.items():
+            self.assertEqual(len(sets), 1)
+            self.assertEqual(sets[0].cell_type.name, population)
+            self.assertEqual(len(sets[0]), len(self.scaffold.get_placement_set(population)))
+        self.spiking_results.ignored_ct = ["purkinje_cell"]
+        self.assertNotIn("purkinje_cell", self.spiking_results.get_placement_sets())
+
+    def test_get_placement_sets_multiple_cell_types(self):
+        # A population whose recordings target cells of several cell types gets the
+        # placement set of each.
+        recordings = [list(group) for group in self.spiking_results._recordings]
+        pops = self.spiking_results._populations
+        first, second = pops.index("purkinje_cell"), pops.index("golgi_cell")
+        recordings[first] = recordings[first] + recordings[second]
+        self.spiking_results._recordings = recordings
+        placement_sets = self.spiking_results.get_placement_sets()
+        self.assertEqual(
+            [ps.cell_type.name for ps in placement_sets["purkinje_cell"]],
+            ["purkinje_cell", "golgi_cell"],
+        )
+        self.assertEqual([ps.cell_type.name for ps in placement_sets["golgi_cell"]], ["golgi_cell"])
+
+
+@unittest.skipUnless(
+    hasattr(Recording, "placement_labels"),
+    "This BSB version does not store the labels devices select their cells by.",
+)
+class LabelledSimCircuitFixture(
+    MiniCerebCircuitFixture, unittest.TestCase, engine_name="hdf5", setup_cls=True
+):
+    """
+    Purkinje cells split into a ``plus`` and a ``minus`` microzone before the simulation,
+    each recorded by its own spike recorder targetting the cells by label.
+    """
+
+    @classmethod
+    def setUpClass(cls):
+        super().setUpClass()
+        ps = cls.scaffold.get_placement_set("purkinje_cell")
+        ids = np.arange(len(ps))
+        cls.plus, cls.minus = ids[: len(ids) // 2], ids[len(ids) // 2 :]
+        ps.label(["plus"], cls.plus)
+        ps.label(["minus"], cls.minus)
+        simulation = cls.scaffold.simulations["basal_activity"]
+        simulation.duration = 1000.0
+        # No report needed here, only the spike recordings.
+        del simulation.after_simulation["print_simulation_report"]
+        del simulation.devices["purkinje_record"]
+        for label in ("plus", "minus"):
+            simulation.devices[f"purkinje_{label}_record"] = {
+                "device": "spike_recorder",
+                "delay": 0.1,
+                "targetting": {
+                    "strategy": "by_label",
+                    "cell_models": ["purkinje_cell"],
+                    "labels": [label],
+                },
+            }
+        adapter = get_simulation_adapter(
+            simulation.simulator, comm=cls.scaffold._comm.get_communicator()
+        )
+        cls.simulation_results = adapter.simulate(simulation)
+        cls.spiking_results = SpikingResults(
+            cls.scaffold, "basal_activity", 0, None, result=cls.simulation_results[0]
+        )
+
+    def test_get_labelled_placement_sets(self):
+        placement_sets = self.spiking_results.get_placement_sets()
+        self.assertNotIn("purkinje_cell", placement_sets)
+        positions = self.scaffold.get_placement_set("purkinje_cell").load_positions()
+        for population, label, cells in (
+            ("purkinje_cell_plus", "plus", self.plus),
+            ("purkinje_cell_minus", "minus", self.minus),
+        ):
+            # Each microzone is recorded by its own labelled recorder.
+            group = self.spiking_results._recordings[
+                self.spiking_results._populations.index(population)
+            ]
+            self.assertEqual({r.device for r in group}, {f"purkinje_{label}_record"})
+            self.assertEqual(len(group), len(cells))
+            # Each microzone gets the placement set of its cell type, filtered by its label.
+            (population_ps,) = placement_sets[population]
+            self.assertEqual(population_ps.cell_type.name, "purkinje_cell")
+            self.assertEqual(population_ps.get_label_filter(), [label])
+            self.assertEqual(len(population_ps), len(cells))
+            np.testing.assert_array_equal(population_ps.load_positions(), positions[cells])
 
 
 class TestExtractISIs(unittest.TestCase):
