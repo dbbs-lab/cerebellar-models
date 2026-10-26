@@ -22,7 +22,7 @@ from elephant.spike_train_correlation import correlation_coefficient
 from elephant.statistics import instantaneous_rate, isi
 from neo import SpikeTrain
 from quantities import ms
-position
+
 from cerebellar_models.analysis.plots import ScaffoldPlot
 
 
