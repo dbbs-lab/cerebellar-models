@@ -128,6 +128,18 @@ class SNNSimulate_forMFM:
         self.prepare_sim()
         return self.scaffold
 
+    def tf_connections(self):
+        """Unique connection tags referenced by the TF templates in ``self.tf_json``
+        (these are scaffold connectivity-set names)."""
+        with open(self.tf_json) as f:
+            tf_dict = json.load(f)
+        tags = []
+        for cell in tf_dict.values():
+            for tag in cell.get("connections", {}):
+                if tag not in tags:
+                    tags.append(tag)
+        return tags
+
     def _nio_path(self):
         if self.output_path is None:
             raise ValueError("output_path must be set to read/write the simulation results")
@@ -344,7 +356,7 @@ class SNNSimulate_forMFM:
 
     def compute_plv(
         self,
-        connections,
+        connections=None,
         output_path="plv.json",
         min_conv=2,
         min_spikes=2,
@@ -363,6 +375,8 @@ class SNNSimulate_forMFM:
         if MPI.get_rank() != 0:
             MPI.barrier()
             return None
+        if connections is None:
+            connections = self.tf_connections()
         rng = np.random.default_rng(seed)
         pop_spikes = self._load_pop_spikes(ignored_ct)
 

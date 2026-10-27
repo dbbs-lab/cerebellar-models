@@ -6,9 +6,13 @@ import numpy as np
 from cerebellar_models.MFM.snn_for_mfm import SNNSimulate_forMFM
 
 SIMULATE = False
+COMPUTE_PLV = True
 
 REPO_ROOT = Path(__file__).resolve().parent.parent
 os.chdir(REPO_ROOT)
+
+PLV_OUTPUT = "1_snn_simulations/plv.json"
+PLV_SEED = 1234
 
 
 if __name__ == "__main__":
@@ -31,3 +35,7 @@ if __name__ == "__main__":
     snn_sims_mfm.print_results(pdf_dir="1_snn_simulations/snn_sims_mfm_pdf")
     results = snn_sims_mfm.compute_firing_rates(save_spiketrains=False)
     #snn_sims_mfm.plot_raster()
+
+    if COMPUTE_PLV:
+        plv = snn_sims_mfm.compute_plv(output_path=PLV_OUTPUT, seed=PLV_SEED)
+        print(f"PLV saved → {PLV_OUTPUT}")
