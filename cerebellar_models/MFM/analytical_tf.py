@@ -227,6 +227,23 @@ class AnalyticalTransferFunction:
         self.conn_weights = dict(conn_weights) if conn_weights else {}
         self.use_plv = use_plv
 
+    def set_plv(self, conn_plv, default=1.0):
+        """Aggregate per-connection PLV scalars ``{conn_tag: value}`` into each channel's
+        ``plv`` as a K-weighted mean over the connections fused into that channel."""
+        for tag, chan in zip(self.tags, self.params["exc"] + self.params["inh"]):
+            pairs = [
+                (conn_plv[t], self.conn_weights.get(t, 1.0))
+                for t in self.label_tags.get(tag, [])
+                if t in conn_plv
+            ]
+            pairs = [(v, w) for v, w in pairs if v is not None and not np.isnan(v)]
+            wsum = sum(w for _, w in pairs)
+            if pairs and wsum > 0:
+                chan["plv"] = float(sum(v * w for v, w in pairs) / wsum)
+            else:
+                chan["plv"] = default
+        return self
+
     def load_plv(self, plv_path, metric="plv_mid", default=1.0):
         with open(plv_path) as f:
             plv = json.load(f)
@@ -236,19 +253,7 @@ class AnalyticalTransferFunction:
                 return entry.get(metric, np.nan)
             return entry.get("plv_per_frequency", {}).get(metric, np.nan)
 
-        for tag, chan in zip(self.tags, self.params["exc"] + self.params["inh"]):
-            pairs = [
-                (_value(plv[t]), self.conn_weights.get(t, 1.0))
-                for t in self.label_tags.get(tag, [])
-                if t in plv
-            ]
-            pairs = [(v, w) for v, w in pairs if v is not None and not np.isnan(v)]
-            wsum = sum(w for _, w in pairs)
-            if pairs and wsum > 0:
-                chan["plv"] = float(sum(v * w for v, w in pairs) / wsum)
-            else:
-                chan["plv"] = default
-        return self
+        return self.set_plv({t: _value(e) for t, e in plv.items()}, default=default)
 
     @property
     def exc_tags(self):
@@ -582,7 +587,11 @@ class AnalyticalTransferFunctionFitting:
         self.w = np.zeros_like(self.MEAN)
 
     def _make_result(self, alpha, P, mse):
-        return AnalyticalTransferFunction(
+        # Mirror the numerical template's PLV provenance: if it was built with PLV-scaled
+        # K, apply the same per-connection values here so the analytical K scaling matches.
+        plv_meta = getattr(self.numerical_tf, "plv", None) or {"use_plv": False}
+        use_plv = bool(plv_meta.get("use_plv", False))
+        res = AnalyticalTransferFunction(
             self.numerical_tf.cell_name,
             self.params,
             alpha,
@@ -592,7 +601,11 @@ class AnalyticalTransferFunctionFitting:
             mse=mse,
             label_tags=self.label_tags,
             conn_weights=self.conn_K,
+            use_plv=use_plv,
         )
+        if use_plv:
+            res.set_plv(plv_meta.get("values", {}))
+        return res
 
     # -- fitting ------------------------------------------------------------ #
 

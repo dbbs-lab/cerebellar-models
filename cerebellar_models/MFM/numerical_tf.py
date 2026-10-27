@@ -22,6 +22,26 @@ from cerebellar_models.analysis import StructureReport
 _WORKER_SIM_INFO = None
 
 
+def _resolve_plv_values(plv_path, conn_tags, metric="plv_mid", default=1.0):
+    """Read ``plv.json`` and return {conn_tag: scalar} for the chosen metric.
+
+    ``metric`` is a top-level key (``plv_mid``/``plv_mean``) or a per-frequency key
+    looked up under ``plv_per_frequency``. Missing/NaN entries fall back to ``default``.
+    """
+    with open(plv_path) as f:
+        plv = json.load(f)
+
+    def _value(entry):
+        v = (
+            entry.get(metric, np.nan)
+            if metric in ("plv_mid", "plv_mean")
+            else entry.get("plv_per_frequency", {}).get(metric, np.nan)
+        )
+        return default if v is None or np.isnan(v) else float(v)
+
+    return {tag: (_value(plv[tag]) if tag in plv else default) for tag in conn_tags}
+
+
 def _connect_neuron(neuron, sim_info, rates_dict, rng):
     """Wire one neuron to its Poisson generators."""
     for conn_tag, info in sim_info["connections"].items():
@@ -140,12 +160,15 @@ class NumericalTransferFunction:
         "io": [0.46, 0.376, 0.54, 1.0],
     }
 
-    def __init__(self, cell_name, tf_mean, tf_std, tags, freq_axes):
+    def __init__(self, cell_name, tf_mean, tf_std, tags, freq_axes, plv=None):
         self.cell_name = cell_name
         self.tf_mean = np.asarray(tf_mean)
         self.tf_std = np.asarray(tf_std)
         self.tags = list(tags)
         self.freq_axes = [np.asarray(a) for a in freq_axes]
+        # PLV provenance: {"use_plv": bool, "plv_path", "plv_metric", "values": {tag: v}}.
+        # The analytical fit reads this back so its K scaling matches this template.
+        self.plv = dict(plv) if plv else {"use_plv": False}
 
     @classmethod
     def load(cls, cell_name, output_dir="output_TFs"):
@@ -154,7 +177,8 @@ class NumericalTransferFunction:
         data = np.load(path, allow_pickle=True)
         tags = data["tags"].tolist()
         freq_axes = [data[f"freq_axis_{t}"] for t in tags]
-        return cls(cell_name, data["tf_mean"], data["tf_std"], tags, freq_axes)
+        plv = data["plv"].item() if "plv" in data.files else None
+        return cls(cell_name, data["tf_mean"], data["tf_std"], tags, freq_axes, plv=plv)
 
     def save(self, output_dir="output_TFs"):
         os.makedirs(output_dir, exist_ok=True)
@@ -164,6 +188,7 @@ class NumericalTransferFunction:
             tf_mean=self.tf_mean,
             tf_std=self.tf_std,
             tags=np.array(self.tags),
+            plv=np.array(self.plv, dtype=object),
             **{f"freq_axis_{t}": ax for t, ax in zip(self.tags, self.freq_axes)},
         )
         print(f"TF saved → {path}")
@@ -196,6 +221,13 @@ class NumericalTransferFunction:
         print(
             f"Std mean: {self.tf_std.mean():.2f} Hz  |  max {self.tf_std.max():.2f} Hz @ ({_fmt(idx_max_std)})"
         )
+        if self.plv.get("use_plv"):
+            print(
+                f"PLV     : on ({self.plv.get('plv_metric')}, {self.plv.get('plv_path')}) "
+                f"{self.plv.get('values')}"
+            )
+        else:
+            print("PLV     : off")
 
     def plot_tf(self, save=True, n_slices=5):
         if len(self.tags) == 2:
@@ -323,6 +355,9 @@ class NumericalTransferFunctionSimulator:
         show_rasters=False,
         raster_max_points=10,
         stochastic_convergence=False,
+        use_plv=False,
+        plv_path=None,
+        plv_metric="plv_mid",
     ):
         self.n_points = n_points
         self.n_reps = n_reps
@@ -333,6 +368,11 @@ class NumericalTransferFunctionSimulator:
         self.show_rasters = show_rasters
         self.raster_max_points = raster_max_points
         self.stochastic_convergence = stochastic_convergence
+        if use_plv and not plv_path:
+            raise ValueError("use_plv=True requires plv_path (a plv.json produced by compute_plv)")
+        self.use_plv = use_plv
+        self.plv_path = plv_path
+        self.plv_metric = plv_metric
 
         self._tf = None
 
@@ -409,6 +449,25 @@ class NumericalTransferFunctionSimulator:
                 "receptor_type": s.get("receptor_type", 1),
                 "rate_range": conn_info["rate_range"],
             }
+
+        if self.use_plv:
+            # Scale the convergence K a priori by the connection PLV (K_eff = K·plv),
+            # mirroring the analytical mean muGe = Q·(K·plv)·Te·f. Downstream n_syn is
+            # drawn from this scaled convergence.
+            values = _resolve_plv_values(self.plv_path, list(connections), self.plv_metric)
+            for conn_tag, info in connections.items():
+                plv = values[conn_tag]
+                info["plv"] = plv
+                info["convergence"] *= plv
+                info["convergence_std"] *= plv
+            self.plv_meta = {
+                "use_plv": True,
+                "plv_path": self.plv_path,
+                "plv_metric": self.plv_metric,
+                "values": values,
+            }
+        else:
+            self.plv_meta = {"use_plv": False}
 
         label_ranges = {}
         for conn_tag, info in connections.items():
@@ -515,7 +574,7 @@ class NumericalTransferFunctionSimulator:
                         pbar.update(1)
 
         self._tf = NumericalTransferFunction(
-            self.cell_name, tf_mean, tf_std, unique_labels, freq_axes
+            self.cell_name, tf_mean, tf_std, unique_labels, freq_axes, plv=self.plv_meta
         )
 
         if save:
