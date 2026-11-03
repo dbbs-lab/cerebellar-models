@@ -12,6 +12,12 @@ from scipy.optimize import curve_fit
 
 
 class TestNestModuleLoading(unittest.TestCase):
+    @classmethod
+    def setUpClass(cls):
+        super().setUpClass()
+        ROOT_FOLDER = abspath(dirname(dirname(__file__)))
+        os.chdir(ROOT_FOLDER)
+
     def test_build_models(self):
         from cerebellar_models.nest_models.build_models import (
             _build_nest_models,
