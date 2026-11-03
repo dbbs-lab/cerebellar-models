@@ -6,8 +6,10 @@ Connection strategies
 :class:`ConnectomeMossyGlomerulus <.connectome.to_glomerulus.ConnectomeMossyGlomerulus>`
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-The algorithm selects one mossy fiber within the :math:`x\_length \times y\_length \times z\_size` :math:`\mu m` box
-surrounding each glomerulus. Here ``z_size`` is the size of the partition where the glomeruli are (i.e. no limit).
+First, each mossy fiber is assigned its closest glomerulus that is not yet assigned to another mossy fiber, so that
+every mossy fiber is connected to at least one glomerulus (as long as there are at least as many glomeruli as mossy
+fibers). Then, for each remaining glomerulus, the algorithm selects one mossy fiber within the
+:math:`x\_length \times y\_length \times z\_size` :math:`\mu m` box surrounding it. Here ``z_size`` is the size of the partition where the glomeruli are (i.e. no limit).
 This selection is random and performed with a truncated exponential distribution. If no mossy_fiber could be found
 in the box surrounding one glomerulus, the closest mossy_fiber is chosen.
 
@@ -151,7 +153,9 @@ See bsb :doc:`documentation <bsb:connectivity/connection-strategies>`.
 
 :class:`ConnectomeUBCGlomerulus <.connectome.to_glomerulus.ConnectomeUBCGlomerulus>`
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-The algorithm selects one UBC within the sphere surrounding each UBC glomerulus. This selection is random and performed
+First, each UBC is assigned its closest UBC glomerulus that is not yet assigned to another UBC, so that every UBC is
+connected to at least one UBC glomerulus (as long as there are at least as many UBC glomeruli as UBCs). Then, the
+algorithm selects one UBC within the sphere surrounding each remaining UBC glomerulus. This selection is random and performed
 with a truncated exponential distribution. If no UBC could be found within the sphere surrounding one UBC glomerulus,
 the closest UBC is chosen.
 

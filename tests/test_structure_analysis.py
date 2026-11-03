@@ -167,6 +167,7 @@ class TestConnectivityPlots(
             self.assertAll(np.array(self.plot.get_convergences()[k]) == 1.0)
         divergences = self.plot.get_divergences()["mf to glomerulus"]
         self.assertEqual(len(divergences), len(self.scaffold.get_placement_set("mossy_fibers")))
+        self.assertAll(divergences >= 1, "Each mossy fiber has at least one glomerulus")
         self.assertAlmostEqual(np.mean(divergences), 20.0, delta=1.0)
 
     def test_connectivity_table_unconnected_cells(self):
