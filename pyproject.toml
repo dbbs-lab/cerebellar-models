@@ -9,7 +9,7 @@ description = "Implementation of the BSB framework for cerebellar cortex reconst
 readme = "README.md"
 license = { file = "LICENSE" }
 classifiers = ["License :: OSI Approved :: GNU General Public License v3 or later (GPLv3+)"]
-requires-python = ">=3.10"
+requires-python = ">=3.11"
 dynamic = ["version"]
 dependencies = [
     "bsb[parallel]~=8.0",
