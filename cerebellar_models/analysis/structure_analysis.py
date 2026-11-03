@@ -154,6 +154,9 @@ class ConnectivityTable(TablePlot, ScaffoldPlot):
       connections created with a single postsynaptic cell
     - the divergence ratio defined as the mean number of efferent
       connections created with a single presynaptic cell
+
+    Convergence and divergence are averaged over the whole postsynaptic and presynaptic
+    populations respectively, including cells that form no connection.
     """
 
     def __init__(
@@ -228,9 +231,14 @@ class ConnectivityTable(TablePlot, ScaffoldPlot):
                 np.column_stack((pre_locs[:, 0], post_locs[:, 0])), axis=0, return_counts=True
             )
 
-            # Find the unique post and pre neurons
-            _, uniquePre_count = np.unique(combos[:, 0], axis=0, return_counts=True)
-            _, uniquePost_count = np.unique(combos[:, 1], axis=0, return_counts=True)
+            # Count the unique partners of each pre and post neuron, including the ones
+            # without any connection. Global ids range from 0 to the number of cells - 1.
+            uniquePre_count = np.bincount(
+                combos[:, 0], minlength=len(ps.pre_type.get_placement_set())
+            )
+            uniquePost_count = np.bincount(
+                combos[:, 1], minlength=len(ps.post_type.get_placement_set())
+            )
             self.rows.append(self.extract_strat_name(ps))
             self._values.append([len(pre_locs), combo_counts, uniquePost_count, uniquePre_count])
             self.table_values.append(
@@ -271,7 +279,7 @@ class ConnectivityTable(TablePlot, ScaffoldPlot):
     def get_convergences(self):
         """
         Return a dictionary which gives for each connection name
-        the divergence number of each unique postsynaptic cell.
+        the convergence number of each postsynaptic cell.
         The plot needs to be updated.
 
         :rtype: Dict[str, numpy.ndarray[int]]
@@ -281,7 +289,7 @@ class ConnectivityTable(TablePlot, ScaffoldPlot):
     def get_divergences(self):
         """
         Return a dictionary which gives for each connection name
-        the divergence number of each unique presynaptic cell.
+        the divergence number of each presynaptic cell.
         The plot needs to be updated.
 
         :rtype: Dict[str, numpy.ndarray[int]]
