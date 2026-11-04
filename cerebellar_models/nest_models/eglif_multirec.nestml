@@ -117,8 +117,8 @@ model eglif_multirec:
     state:
         V_m mV = -40.0 mV                   # Membrane potential in mV
         V_m_2 mV = 0.0 mV                   # Auxiliary variable for Mg_Block voltage dependency
-        I_dep pA = 0 * pA                   # Depolarizing spike-triggered current
-        I_adap pA = 0 * pA                  # Adaptation current
+        I_dep pA = 0 pA                     # Depolarizing spike-triggered current
+        I_adap pA = 0 pA                    # Adaptation current
         r integer = 0                       # Refractory state
         m integer = 0                       # Mg Unblock state
 
@@ -183,18 +183,18 @@ model eglif_multirec:
         recordable inline Mg_block real =  1 / (1 + exp((v0_block - V_m_2) / k_block))
 
         # Update synaptic current
-        recordable inline I_syn_ampa pA = -(convolve(g_AMPA_d1, AMPA) * nS * (V_m-AMPA_E_rev) + convolve(g_AMPA_d2, AMPA) * nS * (V_m-AMPA_E_rev))
-        recordable inline I_syn_nmda pA = -(convolve(g_NMDA_d1, NMDA)* nS * (V_m-NMDA_E_rev) * Mg_block +convolve(g_NMDA_d2, NMDA)* nS * (V_m-NMDA_E_rev) * Mg_block)
-        recordable inline I_syn_gaba pA = - (convolve(g_GABA_d1, GABA) * nS * (V_m - GABA_E_rev) + convolve(g_GABA_d2, GABA) * nS * (V_m - GABA_E_rev))
-        recordable inline I_syn_ampa2 pA = -(convolve(g_AMPA2_d1, AMPA2) * nS * (V_m - AMPA2_E_rev) + convolve(g_AMPA2_d2, AMPA2) * nS * (V_m - AMPA2_E_rev))
-        recordable inline I_syn_ampa3 pA = -(convolve(g_AMPA3_d1, AMPA3) * nS * (V_m - AMPA3_E_rev) + convolve(g_AMPA3_d2, AMPA3) * nS * (V_m - AMPA3_E_rev))
+        recordable inline I_syn_ampa pA = -(convolve(g_AMPA_d1, AMPA) * 1 nS * (V_m-AMPA_E_rev) + convolve(g_AMPA_d2, AMPA) * 1 nS * (V_m-AMPA_E_rev))
+        recordable inline I_syn_nmda pA = -(convolve(g_NMDA_d1, NMDA)* 1 nS * (V_m-NMDA_E_rev) * Mg_block +convolve(g_NMDA_d2, NMDA)* 1 nS * (V_m-NMDA_E_rev) * Mg_block)
+        recordable inline I_syn_gaba pA = - (convolve(g_GABA_d1, GABA) * 1 nS * (V_m - GABA_E_rev) + convolve(g_GABA_d2, GABA) * 1 nS * (V_m - GABA_E_rev))
+        recordable inline I_syn_ampa2 pA = -(convolve(g_AMPA2_d1, AMPA2) * 1 nS * (V_m - AMPA2_E_rev) + convolve(g_AMPA2_d2, AMPA2) * 1 nS * (V_m - AMPA2_E_rev))
+        recordable inline I_syn_ampa3 pA = -(convolve(g_AMPA3_d1, AMPA3) * 1 nS * (V_m - AMPA3_E_rev) + convolve(g_AMPA3_d2, AMPA3) * 1 nS * (V_m - AMPA3_E_rev))
         recordable inline I_syn pA =  I_syn_ampa + I_syn_nmda + I_syn_gaba + I_syn_ampa2 + I_syn_ampa3
 
         # Update membrane potential, adaptation and spike triggered currents
         # WARNING: SIGN BELOW IS INCORRECT FOR A LIF MODEL -> Should be V_m' = - (V_m - E_L) / tau_m + ...
         V_m' = (V_m - E_L) / tau_m + (I_e + I_stim - I_adap + I_dep + I_syn) / C_m
-        I_dep' = - I_dep * k_1 / ms
-        I_adap' = (V_m - E_L) * (k_adap * nS / ms) - I_adap * (k_2 / ms)
+        I_dep' = - I_dep * k_1 / 1 ms
+        I_adap' = (V_m - E_L) * (k_adap * 1 nS / 1 ms) - I_adap * (k_2 / 1 ms)
 
     parameters:
         C_m pF = 281.0 pF                           # Membrane Capacitance
@@ -208,12 +208,12 @@ model eglif_multirec:
         # spike stochasticity parameters
         stochastic_spiking boolean = false          # true: stochastic threshold spiking; false: deterministic threshold spiking
         V_th mV = -50.4 mV                          # Spike Threshold
-        lambda_0 real = 0.001 / ms                  # Escape rate parameter
+        lambda_0 real = 0.001 / 1 ms                # Escape rate parameter
         tau_V mV = 0.5 mV                           # Escape rate parameter
 
-        k_1 real = pow(144.0, -1) / ms              # Decay rate
-        k_2 real = pow(80.5, -1) / ms               # Adaptation constant
-        k_adap real = 4 * nS / ms                   # Adaptation constant
+        k_1 real = pow(144.0, -1) / 1 ms            # Decay rate
+        k_2 real = pow(80.5, -1) / 1 ms             # Adaptation constant
+        k_adap real = 4 * 1 nS / 1 ms               # Adaptation constant
         A1 pA = 100.0 pA                            # Current update constant
         A2 pA = 100.0 pA                            # Current update constant
 

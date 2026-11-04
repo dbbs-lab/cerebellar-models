@@ -167,7 +167,51 @@ class TestConnectivityPlots(
             self.assertAll(np.array(self.plot.get_convergences()[k]) == 1.0)
         divergences = self.plot.get_divergences()["mf to glomerulus"]
         self.assertEqual(len(divergences), len(self.scaffold.get_placement_set("mossy_fibers")))
+        self.assertAll(divergences >= 1, "Each mossy fiber has at least one glomerulus")
         self.assertAlmostEqual(np.mean(divergences), 20.0, delta=1.0)
+
+    def test_connectivity_table_unconnected_cells(self):
+        self.scaffold.compile(
+            only=["granular_layer_innervation", "granular_layer_placement"],
+            skip_after_connectivity=True,
+        )
+        mf_ps = self.scaffold.get_placement_set("mossy_fibers")
+        glom_ps = self.scaffold.get_placement_set("glomerulus")
+        n_mf, n_glom = len(mf_ps), len(glom_ps)
+        self.assertGreater(n_mf, 1)
+        self.assertGreater(n_glom, 2)
+        # Only the first mossy fiber connects, to the first two glomeruli,
+        # twice to the first one.
+        self.scaffold.connect_cells(
+            mf_ps,
+            glom_ps,
+            np.array([[0, -1, -1], [0, -1, -1], [0, -1, -1]]),
+            np.array([[0, -1, -1], [0, -1, -1], [1, -1, -1]]),
+            "mossy_fibers_to_glomerulus",
+        )
+        self.plot = ConnectivityTable(
+            (5, 2.5), scaffold=self.scaffold, dict_abv={"mossy_fibers": "mf"}
+        )
+        self.plot.plot()
+        key = "mf to glomerulus"
+        self.assertEqual(self.plot.rows, [key])
+        self.assertEqual(self.plot.get_synapse_counts()[key], 3)
+        self.assertAll(np.sort(self.plot.get_nb_synapse_per_pair()[key]) == [1, 2])
+        # Unconnected cells count as 0 in the convergence and divergence.
+        expected_conv = np.zeros(n_glom, dtype=int)
+        expected_conv[:2] = 1
+        self.assertAll(self.plot.get_convergences()[key] == expected_conv)
+        expected_div = np.zeros(n_mf, dtype=int)
+        expected_div[0] = 2
+        self.assertAll(self.plot.get_divergences()[key] == expected_div)
+        self.assertEqual(
+            self.plot.table_values[0][2],
+            r"{:.2} $\pm$ {:.2}".format(np.mean(expected_conv), np.std(expected_conv)),
+        )
+        self.assertEqual(
+            self.plot.table_values[0][3],
+            r"{:.2} $\pm$ {:.2}".format(np.mean(expected_div), np.std(expected_div)),
+        )
 
     def test_warn(self):
         # No connection sets in storage before compile

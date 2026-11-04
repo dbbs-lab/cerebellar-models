@@ -58,8 +58,8 @@
 model eglif_cond_alpha_multisyn:
     state:
         V_m mV = -60.0 mV                   # Membrane potential in mV
-        I_dep pA = 0 * pA                   # Depolarizing spike-triggered current
-        I_adap pA = 0 * pA                  # Adaptation current
+        I_dep pA = 0 pA                     # Depolarizing spike-triggered current
+        I_adap pA = 0 pA                    # Adaptation current
         r integer = 0                       # Refractory state
 
     equations:
@@ -70,17 +70,17 @@ model eglif_cond_alpha_multisyn:
         kernel syn_kernel4 = (e / tau_syn4) * t * exp(-t / tau_syn4)
 
         # Update synaptic current
-        inline I_syn1 pA = convolve(syn_kernel1, syn1_spike) * nS * (E_rev1 - V_m)
-        inline I_syn2 pA = convolve(syn_kernel2, syn2_spike) * nS * (E_rev2 - V_m)
-        inline I_syn3 pA = convolve(syn_kernel3, syn3_spike) * nS * (E_rev3 - V_m)
-        inline I_syn4 pA = convolve(syn_kernel4, syn4_spike) * nS * (E_rev4 - V_m)
+        inline I_syn1 pA = convolve(syn_kernel1, syn1_spike) * 1 nS * (E_rev1 - V_m)
+        inline I_syn2 pA = convolve(syn_kernel2, syn2_spike) * 1 nS * (E_rev2 - V_m)
+        inline I_syn3 pA = convolve(syn_kernel3, syn3_spike) * 1 nS * (E_rev3 - V_m)
+        inline I_syn4 pA = convolve(syn_kernel4, syn4_spike) * 1 nS * (E_rev4 - V_m)
         recordable inline I_syn pA =  I_syn1 + I_syn2 + I_syn3 + I_syn4
 
         # Update membrane potential, adaptation and spike triggered currents
         # WARNING: SIGN BELOW IS INCORRECT FOR A LIF MODEL -> Should be V_m' = - (V_m - E_L) / tau_m + ...
         V_m' = (V_m - E_L) / tau_m + (I_e + I_stim - I_adap + I_dep + I_syn) / C_m
-        I_dep' = - I_dep * k_1 / ms
-        I_adap' = (V_m - E_L) * (k_adap * nS / ms) - I_adap * (k_2 / ms)
+        I_dep' = - I_dep * k_1 / 1 ms
+        I_adap' = (V_m - E_L) * (k_adap * 1 nS / 1 ms) - I_adap * (k_2 / 1 ms)
 
     parameters:
         C_m pF = 281.0 pF                   # Membrane Capacitance
@@ -92,12 +92,12 @@ model eglif_cond_alpha_multisyn:
         V_min mV = -150.0 mV                # Minimal membrane potential value
 
         V_th mV = -50.4 mV                  # Spike Threshold
-        lambda_0 real = 0.001 / ms          # Escape rate parameter
+        lambda_0 real = 0.001 / 1 ms        # Escape rate parameter
         tau_V mV = 0.5 mV                   # Escape rate parameter
 
-        k_1 real = pow(144.0, -1) / ms      # Decay rate
-        k_2 real = pow(80.5, -1) / ms       # Adaptation constant
-        k_adap real = 4 * nS / ms           # Adaptation constant
+        k_1 real = pow(144.0, -1) / 1 ms    # Decay rate
+        k_2 real = pow(80.5, -1) / 1 ms     # Adaptation constant
+        k_adap real = 4 * 1 nS / 1 ms       # Adaptation constant
         A1 pA = 100.0 pA                    # Current update constant
         A2 pA = 100.0 pA                    # Current update constant
 
