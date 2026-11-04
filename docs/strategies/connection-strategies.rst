@@ -183,7 +183,7 @@ glomerulus.
 .. code-block:: yaml
 
     glomerulus_to_ubc:
-        strategy: cerebellar_models.connectome.glomerulus_ubc.ConnectomeGlomerulus_to_UBC
+        strategy: cerebellar_models.connectome.glomerulus_ubc.ConnectomeGlomerulusUBC
         presynaptic:
           cell_types:
             - ubc_glomerulus

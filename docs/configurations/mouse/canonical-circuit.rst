@@ -39,7 +39,7 @@ Coordinate framework
 By convention, the circuit is oriented so that its layers are stacked vertically with the granular
 layer at the bottom and the molecular layer at the top. We derived a coordinate framework
 ``(x,y,z)`` from this layout, based on the right-hand orientation convention. Its origin is set at
-the bottom of the circuit, the z axis pointing to the top of the molecular layer. The ``(y-z)``
+the bottom of the circuit, the z axis pointing to the top of the molecular layer. The ``(x-z)``
 plane corresponds to the para-sagittal sections that are co-planar with the Purkinje dendritic trees
 and normal to the granule cells parallel fibers. Finally, unit of distance in the configurations are
 expressed in micrometers :math:`\mu m`. Note that the morphologies provided are oriented by default to
@@ -152,8 +152,8 @@ the numbers reported in :numref:`fig-network`.
    5; GoC; axon ; GoC; basal dendrites; :ref:`voxel_int` ; Hull and Regehr (2012) [#hull_2012]_
    6; GrC; ascending axon ; GoC; basal dendrites; :ref:`voxel_int` ; Cesana et al. (2013) [#cesana_2013]_
    7; GrC; parallel fiber ; GoC; apical dendrites ; :ref:`voxel_int` ; Kanichay and Silver (2008) [#kanichay_2008]_
-   8; GrC; ascending axon ; PC ; ascending axon targets ; :ref:`voxel_int` ; Wang and Huang (2006) [#wang_2006]_
-   9; GrC; parallel fiber ; PC ; parallel fiber targets ; :ref:`voxel_int` ; Wang and Huang (2006) [#wang_2006]_
+   8; GrC; ascending axon ; PC ; ascending axon targets ; :ref:`voxel_int` ; Huang et al. (2006) [#huang_2006]_
+   9; GrC; parallel fiber ; PC ; parallel fiber targets ; :ref:`voxel_int` ; Huang et al. (2006) [#huang_2006]_
    10; GrC; parallel fiber ; BC ; dendrites; :ref:`voxel_int` ; Jörntell et al. (2010) [#jorntell_2010]_
    11; GrC; parallel fiber ; SC ; dendrites; :ref:`voxel_int` ; Jörntell et al. (2010) [#jorntell_2010]_
    12; BC ; axon ; PC ; soma ; :ref:`voxel_int` ; Jörntell et al. (2010) [#jorntell_2010]_
@@ -282,7 +282,7 @@ References
    potent feedback circuit in the cerebellar granular layer. Journal of Neuroscience, 33(30),
    12430-12446. https://doi.org/10.1523/JNEUROSCI.4897-11.2013
 
-.. [#wang_2006] Wang, L., & Huang, R. H. (2006). Cerebellar granule cell: Ascending axon and
+.. [#huang_2006] Huang, C. M., Wang, L., & Huang, R. H. (2006). Cerebellar granule cell: Ascending axon and
    parallel fiber. European Journal of Neuroscience, 23(7), 1731-1737.
    https://doi.org/10.1111/j.1460-9568.2006.04690.x
 
