@@ -280,11 +280,12 @@ class TestSpikePlots(
         self.assertEqual(len(mf_axes), 2)
         xlims = np.array([self.simulationReport.time_from, self.simulationReport.time_to])
         self.assertAll(np.array(plot.get_ax()[0].get_xlim()) == xlims)
-        self.assertAll(np.array(plot.get_ax()[1].get_xlim()) == xlims)
+        ax = plot.get_ax()[1]
+        self.assertAll(np.array(ax.get_xlim()) == xlims)
         self.assertEqual(len(plot.get_ax()[0].collections), 1)
         scatter = plot.get_ax()[0].collections[0]
-        self.assertEqual(len(plot.get_ax()[1].containers), 1)
-        hist = plot.get_ax()[1].containers[0]
+        self.assertEqual(len(ax.containers), 1)
+        hist = ax.containers[0]
         self.assertEqual(scatter.get_sizes()[0], 50 / self.simulationReport.nb_neurons[0])
         self.assertAll(
             np.array(scatter.get_facecolor()[0][:3])
@@ -305,6 +306,15 @@ class TestSpikePlots(
         self.assertAll(np.absolute(mf_spike_times - np.array(scatter.get_offsets()).T) <= 1e-7)
         self.assertEqual(len(hist), 30)
         self.assertEqual(hist.orientation, "vertical")
+
+        self.assertEqual(ax.get_ylabel(), "Firing rate [Hz]")
+        bin_times = np.linspace(plot.time_from, plot.time_to, 31)
+        counts = np.histogram(self.simulationReport.filt_spikes[0].magnitude, bin_times)[0]
+        self.assertGreater(counts.sum(), 0)
+        bin_size_s = (bin_times[1] - bin_times[0]) / 1000.0
+        heights = np.array([bar.get_height() for bar in ax.containers[0]])
+        nb_neurons = self.simulationReport.nb_neurons[0]
+        self.assertTrue(np.allclose(heights, counts / bin_size_s / nb_neurons))
 
     def test_relative_time(self):
         plot = RasterPSTHPlot(

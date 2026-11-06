@@ -208,6 +208,8 @@ class SpikeSimulationReport(BSBReport):
 class RasterPSTHPlot(SpikePlot):
     """
     Combined raster plot and PSTH plot of the spiking activity results for each neuron type.
+    The PSTH displays the mean firing rate per neuron, in Hz (spike counts per bin divided by the
+    size of the time bin and the number of neurons of the population).
     The subplots are split in two columns.
     """
 
@@ -280,6 +282,9 @@ class RasterPSTHPlot(SpikePlot):
         counts[1:] = np.cumsum(self.nb_neurons)
 
         bin_times = np.linspace(self.time_from, self.time_to, self.nb_bins)
+        # Rate contribution (in Hz) of a single spike: 1 / bin size, with bin edges in ms.
+        duration = self.time_to - self.time_from
+        spike_rate = 1000.0 * (self.nb_bins - 1) / duration if duration > 0 else 0.0
         loc_spikes = self.filt_spikes
         for i, ct in enumerate(self.populations):
             times = loc_spikes[i].magnitude
@@ -312,14 +317,20 @@ class RasterPSTHPlot(SpikePlot):
 
             ax = self.get_ax(i)[1]
             if self.nb_neurons[i] > 0:
-                ax.hist(times, bin_times, color=color, **params_psth)
+                ax.hist(
+                    times,
+                    bin_times,
+                    weights=np.full(times.shape, spike_rate / self.nb_neurons[i]),
+                    color=color,
+                    **params_psth,
+                )
             ax.set_xlabel("Time in ms")
             ax.set_xlim(
                 [0, self.time_to - self.time_from]
                 if relative_time
                 else [self.time_from, self.time_to]
             )
-            ax.set_ylabel("Spike counts")
+            ax.set_ylabel("Firing rate [Hz]")
 
 
 class Spike2Columns(SpikePlot):

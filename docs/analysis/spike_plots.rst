@@ -64,7 +64,9 @@ results either from the nio files produced by the BSB simulation, or directly fr
 --------------------------------------------------------------
 This class extracts and plots a simulation spike times as a raster plot
 for the duration of the simulation, as well as the equivalent PSTH for each of
-the cell types of the simulation.
+the cell types of the simulation. The PSTH displays the mean firing rate per neuron
+in Hz, i.e. the number of spikes in each bin divided by the size of the time bin and the number of
+neurons of the population.
 
 On top of the constructor parameters of ``SpikePlot``:
 
