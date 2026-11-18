@@ -19,7 +19,6 @@ from cerebellar_models.analysis.spike_plots import (
     FrequencyPlot,
     ISIPlot,
     RasterPSTHPlot,
-    RunSimulationReport,
     SimResultsTable,
     SortedPSTH,
     SpikeCorrelationPlot,
@@ -285,7 +284,7 @@ class TestSpikePlots(
         scatter = plot.get_ax()[0].collections[0]
         self.assertEqual(len(plot.get_ax()[1].containers), 1)
         hist = plot.get_ax()[1].containers[0]
-        self.assertEqual(scatter.get_sizes()[0], 50 / self.simulationReport.nb_neurons[0])
+        self.assertEqual(scatter.get_sizes()[0], 40 / self.simulationReport.nb_neurons[0])
         self.assertAll(
             np.array(scatter.get_facecolor()[0][:3])
             == self.simulationReport.colors["mossy_fibers"][:3]

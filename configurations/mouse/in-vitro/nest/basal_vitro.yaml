@@ -112,3 +112,4 @@ simulations:
       print_simulation_report:
         strategy: cerebellar_models.analysis.spike_plots.RunSimulationReport
         output_filename: bsb_report_simulation.pdf
+        time_from: 100

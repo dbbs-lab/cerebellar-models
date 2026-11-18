@@ -208,6 +208,8 @@ class SpikeSimulationReport(BSBReport):
 class RasterPSTHPlot(SpikePlot):
     """
     Combined raster plot and PSTH plot of the spiking activity results for each neuron type.
+    The PSTH displays the mean firing rate per neuron, in Hz (spike counts per bin divided by the
+    size of the time bin and the number of neurons of the population).
     The subplots are split in two columns.
     """
 
@@ -238,10 +240,10 @@ class RasterPSTHPlot(SpikePlot):
         self.is_plotted = False
         self.nb_cols = 2
         num_filter = len(self.populations)
-        self.nb_rows = int(np.ceil(num_filter / 2.0))  # nb rows
+        self.nb_rows = int(np.ceil(num_filter / self.nb_cols))  # nb rows
         self.figure = plt.figure(figsize=self.fig_size, **kwargs)
         if self.nb_rows > 0:
-            global_gsp = gs.GridSpec(self.nb_rows, 2)
+            global_gsp = gs.GridSpec(self.nb_rows, self.nb_cols)
         self.axes = [[] for _ in range(self.nb_rows)]
         for i in range(num_filter):
             local_gsp = gs.GridSpecFromSubplotSpec(2, 1, subplot_spec=global_gsp[i], hspace=0)
@@ -250,7 +252,7 @@ class RasterPSTHPlot(SpikePlot):
 
             ax2 = plt.Subplot(self.figure, local_gsp[1])
             self.figure.add_subplot(ax2)
-            self.axes[i // 2].append([ax1, ax2])
+            self.axes[i // self.nb_cols].append([ax1, ax2])
 
     def clear(self):
         for ax in self.get_axes():
@@ -280,13 +282,16 @@ class RasterPSTHPlot(SpikePlot):
         counts[1:] = np.cumsum(self.nb_neurons)
 
         bin_times = np.linspace(self.time_from, self.time_to, self.nb_bins)
+        # Rate contribution (in Hz) of a single spike: 1 / bin size, with bin edges in ms.
+        duration = self.time_to - self.time_from
+        spike_rate = 1000.0 * (self.nb_bins - 1) / duration if duration > 0 else 0.0
         loc_spikes = self.filt_spikes
         for i, ct in enumerate(self.populations):
             times = loc_spikes[i].magnitude
             _, newIds = np.unique(loc_spikes[i].array_annotations["senders"], return_inverse=True)
             cell_params = loc_params_raster.copy()
             if "s" not in cell_params and self.nb_neurons[i] > 0:
-                cell_params["s"] = 50.0 / self.nb_neurons[i]
+                cell_params["s"] = 40.0 / self.nb_neurons[i]
             color = (
                 self.labelled_dict_colors[ct][:3]
                 if ct in self.labelled_dict_colors
@@ -300,7 +305,6 @@ class RasterPSTHPlot(SpikePlot):
                     color=color,
                     **cell_params,
                 )
-            ax.invert_yaxis()
             ax.set_xlim(
                 [0, self.time_to - self.time_from]
                 if relative_time
@@ -308,18 +312,26 @@ class RasterPSTHPlot(SpikePlot):
             )
             ax.get_xaxis().set_visible(False)
             ax.set_ylabel("Neuron id")
-            ax.set_title(f"{ct}")
+            for label in ax.get_yticklabels():
+                label.set_verticalalignment("bottom")
+            ax.set_title(f"{ct.replace("_", " ")}")
 
             ax = self.get_ax(i)[1]
             if self.nb_neurons[i] > 0:
-                ax.hist(times, bin_times, color=color, **params_psth)
-            ax.set_xlabel("Time in ms")
+                ax.hist(
+                    times,
+                    bin_times,
+                    weights=np.full(times.shape, spike_rate / self.nb_neurons[i]),
+                    color=color,
+                    **params_psth,
+                )
+            ax.set_xlabel("Time [ms]")
             ax.set_xlim(
                 [0, self.time_to - self.time_from]
                 if relative_time
                 else [self.time_from, self.time_to]
             )
-            ax.set_ylabel("Spike counts")
+            ax.set_ylabel("Firing \nrate [Hz]")
 
 
 class Spike2Columns(SpikePlot):
@@ -350,12 +362,17 @@ class Spike2Columns(SpikePlot):
         self.is_plotted = False
         self.nb_cols = 2
         num_filter = len(self.populations)
-        self.nb_rows = int(np.ceil(num_filter / 2.0))  # nb rows
+        self.nb_rows = int(np.ceil(num_filter / self.nb_cols))  # nb rows
         self.figure = plt.figure(figsize=self.fig_size, **kwargs)
         self.axes = [[] for _ in range(self.nb_rows)]
         for i in range(num_filter):
-            self.axes[i // 2].append(
-                plt.subplot2grid((self.nb_rows, 2), (i // 2, i % 2), rowspan=1, fig=self.figure)
+            self.axes[i // self.nb_cols].append(
+                plt.subplot2grid(
+                    (self.nb_rows, self.nb_cols),
+                    (i // self.nb_cols, i % self.nb_cols),
+                    rowspan=1,
+                    fig=self.figure,
+                )
             )
 
 
@@ -562,11 +579,11 @@ class SimResultsTable(TablePlot, SpikePlot):
             self.table_values.append(
                 [
                     (
-                        "{:.2} pm {:.2}".format(np.mean(all_fr), np.std(all_fr))
+                        "{:.2f} ± {:.2f}".format(np.mean(all_fr), np.std(all_fr))
                         if len(all_fr) > 0
                         else "/"
                     ),
-                    "{:.2} pm {:.2}".format(np.mean(isi), np.std(isi)) if len(isi) > 0 else "/",
+                    "{:.2f} ± {:.2f}".format(np.mean(isi), np.std(isi)) if len(isi) > 0 else "/",
                 ]
             )
         self.rows = [self.extract_ct_name(ct) for ct in self.populations]
@@ -737,7 +754,7 @@ class BasicSimulationReport(SpikeSimulationReport):
         )
         num_labelled_ct = len(self.populations)
         raster = RasterPSTHPlot(
-            (15, 3 * np.ceil(num_labelled_ct / 2)),
+            (15, 4 * np.ceil(num_labelled_ct / 2)),
             spiking_results=self.spiking_results,
         )
         table = SimResultsTable(
