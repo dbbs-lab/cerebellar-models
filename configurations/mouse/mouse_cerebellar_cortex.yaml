@@ -190,6 +190,7 @@ connectivity:
       distribution: norm
       loc: 160
       scale: 5
+    allow_autapses: true
   gap_goc:
     strategy: bsb.connectivity.VoxelIntersection
     presynaptic:
@@ -351,6 +352,7 @@ connectivity:
       distribution: norm
       loc: 100
       scale: 4
+    allow_autapses: true
   basket_to_basket:
     strategy: bsb.connectivity.VoxelIntersection
     presynaptic:
@@ -370,6 +372,7 @@ connectivity:
       distribution: norm
       loc: 100
       scale: 4
+    allow_autapses: true
 after_connectivity:
   print_structure_report:
     strategy: cerebellar_models.analysis.structure_analysis.RunStructureReport
