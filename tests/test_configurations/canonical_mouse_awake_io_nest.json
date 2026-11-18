@@ -558,6 +558,7 @@
                 ]
             },
             "strategy": "bsb.connectivity.VoxelIntersection",
+            "allow_autapses": true,
             "voxels_post": 500,
             "voxels_pre": 500
         },
@@ -765,6 +766,7 @@
                 ]
             },
             "strategy": "bsb.connectivity.VoxelIntersection",
+            "allow_autapses": true,
             "voxels_post": 500,
             "voxels_pre": 500
         },
@@ -792,6 +794,7 @@
                 ]
             },
             "strategy": "bsb.connectivity.VoxelIntersection",
+            "allow_autapses": true,
             "voxels_post": 500,
             "voxels_pre": 500
         },
