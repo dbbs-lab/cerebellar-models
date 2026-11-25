@@ -42,9 +42,10 @@ class GranuleGenerator(BenderGenerator, classmap_entry="granule_bender"):
         lay = self._ann_to_abv(curr_ann)
         if lay is not None:
             distances = self.voxel_data_of(point, self.thicknesses())
-            top_dist = distances[1]  # dist to gr/mol boundary
+            top_dist = distances[1]  # dist to pu/mol boundary
             if self.ratio_gr is None:
-                self.ratio_gr = top_dist / (top_dist + distances[2])  # ratio depth within gr.
+                # ratio depth within gr (including pu).
+                self.ratio_gr = top_dist / (top_dist + distances[3])
             if "mo" in lay:
                 ascending_axon_length = (1 - self.ratio_gr) * (distances[0] + top_dist) - top_dist
             else:

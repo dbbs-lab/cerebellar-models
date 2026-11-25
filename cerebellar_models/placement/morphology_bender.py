@@ -378,12 +378,15 @@ class MorphologyBender:
         """
         lay = self._ann_to_abv(int(self.voxel_data_of(point, self.annotations)))
         if lay is not None and lay in ["mo", "pu", "gr"]:
+            # Distances to layer borders: top of mo, mo/pu, pu/gr and bottom of gr.
+            # A thickness is the sum of the distances to the borders on each side of the point.
+            distances = self.voxel_data_of(point, self.thicknesses())
             if lay == "mo":  # take only mo thickness
-                thick = np.sum(self.voxel_data_of(point, self.thicknesses())[0:2])
+                thick = distances[0] + distances[1]
             elif lay == "pu":  # pu is too thin add mo
-                thick = np.sum(self.voxel_data_of(point, self.thicknesses())[0:3])
+                thick = distances[0] + distances[2]
             else:  # parts of pu is in gr
-                thick = np.sum(self.voxel_data_of(point, self.thicknesses())[1:4])
+                thick = distances[1] + distances[3]
             return np.maximum(thick / self.default_depth[lay], 0.1)
         else:  # out of the annotations / depth / orientations fields.
             return 0.1
