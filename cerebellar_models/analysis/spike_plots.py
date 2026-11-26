@@ -314,7 +314,7 @@ class RasterPSTHPlot(SpikePlot):
             ax.set_ylabel("Neuron id")
             for label in ax.get_yticklabels():
                 label.set_verticalalignment("bottom")
-            ax.set_title(f"{ct.replace("_", " ")}")
+            ax.set_title(ct.replace("_", " "))
 
             ax = self.get_ax(i)[1]
             if self.nb_neurons[i] > 0:
