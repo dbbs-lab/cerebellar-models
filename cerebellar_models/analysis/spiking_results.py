@@ -356,9 +356,7 @@ class SpikingResults:
                 key = (target.cell_type.name, tuple(labels or ()))
                 if key not in found:
                     found[key] = (
-                        target.placement_set
-                        if labels is None
-                        else self.scaffold.get_placement_set(target.cell_type, labels=labels)
+                        self.scaffold.get_placement_set(target.cell_type, labels=labels)
                     )
             if found:
                 placement_sets[population] = list(found.values())

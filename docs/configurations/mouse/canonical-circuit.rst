@@ -196,6 +196,12 @@ their neurites. Fiber intersection methods require a lot of computational power.
 BSB :ref:`voxel_int` strategy, as it simplifies this detection representing morphologies using
 voxels.
 
+By default, the BSB intersection strategies do not create autapses, i.e. connections from a
+neuron onto itself. Since the inhibitory interneurons of the cerebellar cortex can form autapses,
+we enabled them, with the ``allow_autapses`` flag, for the GoC-GoC (5), BC-BC (14) and SC-SC (15)
+chemical synapses. GoC gap junctions remain without autapses, as a cell cannot be electrically
+coupled to itself.
+
 The ``affinity`` and ``distributions`` of ``contact`` points parameters of these connections were
 tuned to match connectivity divergence and convergence values from De Schepper et al. (2022)
 [#de_schepper_2022]_.
