@@ -17,6 +17,7 @@ from bsb.simulation.results import (
     SimulationRun,
     read_results,
 )
+from bsb.simulation.targetting import ByLabelTargetting
 from elephant.conversion import BinnedSpikeTrain
 from elephant.spike_train_correlation import correlation_coefficient
 from elephant.statistics import instantaneous_rate, isi
@@ -294,6 +295,31 @@ class SpikingResults:
         """List of neuron type names"""
         return [pop for pop in self._populations if pop not in self.ignored_ct]
 
+    def _device_labels(self, device: str | None) -> List[str] | None:
+        """
+        The placement labels a device selected its cells by, from its ``by_label``
+        targetting.
+
+        Read from the configuration the run itself stored, since the scaffold's
+        configuration may have changed since the simulation ran. A run that stored
+        no configuration falls back on the scaffold's own simulation.
+
+        :param device: Name of the device.
+        :return: The labels of the device's targetting, or ``None`` if the device did
+            not target its cells by label.
+        """
+        configuration = self._run.configuration if self._run is not None else None
+        if isinstance(configuration, dict):
+            targetting = (configuration.get("devices") or {}).get(device, {}).get("targetting")
+            if not isinstance(targetting, dict) or targetting.get("strategy") != "by_label":
+                return None
+            return list(targetting.get("labels") or []) or None
+        simulation = self.scaffold.simulations.get(self.simulation_name)
+        device_node = simulation.devices.get(device) if simulation is not None else None
+        if device_node is None or not isinstance(device_node.targetting, ByLabelTargetting):
+            return None
+        return list(device_node.targetting.labels) or None
+
     def get_placement_sets(self) -> Dict[str, List[PlacementSet]]:
         """
         The placement sets of the cells each population's recordings target.
@@ -326,14 +352,10 @@ class SpikingResults:
                 target = recording.target
                 if not isinstance(target, RecordedCell):
                     continue
-                labels = getattr(recording, "placement_labels", None)
+                labels = self._device_labels(recording.device)
                 key = (target.cell_type.name, tuple(labels or ()))
                 if key not in found:
-                    found[key] = (
-                        target.placement_set
-                        if labels is None
-                        else self.scaffold.get_placement_set(target.cell_type, labels=labels)
-                    )
+                    found[key] = self.scaffold.get_placement_set(target.cell_type, labels=labels)
             if found:
                 placement_sets[population] = list(found.values())
         return placement_sets

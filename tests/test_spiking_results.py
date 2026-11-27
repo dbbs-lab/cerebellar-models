@@ -7,7 +7,7 @@ from types import SimpleNamespace
 
 import numpy as np
 from bsb import ResultsError, get_simulation_adapter
-from bsb.simulation.results import Recording, cell_annotations, device_annotations
+from bsb.simulation.results import cell_annotations, device_annotations
 from bsb.storage.provenance import decode_annotation, encode_annotation
 from neo import AnalogSignal, SpikeTrain
 from neo import io as nio
@@ -263,10 +263,6 @@ class TestSpikingResults(
         self.assertEqual([ps.cell_type.name for ps in placement_sets["golgi_cell"]], ["golgi_cell"])
 
 
-@unittest.skipUnless(
-    hasattr(Recording, "placement_labels"),
-    "This BSB version does not store the labels devices select their cells by.",
-)
 class LabelledSimCircuitFixture(
     MiniCerebCircuitFixture, unittest.TestCase, engine_name="hdf5", setup_cls=True
 ):
@@ -326,6 +322,25 @@ class LabelledSimCircuitFixture(
             self.assertEqual(population_ps.get_label_filter(), [label])
             self.assertEqual(len(population_ps), len(cells))
             np.testing.assert_array_equal(population_ps.load_positions(), positions[cells])
+
+    def test_device_labels_from_run_configuration(self):
+        # The labels come from the configuration the run stored, not the scaffold's.
+        self.assertIsNotNone(self.spiking_results._run.configuration)
+        self.assertEqual(self.spiking_results._device_labels("purkinje_plus_record"), ["plus"])
+        self.assertEqual(self.spiking_results._device_labels("purkinje_minus_record"), ["minus"])
+        self.assertIsNone(self.spiking_results._device_labels("golgi_record"))
+        self.assertIsNone(self.spiking_results._device_labels("unknown_device"))
+
+    def test_device_labels_fallback_on_scaffold(self):
+        # A run that stored no configuration falls back on the scaffold's simulation.
+        run = self.spiking_results._run
+        stored, run.configuration = run.configuration, None
+        try:
+            self.assertEqual(self.spiking_results._device_labels("purkinje_plus_record"), ["plus"])
+            self.assertIsNone(self.spiking_results._device_labels("golgi_record"))
+            self.assertIsNone(self.spiking_results._device_labels("unknown_device"))
+        finally:
+            run.configuration = stored
 
 
 class TestExtractISIs(unittest.TestCase):
